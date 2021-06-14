@@ -1,0 +1,421 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>臭虫治理方案（一） | Mofan</title><meta name="keywords" content="bugs,summary"><meta name="author" content="默烦,cy.mofan@foxmail.com"><meta name="copyright" content="默烦"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本文作为日常学习工作总结，主要用于记录遇到的各种顽固“臭虫”。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="臭虫治理方案（一）">
+<meta property="og:url" content="https://mofan212.github.io/posts/Ways-To-Eliminate-Bugs-1/index.html">
+<meta property="og:site_name" content="Mofan">
+<meta property="og:description" content="本文作为日常学习工作总结，主要用于记录遇到的各种顽固“臭虫”。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/70.png">
+<meta property="article:published_time" content="2020-12-01T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-04-20T16:00:00.000Z">
+<meta property="article:author" content="默烦">
+<meta property="article:tag" content="Summary">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/70.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/Ways-To-Eliminate-Bugs-1/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="google-site-verification" content="1bfoJhS5kvbbBtEhia0fjqlZg_1R2lJUinm9sFOG0Wg"/><meta name="baidu-site-verification" content="code-5dSBovftos"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?2d54af115473b9b26a2a9be486263438";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-8G6CL69E10"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-8G6CL69E10');
+</script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":500},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-04-21 00:00:00'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><meta name="referrer" content="no-referrer-when-downgrade" /><link rel="stylesheet" href="/css/myStyle.css"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="Mofan" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" data-lazy-src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">86</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">39</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/post_top_img.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Mofan</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">臭虫治理方案（一）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-12-01T16:00:00.000Z" title="发表于 2020-12-02 00:00:00">2020-12-02</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-04-20T16:00:00.000Z" title="更新于 2021-04-21 00:00:00">2021-04-21</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Summary/">Summary</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">4.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>14分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="臭虫治理方案（一）"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>封面来源：本文封面来源于网络，如有侵权，请联系删除。</p>
+<h1 id="0-前言"><a class="header-anchor" href="#0-前言"></a>0.前言</h1>
+<p>拥有臭虫（BUG）聚集体质的我，总会遇到各种各样的臭虫，这些臭虫还很顽固，有时候驱散半天它们都不走，为了以后的美好生活，我将部分臭虫的驱散（DEBUG）方式总结下来，也方便其他小伙伴遇到这些臭虫时可以“对症下药”，并“药到病除”。</p>
+<h1 id="1-问题与解决方法"><a class="header-anchor" href="#1-问题与解决方法"></a>1. 问题与解决方法</h1>
+<h2 id="1-1-Assert-assertEquals"><a class="header-anchor" href="#1-1-Assert-assertEquals"></a>1.1 Assert.assertEquals()</h2>
+<p>在使用 Junit 的 <code>Assert.assertEquals()</code> 对预期值和实际值进行比较时：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Assert.assertEquals(<span class="number">6L</span>, borrowInfo.getBorrowId());</span><br></pre></td></tr></table></figure>
+<p>编译器出现了一下的错误信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Ambiguous method call. Both assertEquals(Object, Object) in Assert and assertEquals(long, </span><br><span class="line">long)in Assert match</span><br></pre></td></tr></table></figure>
+<p>产生这样的原因是：<code>borrowInfo.getBorrowId()</code> 返回的是 <code>Long</code>，而不是 <code>long</code>。<code>Assert</code> 类中有很多 <code>assertEquals()</code> 方法的重载，因此编译器就蒙了，是该将参数类型都转换成 <code>Object</code> 呢？还是只将 <code>Long</code>  转换成 <code>long</code> 呢？</p>
+<p>解决方式：明确指定参数是基本数据类型，还是 <code>Object</code> 类型。比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Assert.assertEquals(<span class="number">6L</span>, borrowInfo.getBorrowId().longValue());</span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Assert.assertEquals(<span class="number">6L</span>, (<span class="keyword">long</span>)borrowInfo.getBorrowId());</span><br></pre></td></tr></table></figure>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/41893633/ambiguous-method-call-both-assertequalsobject-object-in-assert-and-assertequa">Ambiguous method call Both assertEquals(Object, Object) in Assert and assertEquals(double, double) in Assert match:</a></p>
+<h2 id="1-2-日期校验注解-Past"><a class="header-anchor" href="#1-2-日期校验注解-Past"></a>1.2 日期校验注解 @Past</h2>
+<p>在 DTO 中对某个日期类型的属性使用了 <code>@Past</code> 校验注解，这个注解可以帮助我们校验这个日期属性值是否是过去的日期。</p>
+<p>当我在编写单元测试时，我是这样这样设置这个属性值的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dto.setBirth(<span class="keyword">new</span> Date());</span><br></pre></td></tr></table></figure>
+<p>这样编写对单个测试方法进行测试时不会出现问题，如果对整个测试类进行 All in 的单元测试时，有一定概率校验不通过，提示该属性值必须是过去的日期。</p>
+<p><mark>注意：</mark> 是一定概率校验不通过，就是有时候是可以通过的，但是有时候又不能通过。（薛定谔的测试）</p>
+<p>解决方式很简单，设计单元测试时传入固定的日期，且这个日期是过去的日期，比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 2020-12-01 00:00:00 ==&gt; 1606752000000</span></span><br><span class="line">dto.setBirth(<span class="keyword">new</span> Date(<span class="number">1606752000000L</span>));</span><br></pre></td></tr></table></figure>
+<p><code>1606752000000L</code> 是一个时间戳，表示：2020-12-01 00:00:00</p>
+<h2 id="1-3-无法创建-SpringBoot-项目"><a class="header-anchor" href="#1-3-无法创建-SpringBoot-项目"></a>1.3 无法创建 SpringBoot 项目</h2>
+<p>使用 IDEA 创建 SpringBoot 项目时，可能由于 <code>https://start.spring.io/</code> 网址的原因（比如，无法访问）导致无法常见项目，或者创建项目失败，项目结构无法创建，我们可以更改默认的创建网址来拉取 SpringBoot 项目：</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/%E6%9B%B4%E6%94%B9%E6%8B%89%E5%8F%96SpringBoot%E9%A1%B9%E7%9B%AE%E5%9C%B0%E5%9D%80.png" alt="更改拉取SpringBoot项目地址"></p>
+<p>网址为：<code>https://start.springboot.io/</code></p>
+<h2 id="1-4-Redis-BGSAVE方法失败"><a class="header-anchor" href="#1-4-Redis-BGSAVE方法失败"></a>1.4 Redis BGSAVE方法失败</h2>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/u014071875/article/details/103715183">MISCONF Redis is configured to save RDB snapshots, but it is currently not a</a></p>
+<blockquote>
+<p>快速应急方案</p>
+</blockquote>
+<p>修改 Redis 的配置文件 <code>redis.conf</code>，将 <code>stop-writes-on-bgsave-error yes</code> 修改为 <code>stop-writes-on-bgsave-error no</code>，或者在 Redis 客户端中执行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">config <span class="built_in">set</span> stop-writes-on-bgsave-error no</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>解决方案</p>
+</blockquote>
+<p>在 Linux 系统中，切换至 <code>/</code> 目录下，执行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/sysctl.conf</span><br></pre></td></tr></table></figure>
+<p>修改  /etc/sysctl.conf 文件，添加配置：</p>
+<pre>
+vm.overcommit_memory=1
+</pre>
+<p>如：</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/%E4%BF%AE%E6%94%B9sysctl.conf%E6%96%87%E4%BB%B6.jpg" alt="修改sysctl.conf文件"></p>
+<p>添加完毕后，在 <strong>管理员模式</strong> 下，执行以下命令，使其生效：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sysctl -p /etc/sysctl.conf</span><br></pre></td></tr></table></figure>
+<h2 id="1-5-Command-line-is-too-long"><a class="header-anchor" href="#1-5-Command-line-is-too-long"></a>1.5 Command line is too long</h2>
+<p>使用 IDEA 启动测试类进行测试时，出现以下错误：</p>
+<pre>
+Error running 'Test1.test': Command line is too long. Shorten command line for Test1.test or also for JUnit default configuration.
+</pre>
+<blockquote>
+<p>解决方法一</p>
+</blockquote>
+<p>最简单粗暴的方法：</p>
+<p>创建一个新的测试类，然后在这个测试类中将报错的测试类中的代码复制过来，就完事了。</p>
+<blockquote>
+<p>解决方式二</p>
+</blockquote>
+<p>1、打开当前项目的 <code>.idea</code> 文件夹，找到文件夹中的 <code>workspace.xml</code>文件。</p>
+<p>2、搜索 <code>PropertiesComponent</code>：</p>
+<img src= "/img/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/PropertiesComponent.png" alt="PropertiesComponent" style="zoom: 50%;" />
+<p>3、然后在这个父级结构中添加：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;dynamic.classpath&quot;</span> <span class="attr">value</span>=<span class="string">&quot;true&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<p><img src= "/img/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/%E6%B7%BB%E5%8A%A0dynamic.classpath%E7%9A%84property.png" alt="添加dynamic.classpath的property"></p>
+<p>4、如果这样配置后还是有问题，可以在以下界面中，将 <code>Shorten command line</code> 修改为 <code>JAR manifest</code>：</p>
+<img src= "/img/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/修改Shorten-command-line.png" alt="修改Shorten-command-line" style="zoom:50%;" />
+<h2 id="1-6-整合-Redis-时出现-Unable-to-connect-to"><a class="header-anchor" href="#1-6-整合-Redis-时出现-Unable-to-connect-to"></a>1.6 整合 Redis 时出现 Unable to connect to</h2>
+<blockquote>
+<p>Springboot 配置 Redis 时出现 Unable to connect to 和 ERR invalid password</p>
+</blockquote>
+<p>检查配置文件后发现是密码字段没有使用引号，只需要加上引号之后就可以了。</p>
+<p>但一般来说，即使不使用引号应该也是可以连接上的。</p>
+<h2 id="1-7-IDEA-Git-出现-Line-Separators-Warning"><a class="header-anchor" href="#1-7-IDEA-Git-出现-Line-Separators-Warning"></a>1.7 IDEA Git 出现 Line Separators Warning</h2>
+<p>当我们使用 IDEA 的 Git Commit 代码时，可能会出现以下窗口：</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/LineSeparatorsWarning%E7%AA%97%E5%8F%A3.png" alt="LineSeparatorsWarning窗口"></p>
+<p>出现这种情况主要是因为不同的操作系统采用的行分隔符的方式不同。</p>
+<p>在 Windows 下采用的是 CRLF 方式，即回车并换行。CR 是老版本 MAC 的做法，即回车，后来 MAC 系统统一成了 LF，LF 也是 Linux 下的做法，即回车。</p>
+<p>关于这三者的关系，有兴趣的朋友可以参考这篇文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/ArsenalfanInECNU/p/6086665.html">趣谈、浅析CRLF和LF</a></p>
+<p>一般操作系统上的运行库会自动决定文本文件的换行格式。 如一个程序在 Windows 上运行就生成 CRLF 换行格式的文本文件，而在 Linux 上运行就生成 LF 格式换行的文本文件。</p>
+<p>需要注意的是 <strong>在一个平台上使用另一种换行符的文件文件可能会带来意想不到的问题。</strong></p>
+<p>那怎么搞？🤪</p>
+<p>通常来说，IDE 或文本编辑器都带有换行符转换功能，使用这个功能可以将文本文件中的换行符在不同格式单互换。</p>
+<blockquote>
+<p>场景复现</p>
+</blockquote>
+<p>我是在 Windows 操作系统下新建了一个文件，在对这个文件编写好代码后，需要 Commit 到本地仓库，这个时候就出现了开头的窗口。</p>
+<p>这是因为 Windows 下使用的是 CRLF 换行方式，我创建的文件的换行方式也是 CRLF，与仓库中其他文件文件的换行方式不同，所以 IDEA 就弹出了这个窗口。</p>
+<blockquote>
+<p>解决方式</p>
+</blockquote>
+<p>解决方式很简单，前往我们新建的文件，将 IDEA 右下角的行分隔符设置由 CRLF 修改为 LF 即可，如：</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/%E8%AE%BE%E7%BD%AE%E6%96%87%E4%BB%B6%E7%9A%84%E8%A1%8C%E5%88%86%E9%9A%94%E7%AC%A6.png" alt="设置文件的行分隔符"></p>
+<p><mark>注意：</mark> Windows 下是从 CRLF 改成 LF，而 MAC 下相反。</p>
+<p>这样再 Commit 代码就不会出现这个提示框了，问题暂时解决。🤨</p>
+<p>为什么说暂时解决，因为我们下次再创建文件时，右下角行分隔符的设置还是 CRLF，虽然也可以点一下修改，那有没有什么一劳永逸的方法？🤔</p>
+<p>诶！有的！🧐</p>
+<p>这主要是因为 CRLF 是跟随系统来设置的，因为当前系统是 Windows，所以采取的方式就是 CRLF 了。</p>
+<p>主需要打开 Settings，切换至 Editor，点击 Code Style，然后将 Line separator 由 <code>System-Dependent</code> 修改为 <code>Unix and MacOS(\n)</code> 即可：</p>
+<img src= "/img/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/修改IDEA的默认LineSeparator.png" alt="修改IDEA的默认LineSeparator" style="zoom: 50%;" />
+<h2 id="1-8-Sourcetree-提示-SSH-密钥认证失败"><a class="header-anchor" href="#1-8-Sourcetree-提示-SSH-密钥认证失败"></a>1.8 Sourcetree 提示 SSH 密钥认证失败</h2>
+<p>使用 Sourcetree 在推送代码时，可能会出现 <strong>启用 SSH 代理？</strong> 的提示框，并告诉你：</p>
+<pre>
+通过SSH密钥认证失败, 你想要运行SSH密钥代理( Pageant )并重试吗?
+</pre>
+<p>一般来说，在安装 Git 后都会绑定 SSH 公钥（不知道如何操作可在本站搜索【Git理论与使用 - Gitee的使用】进行查看），既然已经绑定了，为什么还会出现这个提示框呢？</p>
+<p>只需要在 Sourcetree 进行如下设置即可：</p>
+<p>点击菜单栏的 <strong>工具</strong> - <strong>选项</strong> - <strong>一般</strong>，对 SSH 客户端进行配置：</p>
+<img src= "/img/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/对Sourcetree的SSH客户端进行配置.png" alt="对Sourcetree的SSH客户端进行配置" style="zoom:50%;" />
+<p>将 SSH 客户端配置为 OpenSSH 即可，SSH 秘钥会自动填写（如果没有，自行选择）。</p>
+<h2 id="1-9-npm-ERR-Cannot-read-property-‘match’-of-undefined"><a class="header-anchor" href="#1-9-npm-ERR-Cannot-read-property-‘match’-of-undefined"></a>1.9 npm ERR! Cannot read property ‘match’ of undefined</h2>
+<p>当我们对前端项目执行 <code>npm install</code> 命令时，出现了以下错误：</p>
+<pre>
+npm ERR! Cannot read property 'match' of undefined
+</pre>
+<p>解决方法：把项目中 package-lock.json 文件删除，再次运行 npm 命令即可。</p>
+<h2 id="1-10-VS-Code-自带终端-无法执行-yarn"><a class="header-anchor" href="#1-10-VS-Code-自带终端-无法执行-yarn"></a>1.10 VS Code 自带终端 无法执行 yarn</h2>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_30960005/article/details/110946880">vscode 自带终端无法执行yarn</a></p>
+<p>当我们安装并配置好 Yarn 后，使用 VS Code 自带的终端执行 <code>yarn start</code> 命令启动项目时，出现了以下错误：</p>
+<pre>
+找不到或无法加载主类
+</pre>
+<p><strong>原因：</strong> VS Code 中的集成终端使用的是 PowerShell，所以我们要设置一下 PowerShell 的执行权限或者说策略。</p>
+<p>其默认执行策略为 <code>Restricted</code>（默认设置），该不允许任何脚本运行。我们可以将其设置为 <code>RemoteSigned</code>，该执行策略可防止 Windows PowerShell 运行没有数字签名的脚本。</p>
+<p>有关 Windows PowerShell 执行策略的详细信息，可以查考：<a target="_blank" rel="noopener" href="https:/go.microsoft.com/fwlink/?LinkID=135170">关于执行策略</a></p>
+<blockquote>
+<p>结局方式一</p>
+</blockquote>
+<p>这种方式最简单，在 VS Code 内部中安装名为 <code>yarn</code> 的插件即可。它长这样：</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/VSCode%E4%B8%ADyarn%E6%8F%92%E4%BB%B6.png" alt="VSCode中yarn插件"></p>
+<blockquote>
+<p>解决方式二</p>
+</blockquote>
+<p>1、以 <strong>管理员身份</strong> 运行 VS Code。</p>
+<p>2、打开 VS Code 终端，执行以下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">get-ExecutionPolicy # 查看执行策略</span><br><span class="line">set-ExecutionPolicy RemoteSigned # 设置执行策略</span><br></pre></td></tr></table></figure>
+<p>3、重启 VS Code，再打开终端，执行 <code>yarn start</code> 试试？ 😉</p>
+<h2 id="1-11-SpringBoot-项目运行后无法打开-Swagger-界面"><a class="header-anchor" href="#1-11-SpringBoot-项目运行后无法打开-Swagger-界面"></a>1.11 SpringBoot 项目运行后无法打开 Swagger 界面</h2>
+<p>运行 SpringBoot 项目后，能够访问到 Swagger 的 api-docs 页面，数据能够正常显示，但是无法加载 Swagger 界面，界面出现 404 错误码。</p>
+<p>除了网上能够找到的解决方法外，还可能是由于 IDEA 的配置造成的。</p>
+<p>修改项目的启动配置：</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/SwaggerUI%E6%97%A0%E6%B3%95%E8%AE%BF%E9%97%AE%E8%BF%9B%E8%A1%8C%E7%9A%84%E9%85%8D%E7%BD%AE.png" alt="SwaggerUI无法访问进行的配置"></p>
+<p>将 <code>Shorten command line</code> 修改为 <code>classpath file</code> 即可，当然使用默认的 <code>user-local default</code> 也行，但是使用 <code>JAR manifest</code> 是不行的，将无法访问 Swagger UI 界面。</p>
+<h2 id="1-12-LF-will-be-replaced-by-CRLF"><a class="header-anchor" href="#1-12-LF-will-be-replaced-by-CRLF"></a>1.12 LF will be replaced by CRLF</h2>
+<p>参考链接：</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/huihuikuaipao_/article/details/100183521">关于 LF will be replaced by CRLF 问题出现的原因以及解决方式</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/450cd21b36a4">关于git提示“warning: LF will be replaced by CRLF”终极解答</a></p>
+<blockquote>
+<p>具体分析与解决</p>
+</blockquote>
+<p>在 Windows 操作系统上使用 Git 命令行提交代码时，有时候会出现这样的警告：</p>
+<pre>
+warning: LF will be replaced by CRLF in xxxxx
+</pre>
+<p>原因很简单：Windows 中的换行符为 CRLF，而在 Linux 下的换行符为 LF，所以在将修改的文件添加至暂存区时就会出现提示。</p>
+<p>如果你在 Windows 下想要 <strong>开启</strong> 换行符的转化，可以执行以下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 提交时转换为LF，检出时转换为CRLF</span></span><br><span class="line">git config --global core.autocrlf true</span><br></pre></td></tr></table></figure>
+<p>在 Linux 或 Mac 中，行结束符是 LF，但是当 CRLF 引入文件时，我们应当使用 Git 进行修正，可以执行以下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 提交时转换为LF，检出时不转换</span></span><br><span class="line">git config --global core.autocrlf input</span><br></pre></td></tr></table></figure>
+<p>如果仅在 Windows 上进行开发，且开发仅运行在 Windows 上的项目，可以设置 false 取消此功能，把回车保留在版本库中，关闭自动转换的功能即可：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 提交检出均不转换</span></span><br><span class="line">git config --global core.autocrlf false</span><br></pre></td></tr></table></figure>
+<p>还可以在文件提交时进行 safecrlf 检查：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 拒绝提交包含混合换行符的文件</span></span><br><span class="line">git config --global core.safecrlf true   </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 允许提交包含混合换行符的文件</span></span><br><span class="line">git config --global core.safecrlf false   </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 提交包含混合换行符的文件时给出警告</span></span><br><span class="line">git config --global core.safecrlf warn</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>总结</p>
+</blockquote>
+<p>一般来说，不建议关闭这个功能，因为实际项目开发时是协同合作，两个开发者的操作系统不一致时常发生，所以建议开启这个功能。</p>
+<p>如果是使用在 Windows 上编写自己的项目，关闭这个功能也是可以的。</p>
+<p>而且这只是一个警告，可以直接忽略，对我们整体工作不会造成影响！</p>
+<h2 id="1-13-Error-java-Compilation-failed-internal-java-compiler-error"><a class="header-anchor" href="#1-13-Error-java-Compilation-failed-internal-java-compiler-error"></a>1.13 Error:java: Compilation failed: internal java compiler error</h2>
+<p>在 IDEA 中运行项目时，在编译期控制台可能会出现这个错误：</p>
+<pre>
+Error:java: Compilation failed: internal java compiler error
+</pre>
+<p>出现这个问题主要是因为 JDK 的版本问题。一个是编译版本不匹配，一个是当前项目 JDK 版本不支持。</p>
+<blockquote>
+<p>主要需要在 IDEA 查看以下三个地方的 JDK 版本，看它们是否一致且符合要求：</p>
+</blockquote>
+<p>首先进行以下步骤查看项目的 JDK 版本：</p>
+<p>1、 File  -&gt; Project Structure -&gt; Project Settings  -&gt; Project</p>
+<p>2、或者使用快捷键 Ctrl + Alt + Shift + S</p>
+<img src= "/img/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/查看项目JDK版本.png" alt="查看项目JDK版本" style="zoom:50%;" />
+<p>然后点击上图中 Modules 查看当前 Module 对应 JDK 版本：</p>
+<img src= "/img/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/当前Module对应JDK版本.png" alt="当前Module对应JDK版本" style="zoom:50%;" />
+<p>最后查看 Java 编译器版本：</p>
+<img src= "/img/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/查看Java编译器版本.png" alt="查看Java编译器版本" style="zoom:50%;" />
+<h2 id="1-14-MySQL-查询条件不区分大小写？"><a class="header-anchor" href="#1-14-MySQL-查询条件不区分大小写？"></a>1.14 MySQL 查询条件不区分大小写？</h2>
+<blockquote>
+<p>场景重现</p>
+</blockquote>
+<p>今天在对数据库进行如下条件查询时出现了意想不到的结果：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> tb_user <span class="keyword">WHERE</span> username = <span class="string">&#x27;mofan&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p>很显然，我这里是想要查询 <code>username</code> 为 <code>mofan</code> 的数据，结果在运行上述 SQL 语句时，查询得到了 <code>username</code> 为 <code>Mofan</code> 的数据。</p>
+<p>这是怎么个情况，数据库不区分大小写？</p>
+<p>不对啊，我记得区分啊，那咋回事？难不成是我使用的 MyBatis-Plus 的问题？</p>
+<blockquote>
+<p>解决思路</p>
+</blockquote>
+<p>在使用数据库可视化工具（比如 Navicat）创建 MySQL 数据库时，需要我们指定数据库名称、字符集（CHARSET）和排序规则（COLLATE）。</p>
+<p>指定之后，当我们在这个数据库下创建表时、在表中新添字段时，都会 <strong>默认</strong> 采用数据库的字符集和排序规则。</p>
+<p><mark>小贴士：</mark> 我们一般将数据库、表、表中字段的字符集设置为 <code>utf8mb4</code>。MySQL 中 <code>utf8</code> 字符集不是真正的 <code>UTF-8</code>，<code>utf8mb4</code>  才是真正的 <code>UTF-8</code>。</p>
+<p>如果在创建数据表时，<strong>没有指定</strong> 字符集和排序规则，那么这张数据表将会默认采用所在数据库的字符集和排序规则；如果在表中新增字段时 <strong>没有指定</strong> 字符集和排序规则，那么这个字段将会默认采用所在数据表的字符集和排序规则。</p>
+<p>回归正题，在进行条件查询时没有区分查询条件的大小写是 <strong>由字段的排序规则造成的</strong>。</p>
+<p>MySQL 的各个排序规则结尾由以下三种组成，它们也代表了不同的含义：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">结尾</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">_bin</td>
+<td style="text-align:center">将字符串中的每一个字符用二进制数据存储，区分大小写。</td>
+</tr>
+<tr>
+<td style="text-align:center">_ci</td>
+<td style="text-align:center">不区分大小写，ci 为 case insensitive 的缩写，即大小写不敏感。</td>
+</tr>
+<tr>
+<td style="text-align:center">_cs</td>
+<td style="text-align:center">区分大小写，cs为 case sensitive 的缩写，即大小写敏感。</td>
+</tr>
+</tbody>
+</table>
+<p>因此，MySQL 查询条件不区分大小写的解决方案就是：<strong>将字段的排序规则设置为以 _cs 或 _bin 结尾</strong>。</p>
+<p>当然为了后续操作方便，建议一并将数据库和数据表的排序规则也设置为以 <code>_cs</code> 或 <code>_bin</code> 结尾。</p>
+<h1 id="2-经验之谈"><a class="header-anchor" href="#2-经验之谈"></a>2. 经验之谈</h1>
+<h2 id="2-1-Spring-的-Scope-注解"><a class="header-anchor" href="#2-1-Spring-的-Scope-注解"></a>2.1 Spring 的 @Scope 注解</h2>
+<p><code>@Scope</code> 可以用来设置 Spring 容器中 Bean 的作用域，默认作用域是单例的，使用这个注解后可以将其设置成其他作用域。</p>
+<p>在此不介绍 <code>@Scope</code> 注解的使用方式，但需要明白的是：</p>
+<p>默认的单例作用域适用 90% 的场景。如果需要更改作用域，请在更改之前确认是不是由于自己的代码设计缺陷而导致需要更改作用域。</p>
+<h2 id="2-2-单元测试心得"><a class="header-anchor" href="#2-2-单元测试心得"></a>2.2 单元测试心得</h2>
+<p>在进行单元测试时：</p>
+<p>对于数据库相关的查询，更新，删除等操作，不能假设数据库里的数据是存在的，或者直接操作数据库把数据插入进去，请使用程序插入或者导入数据的方式来准备数据。</p>
+<p>保持单元测试的独立性。为了保证单元测试稳定可靠且便于维护，单元测试用例之间决不能互相调用，也不能依赖执行的先后次序。</p>
+<p>单元测试应该是全自动执行的，并且非交互式的。测试用例通常是被定期执行的，执行过程必须完全自动化才有意义。输出结果需要人工检查的测试不是一个好的单元测试。单元测试中不准使用 <code>System.out</code> 来进行人肉验证，必须使用 <code>assert</code> 或 JUnit 的 <code>Assert</code> 等来验证。</p>
+<p>【强烈建议】运行单元测试前后，数据库表中都不能存在数据。如果在运行测试代码时，出现数据无法保存导致的异常或错误，请检查数据库中数据是否符合该条件。</p>
+<p><mark>注意：</mark> 注意在测试类中的 <strong>成员变量</strong> 和 <strong>静态变量</strong> 的区别。如果需要所有测试方法共享那个变量，需要使用静态变量，反之使用成员变量，并且各测试方法每次使用成员变量时，都会初始化成员变量。</p>
+<h2 id="2-3-Accessors-与-链式"><a class="header-anchor" href="#2-3-Accessors-与-链式"></a>2.3 @Accessors 与 链式</h2>
+<p>在 Lombok 中有这样一个注解 <code>@Accessors</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target(&#123;ElementType.TYPE, ElementType.FIELD&#125;)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.SOURCE)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Accessors &#123;</span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">fluent</span><span class="params">()</span> <span class="keyword">default</span> <span class="keyword">false</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">chain</span><span class="params">()</span> <span class="keyword">default</span> <span class="keyword">false</span></span>;</span><br><span class="line"></span><br><span class="line">    String[] prefix() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中有一个默认值为 <code>false</code>，类型为 <code>boolean</code> 名为 <code>chain</code> 的属性，如果在使用 <code>Accessors</code> 注解时将 <code>chain</code> 设置为 <code>true</code>，即：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Accessors(chain = true)</span></span><br></pre></td></tr></table></figure>
+<p>表示当前类下所有属性或当前字段支持链式编程，即：Setter 方法不再返回 <code>void</code>，而是 <code>this</code>。</p>
+<p>但需要注意的是，链式编程用起来很爽，但不要随意使用，尤其是在涉及到 Bean 映射的场景，比如：BeanCopier、MapStruct 等都不支持链式，同时 EasyExcel 也不支持链式。</p>
+<p>主要原因是：它们都存在从源中 get 出数据，然后 set 到目标中，而它们所使用的 Setter 都是返回 <code>void</code>。</p>
+<p>因此：<strong>不推荐随意使用链式编程。</strong></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:cy.mofan@foxmail.com">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/Ways-To-Eliminate-Bugs-1/">https://mofan212.github.io/posts/Ways-To-Eliminate-Bugs-1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Summary/">Summary</a></div><div class="post_share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/70.png" data-sites="wechat,qq,weibo,facebook,twitter"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/Record-A-Test/"><img class="prev-cover" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/71.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">【随笔】记一次入职测试</div></div></a></div><div class="next-post pull-right"><a href="/posts/The-Basis-Of-Dubbo/"><img class="next-cover" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/69.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">【RPC框架】Dubbo 入门</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/posts/Goodbye-2020-Hello-2021/" title="再见 2020，你好 2021"><img class="cover" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/77.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-01-01</div><div class="title">再见 2020，你好 2021</div></div></a></div><div><a href="/posts/Record-A-Test/" title="【随笔】记一次入职测试"><img class="cover" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/71.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-12-03</div><div class="title">【随笔】记一次入职测试</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" data-lazy-src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">默烦</div><div class="author-info__description">彩笔的打怪升级之路...</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">86</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">39</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://space.bilibili.com/23658864/dynamic"><i class="fas fa-running"></i><span>关注我的B站</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS链接"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解，<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a target="_blank" rel="noopener" href="https://mofan212.gitee.io/mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载，我将十分感激！😊</br><strong><font style="color:red">严禁未遵循规范的转载，</font></strong>否则你必“加冕为王”。😡</br><strong>本站已开通评论功能，</strong>如需交换友链或留言，请前往友链页或留言板页，默认关闭其他页面评论功能。🧐<img src="/img/wang.gif"></img></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0-%E5%89%8D%E8%A8%80"><span class="toc-text">0.前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E9%97%AE%E9%A2%98%E4%B8%8E%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="toc-text">1. 问题与解决方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-Assert-assertEquals"><span class="toc-text">1.1 Assert.assertEquals()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E6%97%A5%E6%9C%9F%E6%A0%A1%E9%AA%8C%E6%B3%A8%E8%A7%A3-Past"><span class="toc-text">1.2 日期校验注解 @Past</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-%E6%97%A0%E6%B3%95%E5%88%9B%E5%BB%BA-SpringBoot-%E9%A1%B9%E7%9B%AE"><span class="toc-text">1.3 无法创建 SpringBoot 项目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-Redis-BGSAVE%E6%96%B9%E6%B3%95%E5%A4%B1%E8%B4%A5"><span class="toc-text">1.4 Redis BGSAVE方法失败</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-5-Command-line-is-too-long"><span class="toc-text">1.5 Command line is too long</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-6-%E6%95%B4%E5%90%88-Redis-%E6%97%B6%E5%87%BA%E7%8E%B0-Unable-to-connect-to"><span class="toc-text">1.6 整合 Redis 时出现 Unable to connect to</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-7-IDEA-Git-%E5%87%BA%E7%8E%B0-Line-Separators-Warning"><span class="toc-text">1.7 IDEA Git 出现 Line Separators Warning</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-8-Sourcetree-%E6%8F%90%E7%A4%BA-SSH-%E5%AF%86%E9%92%A5%E8%AE%A4%E8%AF%81%E5%A4%B1%E8%B4%A5"><span class="toc-text">1.8 Sourcetree 提示 SSH 密钥认证失败</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-9-npm-ERR-Cannot-read-property-%E2%80%98match%E2%80%99-of-undefined"><span class="toc-text">1.9 npm ERR! Cannot read property ‘match’ of undefined</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-10-VS-Code-%E8%87%AA%E5%B8%A6%E7%BB%88%E7%AB%AF-%E6%97%A0%E6%B3%95%E6%89%A7%E8%A1%8C-yarn"><span class="toc-text">1.10 VS Code 自带终端 无法执行 yarn</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-11-SpringBoot-%E9%A1%B9%E7%9B%AE%E8%BF%90%E8%A1%8C%E5%90%8E%E6%97%A0%E6%B3%95%E6%89%93%E5%BC%80-Swagger-%E7%95%8C%E9%9D%A2"><span class="toc-text">1.11 SpringBoot 项目运行后无法打开 Swagger 界面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-12-LF-will-be-replaced-by-CRLF"><span class="toc-text">1.12 LF will be replaced by CRLF</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-13-Error-java-Compilation-failed-internal-java-compiler-error"><span class="toc-text">1.13 Error:java: Compilation failed: internal java compiler error</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-14-MySQL-%E6%9F%A5%E8%AF%A2%E6%9D%A1%E4%BB%B6%E4%B8%8D%E5%8C%BA%E5%88%86%E5%A4%A7%E5%B0%8F%E5%86%99%EF%BC%9F"><span class="toc-text">1.14 MySQL 查询条件不区分大小写？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E7%BB%8F%E9%AA%8C%E4%B9%8B%E8%B0%88"><span class="toc-text">2. 经验之谈</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-Spring-%E7%9A%84-Scope-%E6%B3%A8%E8%A7%A3"><span class="toc-text">2.1 Spring 的 @Scope 注解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E5%BF%83%E5%BE%97"><span class="toc-text">2.2 单元测试心得</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-Accessors-%E4%B8%8E-%E9%93%BE%E5%BC%8F"><span class="toc-text">2.3 @Accessors 与 链式</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/Using-Java-To-Manipulate-Excel/" title="使用 Java 操作 Excel"><img data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/80.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="使用 Java 操作 Excel"/></a><div class="content"><a class="title" href="/posts/Using-Java-To-Manipulate-Excel/" title="使用 Java 操作 Excel">使用 Java 操作 Excel</a><time datetime="2021-05-03T16:00:00.000Z" title="更新于 2021-05-04 00:00:00">2021-05-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/The-Basics-Of-Redis-Part-One/" title="【上篇】Redis 基础篇"><img data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/72.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【上篇】Redis 基础篇"/></a><div class="content"><a class="title" href="/posts/The-Basics-Of-Redis-Part-One/" title="【上篇】Redis 基础篇">【上篇】Redis 基础篇</a><time datetime="2021-04-23T16:00:00.000Z" title="更新于 2021-04-24 00:00:00">2021-04-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Ways-To-Eliminate-Bugs-1/" title="臭虫治理方案（一）"><img data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/70.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="臭虫治理方案（一）"/></a><div class="content"><a class="title" href="/posts/Ways-To-Eliminate-Bugs-1/" title="臭虫治理方案（一）">臭虫治理方案（一）</a><time datetime="2021-04-20T16:00:00.000Z" title="更新于 2021-04-21 00:00:00">2021-04-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Basic-Use-Of-Json-Web-Token/" title="JWT 的基本使用"><img data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/86.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="JWT 的基本使用"/></a><div class="content"><a class="title" href="/posts/Basic-Use-Of-Json-Web-Token/" title="JWT 的基本使用">JWT 的基本使用</a><time datetime="2021-04-20T16:00:00.000Z" title="更新于 2021-04-21 00:00:00">2021-04-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Simple-Use-Of-BeanCopier/" title="BeanCopier 的简单使用"><img data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/84.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="BeanCopier 的简单使用"/></a><div class="content"><a class="title" href="/posts/Simple-Use-Of-BeanCopier/" title="BeanCopier 的简单使用">BeanCopier 的简单使用</a><time datetime="2021-04-19T16:00:00.000Z" title="更新于 2021-04-20 00:00:00">2021-04-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/MapStruct-User-Manual/" title="MapStruct 使用手册【未完】"><img data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/82.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="MapStruct 使用手册【未完】"/></a><div class="content"><a class="title" href="/posts/MapStruct-User-Manual/" title="MapStruct 使用手册【未完】">MapStruct 使用手册【未完】</a><time datetime="2021-04-15T16:00:00.000Z" title="更新于 2021-04-16 00:00:00">2021-04-16</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By 默烦</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><script src="/js/mine.js"></script><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="true"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-show-text.min.js" data-mobile="false" data-text="Azathoth,Yog-Sothoth,Shub-Niggurath,Nyarlathotep,Cthulhu,Hastur,Abhoth,Ghroth,Tsathoggua,Cthugha,Deep Ones,Dagon,Chaugnar Faugn,Mordiggian,Shoggoth,Old One,Mi-Go,Great Race of Yith,Flying Polyp,Hounds of Tindalos,Dhole" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
