@@ -6,7 +6,7 @@
   <link href="https://mofan212.github.io/atom.xml" rel="self"/>
   
   <link href="https://mofan212.github.io/"/>
-  <updated>2021-06-26T16:00:00.000Z</updated>
+  <updated>2021-07-16T16:00:00.000Z</updated>
   <id>https://mofan212.github.io/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>【设计模式】工厂模式</title>
+    <link href="https://mofan212.github.io/posts/Design-Pattern-Factory-Pattern/"/>
+    <id>https://mofan212.github.io/posts/Design-Pattern-Factory-Pattern/</id>
+    <published>2021-07-16T16:00:00.000Z</published>
+    <updated>2021-07-16T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">本文主要对 Java 设计模式中的工厂模式进行了介绍，包括简单工厂模式、工厂方法模式、抽象工厂模式以及为什么要引入工厂模式。</summary>
+    
+    
+    
+    <category term="DesignPattern" scheme="https://mofan212.github.io/categories/DesignPattern/"/>
+    
+    
+    <category term="Java" scheme="https://mofan212.github.io/tags/Java/"/>
+    
+    <category term="DesignPattern" scheme="https://mofan212.github.io/tags/DesignPattern/"/>
+    
+  </entry>
   
   <entry>
     <title>毕业设计代码总结</title>
@@ -404,25 +425,6 @@
     
     
     <category term="Dubbo" scheme="https://mofan212.github.io/tags/Dubbo/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>FreeMarker 模板开发</title>
-    <link href="https://mofan212.github.io/posts/FreeMarker-Template-Author&#39;s-Guide/"/>
-    <id>https://mofan212.github.io/posts/FreeMarker-Template-Author&#39;s-Guide/</id>
-    <published>2020-11-19T16:00:00.000Z</published>
-    <updated>2021-01-11T16:00:00.000Z</updated>
-    
-    
-    <summary type="html">本文介绍了 FreeMarker 模板引擎的模板开发。</summary>
-    
-    
-    
-    <category term="TemplateEngine" scheme="https://mofan212.github.io/categories/TemplateEngine/"/>
-    
-    
-    <category term="FreeMarker" scheme="https://mofan212.github.io/tags/FreeMarker/"/>
     
   </entry>
   
