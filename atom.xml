@@ -6,7 +6,7 @@
   <link href="https://mofan212.github.io/atom.xml" rel="self"/>
   
   <link href="https://mofan212.github.io/"/>
-  <updated>2021-07-16T16:00:00.000Z</updated>
+  <updated>2021-07-17T16:00:00.000Z</updated>
   <id>https://mofan212.github.io/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>【设计模式】适配器模式</title>
+    <link href="https://mofan212.github.io/posts/Design-Pattern-Adapter-Pattern/"/>
+    <id>https://mofan212.github.io/posts/Design-Pattern-Adapter-Pattern/</id>
+    <published>2021-07-17T16:00:00.000Z</published>
+    <updated>2021-07-17T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">本文主要对 Java 设计模式中的适配器模式进行了介绍，并在最后将其拓展为双向适配器模式。</summary>
+    
+    
+    
+    <category term="DesignPattern" scheme="https://mofan212.github.io/categories/DesignPattern/"/>
+    
+    
+    <category term="Java" scheme="https://mofan212.github.io/tags/Java/"/>
+    
+    <category term="DesignPattern" scheme="https://mofan212.github.io/tags/DesignPattern/"/>
+    
+  </entry>
   
   <entry>
     <title>【设计模式】工厂模式</title>
@@ -406,25 +427,6 @@
     
     
     <category term="Summary" scheme="https://mofan212.github.io/tags/Summary/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【RPC框架】Dubbo 入门</title>
-    <link href="https://mofan212.github.io/posts/The-Basis-Of-Dubbo/"/>
-    <id>https://mofan212.github.io/posts/The-Basis-Of-Dubbo/</id>
-    <published>2020-11-23T16:00:00.000Z</published>
-    <updated>2020-12-13T16:00:00.000Z</updated>
-    
-    
-    <summary type="html">本文作为 Dubbo 的入门知识讲解，介绍了 Dubbo 基本知识、Dubbo 配置、高可用和 Dubbo 原理四个部分的内容。</summary>
-    
-    
-    
-    <category term="Microservice" scheme="https://mofan212.github.io/categories/Microservice/"/>
-    
-    
-    <category term="Dubbo" scheme="https://mofan212.github.io/tags/Dubbo/"/>
     
   </entry>
   
