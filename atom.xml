@@ -6,7 +6,7 @@
   <link href="https://mofan212.gitee.io/atom.xml" rel="self"/>
   
   <link href="https://mofan212.gitee.io/"/>
-  <updated>2021-08-21T16:00:00.000Z</updated>
+  <updated>2021-08-28T16:00:00.000Z</updated>
   <id>https://mofan212.gitee.io/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>【设计模式】装饰器模式</title>
+    <link href="https://mofan212.gitee.io/posts/Design-Pattern-Decorator-Pattern/"/>
+    <id>https://mofan212.gitee.io/posts/Design-Pattern-Decorator-Pattern/</id>
+    <published>2021-08-28T16:00:00.000Z</published>
+    <updated>2021-08-28T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">本文主要对 Java 设计模式中的装饰器模式进行了介绍，并对其在 JDK 中的应用进行了简单的讲解。</summary>
+    
+    
+    
+    <category term="DesignPattern" scheme="https://mofan212.gitee.io/categories/DesignPattern/"/>
+    
+    
+    <category term="Java" scheme="https://mofan212.gitee.io/tags/Java/"/>
+    
+    <category term="DesignPattern" scheme="https://mofan212.gitee.io/tags/DesignPattern/"/>
+    
+  </entry>
   
   <entry>
     <title>【设计模式】责任链模式</title>
@@ -410,27 +431,6 @@
     <category term="Jackson" scheme="https://mofan212.gitee.io/tags/Jackson/"/>
     
     <category term="JSON" scheme="https://mofan212.gitee.io/tags/JSON/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【下篇】Redis 基础篇</title>
-    <link href="https://mofan212.gitee.io/posts/The-Basics-Of-Redis-Part-Two/"/>
-    <id>https://mofan212.gitee.io/posts/The-Basics-Of-Redis-Part-Two/</id>
-    <published>2020-12-07T16:00:00.000Z</published>
-    <updated>2020-12-07T16:00:00.000Z</updated>
-    
-    
-    <summary type="html">本文为 Redis 基础篇下篇，主要介绍了 Redis事务、发布订阅、Redis 的复制、Jedis、三种特殊的数据类型，缓存穿透和雪崩以及整合 SpringBoot。</summary>
-    
-    
-    
-    <category term="Middleware" scheme="https://mofan212.gitee.io/categories/Middleware/"/>
-    
-    
-    <category term="Middleware" scheme="https://mofan212.gitee.io/tags/Middleware/"/>
-    
-    <category term="Redis" scheme="https://mofan212.gitee.io/tags/Redis/"/>
     
   </entry>
   
