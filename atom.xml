@@ -6,7 +6,7 @@
   <link href="https://mofan212.gitee.io/atom.xml" rel="self"/>
   
   <link href="https://mofan212.gitee.io/"/>
-  <updated>2021-09-18T16:00:00.000Z</updated>
+  <updated>2021-10-16T16:00:00.000Z</updated>
   <id>https://mofan212.gitee.io/</id>
   
   <author>
@@ -15,6 +15,25 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>【上篇】Linux 基础</title>
+    <link href="https://mofan212.gitee.io/posts/The-Basics-Of-Linux-Part-One/"/>
+    <id>https://mofan212.gitee.io/posts/The-Basics-Of-Linux-Part-One/</id>
+    <published>2021-10-16T16:00:00.000Z</published>
+    <updated>2021-10-16T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">本文主要介绍了 Linux 中用户管理、实用指令、组管理、权限管理、定时任务、磁盘分区与挂载、网络配置和进程管理等内容。</summary>
+    
+    
+    
+    <category term="Linux" scheme="https://mofan212.gitee.io/categories/Linux/"/>
+    
+    
+    <category term="Linux" scheme="https://mofan212.gitee.io/tags/Linux/"/>
+    
+  </entry>
   
   <entry>
     <title>【下篇】分布式消息队列 RocketMQ</title>
@@ -408,29 +427,6 @@
     
     
     <category term="Summary" scheme="https://mofan212.gitee.io/tags/Summary/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>PowerMock 实战</title>
-    <link href="https://mofan212.gitee.io/posts/PowerMock-In-Action/"/>
-    <id>https://mofan212.gitee.io/posts/PowerMock-In-Action/</id>
-    <published>2020-12-23T16:00:00.000Z</published>
-    <updated>2021-04-12T16:00:00.000Z</updated>
-    
-    
-    <summary type="html">PowerMock 是一个单元测试模拟框架，它是在其它单元测试模拟框架的基础上做出的扩展，完成了其他 Mock 框架不能完成的工作，但我们仍应减少对其的使用。</summary>
-    
-    
-    
-    <category term="UnitTest" scheme="https://mofan212.gitee.io/categories/UnitTest/"/>
-    
-    
-    <category term="UnitTest" scheme="https://mofan212.gitee.io/tags/UnitTest/"/>
-    
-    <category term="Mockito" scheme="https://mofan212.gitee.io/tags/Mockito/"/>
-    
-    <category term="PowerMock" scheme="https://mofan212.gitee.io/tags/PowerMock/"/>
     
   </entry>
   
