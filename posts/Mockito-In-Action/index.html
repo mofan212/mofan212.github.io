@@ -299,7 +299,7 @@ accountDao.findAccount("x", "x");
 <p><strong>作用二：</strong></p>
 <p><code>@RunWith(MockitoJUnitRunner.class)</code> 和 <code>MockitoAnnotations.initMocks(this);</code> 都可以为单元测试提供 mock 初始化工作。</p>
 <p>当我们使用了 <code>@Mock</code>，<code>@Spy</code>， <code>@InjectMocks</code> 等注解时，必须进行初始化才能使用。</p>
-<p>若在单元测试类中使用了<code>@RunWith(SpringJUnit4ClassRunner.class)</code> 就不能再使用<code>@RunWith(SpringJUnit4ClassRunner.class)</code>，可以使用 <code>MockitoAnnotations.initMocks(this)</code> 来代替。</p>
+<p>若在单元测试类中使用了<code>@RunWith(SpringJUnit4ClassRunner.class)</code> 就不能再使用<code>@RunWith(MockitoJUnitRunner.class)</code>，可以使用 <code>MockitoAnnotations.initMocks(this)</code> 来代替。</p>
 <h2 id="3-2-DeepMock"><a class="header-anchor" href="#3-2-DeepMock"></a>3.2 DeepMock</h2>
 <blockquote>
 <p>环境准备</p>
