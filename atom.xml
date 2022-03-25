@@ -6,7 +6,7 @@
   <link href="https://mofan212.gitee.io/atom.xml" rel="self"/>
   
   <link href="https://mofan212.gitee.io/"/>
-  <updated>2022-03-18T16:00:00.000Z</updated>
+  <updated>2022-03-25T16:00:00.000Z</updated>
   <id>https://mofan212.gitee.io/</id>
   
   <author>
@@ -15,6 +15,25 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Lua 基础知识手册</title>
+    <link href="https://mofan212.gitee.io/posts/Lua-Basics-Manual/"/>
+    <id>https://mofan212.gitee.io/posts/Lua-Basics-Manual/</id>
+    <published>2022-03-25T16:00:00.000Z</published>
+    <updated>2022-03-25T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">本文作为 Lua 语言的的基础知识手册，介绍了 Lua 的简介与安装、基础语法、模块、元表、协程、I/O、错误处理、面向对象等内容。</summary>
+    
+    
+    
+    <category term="Lua" scheme="https://mofan212.gitee.io/categories/Lua/"/>
+    
+    
+    <category term="Lua" scheme="https://mofan212.gitee.io/tags/Lua/"/>
+    
+  </entry>
   
   <entry>
     <title>Lua 中的闭包</title>
@@ -404,27 +423,6 @@
     
     
     <category term="MapStruct" scheme="https://mofan212.gitee.io/tags/MapStruct/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【设计模式】建造者模式</title>
-    <link href="https://mofan212.gitee.io/posts/Design-Pattern-Builder-Pattern/"/>
-    <id>https://mofan212.gitee.io/posts/Design-Pattern-Builder-Pattern/</id>
-    <published>2021-02-02T16:00:00.000Z</published>
-    <updated>2021-12-03T16:00:00.000Z</updated>
-    
-    
-    <summary type="html">本文主要对 Java 设计模式中的建造者模式进行了介绍，同时也介绍了 Lombok 中 @Builder 注解的使用。</summary>
-    
-    
-    
-    <category term="DesignPattern" scheme="https://mofan212.gitee.io/categories/DesignPattern/"/>
-    
-    
-    <category term="Java" scheme="https://mofan212.gitee.io/tags/Java/"/>
-    
-    <category term="DesignPattern" scheme="https://mofan212.gitee.io/tags/DesignPattern/"/>
     
   </entry>
   
