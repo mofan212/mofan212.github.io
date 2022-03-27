@@ -55,6 +55,27 @@
   </entry>
   
   <entry>
+    <title>Redis 集群与分布式锁</title>
+    <link href="https://mofan212.gitee.io/posts/Redis-Cluster-And-Distributed-Locks/"/>
+    <id>https://mofan212.gitee.io/posts/Redis-Cluster-And-Distributed-Locks/</id>
+    <published>2022-02-27T16:00:00.000Z</published>
+    <updated>2022-02-27T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">本文介绍了 Redis 集群的模拟搭建、故障恢复、利用 Redis 实现简单的分布式锁和 Redis 6 中的新特性。</summary>
+    
+    
+    
+    <category term="Middleware" scheme="https://mofan212.gitee.io/categories/Middleware/"/>
+    
+    
+    <category term="Middleware" scheme="https://mofan212.gitee.io/tags/Middleware/"/>
+    
+    <category term="Redis" scheme="https://mofan212.gitee.io/tags/Redis/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Spring 补充</title>
     <link href="https://mofan212.gitee.io/posts/Supplementary-Content-For-Spring/"/>
     <id>https://mofan212.gitee.io/posts/Supplementary-Content-For-Spring/</id>
@@ -404,25 +425,6 @@
     <category term="Java" scheme="https://mofan212.gitee.io/tags/Java/"/>
     
     <category term="DesignPattern" scheme="https://mofan212.gitee.io/tags/DesignPattern/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>MapStruct 使用手册【未完】</title>
-    <link href="https://mofan212.gitee.io/posts/MapStruct-User-Manual/"/>
-    <id>https://mofan212.gitee.io/posts/MapStruct-User-Manual/</id>
-    <published>2021-02-15T16:00:00.000Z</published>
-    <updated>2021-04-15T16:00:00.000Z</updated>
-    
-    
-    <summary type="html">MapStruct 是一个代码生成器，它基于约定而非配置的方法，极大地简化了 Java Bean 之间的转换。本文基于官方文档翻译拓展而来，翻译工作不易，请勿转载。</summary>
-    
-    
-    
-    <category term="Java" scheme="https://mofan212.gitee.io/categories/Java/"/>
-    
-    
-    <category term="MapStruct" scheme="https://mofan212.gitee.io/tags/MapStruct/"/>
     
   </entry>
   
