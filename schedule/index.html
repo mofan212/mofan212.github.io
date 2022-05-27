@@ -11,7 +11,7 @@
 <meta property="article:author" content="默烦">
 <meta property="article:tag" content="默烦,mofan,Mofan">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://mofan212.gitee.io/img/siteCover.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://mofan212.gitee.io/schedule/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+<meta name="twitter:image" content="https://mofan212.gitee.io/img/siteCover.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://mofan212.gitee.io/schedule/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/pluginsSrc/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/pluginsSrc/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
   hm.src = "https://hm.baidu.com/hm.js?2d54af115473b9b26a2a9be486263438";
@@ -51,8 +51,8 @@ gtag('config', 'G-8G6CL69E10');
   Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
   source: {
     justifiedGallery: {
-      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
-      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+      js: '/pluginsSrc/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: '/pluginsSrc/flickr-justified-gallery/dist/fjGallery.css'
     }
   },
   isPhotoFigcaption: false,
@@ -121,6 +121,23 @@ gtag('config', 'G-8G6CL69E10');
       document.head.appendChild(script)
     })
   
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
       const asideStatus = saveToLocal.get('aside-status')
       if (asideStatus !== undefined) {
         if (asideStatus === 'hide') {
@@ -151,10 +168,10 @@ gtag('config', 'G-8G6CL69E10');
 <p><input type="checkbox" id="checkbox10"><label for="checkbox10">SpringCloud Alibaba</label></p>
 <p><input type="checkbox" id="checkbox11"><label for="checkbox11">IDEA 插件开发</label></p>
 <p><input type="checkbox" id="checkbox12"><label for="checkbox12">重学软工基础课程（计算机网络、操作系统等）</label></p>
-</div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By 默烦</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"></div><div id="rightside-config-show"><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@5/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+</div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By 默烦</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/pluginsSrc/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="/pluginsSrc/instant.page/instantpage.js" type="module"></script><script src="/pluginsSrc/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
   if (typeof pangu === 'object') pangu.autoSpacingPage()
   else {
-    getScript('https://cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js')
+    getScript('/pluginsSrc/pangu/dist/browser/pangu.min.js')
       .then(() => {
         pangu.autoSpacingPage()
       })
@@ -180,4 +197,4 @@ document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/j
 
   }
 }
-window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><script src="/js/mine.js"></script><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="true"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-show-text.min.js" data-mobile="false" data-text="Azathoth,Yog-Sothoth,Shub-Niggurath,Nyarlathotep,Cthulhu,Hastur,Abhoth,Ghroth,Tsathoggua,Cthugha,Deep Ones,Dagon,Chaugnar Faugn,Mordiggian,Shoggoth,Old One,Mi-Go,Great Race of Yith,Flying Polyp,Hounds of Tindalos,Dhole" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><script src="/js/mine.js"></script><script defer="defer" id="ribbon" src="/pluginsSrc/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="true"></script><script id="click-show-text" src="/pluginsSrc/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="Azathoth,Yog-Sothoth,Shub-Niggurath,Nyarlathotep,Cthulhu,Hastur,Abhoth,Ghroth,Tsathoggua,Cthugha,Deep Ones,Dagon,Chaugnar Faugn,Mordiggian,Shoggoth,Old One,Mi-Go,Great Race of Yith,Flying Polyp,Hounds of Tindalos,Dhole" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
