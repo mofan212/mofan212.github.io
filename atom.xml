@@ -6,7 +6,7 @@
   <link href="https://mofan212.gitee.io/atom.xml" rel="self"/>
   
   <link href="https://mofan212.gitee.io/"/>
-  <updated>2022-03-27T16:00:00.000Z</updated>
+  <updated>2022-06-17T16:00:00.000Z</updated>
   <id>https://mofan212.gitee.io/</id>
   
   <author>
@@ -15,6 +15,25 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Java 的类资源加载</title>
+    <link href="https://mofan212.gitee.io/posts/Class-Resource-Loading-In-Java/"/>
+    <id>https://mofan212.gitee.io/posts/Class-Resource-Loading-In-Java/</id>
+    <published>2022-06-17T16:00:00.000Z</published>
+    <updated>2022-06-17T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">本文以 Mockito 中静态方法的 mock 为引，介绍了 SPI 机制的应用与源码剖析。</summary>
+    
+    
+    
+    <category term="Java" scheme="https://mofan212.gitee.io/categories/Java/"/>
+    
+    
+    <category term="Java" scheme="https://mofan212.gitee.io/tags/Java/"/>
+    
+  </entry>
   
   <entry>
     <title>Redis 集群与分布式锁</title>
@@ -404,27 +423,6 @@
     <category term="Spring" scheme="https://mofan212.gitee.io/tags/Spring/"/>
     
     <category term="CGLib" scheme="https://mofan212.gitee.io/tags/CGLib/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【设计模式】策略模式</title>
-    <link href="https://mofan212.gitee.io/posts/Design-Pattern-Strategy-Pattern/"/>
-    <id>https://mofan212.gitee.io/posts/Design-Pattern-Strategy-Pattern/</id>
-    <published>2021-02-26T16:00:00.000Z</published>
-    <updated>2021-02-26T16:00:00.000Z</updated>
-    
-    
-    <summary type="html">本文主要对 Java 设计模式中的策略模式进行了介绍。</summary>
-    
-    
-    
-    <category term="DesignPattern" scheme="https://mofan212.gitee.io/categories/DesignPattern/"/>
-    
-    
-    <category term="Java" scheme="https://mofan212.gitee.io/tags/Java/"/>
-    
-    <category term="DesignPattern" scheme="https://mofan212.gitee.io/tags/DesignPattern/"/>
     
   </entry>
   
