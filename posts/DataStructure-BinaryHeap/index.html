@@ -1,0 +1,630 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>数据结构之二叉堆 | Mofan</title><meta name="author" content="默烦,cy.mofan@foxmail.com"><meta name="copyright" content="默烦"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本文介绍了二叉堆中的一些基本概念，然后使用Java语言实现了一个二叉最大堆，也实现了Heapify，并解决最开始提出的Top K问题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据结构之二叉堆">
+<meta property="og:url" content="https://mofan212.github.io/posts/DataStructure-BinaryHeap/index.html">
+<meta property="og:site_name" content="Mofan">
+<meta property="og:description" content="本文介绍了二叉堆中的一些基本概念，然后使用Java语言实现了一个二叉最大堆，也实现了Heapify，并解决最开始提出的Top K问题。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/40.png">
+<meta property="article:published_time" content="2020-08-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-10-24T16:00:00.000Z">
+<meta property="article:author" content="默烦">
+<meta property="article:tag" content="DataStructure">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/40.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/DataStructure-BinaryHeap/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"距离本文上次更新已经过去","messageNext":"天，请注意时效性。"},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '数据结构之二叉堆',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-10-25 00:00:00'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="referrer" content="no-referrer-when-downgrade" /><link rel="stylesheet" href="https://cdn.chrelyonly.cf/gh/mofan212/blog-static-resources@master/css/myStyle.min.css"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css" /><link rel="stylesheet" href="https://cdn.chrelyonly.cf/npm/jetbrains-mono@1.0.6/css/jetbrains-mono.min.css"><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Mofan" type="application/atom+xml">
+</head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+document.addEventListener('pjax:send', () => {
+  Pace.restart()
+})
+</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mofan212/blog-static-resources/css/fill-left.min.css"/><script src="https://cdn.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">135</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">27</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group hide" href="javascript:void(0);"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page group hide" href="javascript:void(0);"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/post_top_img.png')"><nav id="nav"><span id="blog-info"><a href="/" title="Mofan"><span class="site-name">Mofan</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group hide" href="javascript:void(0);"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page group hide" href="javascript:void(0);"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">数据结构之二叉堆</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-08-04T16:00:00.000Z" title="发表于 2020-08-05 00:00:00">2020-08-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-10-24T16:00:00.000Z" title="更新于 2022-10-25 00:00:00">2022-10-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/DataStructure/">DataStructure</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">8.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>32分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="数据结构之二叉堆"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>封面画师：ツチヤ     封面ID：78809165</p>
+<p>本文参考视频：小马哥教育(SEEMYGO) 2019年 恋上数据结构与算法（第一季）</p>
+<p>源码仓库：<a target="_blank" rel="noopener" href="https://github.com/mofan212/data-structure-and-algorithm">mofan212/data-structure-and-algorithm (github.com)</a></p>
+<p>辅助学习网址：<a target="_blank" rel="noopener" href="https://visualgo.net/zh">数据结构和算法动态可视化</a></p>
+<h1 id="0-需求分析"><a class="header-anchor" href="#0-需求分析"></a>0. 需求分析</h1>
+<p>现需要设计一种数据结构，用来存放整数，要求提供三个接口：</p>
+<ul>
+<li>添加元素</li>
+<li>获取最大值</li>
+<li>删除最大值</li>
+</ul>
+<p>可以用很多方式来实现这个需求，比如动态数组、双向链表、BBST 等，它们的时间复杂度对比如下：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>获取最大值</th>
+<th>删除最大值</th>
+<th>添加元素</th>
+<th>吐槽</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>动态数组 \ 双向链表</td>
+<td>O(n)</td>
+<td>O(n)</td>
+<td>O(1)</td>
+<td></td>
+</tr>
+<tr>
+<td><mark>有序</mark> 动态数组 \ 双向链表</td>
+<td>O(1)</td>
+<td>O(1)</td>
+<td>O(n)</td>
+<td>全排序有点浪费</td>
+</tr>
+<tr>
+<td>BBST</td>
+<td>O(logn)</td>
+<td>O(logn)</td>
+<td>O(logn)</td>
+<td>杀鸡焉用牛刀？</td>
+</tr>
+</tbody>
+</table>
+<p>通过上面的对比可知 BBST 的综合效率更高，难道就采用红黑树或 AVL 树来实现？</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/meme/你是憨批.jpg" alt="你是憨批" style="zoom:50%;" />
+<p>BBST 内部逻辑多复杂心里没点数？BBST 的功能也很强大，能做很多事，然后就拿来做这三个需求？那不是杀鸡用了牛刀？</p>
+<p>那有没有更优的数据结构来实现呢？</p>
+<p>那肯定是有的！ 可以使用 <mark>堆</mark>！😎</p>
+<p>堆的时间复杂度如下：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>获取最大值</th>
+<th>删除最大值</th>
+<th>添加元素</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>堆</td>
+<td>O(1)</td>
+<td>O(logn)</td>
+<td>O(logn)</td>
+</tr>
+</tbody>
+</table>
+<p>至此还可以引入一个问题： Top K 问题。💃</p>
+<blockquote>
+<p>Top K 问题</p>
+</blockquote>
+<p>所谓 Top K 问题，就是从海量数据中找出前 K 个数据。</p>
+<p>比如： 从 100 万个整数中找出最大的 100 个整数。</p>
+<p>Top K 问题的解法之一： 可以用数据结构 “堆” 来解决。💪</p>
+<h1 id="1-堆的含义"><a class="header-anchor" href="#1-堆的含义"></a>1. 堆的含义</h1>
+<p>堆（Heap）也是一种树状的数据结构（不要跟内存模型中的“堆空间”混淆），常见的堆实现有：</p>
+<ul>
+<li>二叉堆（Binary Heap，完全二叉堆）</li>
+<li>多叉堆（D-Heap，D-ary Heap）</li>
+<li>索引堆（Index Heap）</li>
+<li>二项堆（Binomial Heap）</li>
+<li>斐波那契堆（Fibonacci Heap）</li>
+<li>左倾堆（Leftist Heap，左式堆）</li>
+<li>斜堆（Skew Heap）</li>
+</ul>
+<p><strong>本文主要介绍二叉堆！</strong></p>
+<blockquote>
+<p>堆的性质</p>
+</blockquote>
+<p>堆有一个重要的性质：任意节点的值总是 大于等于 （或小于等于）其 <span style="color:darkorange ">子节点</span> 的值。</p>
+<p>如果任意节点的值总是 <strong>大于等于</strong> 其子节点的值，称为：最大堆、大根堆、大顶堆，但这并不是说上一层的节点值一定大于等于下一层的节点值。如：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/最大堆_二叉堆.png" alt="最大堆_二叉堆" style="zoom:67%;" />
+<p>如果任意节点的值总是 <strong>小于等于</strong> 其子节点的值，称为：最小堆、小根堆、小顶堆，同样也不是说上一层的节点值就一定小于等于下一层的节点值。如：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/最小堆_二叉堆.png" alt="最小堆_二叉堆" style="zoom:67%;" />
+<p>通过图示可以发现：对于最大堆，整个堆的最大值就是在最上面的根节点；对于最小堆，整个堆的最小值就是在最上面的根节点。</p>
+<p>由此可见，堆中的元素必须具备可比较性（跟二叉搜索树一样）。</p>
+<blockquote>
+<p>接口设计</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> 默烦</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2020/8/4</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Heap</span>&lt;E&gt; &#123;</span><br><span class="line">    <span class="type">int</span> <span class="title function_">size</span><span class="params">()</span>;	<span class="comment">// 元素的数量</span></span><br><span class="line">    <span class="type">boolean</span> <span class="title function_">isEmpty</span><span class="params">()</span>; <span class="comment">// 是否为空</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">clear</span><span class="params">()</span>; <span class="comment">// 清空</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(E element)</span>; <span class="comment">// 添加元素</span></span><br><span class="line">    E <span class="title function_">get</span><span class="params">()</span>; <span class="comment">// 获取堆顶元素</span></span><br><span class="line">    E <span class="title function_">remove</span><span class="params">()</span>; <span class="comment">// 删除堆顶元素</span></span><br><span class="line">    E <span class="title function_">replace</span><span class="params">(E element)</span>; <span class="comment">// 删除堆顶元素的同时插入一个新元素</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="2-二叉堆"><a class="header-anchor" href="#2-二叉堆"></a>2. 二叉堆</h1>
+<h2 id="2-1-基本含义"><a class="header-anchor" href="#2-1-基本含义"></a>2.1 基本含义</h2>
+<p><strong>二叉堆</strong> 的 <mark>逻辑结构</mark> 就是一棵完全二叉树，所以也叫 <strong>完全二叉堆</strong>。</p>
+<p>二叉堆示意图：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/二叉堆.png" alt="二叉堆" style="zoom:50%;" />
+<p>鉴于完全二叉树的一些特性，二叉堆的底层（ 即物理结构）一般用数组实现即可。</p>
+<p>那为什么不用二叉树或者链表作为物理结构呢？</p>
+<ul>
+<li>如果使用二叉树作为物理结构，在编写节点对象，还要存储 left 、right 指针等各种东西，内存结构将变得复杂。</li>
+<li>因为是完全二叉堆，其元素的摆放位置是从上到下、从左到右的，在这样的规则下选用数组作为物理结构是最好的。</li>
+</ul>
+<p>针对上图给出的二叉堆示意图，其物理结构可以表示为：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/%E4%BA%8C%E5%8F%89%E5%A0%86%E7%89%A9%E7%90%86%E7%BB%93%E6%9E%84.png" alt="二叉堆物理结构"></p>
+<blockquote>
+<p>索引 i 的规律（n 是元素数量）</p>
+</blockquote>
+<p>如果 <code>i = 0</code> ，它是 <strong>根</strong> 节点。</p>
+<p>如果 <code>i &gt; 0</code> ，它的 <strong>父</strong> 节点索引为 <code>floor((i - 1) / 2)</code>。</p>
+<p>如果 <code>2i + 1 &lt;= n - 1</code> ，它的 <strong>左</strong> 子节点索引为 <code>2i + 1</code>。</p>
+<p>如果 <code>2i + 1 &gt; n - 1</code> ，它 <strong>无左</strong> 子节点。</p>
+<p>如果 <code>2i + 2 &lt;= n - 1</code> ，它的 <strong>右</strong> 子节点索引为 <code>2i + 2</code>。</p>
+<p>如果 <code>2i + 2 &gt; n - 1</code> ，它 <strong>无右</strong> 子节点。</p>
+<h2 id="2-2-基本接口实现"><a class="header-anchor" href="#2-2-基本接口实现"></a>2.2 基本接口实现</h2>
+<p><mark>接下来基于二叉堆，编写一个最大堆。</mark></p>
+<p>创建实现 <code>Heap</code> 接口二叉堆 <code>BinaryHeap</code> 类。</p>
+<p>由于二叉堆的底层是由数组实现的，因此需要成员变量 <code>size</code> 来表示二叉堆的长度，还需规定数组的默认容量，为编写扩容代码做准备。</p>
+<p>二叉堆的逻辑结构是完全二叉搜索树，因此要求节点有可比较性。</p>
+<p>针对以上说明，可以实现一些简单的方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 二叉堆（最大堆）</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> 默烦</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2020/8/4</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BinaryHeap</span>&lt;E&gt; <span class="keyword">implements</span> <span class="title class_">Heap</span>&lt;E&gt; &#123;</span><br><span class="line">    <span class="keyword">private</span> E[] elements;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> size;</span><br><span class="line">    <span class="keyword">private</span> Comparator&lt;E&gt; comparator;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">DEFAULT_CAPACITY</span> <span class="operator">=</span> <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">BinaryHeap</span><span class="params">(Comparator&lt;E&gt; comparator)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.comparator = comparator;</span><br><span class="line">        <span class="built_in">this</span>.elements = (E[]) <span class="keyword">new</span> <span class="title class_">Object</span>[DEFAULT_CAPACITY];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">BinaryHeap</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="built_in">this</span>(<span class="literal">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> size;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isEmpty</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> size == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">clear</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; size; i++) &#123;</span><br><span class="line">            elements[i] = <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        size = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(E element)</span> &#123; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> E <span class="title function_">get</span><span class="params">()</span> &#123; <span class="comment">// 获取堆顶元素</span></span><br><span class="line">        <span class="comment">// 判断堆是否为空</span></span><br><span class="line">        emptyCheck();</span><br><span class="line">        <span class="keyword">return</span> elements[<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> E <span class="title function_">remove</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> E <span class="title function_">replace</span><span class="params">(E element)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="title function_">compare</span><span class="params">(E e1, E e2)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> comparator != <span class="literal">null</span> ? comparator.compare(e1, e2)</span><br><span class="line">                : ((Comparable&lt;E&gt;) e1).compareTo(e2);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 检查二叉堆 size 是否为 0</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">emptyCheck</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (size == <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IndexOutOfBoundsException</span>(<span class="string">&quot;Heap is empty!&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-3-添加元素"><a class="header-anchor" href="#2-3-添加元素"></a>2.3 添加元素</h2>
+<p>再次声明：<mark>具体实现是基于二叉堆的最大堆。</mark></p>
+<p>前文说到：二叉堆的物理结构是数组，那应该怎么添加元素呢？</p>
+<p>直接这样？🙋</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(E element)</span> &#123;</span><br><span class="line">    elements[size++] = element;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那肯定不是啊！咋可能这么简单。😏</p>
+<blockquote>
+<p>添加思路</p>
+</blockquote>
+<p>首先，要求添加的元素需要有可比较性，因此添加元素时必须判断是否为 <code>null</code>，对此可以写一个检测空值的方法然后在添加方法 <code>add()</code> 中调用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">elementNotNullCheck</span><span class="params">(E element)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (element == <span class="literal">null</span>)&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;element must not be null!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>添加元素时还可能出现数组容量不够的情况，此时需要对数组进行扩容。这里可以使用在动态数组中编写的扩容方法 <code>ensureCapacity()</code>，这也要在 <code>add()</code> 方法中调用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 保证要有capacity的容量(不考虑线程安全)</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">ensureCapacity</span><span class="params">(<span class="type">int</span> capacity)</span>&#123;</span><br><span class="line">    <span class="comment">// 当前 elements.length 为 10，因为默认容量为 10</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">oldCapacity</span> <span class="operator">=</span> elements.length;</span><br><span class="line">    <span class="keyword">if</span> (oldCapacity &gt;= capacity) <span class="keyword">return</span>;</span><br><span class="line">    <span class="comment">// 新容量为新容量的1.5倍</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">newCapacity</span> <span class="operator">=</span> oldCapacity + (oldCapacity &gt;&gt; <span class="number">1</span>);</span><br><span class="line">    E[] newElements = (E[]) <span class="keyword">new</span> <span class="title class_">Object</span>[newCapacity];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; size; i++) &#123;</span><br><span class="line">        newElements[i] = elements[i];</span><br><span class="line">    &#125;</span><br><span class="line">    elements = newElements;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>还有最最重要的一点： <mark>如果直接在数组末尾添加元素，可能会破坏二叉堆的结构</mark>，因此添加元素后需要对二叉堆的结构进行修复。</p>
+<p>假设在一个二叉堆中添加元素 <strong>80</strong>，那么修复步骤如下：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/%E4%BA%8C%E5%8F%89%E5%A0%86%E6%B7%BB%E5%8A%A0%E7%A4%BA%E6%84%8F%E5%9B%BE.png" alt="二叉堆添加示意图"></p>
+<p>对上图的修复步骤进行总结（图中的 <mark>80</mark> 简称为 node）：</p>
+<p>循环执行以下操作：</p>
+<ul>
+<li>如果 <code>node &gt; node 的父节点</code>，那么当前节点与父节点交换位置；</li>
+<li>如果 <code>node &lt;= node 的父节点</code>，或者 <code>node 没有父节点</code>，退出循环。</li>
+</ul>
+<p>这个过程被称为上滤（Sift Up）。添加元素的时间复杂度为 <code>O(logn)</code>。</p>
+<blockquote>
+<p>添加元素的实现</p>
+</blockquote>
+<p>编写一个方法，这个方法可以让索引 <code>index</code> 位置的元素进行上滤：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 让索引为 index 的元素进行上滤</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> index 数组索引</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">siftUp</span><span class="params">(<span class="type">int</span> index)</span> &#123;</span><br><span class="line">    <span class="type">E</span> <span class="variable">e</span> <span class="operator">=</span> elements[index];</span><br><span class="line">    <span class="keyword">while</span> (index &gt; <span class="number">0</span>) &#123; <span class="comment">// 索引位置节点有父节点时</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">pIndex</span> <span class="operator">=</span> (index - <span class="number">1</span>) &gt;&gt; <span class="number">1</span>; <span class="comment">// 获取父节点索引</span></span><br><span class="line">        <span class="type">E</span> <span class="variable">p</span> <span class="operator">=</span> elements[pIndex];</span><br><span class="line">        <span class="keyword">if</span> (compare(e, p) &lt;= <span class="number">0</span>) <span class="keyword">return</span>;</span><br><span class="line">        <span class="comment">// 交换 index、pIndex 位置的内容</span></span><br><span class="line">        <span class="type">E</span> <span class="variable">tmp</span> <span class="operator">=</span> elements[index];</span><br><span class="line">        elements[index] = elements[pIndex];</span><br><span class="line">        elements[pIndex] = tmp;</span><br><span class="line">        <span class="comment">// 重新赋值 index</span></span><br><span class="line">        index = pIndex;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后，在添加方法 <code>add()</code> 中对三个私有方法进行汇总：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(E element)</span> &#123;</span><br><span class="line">    elementNotNullCheck(element);</span><br><span class="line">    ensureCapacity(size + <span class="number">1</span>);</span><br><span class="line">    elements[size++] = element;</span><br><span class="line">    siftUp(size - <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-4-代码优化"><a class="header-anchor" href="#2-4-代码优化"></a>2.4 代码优化</h2>
+<blockquote>
+<p>上滤优化</p>
+</blockquote>
+<p>上滤 <code>siftUp()</code> 的具体实现中进行了位置交换，而位置交换的代码需要三行，这里还可以进行优化：<strong>将新添加节点备份，确定最终位置后才摆放上去</strong>。</p>
+<p>好像有点抽象？💫具体而言：</p>
+<ul>
+<li>先将插入的元素备份一手；</li>
+<li>然后用插入元素与其父元素进行比较，如果大于父节点，就用父节点的数据添加到插入元素的位置；</li>
+<li>使用同样的方法，插入元素一直向上比较循环，直到没有父节点，或小于等于父节点；</li>
+<li>最后用备份的插入节点覆盖父节点。</li>
+</ul>
+<p>具体流程图如下：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/%E4%BA%8C%E5%8F%89%E5%A0%86%E4%B8%8A%E6%BB%A4%E4%BC%98%E5%8C%96%E6%B5%81%E7%A8%8B.png" alt="二叉堆上滤优化流程"></p>
+<p>代码修改如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 让索引为 index 的元素进行上滤</span></span><br><span class="line"><span class="comment">*</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> index 数组索引</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">siftUp</span><span class="params">(<span class="type">int</span> index)</span> &#123;</span><br><span class="line">    <span class="type">E</span> <span class="variable">e</span> <span class="operator">=</span> elements[index];</span><br><span class="line">    <span class="keyword">while</span> (index &gt; <span class="number">0</span>) &#123; <span class="comment">// 索引位置节点有父节点时</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">pIndex</span> <span class="operator">=</span> (index - <span class="number">1</span>) &gt;&gt; <span class="number">1</span>; <span class="comment">// 获取父节点索引</span></span><br><span class="line">        <span class="type">E</span> <span class="variable">p</span> <span class="operator">=</span> elements[pIndex];</span><br><span class="line">        <span class="keyword">if</span> (compare(e, p) &lt;= <span class="number">0</span>) <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 将父元素存储在 index 位置</span></span><br><span class="line">        elements[index] = elements[pIndex];</span><br><span class="line">        <span class="comment">// 重新赋值 index</span></span><br><span class="line">        index = pIndex;</span><br><span class="line">    &#125;</span><br><span class="line">    elements[index] = e;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对比未优化的代码可以发现，在 <code>while</code> 循环中减少了三条语句。</p>
+<p>仅从交换位置的代码角度看：大概由 <code>3 * O(logn)</code> 优化到 <code>1 * O(logn) + 1</code> 。</p>
+<blockquote>
+<p>代码抽取</p>
+</blockquote>
+<p>介绍堆的时候列举过很多的堆实现，比如：多叉堆、索引堆、斐波那契堆等等。有这么多的堆实现，它们中肯定有些代码是可以复用的，因此可以将这些公共代码抽取出来。</p>
+<p>创建一个抽象类 <code>AbstractHeap</code>，实现<code>Heap</code>接口，用于抽取堆中的公共代码。</p>
+<p>堆中的元素肯定是有可比较性的，同时成员变量 <code>size</code> 也肯定是每个堆都有的。基于 <code>size</code> 成员变量，<code>size()</code> 方法和 <code>isEmpty()</code> 方法也应该都是可以共用的，比较方法 <code>compare()</code> 也不例外。</p>
+<p>PS： <mark>注意抽象类中方法、成员变量的访问修饰符！</mark></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> 默烦</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2020/8/4</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">AbstractHeap</span>&lt;E&gt; <span class="keyword">implements</span> <span class="title class_">Heap</span>&lt;E&gt; &#123;</span><br><span class="line">    <span class="keyword">protected</span> <span class="type">int</span> size;</span><br><span class="line">    <span class="keyword">protected</span> Comparator&lt;E&gt; comparator;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">AbstractHeap</span><span class="params">(Comparator&lt;E&gt; comparator)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.comparator = comparator;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">AbstractHeap</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>(<span class="literal">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> size;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isEmpty</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> size == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> <span class="type">int</span> <span class="title function_">compare</span><span class="params">(E e1, E e2)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> comparator != <span class="literal">null</span> ? comparator.compare(e1, e2)</span><br><span class="line">                : ((Comparable&lt;E&gt;) e1).compareTo(e2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后可以用 <code>BinaryHeap</code> 继承抽象类 <code>AbstractHeap</code>，取消实现 <code>Heap</code>，并将 <code>BinaryHeap</code> 类中的公共方法、公共成员变量删除：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BinaryHeap</span>&lt;E&gt; <span class="keyword">extends</span> <span class="title class_">AbstractHeap</span>&lt;E&gt; &#123;</span><br><span class="line">    <span class="comment">// 删除了两个存在于父类的成员变量</span></span><br><span class="line">    <span class="keyword">private</span> E[] elements;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">DEFAULT_CAPACITY</span> <span class="operator">=</span> <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 这个构造方法也要修改</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">BinaryHeap</span><span class="params">(Comparator&lt;E&gt; comparator)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>(comparator);</span><br><span class="line">        <span class="built_in">this</span>.elements = (E[]) <span class="keyword">new</span> <span class="title class_">Object</span>[DEFAULT_CAPACITY];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 删除方法 size()、isEmpty() 和 compare()</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 省略其他代码</span></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-5-删除元素"><a class="header-anchor" href="#2-5-删除元素"></a>2.5 删除元素</h2>
+<p>删除元素的抽象方法是： <code>E remove();</code>，方法并没有接收任何参数，这意味着不能在这里的堆中删除指定的元素，其含义指的是 <strong>删除堆顶的元素</strong> 。</p>
+<p>那应该怎么删除？ 🙋</p>
+<p>直接删除物理结构中数组中的元素，然后让后面的元素向前移，就和动态数组一样？</p>
+<p>那肯定不是，如果这样的话，删除元素的时间复杂度就高达 <code>O(n)</code> 了。😥</p>
+<blockquote>
+<p>删除思路</p>
+</blockquote>
+<p>假设现有一个二叉堆如下图所示，需要删除其堆顶元素 <mark>80</mark> ，具体删除步骤如下：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/%E4%BA%8C%E5%8F%89%E5%A0%86%E5%88%A0%E9%99%A4%E7%A4%BA%E6%84%8F%E5%9B%BE.png" alt="二叉堆删除示意图"></p>
+<p>对上述删除步骤进行总结：</p>
+<ul>
+<li>用最后一个节点覆盖根节点</li>
+<li>删除最后一个节点</li>
+<li>循环执行以下操作（图中的 <mark>43</mark> 简称为 node）：
+<ul>
+<li>如果 <code>node &lt; node 的子节点</code>，与最大的子节点交换位置</li>
+<li>如果 <code>node &gt;= node 的子节点</code>，或者 <code>node 没有子节点</code>，就退出循环</li>
+</ul>
+</li>
+</ul>
+<p>在添加元素中存在上滤，既然有上滤，那么就有下滤，这里的过程就叫做下滤（Sift Down），时间复杂度为：<code>O(logn)</code>，同样在下滤中交换位置的操作也可以像上滤那样进行优化。</p>
+<blockquote>
+<p>删除实现</p>
+</blockquote>
+<p>首先得搞清楚循环的条件，其实很简单：循环到第一个叶子节点就停止循环。</p>
+<p>因此得找到第一个叶子节点的索引，二叉堆的逻辑结构是一棵完全二叉树，根据完全二叉树的规律可知： <strong>第一个叶子节点的索引等于非叶子节点的数量</strong>。</p>
+<p>在完全二叉树中，非叶子节点的数量为 <code>floor(n / 2)</code>，其中 n 为节点的总数量。这样，循环条件就确定了！👏</p>
+<p>然后就是找到节点的左右节点，并与其中最大的节点进行比较替换。这里有一点可以注意一下，在完全二叉树中，一个节点要么只有左子节点，要么左右子节点都有，不可能出现只有右子节点的情况，因此可以设置默认的比较节点为左子节点。</p>
+<p>编写一个方法，这个方法可以让索引 <code>index</code> 位置的元素进行下滤：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 让索引为 index 的元素进行下滤</span></span><br><span class="line"><span class="comment">*</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> index</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">siftDown</span><span class="params">(<span class="type">int</span> index)</span> &#123;</span><br><span class="line">    <span class="type">E</span> <span class="variable">element</span> <span class="operator">=</span> elements[index];</span><br><span class="line">    <span class="type">int</span> <span class="variable">half</span> <span class="operator">=</span> size &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    <span class="comment">// 第一个叶子节点的索引 = 非叶子节点的数量</span></span><br><span class="line">    <span class="keyword">while</span> (index &lt; half)&#123; <span class="comment">// 必须保证index位置是非叶子节点</span></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * index 位置的节点的子节点有两种情况</span></span><br><span class="line"><span class="comment">         * 1. 只有左子节点</span></span><br><span class="line"><span class="comment">         * 2. 同时有左子节点、右子节点</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="comment">// 默认为左子节点的索引</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">childIndex</span> <span class="operator">=</span> (index &lt;&lt; <span class="number">1</span>) + <span class="number">1</span>;</span><br><span class="line">        <span class="type">E</span> <span class="variable">child</span> <span class="operator">=</span> elements[childIndex];</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 右子节点索引</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">rightIndex</span> <span class="operator">=</span> childIndex + <span class="number">1</span>;</span><br><span class="line">        <span class="comment">// 选出最大的子节点</span></span><br><span class="line">        <span class="keyword">if</span> (rightIndex &lt; size </span><br><span class="line">            &amp;&amp; compare(elements[rightIndex],child) &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="comment">//                childIndex = rightIndex;</span></span><br><span class="line">            child = elements[childIndex = rightIndex];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (compare(element,child) &gt;= <span class="number">0</span>) <span class="keyword">break</span>;</span><br><span class="line">        <span class="comment">// 将子节点存放到index位置</span></span><br><span class="line">        elements[index] = child;</span><br><span class="line">        <span class="comment">// 重新设置index</span></span><br><span class="line">        index = childIndex;</span><br><span class="line">    &#125;</span><br><span class="line">    elements[index] = element;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后，完善一下删除堆顶方法 <code>remove()</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> E <span class="title function_">remove</span><span class="params">()</span> &#123; <span class="comment">// 删除堆顶元素</span></span><br><span class="line">    emptyCheck();</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> <span class="variable">lastIndex</span> <span class="operator">=</span> --size;</span><br><span class="line">    <span class="type">E</span> <span class="variable">root</span> <span class="operator">=</span> elements[<span class="number">0</span>];</span><br><span class="line">    elements[<span class="number">0</span>] = elements[lastIndex];</span><br><span class="line">    elements[lastIndex] = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    siftDown(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">return</span> root;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-6-replace-方法"><a class="header-anchor" href="#2-6-replace-方法"></a>2.6 replace 方法</h2>
+<p><code>replace</code> 方法的完整签名是 <code>E replace(E element);</code>，表示删除堆顶元素的同时插入一个新元素。</p>
+<p>既然如此，不难想到这么实现 <code>replace()</code> 方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> E <span class="title function_">replace</span><span class="params">(E element)</span> &#123;</span><br><span class="line">    <span class="type">E</span> <span class="variable">root</span> <span class="operator">=</span> remove();</span><br><span class="line">    add(element);</span><br><span class="line">    <span class="keyword">return</span> root;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这么做…</p>
+<p>确实可以。😂</p>
+<p>但有点欠妥，因为删除、添加都是 <code>O(logn)</code> 级别的，俩加在一起就是 2 倍了，这样就有点 “浪费”。</p>
+<p>因此，Duck 不必！</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/meme/duck%E4%B8%8D%E5%BF%85.jpg" alt="duck不必"></p>
+<p>那咋做呢？😳</p>
+<p>删除栈顶元素的做法是：使用堆底元素覆盖堆顶元素，然后对堆进行修复，使用下滤操作。</p>
+<p>根据这个启发，在实现 <code>replace</code> 时可以 <strong>使用替换元素覆盖堆顶元素，然后进行下滤操作</strong>。</p>
+<p><code>replace()</code> 方法的完整实现如下（注意部分特殊情况）：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> E <span class="title function_">replace</span><span class="params">(E element)</span> &#123;</span><br><span class="line">    elementNotNullCheck(element);</span><br><span class="line"></span><br><span class="line">    <span class="type">E</span> <span class="variable">root</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">if</span> (size == <span class="number">0</span>) &#123;</span><br><span class="line">        elements[<span class="number">0</span>] = element;</span><br><span class="line">        size = <span class="number">1</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        root = elements[<span class="number">0</span>];</span><br><span class="line">        elements[<span class="number">0</span>] = element;</span><br><span class="line">        siftDown(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> root;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="3-批量建堆"><a class="header-anchor" href="#3-批量建堆"></a>3. 批量建堆</h1>
+<h2 id="3-1-基本含义"><a class="header-anchor" href="#3-1-基本含义"></a>3.1 基本含义</h2>
+<p>批量建堆（Heapify），就是将一组不满足堆要求的数据形成一个堆。（我自己的理解，可能不大准确😜）</p>
+<p>假设现有一组数据，它们是乱的、无规则的，想要把它们构造成一个堆，这就是 <strong>批量建堆。</strong></p>
+<p>那这好做！🙋</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    <span class="type">int</span>[] data = &#123;<span class="number">88</span>, <span class="number">44</span>, <span class="number">53</span>, <span class="number">41</span>, <span class="number">16</span>, <span class="number">6</span>, <span class="number">70</span>, <span class="number">18</span>, <span class="number">85</span>, <span class="number">98</span>, <span class="number">81</span>, <span class="number">23</span>, <span class="number">36</span>, <span class="number">43</span>, <span class="number">37</span>&#125;;</span><br><span class="line">    BinaryHeap&lt;Integer&gt; heap = <span class="keyword">new</span> <span class="title class_">BinaryHeap</span>&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; data.length; i++) &#123;</span><br><span class="line">        heap.add(data[i]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样不就完事了？</p>
+<p>这么做也确实可以，但是没有必要！</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/meme/可以但没必要.jpg" alt="可以但没必要" style="zoom:50%;" />
+<p>还有更好的做法：</p>
+<ul>
+<li>自上而下的上滤</li>
+<li>自下而上的下滤</li>
+</ul>
+<h2 id="3-2-自上而下的上滤"><a class="header-anchor" href="#3-2-自上而下的上滤"></a>3.2 自上而下的上滤</h2>
+<p>现有如下图所示的一组数据，它不满足：任意节点的值总是 大于等于 （或小于等于）其 <span style="color:darkorange ">子节点</span> 的值。因此，它不是一个堆，但可以看成一棵二叉树。</p>
+<p>接下来对这组数据进行改造，将其变为一个堆。</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/批量建堆的数据.png" alt="批量建堆的数据" style="zoom:67%;" />
+<p>首先采用的做法是： <mark>自上而下的上滤</mark> 。</p>
+<p>这啥意思呢？就是按照从上到下，从左到右的顺序，对这些数据进行上滤操作。</p>
+<p>即：按照 <code>&#123; 30, 34, 73, 60, 68, 43 &#125;</code> 的顺序进行上滤。</p>
+<p>进行上滤时第一个元素可以不用进行上滤，因为它已经是第一个元素了，上滤个 🔨 。</p>
+<p>使用上述的数据，自上而下的上滤示意图为：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/%E8%87%AA%E4%B8%8A%E8%80%8C%E4%B8%8B%E7%9A%84%E4%B8%8A%E6%BB%A4%E7%A4%BA%E6%84%8F%E5%9B%BE.png" alt="自上而下的上滤示意图"></p>
+<p>通过示意图可以发现，每进行一次上滤，观察局部都是一个最大堆，比如在第三步中，<code>&#123;73, 30, 34&#125;</code> 就是一个堆。持续进行上滤，直到整个结构都变成堆。</p>
+<p>自上而下的上滤的本质是： 每进行一次上滤，就向堆中添加一个元素，堆慢慢长大，最终成为一个“大堆”，与添加 <code>add()</code> 类似。</p>
+<p>上述过程可以像这样实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; size; i++)&#123;</span><br><span class="line">    siftUp(i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="3-2-自下而上的下滤"><a class="header-anchor" href="#3-2-自下而上的下滤"></a>3.2 自下而上的下滤</h2>
+<p>自上而下的上滤已经介绍完了，那么自下而上的下滤也就很好理解了。</p>
+<p>自下而上的下滤：就是按照从下到上，从右到左的顺序，对这些数据进行下滤操作。</p>
+<p>还是使用这样的一组数据：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/批量建堆的数据.png" alt="批量建堆的数据" style="zoom:67%;" />
+<p>自下而上的下滤顺序为： <code>&#123;43, 68, 60, 73, 34, 30&#125;</code></p>
+<p>和上滤一样，下滤时也要注意一点： 叶子节点不用进行下滤，因为下滤是使用当前节点和其最大子节点进行交换，叶子节点都没子节点，交换个 🔨 。</p>
+<p>使用上述的数据，自下而上的下滤示意图如下：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/%E8%87%AA%E4%B8%8B%E8%80%8C%E4%B8%8A%E7%9A%84%E4%B8%8B%E6%BB%A4%E7%A4%BA%E6%84%8F%E5%9B%BE.png" alt="自下而上的下滤示意图"></p>
+<p>通过示意图，我们可以发现，每进行一次下滤，观察局部都是一个最大堆。</p>
+<p>比如在第二步中，<code>&#123;73, 43&#125;</code> 就是一个堆。</p>
+<p>在第三步中，<code>&#123;68, 60, 34&#125;</code> 也是一个堆，这时就差 30 进行下滤了。</p>
+<p>最后就和 <code>replace()</code> 的情况一样了，其他部分都是满足堆的结构，只要将首元素下滤后，整个结构就满足堆的结构了。</p>
+<p>自下而上的下滤的本质是： 先形成多个较小的堆，然后把这些堆聚在一起，直接形成一个“大堆”。与 <code>remove()</code> 的后半部分类似。</p>
+<p>上述过程可以像这样实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> (size &gt;&gt; <span class="number">1</span>) - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)&#123;</span><br><span class="line">    siftDown(i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="3-3-效率对比"><a class="header-anchor" href="#3-3-效率对比"></a>3.3 效率对比</h2>
+<p>前文说了，自上而下的上滤相当于添加操作，而自下而上的下滤相当于删除的后半部分。</p>
+<p>从对节点的操作数量来看，上滤仅有首节点没进行上滤，下滤则是叶子结点都不进行下滤。</p>
+<p>这样一对比，似乎 <strong>自下而上的下滤</strong> 的效率更高。😕</p>
+<p>实际结果也确实如此。😏</p>
+<p>通过下图进行对比：</p>
+<p>图中的三角形表示一个完全二叉树，将其分成四层，每一层所占的阴影部分面积不一样，<strong>面积越大，表示那一层的节点越多</strong>。</p>
+<p>对于自上而下的上滤：第一层进行上滤的高度为 4 层，第二层进行上滤的高度为 3 层 ······</p>
+<p>对于自下而上的下滤：第一层进行上滤的高度为 1 层，第二层进行上滤的高度为 2 层 ······</p>
+<p>很显然，对于自上而下的上滤来说，有大量的节点进行上滤的高度为 4 层，而对于自下而上的下滤来说，只有第四层节点进行上滤的高度为 4 层。</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/%E6%89%B9%E9%87%8F%E5%BB%BA%E5%A0%86%E6%95%88%E7%8E%87%E5%AF%B9%E6%AF%94.png" alt="批量建堆效率对比"></p>
+<p>因此不难得出：<mark>自下而上的下滤的效率更高</mark>。</p>
+<h2 id="3-4-复杂度"><a class="header-anchor" href="#3-4-复杂度"></a>3.4 复杂度</h2>
+<p>先直接上结论：</p>
+<ul>
+<li>自上而下的上滤： <code>O(ologn)</code></li>
+<li>自下而上的下滤： <code>O(n)</code></li>
+</ul>
+<p>堆中的数据不是全排序的，是偏序的，就是说数据是稍微有序的，只能保证“任意节点的值总是大于等于 （或小于等于）其 <span style="color:darkorange ">子节点</span> 的值”，但对于节点的“孙子节点”就不好说了。</p>
+<p>而自上而下的上滤的复杂度高达 <code>O(ologn)</code>，这足以进行全排序了，但得到的结构却是偏序的，那岂不是很浪费？</p>
+<p>对这两种复杂度：</p>
+<ul>
+<li>自上而下的上滤其实是所有节点的 <strong>深度</strong> 之和</li>
+<li>自下而上的下滤其实是所有节点的 <strong>高度</strong> 之和</li>
+</ul>
+<blockquote>
+<p>所有节点的深度之和</p>
+</blockquote>
+<p>仅仅是叶子节点，就有将近 <code>n / 2</code> 个，而且每一个叶子节点的深度都是 <code>O(logn)</code> 级别的。</p>
+<p>因此，在叶子节点这一块，就达到了 <code>O(nlogn)</code> 级别。</p>
+<p><code>O(nlogn)</code> 的时间复杂度也足以利用排序算法对所有节点进行全排序了。</p>
+<blockquote>
+<p>所有节点的高度之和</p>
+</blockquote>
+<p>假设是满树，节点的总个数为 n ，树高为 h，那么 n = 2<sup>h</sup> - 1</p>
+<p>所有节点的树高之和 H(n) = 2<sup>0</sup> * (h - 0) + 2<sup>1</sup> * (h - 1) + 2<sup>2</sup> * (h - 2) + ··· + 2<sup>h-1</sup> * [h - (h - 1)]</p>
+<p>H(n) = h * (2<sup>0</sup> + 2<sup>1</sup>  + 2<sup>2</sup> + ··· + 2<sup>h-1</sup>) - [1 * 2<sup>1</sup> + 2 * 2<sup>2</sup> + 3 * 2<sup>3</sup> + ··· + (h - 1) * 2<sup>h-1</sup>]</p>
+<p>H(n) = h * (2<sup>h</sup> - 1) - [(h - 2) * 2<sup>h</sup> + 2]</p>
+<p>H(n) = h * 2<sup>h</sup> - h - h * 2<sup>h</sup> + 2<sup>h+1</sup> - 2</p>
+<p>H(n) = 2<sup>h+1</sup> - h - 2 = 2 * (2<sup>h</sup> - 1) - h = 2n - h = 2n - log<sub>2</sub>(n + 1) = <code>O(n)</code></p>
+<p>上述公式推导涉及到一个错位相减，来复习一下高中数学😂</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/%E8%8A%82%E7%82%B9%E9%AB%98%E5%BA%A6%E5%92%8C%E5%85%AC%E5%BC%8F%E6%8E%A8%E5%AF%BC.png" alt="节点高度和公式推导"></p>
+<h2 id="3-5-拓展思考"><a class="header-anchor" href="#3-5-拓展思考"></a>3.5 拓展思考</h2>
+<p>前文提到：<strong>自上而下的上滤</strong> 和 <strong>自下而上的下滤</strong> 可以进行批量建堆。</p>
+<p>那么，以下方法可以进行批量建堆吗？</p>
+<ul>
+<li>自上而下的下滤</li>
+<li>自下而上的上滤</li>
+</ul>
+<p>答案是不行。😝</p>
+<p>通过思考【自上而下的上滤】和【自下而上的下滤】的本质就可以得出答案，前者是添加，后者是删除。</p>
+<p>而上面提到的两种方式毫无意义而言，因此是不行。</p>
+<p>为了便于阅读，给一组数据方便测试：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/Heapify%E6%8B%93%E5%B1%95%E6%80%9D%E8%80%83%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE.png" alt="Heapify拓展思考测试数据"></p>
+<h2 id="3-6-代码实现"><a class="header-anchor" href="#3-6-代码实现"></a>3.6 代码实现</h2>
+<p>在 <code>BinaryHeap</code> 类中编写一个构造方法，此构造方法接收一个数组，并利用数组中的数据构建出包含数组数据的堆：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="title function_">BinaryHeap</span><span class="params">(E[] elements, Comparator&lt;E&gt; comparator)</span>&#123;</span><br><span class="line">        <span class="built_in">super</span>(comparator);</span><br><span class="line">        <span class="keyword">if</span> (elements == <span class="literal">null</span> || elements.length == <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="built_in">this</span>.elements = (E[]) <span class="keyword">new</span> <span class="title class_">Object</span>[DEFAULT_CAPACITY];</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 记得将size复制，不然只会存储第一个元素</span></span><br><span class="line">            size = elements.length;</span><br><span class="line">            <span class="comment">// 保证容量至少为 10</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">capacity</span> <span class="operator">=</span> Math.max(elements.length, DEFAULT_CAPACITY);</span><br><span class="line"><span class="comment">//            this.elements = elements;</span></span><br><span class="line">            <span class="built_in">this</span>.elements = (E[]) <span class="keyword">new</span> <span class="title class_">Object</span>[capacity];</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; elements.length; i++) &#123;</span><br><span class="line">                <span class="built_in">this</span>.elements[i] = elements[i];</span><br><span class="line">            &#125;</span><br><span class="line">            heapify();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>在上述代码中，可以发现有一条语句被注释了：<code>this.elements = elements;</code></p>
+<p>使用这条语句的意思是用堆中的数组指向外部的数组，这么做有一个大问题：如果外部数组的数据发生改变，堆内的数据也会发生改变，这显然是不对的。因此只能将外部数据拷贝一份，再进行批量建堆。</p>
+<p>由于添加了一个构造方法，需要对其他构造方法进行修改：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="title function_">BinaryHeap</span><span class="params">(E[] elements)</span>&#123;</span><br><span class="line">    <span class="built_in">this</span>(elements, <span class="literal">null</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="title function_">BinaryHeap</span><span class="params">(Comparator&lt;E&gt; comparator)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>(<span class="literal">null</span>, comparator);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="title function_">BinaryHeap</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>(<span class="literal">null</span>, <span class="literal">null</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后就是 <code>heapify()</code> 方法的代码了，其实也很简单，在前文已经分析过了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 批量建堆 堆化</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">heapify</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="comment">// 自上而下的上滤</span></span><br><span class="line">    <span class="comment">//        for (int i = 0; i &lt; size; i++) &#123;</span></span><br><span class="line">    <span class="comment">//            siftUp(i);</span></span><br><span class="line">    <span class="comment">//        &#125;</span></span><br><span class="line">    <span class="comment">// 自下而上的下滤</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> (size &gt;&gt; <span class="number">1</span>) - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">        siftDown(i);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="3-7-二叉堆完整代码"><a class="header-anchor" href="#3-7-二叉堆完整代码"></a>3.7 二叉堆完整代码</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 二叉堆（最大堆）</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> 默烦</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2020/8/4</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BinaryHeap</span>&lt;E&gt; <span class="keyword">extends</span> <span class="title class_">AbstractHeap</span>&lt;E&gt;&#123;</span><br><span class="line">    <span class="keyword">private</span> E[] elements;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">DEFAULT_CAPACITY</span> <span class="operator">=</span> <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">BinaryHeap</span><span class="params">(E[] elements, Comparator&lt;E&gt; comparator)</span>&#123;</span><br><span class="line">        <span class="built_in">super</span>(comparator);</span><br><span class="line">        <span class="keyword">if</span> (elements == <span class="literal">null</span> || elements.length == <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="built_in">this</span>.elements = (E[]) <span class="keyword">new</span> <span class="title class_">Object</span>[DEFAULT_CAPACITY];</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 记得将size复制，不然只会存储第一个元素</span></span><br><span class="line">            size = elements.length;</span><br><span class="line">            <span class="comment">// 保证容量至少为 10</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">capacity</span> <span class="operator">=</span> Math.max(elements.length, DEFAULT_CAPACITY);</span><br><span class="line"><span class="comment">//            this.elements = elements;</span></span><br><span class="line">            <span class="built_in">this</span>.elements = (E[]) <span class="keyword">new</span> <span class="title class_">Object</span>[capacity];</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; elements.length; i++) &#123;</span><br><span class="line">                <span class="built_in">this</span>.elements[i] = elements[i];</span><br><span class="line">            &#125;</span><br><span class="line">            heapify();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">BinaryHeap</span><span class="params">(E[] elements)</span>&#123;</span><br><span class="line">        <span class="built_in">this</span>(elements,<span class="literal">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">BinaryHeap</span><span class="params">(Comparator&lt;E&gt; comparator)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>(<span class="literal">null</span>,comparator);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">BinaryHeap</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>(<span class="literal">null</span>,<span class="literal">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">clear</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; size; i++) &#123;</span><br><span class="line">            elements[i] = <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        size = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(E element)</span> &#123;</span><br><span class="line">        elementNotNullCheck(element);</span><br><span class="line">        ensureCapacity(size + <span class="number">1</span>);</span><br><span class="line">        elements[size++] = element;</span><br><span class="line">        siftUp(size - <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> E <span class="title function_">get</span><span class="params">()</span> &#123; <span class="comment">// 获取堆顶元素</span></span><br><span class="line">        <span class="comment">// 判断堆是否为空</span></span><br><span class="line">        emptyCheck();</span><br><span class="line">        <span class="keyword">return</span> elements[<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> E <span class="title function_">remove</span><span class="params">()</span> &#123; <span class="comment">// 删除堆顶元素</span></span><br><span class="line">        emptyCheck();</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> <span class="variable">lastIndex</span> <span class="operator">=</span> --size;</span><br><span class="line">        <span class="type">E</span> <span class="variable">root</span> <span class="operator">=</span> elements[<span class="number">0</span>];</span><br><span class="line">        elements[<span class="number">0</span>] = elements[lastIndex];</span><br><span class="line">        elements[lastIndex] = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">        siftDown(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> E <span class="title function_">replace</span><span class="params">(E element)</span> &#123;</span><br><span class="line">        elementNotNullCheck(element);</span><br><span class="line"></span><br><span class="line">        <span class="type">E</span> <span class="variable">root</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (size == <span class="number">0</span>) &#123;</span><br><span class="line">            elements[<span class="number">0</span>] = element;</span><br><span class="line">            size = <span class="number">1</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            root = elements[<span class="number">0</span>];</span><br><span class="line">            elements[<span class="number">0</span>] = element;</span><br><span class="line">            siftDown(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 批量建堆 堆化</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">heapify</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="comment">// 自下而上的下滤</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> (size &gt;&gt; <span class="number">1</span>) - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">            siftDown(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 让索引为 index 的元素进行下滤</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> index</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">siftDown</span><span class="params">(<span class="type">int</span> index)</span> &#123;</span><br><span class="line">        <span class="type">E</span> <span class="variable">element</span> <span class="operator">=</span> elements[index];</span><br><span class="line">        <span class="type">int</span> <span class="variable">half</span> <span class="operator">=</span> size &gt;&gt; <span class="number">1</span>;</span><br><span class="line">        <span class="comment">// 第一个叶子节点的索引 = 非叶子节点的数量</span></span><br><span class="line">        <span class="keyword">while</span> (index &lt; half) &#123; <span class="comment">// 必须保证index位置是非叶子节点</span></span><br><span class="line">            <span class="comment">/**</span></span><br><span class="line"><span class="comment">             * index 位置的节点的子节点有两种情况</span></span><br><span class="line"><span class="comment">             * 1. 只有左子节点</span></span><br><span class="line"><span class="comment">             * 2. 同时有左子节点、右子节点</span></span><br><span class="line"><span class="comment">             */</span></span><br><span class="line">            <span class="comment">// 默认为左子节点的索引</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">childIndex</span> <span class="operator">=</span> (index &lt;&lt; <span class="number">1</span>) + <span class="number">1</span>;</span><br><span class="line">            <span class="type">E</span> <span class="variable">child</span> <span class="operator">=</span> elements[childIndex];</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 右子节点索引</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">rightIndex</span> <span class="operator">=</span> childIndex + <span class="number">1</span>;</span><br><span class="line">            <span class="comment">// 选出最大的子节点</span></span><br><span class="line">            <span class="keyword">if</span> (rightIndex &lt; size &amp;&amp; compare(elements[rightIndex], child) &gt; <span class="number">0</span>) &#123;</span><br><span class="line"><span class="comment">//                childIndex = rightIndex;</span></span><br><span class="line">                child = elements[childIndex = rightIndex];</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (compare(element, child) &gt;= <span class="number">0</span>) <span class="keyword">break</span>;</span><br><span class="line">            <span class="comment">// 将子节点存放到index位置</span></span><br><span class="line">            elements[index] = child;</span><br><span class="line">            <span class="comment">// 重新设置index</span></span><br><span class="line">            index = childIndex;</span><br><span class="line">        &#125;</span><br><span class="line">        elements[index] = element;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 让索引为 index 的元素进行上滤</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> index 数组索引</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">siftUp</span><span class="params">(<span class="type">int</span> index)</span> &#123;</span><br><span class="line">        <span class="type">E</span> <span class="variable">e</span> <span class="operator">=</span> elements[index];</span><br><span class="line">        <span class="keyword">while</span> (index &gt; <span class="number">0</span>) &#123; <span class="comment">// 索引位置节点有父节点时</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">pIndex</span> <span class="operator">=</span> (index - <span class="number">1</span>) &gt;&gt; <span class="number">1</span>; <span class="comment">// 获取父节点索引</span></span><br><span class="line">            <span class="type">E</span> <span class="variable">p</span> <span class="operator">=</span> elements[pIndex];</span><br><span class="line">            <span class="keyword">if</span> (compare(e, p) &lt;= <span class="number">0</span>) <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 将父元素存储在 index 位置</span></span><br><span class="line">            elements[index] = elements[pIndex];</span><br><span class="line">            <span class="comment">// 重新赋值 index</span></span><br><span class="line">            index = pIndex;</span><br><span class="line">        &#125;</span><br><span class="line">        elements[index] = e;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 保证要有capacity的容量(不考虑线程安全)</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">ensureCapacity</span><span class="params">(<span class="type">int</span> capacity)</span> &#123;</span><br><span class="line">        <span class="comment">// 当前elements.length 为 10，因为默认容量为10</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">oldCapacity</span> <span class="operator">=</span> elements.length;</span><br><span class="line">        <span class="keyword">if</span> (oldCapacity &gt;= capacity) <span class="keyword">return</span>;</span><br><span class="line">        <span class="comment">// 新容量为新容量的1.5倍</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">newCapacity</span> <span class="operator">=</span> oldCapacity + (oldCapacity &gt;&gt; <span class="number">1</span>);</span><br><span class="line">        E[] newElements = (E[]) <span class="keyword">new</span> <span class="title class_">Object</span>[newCapacity];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; size; i++) &#123;</span><br><span class="line">            newElements[i] = elements[i];</span><br><span class="line">        &#125;</span><br><span class="line">        elements = newElements;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 检查二叉堆 size 是否为 0</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">emptyCheck</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (size == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IndexOutOfBoundsException</span>(<span class="string">&quot;Heap is empty!&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">elementNotNullCheck</span><span class="params">(E element)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (element == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;element must not be null!&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="4-举一反三"><a class="header-anchor" href="#4-举一反三"></a>4. 举一反三</h1>
+<h2 id="4-1-构建最小堆"><a class="header-anchor" href="#4-1-构建最小堆"></a>4.1 构建最小堆</h2>
+<p>前文实现了一个二叉堆中的最大堆，所谓最大堆，就是指任意节点一定不小于它的子节点。</p>
+<p>那么怎么构建一个最小堆呢？🙋</p>
+<p>这简单，把最大堆的代码复制一份，然后把里面的比较逻辑改一改，比如在下滤方法 <code>siftDown()</code> 方法中，将大于改成小于，小于改成大于，如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">siftDown</span><span class="params">(<span class="type">int</span> index)</span> &#123;</span><br><span class="line">        <span class="type">E</span> <span class="variable">element</span> <span class="operator">=</span> elements[index];</span><br><span class="line">        <span class="type">int</span> <span class="variable">half</span> <span class="operator">=</span> size &gt;&gt; <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (index &lt; half) &#123; <span class="comment">// 必须保证index位置是非叶子节点</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">childIndex</span> <span class="operator">=</span> (index &lt;&lt; <span class="number">1</span>) + <span class="number">1</span>;</span><br><span class="line">            <span class="type">E</span> <span class="variable">child</span> <span class="operator">=</span> elements[childIndex];</span><br><span class="line">            <span class="type">int</span> <span class="variable">rightIndex</span> <span class="operator">=</span> childIndex + <span class="number">1</span>;</span><br><span class="line">            <span class="comment">// 最小堆构建，修改比较逻辑</span></span><br><span class="line">            <span class="keyword">if</span> (rightIndex &lt; size &amp;&amp; compare(elements[rightIndex], child) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">                child = elements[childIndex = rightIndex];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 最小堆构建，修改比较逻辑</span></span><br><span class="line">            <span class="keyword">if</span> (compare(element, child) &lt;= <span class="number">0</span>) <span class="keyword">break</span>;</span><br><span class="line">            elements[index] = child;</span><br><span class="line">            index = childIndex;</span><br><span class="line">        &#125;</span><br><span class="line">        elements[index] = element;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>同理，上滤方法 <code>siftUp()</code> 也是同样的修改方式。</p>
+<p>这…可以是可以，但是不够优雅。😰</p>
+<p>其实还有更简单的方法，堆中的数据都有可比较性，这些数据要么实现 <code>Comparable</code> 接口，要么在构建堆时使用自定义的比较器。堆中对元素进行比较的实现如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="type">int</span> <span class="title function_">compare</span><span class="params">(E e1, E e2)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> comparator != <span class="literal">null</span> ? comparator.compare(e1, e2)</span><br><span class="line">            : ((Comparable&lt;E&gt;) e1).compareTo(e2);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当 <code>compare()</code> 方法的返回值大于 0 时，表示 e1 比较大；当返回值小于 0 时，表示 e2 比较大；当返回值等于 0 时，表示 e1 和 e2 相等。</p>
+<p>对，就是比较器！可以使用比较器：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">test</span><span class="params">()</span>&#123;</span><br><span class="line">    Integer[] data = &#123;<span class="number">88</span>, <span class="number">44</span>, <span class="number">53</span>, <span class="number">41</span>, <span class="number">16</span>, <span class="number">6</span>, <span class="number">70</span>, <span class="number">18</span>, <span class="number">85</span>, <span class="number">98</span>, <span class="number">81</span>, <span class="number">23</span>, <span class="number">36</span>, <span class="number">43</span>, <span class="number">37</span>&#125;;</span><br><span class="line">    BinaryHeap&lt;Integer&gt; heap = <span class="keyword">new</span> <span class="title class_">BinaryHeap</span>&lt;&gt;(data, <span class="keyword">new</span> <span class="title class_">Comparator</span>&lt;Integer&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compare</span><span class="params">(Integer o1, Integer o2)</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> o1 - o2;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>像上述这样使用比较器并重写 <code>compare()</code> 方法后，就相当于为数据指定了一套比较规则。</p>
+<p>比较器中 <code>compare()</code> 方法中的 <strong>返回值如果大于 0 时，表示 o1 比较大</strong> ；当返回值小于 0 时，表示 o2 比较大；当返回值等于 0 时，表示 o1 和 o2 相等。</p>
+<p>假设 o1 为 20，o2 为 10，这个时候 o1 - o2 是大于 0 ，就表示 o1 相对于 o2 是较大的，而 o1 的数值也是大于 o2 的数值的。又假设 o1 为 10，o2 为 20，这个时候 o1 - o2 是小于 0 ，就表示 o1 相对于 o2 是较小的，而 o2 的数值也是大于 o1 的数值的。简单来说，在这种情况下，<strong>数值大的数据就比较大</strong>。</p>
+<p>使用这种方式得到的二叉堆如下图：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/数值大较大的二叉堆.png" alt="数值大较大的二叉堆" style="zoom:67%;" />
+<p>那么如果换种方式，使用 o2 - o1 呢？即：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">test</span><span class="params">()</span>&#123;</span><br><span class="line">    Integer[] data = &#123;<span class="number">88</span>, <span class="number">44</span>, <span class="number">53</span>, <span class="number">41</span>, <span class="number">16</span>, <span class="number">6</span>, <span class="number">70</span>, <span class="number">18</span>, <span class="number">85</span>, <span class="number">98</span>, <span class="number">81</span>, <span class="number">23</span>, <span class="number">36</span>, <span class="number">43</span>, <span class="number">37</span>&#125;;</span><br><span class="line">    BinaryHeap&lt;Integer&gt; heap = <span class="keyword">new</span> <span class="title class_">BinaryHeap</span>&lt;&gt;(data, <span class="keyword">new</span> <span class="title class_">Comparator</span>&lt;Integer&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compare</span><span class="params">(Integer o1, Integer o2)</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> o2 - o1;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    BinaryTrees.println(heap);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>假设 o1 为 20，o2 为 10，这个时候 o2 - o1 是小于 0 ，就表示 o1 相对于 o2 是较小的，而 o1 的数值却小于 o2 的数值的。又假设 o1 为 10，o2 为 20，这个时候 o2 - o1 是大于 0 ，就表示 o1 相对于 o2 是较大的，而 o2 的数值却大于 o1 的数值的。简单来说，在这种情况下，<strong>数值小的数据就比较大</strong>。</p>
+<p>在以前实现的二叉堆中，默认是最大堆，就是任意节点不小于其子节点，也就是说，任意节点相对于其子节点是较大的。</p>
+<p>正因如此，如果使用 o1 - o2 表示数值较大的数据比较大，那么构建出来的最大堆中任意节点的数值是不小于其子节点的，这是个真正意义的最大堆。如果使用 o2 - o1 表示数值较小的数据比较大，那么构建出来的最大堆中任意节点的数值是不大于其子节点，这个时候，与其说是最大堆，不如说是最小堆。</p>
+<p>使用 o2 - o1 后得到的二叉堆如下图：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/数值小较大的二叉堆.png" alt="数值小较大的二叉堆" style="zoom:67%;" />
+<blockquote>
+<p>总结</p>
+</blockquote>
+<p>说了那么多，总结一下：</p>
+<ul>
+<li><code>BinaryHeap</code> 类 <strong>实现的是最大堆</strong>，最大堆的任意节点相对于其子节点是较大的</li>
+<li>使用比较器后：
+<ul>
+<li>返回值为 o1 - o2 时，表示数值较大的数据比较大，那么这时候的二叉堆任意节点的 <strong>数值</strong> 是大于等于其子节点的 <strong>数值</strong>，这个堆 <strong>看起来就是一个最大堆</strong></li>
+<li>返回值为 o2 - o1 时，表示数值较小的数据比较大，那么这时候的二叉堆任意节点的 <strong>数值</strong> 是小于等于其子节点的 <strong>数值</strong>，这个堆 <strong>看起来就是一个最小堆</strong></li>
+</ul>
+</li>
+</ul>
+<p>默认实现的是最大堆，但可以修改比较方式，让这个堆看起来是一个最大堆或最小堆。</p>
+<p><mark>注意： 理解 “数值较大” 和 “节点较大” 的区别，理解 “实现的是最大堆” 和 “看起来是最大堆或最小堆” 的区别。</mark></p>
+<h2 id="4-2-Top-K-问题"><a class="header-anchor" href="#4-2-Top-K-问题"></a>4.2 Top K 问题</h2>
+<p>Top K问题：从 n 个整数中，找出最大的前 k 个数。（k 远远小于 n）</p>
+<p>有两种解决方式：</p>
+<ul>
+<li>使用排序算法进行全排序，需要 <code>O(nlogn)</code> 的时间复杂度</li>
+<li>使用二叉堆来解决，需要 <code>O(nlogk)</code> 的时间复杂度</li>
+</ul>
+<p>由于 k 远远小于 n，因此第二种方式是更好的，选择使用二叉堆来解决。</p>
+<blockquote>
+<p>具体思路</p>
+</blockquote>
+<p>1、新建一个小顶堆（不是找最大吗？为啥用小顶堆？😕别急，待会解释😎）</p>
+<p>2、扫描 n 个整数</p>
+<ul>
+<li>先将遍历到的前 k 个数放入堆中</li>
+<li>从第 k + 1 个数开始，如果大于堆顶元素，就使用 <code>replace</code> 操作（删除堆顶元素，将第 k + 1 个数添加到堆中）</li>
+</ul>
+<p>3、扫描完毕后，堆中剩下的就是最大的前 k 个数</p>
+<blockquote>
+<p>代码实现</p>
+</blockquote>
+<p>假设现有 30 个数，找出其中最大的前 5 个数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">topK</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// 新建一个小顶堆</span></span><br><span class="line">    BinaryHeap&lt;Integer&gt; heap = <span class="keyword">new</span> <span class="title class_">BinaryHeap</span>&lt;&gt;(<span class="keyword">new</span> <span class="title class_">Comparator</span>&lt;Integer&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compare</span><span class="params">(Integer o1, Integer o2)</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> o2 - o1;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 找出最大的前k个数</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> <span class="number">5</span>;</span><br><span class="line">    Integer[] data = &#123;<span class="number">51</span>, <span class="number">30</span>, <span class="number">39</span>, <span class="number">92</span>, <span class="number">74</span>, <span class="number">25</span>, <span class="number">16</span>, <span class="number">93</span>,</span><br><span class="line">            <span class="number">91</span>, <span class="number">19</span>, <span class="number">54</span>, <span class="number">47</span>, <span class="number">73</span>, <span class="number">62</span>, <span class="number">76</span>, <span class="number">63</span>, <span class="number">35</span>, <span class="number">18</span>,</span><br><span class="line">            <span class="number">90</span>, <span class="number">6</span>, <span class="number">65</span>, <span class="number">49</span>, <span class="number">3</span>, <span class="number">26</span>, <span class="number">61</span>, <span class="number">21</span>, <span class="number">48</span>&#125;;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; data.length; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (heap.size() &lt; k) &#123; <span class="comment">// 前 k个数添加到小顶堆</span></span><br><span class="line">            heap.add(data[i]); <span class="comment">// logk</span></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (data[i] &gt; heap.get()) &#123; <span class="comment">// 如果是第 k+1个数，并大于堆顶元素</span></span><br><span class="line">            heap.replace(data[i]); <span class="comment">// // logk</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// O(nlogk)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最终得到的前 5 个数是：76、90、93、92、91</p>
+<blockquote>
+<p>为什么要用小顶堆？</p>
+</blockquote>
+<p>假定小顶堆中的元素是目标数组中最大的几个数。小顶堆的堆顶元素是整个堆中最小的，如果第 k + 1 个数大于堆顶元素，那么它一定该在这个小顶堆中。这个时候删除堆顶元素，将第 k + 1 个数添加到堆中，使得原本这个堆中的最小元素变大了，也保持小顶堆中的元素是目标数组中最大的几个数。一直循环扫描，堆中最小的元素不断变大，最后堆中的元素一定真正是那 n 个数中最大的前 k 个数。</p>
+<blockquote>
+<p>使用堆解决 Top K 问题的时间复杂度为 <code>O(nlogk)</code> 是怎么计算的？</p>
+</blockquote>
+<p>二叉堆添加元素的时间复杂度为 <code>O(logn)</code>，其中的 n 表示堆中的元素。在这个问题中，堆中元素是 k 个，因此 <code>add()</code> 方法的时间复杂度为 <code>O(logk)</code>。对于 <code>replace()</code> 方法也是如此，时间复杂度为 <code>O(logk)</code>。在上述代码中涉及两个判断，这两个判断中一个判断成功后调用 <code>add()</code> 方法，另一个判断成功后调用 <code>replace()</code> 方法，假设在最坏情况下，不是调用 <code>add()</code> 就是调用 <code>replace()</code>，那么这样的时间复杂度为 <code>O(nlogk)</code>，n 为数据总数。最终，使用堆解决 Top K 问题的时间复杂度就为 <code>O(nlogk)</code>。</p>
+<blockquote>
+<p>如果是找出最小的前 k 个数应该怎么办？</p>
+</blockquote>
+<p>使用大顶堆，其他操作一样，只不过第 k + 1 个元素小于堆顶元素时，使用 <code>replace</code> 操作。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/DataStructure-BinaryHeap/">https://mofan212.github.io/posts/DataStructure-BinaryHeap/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/DataStructure/">DataStructure</a></div><div class="post_share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/40.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/DataStructure-PriorityQueue/" title="数据结构之优先级队列"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/41.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">数据结构之优先级队列</div></div></a></div><div class="next-post pull-right"><a href="/posts/DataStructure-HashMap/" title="数据结构之哈希表"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/39.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">数据结构之哈希表</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/posts/DataStructure-Basic-Knowledge-Of-Graphs/" title="高级数据结构之图"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/51.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-08-23</div><div class="title">高级数据结构之图</div></div></a></div><div><a href="/posts/DataStructure-Union-Find/" title="高级数据结构之并查集"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/50.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-08-19</div><div class="title">高级数据结构之并查集</div></div></a></div><div><a href="/posts/DataStructure-B+Tree/" title="高级数据结构之B+树"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/119.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-12-11</div><div class="title">高级数据结构之B+树</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0-%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90"><span class="toc-text">0. 需求分析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E5%A0%86%E7%9A%84%E5%90%AB%E4%B9%89"><span class="toc-text">1. 堆的含义</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E4%BA%8C%E5%8F%89%E5%A0%86"><span class="toc-text">2. 二叉堆</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E5%9F%BA%E6%9C%AC%E5%90%AB%E4%B9%89"><span class="toc-text">2.1 基本含义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E5%9F%BA%E6%9C%AC%E6%8E%A5%E5%8F%A3%E5%AE%9E%E7%8E%B0"><span class="toc-text">2.2 基本接口实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E6%B7%BB%E5%8A%A0%E5%85%83%E7%B4%A0"><span class="toc-text">2.3 添加元素</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-%E4%BB%A3%E7%A0%81%E4%BC%98%E5%8C%96"><span class="toc-text">2.4 代码优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-5-%E5%88%A0%E9%99%A4%E5%85%83%E7%B4%A0"><span class="toc-text">2.5 删除元素</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-6-replace-%E6%96%B9%E6%B3%95"><span class="toc-text">2.6 replace 方法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E6%89%B9%E9%87%8F%E5%BB%BA%E5%A0%86"><span class="toc-text">3. 批量建堆</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E5%9F%BA%E6%9C%AC%E5%90%AB%E4%B9%89"><span class="toc-text">3.1 基本含义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E8%87%AA%E4%B8%8A%E8%80%8C%E4%B8%8B%E7%9A%84%E4%B8%8A%E6%BB%A4"><span class="toc-text">3.2 自上而下的上滤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E8%87%AA%E4%B8%8B%E8%80%8C%E4%B8%8A%E7%9A%84%E4%B8%8B%E6%BB%A4"><span class="toc-text">3.2 自下而上的下滤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-%E6%95%88%E7%8E%87%E5%AF%B9%E6%AF%94"><span class="toc-text">3.3 效率对比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="toc-text">3.4 复杂度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-5-%E6%8B%93%E5%B1%95%E6%80%9D%E8%80%83"><span class="toc-text">3.5 拓展思考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-6-%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-text">3.6 代码实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-7-%E4%BA%8C%E5%8F%89%E5%A0%86%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81"><span class="toc-text">3.7 二叉堆完整代码</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E4%B8%BE%E4%B8%80%E5%8F%8D%E4%B8%89"><span class="toc-text">4. 举一反三</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E6%9E%84%E5%BB%BA%E6%9C%80%E5%B0%8F%E5%A0%86"><span class="toc-text">4.1 构建最小堆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-Top-K-%E9%97%AE%E9%A2%98"><span class="toc-text">4.2 Top K 问题</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By 默烦</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-butterfly/4.8.5/js/utils.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-butterfly/4.8.5/js/main.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-butterfly/4.8.5/js/tw_cn.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-pjax"></div><script src="https://cdn.chrelyonly.cf/gh/mofan212/blog-static-resources@master/js/mine.min.js"></script><script src="https://npm.elemecdn.com/mermaid/dist/mermaid.min.js"></script><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="Azathoth,Yog-Sothoth,Shub-Niggurath,Nyarlathotep,Cthulhu,Hastur,Abhoth,Ghroth,Tsathoggua,Cthugha,Deep Ones,Dagon,Chaugnar Faugn,Mordiggian,Shoggoth,Old One,Mi-Go,Great Race of Yith,Flying Polyp,Hounds of Tindalos,Dhole" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div class="docsearch-wrap"><div id="docsearch" style="display:none"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css/dist/style.min.css"/><script src="https://cdn.jsdelivr.net/npm/@docsearch/js/dist/umd/index.min.js"></script><script>(() => {
+  docsearch(Object.assign({
+    appId: 'BAFEL7A6K1',
+    apiKey: '89fcb5961984c5c054bf04149f345f38',
+    indexName: 'mofan212io',
+    container: '#docsearch',
+  }, [{"placeholder":"Please enter search keywords"}]))
+
+
+  const searchClickFn = () => {
+    document.querySelector('#search-button > .search').addEventListener('click', () => {
+      document.querySelector('.DocSearch-Button').click()
+    })
+  }
+
+  searchClickFn()
+  window.addEventListener('pjax:complete', searchClickFn)
+})()</script></div></div></body></html>

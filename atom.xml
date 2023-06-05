@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Mofan</title>
+  <icon>https://mofan212.github.io/icon.png</icon>
+  <subtitle>默烦</subtitle>
+  <link href="https://mofan212.github.io/atom.xml" rel="self"/>
+  
+  <link href="https://mofan212.github.io/"/>
+  <updated>2023-05-13T16:00:00.000Z</updated>
+  <id>https://mofan212.github.io/</id>
+  
+  <author>
+    <name>默烦</name>
+    <email>cy.mofan@foxmail.com</email>
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>【MySQL 高级篇五】存储引擎</title>
+    <link href="https://mofan212.github.io/posts/MySQL-Advanced-Fifth-Storage-Engines/"/>
+    <id>https://mofan212.github.io/posts/MySQL-Advanced-Fifth-Storage-Engines/</id>
+    <published>2023-05-13T16:00:00.000Z</published>
+    <updated>2023-05-13T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">本文介绍了 MySQL 中的多种存储引擎的特性与适用场景。</summary>
+    
+    
+    
+    <category term="MySQL" scheme="https://mofan212.github.io/categories/MySQL/"/>
+    
+    
+    <category term="MySQL" scheme="https://mofan212.github.io/tags/MySQL/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【MySQL 高级篇四】逻辑架构</title>
+    <link href="https://mofan212.github.io/posts/MySQL-Advanced-Fourth-Logical-Architecture/"/>
+    <id>https://mofan212.github.io/posts/MySQL-Advanced-Fourth-Logical-Architecture/</id>
+    <published>2023-05-12T16:00:00.000Z</published>
+    <updated>2023-05-12T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">本文剖析了 MySQL 的逻辑架构，介绍了 SQL 执行流程和数据库缓冲池。</summary>
+    
+    
+    
+    <category term="MySQL" scheme="https://mofan212.github.io/categories/MySQL/"/>
+    
+    
+    <category term="MySQL" scheme="https://mofan212.github.io/tags/MySQL/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Spring 对 Java 注解的增强</title>
+    <link href="https://mofan212.github.io/posts/Spring&#39;s-Enhancements-To-Java-Annotation/"/>
+    <id>https://mofan212.github.io/posts/Spring&#39;s-Enhancements-To-Java-Annotation/</id>
+    <published>2023-04-14T16:00:00.000Z</published>
+    <updated>2023-04-14T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">本文介绍了 Spring 中 @AliasFor 注解的使用方式和JDK 中一些元注解的使用。</summary>
+    
+    
+    
+    <category term="Java" scheme="https://mofan212.github.io/categories/Java/"/>
+    
+    <category term="Spring" scheme="https://mofan212.github.io/categories/Java/Spring/"/>
+    
+    
+    <category term="Java" scheme="https://mofan212.github.io/tags/Java/"/>
+    
+    <category term="Spring" scheme="https://mofan212.github.io/tags/Spring/"/>
+    
+    <category term="Annotation" scheme="https://mofan212.github.io/tags/Annotation/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【MySQL 高级篇三】用户与权限管理</title>
+    <link href="https://mofan212.github.io/posts/MySQL-Advanced-Third-User-And-Permission-Management/"/>
+    <id>https://mofan212.github.io/posts/MySQL-Advanced-Third-User-And-Permission-Management/</id>
+    <published>2023-03-26T16:00:00.000Z</published>
+    <updated>2023-03-26T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">本文介绍了 MySQL 中的用户管理、权限管理、权限表、角色管理和配置文件的使用。</summary>
+    
+    
+    
+    <category term="MySQL" scheme="https://mofan212.github.io/categories/MySQL/"/>
+    
+    
+    <category term="MySQL" scheme="https://mofan212.github.io/tags/MySQL/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>从回调到 LambdaSafe</title>
+    <link href="https://mofan212.github.io/posts/From-Callback-To-LambdaSafe/"/>
+    <id>https://mofan212.github.io/posts/From-Callback-To-LambdaSafe/</id>
+    <published>2023-03-11T16:00:00.000Z</published>
+    <updated>2023-03-11T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">什么是回调？Spring 提供的 LambdaSafe 工具类如何使用？</summary>
+    
+    
+    
+    <category term="SpringBoot" scheme="https://mofan212.github.io/categories/SpringBoot/"/>
+    
+    
+    <category term="Java" scheme="https://mofan212.github.io/tags/Java/"/>
+    
+    <category term="SpringBoot" scheme="https://mofan212.github.io/tags/SpringBoot/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>JSONPath 快速入门</title>
+    <link href="https://mofan212.github.io/posts/Quick-Start-To-JSONPath/"/>
+    <id>https://mofan212.github.io/posts/Quick-Start-To-JSONPath/</id>
+    <published>2023-03-09T16:00:00.000Z</published>
+    <updated>2023-05-22T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">A Java DSL for reading JSON documents.</summary>
+    
+    
+    
+    <category term="Java" scheme="https://mofan212.github.io/categories/Java/"/>
+    
+    
+    <category term="JSONPath" scheme="https://mofan212.github.io/tags/JSONPath/"/>
+    
+    <category term="JSON" scheme="https://mofan212.github.io/tags/JSON/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【MySQL 高级篇二】MySQL 的数据目录</title>
+    <link href="https://mofan212.github.io/posts/MySQL-Advanced-Second-Data-Directory-Of-MySQL/"/>
+    <id>https://mofan212.github.io/posts/MySQL-Advanced-Second-Data-Directory-Of-MySQL/</id>
+    <published>2023-03-04T16:00:00.000Z</published>
+    <updated>2023-03-04T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">本文介绍了 MySQL 8.0 的主要目录结构、数据库和文件系统的关系。</summary>
+    
+    
+    
+    <category term="MySQL" scheme="https://mofan212.github.io/categories/MySQL/"/>
+    
+    
+    <category term="MySQL" scheme="https://mofan212.github.io/tags/MySQL/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【MySQL 高级篇一】Linux 下 MySQL 的使用</title>
+    <link href="https://mofan212.github.io/posts/MySQL-Advanced-First-Use-Of-MySQL-Under-Linux/"/>
+    <id>https://mofan212.github.io/posts/MySQL-Advanced-First-Use-Of-MySQL-Under-Linux/</id>
+    <published>2023-02-25T16:00:00.000Z</published>
+    <updated>2023-02-25T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">本文介绍了 Linux 下 MySQL 的使用以及 MySQL 的字符集、SQL 大小写规范和 sql_mode 的合理设置。</summary>
+    
+    
+    
+    <category term="MySQL" scheme="https://mofan212.github.io/categories/MySQL/"/>
+    
+    
+    <category term="MySQL" scheme="https://mofan212.github.io/tags/MySQL/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Arthas 快速入门</title>
+    <link href="https://mofan212.github.io/posts/Quick-Start-To-Arthas/"/>
+    <id>https://mofan212.github.io/posts/Quick-Start-To-Arthas/</id>
+    <published>2023-02-20T16:00:00.000Z</published>
+    <updated>2023-02-20T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">Arthas 是一款由阿里巴巴出品的线上监控诊断产品。</summary>
+    
+    
+    
+    <category term="Tools" scheme="https://mofan212.github.io/categories/Tools/"/>
+    
+    
+    <category term="Arthas" scheme="https://mofan212.github.io/tags/Arthas/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【Spring 四十九讲】杂项</title>
+    <link href="https://mofan212.github.io/posts/Spring-Forty-Nine-Lectures-Sundry/"/>
+    <id>https://mofan212.github.io/posts/Spring-Forty-Nine-Lectures-Sundry/</id>
+    <published>2023-02-02T16:00:00.000Z</published>
+    <updated>2023-03-27T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">Spring 四十九讲中第卌三讲到第卌九讲，杂项。</summary>
+    
+    
+    
+    <category term="Java" scheme="https://mofan212.github.io/categories/Java/"/>
+    
+    <category term="Spring" scheme="https://mofan212.github.io/categories/Java/Spring/"/>
+    
+    
+    <category term="Java" scheme="https://mofan212.github.io/tags/Java/"/>
+    
+    <category term="Spring" scheme="https://mofan212.github.io/tags/Spring/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【Spring 四十九讲】SpringBoot</title>
+    <link href="https://mofan212.github.io/posts/Spring-Forty-Nine-Lectures-Spring-Boot/"/>
+    <id>https://mofan212.github.io/posts/Spring-Forty-Nine-Lectures-Spring-Boot/</id>
+    <published>2023-01-28T16:00:00.000Z</published>
+    <updated>2023-01-28T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">Spring 四十九讲中第卅七讲到第卌二讲，Spring Boot。</summary>
+    
+    
+    
+    <category term="Java" scheme="https://mofan212.github.io/categories/Java/"/>
+    
+    <category term="Spring" scheme="https://mofan212.github.io/categories/Java/Spring/"/>
+    
+    
+    <category term="Java" scheme="https://mofan212.github.io/tags/Java/"/>
+    
+    <category term="Spring" scheme="https://mofan212.github.io/tags/Spring/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【Spring 四十九讲】WebMVC</title>
+    <link href="https://mofan212.github.io/posts/Spring-Forty-Nine-Lectures-MVC/"/>
+    <id>https://mofan212.github.io/posts/Spring-Forty-Nine-Lectures-MVC/</id>
+    <published>2023-01-26T16:00:00.000Z</published>
+    <updated>2023-01-26T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">Spring 四十九讲中第廿讲到第卅六讲，WebMVC。</summary>
+    
+    
+    
+    <category term="Java" scheme="https://mofan212.github.io/categories/Java/"/>
+    
+    <category term="Spring" scheme="https://mofan212.github.io/categories/Java/Spring/"/>
+    
+    
+    <category term="Java" scheme="https://mofan212.github.io/tags/Java/"/>
+    
+    <category term="Spring" scheme="https://mofan212.github.io/tags/Spring/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【Spring 四十九讲】AOP</title>
+    <link href="https://mofan212.github.io/posts/Spring-Forty-Nine-Lectures-AOP/"/>
+    <id>https://mofan212.github.io/posts/Spring-Forty-Nine-Lectures-AOP/</id>
+    <published>2023-01-20T16:00:00.000Z</published>
+    <updated>2023-01-20T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">Spring 四十九讲中第九讲到第十九讲，AOP。</summary>
+    
+    
+    
+    <category term="Java" scheme="https://mofan212.github.io/categories/Java/"/>
+    
+    <category term="Spring" scheme="https://mofan212.github.io/categories/Java/Spring/"/>
+    
+    
+    <category term="Java" scheme="https://mofan212.github.io/tags/Java/"/>
+    
+    <category term="Spring" scheme="https://mofan212.github.io/tags/Spring/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【Spring 四十九讲】容器与 Bean</title>
+    <link href="https://mofan212.github.io/posts/Spring-Forty-Nine-Lectures-Container-And-Bean/"/>
+    <id>https://mofan212.github.io/posts/Spring-Forty-Nine-Lectures-Container-And-Bean/</id>
+    <published>2023-01-07T16:00:00.000Z</published>
+    <updated>2023-01-07T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">Spring 四十九讲中第一讲到第八讲，容器与 Bean。</summary>
+    
+    
+    
+    <category term="Java" scheme="https://mofan212.github.io/categories/Java/"/>
+    
+    <category term="Spring" scheme="https://mofan212.github.io/categories/Java/Spring/"/>
+    
+    
+    <category term="Java" scheme="https://mofan212.github.io/tags/Java/"/>
+    
+    <category term="Spring" scheme="https://mofan212.github.io/tags/Spring/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>再见 2022，你好 2023</title>
+    <link href="https://mofan212.github.io/posts/Goodbye-2022-Hello-2023/"/>
+    <id>https://mofan212.github.io/posts/Goodbye-2022-Hello-2023/</id>
+    <published>2022-12-31T16:00:00.000Z</published>
+    <updated>2022-12-31T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">永远紧绷着一个弦，不要停止学习，作为一个打工人，既然无法改变某种现状，但至少要在无法忍受时说不。</summary>
+    
+    
+    
+    <category term="Summary" scheme="https://mofan212.github.io/categories/Summary/"/>
+    
+    
+    <category term="Summary" scheme="https://mofan212.github.io/tags/Summary/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【算法】串匹配算法</title>
+    <link href="https://mofan212.github.io/posts/Algorithm-String-Matching/"/>
+    <id>https://mofan212.github.io/posts/Algorithm-String-Matching/</id>
+    <published>2022-12-17T16:00:00.000Z</published>
+    <updated>2023-03-16T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">本文介绍了串匹配算法中的蛮力算法与 KMP 算法的理论与实现。</summary>
+    
+    
+    
+    <category term="Algorithm" scheme="https://mofan212.github.io/categories/Algorithm/"/>
+    
+    
+    <category term="Algorithm" scheme="https://mofan212.github.io/tags/Algorithm/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>高级数据结构之B+树</title>
+    <link href="https://mofan212.github.io/posts/DataStructure-B+Tree/"/>
+    <id>https://mofan212.github.io/posts/DataStructure-B+Tree/</id>
+    <published>2022-12-10T16:00:00.000Z</published>
+    <updated>2022-12-10T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">B+ 树是 B 树的变体，常用于数据库和操作系统的文件系统中。MySQL 数据库的索引就是基于 B+ 树实现的。</summary>
+    
+    
+    
+    <category term="DataStructure" scheme="https://mofan212.github.io/categories/DataStructure/"/>
+    
+    
+    <category term="DataStructure" scheme="https://mofan212.github.io/tags/DataStructure/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>高级数据结构之跳表</title>
+    <link href="https://mofan212.github.io/posts/DataStructure-SkipList/"/>
+    <id>https://mofan212.github.io/posts/DataStructure-SkipList/</id>
+    <published>2022-12-05T16:00:00.000Z</published>
+    <updated>2022-12-08T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">跳表是在有序链表的基础上增加了“跳跃”的功能，由 William Pugh 于 1990 年发布，设计的初衷是为了取代平衡树。</summary>
+    
+    
+    
+    <category term="DataStructure" scheme="https://mofan212.github.io/categories/DataStructure/"/>
+    
+    
+    <category term="DataStructure" scheme="https://mofan212.github.io/tags/DataStructure/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>高级数据结构之布隆过滤器</title>
+    <link href="https://mofan212.github.io/posts/DataStructure-Bloom-Filter/"/>
+    <id>https://mofan212.github.io/posts/DataStructure-Bloom-Filter/</id>
+    <published>2022-12-02T16:00:00.000Z</published>
+    <updated>2022-12-02T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">布隆过滤器是一个空间效率高的概率型数据结构，可以用来判断一个元素一定不存在或者可能存在。</summary>
+    
+    
+    
+    <category term="DataStructure" scheme="https://mofan212.github.io/categories/DataStructure/"/>
+    
+    
+    <category term="DataStructure" scheme="https://mofan212.github.io/tags/DataStructure/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【算法】动态规划</title>
+    <link href="https://mofan212.github.io/posts/Algorithm-Dynamic-Programming/"/>
+    <id>https://mofan212.github.io/posts/Algorithm-Dynamic-Programming/</id>
+    <published>2022-11-26T16:00:00.000Z</published>
+    <updated>2022-11-26T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">动态规划，Dynamic Programming，简称 DP，是求解最优化问题的一种常用策略。</summary>
+    
+    
+    
+    <category term="Algorithm" scheme="https://mofan212.github.io/categories/Algorithm/"/>
+    
+    
+    <category term="Algorithm" scheme="https://mofan212.github.io/tags/Algorithm/"/>
+    
+  </entry>
+  
+</feed>

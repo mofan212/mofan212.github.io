@@ -1,0 +1,485 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>高级数据结构之图 | Mofan</title><meta name="author" content="默烦,cy.mofan@foxmail.com"><meta name="copyright" content="默烦"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本文基于一种新型数据结构——图，介绍了一些相关的概念，并在最后进行编码实现与测试。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="高级数据结构之图">
+<meta property="og:url" content="https://mofan212.github.io/posts/DataStructure-Basic-Knowledge-Of-Graphs/index.html">
+<meta property="og:site_name" content="Mofan">
+<meta property="og:description" content="本文基于一种新型数据结构——图，介绍了一些相关的概念，并在最后进行编码实现与测试。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/51.jpg">
+<meta property="article:published_time" content="2020-08-22T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-08-23T16:00:00.000Z">
+<meta property="article:author" content="默烦">
+<meta property="article:tag" content="DataStructure">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/51.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/DataStructure-Basic-Knowledge-Of-Graphs/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"距离本文上次更新已经过去","messageNext":"天，请注意时效性。"},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '高级数据结构之图',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2020-08-24 00:00:00'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="referrer" content="no-referrer-when-downgrade" /><link rel="stylesheet" href="https://cdn.chrelyonly.cf/gh/mofan212/blog-static-resources@master/css/myStyle.min.css"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css" /><link rel="stylesheet" href="https://cdn.chrelyonly.cf/npm/jetbrains-mono@1.0.6/css/jetbrains-mono.min.css"><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Mofan" type="application/atom+xml">
+</head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+document.addEventListener('pjax:send', () => {
+  Pace.restart()
+})
+</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mofan212/blog-static-resources/css/fill-left.min.css"/><script src="https://cdn.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">135</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">27</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group hide" href="javascript:void(0);"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page group hide" href="javascript:void(0);"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/post_top_img.png')"><nav id="nav"><span id="blog-info"><a href="/" title="Mofan"><span class="site-name">Mofan</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group hide" href="javascript:void(0);"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page group hide" href="javascript:void(0);"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">高级数据结构之图</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-08-22T16:00:00.000Z" title="发表于 2020-08-23 00:00:00">2020-08-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2020-08-23T16:00:00.000Z" title="更新于 2020-08-24 00:00:00">2020-08-24</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/DataStructure/">DataStructure</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">5.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>21分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="高级数据结构之图"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>封面画师：Nengoro(ネんごろぅ)     封面ID：71966863</p>
+<p>本文参考视频：小马哥教育(SEEMYGO) 2019年 恋上数据结构与算法（第二季）</p>
+<p>源码仓库：<a target="_blank" rel="noopener" href="https://github.com/mofan212/data-structure-and-algorithm">mofan212/data-structure-and-algorithm (github.com)</a></p>
+<p>辅助学习网址：<a target="_blank" rel="noopener" href="https://visualgo.net/zh">数据结构和算法动态可视化</a>     <a target="_blank" rel="noopener" href="https://www.cs.usfca.edu/~galles/visualization/Algorithms.html">Data Structure Visualizations</a></p>
+<h1 id="0-知识回顾"><a class="header-anchor" href="#0-知识回顾"></a>0. 知识回顾</h1>
+<p>在学习数据结构时，我们学习了线性结构与树形结构，比如：</p>
+<p>线性结构：数组、链表、栈、队列、哈希表</p>
+<p>树形结构：二叉树、B树、堆、Trie、哈夫曼树、并查集</p>
+<p>从这开始，将学习一种新的数据结构 —— 图。</p>
+<h1 id="1-图的概念"><a class="header-anchor" href="#1-图的概念"></a>1. 图的概念</h1>
+<h2 id="1-1-基本概念"><a class="header-anchor" href="#1-1-基本概念"></a>1.1 基本概念</h2>
+<p>图（Graph），由<span style="color:darkorange ">顶点</span>（vertex）和<span style="color:darkorange ">边</span>（edge）组成，通常表示为 G = (V , E)</p>
+<p>G 表示一个图， V 是顶点集， E 是边集</p>
+<p>顶点集 V 有穷且非空</p>
+<p>任意两个顶点之间都可以用边来表示他们之间的关系，边集 E 可以是空的</p>
+<p>比如下图就表示了三个图：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/%E5%9B%BE.png" alt="图"></p>
+<blockquote>
+<p>应用举例</p>
+</blockquote>
+<p>图结构的应用极其广泛，比如：</p>
+<ul>
+<li>社交网络</li>
+<li>地图导航</li>
+<li>游戏开发</li>
+</ul>
+<h2 id="1-2-有向图"><a class="header-anchor" href="#1-2-有向图"></a>1.2 有向图</h2>
+<blockquote>
+<p>基本概念</p>
+</blockquote>
+<p>有向图（Directed Graph），有向图的边是有明确方向的。比如：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/%E6%9C%89%E5%90%91%E5%9B%BE.png" alt="有向图"></p>
+<p>有向无环图（Directed Acyclic Graph，简称 DAG）：如果一个有向图，从任意顶点出发无法经过若干条边回到该顶点，那么它就是一个有向无环图。</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/%E6%9C%89%E5%90%91%E6%97%A0%E7%8E%AF%E5%9B%BE%E5%AF%B9%E6%AF%94.png" alt="有向无环图对比"></p>
+<blockquote>
+<p>出度、入度</p>
+</blockquote>
+<p><mark>出度、入度适用于有向图。</mark></p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/出度与入度.png" alt="出度与入度" style="zoom:67%;" />
+<p>出度（Out-degree）：</p>
+<ul>
+<li>一个顶点的出度是 x ，是指有 x 条边以该顶点为<strong>起点</strong></li>
+<li>顶点 11 的出度是 3</li>
+</ul>
+<p>入度（In-degree）：</p>
+<ul>
+<li>一个顶点的入度是 x ，是指有 x 条边以该顶点为<strong>终点</strong></li>
+<li>顶点 11 的入度是 2</li>
+</ul>
+<h2 id="1-3-无向图"><a class="header-anchor" href="#1-3-无向图"></a>1.3 无向图</h2>
+<p>无向图（Undirected Graph），无向图的边是没有方向的。</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/%E6%97%A0%E5%90%91%E5%9B%BE.png" alt="无向图"></p>
+<blockquote>
+<p>混合图</p>
+</blockquote>
+<p>混合图（Mixed Graph），混合图的边可能是无向的，也有可能是有向的。比如：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/%E6%B7%B7%E5%90%88%E5%9B%BE.png" alt="混合图"></p>
+<h2 id="1-4-简单图与多重图"><a class="header-anchor" href="#1-4-简单图与多重图"></a>1.4 简单图与多重图</h2>
+<p>平行边：</p>
+<ul>
+<li>
+<p>在无向图中，关联一对顶点的无向边如果多余 1 条，则称这些边是平行边</p>
+</li>
+<li>
+<p>在有向图中，关联一对顶点的有向边如果多余 1 条，并且它们的<strong>方向相同</strong> ，则称这些边是平行边</p>
+</li>
+</ul>
+<p>多重图（Multigraph）：有平行边或者自环的图</p>
+<p>简单图（Simple Graph）：既没有平行边也没有自环的图</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/多重图与简单图.png" alt="多重图与简单图" style="zoom:50%;" />
+<h2 id="1-5-完全图"><a class="header-anchor" href="#1-5-完全图"></a>1.5 完全图</h2>
+<blockquote>
+<p>无向完全图</p>
+</blockquote>
+<p>无向完全图（Undirected Complete Graph）：如果一个无向图的<strong>任意两个顶点之间都存在边</strong> ，那么这个图叫做无向完全图。</p>
+<p>n 个顶点的的无向完全图有 <code>n(n - 1) / 2</code> 条边。</p>
+<p>无向完全图顶点与边数之间的关系：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/无向完全图顶点与边数之间的关系.png" alt="无向完全图顶点与边数之间的关系" style="zoom: 67%;" />
+<p>从上面给出的表中易得边数 N = (n - 1) + (n - 2) + (n - 3) + ··· + 3 + 2 + 1 = (n - 1)! = n (n - 1) / 2</p>
+<blockquote>
+<p>有向完全图</p>
+</blockquote>
+<p>有向完全图（Directed Complete Graph）：任意两个顶点之间都存在方向相反的两条边的有向图。</p>
+<p>n 个顶点的有向完全图有 <code>n(n - 1)</code> 条边。</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/有向完全图.png" alt="有向完全图" style="zoom: 67%;" />
+<blockquote>
+<p>稠密图与稀疏图</p>
+</blockquote>
+<p>稠密图（Dense Graph）：边数接近于或等于完全图。</p>
+<p>稀疏图（Sparse Graph）：边数远远少于完全图。</p>
+<h2 id="1-6-有权图"><a class="header-anchor" href="#1-6-有权图"></a>1.6 有权图</h2>
+<p>有权图（Weighted Graph）：有权图的边可以拥有权值（Weight）。如：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/%E6%9C%89%E6%9D%83%E5%9B%BE.png" alt="有权图"></p>
+<h2 id="1-7-连通图"><a class="header-anchor" href="#1-7-连通图"></a>1.7 连通图</h2>
+<blockquote>
+<p>连通图</p>
+</blockquote>
+<p>如果顶点 x 和 y 之间存在可相互抵达的路径（直接或间接的路径），则称 x 和 y 是连通的。</p>
+<p>连通图（Connected Graph）：如果无向图 G 中任意两个顶点都是连通的，则称 G 为<span style="color:darkorange ">连通图</span>。如：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/连通图.png" alt="连通图" style="zoom: 67%;" />
+<blockquote>
+<p>连通分量</p>
+</blockquote>
+<p>连通分量（Connected Component）： <mark>无向图</mark>的极大连通子图。</p>
+<p>连通图只有一个连通分量，即自身；非连通的无向图有多个连通分量。</p>
+<p>下图的无向图有 3 个连通分量：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/3个连通分量.png" alt="3个连通分量" style="zoom:50%;" />
+<blockquote>
+<p>强连通图</p>
+</blockquote>
+<p>强连通图（Strongly Connected Graph）：如果有向图 G 中任意 2 个顶点都是连通的，则称 G 为<span style="color:darkorange ">强连通图</span>。如：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/%E5%BC%BA%E8%BF%9E%E9%80%9A%E5%9B%BE.png" alt="强连通图"></p>
+<blockquote>
+<p>强连通分量</p>
+</blockquote>
+<p>强连通分量（Strongly Connected Component）：有向图的极大连通子图。</p>
+<p>强连通图只有一个强连通分量，即自身；非强连通的有向图有多个强连通分量。</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/强连通分量.png" alt="强连通分量" style="zoom: 50%;" />
+<h1 id="2-图的实现方案"><a class="header-anchor" href="#2-图的实现方案"></a>2. 图的实现方案</h1>
+<p>图有两种常见的实现方案：</p>
+<ul>
+<li>邻接矩阵（Adjacency Matrix）</li>
+<li>邻接表（Adjacency List）</li>
+</ul>
+<h2 id="2-1-邻接矩阵"><a class="header-anchor" href="#2-1-邻接矩阵"></a>2.1 邻接矩阵</h2>
+<p>邻接矩阵的存储方式：一维数组存放顶点信息，二维数组存放边信息。</p>
+<p>比如：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/%E9%82%BB%E6%8E%A5%E7%9F%A9%E9%98%B5%E5%AE%9E%E7%8E%B0%E5%9B%BE.png" alt="邻接矩阵实现图"></p>
+<p>邻接矩阵比较适合稠密图，不然会比较浪费内存。</p>
+<p>邻接矩阵实现有权图：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/邻接矩阵实现有权图.png" alt="邻接矩阵实现有权图" style="zoom:50%;" />
+<h2 id="2-2-邻接表"><a class="header-anchor" href="#2-2-邻接表"></a>2.2 邻接表</h2>
+<p>邻接表表示图时，可以看成使用的链表数组来表示的。</p>
+<p>邻接表实现图：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/邻接表实现图.png" alt="邻接表实现图" style="zoom:50%;" />
+<p>邻接表实现有权图：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/邻接表实现有权图.png" alt="邻接表实现有权图" style="zoom:50%;" />
+<hr>
+<p>我们在实现图时，为了方便理解，抛弃邻接矩阵的实现，采用邻接表的实现。</p>
+<h1 id="3-编码实现"><a class="header-anchor" href="#3-编码实现"></a>3. 编码实现</h1>
+<p>本次编码<mark>基于有向图的实现</mark> ，因为无向图可以转换为有向图，有向图可以表达无向图。</p>
+<p>在这采取的实现方式不属于邻接矩阵的实现，也不属于邻接表的实现，但比较接近邻接表的实现，属于怎么简单怎么来。 😂</p>
+<h2 id="3-1-接口设计"><a class="header-anchor" href="#3-1-接口设计"></a>3.1 接口设计</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> 默烦</span></span><br><span class="line"><span class="comment"> * 2020/8/22</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Graph</span>&lt;V, E&gt; &#123;</span><br><span class="line">    <span class="type">int</span> <span class="title function_">edgesSize</span><span class="params">()</span>;</span><br><span class="line">    <span class="type">int</span> <span class="title function_">verticesSize</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">addVertex</span><span class="params">(V v)</span>;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">addEdge</span><span class="params">(V from, V to)</span>;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">addEdge</span><span class="params">(V from, V to, E weight)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">removeEdge</span><span class="params">(V from, V to)</span>;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">removeVertex</span><span class="params">(V v)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="3-2-顶点与边"><a class="header-anchor" href="#3-2-顶点与边"></a>3.2 顶点与边</h2>
+<p>图是由顶点和边组成的，就像二叉树一样，是由节点组成的，因此我们需要编写两个内部类用来表示图的顶点和边。</p>
+<p>对于顶点来说，首先需要一个 value 属性，用来表示顶点的值。一个顶点可以存在出这个顶点的边，还可以有进这个顶点的边，因此这两个成员变量也是不可缺少的。</p>
+<p>对于边来说，首先需要一个 weight 属性，用来表示这条边的权值。一条边是由两个顶点产生的，因此表示这两个顶点的成员变量也不能缺少。</p>
+<p>我们使用 HashSet 来保存边，这样的话可以很好地判断某条边是否存在。HashSet 是使用 HashMap 实现的，在判断某个元素是否存在时，需要使用<code>equals()</code>和<code>hashCode()</code>方法进行判断，因此，我们将在这两个内部类中重写<code>equals()</code>和<code>hashCode()</code>方法。</p>
+<p>为了方便后续测试，将<code>toString()</code>方法也进行重写。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Vertex</span>&lt;V, E&gt; &#123;</span><br><span class="line">    V value;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 设计成 Set 可以很好地判断边是否存在</span></span><br><span class="line"><span class="comment">    * 且使用的 HashSet，判断存在的效率很高</span></span><br><span class="line"><span class="comment">    * 如果设计成 List，还要一个一个地遍历</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    Set&lt;Edge&lt;V, E&gt;&gt; inEdges = <span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;&gt;();</span><br><span class="line">    Set&lt;Edge&lt;V, E&gt;&gt; outEdges = <span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Vertex</span><span class="params">(V value)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.value = value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">equals</span><span class="params">(Object o)</span> &#123;</span><br><span class="line">        Vertex&lt;V, E&gt; vertex = (Vertex&lt;V, E&gt;) o;</span><br><span class="line">        <span class="keyword">return</span> Objects.equals(value, vertex.value);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">hashCode</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> value == <span class="literal">null</span> ? <span class="number">0</span> : value.hashCode();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> value == <span class="literal">null</span> ? <span class="string">&quot;null&quot;</span> : value.toString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Edge</span>&lt;V, E&gt; &#123;</span><br><span class="line">    Vertex&lt;V, E&gt; from;</span><br><span class="line">    Vertex&lt;V, E&gt; to;</span><br><span class="line">    E weight;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Edge</span><span class="params">(Vertex&lt;V, E&gt; from, Vertex&lt;V, E&gt; to)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.from = from;</span><br><span class="line">        <span class="built_in">this</span>.to = to;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 起点与终点相等时，就认为这是同一条边</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">equals</span><span class="params">(Object o)</span> &#123;</span><br><span class="line">        Edge&lt;V, E&gt; edge = (Edge&lt;V, E&gt;) o;</span><br><span class="line">        <span class="keyword">return</span> Objects.equals(from, edge.from) &amp;&amp;</span><br><span class="line">            Objects.equals(to, edge.to);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">hashCode</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> from.hashCode() * <span class="number">31</span> + to.hashCode();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Edge&#123;&quot;</span> +</span><br><span class="line">            <span class="string">&quot;from=&quot;</span> + from +</span><br><span class="line">            <span class="string">&quot;, to=&quot;</span> + to +</span><br><span class="line">            <span class="string">&quot;, weight=&quot;</span> + weight +</span><br><span class="line">            <span class="string">&#x27;&#125;&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="3-3-添加"><a class="header-anchor" href="#3-3-添加"></a>3.3 添加</h2>
+<p>当我们添加一条边时，可以使用<code>addEdge(V from, V to, E weight)</code>方法，在实现这个方法时，必须先判断 from 顶点和 weight 顶点是否存在，如果不存在，我们就新建顶点，然后在它们之间添加一条边。</p>
+<p>对于使用的用户来说， V 类型的 from 和 to 就是顶点；但对编码的我们来说， Vertex 才是顶点。如果在添加边时，有一个或两个顶点不存在，我们需要创建顶点对象<code>Vertex v = new Vertex();</code>，然后初始化顶点<code>v.value = from;</code>，这就表明了： 用户自定义对象 和 顶点对象是一一对应的。</p>
+<p>所以我们想要存储顶点时，就可以使用 HashMap 来存储。同样，储存边可以使用 HashSet。</p>
+<blockquote>
+<p>添加顶点</p>
+</blockquote>
+<p>添加顶点很简单，因为我们图的所有顶点都是存储在 HashMap 中的，所以在添加之前需要判断添加的顶点是否已经存在，如果存在了，就直接返回，反之则添加。</p>
+<blockquote>
+<p>添加边</p>
+</blockquote>
+<p>两个顶点可以确定一条边，如果在添加边时，这两个顶点都不存在，那么就无法添加边。为了规避这个现象，我们在进行实现时，先判断顶点是否存在，如果顶点不存在，就创建顶点，然后再添加边。</p>
+<p>在添加边时，还有一种情况： 两个顶点之间已经存在一条边了。对于这种情况，我们采用新边覆盖旧边的方式。</p>
+<p>为了统一逻辑，我们可以采用删除后再添加的方法。如果两个顶点之间已经存在了一条边，那就将这条边删除然后再将新的边添加进去；如果两个顶点之间不存在边，就不进行删除而直接添加。</p>
+<p>在判断两个顶点之间是否存在边时，可以使用 HashSet 的<code>contains()</code>方法进行判断，除此之外还可以直接使用<code>remove()</code>方法，因为<code>remove()</code>方法的返回值类型是<code>boolean</code>的，如果成功删除就会返回 true ，反之返回 false。既然都成功删除了，也就表明两个顶点之间是存在边的，所以我们可以使用 <code>remove()</code> 代替 <code>contains()</code>以减少方法的调用。</p>
+<blockquote>
+<p>编码实现</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> 默烦</span></span><br><span class="line"><span class="comment"> * 2020/8/22</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ListGraph</span>&lt;V, E&gt; <span class="keyword">implements</span> <span class="title class_">Graph</span>&lt;V, E&gt; &#123;</span><br><span class="line">    <span class="comment">// 存储图中所有顶点</span></span><br><span class="line">    <span class="keyword">private</span> Map&lt;V, Vertex&lt;V, E&gt;&gt; vertices = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">    <span class="comment">// 存储图中所有边</span></span><br><span class="line">    <span class="keyword">private</span> Set&lt;Edge&lt;V, E&gt;&gt; edges = <span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">edgesSize</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> edges.size();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">verticesSize</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> vertices.size();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addVertex</span><span class="params">(V v)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (vertices.containsKey(v)) <span class="keyword">return</span>;</span><br><span class="line">        vertices.put(v, <span class="keyword">new</span> <span class="title class_">Vertex</span>&lt;&gt;(v));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addEdge</span><span class="params">(V from, V to)</span> &#123;</span><br><span class="line">        addEdge(from, to, <span class="literal">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addEdge</span><span class="params">(V from, V to, E weight)</span> &#123;</span><br><span class="line">        <span class="comment">// 先判断 from、to 顶点是否存在</span></span><br><span class="line">        Vertex&lt;V, E&gt; fromVertex = vertices.get(from);</span><br><span class="line">        <span class="keyword">if</span> (fromVertex == <span class="literal">null</span>) &#123;</span><br><span class="line">            fromVertex = <span class="keyword">new</span> <span class="title class_">Vertex</span>&lt;&gt;(from);</span><br><span class="line">            vertices.put(from, fromVertex);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Vertex&lt;V, E&gt; toVertex = vertices.get(to);</span><br><span class="line">        <span class="keyword">if</span> (toVertex == <span class="literal">null</span>) &#123;</span><br><span class="line">            toVertex = <span class="keyword">new</span> <span class="title class_">Vertex</span>&lt;&gt;(to);</span><br><span class="line">            vertices.put(to, toVertex);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 判断两个顶点之间是否存在边</span></span><br><span class="line">        Edge&lt;V, E&gt; edge = <span class="keyword">new</span> <span class="title class_">Edge</span>&lt;&gt;(fromVertex, toVertex);</span><br><span class="line">        edge.weight = weight;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (fromVertex.outEdges.remove(edge)) &#123;</span><br><span class="line">            toVertex.inEdges.remove(edge);</span><br><span class="line">            edges.remove(edge);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        fromVertex.outEdges.add(edge);</span><br><span class="line">        toVertex.inEdges.add(edge);</span><br><span class="line">        edges.add(edge);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="3-4-删除"><a class="header-anchor" href="#3-4-删除"></a>3.4 删除</h2>
+<blockquote>
+<p>删除边</p>
+</blockquote>
+<p>删除边的方法是<code>removeEdge(V from, V to)</code>，表示删除从顶点 from 出发打顶点 to 的边，因此在实现这个方法时，首先得判断 from 和 to 这两个顶点是否存在，如果不存在就直接返回。</p>
+<p>当两个顶点都存在时，还得判断这两个顶点之间是否存在边，如果存在才进行删除，反之不进行删除。</p>
+<p>存在与否的判断逻辑依然可以使用 <code>remove()</code> 方法的返回值来进行判断。</p>
+<blockquote>
+<p>删除顶点</p>
+</blockquote>
+<p>实现删除顶点时，并不是直接删除了顶点就完事了，删除顶点只是第一步，之后还要将和这个顶点有关的边都删除了，才算将这个顶点删除完毕了。</p>
+<p>删除和顶点有关的边时，这些边有两种情况：</p>
+<ul>
+<li>从这个顶点出去的边</li>
+<li>进入这个顶点的边</li>
+</ul>
+<p>这些边都出存储在 HashSet 中的，然后可以遍历 HashSet ，找出对应的边进行删除。</p>
+<p>但需要注意的是，这里的遍历不能直接使用 <code>forEach</code> 进行遍历，我们遍历时会进行删除，如果使用 <code>forEach</code> 一边删除一边遍历，就会出问题。</p>
+<p>那怎么办？ Java 给我们提供了迭代器，我们可以使用迭代器一边遍历一边删除。</p>
+<blockquote>
+<p>编码实现</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">removeEdge</span><span class="params">(V from, V to)</span> &#123;</span><br><span class="line">    Vertex&lt;V, E&gt; fromVertex = vertices.get(from);</span><br><span class="line">    <span class="keyword">if</span> (fromVertex == <span class="literal">null</span>) <span class="keyword">return</span>;</span><br><span class="line">    Vertex&lt;V, E&gt; toVertex = vertices.get(to);</span><br><span class="line">    <span class="keyword">if</span> (toVertex == <span class="literal">null</span>) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    Edge&lt;V, E&gt; edge = <span class="keyword">new</span> <span class="title class_">Edge</span>&lt;&gt;(fromVertex, toVertex);</span><br><span class="line">    <span class="keyword">if</span> (fromVertex.outEdges.remove(edge)) &#123;</span><br><span class="line">        toVertex.inEdges.remove(edge);</span><br><span class="line">        edges.remove(edge);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">removeVertex</span><span class="params">(V v)</span> &#123;</span><br><span class="line">    Vertex&lt;V, E&gt; vertex = vertices.remove(v);</span><br><span class="line">    <span class="keyword">if</span> (vertex == <span class="literal">null</span>) <span class="keyword">return</span>;</span><br><span class="line">    <span class="comment">// 迭代器删除 边遍历边删除</span></span><br><span class="line">    <span class="keyword">for</span> (Iterator&lt;Edge&lt;V, E&gt;&gt; iterator = vertex.outEdges.iterator(); iterator.hasNext();)&#123;</span><br><span class="line">        Edge&lt;V, E&gt; edge = iterator.next();</span><br><span class="line">        edge.to.inEdges.remove(edge);</span><br><span class="line">        <span class="comment">// 将当前遍历到的元素 edge 从集合 vertex.outEdges 中删除</span></span><br><span class="line">        iterator.remove();</span><br><span class="line">        edges.remove(edge);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (Iterator&lt;Edge&lt;V, E&gt;&gt; iterator = vertex.inEdges.iterator(); iterator.hasNext();)&#123;</span><br><span class="line">        Edge&lt;V, E&gt; edge = iterator.next();</span><br><span class="line">        edge.from.outEdges.remove(edge);</span><br><span class="line">        <span class="comment">// 将当前遍历到的元素 edge 从集合 vertex.outEdges 中删除</span></span><br><span class="line">        iterator.remove();</span><br><span class="line">        edges.remove(edge);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="3-5-测试"><a class="header-anchor" href="#3-5-测试"></a>3.5 测试</h2>
+<blockquote>
+<p>有向图的测试</p>
+</blockquote>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/邻接表实现有权图.png" alt="邻接表实现有权图" style="zoom:50%;" />
+<p>在测试代码中创建一个如上图所示的图，然后进行测试。为了便于查看测试结果，可以在<code>ListGraph</code>类中增加一个公共方法<code>print()</code>，这个方法用来打印顶点和边。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">print</span><span class="params">()</span> &#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;============【顶点】===========&quot;</span>);</span><br><span class="line">    vertices.forEach((V v, Vertex&lt;V, E&gt; vertex) -&gt; &#123;</span><br><span class="line">        System.out.println(v);</span><br><span class="line">        System.out.println(<span class="string">&quot;out---------------&quot;</span>);</span><br><span class="line">        System.out.println(vertex.outEdges);</span><br><span class="line">        System.out.println(<span class="string">&quot;in---------------&quot;</span>);</span><br><span class="line">        System.out.println(vertex.inEdges);</span><br><span class="line">    &#125;);</span><br><span class="line">    System.out.println(<span class="string">&quot;=============【边】=============&quot;</span>);</span><br><span class="line">    edges.forEach((Edge&lt;V, E&gt; edge) -&gt; &#123;</span><br><span class="line">        System.out.println(edge);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">test_1</span><span class="params">()</span>&#123;</span><br><span class="line">        ListGraph&lt;String, Integer&gt; graph = <span class="keyword">new</span> <span class="title class_">ListGraph</span>&lt;&gt;();</span><br><span class="line">        graph.addEdge(<span class="string">&quot;V1&quot;</span>, <span class="string">&quot;V0&quot;</span>, <span class="number">9</span>);</span><br><span class="line">        graph.addEdge(<span class="string">&quot;V1&quot;</span>, <span class="string">&quot;V2&quot;</span>, <span class="number">3</span>);</span><br><span class="line">        graph.addEdge(<span class="string">&quot;V2&quot;</span>, <span class="string">&quot;V0&quot;</span>, <span class="number">2</span>);</span><br><span class="line">        graph.addEdge(<span class="string">&quot;V2&quot;</span>, <span class="string">&quot;V3&quot;</span>, <span class="number">5</span>);</span><br><span class="line">        graph.addEdge(<span class="string">&quot;V3&quot;</span>, <span class="string">&quot;V4&quot;</span>, <span class="number">1</span>);</span><br><span class="line">        graph.addEdge(<span class="string">&quot;V0&quot;</span>, <span class="string">&quot;V4&quot;</span>, <span class="number">6</span>);</span><br><span class="line"><span class="comment">//        graph.removeEdge(&quot;V0&quot;, &quot;V4&quot;);</span></span><br><span class="line">        graph.removeVertex(<span class="string">&quot;V0&quot;</span>);</span><br><span class="line">        graph.print();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>控制台打印的测试结果与我们给出的图是一样的。 😎</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/编码实现有向图测试结果.png" alt="编码实现有向图测试结果" style="zoom:50%;" />
+<blockquote>
+<p>无向图的测试</p>
+</blockquote>
+<p>无向图可以转换为有向图，有向图可以表达无向图，我们的测试代码可以这么编写：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">test_2</span><span class="params">()</span>&#123;</span><br><span class="line">    ListGraph&lt;String, Integer&gt; graph = <span class="keyword">new</span> <span class="title class_">ListGraph</span>&lt;&gt;();</span><br><span class="line">    graph.addEdge(<span class="string">&quot;V0&quot;</span>, <span class="string">&quot;V1&quot;</span>);</span><br><span class="line">    graph.addEdge(<span class="string">&quot;V1&quot;</span>, <span class="string">&quot;V0&quot;</span>);</span><br><span class="line"></span><br><span class="line">    graph.addEdge(<span class="string">&quot;V0&quot;</span>, <span class="string">&quot;V2&quot;</span>);</span><br><span class="line">    graph.addEdge(<span class="string">&quot;V2&quot;</span>, <span class="string">&quot;V0&quot;</span>);</span><br><span class="line"></span><br><span class="line">    graph.addEdge(<span class="string">&quot;V0&quot;</span>, <span class="string">&quot;V3&quot;</span>);</span><br><span class="line">    graph.addEdge(<span class="string">&quot;V3&quot;</span>, <span class="string">&quot;V0&quot;</span>);</span><br><span class="line"></span><br><span class="line">    graph.addEdge(<span class="string">&quot;V2&quot;</span>, <span class="string">&quot;V1&quot;</span>);</span><br><span class="line">    graph.addEdge(<span class="string">&quot;V1&quot;</span>, <span class="string">&quot;V2&quot;</span>);</span><br><span class="line"></span><br><span class="line">    graph.addEdge(<span class="string">&quot;V2&quot;</span>, <span class="string">&quot;V3&quot;</span>);</span><br><span class="line">    graph.addEdge(<span class="string">&quot;V3&quot;</span>, <span class="string">&quot;V2&quot;</span>);</span><br><span class="line">    graph.print();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>无向图的测试结果：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/编码实现无向图测试结果.png" alt="编码实现无向图测试结果" style="zoom: 50%;" />
+<h1 id="4-图的遍历"><a class="header-anchor" href="#4-图的遍历"></a>4. 图的遍历</h1>
+<p>图的遍历：从图中某一顶点出发访问图中其余顶点，且每一个顶点仅被访问一次。</p>
+<p>图有两种常见的遍历方式（有向图、无向图都适用）：</p>
+<p>1、广度优先搜索（Breadth First Search, BFS），又称为宽度优先搜索、横向优先搜索</p>
+<p>2、深度优先搜索（Depth First Search, DFS）</p>
+<p>发明“深度优先搜索”算法的两位科学家在 1986 年共同获得计算机领域的最高奖： 图灵奖。</p>
+<p>PS：这两位是 <span style="color:red">约翰·E·霍普克洛夫特（John E. Hopcroft）</span>与<span style="color:red">罗伯特·塔扬（Robert Tarjan）</span></p>
+<h2 id="4-1-广度优先搜索"><a class="header-anchor" href="#4-1-广度优先搜索"></a>4.1 广度优先搜索</h2>
+<p>二叉树<strong>层序遍历</strong>其实就是一种广度优先搜索。</p>
+<p>如果使用广度优先搜索来遍历图时，则有：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/BFS示例1.png" alt="BFS示例1BFS" style="zoom: 45%;" />
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/BFS示例2.png" alt="BFS示例2" style="zoom:45%;" />
+<p>从上面的示例可以知道，广度优先搜索遍历图的规则是：在图中选定一个顶点作为第一层，从这个顶点出发，能够到达的第一个其他顶点作为第二层；以第二层的顶点为起点出发，能够到达的第一个顶点作为第三层，依次类推进行遍历，直到遍历完所有顶点或不能再遍历。</p>
+<p>在层序遍历二叉树时使用了队列来实现，而在这的广度优先搜索也可以使用队列来实现。</p>
+<p>1、选定一个顶点入队；</p>
+<p>2、一个元素（顶点）出队，将出队顶点能够到达的所有顶点入队。如果能够到达的顶点已经在队列中或已经出队，则对这些顶点不进行入队操作；</p>
+<p>3、重复上一步，直到队列为空。</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/BFS思路.png" alt="BFS思路" style="zoom:50%;" />
+<p><mark>需要注意的是</mark> ，选择不同的起始顶点得到的遍历结果很大概率会不同。</p>
+<h2 id="4-2-实现BFS"><a class="header-anchor" href="#4-2-实现BFS"></a>4.2 实现BFS</h2>
+<p>在<code>Graph</code>接口中添加一个方法<code>void bfs(V begin);</code>，表示广度优先搜索的方法。</p>
+<p>然后需要在<code>ListGraph</code>类中实现这个方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">bfs</span><span class="params">(V begin)</span> &#123;</span><br><span class="line">    Vertex&lt;V, E&gt; beginVertex = vertices.get(begin);</span><br><span class="line">    <span class="keyword">if</span> (beginVertex == <span class="literal">null</span>) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    Set&lt;Vertex&lt;V, E&gt;&gt; visitedVertices = <span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;&gt;();</span><br><span class="line">    Queue&lt;Vertex&lt;V, E&gt;&gt; queue = <span class="keyword">new</span> <span class="title class_">LinkedList</span>&lt;&gt;();</span><br><span class="line">    queue.offer(beginVertex);</span><br><span class="line">    visitedVertices.add(beginVertex);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (!queue.isEmpty())&#123;</span><br><span class="line">        Vertex&lt;V, E&gt; vertex = queue.poll();</span><br><span class="line">        System.out.println(vertex.value);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (Edge&lt;V, E&gt; edge : vertex.outEdges) &#123;</span><br><span class="line">            <span class="keyword">if</span> (visitedVertices.contains(edge.to)) <span class="keyword">continue</span>;</span><br><span class="line">            queue.offer(edge.to);</span><br><span class="line">            visitedVertices.add(edge.to);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上就是广度优先搜索的代码，以经过初步测试，可放心 “食用”！ 😜</p>
+<h2 id="4-3-深度优先搜索"><a class="header-anchor" href="#4-3-深度优先搜索"></a>4.3 深度优先搜索</h2>
+<p>二叉树<strong>前序遍历</strong>其实就是一种深度优先搜索。</p>
+<p>二叉树前序遍历的访问顺序： <span style="color:darkorange ">根</span>节点、前序遍历<span style="color:darkorange ">左</span>子树、前序遍历<span style="color:darkorange ">右</span>子树。</p>
+<p>如果使用深度优先搜索来遍历图时，则有：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/DFS示例1.png" alt="DFS示例1" style="zoom:50%;" />
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/DFS示例2.png" alt="DFS示例2" style="zoom:50%;" />
+<p>从上面的示例可以知道，深度优先搜索遍历图的规则是：在图中选定一个顶点作为起点，从起点出发，选择一条路径一直向下遍历，直到没有顶点可以遍历；然后从最后一个顶点进行回退，在回退经过的顶点处选择其他的路径进行遍历（这里指的是遍历没有遍历过的顶点），直到遍历完图中所有顶点或无法遍历。</p>
+<p>在实现二叉树的前序遍历时，我们使用了<strong>递归</strong>进行实现，而深度优先遍历也可以使用递归实现。</p>
+<p><mark>需要注意的是</mark> ，选择不同的起始顶点和不同的路径得到的遍历结果很大概率会不同。</p>
+<h2 id="4-4-实现DFS"><a class="header-anchor" href="#4-4-实现DFS"></a>4.4 实现DFS</h2>
+<blockquote>
+<p>递归实现</p>
+</blockquote>
+<p>在<code>Graph</code>接口中添加一个方法<code>void dfs(V begin);</code>，表示深度优先搜索的方法。</p>
+<p>然后需要在<code>ListGraph</code>类中实现这个方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(V begin)</span> &#123;</span><br><span class="line">    Vertex&lt;V, E&gt; beginVertex = vertices.get(begin);</span><br><span class="line">    <span class="keyword">if</span> (beginVertex == <span class="literal">null</span>) <span class="keyword">return</span>;</span><br><span class="line">    dfs(beginVertex, <span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;&gt;());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(Vertex&lt;V, E&gt; vertex, Set&lt;Vertex&lt;V, E&gt;&gt; visitedVertices)</span>&#123;</span><br><span class="line">    System.out.println(vertex.value);</span><br><span class="line">    visitedVertices.add(vertex);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (Edge&lt;V, E&gt; edge : vertex.outEdges) &#123;</span><br><span class="line">        <span class="keyword">if</span> (visitedVertices.contains(edge.to)) <span class="keyword">continue</span>;</span><br><span class="line">        dfs(edge.to, visitedVertices);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上就是深度优先搜索递归实现的代码，以经过初步测试，可放心 “食用”！😝</p>
+<blockquote>
+<p>非递归实现</p>
+</blockquote>
+<p><strong>非递归思路：</strong></p>
+<p>1、选定一个顶点作为起点，将这个顶点入栈</p>
+<p>2、从栈中弹出一个顶点，在弹出顶点的时候需要：</p>
+<ul>
+<li>从这个顶点的 outEdge 中选择一条边</li>
+<li>将选择的边的 form、to 按顺序入栈</li>
+<li>打印选择的边的 to，并将 to 加入已经访问的范围中，最后 <code>break</code></li>
+</ul>
+<p>3、重复上一步，直到遍历完整个图或无法遍历</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/DFS非递归思路.png" alt="DFS非递归思路" style="zoom: 50%;" />
+<hr>
+<p><strong>非递归实现：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(V begin)</span> &#123;</span><br><span class="line">    Vertex&lt;V, E&gt; beginVertex = vertices.get(begin);</span><br><span class="line">    <span class="keyword">if</span> (beginVertex == <span class="literal">null</span>) <span class="keyword">return</span>;</span><br><span class="line">    Set&lt;Vertex&lt;V, E&gt;&gt; visitedVertices = <span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;&gt;();</span><br><span class="line">    Stack&lt;Vertex&lt;V, E&gt;&gt; stack = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;&gt;();</span><br><span class="line">    <span class="comment">// 先访问起点</span></span><br><span class="line">    stack.push(beginVertex);</span><br><span class="line">    visitedVertices.add(beginVertex);</span><br><span class="line">    System.out.println(beginVertex.value);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (!stack.isEmpty()) &#123;</span><br><span class="line">        Vertex&lt;V, E&gt; vertex = stack.pop();</span><br><span class="line">        <span class="keyword">for</span> (Edge&lt;V, E&gt; edge : vertex.outEdges) &#123;</span><br><span class="line">            <span class="keyword">if</span> (visitedVertices.contains(edge.to)) <span class="keyword">continue</span>;</span><br><span class="line">            stack.push(edge.from);</span><br><span class="line">            stack.push(edge.to);</span><br><span class="line">            visitedVertices.add(edge.to);</span><br><span class="line">            System.out.println(edge.to.value);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上就是深度优先搜索非递归实现的代码，以经过初步测试，可放心 “食用”！😘</p>
+<h2 id="4-5-遍历接口"><a class="header-anchor" href="#4-5-遍历接口"></a>4.5 遍历接口</h2>
+<p>在上述实现的遍历代码中，遍历是很“封闭”的，只是单纯的打印出来，如果我们遍历后不局限于打印呢？用户可以自定义呢？</p>
+<p>或者遍历的时候不遍历完，可以控制遍历的终止，又该怎么做呢？ 😕</p>
+<p>可以像以前遍历二叉树一样，在接口中编写一个嵌套接口，并修改遍历接口的参数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Graph</span>&lt;V, E&gt; &#123;</span><br><span class="line">    <span class="comment">// 省略其他代码</span></span><br><span class="line">    ......</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">bfs</span><span class="params">(V begin, VertexVisitor&lt;V&gt; visitor)</span>;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(V begin, VertexVisitor&lt;V&gt; visitor)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">interface</span> <span class="title class_">VertexVisitor</span>&lt;V&gt;&#123;</span><br><span class="line">        <span class="type">boolean</span> <span class="title function_">visit</span><span class="params">(V v)</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在实现遍历接口时，将原先直接打印修改为调用 visitor 的 <code>visit()</code> 方法，而用户在使用的时候，可以自己实现方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">bfs</span><span class="params">(V begin, VertexVisitor&lt;V&gt; visitor)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (visitor == <span class="literal">null</span>) <span class="keyword">return</span>;</span><br><span class="line">    Vertex&lt;V, E&gt; beginVertex = vertices.get(begin);</span><br><span class="line">    <span class="keyword">if</span> (beginVertex == <span class="literal">null</span>) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    Set&lt;Vertex&lt;V, E&gt;&gt; visitedVertices = <span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;&gt;();</span><br><span class="line">    Queue&lt;Vertex&lt;V, E&gt;&gt; queue = <span class="keyword">new</span> <span class="title class_">LinkedList</span>&lt;&gt;();</span><br><span class="line">    queue.offer(beginVertex);</span><br><span class="line">    visitedVertices.add(beginVertex);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (!queue.isEmpty()) &#123;</span><br><span class="line">        Vertex&lt;V, E&gt; vertex = queue.poll();</span><br><span class="line">        <span class="comment">// 用户自定义遍历方式</span></span><br><span class="line">        <span class="keyword">if</span> (visitor.visit(vertex.value)) <span class="keyword">return</span>; </span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (Edge&lt;V, E&gt; edge : vertex.outEdges) &#123;</span><br><span class="line">            <span class="keyword">if</span> (visitedVertices.contains(edge.to)) <span class="keyword">continue</span>;</span><br><span class="line">            queue.offer(edge.to);</span><br><span class="line">            visitedVertices.add(edge.to);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(V begin, VertexVisitor&lt;V&gt; visitor)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (visitor == <span class="literal">null</span>) <span class="keyword">return</span>;</span><br><span class="line">    Vertex&lt;V, E&gt; beginVertex = vertices.get(begin);</span><br><span class="line">    <span class="keyword">if</span> (beginVertex == <span class="literal">null</span>) <span class="keyword">return</span>;</span><br><span class="line">    Set&lt;Vertex&lt;V, E&gt;&gt; visitedVertices = <span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;&gt;();</span><br><span class="line">    Stack&lt;Vertex&lt;V, E&gt;&gt; stack = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;&gt;();</span><br><span class="line">    <span class="comment">// 先访问起点</span></span><br><span class="line">    stack.push(beginVertex);</span><br><span class="line">    visitedVertices.add(beginVertex);</span><br><span class="line">    <span class="comment">// 用户自定义遍历方式</span></span><br><span class="line">    <span class="keyword">if</span> (visitor.visit(begin)) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (!stack.isEmpty()) &#123;</span><br><span class="line">        Vertex&lt;V, E&gt; vertex = stack.pop();</span><br><span class="line">        <span class="keyword">for</span> (Edge&lt;V, E&gt; edge : vertex.outEdges) &#123;</span><br><span class="line">            <span class="keyword">if</span> (visitedVertices.contains(edge.to)) <span class="keyword">continue</span>;</span><br><span class="line">            stack.push(edge.from);</span><br><span class="line">            stack.push(edge.to);</span><br><span class="line">            visitedVertices.add(edge.to);</span><br><span class="line">            <span class="comment">// 用户自定义遍历方式</span></span><br><span class="line">            <span class="keyword">if</span> (visitor.visit(edge.to.value)) <span class="keyword">return</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样修改代码后，用户就可以自定义遍历方式了，代码以经过初步测试，可放心 “食用”！😉</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/DataStructure-Basic-Knowledge-Of-Graphs/">https://mofan212.github.io/posts/DataStructure-Basic-Knowledge-Of-Graphs/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/DataStructure/">DataStructure</a></div><div class="post_share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/51.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/Algorithm-Topological-Sort-And-MST/" title="【算法】拓扑排序与最小生成树"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/52.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">【算法】拓扑排序与最小生成树</div></div></a></div><div class="next-post pull-right"><a href="/posts/DataStructure-Union-Find/" title="高级数据结构之并查集"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/50.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">高级数据结构之并查集</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/posts/DataStructure-Union-Find/" title="高级数据结构之并查集"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/50.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-08-19</div><div class="title">高级数据结构之并查集</div></div></a></div><div><a href="/posts/DataStructure-B+Tree/" title="高级数据结构之B+树"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/119.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-12-11</div><div class="title">高级数据结构之B+树</div></div></a></div><div><a href="/posts/DataStructure-AVLTree/" title="数据结构之“艾薇儿”树"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/35.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-07-12</div><div class="title">数据结构之“艾薇儿”树</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0-%E7%9F%A5%E8%AF%86%E5%9B%9E%E9%A1%BE"><span class="toc-text">0. 知识回顾</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E5%9B%BE%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-text">1. 图的概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-text">1.1 基本概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E6%9C%89%E5%90%91%E5%9B%BE"><span class="toc-text">1.2 有向图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-%E6%97%A0%E5%90%91%E5%9B%BE"><span class="toc-text">1.3 无向图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-%E7%AE%80%E5%8D%95%E5%9B%BE%E4%B8%8E%E5%A4%9A%E9%87%8D%E5%9B%BE"><span class="toc-text">1.4 简单图与多重图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-5-%E5%AE%8C%E5%85%A8%E5%9B%BE"><span class="toc-text">1.5 完全图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-6-%E6%9C%89%E6%9D%83%E5%9B%BE"><span class="toc-text">1.6 有权图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-7-%E8%BF%9E%E9%80%9A%E5%9B%BE"><span class="toc-text">1.7 连通图</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E5%9B%BE%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88"><span class="toc-text">2. 图的实现方案</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E9%82%BB%E6%8E%A5%E7%9F%A9%E9%98%B5"><span class="toc-text">2.1 邻接矩阵</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E9%82%BB%E6%8E%A5%E8%A1%A8"><span class="toc-text">2.2 邻接表</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E7%BC%96%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-text">3. 编码实现</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E6%8E%A5%E5%8F%A3%E8%AE%BE%E8%AE%A1"><span class="toc-text">3.1 接口设计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E9%A1%B6%E7%82%B9%E4%B8%8E%E8%BE%B9"><span class="toc-text">3.2 顶点与边</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-%E6%B7%BB%E5%8A%A0"><span class="toc-text">3.3 添加</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-%E5%88%A0%E9%99%A4"><span class="toc-text">3.4 删除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-5-%E6%B5%8B%E8%AF%95"><span class="toc-text">3.5 测试</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E5%9B%BE%E7%9A%84%E9%81%8D%E5%8E%86"><span class="toc-text">4. 图的遍历</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E5%B9%BF%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2"><span class="toc-text">4.1 广度优先搜索</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E5%AE%9E%E7%8E%B0BFS"><span class="toc-text">4.2 实现BFS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2"><span class="toc-text">4.3 深度优先搜索</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-4-%E5%AE%9E%E7%8E%B0DFS"><span class="toc-text">4.4 实现DFS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-5-%E9%81%8D%E5%8E%86%E6%8E%A5%E5%8F%A3"><span class="toc-text">4.5 遍历接口</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By 默烦</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-butterfly/4.8.5/js/utils.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-butterfly/4.8.5/js/main.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-butterfly/4.8.5/js/tw_cn.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-pjax"></div><script src="https://cdn.chrelyonly.cf/gh/mofan212/blog-static-resources@master/js/mine.min.js"></script><script src="https://npm.elemecdn.com/mermaid/dist/mermaid.min.js"></script><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="Azathoth,Yog-Sothoth,Shub-Niggurath,Nyarlathotep,Cthulhu,Hastur,Abhoth,Ghroth,Tsathoggua,Cthugha,Deep Ones,Dagon,Chaugnar Faugn,Mordiggian,Shoggoth,Old One,Mi-Go,Great Race of Yith,Flying Polyp,Hounds of Tindalos,Dhole" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div class="docsearch-wrap"><div id="docsearch" style="display:none"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css/dist/style.min.css"/><script src="https://cdn.jsdelivr.net/npm/@docsearch/js/dist/umd/index.min.js"></script><script>(() => {
+  docsearch(Object.assign({
+    appId: 'BAFEL7A6K1',
+    apiKey: '89fcb5961984c5c054bf04149f345f38',
+    indexName: 'mofan212io',
+    container: '#docsearch',
+  }, [{"placeholder":"Please enter search keywords"}]))
+
+
+  const searchClickFn = () => {
+    document.querySelector('#search-button > .search').addEventListener('click', () => {
+      document.querySelector('.DocSearch-Button').click()
+    })
+  }
+
+  searchClickFn()
+  window.addEventListener('pjax:complete', searchClickFn)
+})()</script></div></div></body></html>
