@@ -1433,7 +1433,7 @@ hr:hover:before {
 }
 hr:before {
   position: absolute;
-  top: -10px;
+  top: 10px;
   left: 5%;
   z-index: 1;
   color: var(--hr-before-color);
