@@ -1406,10 +1406,6 @@ body {
   font-family: "LXGW WenKai Screen", "Microsoft YaHei", sans-serif;
   line-height: 2;
   -webkit-tap-highlight-color: rgba(0,0,0,0);
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 }
 *::-webkit-scrollbar {
   width: 5px;
