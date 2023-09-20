@@ -6,7 +6,7 @@
   <link href="https://mofan212.github.io/atom.xml" rel="self"/>
   
   <link href="https://mofan212.github.io/"/>
-  <updated>2023-09-05T16:00:00.000Z</updated>
+  <updated>2023-09-19T16:00:00.000Z</updated>
   <id>https://mofan212.github.io/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>获取 ApplicationContext</title>
+    <link href="https://mofan212.github.io/posts/Get-ApplicationContext/"/>
+    <id>https://mofan212.github.io/posts/Get-ApplicationContext/</id>
+    <published>2023-09-19T16:00:00.000Z</published>
+    <updated>2023-09-19T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">从源码层面介绍通过注入 ApplicationContext 和 ApplicationContextAware 获取 ApplicationContext 的区别。</summary>
+    
+    
+    
+    <category term="Microservice" scheme="https://mofan212.github.io/categories/Microservice/"/>
+    
+    <category term="SpringBoot" scheme="https://mofan212.github.io/categories/Microservice/SpringBoot/"/>
+    
+    
+    <category term="Java" scheme="https://mofan212.github.io/tags/Java/"/>
+    
+    <category term="SpringBoot" scheme="https://mofan212.github.io/tags/SpringBoot/"/>
+    
+  </entry>
   
   <entry>
     <title>康康存款有几位数</title>
@@ -193,9 +216,9 @@
     <category term="Java" scheme="https://mofan212.github.io/categories/Java/"/>
     
     
-    <category term="JSONPath" scheme="https://mofan212.github.io/tags/JSONPath/"/>
-    
     <category term="JSON" scheme="https://mofan212.github.io/tags/JSON/"/>
+    
+    <category term="JSONPath" scheme="https://mofan212.github.io/tags/JSONPath/"/>
     
   </entry>
   
@@ -406,25 +429,6 @@
     
     
     <category term="Algorithm" scheme="https://mofan212.github.io/tags/Algorithm/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>高级数据结构之B+树</title>
-    <link href="https://mofan212.github.io/posts/DataStructure-B+Tree/"/>
-    <id>https://mofan212.github.io/posts/DataStructure-B+Tree/</id>
-    <published>2022-12-10T16:00:00.000Z</published>
-    <updated>2022-12-10T16:00:00.000Z</updated>
-    
-    
-    <summary type="html">B+ 树是 B 树的变体，常用于数据库和操作系统的文件系统中。MySQL 数据库的索引就是基于 B+ 树实现的。</summary>
-    
-    
-    
-    <category term="DataStructure" scheme="https://mofan212.github.io/categories/DataStructure/"/>
-    
-    
-    <category term="DataStructure" scheme="https://mofan212.github.io/tags/DataStructure/"/>
     
   </entry>
   
