@@ -6,7 +6,7 @@
   <link href="https://mofan212.github.io/atom.xml" rel="self"/>
   
   <link href="https://mofan212.github.io/"/>
-  <updated>2023-09-19T16:00:00.000Z</updated>
+  <updated>2023-09-22T16:00:00.000Z</updated>
   <id>https://mofan212.github.io/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>@Configuration 注解的那些事</title>
+    <link href="https://mofan212.github.io/posts/Configuration-Annotation/"/>
+    <id>https://mofan212.github.io/posts/Configuration-Annotation/</id>
+    <published>2023-09-22T16:00:00.000Z</published>
+    <updated>2023-09-22T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">从源码层面介绍 @Configuration 注解的 Full 模式与 Lite 模式。</summary>
+    
+    
+    
+    <category term="Java" scheme="https://mofan212.github.io/categories/Java/"/>
+    
+    <category term="Spring" scheme="https://mofan212.github.io/categories/Java/Spring/"/>
+    
+    
+    <category term="Spring" scheme="https://mofan212.github.io/tags/Spring/"/>
+    
+  </entry>
   
   <entry>
     <title>获取 ApplicationContext</title>
@@ -408,25 +429,6 @@
     
     
     <category term="Summary" scheme="https://mofan212.github.io/tags/Summary/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【算法】串匹配算法</title>
-    <link href="https://mofan212.github.io/posts/Algorithm-String-Matching/"/>
-    <id>https://mofan212.github.io/posts/Algorithm-String-Matching/</id>
-    <published>2022-12-17T16:00:00.000Z</published>
-    <updated>2023-03-16T16:00:00.000Z</updated>
-    
-    
-    <summary type="html">本文介绍了串匹配算法中的蛮力算法与 KMP 算法的理论与实现。</summary>
-    
-    
-    
-    <category term="Algorithm" scheme="https://mofan212.github.io/categories/Algorithm/"/>
-    
-    
-    <category term="Algorithm" scheme="https://mofan212.github.io/tags/Algorithm/"/>
     
   </entry>
   
