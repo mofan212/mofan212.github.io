@@ -226,11 +226,11 @@ document.addEventListener('pjax:send', () => {
 <p>此注解并不是由 Spring 提供的，而是 JSR-250 规范中指定的。</p>
 <p>此注解只能在 <strong>非静态无返回值</strong> 方法上使用，被此注解标记了的方法，作为 Spring 中 bean 的 <strong>初始化</strong> 方法。</p>
 <p>在整个 bean 的初始化过程中，最先执行构造方法，再进行依赖注入，然后再执行被此注解标记的方法。</p>
-<p><mark>注意：</mark> 此注解在 JDK9 中已被废弃，在 JDK11 中已被移除。要想在高版本 JDK 中使用此注解，需要添加依赖 <code>javax.annotation-api</code>。</p>
+<p><mark>注意：</mark> 此注解在 JDK9 中已被废弃，在 JDK11 中已被移除。要想在高版本 JDK 中使用此注解，需要添加依赖 <code>jakarta.annotation-api</code>。</p>
 <h2 id="1-5-PreDestroy"><a class="header-anchor" href="#1-5-PreDestroy"></a>1.5 @PreDestroy</h2>
 <p>此注解并不是由 Spring 提供的，而是 JSR-250 规范中指定的。</p>
 <p>此注解只能在 <strong>非静态无返回值</strong> 方法上使用，被此注解标记了的方法，作为 Spring 中 bean 的 <strong>销毁</strong> 方法。</p>
-<p><mark>注意：</mark> 此注解在 JDK9 中已被废弃，在 JDK11 中已被移除。要想在高版本 JDK 中使用此注解，需要添加依赖 <code>javax.annotation-api</code>。</p>
+<p><mark>注意：</mark> 此注解在 JDK9 中已被废弃，在 JDK11 中已被移除。要想在高版本 JDK 中使用此注解，需要添加依赖 <code>jakarta.annotation-api</code>。</p>
 <h2 id="1-6-Lookup"><a class="header-anchor" href="#1-6-Lookup"></a>1.6 @Lookup</h2>
 <p>Lookup，意为“查找、查阅”，在 Spring 中也有一个 <code>@Lookup</code> 注解，该注解只能作用在 <strong>方法</strong> 上。</p>
 <p>当使用 <code>ApplicationContext#getBean()</code> 方法按类型获取 Spring 容器中的 Bean 时，如果传入的类型是一个抽象类，那么会尝试在容器中查找该抽象类的实现类类型的 Bean，如果不存在这样的 Bean，则会抛出 <code>NoSuchBeanDefinitionException</code> 异常。</p>
