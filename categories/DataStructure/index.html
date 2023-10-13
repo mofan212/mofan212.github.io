@@ -9,7 +9,7 @@
 <meta property="article:author" content="默烦">
 <meta property="article:tag" content="默烦,mofan,Mofan">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://mofan212.github.io/categories/DataStructure/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://jsd.onmicrosoft.cn/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://jsd.onmicrosoft.cn/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://jsd.onmicrosoft.cn/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+<meta name="twitter:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://mofan212.github.io/categories/DataStructure/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://jsd.onmicrosoft.cn/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://jsd.onmicrosoft.cn/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://jsd.onmicrosoft.cn/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
   root: '/',
   algolia: undefined,
   localSearch: undefined,
@@ -35,12 +35,10 @@
   },
   copyright: {"limitCount":50,"languages":{"author":"作者: 默烦","link":"链接: ","source":"来源: Mofan","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
   lightbox: 'fancybox',
-  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
-  source: {
-    justifiedGallery: {
-      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
-      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
-    }
+  Snackbar: {"chs_to_cht":"你已切换为繁体中文","cht_to_chs":"你已切换为简体中文","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
   },
   isPhotoFigcaption: false,
   islazyload: false,
@@ -56,85 +54,78 @@
   isHome: false,
   isHighlightShrink: false,
   isToc: false,
-  postUpdate: '2023-10-11 19:37:37'
-}</script><noscript><style type="text/css">
-  #nav {
-    opacity: 1
-  }
-  .justified-gallery img {
-    opacity: 1
-  }
-
-  #recent-posts time,
-  #post-meta time {
-    display: inline !important
-  }
-</style></noscript><script>(win=>{
-    win.saveToLocal = {
-      set: function setWithExpiry(key, value, ttl) {
-        if (ttl === 0) return
-        const now = new Date()
-        const expiryDay = ttl * 86400000
-        const item = {
-          value: value,
-          expiry: now.getTime() + expiryDay,
+  postUpdate: '2023-10-13 20:03:00'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
         }
-        localStorage.setItem(key, JSON.stringify(item))
-      },
-
-      get: function getWithExpiry(key) {
-        const itemStr = localStorage.getItem(key)
-
-        if (!itemStr) {
-          return undefined
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
         }
-        const item = JSON.parse(itemStr)
-        const now = new Date()
 
-        if (now.getTime() > item.expiry) {
-          localStorage.removeItem(key)
-          return undefined
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
         }
-        return item.value
-      }
-    }
-  
-    win.getScript = url => new Promise((resolve, reject) => {
-      const script = document.createElement('script')
-      script.src = url
-      script.async = true
-      script.onerror = reject
-      script.onload = script.onreadystatechange = function() {
-        const loadState = this.readyState
-        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
-        script.onload = script.onreadystatechange = null
-        resolve()
-      }
-      document.head.appendChild(script)
-    })
-  
-    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
-      const link = document.createElement('link')
-      link.rel = 'stylesheet'
-      link.href = url
-      if (id) link.id = id
-      link.onerror = reject
-      link.onload = link.onreadystatechange = function() {
-        const loadState = this.readyState
-        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
-        link.onload = link.onreadystatechange = null
-        resolve()
-      }
-      document.head.appendChild(link)
-    })
-  
-      win.activateDarkMode = function () {
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
         document.documentElement.setAttribute('data-theme', 'dark')
         if (document.querySelector('meta[name="theme-color"]') !== null) {
           document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
         }
       }
-      win.activateLightMode = function () {
+      win.activateLightMode = () => {
         document.documentElement.setAttribute('data-theme', 'light')
         if (document.querySelector('meta[name="theme-color"]') !== null) {
           document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
@@ -142,9 +133,9 @@
       }
       const t = saveToLocal.get('theme')
     
-          if (t === 'dark') activateDarkMode()
-          else if (t === 'light') activateLightMode()
-        
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
       const asideStatus = saveToLocal.get('aside-status')
       if (asideStatus !== undefined) {
         if (asideStatus === 'hide') {
@@ -154,12 +145,12 @@
         }
       }
     
-    const detectApple = () => {
-      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
-        document.documentElement.classList.add('apple')
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
       }
-    }
-    detectApple()
+      detectApple()
     })(window)</script><meta name="referrer" content="no-referrer-when-downgrade" /><link rel="stylesheet" href="https://jsd.onmicrosoft.cn/gh/mofan212/blog-static-resources@master/css/myStyle.min.css"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css" /><link rel="stylesheet" href="https://jsd.onmicrosoft.cn/npm/jetbrains-mono@1.0.6/css/jetbrains-mono.min.css"><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Mofan" type="application/atom+xml">
 </head><body><script>window.paceOptions = {
   restartOnPushState: false
@@ -168,7 +159,7 @@
 document.addEventListener('pjax:send', () => {
   Pace.restart()
 })
-</script><link rel="stylesheet" href="https://jsd.onmicrosoft.cn/gh/mofan212/blog-static-resources/css/fill-left.min.css"/><script src="https://jsd.onmicrosoft.cn/npm/pace-js/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">140</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">28</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group hide" href="javascript:void(0);"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page group hide" href="javascript:void(0);"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li></ul></div></div></div></div><div class="page" id="body-wrap"><header class="not-home-page" id="page-header" style="background-image: url('/img/siteCover.png')"><nav id="nav"><span id="blog-info"><a href="/" title="Mofan"><span class="site-name">Mofan</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group hide" href="javascript:void(0);"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page group hide" href="javascript:void(0);"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="page-site-info"><h1 id="site-title">DataStructure</h1></div></header><main class="layout hide-aside" id="content-inner"><div id="category"><div class="article-sort-title">分类 - DataStructure</div><div class="article-sort"><div class="article-sort-item year">2022</div><div class="article-sort-item"><a class="article-sort-item-img" href="/posts/DataStructure-B+Tree/" title="高级数据结构之B+树"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/119.jpg" alt="高级数据结构之B+树" onerror="this.onerror=null;this.src='/img/404.jpg'"></a><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2022-12-10T16:00:00.000Z" title="发表于 2022-12-11 00:00:00">2022-12-11</time></div><a class="article-sort-item-title" href="/posts/DataStructure-B+Tree/" title="高级数据结构之B+树">高级数据结构之B+树</a></div></div><div class="article-sort-item"><a class="article-sort-item-img" href="/posts/DataStructure-SkipList/" title="高级数据结构之跳表"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/118.jpg" alt="高级数据结构之跳表" onerror="this.onerror=null;this.src='/img/404.jpg'"></a><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2022-12-05T16:00:00.000Z" title="发表于 2022-12-06 00:00:00">2022-12-06</time></div><a class="article-sort-item-title" href="/posts/DataStructure-SkipList/" title="高级数据结构之跳表">高级数据结构之跳表</a></div></div><div class="article-sort-item"><a class="article-sort-item-img" href="/posts/DataStructure-Bloom-Filter/" title="高级数据结构之布隆过滤器"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/117.jpg" alt="高级数据结构之布隆过滤器" onerror="this.onerror=null;this.src='/img/404.jpg'"></a><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2022-12-02T16:00:00.000Z" title="发表于 2022-12-03 00:00:00">2022-12-03</time></div><a class="article-sort-item-title" href="/posts/DataStructure-Bloom-Filter/" title="高级数据结构之布隆过滤器">高级数据结构之布隆过滤器</a></div></div><div class="article-sort-item"><a class="article-sort-item-img" href="/posts/ArrayDeque/" title="双端队列 ArrarDeque"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/113.png" alt="双端队列 ArrarDeque" onerror="this.onerror=null;this.src='/img/404.jpg'"></a><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2022-11-04T16:00:00.000Z" title="发表于 2022-11-05 00:00:00">2022-11-05</time></div><a class="article-sort-item-title" href="/posts/ArrayDeque/" title="双端队列 ArrarDeque">双端队列 ArrarDeque</a></div></div><div class="article-sort-item year">2020</div><div class="article-sort-item"><a class="article-sort-item-img" href="/posts/DataStructure-Basic-Knowledge-Of-Graphs/" title="高级数据结构之图"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/51.jpg" alt="高级数据结构之图" onerror="this.onerror=null;this.src='/img/404.jpg'"></a><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2020-08-22T16:00:00.000Z" title="发表于 2020-08-23 00:00:00">2020-08-23</time></div><a class="article-sort-item-title" href="/posts/DataStructure-Basic-Knowledge-Of-Graphs/" title="高级数据结构之图">高级数据结构之图</a></div></div><div class="article-sort-item"><a class="article-sort-item-img" href="/posts/DataStructure-Union-Find/" title="高级数据结构之并查集"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/50.jpg" alt="高级数据结构之并查集" onerror="this.onerror=null;this.src='/img/404.jpg'"></a><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2020-08-18T16:00:00.000Z" title="发表于 2020-08-19 00:00:00">2020-08-19</time></div><a class="article-sort-item-title" href="/posts/DataStructure-Union-Find/" title="高级数据结构之并查集">高级数据结构之并查集</a></div></div><div class="article-sort-item"><a class="article-sort-item-img" href="/posts/DataStructure-The-End/" title="数据结构之总结与补充"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/44.png" alt="数据结构之总结与补充" onerror="this.onerror=null;this.src='/img/404.jpg'"></a><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2020-08-09T16:00:00.000Z" title="发表于 2020-08-10 00:00:00">2020-08-10</time></div><a class="article-sort-item-title" href="/posts/DataStructure-The-End/" title="数据结构之总结与补充">数据结构之总结与补充</a></div></div><div class="article-sort-item"><a class="article-sort-item-img" href="/posts/DataStructure-Trie/" title="数据结构之Trie"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/43.png" alt="数据结构之Trie" onerror="this.onerror=null;this.src='/img/404.jpg'"></a><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2020-08-08T16:00:00.000Z" title="发表于 2020-08-09 00:00:00">2020-08-09</time></div><a class="article-sort-item-title" href="/posts/DataStructure-Trie/" title="数据结构之Trie">数据结构之Trie</a></div></div><div class="article-sort-item"><a class="article-sort-item-img" href="/posts/DataStructure-HuffmanTree/" title="数据结构之哈夫曼树"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/22.png" alt="数据结构之哈夫曼树" onerror="this.onerror=null;this.src='/img/404.jpg'"></a><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2020-08-06T16:00:00.000Z" title="发表于 2020-08-07 00:00:00">2020-08-07</time></div><a class="article-sort-item-title" href="/posts/DataStructure-HuffmanTree/" title="数据结构之哈夫曼树">数据结构之哈夫曼树</a></div></div><div class="article-sort-item"><a class="article-sort-item-img" href="/posts/DataStructure-PriorityQueue/" title="数据结构之优先级队列"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/41.png" alt="数据结构之优先级队列" onerror="this.onerror=null;this.src='/img/404.jpg'"></a><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2020-08-05T16:00:00.000Z" title="发表于 2020-08-06 00:00:00">2020-08-06</time></div><a class="article-sort-item-title" href="/posts/DataStructure-PriorityQueue/" title="数据结构之优先级队列">数据结构之优先级队列</a></div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span><a class="page-number" href="/categories/DataStructure/page/2/">2</a><a class="extend next" rel="next" href="/categories/DataStructure/page/2/"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By 默烦</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-butterfly/4.9.0/js/utils.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-butterfly/4.9.0/js/main.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-butterfly/4.9.0/js/tw_cn.min.js"></script><script src="https://jsd.onmicrosoft.cn/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://jsd.onmicrosoft.cn/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://jsd.onmicrosoft.cn/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+</script><link rel="stylesheet" href="https://jsd.onmicrosoft.cn/gh/mofan212/blog-static-resources/css/fill-left.min.css"/><script src="https://jsd.onmicrosoft.cn/npm/pace-js/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">140</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">28</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group hide" href="javascript:void(0);"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page group hide" href="javascript:void(0);"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li></ul></div></div></div></div><div class="page" id="body-wrap"><header class="not-home-page" id="page-header" style="background-image: url('/img/siteCover.png')"><nav id="nav"><span id="blog-info"><a href="/" title="Mofan"><span class="site-name">Mofan</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group hide" href="javascript:void(0);"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page group hide" href="javascript:void(0);"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="page-site-info"><h1 id="site-title">DataStructure</h1></div></header><main class="layout hide-aside" id="content-inner"><div id="category"><div class="article-sort-title">分类 - DataStructure</div><div class="article-sort"><div class="article-sort-item year">2022</div><div class="article-sort-item"><a class="article-sort-item-img" href="/posts/DataStructure-B+Tree/" title="高级数据结构之B+树"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/119.jpg" alt="高级数据结构之B+树" onerror="this.onerror=null;this.src='/img/404.jpg'"></a><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2022-12-10T16:00:00.000Z" title="发表于 2022-12-11 00:00:00">2022-12-11</time></div><a class="article-sort-item-title" href="/posts/DataStructure-B+Tree/" title="高级数据结构之B+树">高级数据结构之B+树</a></div></div><div class="article-sort-item"><a class="article-sort-item-img" href="/posts/DataStructure-SkipList/" title="高级数据结构之跳表"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/118.jpg" alt="高级数据结构之跳表" onerror="this.onerror=null;this.src='/img/404.jpg'"></a><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2022-12-05T16:00:00.000Z" title="发表于 2022-12-06 00:00:00">2022-12-06</time></div><a class="article-sort-item-title" href="/posts/DataStructure-SkipList/" title="高级数据结构之跳表">高级数据结构之跳表</a></div></div><div class="article-sort-item"><a class="article-sort-item-img" href="/posts/DataStructure-Bloom-Filter/" title="高级数据结构之布隆过滤器"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/117.jpg" alt="高级数据结构之布隆过滤器" onerror="this.onerror=null;this.src='/img/404.jpg'"></a><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2022-12-02T16:00:00.000Z" title="发表于 2022-12-03 00:00:00">2022-12-03</time></div><a class="article-sort-item-title" href="/posts/DataStructure-Bloom-Filter/" title="高级数据结构之布隆过滤器">高级数据结构之布隆过滤器</a></div></div><div class="article-sort-item"><a class="article-sort-item-img" href="/posts/ArrayDeque/" title="双端队列 ArrarDeque"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/113.png" alt="双端队列 ArrarDeque" onerror="this.onerror=null;this.src='/img/404.jpg'"></a><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2022-11-04T16:00:00.000Z" title="发表于 2022-11-05 00:00:00">2022-11-05</time></div><a class="article-sort-item-title" href="/posts/ArrayDeque/" title="双端队列 ArrarDeque">双端队列 ArrarDeque</a></div></div><div class="article-sort-item year">2020</div><div class="article-sort-item"><a class="article-sort-item-img" href="/posts/DataStructure-Basic-Knowledge-Of-Graphs/" title="高级数据结构之图"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/51.jpg" alt="高级数据结构之图" onerror="this.onerror=null;this.src='/img/404.jpg'"></a><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2020-08-22T16:00:00.000Z" title="发表于 2020-08-23 00:00:00">2020-08-23</time></div><a class="article-sort-item-title" href="/posts/DataStructure-Basic-Knowledge-Of-Graphs/" title="高级数据结构之图">高级数据结构之图</a></div></div><div class="article-sort-item"><a class="article-sort-item-img" href="/posts/DataStructure-Union-Find/" title="高级数据结构之并查集"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/50.jpg" alt="高级数据结构之并查集" onerror="this.onerror=null;this.src='/img/404.jpg'"></a><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2020-08-18T16:00:00.000Z" title="发表于 2020-08-19 00:00:00">2020-08-19</time></div><a class="article-sort-item-title" href="/posts/DataStructure-Union-Find/" title="高级数据结构之并查集">高级数据结构之并查集</a></div></div><div class="article-sort-item"><a class="article-sort-item-img" href="/posts/DataStructure-The-End/" title="数据结构之总结与补充"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/44.png" alt="数据结构之总结与补充" onerror="this.onerror=null;this.src='/img/404.jpg'"></a><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2020-08-09T16:00:00.000Z" title="发表于 2020-08-10 00:00:00">2020-08-10</time></div><a class="article-sort-item-title" href="/posts/DataStructure-The-End/" title="数据结构之总结与补充">数据结构之总结与补充</a></div></div><div class="article-sort-item"><a class="article-sort-item-img" href="/posts/DataStructure-Trie/" title="数据结构之Trie"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/43.png" alt="数据结构之Trie" onerror="this.onerror=null;this.src='/img/404.jpg'"></a><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2020-08-08T16:00:00.000Z" title="发表于 2020-08-09 00:00:00">2020-08-09</time></div><a class="article-sort-item-title" href="/posts/DataStructure-Trie/" title="数据结构之Trie">数据结构之Trie</a></div></div><div class="article-sort-item"><a class="article-sort-item-img" href="/posts/DataStructure-HuffmanTree/" title="数据结构之哈夫曼树"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/22.png" alt="数据结构之哈夫曼树" onerror="this.onerror=null;this.src='/img/404.jpg'"></a><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2020-08-06T16:00:00.000Z" title="发表于 2020-08-07 00:00:00">2020-08-07</time></div><a class="article-sort-item-title" href="/posts/DataStructure-HuffmanTree/" title="数据结构之哈夫曼树">数据结构之哈夫曼树</a></div></div><div class="article-sort-item"><a class="article-sort-item-img" href="/posts/DataStructure-PriorityQueue/" title="数据结构之优先级队列"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/41.png" alt="数据结构之优先级队列" onerror="this.onerror=null;this.src='/img/404.jpg'"></a><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2020-08-05T16:00:00.000Z" title="发表于 2020-08-06 00:00:00">2020-08-06</time></div><a class="article-sort-item-title" href="/posts/DataStructure-PriorityQueue/" title="数据结构之优先级队列">数据结构之优先级队列</a></div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span><a class="page-number" href="/categories/DataStructure/page/2/">2</a><a class="extend next" rel="next" href="/categories/DataStructure/page/2/"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By 默烦</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-butterfly/4.10.0/js/utils.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-butterfly/4.10.0/js/main.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-butterfly/4.10.0/js/tw_cn.min.js"></script><script src="https://jsd.onmicrosoft.cn/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://jsd.onmicrosoft.cn/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://jsd.onmicrosoft.cn/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
   if (typeof pangu === 'object') pangu.autoSpacingPage()
   else {
     getScript('https://jsd.onmicrosoft.cn/npm/pangu/dist/browser/pangu.min.js')
@@ -194,11 +185,12 @@ document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-
     container: '#docsearch',
   }, [{"placeholder":"Please enter search keywords"}]))
 
+  const handleClick = () => {
+    document.querySelector('.DocSearch-Button').click()
+  }
 
   const searchClickFn = () => {
-    document.querySelector('#search-button > .search').addEventListener('click', () => {
-      document.querySelector('.DocSearch-Button').click()
-    })
+    btf.addEventListenerPjax(document.querySelector('#search-button > .search'), 'click', handleClick)
   }
 
   searchClickFn()
