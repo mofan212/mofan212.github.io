@@ -6,7 +6,7 @@
   <link href="https://mofan212.github.io/atom.xml" rel="self"/>
   
   <link href="https://mofan212.github.io/"/>
-  <updated>2023-10-13T16:00:00.000Z</updated>
+  <updated>2023-10-14T16:00:00.000Z</updated>
   <id>https://mofan212.github.io/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>SpringBoot-Shutdown-Hook</title>
+    <link href="https://mofan212.github.io/posts/SpringBoot-Shutdown-Hook/"/>
+    <id>https://mofan212.github.io/posts/SpringBoot-Shutdown-Hook/</id>
+    <published>2023-10-14T16:00:00.000Z</published>
+    <updated>2023-10-14T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">围绕 SpringBoot Shutdown Hook 讲述了 System.exit() 方法的源码剖析、SpringBoot 优雅停机等一系列内容。</summary>
+    
+    
+    
+    <category term="SpringBoot" scheme="https://mofan212.github.io/categories/SpringBoot/"/>
+    
+    
+    <category term="Java" scheme="https://mofan212.github.io/tags/Java/"/>
+    
+    <category term="SpringBoot" scheme="https://mofan212.github.io/tags/SpringBoot/"/>
+    
+  </entry>
   
   <entry>
     <title>SpringBoot 常用拓展点</title>
@@ -385,27 +406,6 @@
     
     
     <summary type="html">Spring 四十九讲中第九讲到第十九讲，AOP。</summary>
-    
-    
-    
-    <category term="Spring" scheme="https://mofan212.github.io/categories/Spring/"/>
-    
-    
-    <category term="Java" scheme="https://mofan212.github.io/tags/Java/"/>
-    
-    <category term="Spring" scheme="https://mofan212.github.io/tags/Spring/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【Spring 四十九讲】容器与 Bean</title>
-    <link href="https://mofan212.github.io/posts/Spring-Forty-Nine-Lectures-Container-And-Bean/"/>
-    <id>https://mofan212.github.io/posts/Spring-Forty-Nine-Lectures-Container-And-Bean/</id>
-    <published>2023-01-07T16:00:00.000Z</published>
-    <updated>2023-08-10T16:00:00.000Z</updated>
-    
-    
-    <summary type="html">Spring 四十九讲中第一讲到第八讲，容器与 Bean。</summary>
     
     
     
