@@ -279,7 +279,7 @@ accountDao.findAccount("x", "x");
 <p>测试方法执行前执行 <code>MockitoAnnotations.openMocks(this);</code></p>
 </li>
 <li>
-<p>在测试类上使用 <code>@ExtendWith(MockitoExtension.class)</code>，如果使用 Junit4，则替换为 <code>@ExtendWith(MockitoExtension.class)</code></p>
+<p>在测试类上使用 <code>@ExtendWith(MockitoExtension.class)</code>，如果使用 Junit4，则替换为 <code>@RunWith(MockitoJUnitRunner.class)</code></p>
 </li>
 </ul>
 <p>因此下述代码将与输出上述代码一样的结果：</p>
