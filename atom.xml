@@ -6,7 +6,7 @@
   <link href="https://mofan212.github.io/atom.xml" rel="self"/>
   
   <link href="https://mofan212.github.io/"/>
-  <updated>2024-01-09T16:00:00.000Z</updated>
+  <updated>2024-01-13T16:00:00.000Z</updated>
   <id>https://mofan212.github.io/</id>
   
   <author>
@@ -15,6 +15,25 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>【MySQL 高级篇七】InnoDB 的数据存储结构</title>
+    <link href="https://mofan212.github.io/posts/MySQL-Advanced-Seventh-Data-Storage-Structure-Of-InnoDB/"/>
+    <id>https://mofan212.github.io/posts/MySQL-Advanced-Seventh-Data-Storage-Structure-Of-InnoDB/</id>
+    <published>2024-01-13T16:00:00.000Z</published>
+    <updated>2024-01-13T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">本文介绍了 MySQL 中 InnoDB 存储引擎的数据存储结构，包括页的内部结构、行格式等。</summary>
+    
+    
+    
+    <category term="MySQL" scheme="https://mofan212.github.io/categories/MySQL/"/>
+    
+    
+    <category term="MySQL" scheme="https://mofan212.github.io/tags/MySQL/"/>
+    
+  </entry>
   
   <entry>
     <title>【MySQL 高级篇六】索引的数据结构</title>
@@ -390,25 +409,6 @@
     
     
     <category term="MySQL" scheme="https://mofan212.github.io/tags/MySQL/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Arthas 快速入门</title>
-    <link href="https://mofan212.github.io/posts/Quick-Start-To-Arthas/"/>
-    <id>https://mofan212.github.io/posts/Quick-Start-To-Arthas/</id>
-    <published>2023-02-20T16:00:00.000Z</published>
-    <updated>2023-02-20T16:00:00.000Z</updated>
-    
-    
-    <summary type="html">Arthas 是一款由阿里巴巴出品的线上监控诊断产品。</summary>
-    
-    
-    
-    <category term="Tools" scheme="https://mofan212.github.io/categories/Tools/"/>
-    
-    
-    <category term="Arthas" scheme="https://mofan212.github.io/tags/Arthas/"/>
     
   </entry>
   
