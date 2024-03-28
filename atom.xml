@@ -6,7 +6,7 @@
   <link href="https://mofan212.github.io/atom.xml" rel="self"/>
   
   <link href="https://mofan212.github.io/"/>
-  <updated>2024-03-03T16:00:00.000Z</updated>
+  <updated>2024-03-27T16:00:00.000Z</updated>
   <id>https://mofan212.github.io/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Combinator Pattern</title>
+    <link href="https://mofan212.github.io/posts/Combinator-Pattern/"/>
+    <id>https://mofan212.github.io/posts/Combinator-Pattern/</id>
+    <published>2024-03-27T16:00:00.000Z</published>
+    <updated>2024-03-27T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">本文介绍了如何在 Java 中使用 Combinator Pattern。</summary>
+    
+    
+    
+    <category term="DesignPattern" scheme="https://mofan212.github.io/categories/DesignPattern/"/>
+    
+    
+    <category term="Java" scheme="https://mofan212.github.io/tags/Java/"/>
+    
+    <category term="DesignPattern" scheme="https://mofan212.github.io/tags/DesignPattern/"/>
+    
+  </entry>
   
   <entry>
     <title>【设计模式】中介者模式</title>
@@ -390,27 +411,6 @@
     <category term="Java" scheme="https://mofan212.github.io/tags/Java/"/>
     
     <category term="SpringBoot" scheme="https://mofan212.github.io/tags/SpringBoot/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>JSONPath 快速入门</title>
-    <link href="https://mofan212.github.io/posts/Quick-Start-To-JSONPath/"/>
-    <id>https://mofan212.github.io/posts/Quick-Start-To-JSONPath/</id>
-    <published>2023-03-09T16:00:00.000Z</published>
-    <updated>2023-05-22T16:00:00.000Z</updated>
-    
-    
-    <summary type="html">A Java DSL for reading JSON documents.</summary>
-    
-    
-    
-    <category term="Java" scheme="https://mofan212.github.io/categories/Java/"/>
-    
-    
-    <category term="JSONPath" scheme="https://mofan212.github.io/tags/JSONPath/"/>
-    
-    <category term="JSON" scheme="https://mofan212.github.io/tags/JSON/"/>
     
   </entry>
   
