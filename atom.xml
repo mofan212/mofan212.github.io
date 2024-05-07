@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Mofan</title>
+  <icon>https://mofan212.github.io/icon.png</icon>
+  <subtitle>默烦</subtitle>
+  <link href="https://mofan212.github.io/atom.xml" rel="self"/>
+  
+  <link href="https://mofan212.github.io/"/>
+  <updated>2024-04-02T16:00:00.000Z</updated>
+  <id>https://mofan212.github.io/</id>
+  
+  <author>
+    <name>默烦</name>
+    <email>cy.mofan@foxmail.com</email>
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Combinator Pattern</title>
+    <link href="https://mofan212.github.io/posts/Combinator-Pattern/"/>
+    <id>https://mofan212.github.io/posts/Combinator-Pattern/</id>
+    <published>2024-03-27T16:00:00.000Z</published>
+    <updated>2024-04-02T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">本文介绍了如何在 Java 中使用 Combinator Pattern。</summary>
+    
+    
+    
+    <category term="DesignPattern" scheme="https://mofan212.github.io/categories/DesignPattern/"/>
+    
+    
+    <category term="Java" scheme="https://mofan212.github.io/tags/Java/"/>
+    
+    <category term="DesignPattern" scheme="https://mofan212.github.io/tags/DesignPattern/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【设计模式】中介者模式</title>
+    <link href="https://mofan212.github.io/posts/Design-Pattern-Mediator-Pattern/"/>
+    <id>https://mofan212.github.io/posts/Design-Pattern-Mediator-Pattern/</id>
+    <published>2024-03-02T16:00:00.000Z</published>
+    <updated>2024-03-03T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">本文主要对 Java 设计模式中的中介者模式进行了介绍。</summary>
+    
+    
+    
+    <category term="DesignPattern" scheme="https://mofan212.github.io/categories/DesignPattern/"/>
+    
+    
+    <category term="Java" scheme="https://mofan212.github.io/tags/Java/"/>
+    
+    <category term="DesignPattern" scheme="https://mofan212.github.io/tags/DesignPattern/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>再见癸卯，你好甲辰</title>
+    <link href="https://mofan212.github.io/posts/Goodbye-2023-Hello-2024/"/>
+    <id>https://mofan212.github.io/posts/Goodbye-2023-Hello-2024/</id>
+    <published>2024-02-09T16:00:00.000Z</published>
+    <updated>2024-02-09T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">人生只若初见，何事秋风悲画扇。</summary>
+    
+    
+    
+    <category term="Summary" scheme="https://mofan212.github.io/categories/Summary/"/>
+    
+    
+    <category term="Summary" scheme="https://mofan212.github.io/tags/Summary/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【MySQL 高级篇七】InnoDB 的数据存储结构</title>
+    <link href="https://mofan212.github.io/posts/MySQL-Advanced-Seventh-Data-Storage-Structure-Of-InnoDB/"/>
+    <id>https://mofan212.github.io/posts/MySQL-Advanced-Seventh-Data-Storage-Structure-Of-InnoDB/</id>
+    <published>2024-01-13T16:00:00.000Z</published>
+    <updated>2024-01-13T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">本文介绍了 MySQL 中 InnoDB 存储引擎的数据存储结构，包括页的内部结构、行格式等。</summary>
+    
+    
+    
+    <category term="MySQL" scheme="https://mofan212.github.io/categories/MySQL/"/>
+    
+    
+    <category term="MySQL" scheme="https://mofan212.github.io/tags/MySQL/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【MySQL 高级篇六】索引的数据结构</title>
+    <link href="https://mofan212.github.io/posts/MySQL-Advanced-Sixth-Data-Structure-Of-Index/"/>
+    <id>https://mofan212.github.io/posts/MySQL-Advanced-Sixth-Data-Structure-Of-Index/</id>
+    <published>2024-01-09T16:00:00.000Z</published>
+    <updated>2024-01-09T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">本文介绍了 MySQL 中 InnoDB 存储引擎的索引的数据结构。</summary>
+    
+    
+    
+    <category term="MySQL" scheme="https://mofan212.github.io/categories/MySQL/"/>
+    
+    
+    <category term="MySQL" scheme="https://mofan212.github.io/tags/MySQL/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>JMH</title>
+    <link href="https://mofan212.github.io/posts/JMH/"/>
+    <id>https://mofan212.github.io/posts/JMH/</id>
+    <published>2023-12-26T16:00:00.000Z</published>
+    <updated>2023-12-30T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">JMH 是 OpenJDK 团队开发的一款基准测试工具，常用于代码的性能调优。</summary>
+    
+    
+    
+    <category term="Java" scheme="https://mofan212.github.io/categories/Java/"/>
+    
+    
+    <category term="Java" scheme="https://mofan212.github.io/tags/Java/"/>
+    
+    <category term="JMH" scheme="https://mofan212.github.io/tags/JMH/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用 Lambda 表达式重构成回溯</title>
+    <link href="https://mofan212.github.io/posts/Using-Lambda-Expressions-To-Refactor-Backtracking/"/>
+    <id>https://mofan212.github.io/posts/Using-Lambda-Expressions-To-Refactor-Backtracking/</id>
+    <published>2023-11-11T16:00:00.000Z</published>
+    <updated>2024-01-08T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">使用 Lambda 表达式为代码重构提供新思路。</summary>
+    
+    
+    
+    <category term="Summary" scheme="https://mofan212.github.io/categories/Summary/"/>
+    
+    
+    <category term="Summary" scheme="https://mofan212.github.io/tags/Summary/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>方法句柄</title>
+    <link href="https://mofan212.github.io/posts/Method-Handle/"/>
+    <id>https://mofan212.github.io/posts/Method-Handle/</id>
+    <published>2023-10-28T16:00:00.000Z</published>
+    <updated>2023-11-06T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">Java 中 MethodHandle 的使用。</summary>
+    
+    
+    
+    <category term="Java" scheme="https://mofan212.github.io/categories/Java/"/>
+    
+    
+    <category term="Java" scheme="https://mofan212.github.io/tags/Java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>SpringBoot Shutdown Hook</title>
+    <link href="https://mofan212.github.io/posts/SpringBoot-Shutdown-Hook/"/>
+    <id>https://mofan212.github.io/posts/SpringBoot-Shutdown-Hook/</id>
+    <published>2023-10-14T16:00:00.000Z</published>
+    <updated>2023-10-14T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">围绕 SpringBoot Shutdown Hook 讲述了 System.exit() 方法的源码剖析、SpringBoot 优雅停机等一系列内容。</summary>
+    
+    
+    
+    <category term="SpringBoot" scheme="https://mofan212.github.io/categories/SpringBoot/"/>
+    
+    
+    <category term="Java" scheme="https://mofan212.github.io/tags/Java/"/>
+    
+    <category term="SpringBoot" scheme="https://mofan212.github.io/tags/SpringBoot/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>SpringBoot 常用拓展点</title>
+    <link href="https://mofan212.github.io/posts/Common-Extension-Points-In-Spring-Boot/"/>
+    <id>https://mofan212.github.io/posts/Common-Extension-Points-In-Spring-Boot/</id>
+    <published>2023-10-02T16:00:00.000Z</published>
+    <updated>2024-02-29T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">2023 年国庆巨献：从源码层面剖析 SpringBoot 常用拓展点</summary>
+    
+    
+    
+    <category term="SpringBoot" scheme="https://mofan212.github.io/categories/SpringBoot/"/>
+    
+    
+    <category term="Java" scheme="https://mofan212.github.io/tags/Java/"/>
+    
+    <category term="Spring" scheme="https://mofan212.github.io/tags/Spring/"/>
+    
+    <category term="SpringBoot" scheme="https://mofan212.github.io/tags/SpringBoot/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>@Configuration 注解的那些事</title>
+    <link href="https://mofan212.github.io/posts/Configuration-Annotation/"/>
+    <id>https://mofan212.github.io/posts/Configuration-Annotation/</id>
+    <published>2023-09-22T16:00:00.000Z</published>
+    <updated>2023-09-23T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">从源码层面介绍 @Configuration 注解的 Full 模式与 Lite 模式。</summary>
+    
+    
+    
+    <category term="Spring" scheme="https://mofan212.github.io/categories/Spring/"/>
+    
+    
+    <category term="Spring" scheme="https://mofan212.github.io/tags/Spring/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>获取 ApplicationContext</title>
+    <link href="https://mofan212.github.io/posts/Get-ApplicationContext/"/>
+    <id>https://mofan212.github.io/posts/Get-ApplicationContext/</id>
+    <published>2023-09-19T16:00:00.000Z</published>
+    <updated>2023-10-07T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">从源码层面介绍通过注入 ApplicationContext 和 ApplicationContextAware 获取 ApplicationContext 的区别。</summary>
+    
+    
+    
+    <category term="Spring" scheme="https://mofan212.github.io/categories/Spring/"/>
+    
+    
+    <category term="Spring" scheme="https://mofan212.github.io/tags/Spring/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>康康存款有几位数</title>
+    <link href="https://mofan212.github.io/posts/Look-At-The-Number-Of-Digits-In-Your-Deposit/"/>
+    <id>https://mofan212.github.io/posts/Look-At-The-Number-Of-Digits-In-Your-Deposit/</id>
+    <published>2023-09-04T16:00:00.000Z</published>
+    <updated>2023-09-05T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">少占小便宜，省得一身骚。</summary>
+    
+    
+    
+    <category term="Summary" scheme="https://mofan212.github.io/categories/Summary/"/>
+    
+    
+    <category term="Summary" scheme="https://mofan212.github.io/tags/Summary/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Reduce Functions</title>
+    <link href="https://mofan212.github.io/posts/Reduce-Functions/"/>
+    <id>https://mofan212.github.io/posts/Reduce-Functions/</id>
+    <published>2023-08-26T16:00:00.000Z</published>
+    <updated>2023-09-01T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">Stream 就是 Lambda 表达式的全部？或许本文可以给你一点启发。</summary>
+    
+    
+    
+    <category term="Summary" scheme="https://mofan212.github.io/categories/Summary/"/>
+    
+    
+    <category term="Summary" scheme="https://mofan212.github.io/tags/Summary/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【MySQL 补充】Windows 下 MySQL 的安装</title>
+    <link href="https://mofan212.github.io/posts/Installing-MySQL-Under-Windows/"/>
+    <id>https://mofan212.github.io/posts/Installing-MySQL-Under-Windows/</id>
+    <published>2023-06-05T16:00:00.000Z</published>
+    <updated>2023-11-19T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">本文介绍了 MySQL 在 Windows 下的安装与卸载，以及常见问题的解决。</summary>
+    
+    
+    
+    <category term="MySQL" scheme="https://mofan212.github.io/categories/MySQL/"/>
+    
+    
+    <category term="MySQL" scheme="https://mofan212.github.io/tags/MySQL/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【MySQL 高级篇五】存储引擎</title>
+    <link href="https://mofan212.github.io/posts/MySQL-Advanced-Fifth-Storage-Engines/"/>
+    <id>https://mofan212.github.io/posts/MySQL-Advanced-Fifth-Storage-Engines/</id>
+    <published>2023-05-13T16:00:00.000Z</published>
+    <updated>2023-05-13T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">本文介绍了 MySQL 中的多种存储引擎的特性与适用场景。</summary>
+    
+    
+    
+    <category term="MySQL" scheme="https://mofan212.github.io/categories/MySQL/"/>
+    
+    
+    <category term="MySQL" scheme="https://mofan212.github.io/tags/MySQL/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【MySQL 高级篇四】逻辑架构</title>
+    <link href="https://mofan212.github.io/posts/MySQL-Advanced-Fourth-Logical-Architecture/"/>
+    <id>https://mofan212.github.io/posts/MySQL-Advanced-Fourth-Logical-Architecture/</id>
+    <published>2023-05-12T16:00:00.000Z</published>
+    <updated>2023-05-12T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">本文剖析了 MySQL 的逻辑架构，介绍了 SQL 执行流程和数据库缓冲池。</summary>
+    
+    
+    
+    <category term="MySQL" scheme="https://mofan212.github.io/categories/MySQL/"/>
+    
+    
+    <category term="MySQL" scheme="https://mofan212.github.io/tags/MySQL/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Spring 对 Java 注解的增强</title>
+    <link href="https://mofan212.github.io/posts/Spring&#39;s-Enhancements-To-Java-Annotation/"/>
+    <id>https://mofan212.github.io/posts/Spring&#39;s-Enhancements-To-Java-Annotation/</id>
+    <published>2023-04-14T16:00:00.000Z</published>
+    <updated>2024-02-10T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">本文介绍了 Spring 中 @AliasFor 注解的使用方式和JDK 中一些元注解的使用。</summary>
+    
+    
+    
+    <category term="Spring" scheme="https://mofan212.github.io/categories/Spring/"/>
+    
+    
+    <category term="Java" scheme="https://mofan212.github.io/tags/Java/"/>
+    
+    <category term="Spring" scheme="https://mofan212.github.io/tags/Spring/"/>
+    
+    <category term="Annotation" scheme="https://mofan212.github.io/tags/Annotation/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【MySQL 高级篇三】用户与权限管理</title>
+    <link href="https://mofan212.github.io/posts/MySQL-Advanced-Third-User-And-Permission-Management/"/>
+    <id>https://mofan212.github.io/posts/MySQL-Advanced-Third-User-And-Permission-Management/</id>
+    <published>2023-03-26T16:00:00.000Z</published>
+    <updated>2023-03-26T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">本文介绍了 MySQL 中的用户管理、权限管理、权限表、角色管理和配置文件的使用。</summary>
+    
+    
+    
+    <category term="MySQL" scheme="https://mofan212.github.io/categories/MySQL/"/>
+    
+    
+    <category term="MySQL" scheme="https://mofan212.github.io/tags/MySQL/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>从回调到 LambdaSafe</title>
+    <link href="https://mofan212.github.io/posts/From-Callback-To-LambdaSafe/"/>
+    <id>https://mofan212.github.io/posts/From-Callback-To-LambdaSafe/</id>
+    <published>2023-03-11T16:00:00.000Z</published>
+    <updated>2024-02-03T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">什么是回调？Spring 提供的 LambdaSafe 工具类如何使用？</summary>
+    
+    
+    
+    <category term="SpringBoot" scheme="https://mofan212.github.io/categories/SpringBoot/"/>
+    
+    
+    <category term="Java" scheme="https://mofan212.github.io/tags/Java/"/>
+    
+    <category term="SpringBoot" scheme="https://mofan212.github.io/tags/SpringBoot/"/>
+    
+  </entry>
+  
+</feed>
