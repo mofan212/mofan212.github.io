@@ -6,7 +6,7 @@
   <link href="https://mofan212.github.io/atom.xml" rel="self"/>
   
   <link href="https://mofan212.github.io/"/>
-  <updated>2024-04-02T16:00:00.000Z</updated>
+  <updated>2024-07-06T16:00:00.000Z</updated>
   <id>https://mofan212.github.io/</id>
   
   <author>
@@ -15,6 +15,25 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>JDK21 中的 LinkedHashMap</title>
+    <link href="https://mofan212.github.io/posts/LinkedHashMap-In-JDK21/"/>
+    <id>https://mofan212.github.io/posts/LinkedHashMap-In-JDK21/</id>
+    <published>2024-07-06T16:00:00.000Z</published>
+    <updated>2024-07-06T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">浅谈 JDK21 中 LinkedHashMap 的实现。</summary>
+    
+    
+    
+    <category term="DataStructure" scheme="https://mofan212.github.io/categories/DataStructure/"/>
+    
+    
+    <category term="DataStructure" scheme="https://mofan212.github.io/tags/DataStructure/"/>
+    
+  </entry>
   
   <entry>
     <title>Combinator Pattern</title>
@@ -390,27 +409,6 @@
     
     
     <category term="MySQL" scheme="https://mofan212.github.io/tags/MySQL/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>从回调到 LambdaSafe</title>
-    <link href="https://mofan212.github.io/posts/From-Callback-To-LambdaSafe/"/>
-    <id>https://mofan212.github.io/posts/From-Callback-To-LambdaSafe/</id>
-    <published>2023-03-11T16:00:00.000Z</published>
-    <updated>2024-02-03T16:00:00.000Z</updated>
-    
-    
-    <summary type="html">什么是回调？Spring 提供的 LambdaSafe 工具类如何使用？</summary>
-    
-    
-    
-    <category term="SpringBoot" scheme="https://mofan212.github.io/categories/SpringBoot/"/>
-    
-    
-    <category term="Java" scheme="https://mofan212.github.io/tags/Java/"/>
-    
-    <category term="SpringBoot" scheme="https://mofan212.github.io/tags/SpringBoot/"/>
     
   </entry>
   
