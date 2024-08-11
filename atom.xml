@@ -6,7 +6,7 @@
   <link href="https://mofan212.github.io/atom.xml" rel="self"/>
   
   <link href="https://mofan212.github.io/"/>
-  <updated>2024-07-19T16:00:00.000Z</updated>
+  <updated>2024-08-10T16:00:00.000Z</updated>
   <id>https://mofan212.github.io/</id>
   
   <author>
@@ -15,6 +15,25 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>BeanDefinition</title>
+    <link href="https://mofan212.github.io/posts/Spring-BeanDefinition/"/>
+    <id>https://mofan212.github.io/posts/Spring-BeanDefinition/</id>
+    <published>2024-08-10T16:00:00.000Z</published>
+    <updated>2024-08-10T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">Spring 中绕不开的一个类 —— BeanDefinition。</summary>
+    
+    
+    
+    <category term="SpringBoot" scheme="https://mofan212.github.io/categories/SpringBoot/"/>
+    
+    
+    <category term="SpringBoot" scheme="https://mofan212.github.io/tags/SpringBoot/"/>
+    
+  </entry>
   
   <entry>
     <title>Lambda 表达式与函数式编程</title>
@@ -383,25 +402,6 @@
     
     
     <summary type="html">本文介绍了 MySQL 中的多种存储引擎的特性与适用场景。</summary>
-    
-    
-    
-    <category term="MySQL" scheme="https://mofan212.github.io/categories/MySQL/"/>
-    
-    
-    <category term="MySQL" scheme="https://mofan212.github.io/tags/MySQL/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【MySQL 高级篇四】逻辑架构</title>
-    <link href="https://mofan212.github.io/posts/MySQL-Advanced-Fourth-Logical-Architecture/"/>
-    <id>https://mofan212.github.io/posts/MySQL-Advanced-Fourth-Logical-Architecture/</id>
-    <published>2023-05-12T16:00:00.000Z</published>
-    <updated>2024-07-24T16:00:00.000Z</updated>
-    
-    
-    <summary type="html">本文剖析了 MySQL 的逻辑架构，介绍了 SQL 执行流程和数据库缓冲池。</summary>
     
     
     
