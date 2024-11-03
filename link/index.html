@@ -60,7 +60,6 @@
         if (!false && key.startsWith('pjax')) return
         const globalFn = parent.globalFn || {}
         globalFn[key] = globalFn[key] || {}
-        if (name && globalFn[key][name]) return
         globalFn[key][name || Object.keys(globalFn[key]).length] = fn
         parent.globalFn = globalFn
       }
@@ -147,7 +146,8 @@
   isHome: false,
   isHighlightShrink: false,
   isToc: false,
-  postUpdate: '2024-10-29 19:18:15'
+  postUpdate: '2024-10-29 19:18:15',
+  isShuoshuo: false
 }</script><meta name="referrer" content="no-referrer-when-downgrade" /><link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/mofan212/blog-static-resources@master/css/myStyle.min.css"><link rel="stylesheet" href="https://cdn.staticfile.net/lxgw-wenkai-screen-webfont/1.7.0/style.min.css" /><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono.min.css" /><meta name="generator" content="Hexo 7.2.0"><link rel="alternate" href="/atom.xml" title="Mofan" type="application/atom+xml">
 </head><body><script>window.paceOptions = {
   restartOnPushState: false
@@ -647,6 +647,9 @@ btf.addGlobalFn('pjaxSend', () => {
   btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
   window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
 })()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
   const getCount = () => {
     const countELement = document.getElementById('twikoo-count')
     if(!countELement) return
@@ -662,22 +665,38 @@ btf.addGlobalFn('pjaxSend', () => {
     })
   }
 
-  const init = () => {
-    twikoo.init(Object.assign({
-      el: '#twikoo-wrap',
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
       envId: 'https://mofan212-twikoo.netlify.app/.netlify/functions/twikoo',
       region: '',
       onCommentLoaded: () => {
         btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
-      }
-    }, null))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
 
     
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
   }
 
-  const loadTwikoo = () => {
-    if (typeof twikoo === 'object') setTimeout(init,0)
-    else btf.getScript('https://fastly.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js').then(init)
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://fastly.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
   }
 
   if ('Twikoo' === 'Twikoo' || !true) {
