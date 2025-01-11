@@ -132,7 +132,7 @@
     buttonText: '加载更多'
   },
   isPhotoFigcaption: false,
-  islazyload: true,
+  islazyloadPlugin: true,
   isAnchor: false,
   percent: {
     toc: true,
@@ -141,11 +141,9 @@
   autoDarkmode: false
 }</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
   title: '友情链接',
-  isPost: false,
-  isHome: false,
   isHighlightShrink: false,
   isToc: false,
-  isShuoshuo: false
+  pageType: 'page'
 }</script><meta name="referrer" content="no-referrer-when-downgrade" /><link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/mofan212/blog-static-resources@master/css/myStyle.min.css"><link rel="stylesheet" href="https://cdn.staticfile.net/lxgw-wenkai-screen-webfont/1.7.0/style.min.css" /><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono.min.css" /><meta name="generator" content="Hexo 7.2.0"><link rel="alternate" href="/atom.xml" title="Mofan" type="application/atom+xml">
 </head><body><script>window.paceOptions = {
   restartOnPushState: false
@@ -155,14 +153,14 @@ btf.addGlobalFn('pjaxSend', () => {
   Pace.restart()
 }, 'pace_restart')
 
-</script><link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/mofan212/blog-static-resources/css/minimal.min.css"/><script src="https://fastly.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">155</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">48</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">29</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li></ul></div></div></div></div><div class="page type-link" id="body-wrap"><header class="not-home-page" id="page-header" style="background-image: url(https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/siteCover.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Mofan</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="page-site-info"><h1 id="site-title">友情链接</h1></div></header><main class="layout hide-aside" id="content-inner"><div id="page"><div class="container" id="article-container"><div class="flink"><h2 id="B-站优质-UP-🔆"><a class="header-anchor" href="#B-站优质-UP-🔆"></a>B 站优质 UP 🔆</h2>
+</script><link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/mofan212/blog-static-resources/css/minimal.min.css"/><script src="https://fastly.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">155</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">48</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">29</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li></ul></div></div></div></div><div class="page type-link" id="body-wrap"><header class="not-home-page" id="page-header" style="background-image: url(https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/siteCover.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Mofan</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="page-site-info"><h1 id="site-title">友情链接</h1></div></header><main class="layout hide-aside" id="content-inner"><div id="page"><div class="container" id="article-container"><div class="flink"><h2 id="B-站优质-UP-🔆"><a class="header-anchor" href="#B-站优质-UP-🔆"></a>B 站优质 UP 🔆</h2>
 <div class="flink-desc">哔哩哔哩大学的老师们</div> <div class="flink-list">
   <div class="flink-list-item">
     <a href="https://space.bilibili.com/302417610/" title="尚硅谷官方" target="_blank">
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/atguigu.jpg" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="尚硅谷官方" />
       </div>
-      <div class="flink-item-name">尚硅谷官方</div> 
+      <div class="flink-item-name">尚硅谷官方</div>
       <div class="flink-item-desc" title="哔哩哔哩尚硅谷官方账号">哔哩哔哩尚硅谷官方账号</div>
     </a>
   </div>
@@ -171,7 +169,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/CodeSheep.webp" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="CodeSheep" />
       </div>
-      <div class="flink-item-name">CodeSheep</div> 
+      <div class="flink-item-name">CodeSheep</div>
       <div class="flink-item-desc" title="一只程序员UP">一只程序员UP</div>
     </a>
   </div>
@@ -180,7 +178,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/%E9%99%88%E8%89%B3%E7%94%B7.webp" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="编程不良人" />
       </div>
-      <div class="flink-item-name">编程不良人</div> 
+      <div class="flink-item-name">编程不良人</div>
       <div class="flink-item-desc" title="不忘初心，牢记使命!">不忘初心，牢记使命!</div>
     </a>
   </div></div><h2 id="三次元的朋友们-💪"><a class="header-anchor" href="#三次元的朋友们-💪"></a>三次元的朋友们 💪</h2>
@@ -190,7 +188,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://observer-storage.oss-cn-chengdu.aliyuncs.com/img/design/avatar/96275146_p0_master1200.jpg" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="Ninokz" />
       </div>
-      <div class="flink-item-name">Ninokz</div> 
+      <div class="flink-item-name">Ninokz</div>
       <div class="flink-item-desc" title="这是什么 🐟 ？摸一下">这是什么 🐟 ？摸一下</div>
     </a>
   </div></div><h2 id="厉害的群友们-👏"><a class="header-anchor" href="#厉害的群友们-👏"></a>厉害的群友们 👏</h2>
@@ -200,7 +198,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://wwang-net.oss-cn-beijing.aliyuncs.com/wwang/Kirito.jpg" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="CodeWwang" />
       </div>
-      <div class="flink-item-name">CodeWwang</div> 
+      <div class="flink-item-name">CodeWwang</div>
       <div class="flink-item-desc" title="Vivian">Vivian</div>
     </a>
   </div>
@@ -209,7 +207,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://banmoon-blog.oss-cn-guangzhou.aliyuncs.com/config/a441450a27436ff61f584dc176bc6a10.png" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="半月无霜" />
       </div>
-      <div class="flink-item-name">半月无霜</div> 
+      <div class="flink-item-name">半月无霜</div>
       <div class="flink-item-desc" title="世界上有10种人，一种人懂编程，另一种则不懂">世界上有10种人，一种人懂编程，另一种则不懂</div>
     </a>
   </div>
@@ -218,7 +216,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://npm.elemecdn.com/reverse-stu-allversions@1.0.0/img/202203071633899.gif" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="Reverse" />
       </div>
-      <div class="flink-item-name">Reverse</div> 
+      <div class="flink-item-name">Reverse</div>
       <div class="flink-item-desc" title="留个爪">留个爪</div>
     </a>
   </div></div><h2 id="大佬们的网站-🎓"><a class="header-anchor" href="#大佬们的网站-🎓"></a>大佬们的网站 🎓</h2>
@@ -228,7 +226,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://assets.javadoop.com/imgs/20510079/default/favor.ico" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="Javadoop" />
       </div>
-      <div class="flink-item-name">Javadoop</div> 
+      <div class="flink-item-name">Javadoop</div>
       <div class="flink-item-desc" title="Java 优质博客">Java 优质博客</div>
     </a>
   </div>
@@ -237,7 +235,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://static.vlts.cn/avatar/avatar-bingo.png" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="Throwable" />
       </div>
-      <div class="flink-item-name">Throwable</div> 
+      <div class="flink-item-name">Throwable</div>
       <div class="flink-item-desc" title="Coding And Living">Coding And Living</div>
     </a>
   </div>
@@ -246,7 +244,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/diguage.ico" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt=""地瓜哥"博客网" />
       </div>
-      <div class="flink-item-name">"地瓜哥"博客网</div> 
+      <div class="flink-item-name">"地瓜哥"博客网</div>
       <div class="flink-item-desc" title="分享技术带来的喜悦">分享技术带来的喜悦</div>
     </a>
   </div></div><h2 id="值得推荐的网站-🎁"><a class="header-anchor" href="#值得推荐的网站-🎁"></a>值得推荐的网站 🎁</h2>
@@ -256,7 +254,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/wallroom.png" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="Wallroom" />
       </div>
-      <div class="flink-item-name">Wallroom</div> 
+      <div class="flink-item-name">Wallroom</div>
       <div class="flink-item-desc" title="高质量壁纸网站">高质量壁纸网站</div>
     </a>
   </div>
@@ -265,7 +263,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/pexels.png" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="Pexels" />
       </div>
-      <div class="flink-item-name">Pexels</div> 
+      <div class="flink-item-name">Pexels</div>
       <div class="flink-item-desc" title="免费素材图片">免费素材图片</div>
     </a>
   </div>
@@ -274,7 +272,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://www.bejson.com/static/bejson/img/qq/bejson-q.png" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="BeJSON" />
       </div>
-      <div class="flink-item-name">BeJSON</div> 
+      <div class="flink-item-name">BeJSON</div>
       <div class="flink-item-desc" title="在线无损压缩图片">在线无损压缩图片</div>
     </a>
   </div>
@@ -283,7 +281,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/LoremPicsum.png" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="LoremPicsum" />
       </div>
-      <div class="flink-item-name">LoremPicsum</div> 
+      <div class="flink-item-name">LoremPicsum</div>
       <div class="flink-item-desc" title="随机图库">随机图库</div>
     </a>
   </div>
@@ -292,7 +290,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/SubtlePatterns.png" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="SubtlePatterns" />
       </div>
-      <div class="flink-item-name">SubtlePatterns</div> 
+      <div class="flink-item-name">SubtlePatterns</div>
       <div class="flink-item-desc" title="高质量背景素材">高质量背景素材</div>
     </a>
   </div>
@@ -301,7 +299,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/Grabient.png" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="Grabient" />
       </div>
-      <div class="flink-item-name">Grabient</div> 
+      <div class="flink-item-name">Grabient</div>
       <div class="flink-item-desc" title="在线渐变配色网站">在线渐变配色网站</div>
     </a>
   </div>
@@ -310,7 +308,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/wallhaven.png" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="Wallhaven" />
       </div>
-      <div class="flink-item-name">Wallhaven</div> 
+      <div class="flink-item-name">Wallhaven</div>
       <div class="flink-item-desc" title="网上最好的壁纸！">网上最好的壁纸！</div>
     </a>
   </div>
@@ -319,7 +317,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://tableconvert.com/images/favicon.png" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="TableConvert" />
       </div>
-      <div class="flink-item-name">TableConvert</div> 
+      <div class="flink-item-name">TableConvert</div>
       <div class="flink-item-desc" title="在线表格转换工具">在线表格转换工具</div>
     </a>
   </div>
@@ -328,7 +326,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/DeepL.webp" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="DeepL" />
       </div>
-      <div class="flink-item-name">DeepL</div> 
+      <div class="flink-item-name">DeepL</div>
       <div class="flink-item-desc" title="来自未来的优质翻译器">来自未来的优质翻译器</div>
     </a>
   </div>
@@ -337,7 +335,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/Papago.webp" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="Papago" />
       </div>
-      <div class="flink-item-name">Papago</div> 
+      <div class="flink-item-name">Papago</div>
       <div class="flink-item-desc" title="值得一试的中韩翻译器">值得一试的中韩翻译器</div>
     </a>
   </div>
@@ -346,7 +344,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://www.52doc.com/assets/logo_rect-7ffc18b6b5b24782b3d81037af31b2b31e4e2b9ff63bd171efbee99821aa8666.png" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="我爱电子书" />
       </div>
-      <div class="flink-item-name">我爱电子书</div> 
+      <div class="flink-item-name">我爱电子书</div>
       <div class="flink-item-desc" title="电子书资源下载网站">电子书资源下载网站</div>
     </a>
   </div>
@@ -355,7 +353,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/apple-touch-icon.png" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="Font Awesome" />
       </div>
-      <div class="flink-item-name">Font Awesome</div> 
+      <div class="flink-item-name">Font Awesome</div>
       <div class="flink-item-desc" title="好用的图标库">好用的图标库</div>
     </a>
   </div>
@@ -364,7 +362,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/c-runoob-logo.ico" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="菜鸟工具" />
       </div>
-      <div class="flink-item-name">菜鸟工具</div> 
+      <div class="flink-item-name">菜鸟工具</div>
       <div class="flink-item-desc" title="不止于工具">不止于工具</div>
     </a>
   </div>
@@ -373,7 +371,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://www.iamwawa.cn/Public/img/logo.png" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="蛙蛙工具" />
       </div>
-      <div class="flink-item-name">蛙蛙工具</div> 
+      <div class="flink-item-name">蛙蛙工具</div>
       <div class="flink-item-desc" title="便捷的在线工具网站">便捷的在线工具网站</div>
     </a>
   </div>
@@ -382,7 +380,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://squoosh.app/c/icon-demo-logo-326ed9b6.png" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="Squoosh" />
       </div>
-      <div class="flink-item-name">Squoosh</div> 
+      <div class="flink-item-name">Squoosh</div>
       <div class="flink-item-desc" title="好用的图片在线压缩网站">好用的图片在线压缩网站</div>
     </a>
   </div>
@@ -391,7 +389,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mermaid.live/mermaidchart-logo.svg" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="Mermaid Live Editor" />
       </div>
-      <div class="flink-item-name">Mermaid Live Editor</div> 
+      <div class="flink-item-name">Mermaid Live Editor</div>
       <div class="flink-item-desc" title="Mermaid 在线编辑器">Mermaid 在线编辑器</div>
     </a>
   </div>
@@ -400,7 +398,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://www.sordum.org/wp-content/uploads/2017/06/sordum.org_logo2.png" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="Sordum" />
       </div>
-      <div class="flink-item-name">Sordum</div> 
+      <div class="flink-item-name">Sordum</div>
       <div class="flink-item-desc" title="Simplify Your computer Usage">Simplify Your computer Usage</div>
     </a>
   </div>
@@ -409,7 +407,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://www.hello-algo.com/assets/images/favicon.png" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="Hello 算法" />
       </div>
-      <div class="flink-item-name">Hello 算法</div> 
+      <div class="flink-item-name">Hello 算法</div>
       <div class="flink-item-desc" title="动画图解、一键运行的数据结构与算法教程">动画图解、一键运行的数据结构与算法教程</div>
     </a>
   </div>
@@ -418,7 +416,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/baeldung-logo.jpg" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="Baeldung" />
       </div>
-      <div class="flink-item-name">Baeldung</div> 
+      <div class="flink-item-name">Baeldung</div>
       <div class="flink-item-desc" title="Java 在线教程">Java 在线教程</div>
     </a>
   </div>
@@ -427,7 +425,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://java-design-patterns.com/coffee.svg" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="Java Design Patterns" />
       </div>
-      <div class="flink-item-name">Java Design Patterns</div> 
+      <div class="flink-item-name">Java Design Patterns</div>
       <div class="flink-item-desc" title="Software design patterns, principles, and snippets">Software design patterns, principles, and snippets</div>
     </a>
   </div>
@@ -436,7 +434,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://open-source-license-chooser.toolsnav.top/favicon.ico" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="开源许可选择器" />
       </div>
-      <div class="flink-item-name">开源许可选择器</div> 
+      <div class="flink-item-name">开源许可选择器</div>
       <div class="flink-item-desc" title="选择满意的开源许可证">选择满意的开源许可证</div>
     </a>
   </div>
@@ -445,7 +443,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/加水印.com.png" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="加水印.com" />
       </div>
-      <div class="flink-item-name">加水印.com</div> 
+      <div class="flink-item-name">加水印.com</div>
       <div class="flink-item-desc" title="简易图片加水印，防盗图必备">简易图片加水印，防盗图必备</div>
     </a>
   </div>
@@ -454,7 +452,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/probability-visualized-fun.svg" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="看见概率论" />
       </div>
-      <div class="flink-item-name">看见概率论</div> 
+      <div class="flink-item-name">看见概率论</div>
       <div class="flink-item-desc" title="让概率论变得可见且有趣">让概率论变得可见且有趣</div>
     </a>
   </div></div><h2 id="可以尝试的软件-🧰"><a class="header-anchor" href="#可以尝试的软件-🧰"></a>可以尝试的软件 🧰</h2>
@@ -464,7 +462,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://typoraio.cn/img/favicon-128.png" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="Typora" />
       </div>
-      <div class="flink-item-name">Typora</div> 
+      <div class="flink-item-name">Typora</div>
       <div class="flink-item-desc" title="一款 Markdown 编辑器和阅读器">一款 Markdown 编辑器和阅读器</div>
     </a>
   </div>
@@ -473,7 +471,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://cdn.rizonesoft.com/wp-content/uploads/2020/02/Notepad3-icon-e1596170447452.png" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="Notepad3" />
       </div>
-      <div class="flink-item-name">Notepad3</div> 
+      <div class="flink-item-name">Notepad3</div>
       <div class="flink-item-desc" title="Windows 记事本的替代">Windows 记事本的替代</div>
     </a>
   </div>
@@ -482,7 +480,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/Uninstalr.webp" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="Uninstalr" />
       </div>
-      <div class="flink-item-name">Uninstalr</div> 
+      <div class="flink-item-name">Uninstalr</div>
       <div class="flink-item-desc" title="Windows 下最好的卸载器">Windows 下最好的卸载器</div>
     </a>
   </div></div><h2 id="Emoji-爱好者-😜"><a class="header-anchor" href="#Emoji-爱好者-😜"></a>Emoji 爱好者 😜</h2>
@@ -492,7 +490,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://www.emojiall.com/apple-touch-icon-152x152.png" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="Emoji中文网" />
       </div>
-      <div class="flink-item-name">Emoji中文网</div> 
+      <div class="flink-item-name">Emoji中文网</div>
       <div class="flink-item-desc" title="一本全面的 Emoji 词典">一本全面的 Emoji 词典</div>
     </a>
   </div>
@@ -501,7 +499,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://ai-emoji.bettergogo.com/logo.webp" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="AIEmoji" />
       </div>
-      <div class="flink-item-name">AIEmoji</div> 
+      <div class="flink-item-name">AIEmoji</div>
       <div class="flink-item-desc" title="AI 检索最匹配的 Emoji 符号">AI 检索最匹配的 Emoji 符号</div>
     </a>
   </div>
@@ -510,7 +508,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://emojispark.com/_nuxt/logo.D4F9YlA2.webp" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="Emoji Spark" />
       </div>
-      <div class="flink-item-name">Emoji Spark</div> 
+      <div class="flink-item-name">Emoji Spark</div>
       <div class="flink-item-desc" title="快速匹配搜索 Emoji">快速匹配搜索 Emoji</div>
     </a>
   </div>
@@ -519,7 +517,7 @@ btf.addGlobalFn('pjaxSend', () => {
       <div class="flink-item-icon">
         <img class="no-lightbox" src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="🤖" onerror='this.onerror=null;this.src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif"' alt="Emoji Spark" />
       </div>
-      <div class="flink-item-name">Emoji Spark</div> 
+      <div class="flink-item-name">Emoji Spark</div>
       <div class="flink-item-desc" title="用 AI 找到最适合的表情">用 AI 找到最适合的表情</div>
     </a>
   </div></div><h2 id="友链交换-🔗"><a class="header-anchor" href="#友链交换-🔗"></a>友链交换 🔗</h2>
@@ -687,7 +685,7 @@ btf.addGlobalFn('pjaxSend', () => {
   btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
   window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
 })()</script><script>(() => {
-  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
   const option = null
 
   const getCount = () => {

@@ -1,13 +1,13 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>网站维护日志 | Mofan</title><meta name="author" content="默烦,cy.mofan@foxmail.com"><meta name="copyright" content="默烦"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="2024 11-06  主题升级至 5.2.2 版本  11-03  主题升级至 5.2.1 版本  10-21  主题升级至 5.1.0 版本  10-15  优化 Algolia DocSearch 爬虫，参考文章：为博客添加 Algolia 全局搜索，Record Extractor  10-06  主题升级至 5.0.0 版本 移除 hexo-filter-mermaid-diagrams">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>网站维护日志 | Mofan</title><meta name="author" content="默烦,cy.mofan@foxmail.com"><meta name="copyright" content="默烦"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="2025                                     01-11                    主题升级至 5.3.0 版本                              2024                                     11-06                    主题升级">
 <meta property="og:type" content="website">
 <meta property="og:title" content="网站维护日志">
 <meta property="og:url" content="https://mofan212.github.io/update/index.html">
 <meta property="og:site_name" content="Mofan">
-<meta property="og:description" content="2024 11-06  主题升级至 5.2.2 版本  11-03  主题升级至 5.2.1 版本  10-21  主题升级至 5.1.0 版本  10-15  优化 Algolia DocSearch 爬虫，参考文章：为博客添加 Algolia 全局搜索，Record Extractor  10-06  主题升级至 5.0.0 版本 移除 hexo-filter-mermaid-diagrams">
+<meta property="og:description" content="2025                                     01-11                    主题升级至 5.3.0 版本                              2024                                     11-06                    主题升级">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg">
 <meta property="article:published_time" content="2020-05-29T07:23:07.000Z">
-<meta property="article:modified_time" content="2024-11-06T14:07:47.594Z">
+<meta property="article:modified_time" content="2025-01-11T05:26:30.080Z">
 <meta property="article:author" content="默烦">
 <meta property="article:tag" content="默烦,mofan,Mofan">
 <meta name="twitter:card" content="summary">
@@ -132,7 +132,7 @@
     buttonText: '加载更多'
   },
   isPhotoFigcaption: false,
-  islazyload: true,
+  islazyloadPlugin: true,
   isAnchor: false,
   percent: {
     toc: true,
@@ -141,11 +141,9 @@
   autoDarkmode: false
 }</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
   title: '网站维护日志',
-  isPost: false,
-  isHome: false,
   isHighlightShrink: false,
   isToc: false,
-  isShuoshuo: false
+  pageType: 'page'
 }</script><meta name="referrer" content="no-referrer-when-downgrade" /><link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/mofan212/blog-static-resources@master/css/myStyle.min.css"><link rel="stylesheet" href="https://cdn.staticfile.net/lxgw-wenkai-screen-webfont/1.7.0/style.min.css" /><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono.min.css" /><meta name="generator" content="Hexo 7.2.0"><link rel="alternate" href="/atom.xml" title="Mofan" type="application/atom+xml">
 </head><body><script>window.paceOptions = {
   restartOnPushState: false
@@ -155,161 +153,360 @@ btf.addGlobalFn('pjaxSend', () => {
   Pace.restart()
 }, 'pace_restart')
 
-</script><link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/mofan212/blog-static-resources/css/minimal.min.css"/><script src="https://fastly.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">155</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">48</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">29</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li></ul></div></div></div></div><div class="page" id="body-wrap"><header class="not-home-page" id="page-header" style="background-image: url(https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/siteCover.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Mofan</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="page-site-info"><h1 id="site-title">网站维护日志</h1></div></header><main class="layout hide-aside" id="content-inner"><div id="page"><div class="container" id="article-container"><div class="timeline blue"><div class='timeline-item headline'><div class='timeline-item-title'><div class='item-circle'><p>2024</p>
-</div></div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>11-06</p>
-</div></div><div class='timeline-item-content'><ul>
+</script><link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/mofan212/blog-static-resources/css/minimal.min.css"/><script src="https://fastly.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src= "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">155</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">48</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">29</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li></ul></div></div></div></div><div class="page" id="body-wrap"><header class="not-home-page" id="page-header" style="background-image: url(https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/siteCover.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Mofan</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="page-site-info"><h1 id="site-title">网站维护日志</h1></div></header><main class="layout hide-aside" id="content-inner"><div id="page"><div class="container" id="article-container"><div class="timeline purple"><div class='timeline-item headline'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>2025</p>
+</div>
+        </div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>01-11</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
+<li><mark>主题升级至 5.3.0 版本</mark></li>
+</ul>
+</div>
+      </div></div>
+<div class="timeline blue"><div class='timeline-item headline'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>2024</p>
+</div>
+        </div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>11-06</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li><mark>主题升级至 5.2.2 版本</mark></li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>11-03</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>11-03</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li><mark>主题升级至 5.2.1 版本</mark></li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>10-21</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>10-21</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li><mark>主题升级至 5.1.0 版本</mark></li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>10-15</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>10-15</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li>优化 Algolia DocSearch 爬虫，参考文章：<a target="_blank" rel="noopener" href="https://juejin.cn/post/7260405692295544893">为博客添加 Algolia 全局搜索</a>，<a target="_blank" rel="noopener" href="https://docsearch.algolia.com/docs/record-extractor">Record Extractor</a></li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>10-06</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>10-06</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li><mark>主题升级至 5.0.0 版本</mark></li>
 <li>移除 <code>hexo-filter-mermaid-diagrams</code>，采用主题内置方案渲染 mermaid</li>
 <li>文章卡片布局切换为瀑布流</li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>02-22</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>02-22</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li><mark>主题升级至 4.13.0 版本</mark></li>
 </ul>
-</div></div></div>
-<div class="timeline red"><div class='timeline-item headline'><div class='timeline-item-title'><div class='item-circle'><p>2023</p>
-</div></div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>12-30</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div></div>
+<div class="timeline red"><div class='timeline-item headline'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>2023</p>
+</div>
+        </div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>12-30</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li><mark>主题升级至 4.12.0 版本</mark></li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>11-25</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>11-25</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li><mark>主题升级至 4.11.0 版本，Hexo 升级至 7.0.0 版本</mark></li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>10-13</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>10-13</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li><mark>主题升级至 4.10 版本</mark></li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>08-20</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>08-20</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li>死去的评论系统复活了！</li>
 <li>开启文章复制功能，真想盗文也拦不住，反而还麻烦了自己</li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>08-02</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>08-02</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li><mark>主题升级至 4.9.0 版本</mark></li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>06-05</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>06-05</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li><mark>主题升级至 4.8.5 版本</mark></li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>05-08</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>05-08</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li>使用 timeline 作为维护、里程碑页的样式</li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>04-12</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>04-12</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li><mark>主题升级至 4.8.1 版本</mark></li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>03-16</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>03-16</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li>使用 <a target="_blank" rel="noopener" href="https://www.jsdelivr.com/package/npm/jetbrains-mono">JetBrains Mono</a> 作为代码块字体</li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>03-05</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>03-05</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li>基于 Algolia 的全文搜索一直没弄好，API 返回有值，但 JS 始终报错，今天逛 Github 发现主题作者又更新了 DocSearch，果断升级主题，10 分钟的配置后基于 DocSearch 的搜索系统上线</li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>01-31</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>01-31</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li>启用基于 Algolia 的全文搜索，移除本地搜索功能</li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>01-22</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>01-22</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li>fork hexo-filter-mermaid-diagrams 修改源码，使用 <code>npm i mofan212/hexo-filter-mermaid-diagrams --save</code> 进行安装 <s>（大年初一 JS 还在折磨我，前端？狗都不学！）</s></li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>01-08</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>01-08</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li>使用 <a target="_blank" rel="noopener" href="https://github.com/webappdevelp/hexo-filter-mermaid-diagrams">hexo-filter-mermaid-diagrams</a> 解析 Mermaid</li>
 </ul>
-</div></div></div>
-<div class="timeline orange"><div class='timeline-item headline'><div class='timeline-item-title'><div class='item-circle'><p>2022</p>
-</div></div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>10-22</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div></div>
+<div class="timeline orange"><div class='timeline-item headline'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>2022</p>
+</div>
+        </div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>10-22</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li><mark>主题升级至 4.5.0 版本，Hexo 升级至 6.3.0 版本</mark></li>
 <li>移除 hexo-butterfly-extjs 插件，使用 unpkg 加速源</li>
 <li>使用 <a target="_blank" rel="noopener" href="https://github.com/lxgw/LxgwWenKai">霞鹜文楷</a> 屏幕阅读版作为网站字体</li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>05-26</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>05-26</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li>使用 <code>npm install hexo-butterfly-extjs --save</code> 命令安装 hexo-butterfly-extjs 插件，解决图标缺失的问题</li>
 <li><mark>主题升级至 4.2.2 版本，Hexo 升级至 6.2.0 版本</mark></li>
 </ul>
-</div></div></div>
-<div class="timeline green"><div class='timeline-item headline'><div class='timeline-item-title'><div class='item-circle'><p>2021</p>
-</div></div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>04-15</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div></div>
+<div class="timeline green"><div class='timeline-item headline'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>2021</p>
+</div>
+        </div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>04-15</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li><mark>主题升级至 3.7.1 版本</mark></li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>01-30</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>01-30</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li>使用百度、谷歌网站验证</li>
 <li>使用百度、谷歌分析统计</li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>01-11</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>01-11</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li>对文章中的图片添加灰色边框</li>
 <li>修改部分图标显示</li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>01-05</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>01-05</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li><mark>主题升级至 3.5.1 版本</mark> ，增加多种新特性</li>
 <li>增加 Twikoo 评论功能，参考链接：<a target="_blank" rel="noopener" href="https://blog.zhheo.com/p/2e6bbbd0.html">Twikoo评论系统配置教程（基于腾讯云开发）</a>、<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1MZ4y1G7VB">Twikoo 快速上手视频教程</a></li>
 <li>修改 Twikoo 默认头像，参考链接：<a target="_blank" rel="noopener" href="http://www.ceniv.com/gravatar.html">全球通用头像Gravatar使用教程</a></li>
 </ul>
-</div></div></div>
-<div class="timeline "><div class='timeline-item headline'><div class='timeline-item-title'><div class='item-circle'><p>2020</p>
-</div></div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>11-29</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div></div>
+<div class="timeline "><div class='timeline-item headline'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>2020</p>
+</div>
+        </div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>11-29</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li>新增【计划】栏</li>
 <li>实现 Markdown 渲染 CheckBox 参考链接：<a target="_blank" rel="noopener" href="http://baishusama.github.io/2016/12/24/hexo-render-markdown-it-and-its-plugins/">Hexo 的 markdown-it 渲染引擎和其相关插件</a></li>
 <li>对 CheckBox 进行美化</li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>11-16</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>11-16</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li><mark>Hexo 升级至 5.2.0 版本，主题升级至 3.3.0 版本</mark></li>
 <li>新版主题新增多种特性</li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>09-16</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>09-16</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li>逐渐对以前的文章进行 <strong>内容补全</strong> 和 <strong>格式优化</strong></li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>08-13</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>08-13</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li><mark>主题升级至 3.0.1 版本</mark> ，修复部分 BUG</li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>08-07</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>08-07</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li><mark>主题升级至 3.0.0 版本</mark> ，修改部分配置</li>
 <li>添加网页背景图片</li>
 <li>替换图片加载动画</li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>07-20</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>07-20</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li>统一文章页顶部图</li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>07-09</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>07-09</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li>修复出现的跨域请求</li>
 <li>因相关错误，修改主题背景</li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>06-24</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>06-24</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li><mark>主题升级至 3.0.0 rc1 版本</mark></li>
 <li>移除手动编写的侧边栏分类卡展开/收缩按钮</li>
 <li>增加本地搜索功能，可搜索站内所有文章</li>
@@ -317,38 +514,73 @@ btf.addGlobalFn('pjaxSend', () => {
 <li>分割线图标更换</li>
 <li>其他细节优化</li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>06-05</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>06-05</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li>导航菜单优化</li>
 <li>表明文章封面出处</li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>06-04</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>06-04</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li>开启 SubTitle 循环播放</li>
 <li>文章侧边栏滚动条重置</li>
 <li>添加文章置顶功能</li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>06-02</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>06-02</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li>博客图标更换</li>
 <li>移除标签页、分类页的侧边栏</li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>06-01</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>06-01</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li>移除文章侧边栏滚动条</li>
 <li>友链功能上线</li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>05-31</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>05-31</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li>移除鼠标指针美化，恢复至默认状态</li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>05-30</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>05-30</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li>优化文章标签与分类，部分文章纠错</li>
 <li>地址栏优化 参考链接：<a target="_blank" rel="noopener" href="https://yangchaoyi.vip/posts/520520/#%E5%9C%B0%E5%9D%80%E6%A0%8F%E6%B7%BB%E5%8A%A0-abbrlink">地址栏添加 abbrlink</a></li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>05-29</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>05-29</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li>使用 <code>阿里OSS</code> 搭建图床并将图片添加至博客 参考链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/kai123wen/article/details/104027802">阿里云OSS PicGo 配置图床教程 超详细</a></li>
 <li>将部分笔记更新至博客</li>
 <li>Markdown语法支持emoji表情 参考链接：<a target="_blank" rel="noopener" href="https://hasaik.com/posts/9b280ea3.html">Hexo中使用emoji表情</a></li>
@@ -357,13 +589,19 @@ btf.addGlobalFn('pjaxSend', () => {
 <li>实现切换窗口改变网页Title</li>
 <li>博客内容优化</li>
 </ul>
-</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>05-28</p>
-</div></div><div class='timeline-item-content'><ul>
+</div>
+      </div><div class='timeline-item'>
+        <div class='timeline-item-title'>
+          <div class='item-circle'><p>05-28</p>
+</div>
+        </div>
+        <div class='timeline-item-content'><ul>
 <li>使用 <code>Hexo</code> 成功搭建博客并部署到 <code>Gitee</code></li>
 <li>使用 <code>Hexo</code> 主题 <code>hexo-theme-butterfly</code> 美化界面</li>
 <li>界面细节完善</li>
 </ul>
-</div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2025 By 默烦</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://fastly.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://fastly.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://fastly.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+</div>
+      </div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2025 By 默烦</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://fastly.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://fastly.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://fastly.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
   const runMermaid = ele => {
     window.loadMermaid = true
     const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
