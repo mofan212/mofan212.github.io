@@ -573,7 +573,7 @@ NAME    DESCRIPTION       STARS       OFFICIAL       AUTOMATED
 <p>强制删除容器：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rm -f 容器ID/容器名</span><br></pre></td></tr></table></figure>
 <p>强制删除所有容器实例（谨慎操作）：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker rm -f $&#123;docker ps -a -q&#125;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">或者</span></span><br><span class="line">docker ps -a -q | xargs docker rm -f</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker rm -f $(docker ps -a -q)</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">或者</span></span><br><span class="line">docker ps -a -q | xargs docker rm -f</span><br></pre></td></tr></table></figure>
 <h2 id="3-4-重要容器命令"><a class="header-anchor" href="#3-4-重要容器命令"></a>3.4 重要容器命令</h2>
 <blockquote>
 <p>启动守护式容器（后台服务器）</p>
