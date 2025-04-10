@@ -319,7 +319,7 @@ Is this ok [y/d/N]:
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run hello-world</span><br></pre></td></tr></table></figure>
 <p>执行后，终端输出：</p>
 <pre>
-<font style="color:yellow">Unable to </font>find image 'hello-world:latest' locally
+<font style="color:gold">Unable to </font>find image 'hello-world:latest' locally
 </pre>
 <p>甚至还会紧接着输出：</p>
 <pre>
@@ -448,7 +448,7 @@ NAME    DESCRIPTION       STARS       OFFICIAL       AUTOMATED
 <p>删除镜像使用 <code>docker rmi</code> 命令，<code>-f</code> 选项表示强制删除指定镜像。</p>
 <p>不使用 <code>-f</code> 选项，并且删除的镜像正在某个容器中使用，此时会出现以下错误：</p>
 <pre>
-<font style="color:red">Error</font> response from daemon: conflict: <font style="color:yellow">unable to</font> remove repository reference "镜像名称" (must force) - container 容器ID is using its referenced image 镜像ID
+<font style="color:red">Error</font> response from daemon: conflict: <font style="color:gold">unable to</font> remove repository reference "镜像名称" (must force) - container 容器ID is using its referenced image 镜像ID
 </pre>
 <p>这表示：某个容器正在使用当前删除的镜像。</p>
 <p>执行以下命令查看当前 Docker 中正在运行的容器：</p>
@@ -707,7 +707,7 @@ docker.io/library/tomcat:latest
 <p>首先下载 ubuntu 镜像到本地并运行成功，原始默认的 ubuntu 镜像中不包含 <code>vim</code> 命令：</p>
 <pre>
 root@8d7a9c64170c:/# vim a.txt
-bash: vim: <font style="color:yellow">command not found</font>
+bash: vim: <font style="color:gold">command not found</font>
 </pre>
 <p>现在需要在当前容器实例内部安装 Vim，最后使用当前容器副本生成一个包含 <code>vim</code> 命令的 ubuntu 镜像。</p>
 <p>首先更新包管理工具：</p>
@@ -820,7 +820,7 @@ redis            6.0.8     16ecd2772934   4 years ago      104MB
 <p>原始的 ubuntu 镜像不包含 <code>ifconfig</code> 命令：</p>
 <pre>
 root@fc5b8e0407a5:/# ifconfig
-bash: ifconfig: <font style="color:yellow">command not found</font>
+bash: ifconfig: <font style="color:gold">command not found</font>
 </pre>
 <p>在当前容器内安装 <code>ifconfig</code> 命令并测试通过：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">更新包管理工具</span></span><br><span class="line">apt-get update</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装 ifconfig</span></span><br><span class="line">apt-get install net-tools</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">测试 ifconfig</span></span><br><span class="line">ifconfig</span><br></pre></td></tr></table></figure>
