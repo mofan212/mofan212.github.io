@@ -1380,7 +1380,7 @@ To add an exception for this directory, call:<br/>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global --add safe.directory 仓库路径</span><br></pre></td></tr></table></figure>
 <p>执行上述命令后，确实可以解决问题。</p>
 <p>先前说过，执行 <code>git config --global</code>  命令时，会将对应的配置信息存放在用户目录的 <code>.gitconfig</code> 文件里：</p>
-<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">[safe]</span></span><br><span class="line">	<span class="attr">directory</span> = <span class="string">仓库路径</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">[safe]</span></span><br><span class="line">    <span class="attr">directory</span> = <span class="string">仓库路径</span></span><br></pre></td></tr></table></figure>
 <p>如果拥有良好的文件管理习惯，通常会在同一个目录下存放所有的代码，可以将命令中的「仓库路径」替换成这个大目录，一次性将所有仓库标记为「safe」。</p>
 <blockquote>
 <p>问题的根本</p>
