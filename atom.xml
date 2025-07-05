@@ -6,7 +6,7 @@
   <link href="https://mofan212.github.io/atom.xml" rel="self"/>
   
   <link href="https://mofan212.github.io/"/>
-  <updated>2025-05-04T16:00:00.000Z</updated>
+  <updated>2025-07-04T16:00:00.000Z</updated>
   <id>https://mofan212.github.io/</id>
   
   <author>
@@ -15,6 +15,25 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Functors, Applicatives and Monads In Pictures</title>
+    <link href="https://mofan212.github.io/posts/Functors-Applicatives-And-Monads-In-Pictures/"/>
+    <id>https://mofan212.github.io/posts/Functors-Applicatives-And-Monads-In-Pictures/</id>
+    <published>2025-07-04T16:00:00.000Z</published>
+    <updated>2025-07-04T16:00:00.000Z</updated>
+    
+    
+    <summary type="html">图解 Functors, Applicatives 和 Monads。</summary>
+    
+    
+    
+    <category term="Functional Programming" scheme="https://mofan212.github.io/categories/Functional-Programming/"/>
+    
+    
+    <category term="Functional Programming" scheme="https://mofan212.github.io/tags/Functional-Programming/"/>
+    
+  </entry>
   
   <entry>
     <title>JVM 内存结构</title>
@@ -394,27 +413,6 @@
     <category term="Java-Lambda" scheme="https://mofan212.github.io/tags/Java-Lambda/"/>
     
     <category term="Code-In-Practice" scheme="https://mofan212.github.io/tags/Code-In-Practice/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>方法句柄</title>
-    <link href="https://mofan212.github.io/posts/Method-Handle/"/>
-    <id>https://mofan212.github.io/posts/Method-Handle/</id>
-    <published>2023-10-28T16:00:00.000Z</published>
-    <updated>2024-09-05T16:00:00.000Z</updated>
-    
-    
-    <summary type="html">Java 中 MethodHandle 的使用。</summary>
-    
-    
-    
-    <category term="Java" scheme="https://mofan212.github.io/categories/Java/"/>
-    
-    
-    <category term="Java-Lambda" scheme="https://mofan212.github.io/tags/Java-Lambda/"/>
-    
-    <category term="Java" scheme="https://mofan212.github.io/tags/Java/"/>
     
   </entry>
   
