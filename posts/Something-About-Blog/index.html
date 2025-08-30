@@ -349,7 +349,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>本地搜索插件一直被拦截，我也曾一度以为是搜索插件或主题的问题。</p>
 <h2 id="1-3-本地运行错误"><a class="header-anchor" href="#1-3-本地运行错误"></a>1.3 本地运行错误</h2>
 <p>当我们下载好 Hexo，执行 <code>hexo init</code> 并换上喜欢的主题后，可以执行以下命令在本地查看主题的效果：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>
 <p>在浏览器地址栏输入 <code>localhost:4000</code> 进行本地访问时，浏览器页面上出现以下字样，并且也没有跳转至博客界面：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">extends includes/layout.pug block content include ./includes/mixins/post -ui.pug #recent posts.recent posts +postUI include includes/pagination.pug</span><br></pre></td></tr></table></figure>
 <p>这是因为缺少某些插件，只需在博客目录下执行以下命令安装需要的插件：</p>
@@ -563,9 +563,8 @@ mongodb://[username:password@]host1[:port1][,host2[:port2],...[,hostN[:portN]]][
 <h2 id="2-6-使用-Mermaid"><a class="header-anchor" href="#2-6-使用-Mermaid"></a>2.6 使用 Mermaid</h2>
 <p>Mermaid 是一个用于画流程图、状态图、时序图、甘特图的库，使用 JS 进行本地渲染，广泛集成于许多 Markdown 编辑器中。</p>
 <p>Typora 也支持使用 Mermaid 绘制流程图、状态图、时序图和甘特图。在 Typora 中的基本语法是：</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="code">```mermaid</span></span><br><span class="line"><span class="code">内容</span></span><br><span class="line"><span class="code">```</span></span><br></pre></td></tr></table></figure>
-<p>但在 Butterfly 主题中并不支持使用这种语法，而是采用了标签外挂（Tag Plugins）进行实现，基本语法是：</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;% mermaid %&#125;</span><br><span class="line">内容</span><br><span class="line">&#123;% endmermaid %&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="code">```mermaid</span></span><br><span class="line"><span class="code">内容</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">但在 Butterfly 主题中并不支持使用这种语法，而是采用了标签外挂（Tag Plugins）进行实现，基本语法是：</span><br><span class="line"></span><br><span class="line">```markdown</span><br><span class="line">&#123;% mermaid %&#125;</span><br><span class="line">内容</span><br><span class="line">&#123;% endmermaid %&#125;</span><br></pre></td></tr></table></figure>
 <p>为了能够不进行任何修改就能直接将使用 Typora 编写的 Markdown 文件迁移到 Hexo 中，使用 Mermaid 时采用的语法最好与 Typora 中一致。</p>
 <blockquote>
 <p>解决方案（适用于 Butterfly 5.0.0 及以上版本）</p>

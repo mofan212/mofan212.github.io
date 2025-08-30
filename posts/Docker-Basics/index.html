@@ -356,22 +356,22 @@ This message shows that your installation appears to be working correctly.
 </pre>
 <p>执行 <code>docker run</code> 时，Docker 的工作流程：</p>
 <pre><code class="highlight mermaid">flowchart LR
-	start([开始])
-	a[Docker 在本机中寻找镜像]
-	b&#123;本机是否有镜像&#125;
-	c[以该镜像为模板生产容器实例运行]
-	d[去 Docker Hub 上查找该镜像]
-	e&#123;Hub 上能否找到&#125;
-	f[下载该镜像到本地]
-	g[&quot;返回失败错误，查不到该镜像&quot;]
-	z([结束])
-	
-	start --&gt; a --&gt; b
-	b -- 是 --&gt; c
-	b -- 否 --&gt; d
-	d --&gt; e
-	e -- 是 --&gt; f --&gt; c --&gt; z
-	e -- 否 --&gt; g --&gt; z</code></pre>
+    start([开始])
+    a[Docker 在本机中寻找镜像]
+    b&#123;本机是否有镜像&#125;
+    c[以该镜像为模板生产容器实例运行]
+    d[去 Docker Hub 上查找该镜像]
+    e&#123;Hub 上能否找到&#125;
+    f[下载该镜像到本地]
+    g[&quot;返回失败错误，查不到该镜像&quot;]
+    z([结束])
+    
+    start --&gt; a --&gt; b
+    b -- 是 --&gt; c
+    b -- 否 --&gt; d
+    d --&gt; e
+    e -- 是 --&gt; f --&gt; c --&gt; z
+    e -- 否 --&gt; g --&gt; z</code></pre>
 <h2 id="2-6-卸载-Docker"><a class="header-anchor" href="#2-6-卸载-Docker"></a>2.6 卸载 Docker</h2>
 <p>关闭服务：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop docker</span><br></pre></td></tr></table></figure>

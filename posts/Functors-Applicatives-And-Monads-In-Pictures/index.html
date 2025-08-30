@@ -371,7 +371,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">var</span> <span class="variable">io</span> <span class="operator">=</span> getLine().flatMap(s -&gt; readFile(s)).flatMap(s -&gt; printLine(s));</span><br><span class="line"></span><br><span class="line">io.run();</span><br></pre></td></tr></table></figure>
 <p>哇哦！前排的各位请看 Monad 的表演！</p>
 <p>Haskell 还为我们提供了一些关于 Monad 的语法糖，称为 <code>do</code> 表示法：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">foo = do</span><br><span class="line">    filename &lt;- getLine</span><br><span class="line">    contents &lt;- readFile filename</span><br><span class="line">    putStrLn contents</span><br></pre></td></tr></table></figure>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">foo</span> = <span class="keyword">do</span></span><br><span class="line">    filename &lt;- getLine</span><br><span class="line">    contents &lt;- readFile filename</span><br><span class="line">    putStrLn contents</span><br></pre></td></tr></table></figure>
 <p>可惜，这在 Java 中并没有。</p>
 <h1 id="6-总结"><a class="header-anchor" href="#6-总结"></a>6. 总结</h1>
 <ol>
