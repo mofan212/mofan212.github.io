@@ -1,0 +1,1158 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Docker 基础篇 | Mofan</title><meta name="author" content="默烦,cy.mofan@foxmail.com"><meta name="copyright" content="默烦"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Develop faster. Run anywhere.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker 基础篇">
+<meta property="og:url" content="https://mofan212.github.io/posts/Docker-Basics/">
+<meta property="og:site_name" content="Mofan">
+<meta property="og:description" content="Develop faster. Run anywhere.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/157.png">
+<meta property="article:published_time" content="2025-02-14T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-02-18T16:00:00.000Z">
+<meta property="article:author" content="默烦">
+<meta property="article:tag" content="Docker">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/157.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Docker 基础篇",
+  "url": "https://mofan212.github.io/posts/Docker-Basics/",
+  "image": "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/157.png",
+  "datePublished": "2025-02-14T16:00:00.000Z",
+  "dateModified": "2025-02-18T16:00:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "默烦",
+      "url": "https://mofan212.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/Docker-Basics/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":true,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 默烦","link":"链接: ","source":"来源: Mofan","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://testingcf.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Docker 基础篇',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="referrer" content="no-referrer-when-downgrade" /><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/css/myStyle.min.css"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css" /><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css" /><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Mofan" type="application/atom+xml">
+</head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+btf.addGlobalFn('pjaxSend', () => {
+  Pace.restart()
+}, 'pace_restart')
+
+</script><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources/css/minimal.min.css"/><script src="https://testingcf.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/post_top_img.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Mofan</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Docker 基础篇</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-02-14T16:00:00.000Z" title="发表于 2025-02-15 00:00:00">2025-02-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-02-18T16:00:00.000Z" title="更新于 2025-02-19 00:00:00">2025-02-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Docker/">Docker</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">11.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>39分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;距离本文上次更新已经过去&quot;,&quot;messageNext&quot;:&quot;天，请注意时效性。&quot;,&quot;postUpdate&quot;:&quot;2025-02-19 00:00:00&quot;}" hidden></div><p>封面来源：本文封面来源于 Docker 官网，如有侵权，请联系删除。</p>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1gr4y1U7CY/">尚硅谷Docker实战教程</a></p>
+<h1 id="1-简介"><a class="header-anchor" href="#1-简介"></a>1. 简介</h1>
+<h2 id="1-1-Docker-是什么"><a class="header-anchor" href="#1-1-Docker-是什么"></a>1.1 Docker 是什么</h2>
+<p>当开发的应用依赖于当前的电脑配置和某些配置文件，为了能够尽可能多地在其他本地模拟这些环境而不产生重新创建服务器环境的开销，此时可以使用 <strong>容器技术</strong>。</p>
+<p>Docker 之所以发展如此迅速，就是因为它对此给出了一个标准化的解决方案 —— 系统平滑移植，容器虚拟化技术。</p>
+<p>当环境配置相当复杂时，人们会想到能不能从根本上解决这个问题，软件可不可以连带着其需要的环境一起安装？也就是在安装软件的时候，一并把原始环境也一模一样地复制过来，开发人员利用 Docker 消除协作编码时产生的「在我的机器上都能跑，怎么你的不行」的问题。</p>
+<p>Docker 的出现打破了「程序即应用」的关联，通过镜像（images）将作业系统核心除外，运作应用程序所需要的系统环境由上而下地打包，达到应用程序跨平台的无缝接轨运作。</p>
+<p>Docker 是基于 Golang 实现的云开源项目，它的主要目标是「Build, Ship and Run Any App, Anywhere」，也就是通过对应用组件的封装、分发、部署、运行等生命周期的管理，使用户的应用程序及其运行环境能够做到「一次镜像，处处运行」。</p>
+<p>Linux 容器技术的出现就解决了这样一个问题，Docker 是在它的基础上发展过来的。将应用打包成镜像，通过镜像成为运行在 Docker 容器上的实例。Docker 容器在任何操作系统上都是一致的，这就实现了跨平台、跨服务器。只需要一次配置好环境，换到别的机子上还能一键部署好，极大简化了操作。</p>
+<p>一句话：<strong>Docker 是解决了运行环境和配置问题的软件容器，方便做持续集成并有助于整体发布的容器虚拟化技术</strong>。</p>
+<h2 id="1-2-容器与虚拟机"><a class="header-anchor" href="#1-2-容器与虚拟机"></a>1.2 容器与虚拟机</h2>
+<p>虚拟机（Virtual Machine）也是一种带环境安装的解决方案。</p>
+<p>虚拟机可以摘一种操作系统里运行另一种操作系统，比如在 Windows 系统里运行 Linux 系统。运行在虚拟机的应用程序毫无感知，因为虚拟机看上去和真实系统一模一样，而对于底层系统来说，虚拟机就是一个普通文件，如果不需要，直接删除，并对系统其他部分毫无影响。</p>
+<p>虚拟机终究还是太「重」了，于是 Linux 又发展出另一种虚拟化技术 —— Linux 容器（Linux Containers，缩写为 LXC）。</p>
+<p>Linux 容器是与系统其他部分隔离开的一系列进程，从另一个镜像运行，并由该镜像提供支持进程所需的全部文件。容器提供的镜像包含了应用的所有依赖项，因而从开发到测试再到生产的整个过程中，它都具有可移植性和一致性。</p>
+<p><mark>Liunx 容器不是模拟一个完整的操作系统，</mark> 而是对系统进行隔离。有了容器，就可以将软件运行所需的全部资源打包到一个隔离的容器中。<strong>容器与虚拟机不同，不需要捆绑一整套操作系统，</strong> 只需要软件工作所需的库资源和设置。系统因此变得高效轻量并保证部署在任何环境中的软件都能始终如一地运行。</p>
+<p>Docker 容器是在操作系统层面上实现虚拟化，直接复用本地主机的操作系统，传统虚拟机则是在硬件层面实现虚拟化。与传统的虚拟机相比，Docker 优势体现在启动速度快、占用体积小。</p>
+<p>Docker 与传统虚拟化方式的不同：</p>
+<ul>
+<li>
+<p>传统虚拟机技术是虚拟出一套硬件后，运行一个完整操作系统，在该系统上再运行所需应用进程；</p>
+</li>
+<li>
+<p>容器内的应用进程直接运行于宿主的内核，容器内没有自己的内核也没有进行硬件虚拟。因此容器比传统虚拟机更为轻便；</p>
+</li>
+<li>
+<p>每个容器之间互相隔离，每个容器有自己的文件系统，容器之间进程不会相互影响，并能区分计算资源。</p>
+</li>
+</ul>
+<h1 id="2-安装-Docker"><a class="header-anchor" href="#2-安装-Docker"></a>2. 安装 Docker</h1>
+<p>Docker 官网：<a target="_blank" rel="noopener" href="https://www.docker.com/">Docker: Accelerated Container Application Development</a></p>
+<p>Docker Hub 官网：<a target="_blank" rel="noopener" href="https://hub.docker.com/">Docker Hub Container Image Library | App Containerization</a></p>
+<h2 id="2-1-安装前提"><a class="header-anchor" href="#2-1-安装前提"></a>2.1 安装前提</h2>
+<p>Docker 并非是一个通用的容器工具，它依赖于已存在并运行的 Linux 内核环境。</p>
+<p>Docker 实质上是在已经运行的 Linux 下制造了一个隔离的文件环境，因此它执行的效率几乎等同于所部署的 Linux 主机。</p>
+<p>因此，Docker <strong>必须部署在 Linux 内核的系统上，</strong> 如果有其他系统想要部署 Docker 就必须安装一个 Linux 环境。</p>
+<p>查看 Linux 内核信息：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/redhat-realease</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">or</span></span><br><span class="line">uname -r</span><br></pre></td></tr></table></figure>
+<h2 id="2-2-基本组成"><a class="header-anchor" href="#2-2-基本组成"></a>2.2 基本组成</h2>
+<p>Docker 的基本组成是镜像（image）、容器（container）、仓库（repository）。</p>
+<blockquote>
+<p>镜像</p>
+</blockquote>
+<p>Docker 镜像（Image）是一个 <strong>只读</strong> 的模板。镜像可以用来创建 Docker 容器，一个镜像可以创建很多容器。它也相当于一个 root 文件系统。比如官方镜像 CentOS7 就包含了一套完整的 CentOS7 最小系统的 root 文件系统。镜像相当于容器的「源代码」，Docker 镜像文件类似于 Java 类，Docker 容器实例类似于 Java 中 new 出来的实例对象。</p>
+<blockquote>
+<p>容器</p>
+</blockquote>
+<p>从面向对象角度来看，Docker 利用容器（Container）独立运行一个或一组应用，应用程序或服务运行在容器里面，容器类似于一个虚拟化的运行环境，容器是用镜像创建的运行实例。就像 Java 中的类和实例对象一样，镜像是静态的定义，容器是镜像运行时的实体。容器为镜像提供了一个标准的、隔离的运行环境，它可以被启动、开始、停止和删除。每个容器都是相互隔离的、保证安全的平台。</p>
+<p>从镜像容器角度来看，可以把容器看做是一个简易版的 Linux 环境（包括 root 用户权限、进程空间、用户空间和网络空间等）和运行在其中的应用程序。</p>
+<blockquote>
+<p>仓库</p>
+</blockquote>
+<p>仓库（Repository）是集中存放镜像文件的场所。</p>
+<p>类似于：</p>
+<ul>
+<li>Maven 仓库是存放各种 jar 包的地方</li>
+<li>GitHub 仓库是存放各种 git 项目的地方</li>
+</ul>
+<p>Docker 公司提供的官方 Registry 被称为 Docker Hub，是存放各种镜像模板的地方。</p>
+<p>仓库分为公开仓库（Public）和私有仓库（Private）两种形式。最大的公开仓库是 <a target="_blank" rel="noopener" href="https://hub.docker.com/">Docker Hub</a>，存放了数量庞大的镜像供用户下载。国内的公开仓库包括阿里云、网易云等。</p>
+<blockquote>
+<p>总结</p>
+</blockquote>
+<p>Docker 本身是一个容器运行载体或者说管理引擎。把应用程序和配置依赖打包好形成一个可交付的运行环境，这个打包好的运行环境就是 Image 镜像文件。只有通过这个镜像文件才能生成 Docker 容器实例（类似 Java 中 new 出来的对象）。</p>
+<p>Image 文件可以看作是容器的模板。Docker 根据 Image 文件生成容器的实例。同一个 Image 文件，可以生成多个同时运行的容器实例。</p>
+<p>镜像文件：Image 文件生成的容器实例，本身也是一个文件，称之为镜像文件。</p>
+<p>容器实例：一个容器运行一种服务，在需要的时候，可以通过 Docker 客户端创建一个对应的运行实例，也就是容器。</p>
+<p>仓库：存放一堆镜像的地方，可以把镜像发布到仓库中，需要的时候直接从仓库拉即可。</p>
+<h2 id="2-3-架构图解"><a class="header-anchor" href="#2-3-架构图解"></a>2.3 架构图解</h2>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/Docker%E7%AE%80%E6%98%93%E6%9E%B6%E6%9E%84%E5%9B%BE.svg" alt="Docker简易架构图"></p>
+<p>Docker 是一个 Client-Server 结构的系统，后端是一个松耦合架构，众多模块各司其职。</p>
+<p>Docker 守护进程运行在主机上，然后通过 Socket 连接从客户端访问，守护进程从客户端接收命令并管理运行在主机上的容器。</p>
+<p>容器，是一个运行时的环境，就像 Docker 图标上的集装箱。</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/Docker%E6%9E%B6%E6%9E%84%E5%9B%BE.png" alt="Docker架构图"></p>
+<p>Docker运行的基本流程为：</p>
+<ol>
+<li>用户使用 Docker Client 与 Docker Daemon 建立通信，并发送请求给后者；</li>
+<li>Docker Daemon 作为 Docker 架构的主体部分，首先提供 Docker Server 的功能使其可以接收 Docker Client 的请求；</li>
+<li>Docker Engine 执行 Docker 内部的一系列工作，每一项工作都是以一个 Job 的形式存在；</li>
+<li>在 Job 的运行过程中，当需要容器镜像时，会从 Docker Registry 中下载镜像，并通过镜像管理驱动 Graph Driver 将下载镜像以 Graph 的形式存储；</li>
+<li>当需要为 Docker 创建网络环境时，通过网络管理驱动 Network Driver 创建并配置 Docker 容器网络环境；</li>
+<li>当需要限制 Docker 容器运行资源或执行用户指令等操作时，则通过 Exec Driver 完成；</li>
+<li>Libcontainer 是一项独立的容器管理包，Network Driver 以及 Exec Driver 都是通过 Libcontainer 来实现对容器进行的具体操作。</li>
+</ol>
+<h2 id="2-4-安装-Docker"><a class="header-anchor" href="#2-4-安装-Docker"></a>2.4 安装 Docker</h2>
+<p>CentOS 安装 Docker 文档：<a target="_blank" rel="noopener" href="https://docs.docker.com/engine/install/centos/">Install Docker Engine on CentOS</a></p>
+<blockquote>
+<p>确定 CentOS 版本</p>
+</blockquote>
+<p>执行命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/redhat-release</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>卸载旧版本</p>
+</blockquote>
+<p>在安装 Docker 之前，需要卸载任何相互冲突的软件包。</p>
+<p>使用的 Linux 发行版可能会提供非正式的 Docker 软件包，这可能与 Docker 提供的官方软件包相冲突。在安装Docker 的官方版本之前，必须卸载这些软件包。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sudo yum remove docker \</span><br><span class="line">                docker-client \</span><br><span class="line">                docker-client-latest \</span><br><span class="line">                docker-common \</span><br><span class="line">                docker-latest \</span><br><span class="line">                docker-latest-logrotate \</span><br><span class="line">                docker-logrotate \</span><br><span class="line">                docker-engine</span><br></pre></td></tr></table></figure>
+<p>上述命令执行期间可能提示没有安装这些软件包。</p>
+<p>卸载 Docker 时，存储在 <code>/var/lib/docker/</code> 中的镜像（images）、容器（containers）、数据卷（volumes）和网络（networks）不会被自动删除。</p>
+<blockquote>
+<p>yum 安装 gcc 相关</p>
+</blockquote>
+<p>依次执行以下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum -y install gcc</span><br><span class="line">yum -y install gcc-c++</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>安装需要的软件包</p>
+</blockquote>
+<p>首次在新的主机上安装 Docker 之前，需要设置 Docker repository，之后才可以从 repository 中安装和更新 Docker。</p>
+<p>安装 <code>yum-utils</code> 软件包（提供了 yum-config-manager 功能 ）：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install -y yum-utils</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>设置 stable 镜像仓库</p>
+</blockquote>
+<p>官方库，速度慢，不推荐：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo</span><br></pre></td></tr></table></figure>
+<p>阿里镜像库，<strong>推荐</strong>：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>更新 yum 软件包索引</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum makecache fast</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>安装 Docker</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin</span><br></pre></td></tr></table></figure>
+<p>安装过程中会碰到以下询问：</p>
+<pre>
+Is this ok [y/d/N]:
+</pre>
+<p>键入 <code>y</code> 即可。</p>
+<blockquote>
+<p>启动 Docker</p>
+</blockquote>
+<p>Docker 是一个系统服务，使用启动系统服务方式进行启动：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl start docker</span><br></pre></td></tr></table></figure>
+<p>成功执行上述命令后，终端不会显示任何信息。</p>
+<p>可以执行以下命令查看当前系统中的 Docker 服务：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps -ef | grep docker</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>测试运行</p>
+</blockquote>
+<p>执行以下命令查看 Docker 版本：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker version</span><br></pre></td></tr></table></figure>
+<p>运行 Hello World：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run hello-world</span><br></pre></td></tr></table></figure>
+<p>执行后，终端输出：</p>
+<pre>
+<font style="color:gold">Unable to </font>find image 'hello-world:latest' locally
+</pre>
+<p>甚至还会紧接着输出：</p>
+<pre>
+docker: <font style="color:red">Error</font> response from daemon: Get "https://registry-1.docker.io/v2/": net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers).
+See 'docker run <font style="color:aqua">--help</font>'.
+</pre>
+<p>这表示下载远端镜像失败，此时需要配置镜像加速器。</p>
+<h2 id="2-5-配置镜像加速器"><a class="header-anchor" href="#2-5-配置镜像加速器"></a>2.5 配置镜像加速器</h2>
+<p>注册并登录 <a target="_blank" rel="noopener" href="https://www.aliyun.com/">阿里云</a>，搜索「容器镜像服务」：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/%E9%85%8D%E7%BD%AEDocker%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E5%99%A8.png" alt="配置Docker镜像加速器"></p>
+<p>执行命令为 Docker 配置镜像加速器：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir -p /etc/docker</span><br><span class="line">sudo tee /etc/docker/daemon.json &lt;&lt;-&#x27;EOF&#x27;</span><br><span class="line">&#123;</span><br><span class="line">  &quot;registry-mirrors&quot;: [&quot;阿里云镜像加速器地址&quot;]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line">sudo systemctl daemon-reload</span><br><span class="line">sudo systemctl restart docker</span><br></pre></td></tr></table></figure>
+<p>更多镜像地址：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;registry-mirrors&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;https://huecker.io/&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://dockerhub.timeweb.cloud&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://noohub.ru/&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://dockerproxy.com&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://docker.mirrors.ustc.edu.cn&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://docker.nju.edu.cn&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://registry.docker-cn.com&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;http://hub-mirror.c.163.com&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;https://docker.mirrors.ustc.edu.cn&quot;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>尝试再次执行 <code>docker run hello-world</code> 命令，能够成功下载镜像，并在终端输出以下信息：</p>
+<pre>
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+</pre>
+<p>执行 <code>docker run</code> 时，Docker 的工作流程：</p>
+<pre><code class="highlight mermaid">flowchart LR
+    start([开始])
+    a[Docker 在本机中寻找镜像]
+    b&#123;本机是否有镜像&#125;
+    c[以该镜像为模板生产容器实例运行]
+    d[去 Docker Hub 上查找该镜像]
+    e&#123;Hub 上能否找到&#125;
+    f[下载该镜像到本地]
+    g[&quot;返回失败错误，查不到该镜像&quot;]
+    z([结束])
+    
+    start --&gt; a --&gt; b
+    b -- 是 --&gt; c
+    b -- 否 --&gt; d
+    d --&gt; e
+    e -- 是 --&gt; f --&gt; c --&gt; z
+    e -- 否 --&gt; g --&gt; z</code></pre>
+<h2 id="2-6-卸载-Docker"><a class="header-anchor" href="#2-6-卸载-Docker"></a>2.6 卸载 Docker</h2>
+<p>关闭服务：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop docker</span><br></pre></td></tr></table></figure>
+<p>移除 Docker 相关组件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum remove docker-ce docker-ce-cli containerd.io</span><br></pre></td></tr></table></figure>
+<p>删除镜像、容器、数据卷、自定义配置等文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo rm -rf /var/lib/docker</span><br><span class="line">sudo rm -rf /var/lib/containerd</span><br></pre></td></tr></table></figure>
+<h1 id="3-常用命令"><a class="header-anchor" href="#3-常用命令"></a>3. 常用命令</h1>
+<h2 id="3-1-帮助启动类命令"><a class="header-anchor" href="#3-1-帮助启动类命令"></a>3.1 帮助启动类命令</h2>
+<p>启动 Docker：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl start docker</span><br></pre></td></tr></table></figure>
+<p>停止 Docker：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop docker</span><br></pre></td></tr></table></figure>
+<p>重启 Docker：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart docker</span><br></pre></td></tr></table></figure>
+<p>查看 Docker 状态：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl status docker</span><br></pre></td></tr></table></figure>
+<p>设置开机自启动：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable docker</span><br></pre></td></tr></table></figure>
+<p>查看 Docker 概要信息：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker info</span><br></pre></td></tr></table></figure>
+<p>查看 Docker 总体帮助文档：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker --help</span><br></pre></td></tr></table></figure>
+<p>查看 Docker 命令帮助文档：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker 具体命令 --help</span><br></pre></td></tr></table></figure>
+<h2 id="3-2-镜像命令"><a class="header-anchor" href="#3-2-镜像命令"></a>3.2 镜像命令</h2>
+<blockquote>
+<p>列出本地主机上的镜像</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></table></figure>
+<p>执行该命令后，无论本地主机上是否有镜像，都会输出以下表头：</p>
+<pre>
+REPOSITORY    TAG       IMAGE ID       CREATED       SIZE
+</pre>
+<ul>
+<li><code>REPOSITORY</code> 表示镜像的仓库源</li>
+<li><code>TAG</code> 表示镜像的标签</li>
+<li><code>IMAGE ID</code> 表示镜像 ID</li>
+<li><code>CREATED</code> 表示镜像创建时间</li>
+<li><code>SIZE</code> 表示镜像大小</li>
+</ul>
+<p>同一仓库源可以有多个 <code>TAG</code> 版本，代表这个仓库源的不同个版本，使用 <code>REPOSITORY:TAG</code> 来定义不同的镜像。</p>
+<p>如果不指定一个镜像的版本标签，例如只使用 <code>ubuntu</code>，Docker 将默认使用 <code>ubuntu:latest</code> 镜像。</p>
+<p>更多选项：</p>
+<ul>
+<li><code>-a</code> 列出本地所有的镜像（含历史镜像）</li>
+<li><code>-q</code> 只显示镜像 ID</li>
+</ul>
+<blockquote>
+<p>搜索远程仓库中的镜像</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker search 镜像名称</span><br></pre></td></tr></table></figure>
+<p>执行命令后，会输出以下表头：</p>
+<pre>
+NAME    DESCRIPTION       STARS       OFFICIAL       AUTOMATED
+</pre>
+<ul>
+<li><code>NAME</code> 表示镜像名称</li>
+<li><code>DESCRIPTION</code> 表示镜像说明</li>
+<li><code>STARS</code> 表示点赞数量</li>
+<li><code>OFFICIAL</code> 表示是否是官方的，<code>[OK]</code> 表示官方的</li>
+<li><code>AUTOMATED</code> 表示是否是自动构建的，<code>[OK]</code> 表示自动构建的</li>
+</ul>
+<p>更多选项：</p>
+<ul>
+<li><code>--limit n</code> 只列出前 <code>n</code> 个镜像，默认 25 个。比如 <code>docker search --limit 5 redis</code></li>
+</ul>
+<blockquote>
+<p>下载镜像</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull 镜像名称[:TAG]</span><br></pre></td></tr></table></figure>
+<p><code>TAG</code> 相当于镜像的版本，不添加 <code>TAG</code> 信息时，默认下载最新的镜像，即 <code>TAG</code> 为 <code>latest</code>。</p>
+<blockquote>
+<p>查看镜像、容器、数据卷所占的空间</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker system df</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>强制删除镜像</p>
+</blockquote>
+<p>删除指定镜像：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rmi -f 镜像名称/ID</span><br></pre></td></tr></table></figure>
+<p>使用空格分割镜像信息来删除多个：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rmi -f 镜像名称1:TAG 镜像名称2:TAG</span><br></pre></td></tr></table></figure>
+<p>删除全部镜像：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rmi -f $(docker images -qa)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>优雅地删除镜像</p>
+</blockquote>
+<p>删除镜像使用 <code>docker rmi</code> 命令，<code>-f</code> 选项表示强制删除指定镜像。</p>
+<p>不使用 <code>-f</code> 选项，并且删除的镜像正在某个容器中使用，此时会出现以下错误：</p>
+<pre>
+<font style="color:red">Error</font> response from daemon: conflict: <font style="color:gold">unable to</font> remove repository reference "镜像名称" (must force) - container 容器ID is using its referenced image 镜像ID
+</pre>
+<p>这表示：某个容器正在使用当前删除的镜像。</p>
+<p>执行以下命令查看当前 Docker 中正在运行的容器：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br></pre></td></tr></table></figure>
+<p>控制台输出包含先前错误信息中「容器 ID」对应的容器，其 <code>STATUS</code> 为 <code>Up</code>，表示正在运行。</p>
+<p>执行下述命令停止容器的运行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker stop 容器ID</span><br></pre></td></tr></table></figure>
+<p>执行以下命令查看 Docker 中的所有容器（使用 <code>-a</code> 选项能够输出所有容器信息，包括正在运行的容器、已停止的容器、创建后从未启动过的容器）：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps -a</span><br></pre></td></tr></table></figure>
+<p>先前被停止运行的容器的 <code>STATUS</code> 更新为 <code>Exited(0)</code>。</p>
+<p>再执行下述命令删除被停止运行的容器：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rm 容器ID</span><br></pre></td></tr></table></figure>
+<p>最后删除镜像：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rmi 镜像名称/ID</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>一道面试题：Docker  的虚悬镜像是什么？</p>
+</blockquote>
+<p>仓库名（REPOSITORY）、标签（TAG）都是 <code>&lt;none&gt;</code> 的镜像，俗称虚悬镜像（dangling image）。</p>
+<h2 id="3-3-常用容器命令"><a class="header-anchor" href="#3-3-常用容器命令"></a>3.3 常用容器命令</h2>
+<p>有镜像才能创建容器，在开始本节前，先下载一个 ubuntu 镜像：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull ubuntu</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>新建启动容器</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run [OPTIONS] IMAGE [COMMAND] [ARG...]</span><br></pre></td></tr></table></figure>
+<p>常用选项：</p>
+<ul>
+<li>
+<p><code>--name=&quot;容器新名称&quot;</code> 为容器指定一个名称</p>
+</li>
+<li>
+<p><code>-d</code> 后台运行容器并返回容器 ID，即启动守护式容器（后台运行）</p>
+</li>
+<li>
+<p><code>-i</code>（interactive）以交互模式运行容器，常与 <code>-t</code> 一起使用</p>
+</li>
+<li>
+<p><code>-t</code>（tty，terminal）为容器重新分配一个伪输入终端，常与 <code>-i</code> 一起使用，即启动交互式容器（前台有伪终端，等待交互）</p>
+</li>
+<li>
+<p><code>-e</code> 为容器添加环境变量</p>
+</li>
+<li>
+<p><code>-P</code>（大写 <code>P</code>）<strong>随机</strong> 端口映射，将容器内暴露的所有端口映射到宿主机随机端口</p>
+</li>
+<li>
+<p><code>-p</code> （小写 <code>p</code>）<strong>指定</strong> 端口映射</p>
+</li>
+</ul>
+<p>通常使用 <code>-p</code>（小写 <code>p</code>） 指定端口映射，它有多种映射方式：</p>
+<ul>
+<li>
+<p><code>-p hostPort:containerPort</code>，最简单的端口映射，例如 <code>-p 8080:80</code></p>
+</li>
+<li>
+<p><code>-p ip:hostPort:containerPort</code>，配置监听地址，例如 <code>-p 10.0.0.1:8080:80</code></p>
+</li>
+<li>
+<p><code>-p ip::containerPort</code>，随机分配端口，例如 <code>-p 10.0.0.1::80</code></p>
+</li>
+<li>
+<p><code>-p hostPort1:containerPort1 -p hostPort2:containerPort2</code>，一次指定多个端口映射，例如 <code>-p 8080:80 -p 8888:3306</code></p>
+</li>
+</ul>
+<p>使用示例：使用镜像 ubuntu 以 <strong>交互模式</strong> 启动一个容器，在该容器内执行 <code>/bin/bash</code> 命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it ubuntu /bin/bash</span><br></pre></td></tr></table></figure>
+<p>上述命令的更多解释：</p>
+<ul>
+<li>
+<p><code>ubuntu</code> 指 <code>ubuntu</code> 镜像</p>
+</li>
+<li>
+<p><code>/bin/bash</code> 放在镜像后的是命令，此处希望有个交互式 Shell，因此使用 <code>/bin/bash</code></p>
+</li>
+<li>
+<p>如果想要退出终端，退回到宿主机，直接输入 <code>exit</code> 命令</p>
+</li>
+</ul>
+<blockquote>
+<p>列出当前所有正在运行的容器</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps [OPTIONS]</span><br></pre></td></tr></table></figure>
+<p>常用选项：</p>
+<ul>
+<li>
+<p><code>-a</code> 列出当前所有 <strong>正在运行</strong> 的容器和 <strong>历史上运行过</strong> 的容器</p>
+</li>
+<li>
+<p><code>-l</code> 显示最近创建的容器</p>
+</li>
+<li>
+<p><code>-n</code> 显示最近 n 个创建的容器</p>
+</li>
+<li>
+<p><code>-q</code> 静默模式，<strong>只显示容器编号</strong></p>
+</li>
+<li>
+<p><code>-f</code> 根据指定条件查找</p>
+</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查找已经退出、镜像名称是 tomcat 的容器</span></span><br><span class="line">docker ps -f status=exited -f ancestor=tomcat</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>退出容器</p>
+</blockquote>
+<p>前面介绍可以使用 <code>exit</code> 命令退出正在运行的容器，该命令还会将容器一并停止。</p>
+<p>如果不想让容器也停止，可以使用快捷键 <code>Ctrl + p + q</code>。之后可以使用以下命令再次进入该容器：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it 容器ID /bin/bash</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>启动已停止运行的容器</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker start 容器ID/容器名</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>重启容器</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker restart 容器ID/容器名</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>停止容器</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker stop 容器ID/容器名</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>强制停止容器</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker kill 容器ID/容器名</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>删除容器</p>
+</blockquote>
+<p>删除已经停止的容器：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rm 容器ID/容器名</span><br></pre></td></tr></table></figure>
+<p>强制删除容器：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rm -f 容器ID/容器名</span><br></pre></td></tr></table></figure>
+<p>强制删除所有容器实例（谨慎操作）：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker rm -f $(docker ps -a -q)</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">或者</span></span><br><span class="line">docker ps -a -q | xargs docker rm -f</span><br></pre></td></tr></table></figure>
+<h2 id="3-4-重要容器命令"><a class="header-anchor" href="#3-4-重要容器命令"></a>3.4 重要容器命令</h2>
+<blockquote>
+<p>启动守护式容器（后台服务器）</p>
+</blockquote>
+<p>有镜像才能创建容器，这是根本前提，本节将使用 Redis 6.0.8 镜像进行演示。</p>
+<p>在大部分场景下，希望 Docker 的服务是在后台运行的，可以通过 <code>-d</code> 指定容器的后台运行模式：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d 镜像名</span><br></pre></td></tr></table></figure>
+<p>比如使用镜像 ubuntu 以后台模式启动一个容器：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d ubuntu</span><br></pre></td></tr></table></figure>
+<p>命令执行后会返回容器 ID，如果以 <code>docker ps -a</code> 命令查看当前所有的容器，会发现以 <code>-d</code> 选项启动的容器已经退出。</p>
+<p>Docker 容器如果在后台运行，就必须要有一个前台进程。如果容器运行的命令不是那些一直挂起的命令（例如 <code>top</code>、<code>tail</code>），就是会自动退出。</p>
+<p>这是 Docker 本身的机制，以 Nginx 为例，在正常情况下，配置启动服务只需要启动响应的 service 即可，例如 <code>service nginx start</code>，此时 Nginx 会以后台进程模式运行，导致 Docker 前台没有运行的应用。当容器后台启动后就会立即「自杀」，因为它认为「无事可做」。最佳解决方案是将需要运行的程序以前台进程的形式运行，常见的就是命令行模式，这表示还有交互操作，不能终端，此时容器启动后不再自动退出。</p>
+<p>回到 <code>-d</code> 选项的使用，先以前台交互式启动：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it redis:6.0.8</span><br></pre></td></tr></table></figure>
+<p>键入 <code>Ctrl + c</code>，会立即退出，使用 <code>docker ps -a</code> 命令查看容器状态，会发现启动的 <code>redis:6.0.8</code> 容器状态为 <code>Exited (0)</code>，表示容器已经停止运行。</p>
+<p>这显然是不行的，一退出，容器都直接停止了，那还怎么玩？能不能让 Redis 在后台「默默地」运行呢？</p>
+<p>不使用 <code>-it</code> 选项，而是使用 <code>-d</code> 选项，以后台守护式启动：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d redis:6.0.8</span><br></pre></td></tr></table></figure>
+<p>再使用 <code>docker ps -a</code> 命令查看容器状态，会发现对应容器状态为 <code>Up</code>，即正在运行中。</p>
+<blockquote>
+<p>查看容器日志</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker logs 容器ID/容器名</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>查看容器内运行的进程</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker top 容器ID/容器名</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>查看容器内部细节</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker inspect 容器ID/容器名</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>进入正在运行的容器，并以命令行交互</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">1.</span></span><br><span class="line">docker exec -it 容器ID /bin/bash</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">2.</span></span><br><span class="line">docker attach 容器ID</span><br></pre></td></tr></table></figure>
+<p>两种命令的区别：</p>
+<ul>
+<li>
+<p><code>exec</code> 是在容器中打开新的终端，并且可以启动新的进程，后续用 <code>exit</code> 退出不会停止容器 <strong>（推荐使用）</strong></p>
+</li>
+<li>
+<p><code>attach</code> 直接进入容器启动命令的终端，不会启动新的进程，后续用 <code>exit</code> 退出会直接停止容器</p>
+</li>
+</ul>
+<p>如果多个终端都对同一个容器执行了 <code>docker attach</code>，就会出现类似「投屏显示」的效果。一个终端中输入输出的内容，还会在其他终端上同步显示。</p>
+<blockquote>
+<p>从容器内拷贝文件到主机上</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker cp 容器ID:容器内路径 目的主机路径</span><br></pre></td></tr></table></figure>
+<p>交换后面两个参数，即可实现从宿主机将文件拷贝到容器中：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker cp 主机路径 容器ID:容器内路径</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>导入和导出容器</p>
+</blockquote>
+<ul>
+<li>
+<p><code>export</code> 导出容器的内容流作为一个 <code>tar</code> 归档文件（对应 <code>import</code> 命令）；</p>
+</li>
+<li>
+<p><code>import</code> 从 <code>tar</code> 包中的内容创建一个新的文件系统再导入为镜像（对应 <code>export</code> 命令）；</p>
+</li>
+</ul>
+<p>导出：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker export 容器ID &gt; 文件名.tar</span><br></pre></td></tr></table></figure>
+<p>导入：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat 文件名.tar | docker import - 镜像用户/镜像名:镜像版本号</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>容器命令一图流</p>
+</blockquote>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/Docker-Command-Diagram.png" alt="Docker-Command-Diagram"></p>
+<h1 id="4-镜像"><a class="header-anchor" href="#4-镜像"></a>4. 镜像</h1>
+<h2 id="4-1-基本概念"><a class="header-anchor" href="#4-1-基本概念"></a>4.1 基本概念</h2>
+<p>再回顾一下：</p>
+<p>镜像是一种轻量级、可执行的独立软件包，它包含运行某个软件需要的所有内容，把应用程序和配置依赖打包好形成一个可交付的运行环境（包括代码、运行时需要的库、环境变量、配置文件等)，这个打包好的运行环境就是 image 镜像文件。</p>
+<p>只有通过这个镜像文件才能生成 Docker 容器实例（类似 Java 中 new 出来一个对象）。</p>
+<h2 id="4-2-UnionFS"><a class="header-anchor" href="#4-2-UnionFS"></a>4.2 UnionFS</h2>
+<p>以拉取最新的 tomcat 镜像为例：</p>
+<pre>
+[root@mofan ~]# docker pull tomcat
+Using default tag: latest
+latest: Pulling from library/tomcat
+0e29546d541c: Pull complete
+9b829c73b52b: Pull complete
+cb5b7ae36172: Pull complete
+6494e4811622: Pull complete
+668f6fcc5fa5: Pull complete
+dc120c3e0290: Pull complete
+8f7c0eebb7b1: Pull complete
+77b694f83996: Pull complete
+0f611256ec3a: Pull complete
+4f25def12f23: Pull complete
+Digest: sha256:9dee185c3b161cdfede1f5e35e8b56ebc9de88ed3a79526939701f3537a52324
+Status: Downloaded newer image for tomcat:latest
+docker.io/library/tomcat:latest
+</pre>
+<p>可以看到，Docker 镜像在下载过程中似乎是一层一层地被下载。</p>
+<p>Docker 中的文件存储驱动叫做 Storage Driver。</p>
+<p>Docker 最早支持的 Storage Driver 是 AUFS，它由一层一层的文件系统组成，这种层级的文件系统叫做 UnionFS。</p>
+<p>UnionFS（联合文件系统）是一种分层、轻量级并且高性能的文件系统，它支持对文件系统的修改作为一次提交来一层层的叠加，同时可以将不同目录挂载到同一个虚拟文件系统下（unite serveral directories into a single virtual filesystem）。</p>
+<p>UnionFS 是 Docker 镜像的基础。镜像可以通过分层来进行继承，基于基础镜像（没有父镜像）可以制作各种具体的应用镜像。</p>
+<p>特性：一次同时加载多个文件系统，但从外面看起来，只能看到一个文件系统，联合加载会把各层文件系统叠加起来，这样最终的文件系统会包含所有底层的文件和目录。</p>
+<p>Docker 在后来版本中还支持 OverlayFS、Btrfs、Device Mapper、VFS、ZFS 等 Storage Driver。</p>
+<h2 id="4-3-镜像加载原理"><a class="header-anchor" href="#4-3-镜像加载原理"></a>4.3 镜像加载原理</h2>
+<p>Docker 镜像实际上是由一层一层的文件系统组成，这种层级的文件系统叫做 UnionFS。</p>
+<p>bootfs（boot file system）主要包含 bootloader 和 kernel，bootloader 主要用于引导加载 kernel，Linux 刚启动时会加载 bootfs 文件系统。在 Docker 镜像的最底层是引导文件系统 bootfs。这一层与典型的 Linux/Unix 系统是一样的，包含 boot 加载器和内核。当 boot 加载完成之后整个内核就都在内存中了，此时内存的使用权已经由 bootfs 转交给内核，系统也会在这时卸载 bootfs。</p>
+<p>rootfs（root file system），在 bootfs 之上，包含Linux 系统中的 <code>/dev</code>、<code>/proc</code>、<code>/bin</code>、<code>/etc</code> 等标准目录和文件。rootfs 是各种不同的操作系统发行版，比如 Ubuntu、CentOS 等。</p>
+<p>Docker 镜像底层层次：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/Docker%E9%95%9C%E5%83%8F%E5%BA%95%E5%B1%82%E5%B1%82%E6%AC%A1.jpg" alt="Docker镜像底层层次"></p>
+<p>平时安装的 CentOS、Ubuntu 虚拟机都是好几个 G，为什么它们的 Docker 镜像只有几百兆或者几十兆呢？</p>
+<p>对于一个精简的 OS，rootfs 可以很小，只需要包括最基本的命令、工具和程序库。因为底层直接使用 Host 的 Kernel，自己只需要提供 rootfs 即可。所以，对于不同的 Linux 发行版，bootfs 基本是一致的，rootfs 会有些差别，因此不同的发行版可以共用 bootfs。</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/%E6%9C%89%E5%B7%AE%E5%88%AB%E7%9A%84rootfs.jpg" alt="有差别的rootfs"></p>
+<h2 id="4-4-分层的镜像"><a class="header-anchor" href="#4-4-分层的镜像"></a>4.4 分层的镜像</h2>
+<p>镜像分层的一个最大好处就是共享资源，方便复制迁移，方便复用。</p>
+<p>比如说有多个镜像都从相同的 base 镜像构建而来，那么 Docker Host 只需要在磁盘上保存一份 base 镜像，同时内存中也只需加载一份 base 镜像，就可以为所有容器服务了，并且镜像的每一层都可以被共享。</p>
+<p><mark>Docker 镜像层都是只读的，容器层是可写的。</mark></p>
+<p>当容器启动时，一个新的 <strong>可写层</strong> 将被加载到镜像的顶部，这一层通常被称为 <strong>容器层</strong>，容器层之下的都叫 <strong>镜像层</strong>。所有对容器的改动（无论添加、删除、还是修改文件）都只会发生在容器层中。只有容器层是可写的，容器层下面的所有镜像层都是只读的。</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/Docker%E9%95%9C%E5%83%8F%E5%B1%82%E4%B8%8E%E5%AE%B9%E5%99%A8%E5%B1%82.jpg" alt="Docker镜像层与容器层"></p>
+<h2 id="4-5-生成新镜像"><a class="header-anchor" href="#4-5-生成新镜像"></a>4.5 生成新镜像</h2>
+<p><code>docker commit</code> 提交容器副本使之成为一个新的镜像。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker commit -m=&quot;提交的描述信息&quot; -a=&quot;作者&quot; 容器ID 要创建的目标镜像名:[tag]</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>使用示例</p>
+</blockquote>
+<p>首先下载 ubuntu 镜像到本地并运行成功，原始默认的 ubuntu 镜像中不包含 <code>vim</code> 命令：</p>
+<pre>
+root@8d7a9c64170c:/# vim a.txt
+bash: vim: <font style="color:gold">command not found</font>
+</pre>
+<p>现在需要在当前容器实例内部安装 Vim，最后使用当前容器副本生成一个包含 <code>vim</code> 命令的 ubuntu 镜像。</p>
+<p>首先更新包管理工具：</p>
+<pre>
+root@8d7a9c64170c:/# apt-get update
+</pre>
+<p>当出现以下字样后，证明包管理工具更新成功：</p>
+<pre>
+Reading package lists... Done
+</pre>
+<p>之后安装 Vim：</p>
+<pre>
+root@8d7a9c64170c:/# apt-get -y install vim
+</pre>
+<p>安装完成后尝试使用 <code>vim</code> 命令创建 <code>a.txt</code> 文件，并添加 <code>this is docker</code> 的内容：</p>
+<pre>
+root@8d7a9c64170c:/# vim a.txt
+root@8d7a9c64170c:/# cat a.txt
+this is docker
+</pre>
+<p>容器 ID 为 <code>8d7a9c64170c</code> 的容器中已经包含了 <code>vim</code> 命令，在宿主机尝试将其提交并得到一个新的镜像：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker commit -m=&quot;add vim cmd&quot; -a=&quot;mofan&quot; 8d7a9c64170c mofan/myubuntu:1.0</span><br></pre></td></tr></table></figure>
+<p>执行 <code>docker images</code> 命令，能够看到新生成的名为 <code>mofan/myubuntu</code> 的镜像：</p>
+<pre>
+[root@mofan ~]# docker images
+REPOSITORY       TAG       IMAGE ID       CREATED         SIZE
+mofan/myubuntu   1.0       08de280c2075   6 seconds ago   197MB
+ubuntu           latest    ba6acccedd29   3 years ago     72.8MB
+</pre>
+<p>并且能够发现新生成的镜像体积比原本镜像体积要大得多。</p>
+<p>尝试运行新生成的镜像：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it mofan/myubuntu:1.0 /bin/bash</span><br></pre></td></tr></table></figure>
+<p>在新容器内部能够使用 <code>vim</code> 命令，并且也能看到先前创建的 <code>a.txt</code> 文件：</p>
+<pre>
+root@d7a6a44f7ca3:/# vim a.txt
+root@d7a6a44f7ca3:/# cat a.txt
+this is docker
+</pre>
+<blockquote>
+<p>总结</p>
+</blockquote>
+<p>Docker 中的镜像分层，支持扩展现有镜像，创建新的镜像。类似在 Java 中继承一个 Base 类，自己再按需扩展。</p>
+<p>新镜像是从 base 镜像一层一层叠加生成的。每安装一个软件，就会在现有镜像的基础上增加一层。</p>
+<p>这里涉及到 DockerFile，简单看下即可：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Version: 0.0.1</span></span><br><span class="line"><span class="keyword">FROM</span> debian  <span class="comment"># 直接在 debain base 镜像上构建</span></span><br><span class="line"><span class="keyword">MAINTAINER</span> mylinux</span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> apt-get update &amp;&amp; apt-get install -y emacs <span class="comment"># 安装 emacs</span></span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> apt-get install -y apache2 <span class="comment"># 安装 apache2</span></span></span><br><span class="line"><span class="keyword">CMD</span><span class="language-bash"> [<span class="string">&quot;/bin/bash&quot;</span>] <span class="comment"># 容器启动时运行 bash</span></span></span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/Docker%E9%95%9C%E5%83%8F%E5%88%9B%E5%BB%BA%E8%BF%87%E7%A8%8B.png" alt="Docker镜像创建过程"></p>
+<h1 id="5-本地镜像发布到阿里云"><a class="header-anchor" href="#5-本地镜像发布到阿里云"></a>5. 本地镜像发布到阿里云</h1>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/%E9%98%BF%E9%87%8C%E4%BA%91ECS-Docker%E7%94%9F%E6%80%81.png" alt="阿里云ECS-Docker生态"></p>
+<p>本节将使用上一节中生成的 <code>mofan/myubuntu:1.0</code> 镜像，并将其发布到阿里云。</p>
+<p>首先登录 <a target="_blank" rel="noopener" href="https://www.aliyun.com/">阿里云</a>，进入「容器镜像服务」页面，创建并进入个人版实例：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/%E9%98%BF%E9%87%8C%E4%BA%91%E5%AE%B9%E5%99%A8%E9%95%9C%E5%83%8F%E6%9C%8D%E5%8A%A1%E4%B8%AA%E4%BA%BA%E7%89%88%E5%AE%9E%E4%BE%8B.png" alt="阿里云容器镜像服务个人版实例"></p>
+<p>点击「命名空间」，点击「创建命名空间」，输入想要创建的命名空间名称，最后点击「确定」：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/%E5%88%9B%E5%BB%BA%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4.png" alt="创建命名空间"></p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/%E6%88%90%E5%8A%9F%E5%88%9B%E5%BB%BAmofan212%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4.png" alt="成功创建mofan212命名空间"></p>
+<p>切换到「镜像仓库」，选择命名空间为刚刚创建的，并点击「创建镜像仓库」：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/%E5%87%86%E5%A4%87%E5%88%9B%E5%BB%BA%E9%95%9C%E5%83%8F%E4%BB%93%E5%BA%93.png" alt="准备创建镜像仓库"></p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/%E5%88%9B%E5%BB%BA%E9%95%9C%E5%83%8F%E4%BB%93%E5%BA%93.png" alt="创建镜像仓库"></p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/%E9%95%9C%E5%83%8F%E4%BB%93%E5%BA%93%E4%BB%A3%E7%A0%81%E6%BA%90%E9%80%89%E6%8B%A9%E6%9C%AC%E5%9C%B0%E4%BB%93%E5%BA%93.png" alt="镜像仓库代码源选择本地仓库"></p>
+<p>最后点击「创建镜像仓库」完成创建，之后会进入仓库管理页面。</p>
+<p>在管理页面的操作指南上存在 <strong>将镜像推送到 Registry</strong> 的方法：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/%E5%B0%86%E9%95%9C%E5%83%8F%E6%8E%A8%E9%80%81%E5%88%B0Registry.png" alt="将镜像推送到Registry"></p>
+<p>回到终端，登录阿里云 Docker Registry：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker login --username=xxx xxx</span><br></pre></td></tr></table></figure>
+<p>用于登录的用户名为阿里云账号全名，密码为开通服务时设置的密码，可以在访问凭证页面修改凭证密码。</p>
+<p>输入正确的密码后，出现以下字样，证明登录成功：</p>
+<pre>Login <font style="color:green">Succeeded</font></pre>
+<p>执行 <code>docker images</code> 命令，查看本地镜像信息：</p>
+<pre>
+[root@mofan ~]# docker images
+REPOSITORY       TAG       IMAGE ID       CREATED          SIZE
+mofan/myubuntu   1.0       08de280c2075   59 minutes ago   197MB
+tomcat           latest    fb5657adc892   3 years ago      680MB
+ubuntu           latest    ba6acccedd29   3 years ago      72.8MB
+hello-world      latest    feb5d9fea6a5   3 years ago      13.3kB
+redis            6.0.8     16ecd2772934   4 years ago      104MB
+</pre>
+<p>其中镜像 ID 为 <code>08de280c2075</code> 的镜像是需要发布到阿里云的镜像。</p>
+<p>为对应镜像取一个别名：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">[ImageId] 替换成 08de280c2075，[镜像版本号] 替换成 1.0</span></span><br><span class="line">docker tag [ImageId] xxx.aliyuncs.com/mofan212/myubuntu:[镜像版本号]</span><br></pre></td></tr></table></figure>
+<p>推送镜像到阿里云：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker push xxx.aliyuncs.com/mofan212/myubuntu:[镜像版本号]</span><br></pre></td></tr></table></figure>
+<p>耐心等待推送完成。</p>
+<p>执行命令删除本地镜像：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rmi -f 08de280c2075</span><br></pre></td></tr></table></figure>
+<p>尝试从阿里云拉取刚刚发布的镜像：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">[镜像版本号] 为先前发布时指定的镜像版本号</span></span><br><span class="line">docker pull xxx.aliyuncs.com/mofan212/myubuntu:[镜像版本号]</span><br></pre></td></tr></table></figure>
+<p>运行拉取的镜像：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">发布到阿里云的镜像 ID 不会变，拉取下来的镜像 ID 也和原来一样</span></span><br><span class="line">docker run -it 08de280c2075 /bin/bash</span><br></pre></td></tr></table></figure>
+<p>在这个容器里，可以使用 <code>vim</code> 命令，也存在先前创建的 <code>a.txt</code> 文件。</p>
+<h1 id="6-本地镜像发布到私有库"><a class="header-anchor" href="#6-本地镜像发布到私有库"></a>6. 本地镜像发布到私有库</h1>
+<p>现阶段中国大陆无法直接访问官方 <a target="_blank" rel="noopener" href="https://hub.docker.com/">Docker Hub</a>，并且它也有被阿里云取代的趋势。</p>
+<p>在实际工作中，公司通常不会提供镜像给公网，所以需要创建一个本地私人仓库供给团队使用，基于公司内部项目构建镜像。</p>
+<p>Docker Registry 是 Docker 官方提供的工具，用于构建私有镜像仓库。</p>
+<blockquote>
+<p>下载镜像 Docker Registry</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull registry</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>运行私有库 Registry，相当于本地有个私有 Docker Hub</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 5000:5000  -v /mofan/myregistry/:/tmp/registry --privileged=true registry</span><br></pre></td></tr></table></figure>
+<p>默认情况，仓库被创建在容器的 <code>/var/lib/registry</code> 目录下，建议自行用容器卷映射，方便于宿主机联调。</p>
+<p>确保宿主机上存在 <code>/mofan/myregistry/</code> 目录，如果不存在，执行以下命令创建：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /mofan/myregistry/</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>创建一个新镜像，ubuntu 安装 ifconfig 命令</p>
+</blockquote>
+<p>运行 ubuntu 镜像：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it ubuntu</span><br></pre></td></tr></table></figure>
+<p>原始的 ubuntu 镜像不包含 <code>ifconfig</code> 命令：</p>
+<pre>
+root@fc5b8e0407a5:/# ifconfig
+bash: ifconfig: <font style="color:gold">command not found</font>
+</pre>
+<p>在当前容器内安装 <code>ifconfig</code> 命令并测试通过：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">更新包管理工具</span></span><br><span class="line">apt-get update</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装 ifconfig</span></span><br><span class="line">apt-get install net-tools</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">测试 ifconfig</span></span><br><span class="line">ifconfig</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>commit 新镜像</p>
+</blockquote>
+<p>在容器外执行 <code>docker ps -a</code> 查看所有容器，会发现容器 ID 为 <code>fc5b8e0407a5</code> 的 <code>ubuntu</code> 镜像容器。</p>
+<p>执行以下命令将该容器提交为新镜像：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker commit -m=&quot;add ifconfig cmd&quot; -a=&quot;mofan&quot; fc5b8e0407a5 mofan/myubuntu:1.1</span><br></pre></td></tr></table></figure>
+<p>执行 <code>docker images</code> 命令能够看到新生成的镜像：</p>
+<pre>
+[root@mofan /]# docker images
+REPOSITORY       TAG       IMAGE ID       CREATED          SIZE
+mofan/myubuntu   1.1       7f6f061cbb7c   10 seconds ago   130MB
+</pre>
+<p>尝试运行新生成的镜像：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it mofan/myubuntu:1.1</span><br></pre></td></tr></table></figure>
+<p>之后容器内执行 <code>ifconfig</code> 命令，检验是否存在 <code>ifconfig</code>。</p>
+<blockquote>
+<p>使用 curl 验证私服库上有什么镜像</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">替换 IP 信息，端口为先前映射的端口，即 5000</span></span><br><span class="line">curl -XGET http://IP信息:5000/v2/_catalog</span><br></pre></td></tr></table></figure>
+<p>如果使用的是云服务器，上述命令的「IP信息」即为云服务器公网 IP。除此之外，还需要把安全组里的 5000 端口打开。</p>
+<p>执行上述命令后，终端输出：</p>
+<pre>
+{"repositories":[]}
+</pre>
+<blockquote>
+<p>将新镜像修改符合私服规范的 Tag</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker tag 镜像名称:Tag Host:Port/Repository:Tag</span><br></pre></td></tr></table></figure>
+<p>例如：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker tag mofan/myubuntu:1.1 IP信息:5000/myubuntu:1.1</span><br></pre></td></tr></table></figure>
+<p>同样的，如果使用的是云服务器，上述命令的「IP信息」也替换为云服务器公网 IP。</p>
+<p>执行 <code>docker images</code> 命令能看到取了别名的镜像：</p>
+<pre>
+[root@mofan /]# docker images
+REPOSITORY                    TAG       IMAGE ID       CREATED          SIZE
+IP信息:5000/myubuntu           1.1       7f6f061cbb7c   27 minutes ago   130MB
+mofan/myubuntu                1.1       7f6f061cbb7c   27 minutes ago   130MB
+</pre>
+<blockquote>
+<p>修改配置文件使之支持 http</p>
+</blockquote>
+<p>Docker 默认不允许以 http 的方式来推送镜像，需要通过配置选项来取消这个限制。</p>
+<p>先前配置镜像加速器时修改过 <code>/etc/docker/daemon.json</code> 文件，现在需要在该文件中追加 <code>insecure-registries</code> 信息：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;registry-mirrors&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;阿里云镜像加速器地址&quot;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;insecure-registries&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;IP信息:5000&quot;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>如果使用的是云服务器，上述内容中的「IP信息」还是替换为云服务器公网 IP。</p>
+<p>修改完成后，与配置镜像加速器一样，需要重新加载 <code>daemon.json</code> 文件并重启 Docker：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl daemon-reload</span><br><span class="line">sudo systemctl restart docker</span><br></pre></td></tr></table></figure>
+<p>重启 Docker 后，原先运行 Registry 的容器也停止了，需要重新启动：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker start registry</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>push 到私服库</p>
+</blockquote>
+<p>执行 <code>docker images</code> 查看镜像信息：</p>
+<pre>
+[root@mofan /]# docker images
+REPOSITORY                    TAG       IMAGE ID       CREATED          SIZE
+IP信息:5000/myubuntu           1.1       7f6f061cbb7c   27 minutes ago   130MB
+mofan/myubuntu                1.1       7f6f061cbb7c   27 minutes ago   130MB
+</pre>
+<p>然后执行以下命令将镜像推送到私服库：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker push IP信息:5000/myubuntu:1.1</span><br></pre></td></tr></table></figure>
+<p>耐心等待推送完成。</p>
+<blockquote>
+<p>再次验证私服库上的镜像信息</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">替换 IP 信息，端口为先前映射的端口，即 5000</span></span><br><span class="line">curl -XGET http://IP信息:5000/v2/_catalog</span><br></pre></td></tr></table></figure>
+<p>执行上述命令后，终端输出：</p>
+<pre>
+{"repositories":["myubuntu"]}
+</pre>
+<blockquote>
+<p>拉取私服的镜像到本地运行并验证</p>
+</blockquote>
+<p>像上一节那样，先删除本地镜像，然后拉取私服镜像，最后验证新的 ubuntu 镜像中是否包含 <code>ifconfig</code> 命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">删除本地镜像</span></span><br><span class="line">docker rmi -f 镜像ID</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">pull 后的内容与先前执行 push 时一样</span></span><br><span class="line">docker pull IP信息:5000/myubuntu:1.1</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">运行容器</span></span><br><span class="line">docker run -it IP信息:5000/myubuntu:1.1</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">进入容器内，验证 ifconfig 命令</span></span><br></pre></td></tr></table></figure>
+<h1 id="7-容器数据卷"><a class="header-anchor" href="#7-容器数据卷"></a>7. 容器数据卷</h1>
+<h2 id="7-1-先来个坑"><a class="header-anchor" href="#7-1-先来个坑"></a>7.1 先来个坑</h2>
+<p>在使用容器数据卷时，Docker 挂载主机目录访问出现以下错误：</p>
+<pre>
+cannot open directory '.': Permission denied
+</pre>
+<p>此时在挂载目录后添加 <code>--privileged=true</code> 参数即可解决。</p>
+<p>如果使用的是 CentOS7，其安全模块相比之前版本得到了加强，不安全的操作会先被禁止，挂载目录被默认认定为不安全的行为。在 SELinux 里面挂载目录被禁止掉了，如果要开启，一般使用 <code>--privileged=true</code> 命令来扩大容器的权限并解决挂载目录没有权限的问题。使用该参数，容器内的 root 用户才拥有真正的 root 权限，否则只是外部的普通用户权限。</p>
+<h2 id="7-2-是什么"><a class="header-anchor" href="#7-2-是什么"></a>7.2 是什么</h2>
+<p>容器数据卷就是目录或文件，存在于一个或多个容器中，由 Docker 挂载到容器，但不属于联合文件系统，因此能够绕过 UnionFS，提供一些用于持续存储或共享数据的特性。设计目的是数据的持久化，完全独立于容器的生存周期，因此不会在容器删除时删除其挂载的数据卷。</p>
+<p>类似 Redis 里面的 rdb 和 aof 文件，将 Docker 容器内的数据保存进宿主机的磁盘中。</p>
+<p>运行一个带有容器数据卷存储功能的容器实例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --privileged=true -v /宿主机绝对路径目录:/容器内目录 镜像名</span><br></pre></td></tr></table></figure>
+<h2 id="7-3-能干嘛"><a class="header-anchor" href="#7-3-能干嘛"></a>7.3 能干嘛</h2>
+<p>如果不备份 Docker 容器产生的数据，那么当容器实例删除后，容器内的数据自然也就没有了。为了能够保存这些数据就可以使用容器数据卷。</p>
+<p>数据卷的特点：</p>
+<ol>
+<li>数据卷可以在容器之间共享或重用数据</li>
+<li>数据卷中的更改可以直接实时生效</li>
+<li>数据卷中的更改不会包含在镜像的更新中</li>
+<li>数据卷的生命周期一直持续到没有容器使用它为止</li>
+</ol>
+<h2 id="7-4-使用案例"><a class="header-anchor" href="#7-4-使用案例"></a>7.4 使用案例</h2>
+<blockquote>
+<p>宿主机与容器之间映射添加容器卷</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --privileged=true -v /宿主机绝对路径目录:/容器内目录 镜像名</span><br></pre></td></tr></table></figure>
+<p>当容器内目录下的文件发生变化时，宿主机下的目录会实时感知到，反之亦然。</p>
+<p>如果容器被停止了，之后宿主机目录下的文件发生了变化，当容器再次运行时，容器目录依旧会感知到文件的变化。</p>
+<p>使用以下命令查看数据卷是否挂载成功：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker inspect 容器ID</span><br></pre></td></tr></table></figure>
+<p>执行命令后会输出包含 <code>Mounts</code> 的信息，其中的 <code>Source</code> 即宿主机下的目录，<code>Destination</code> 即容器内目录。</p>
+<blockquote>
+<p>读写规则映射添加说明</p>
+</blockquote>
+<p>默认规则是 <strong>读写</strong>：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --privileged=true -v /宿主机绝对路径目录:/容器内目录:rw 镜像名</span><br></pre></td></tr></table></figure>
+<p><code>rw</code> 即 <code>read</code> 与 <code>write</code>，这是默认规则，不加也行。</p>
+<p><strong>只读</strong> 规则，容器实例内部被限制，只能读取不能写入：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --privileged=true -v /宿主机绝对路径目录:/容器内目录:ro 镜像名</span><br></pre></td></tr></table></figure>
+<p><code>ro</code> 即 <code>read only</code>。</p>
+<p>如果尝试在容器内写入，会显示如下错误：</p>
+<pre>
+Read-only file system
+</pre>
+<p>如果宿主机写入了内容，容器可以感知到变化。</p>
+<blockquote>
+<p>卷的继承和共享</p>
+</blockquote>
+<p>启动一个容器：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --privileged=true -v /mydocker/u:/tmp --name u1 ubuntu</span><br></pre></td></tr></table></figure>
+<p>使用 <code>--volumes-from</code> 选项继承 <code>u1</code> 的容器卷映射配置：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --privileged=true --volumes-from u1 --name u2 ubuntu</span><br></pre></td></tr></table></figure>
+<h1 id="8-常规软件安装"><a class="header-anchor" href="#8-常规软件安装"></a>8. 常规软件安装</h1>
+<h2 id="8-1-安装-Tomcat"><a class="header-anchor" href="#8-1-安装-Tomcat"></a>8.1 安装 Tomcat</h2>
+<p>拉取 tomcat 镜像到本地：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull tomcat</span><br></pre></td></tr></table></figure>
+<p>查看是否成功拉取到 tomcat 镜像：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker images tomcat</span><br></pre></td></tr></table></figure>
+<p>使用 tomcat 镜像创建容器实例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">宿主机的 8080 端口映射到容器的 8080 端口</span></span><br><span class="line">docker run -d -p 8080:8080 tomcat</span><br></pre></td></tr></table></figure>
+<p>在浏览器中以 8080 端口访问 Tomcat 首页，页面出现 <code>404</code> 错误。</p>
+<p>如果使用的是云服务器，可以直接以 <code>公网IP:8080</code> 的形式进行访问，在之前记得把 <code>8080</code> 端口添加到安全组。</p>
+<p>进入运行 tomcat 的容器，并以命令行进行交互：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it 容器ID /bin/bash</span><br></pre></td></tr></table></figure>
+<p>进入容器后会位于容器的 <code>/usr/local/tomcat</code> 目录下。</p>
+<p>查看该目录下的文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -l</span><br></pre></td></tr></table></figure>
+<pre>
+drwxr-xr-x 2 root root  4096 Dec 22  2021 webapps
+drwxr-xr-x 7 root root  4096 Dec  2  2021 webapps.dist
+</pre>
+<p>存在名为 <code>webapps</code> 和 <code>webapps.dist</code> 的两个目录。</p>
+<p>如果想要在浏览器上出现 tomcat 的那只猫，而不是显示 404，那么 <code>webapps</code> 目录下应该是有些文件的：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">进入 webapps 目录</span></span><br><span class="line">cd webapps</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看内部文件信息</span></span><br><span class="line">ls -l</span><br></pre></td></tr></table></figure>
+<pre>
+total 0
+</pre>
+<p>结果里面什么都没有。</p>
+<p>这是因为新版 Tomcat 发生了变化，那些文件都被移动到了 <code>webapps.dist</code> 目录下。</p>
+<p>删除现有的 <code>webapps</code> 目录：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm -r webapps</span><br></pre></td></tr></table></figure>
+<p>将 <code>webapps.dist</code> 目录重命名为 <code>webapps</code>：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv webapps.dist webapps</span><br></pre></td></tr></table></figure>
+<p>之后在用浏览器访问 Tomcat 首页，此时就能看到那只猫。😹</p>
+<p>如果不想修改，而是直接使用，可以使用以下 tomcat 镜像：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker pull billygoo/tomcat8-jdk8</span><br><span class="line">docker run -d -p 8080:8080 --name mytomcat8 billygoo/tomcat8-jdk8</span><br></pre></td></tr></table></figure>
+<h2 id="8-2-安装-MySQL"><a class="header-anchor" href="#8-2-安装-MySQL"></a>8.2 安装 MySQL</h2>
+<blockquote>
+<p>简单版（存在缺陷）</p>
+</blockquote>
+<p>拉取 mysql 镜像到本地（以 5.7 版本为例）：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull mysql:5.7</span><br></pre></td></tr></table></figure>
+<p>查看 3306 端口是否被占用：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -tunlp | grep 3306</span><br></pre></td></tr></table></figure>
+<p>如果被占用，可以尝试 <code>kill</code> 掉，也可以在后续创建 mysql 容器实例时，指定额外的端口映射。</p>
+<p>使用 mysql 镜像创建容器实例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -d mysql:5.7</span><br></pre></td></tr></table></figure>
+<p>查看运行的容器信息，获取 mysql 容器 ID：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br></pre></td></tr></table></figure>
+<p>进入容器：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it 容器ID /bin/bash</span><br></pre></td></tr></table></figure>
+<p>进入 MySQL：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -uroot -p</span><br></pre></td></tr></table></figure>
+<p>输入正确的密码即可进入 MySQL 命令行页面，之后的建表、数据添加都能在此进行，当然也可以使用图形化界面工具连接该 MySQL，效果都差不多。</p>
+<p>但这样的 MySQL 仍然有问题，当插入数据包含中文时就会报错。</p>
+<p>因为 Docker 上的 MySQL 默认字符集编码存在隐患。</p>
+<p>查看 MySQL 字符集相关系统变量：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SHOW VARIABLES LIKE &#x27;character%&#x27;;</span><br></pre></td></tr></table></figure>
+<p>其中的 <code>character_set_database</code> 信息为 <code>latin1</code>，这种字符集编码不支持中文，这就是报错的原因。</p>
+<p>除此之外，当前启动方式并没有使用到容器数据卷，如果意外将该容器删除了，其中的数据不就全部丢失了？</p>
+<blockquote>
+<p>实战版</p>
+</blockquote>
+<p>从头来新建 mysql 容器实例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 3306:3306 </span><br><span class="line">--privileged=true </span><br><span class="line">-v /mofan/mysql/log:/var/log/mysql </span><br><span class="line">-v /mofan/mysql/data:/var/lib/mysql </span><br><span class="line">-v /mofan/mysql/conf:/etc/mysql/conf.d </span><br><span class="line">-eMYSQL_ROOT_PASSWORD=123456  </span><br><span class="line">--name mysql mysql:5.7</span><br></pre></td></tr></table></figure>
+<p>接下来需要解决中文乱码问题，在宿主机的 <code>/mofan/mysql/conf</code> 目录（这个目录是先前创建容器实例时与容器的映射目录）下新建 <code>my.cnf</code> 文件，并写入以下内容：</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">[client]</span></span><br><span class="line"><span class="attr">default_character_set</span>=<span class="string">utf8</span></span><br><span class="line"><span class="attr">[mysqld]</span></span><br><span class="line"><span class="attr">collation_server</span>=<span class="string">utf8_general_ci</span></span><br><span class="line"><span class="attr">character_set_server</span>=<span class="string">utf8</span></span><br></pre></td></tr></table></figure>
+<p>重新启动 mysql 容器实例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker restart mysql</span><br></pre></td></tr></table></figure>
+<p>再次进入容器：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it 容器ID /bin/bash</span><br></pre></td></tr></table></figure>
+<p>查看字符集编码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SHOW VARIABLES LIKE &#x27;character%&#x27;;</span><br></pre></td></tr></table></figure>
+<p>此时的 <code>character_set_database</code> 信息为 <code>utf8</code>，后续能够成功插入中文。</p>
+<p>创建 mysql 容器实例时挂载了容器数据卷，如果这个容器也被意外删除，之后以同样的方式新建新的容器，在新的容器中依旧存在前一个容器的数据。</p>
+<h2 id="8-3-安装-Redis"><a class="header-anchor" href="#8-3-安装-Redis"></a>8.3 安装 Redis</h2>
+<blockquote>
+<p>简单版（未使用容器数据卷）</p>
+</blockquote>
+<p>拉取 redis 镜像到本地（以 6.0.8 版本为例）：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull redis:6.0.8</span><br></pre></td></tr></table></figure>
+<p>创建容器实例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 6379:6379 redis:6.0.8</span><br></pre></td></tr></table></figure>
+<p>查看正在运行的容器信息：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br></pre></td></tr></table></figure>
+<pre>
+CONTAINER ID   IMAGE      
+ebb1d8ebc293   redis:6.0.8
+</pre>
+<p>以命令行交互模式进入该容器：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it 容器ID /bin/bash</span><br></pre></td></tr></table></figure>
+<p>简单使用下 Redis 相关命令：</p>
+<pre>
+root@ebb1d8ebc293:/data# redis-cli
+127.0.0.1:6379> set k1 v1
+OK
+127.0.0.1:6379> get k1
+"v1"
+127.0.0.1:6379>
+</pre>
+<blockquote>
+<p>实战版</p>
+</blockquote>
+<p>在宿主机上新建 <code>/app/redis</code> 目录：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /app/redis</span><br></pre></td></tr></table></figure>
+<p>将一个 <code>redis.conf</code> 配置文件模板拷贝进 <code>/app/redis</code> 目录下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp /redis/redis.conf /app/redis/</span><br></pre></td></tr></table></figure>
+<p>在 <code>/app/redis</code> 目录下修改 <code>redis.conf</code> 文件：</p>
+<ul>
+<li>开启 Redis 验证，指定连接密码：<code>requirepass 密码</code></li>
+<li>允许 Redis 外地连接，注释掉 <code>bind 127.0.0.1</code></li>
+<li>注释 <code>daemonize yes</code> 或者修改为 <code>daemonize no</code>，该配置会和 <code>docker run</code> 中的 <code>-d</code> 参数冲突，进而导致容器一直启动失败</li>
+<li>关闭保护模式，设置 <code>protected-mode no</code></li>
+<li>开启 Redis 数据持久化，设置 <code>appendonly yes</code></li>
+</ul>
+<p>使用以下命令创建 redis 容器实例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">docker run  </span><br><span class="line">-p 6379:6379 </span><br><span class="line">--name myr3 </span><br><span class="line">--privileged=true </span><br><span class="line">-v /app/redis/redis.conf:/etc/redis/redis.conf </span><br><span class="line">-v /app/redis/data:/data </span><br><span class="line">-d redis:6.0.8 redis-server /etc/redis/redis.conf</span><br></pre></td></tr></table></figure>
+<p>之后正常使用 Redis 即可。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/Docker-Basics/">https://mofan212.github.io/posts/Docker-Basics/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Docker/">Docker</a></div><div class="post-share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/157.png" data-sites="wechat,qq,weibo,facebook,x"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/Goodbye-2024-Hello-2025/" title="再见甲辰，你好乙巳"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/156.webp" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">再见甲辰，你好乙巳</div></div><div class="info-2"><div class="info-item-1">去你妈的焦虑。</div></div></div></a><a class="pagination-related" href="/posts/Docker-Advanced/" title="Docker 高级篇"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/158.png" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Docker 高级篇</div></div><div class="info-2"><div class="info-item-1">Develop faster. Run anywhere.</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/Docker-Desktop/" title="Docker Desktop"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/164.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-07-26</div><div class="info-item-2">Docker Desktop</div></div><div class="info-2"><div class="info-item-1">开发者和团队首选的容器化软件，利用 Docker Desktop 的容器工具简化开发过程。</div></div></div></a><a class="pagination-related" href="/posts/Docker-Advanced/" title="Docker 高级篇"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/158.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-02-23</div><div class="info-item-2">Docker 高级篇</div></div><div class="info-2"><div class="info-item-1">Develop faster. Run anywhere.</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">默烦</div><div class="author-info-description">彩笔的打怪升级之路...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mofan212"><i class="fab fa-github"></i><span>follow me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解。<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a href="./mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载。😊</br><strong><font style="color:red">严禁未遵循规范的转载。</font></strong>😡</br><strong>死去的评论系统复活啦！欢迎到留言板畅所欲言！</strong>当然也可以使用更高效的<a target="_blank" href="https://space.bilibili.com/23658864/dynamic" style="color:#49B1F5;text-decoration:underline"> 哔哩哔哩私信 </a>或<a href="mailto:cy.mofan@foxmail.com" style="color:#49B1F5;text-decoration:underline" target="_blank">邮箱</a>。 😉</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E7%AE%80%E4%BB%8B"><span class="toc-text">1. 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-Docker-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-text">1.1 Docker 是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E5%AE%B9%E5%99%A8%E4%B8%8E%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="toc-text">1.2 容器与虚拟机</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E5%AE%89%E8%A3%85-Docker"><span class="toc-text">2. 安装 Docker</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E5%AE%89%E8%A3%85%E5%89%8D%E6%8F%90"><span class="toc-text">2.1 安装前提</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E5%9F%BA%E6%9C%AC%E7%BB%84%E6%88%90"><span class="toc-text">2.2 基本组成</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E6%9E%B6%E6%9E%84%E5%9B%BE%E8%A7%A3"><span class="toc-text">2.3 架构图解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-%E5%AE%89%E8%A3%85-Docker"><span class="toc-text">2.4 安装 Docker</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-5-%E9%85%8D%E7%BD%AE%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E5%99%A8"><span class="toc-text">2.5 配置镜像加速器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-6-%E5%8D%B8%E8%BD%BD-Docker"><span class="toc-text">2.6 卸载 Docker</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">3. 常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E5%B8%AE%E5%8A%A9%E5%90%AF%E5%8A%A8%E7%B1%BB%E5%91%BD%E4%BB%A4"><span class="toc-text">3.1 帮助启动类命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E9%95%9C%E5%83%8F%E5%91%BD%E4%BB%A4"><span class="toc-text">3.2 镜像命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-%E5%B8%B8%E7%94%A8%E5%AE%B9%E5%99%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">3.3 常用容器命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-%E9%87%8D%E8%A6%81%E5%AE%B9%E5%99%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">3.4 重要容器命令</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E9%95%9C%E5%83%8F"><span class="toc-text">4. 镜像</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-text">4.1 基本概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-UnionFS"><span class="toc-text">4.2 UnionFS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-%E9%95%9C%E5%83%8F%E5%8A%A0%E8%BD%BD%E5%8E%9F%E7%90%86"><span class="toc-text">4.3 镜像加载原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-4-%E5%88%86%E5%B1%82%E7%9A%84%E9%95%9C%E5%83%8F"><span class="toc-text">4.4 分层的镜像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-5-%E7%94%9F%E6%88%90%E6%96%B0%E9%95%9C%E5%83%8F"><span class="toc-text">4.5 生成新镜像</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-%E6%9C%AC%E5%9C%B0%E9%95%9C%E5%83%8F%E5%8F%91%E5%B8%83%E5%88%B0%E9%98%BF%E9%87%8C%E4%BA%91"><span class="toc-text">5. 本地镜像发布到阿里云</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-%E6%9C%AC%E5%9C%B0%E9%95%9C%E5%83%8F%E5%8F%91%E5%B8%83%E5%88%B0%E7%A7%81%E6%9C%89%E5%BA%93"><span class="toc-text">6. 本地镜像发布到私有库</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-%E5%AE%B9%E5%99%A8%E6%95%B0%E6%8D%AE%E5%8D%B7"><span class="toc-text">7. 容器数据卷</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#7-1-%E5%85%88%E6%9D%A5%E4%B8%AA%E5%9D%91"><span class="toc-text">7.1 先来个坑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-2-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-text">7.2 是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-3-%E8%83%BD%E5%B9%B2%E5%98%9B"><span class="toc-text">7.3 能干嘛</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-4-%E4%BD%BF%E7%94%A8%E6%A1%88%E4%BE%8B"><span class="toc-text">7.4 使用案例</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-%E5%B8%B8%E8%A7%84%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="toc-text">8. 常规软件安装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#8-1-%E5%AE%89%E8%A3%85-Tomcat"><span class="toc-text">8.1 安装 Tomcat</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-2-%E5%AE%89%E8%A3%85-MySQL"><span class="toc-text">8.2 安装 MySQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-3-%E5%AE%89%E8%A3%85-Redis"><span class="toc-text">8.3 安装 Redis</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/Something-About-Blog/" title="博客搭建与维护"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="博客搭建与维护"/></a><div class="content"><a class="title" href="/posts/Something-About-Blog/" title="博客搭建与维护">博客搭建与维护</a><time datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"/></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="更新于 2026-01-03 00:00:00">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"/></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/103.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 的类资源加载"/></a><div class="content"><a class="title" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载">Java 的类资源加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/20.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="注解、类的加载、反射"/></a><div class="content"><a class="title" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射">注解、类的加载、反射</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/ren-zhi-jue-xing/" title="认知觉醒"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/172.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="认知觉醒"/></a><div class="content"><a class="title" href="/posts/ren-zhi-jue-xing/" title="认知觉醒">认知觉醒</a><time datetime="2025-12-28T16:00:00.000Z" title="更新于 2025-12-29 00:00:00">2025-12-29</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://gcore.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script src="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/js/mine.min.js"></script><script src="/js/tip_portal.js"></script><script defer="defer" id="ribbon" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script id="click-show-text" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="Azathoth,Yog-Sothoth,Shub-Niggurath,Nyarlathotep,Cthulhu,Hastur,Abhoth,Ghroth,Tsathoggua,Cthugha,Deep Ones,Dagon,Chaugnar Faugn,Mordiggian,Shoggoth,Old One,Mi-Go,Great Race of Yith,Flying Polyp,Hounds of Tindalos,Dhole" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div class="docsearch-wrap"><div id="docsearch" style="display:none"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@docsearch/css/dist/style.min.css"/><script src="https://testingcf.jsdelivr.net/npm/@docsearch/js/dist/umd/index.min.js"></script><script>(() => {
+  docsearch(Object.assign({
+    appId: 'BAFEL7A6K1',
+    apiKey: '89fcb5961984c5c054bf04149f345f38',
+    indexName: 'mofan212io',
+    container: '#docsearch',
+    placeholder: '输入关键字进行搜索',
+  }, null))
+
+  const handleClick = () => {
+    document.querySelector('.DocSearch-Button').click()
+  }
+
+  const searchClickFn = () => {
+    btf.addEventListenerPjax(document.querySelector('#search-button > .search'), 'click', handleClick)
+  }
+
+  searchClickFn()
+  window.addEventListener('pjax:complete', searchClickFn)
+})()</script></div></div></body></html>

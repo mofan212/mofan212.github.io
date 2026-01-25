@@ -1,0 +1,527 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【MySQL 高级篇二】MySQL 的数据目录 | Mofan</title><meta name="author" content="默烦,cy.mofan@foxmail.com"><meta name="copyright" content="默烦"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本文介绍了 MySQL 8.0 的主要目录结构、数据库和文件系统的关系。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【MySQL 高级篇二】MySQL 的数据目录">
+<meta property="og:url" content="https://mofan212.github.io/posts/MySQL-Advanced-Second-Data-Directory-Of-MySQL/">
+<meta property="og:site_name" content="Mofan">
+<meta property="og:description" content="本文介绍了 MySQL 8.0 的主要目录结构、数据库和文件系统的关系。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/129.jpg">
+<meta property="article:published_time" content="2023-03-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-03-04T16:00:00.000Z">
+<meta property="article:author" content="默烦">
+<meta property="article:tag" content="MySQL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/129.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "【MySQL 高级篇二】MySQL 的数据目录",
+  "url": "https://mofan212.github.io/posts/MySQL-Advanced-Second-Data-Directory-Of-MySQL/",
+  "image": "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/129.jpg",
+  "datePublished": "2023-03-04T16:00:00.000Z",
+  "dateModified": "2023-03-04T16:00:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "默烦",
+      "url": "https://mofan212.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/MySQL-Advanced-Second-Data-Directory-Of-MySQL/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":true,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 默烦","link":"链接: ","source":"来源: Mofan","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://testingcf.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '【MySQL 高级篇二】MySQL 的数据目录',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="referrer" content="no-referrer-when-downgrade" /><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/css/myStyle.min.css"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css" /><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css" /><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Mofan" type="application/atom+xml">
+</head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+btf.addGlobalFn('pjaxSend', () => {
+  Pace.restart()
+}, 'pace_restart')
+
+</script><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources/css/minimal.min.css"/><script src="https://testingcf.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/post_top_img.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Mofan</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【MySQL 高级篇二】MySQL 的数据目录</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-03-04T16:00:00.000Z" title="发表于 2023-03-05 00:00:00">2023-03-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-03-04T16:00:00.000Z" title="更新于 2023-03-05 00:00:00">2023-03-05</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/MySQL/">MySQL</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">4.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>15分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;距离本文上次更新已经过去&quot;,&quot;messageNext&quot;:&quot;天，请注意时效性。&quot;,&quot;postUpdate&quot;:&quot;2023-03-05 00:00:00&quot;}" hidden></div><p>封面来源：由博主个人绘制，如需使用请联系博主。</p>
+<p>本文参考：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1iq4y1u7vj?p=104">MySQL数据库教程天花板，mysql安装到mysql高级，强！硬！</a></p>
+<h1 id="1-MySQL-8-0-的主要目录结构"><a class="header-anchor" href="#1-MySQL-8-0-的主要目录结构"></a>1. MySQL 8.0 的主要目录结构</h1>
+<p>在 Linux 环境下执行以下命令，查询系统中与 MySQL 相关的文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find / -name mysql</span><br></pre></td></tr></table></figure>
+<pre>
+[root@mofan ~]# find / -name mysql
+/var/lib/mysql
+/var/lib/mysql/mysql
+/usr/lib64/mysql
+/usr/bin/mysql
+/opt/mysql
+/etc/logrotate.d/mysql
+</pre>
+<h2 id="1-1-数据库文件的存放路径"><a class="header-anchor" href="#1-1-数据库文件的存放路径"></a>1.1 数据库文件的存放路径</h2>
+<p>MySQL 数据库文件的存放路径：<code>/var/lib/mysql</code>。</p>
+<p>MySQL 服务器程序在启动时会到文件系统的某个目录下加载一些文件，之后在运行过程中产生的数据也会存储到这个目录下的某些文件中，这个目录被称为 <strong>数据目录</strong>。</p>
+<p>MySQL 把数据都存到哪个路径下呢？<strong>数据目录</strong> 对应着一个系统变量 <code>datadir</code>，在客户端与服务器建立连接后查看这个系统变量：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show variables like &#x27;datadir&#x27;;</span><br></pre></td></tr></table></figure>
+<pre>
++---------------+-----------------+
+| Variable_name | Value           |
++---------------+-----------------+
+| datadir       | /var/lib/mysql/ |
++---------------+-----------------+
+</pre>
+<h2 id="1-2-相关指令目录"><a class="header-anchor" href="#1-2-相关指令目录"></a>1.2 相关指令目录</h2>
+<p>MySQL 相关指令存放的目录有两个：</p>
+<ul>
+<li><code>/usr/bin</code>：存放 <code>mysqladmin</code>、<code>mysqlbinlog</code>、<code>mysqldump</code> 等命令</li>
+<li><code>/usr/sbin</code></li>
+</ul>
+<pre>
+[root@mofan ~]# cd /usr/bin
+[root@mofan bin]# find . -name "mysqladmin"
+./mysqladmin
+[root@mofan bin]# find . -name "mysqldump"
+./mysqldump
+</pre>
+<p><code>bin</code>  目录下存放了很多关于控制客户端程序和服务器程序的命令（许多可执行文件，比如 <code>mysql</code>、<code>mysqld</code>、<code>mysqld_safe</code> 等），而前文介绍的 <strong>数据目录</strong> 是用来存储 MySQL 在运行过程中产生的数据，注意区分二者。</p>
+<h2 id="1-3-配置文件目录"><a class="header-anchor" href="#1-3-配置文件目录"></a>1.3 配置文件目录</h2>
+<p>MySQL 配置文件的存放目录也有两个：</p>
+<ul>
+<li><code>/usr/share/mysql-8.0</code>：存放相关命令及配置文件</li>
+<li><code>/etc</code>：配置文件 <code>my.cnf</code> 的存放位置</li>
+</ul>
+<h1 id="2-数据库和文件系统的关系"><a class="header-anchor" href="#2-数据库和文件系统的关系"></a>2. 数据库和文件系统的关系</h1>
+<p>像 <code>InnoDB</code>、<code>MyISAM</code> 这样的存储引擎都是把表存储在磁盘上的，操作系统用来管理磁盘的结构被称为 <strong>文件系统</strong>，所以用专业一点的话来表述就是：像 <code>InnoDB</code>、<code>MyISAM</code> 这样的存储引擎都是把表存储在文件系统上的。当需要读取数据的时候，这些存储引擎会从文件系统中把数据读出来并返回；当需要写入数据的时候，这些存储引擎会把这些数据又写回文件系统。</p>
+<h2 id="2-1-查看默认数据库"><a class="header-anchor" href="#2-1-查看默认数据库"></a>2.1 查看默认数据库</h2>
+<p>MySQL 在安装完毕后会自带几个系统数据库，执行以下语句查看 MySQL 有几个自带的系统数据库：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SHOW DATABASES;</span><br></pre></td></tr></table></figure>
+<pre>
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+</pre>
+<blockquote>
+<p><code>mysql</code></p>
+</blockquote>
+<p>MySQL 系统自带的核心数据库，它存储了 MySQL 的用户账户和权限信息，一些存储过程、事件的定义信息，一些运行过程中产生的日志信息，一些帮助信息以及时区信息等。</p>
+<blockquote>
+<p><code>information_schema</code></p>
+</blockquote>
+<p>MySQL 系统自带的数据库，这个数据库保存着 MySQL 服务器维护的所有其他数据库的信息，比如有哪些表、哪些视图、哪些触发器、哪些列、哪些索引。这些信息并不是真实的用户数据，而是一些描述性信息，有时候也称之为元数据。在系统数据库 <code>information_schema</code> 中提供了一些以 <code>innodb_sys</code> 开头的表，用于表示内部系统表。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">USE information_schema;</span><br><span class="line">SHOW TABLES LIKE &#x27;innodb_sys%&#x27;;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>performance_schema</code></p>
+</blockquote>
+<p>MySQL 系统自带的数据库，这个数据库里主要保存 MySQL 服务器运行过程中的一些状态信息，可以用来监控 MySQL 服务的各类性能指标。包括统计最近执行了哪些语句，在执行过程的每个阶段都花费了多长时间，内存的使用情况等信息。</p>
+<blockquote>
+<p><code>sys</code></p>
+</blockquote>
+<p>MySQL 系统自带的数据库，这个数据库主要是通过视图的形式把 information_schema 和 performance_schema 结合起来，帮助系统管理员和开发人员监控 MySQL 的技术性能。</p>
+<h2 id="2-2-数据库在文件系统中的表示"><a class="header-anchor" href="#2-2-数据库在文件系统中的表示"></a>2.2 数据库在文件系统中的表示</h2>
+<p>使用 <code>CREATE DATABASE 数据库名;</code> 语句创建一个数据库时，在文件系统上发生了什么呢？其实很简单，每个数据库都对应了数据目录下的一个子目录，或者说对应一个文件夹，每当新建一个数据库时，MySQL 会做两件事：</p>
+<ol>
+<li>在 <strong>数据目录</strong> 下创建一个和数据库同名的子目录；</li>
+<li>在与该数据库同名的子目录下创建一个名为 <code>db.opt</code> 的文件（仅限 MySQL 5.7 及之前的版本），这个文件中包含了 <strong>该数据库的各种属性信息</strong>，比如该数据库使用的字符集和比较规则。</li>
+</ol>
+<p>进入 MySQL 8.0 的 <strong>数据目录</strong> 并查看目录中的文件信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /var/lib/mysql</span><br><span class="line">ll</span><br></pre></td></tr></table></figure>
+<pre>
+[root@mofan /]# cd /var/lib/mysql
+[root@mofan mysql]# ll
+total 90584
+-rw-r----- 1 mysql mysql       56 Feb 13 18:18 auto.cnf
+-rw-r----- 1 mysql mysql      502 Feb 13 18:52 binlog.000001
+-rw-r----- 1 mysql mysql     6604 Feb 26 19:22 binlog.000002
+-rw-r----- 1 mysql mysql       32 Feb 13 18:52 binlog.index
+-rw------- 1 mysql mysql     1676 Feb 13 18:18 ca-key.pem
+-rw-r--r-- 1 mysql mysql     1112 Feb 13 18:18 ca.pem
+-rw-r--r-- 1 mysql mysql     1112 Feb 13 18:18 client-cert.pem
+-rw------- 1 mysql mysql     1676 Feb 13 18:18 client-key.pem
+drwxr-x--- 2 mysql mysql     4096 Feb 26 19:17 dbtest1
+-rw-r----- 1 mysql mysql   196608 Feb 26 19:22 #ib_16384_0.dblwr
+-rw-r----- 1 mysql mysql  8585216 Feb 13 18:18 #ib_16384_1.dblwr
+-rw-r----- 1 mysql mysql     3525 Feb 13 18:52 ib_buffer_pool
+-rw-r----- 1 mysql mysql 12582912 Feb 26 19:22 ibdata1
+-rw-r----- 1 mysql mysql 12582912 Feb 13 18:52 ibtmp1
+drwxr-x--- 2 mysql mysql     4096 Feb 13 18:52 #innodb_redo
+drwxr-x--- 2 mysql mysql     4096 Feb 13 18:52 #innodb_temp
+drwxr-x--- 2 mysql mysql     4096 Feb 13 18:18 mysql
+-rw-r----- 1 mysql mysql 25165824 Feb 26 19:17 mysql.ibd
+srwxrwxrwx 1 mysql mysql        0 Feb 13 18:52 mysql.sock
+-rw------- 1 mysql mysql        5 Feb 13 18:52 mysql.sock.lock
+drwxr-x--- 2 mysql mysql     4096 Feb 13 18:18 performance_schema
+-rw------- 1 mysql mysql     1676 Feb 13 18:18 private_key.pem
+-rw-r--r-- 1 mysql mysql      452 Feb 13 18:18 public_key.pem
+-rw-r--r-- 1 mysql mysql     1112 Feb 13 18:18 server-cert.pem
+-rw------- 1 mysql mysql     1680 Feb 13 18:18 server-key.pem
+drwxr-x--- 2 mysql mysql     4096 Feb 13 18:18 sys
+-rw-r----- 1 mysql mysql 16777216 Feb 26 19:18 undo_001
+-rw-r----- 1 mysql mysql 16777216 Feb 26 19:22 undo_002
+</pre>
+<p>这个数据目录下的文件和子目录比较多，除 information_schema 这个系统数据库外，其他的数据库在数据目录下都有对应的子目录。</p>
+<p>以 <code>dbtest1</code> 数据库为例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd dbtest1/</span><br><span class="line">ll</span><br></pre></td></tr></table></figure>
+<pre>
+[root@mofan mysql]# cd dbtest1/
+[root@mofan dbtest1]# ll
+total 224
+-rw-r----- 1 mysql mysql 114688 Feb 19 17:27 emp1.ibd
+-rw-r----- 1 mysql mysql 114688 Feb 26 19:22 mytbl2.ibd
+</pre>
+<h2 id="2-3-InnoDB存储引擎模式"><a class="header-anchor" href="#2-3-InnoDB存储引擎模式"></a>2.3 InnoDB存储引擎模式</h2>
+<p>用户的数据都是以 <strong>记录的形式</strong> 插入到表中的，每个表的信息可以分为两种：</p>
+<ol>
+<li>表结构的定义</li>
+<li>表中的数据</li>
+</ol>
+<p><strong>表结构</strong> 就是该表的名称，表中有多少列，每个列的数据类型、约束条件和索引，使用的字符集和比较规则等各种信息，这些信息都会体现在建表语句中。</p>
+<blockquote>
+<p>表结构</p>
+</blockquote>
+<p>为了保存表结构，InnoDB 在数据目录下对应的数据库子目录下创建了一个专门用于描述表结构的文件，文件名类似于 <code>表名.frm</code>。</p>
+<p>比方说在 dbtest1 数据库下创建一个名为 test 的表：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE TABLE</span> test(c1 <span class="type">INT</span>);</span><br></pre></td></tr></table></figure>
+<p>那在数据库 dbtest1 对应的子目录下就会创建一个名为 <code>test.frm</code> 的用于描述表结构的文件。<code>.frm</code> 文件的格式在不同的平台上都是相同的，该文件内容以二进制格式存储的，直接打开看到的内容乱码。</p>
+<blockquote>
+<p>表中数据和索引</p>
+</blockquote>
+<p>InnoDB 使用 <strong>页</strong> 为基本单位来管理存储空间的，<strong>页</strong> 的默认大小为 16KB。</p>
+<p>对于 InnoDB 存储引擎来说，每个索引都对应着一颗 B+ 树，B+ 树的每个节点都是一个数据页，数据页之间不需要是物理连续的，因为数据页之间有 <strong>双向链表</strong> 来维护着这些页的顺序。</p>
+<p>InnoDB 的聚簇索引的叶子节点存储了完整的用户记录，也就是所谓的“索引即数据，数据即索引”。</p>
+<p>为了更好地管理这些页，InnoDB 提出了一个 <strong>表空间（table space）</strong> 或 <strong>文件空间（file space）</strong> 的概念，表空间是一个抽象的概念，它可以对应文件系统上一个或多个真实文件（不同表空间对应的文件数量可能不同）。每一个 <strong>表空间</strong> 可以被划分为多个页，数据表中的数据就存放在某个 <strong>表空间</strong> 下的某些页里。</p>
+<p>表空间有几种不同的类型：</p>
+<ol>
+<li>系统表空间（system tablespace）</li>
+<li>独立表空间（file-per-table tablespace）</li>
+<li>其他类型的表空间</li>
+</ol>
+<p><strong>① 系统表空间</strong></p>
+<p>默认情况下，InnoDB 会在数据目录下创建一个名为 <code>ibdata1</code>、大小为 12M 的文件，这个文件就是对应的系统表空间在文件系统上的表示。</p>
+<p>怎么才 12M？这个文件是自扩展文件，当不够用的时候它会自己增加文件大小。</p>
+<p>如果想让系统表空间对应文件系统上多个实际文件，或者仅仅觉得默认的 <code>ibdata1</code> 文件名难听，那么在 MySQL 启动时可以配置对应的文件路径以及它们的大小，比如这样修改 <code>my.cnf</code> 配置文件：</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">[server]</span></span><br><span class="line"><span class="attr">innodb_data_file_path</span>=<span class="string">data1:512M;data2:512M:autoextend</span></span><br></pre></td></tr></table></figure>
+<p>这样在 MySQL 启动之后就会创建两个 512M 大小的文件作为系统表空间，其中的 <code>autoextend</code> 属性表示当这两个文件大小不够用时就会自动拓展 <code>data2</code> 文件的大小。</p>
+<p>需要注意的是，在一个 MySQL 服务器中，系统表空间只有一份。从 MySQL 5.5.7 到 MySQL 5.6.6 之间的各个版本中，表中的数据都会被默认地存储到这个系统表空间中。</p>
+<p><strong>② 独立表空间</strong></p>
+<p>在 MySQL 5.6.6 以及之后的版本中，InnoDB 并不会默认的把各个表的数据存储到系统表空间中，而是为每一个表建立一个独立表空间，即创建了多少个表，就有多少个独立表空间。使用独立表空间来存储表数据的话，会在该表所属数据库对应的子目录下创建一个表示该独立表空间的文件，文件名和表名相同，扩展名为 <code>.ibd</code>，类似于 <code>表名.ibd</code>。</p>
+<p>比如使用了独立表空间去存储 dbtest1 数据库下的 test 表的话，那么在该表所在数据库对应的 dbtest1 目录下会为 test 表创建 <code>test.frm</code> 和 <code>test.ibd</code> 两个文件。其中 <code>test.ibd</code> 文件用来存储 test 表中的数据和索引。</p>
+<p><strong>③ 系统表空间与独立表空间的设置</strong></p>
+<p>可以指定使用系统表空间还是独立表空间来存储数据，这个功能由启动参数 <code>innodb_file_per_table</code> 控制，比如想刻意地将表数据都存储到系统表空间时，可以这样修改 <code>my.cnf</code> 配置文件：</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">[server]</span></span><br><span class="line"><span class="attr">innodb_file_per_table</span>=<span class="string">0  # 0 代表使用系统表空间; 1 代表使用独立表空间</span></span><br></pre></td></tr></table></figure>
+<p>执行以下语句查看默认情况下的配置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show variables like &#x27;innodb_file_per_table&#x27;;</span><br></pre></td></tr></table></figure>
+<pre>
++-----------------------+-------+
+| Variable_name         | Value |
++-----------------------+-------+
+| innodb_file_per_table | ON    |
++-----------------------+-------+
+</pre>
+<p>其中的 <code>ON</code> 表示默认情况下使用独立表空间存放表数据。</p>
+<p><code>innodb_file_per_table</code> 参数的修改只对新建的表起作用，对于已经分配了表空间的表并不起作用。</p>
+<p>如果想把已经存在系统表空间中的表转移到独立表空间中，可以执行以下语句：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE 表名 TABLESPACE [=] innodb_file_per_table;</span><br></pre></td></tr></table></figure>
+<p>或者把已经存在独立表空间的表转移到系统表空间中，可以执行以下语句：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE 表名 TABLESPACE [=] innodb_system;</span><br></pre></td></tr></table></figure>
+<p>其中中括号括起来的 <code>=</code> 可以省略。</p>
+<p><strong>④ 其他类型的表空间</strong></p>
+<p>随着 MySQL 的发展，除了上述两种老牌表空间之外，现在还新提出了一些不同类型的表空间，比如通用表空间（general tablespace）、临时表空间（temporary tablespace）等。</p>
+<blockquote>
+<p>疑问</p>
+</blockquote>
+<p><code>frm</code> 文件在 MySQL 8.0 中不存在了，那去哪里了呢？</p>
+<p>这就需要解析 <code>ibd</code> 文件了，Oracle 官方将 <code>frm</code> 文件的信息及更多的信息移动到序列化字典信息（Serialized Dictionary Information）中，SDI 被写在 <code>ibd</code> 文件内部，MySQL 8.0 也属于 Oracle 旗下，因此同理。</p>
+<p>为了从 <code>ibd</code> 文件中提取 SDI 信息，Oracle 提供了一个应用程序 <code>ibd2sdi</code>。这个工具不需要下载，MySQL 8.0 自带就有。</p>
+<p>① 查看表结构：到存储 <code>ibd</code> 文件的目录下，执行以下语句：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ibd2sdi --dump-file=emp1.txt emp1.ibd</span><br></pre></td></tr></table></figure>
+<pre>
+[root@mofan dbtest1]# ibd2sdi --dump-file=emp1.txt emp1.ibd
+[root@mofan dbtest1]# ls
+emp1.ibd  emp1.txt  mytbl2.ibd
+</pre>
+<p>执行完毕后，可以看到多出 <code>emp1.txt</code> 文件。查看该文件内容，就能看到 <code>emp1</code> 表的表结构。</p>
+<h2 id="2-4-MyISAM存储引擎模式"><a class="header-anchor" href="#2-4-MyISAM存储引擎模式"></a>2.4 MyISAM存储引擎模式</h2>
+<blockquote>
+<p>表结构</p>
+</blockquote>
+<p>在存储表结构方面，MyISAM 和 InnoDB 一样，也是在数据目录下对应的数据库子目录中创建了一个专门用于描述表结构的文件 <code>表名.frm</code>。</p>
+<blockquote>
+<p>表中的数据和索引</p>
+</blockquote>
+<p>在 MyISAM 中的索引全部都是二级索引，该存储引擎的数据和索引是分开存放的。所以在文件系统中也是使用不同的文件来存储数据文件和索引文件，同时表数据都存放在对应的数据库子目录下。假如 test 表使用 MyISAM 存储引擎的话，那么在它所在数据库对应的 dbtest1 目录下会为 test 表创建这三个文件：</p>
+<ul>
+<li><code>test.frm</code>：存储表结构</li>
+<li><code>test.MYD</code>：存储数据（MYData），采用独立表存储模式，每个表对应一个 MYD 文件</li>
+<li><code>test.MYI</code>：存储索引（MYIndex）</li>
+</ul>
+<p>比如，创建一个使用 MyISAM 作为存储引擎的表，使用 <code>ENGINE</code> 选项显式指定引擎，因为默认引擎是 InnoDB：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE `student_myisam` (</span><br><span class="line">    `id` bigint NOT NULL AUTO_INCREMENT,</span><br><span class="line">    `name` varchar(64) DEFAULT NULL,</span><br><span class="line">    `age` int DEFAULT NULL,</span><br><span class="line">    `sex` varchar(2) DEFAULT NULL,</span><br><span class="line">    PRIMARY KEY (`id`)</span><br><span class="line">)ENGINE=MYISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb3;</span><br></pre></td></tr></table></figure>
+<p>在 MySQL 8.0 下，成功新建 <code>student_myisam</code> 表后，在数据目录下新增三个文件：</p>
+<ul>
+<li>
+<p>student_myisam_367.sdi：存储元数据</p>
+</li>
+<li>
+<p>student_myisam.MYD：存储数据</p>
+</li>
+<li>
+<p>student_myisam.MYI：存储索引</p>
+</li>
+</ul>
+<p>对于采用 InnoDB 存储引擎的表，SDI 与独立表空间下的用户数据一起存储；对于采用 MyISAM 存储引擎的表，它被写入 <code>sdi</code> 文件中。</p>
+<p>在 MySQL 8.0 中，MyISAM 存储引擎不提供分区支持。在以前版本的 MySQL 中创建的分区 MyISAM 表不能在 MySQL 8.0 中使用。</p>
+<h2 id="2-5-小结"><a class="header-anchor" href="#2-5-小结"></a>2.5 小结</h2>
+<p>以数据库 <code>a</code> 中的数据表 <code>b</code> 为例。</p>
+<blockquote>
+<p>如果表 <code>b</code> 采用 InnoDB</p>
+</blockquote>
+<p><code>data\a</code> 中会产生 1 个或者 2 个文件：</p>
+<ul>
+<li><code>b.frm</code>：描述表结构文件，字段长度等</li>
+<li>如果采用 <strong>系统表空间</strong> 模式，数据信息和索引信息都存储在 <code>ibdata1</code> 中</li>
+<li>如果采用 <strong>独立表空间</strong> 存储模式，<code>data\a</code> 中还会产生 <code>b.ibd</code> 文件（存储数据信息和索引信息）</li>
+</ul>
+<p>不同的 MySQL 版本下也有区别：</p>
+<ul>
+<li>MySQL 5.7 中会在 <code>data/a</code> 目录下生成 <code>db.opt</code> 文件用于保存数据库的相关配置，比如字符集、比较规则等信息，而 MySQL 8.0 不再提供 <code>db.opt</code> 文件。</li>
+<li>MySQL 8.0 中不再单独提供 <code>b.frm</code>，而是合并在 <code>b.ibd</code> 文件中。</li>
+</ul>
+<blockquote>
+<p>如果表 <code>b</code> 采用 MyISAM</p>
+</blockquote>
+<p><code>data\a</code> 中会产生 3 个文件：</p>
+<ul>
+<li>MySQL 5.7 下生成 <code>b.frm</code>，用于描述表结构文件，字段长度等；MySQL 8.0 下生成 <code>b.xxx.sdi</code>，描述表结构文件，字段长度等</li>
+<li><code>b.MYD</code>（MYData）：数据信息文件，存储数据信息（如果采用独立表存储模式）</li>
+<li><code>b.MYI</code>（MYIndex）：存放索引信息文件</li>
+</ul>
+<h2 id="2-6-视图在文件系统中的表示"><a class="header-anchor" href="#2-6-视图在文件系统中的表示"></a>2.6 视图在文件系统中的表示</h2>
+<p>MySQL 中的视图其实是虚拟的表，也就是某个查询语句的一个别名而已，所以在存储视图的时候不需要存储真实的数据，只需要把它的结构存储起来就行了。</p>
+<p>和表一样，描述视图结构的文件也会被存储到所属数据库对应的子目录下边，只会存储一个 <code>视图名.frm</code> 的文件。</p>
+<h2 id="2-7-其他的文件"><a class="header-anchor" href="#2-7-其他的文件"></a>2.7 其他的文件</h2>
+<p>除了前文说的那些用户自己存储的数据以外，数据目录下还包括为了更好地运行程序的一些额外文件，主要包括这几类文件：</p>
+<ul>
+<li>服务器进程文件：每运行一个 MySQL 服务器程序，都意味着启动一个进程。MySQL 服务器会把自己的进程 ID 写入到一个文件中</li>
+<li>服务器日志文件：在服务器运行过程中，会产生各种各样的日志，比如常规的查询日志、错误日志、二进制日志、redo 日志等</li>
+<li>默认/自动生成的 SSL 和 RSA 证书和密钥文件：主要是为了客户端和服务器安全通信而创建的一些文件</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/MySQL-Advanced-Second-Data-Directory-Of-MySQL/">https://mofan212.github.io/posts/MySQL-Advanced-Second-Data-Directory-Of-MySQL/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/MySQL/">MySQL</a></div><div class="post-share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/129.jpg" data-sites="wechat,qq,weibo,facebook,x"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/MySQL-Advanced-First-Use-Of-MySQL-Under-Linux/" title="【MySQL 高级篇一】Linux 下 MySQL 的使用"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/128.jpg" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【MySQL 高级篇一】Linux 下 MySQL 的使用</div></div><div class="info-2"><div class="info-item-1">本文介绍了 Linux 下 MySQL 的使用以及 MySQL 的字符集、SQL 大小写规范和 sql_mode 的合理设置。</div></div></div></a><a class="pagination-related" href="/posts/Quick-Start-To-JSONPath/" title="JSONPath 快速入门"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/130.png" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">JSONPath 快速入门</div></div><div class="info-2"><div class="info-item-1">A Java DSL for reading JSON documents.</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/MySQL-Advanced-Fourth-Logical-Architecture/" title="【MySQL 高级篇四】逻辑架构"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/134.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-13</div><div class="info-item-2">【MySQL 高级篇四】逻辑架构</div></div><div class="info-2"><div class="info-item-1">本文剖析了 MySQL 的逻辑架构，介绍了 SQL 执行流程和数据库缓冲池。</div></div></div></a><a class="pagination-related" href="/posts/DDL-And-DML-Of-MySQL/" title="【MySQL 二】DDL 与 DML"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/106.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-09-11</div><div class="info-item-2">【MySQL 二】DDL 与 DML</div></div><div class="info-2"><div class="info-item-1">本文介绍了 MySQL 中的 DDL 与 DML，并对其进行拓展。</div></div></div></a><a class="pagination-related" href="/posts/MySQL-Advanced-First-Use-Of-MySQL-Under-Linux/" title="【MySQL 高级篇一】Linux 下 MySQL 的使用"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/128.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-02-26</div><div class="info-item-2">【MySQL 高级篇一】Linux 下 MySQL 的使用</div></div><div class="info-2"><div class="info-item-1">本文介绍了 Linux 下 MySQL 的使用以及 MySQL 的字符集、SQL 大小写规范和 sql_mode 的合理设置。</div></div></div></a><a class="pagination-related" href="/posts/MySQL-Advanced-Fifth-Storage-Engines/" title="【MySQL 高级篇五】存储引擎"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/135.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-14</div><div class="info-item-2">【MySQL 高级篇五】存储引擎</div></div><div class="info-2"><div class="info-item-1">本文介绍了 MySQL 中的多种存储引擎的特性与适用场景。</div></div></div></a><a class="pagination-related" href="/posts/Constraint-Of-MySQL/" title="【MySQL 四】约束"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/108.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-09-18</div><div class="info-item-2">【MySQL 四】约束</div></div><div class="info-2"><div class="info-item-1">本文介绍了 MySQL 中约束的使用，并给出添加、删除约束的方式。</div></div></div></a><a class="pagination-related" href="/posts/Variable-Process-Control-Cursor-And-Trigger-Of-MySQL/" title="【MySQL 六】变量、流程控制、游标与触发器"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/110.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-10-02</div><div class="info-item-2">【MySQL 六】变量、流程控制、游标与触发器</div></div><div class="info-2"><div class="info-item-1">本文介绍了 MySQL 中变量、流程控制、游标和触发器的语法与使用。</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">默烦</div><div class="author-info-description">彩笔的打怪升级之路...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mofan212"><i class="fab fa-github"></i><span>follow me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解。<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a href="./mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载。😊</br><strong><font style="color:red">严禁未遵循规范的转载。</font></strong>😡</br><strong>死去的评论系统复活啦！欢迎到留言板畅所欲言！</strong>当然也可以使用更高效的<a target="_blank" href="https://space.bilibili.com/23658864/dynamic" style="color:#49B1F5;text-decoration:underline"> 哔哩哔哩私信 </a>或<a href="mailto:cy.mofan@foxmail.com" style="color:#49B1F5;text-decoration:underline" target="_blank">邮箱</a>。 😉</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-MySQL-8-0-%E7%9A%84%E4%B8%BB%E8%A6%81%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="toc-text">1. MySQL 8.0 的主要目录结构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E6%95%B0%E6%8D%AE%E5%BA%93%E6%96%87%E4%BB%B6%E7%9A%84%E5%AD%98%E6%94%BE%E8%B7%AF%E5%BE%84"><span class="toc-text">1.1 数据库文件的存放路径</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E7%9B%B8%E5%85%B3%E6%8C%87%E4%BB%A4%E7%9B%AE%E5%BD%95"><span class="toc-text">1.2 相关指令目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95"><span class="toc-text">1.3 配置文件目录</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-text">2. 数据库和文件系统的关系</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E6%9F%A5%E7%9C%8B%E9%BB%98%E8%AE%A4%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-text">2.1 查看默认数据库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9C%A8%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E8%A1%A8%E7%A4%BA"><span class="toc-text">2.2 数据库在文件系统中的表示</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-InnoDB%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E6%A8%A1%E5%BC%8F"><span class="toc-text">2.3 InnoDB存储引擎模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-MyISAM%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E6%A8%A1%E5%BC%8F"><span class="toc-text">2.4 MyISAM存储引擎模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-5-%E5%B0%8F%E7%BB%93"><span class="toc-text">2.5 小结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-6-%E8%A7%86%E5%9B%BE%E5%9C%A8%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E8%A1%A8%E7%A4%BA"><span class="toc-text">2.6 视图在文件系统中的表示</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-7-%E5%85%B6%E4%BB%96%E7%9A%84%E6%96%87%E4%BB%B6"><span class="toc-text">2.7 其他的文件</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/Something-About-Blog/" title="博客搭建与维护"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="博客搭建与维护"/></a><div class="content"><a class="title" href="/posts/Something-About-Blog/" title="博客搭建与维护">博客搭建与维护</a><time datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"/></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="更新于 2026-01-03 00:00:00">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"/></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/103.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 的类资源加载"/></a><div class="content"><a class="title" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载">Java 的类资源加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/20.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="注解、类的加载、反射"/></a><div class="content"><a class="title" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射">注解、类的加载、反射</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/ren-zhi-jue-xing/" title="认知觉醒"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/172.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="认知觉醒"/></a><div class="content"><a class="title" href="/posts/ren-zhi-jue-xing/" title="认知觉醒">认知觉醒</a><time datetime="2025-12-28T16:00:00.000Z" title="更新于 2025-12-29 00:00:00">2025-12-29</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://gcore.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script src="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/js/mine.min.js"></script><script src="/js/tip_portal.js"></script><script defer="defer" id="ribbon" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script id="click-show-text" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="Azathoth,Yog-Sothoth,Shub-Niggurath,Nyarlathotep,Cthulhu,Hastur,Abhoth,Ghroth,Tsathoggua,Cthugha,Deep Ones,Dagon,Chaugnar Faugn,Mordiggian,Shoggoth,Old One,Mi-Go,Great Race of Yith,Flying Polyp,Hounds of Tindalos,Dhole" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div class="docsearch-wrap"><div id="docsearch" style="display:none"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@docsearch/css/dist/style.min.css"/><script src="https://testingcf.jsdelivr.net/npm/@docsearch/js/dist/umd/index.min.js"></script><script>(() => {
+  docsearch(Object.assign({
+    appId: 'BAFEL7A6K1',
+    apiKey: '89fcb5961984c5c054bf04149f345f38',
+    indexName: 'mofan212io',
+    container: '#docsearch',
+    placeholder: '输入关键字进行搜索',
+  }, null))
+
+  const handleClick = () => {
+    document.querySelector('.DocSearch-Button').click()
+  }
+
+  const searchClickFn = () => {
+    btf.addEventListenerPjax(document.querySelector('#search-button > .search'), 'click', handleClick)
+  }
+
+  searchClickFn()
+  window.addEventListener('pjax:complete', searchClickFn)
+})()</script></div></div></body></html>

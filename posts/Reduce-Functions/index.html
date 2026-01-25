@@ -1,0 +1,621 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Reduce Functions | Mofan</title><meta name="author" content="默烦,cy.mofan@foxmail.com"><meta name="copyright" content="默烦"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Stream 就是 Lambda 表达式的全部？或许本文可以给你一点启发。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Reduce Functions">
+<meta property="og:url" content="https://mofan212.github.io/posts/Reduce-Functions/">
+<meta property="og:site_name" content="Mofan">
+<meta property="og:description" content="Stream 就是 Lambda 表达式的全部？或许本文可以给你一点启发。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/137.png">
+<meta property="article:published_time" content="2023-08-26T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-09-01T16:00:00.000Z">
+<meta property="article:author" content="默烦">
+<meta property="article:tag" content="Java-Lambda">
+<meta property="article:tag" content="Code-In-Practice">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/137.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Reduce Functions",
+  "url": "https://mofan212.github.io/posts/Reduce-Functions/",
+  "image": "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/137.png",
+  "datePublished": "2023-08-26T16:00:00.000Z",
+  "dateModified": "2023-09-01T16:00:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "默烦",
+      "url": "https://mofan212.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/Reduce-Functions/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":true,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 默烦","link":"链接: ","source":"来源: Mofan","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://testingcf.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Reduce Functions',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="referrer" content="no-referrer-when-downgrade" /><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/css/myStyle.min.css"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css" /><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css" /><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Mofan" type="application/atom+xml">
+</head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+btf.addGlobalFn('pjaxSend', () => {
+  Pace.restart()
+}, 'pace_restart')
+
+</script><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources/css/minimal.min.css"/><script src="https://testingcf.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/post_top_img.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Mofan</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Reduce Functions</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-08-26T16:00:00.000Z" title="发表于 2023-08-27 00:00:00">2023-08-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-09-01T16:00:00.000Z" title="更新于 2023-09-02 00:00:00">2023-09-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Code-In-Practice/">Code-In-Practice</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">5.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>18分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;距离本文上次更新已经过去&quot;,&quot;messageNext&quot;:&quot;天，请注意时效性。&quot;,&quot;postUpdate&quot;:&quot;2023-09-02 00:00:00&quot;}" hidden></div><p>封面来源：由博主个人绘制，如需使用请联系博主。</p>
+<p>本文涉及的代码：<a target="_blank" rel="noopener" href="https://github.com/mofan212/reduce-functions">mofan212/reduce-functions</a></p>
+<h1 id="0-前言"><a class="header-anchor" href="#0-前言"></a>0. 前言</h1>
+<h2 id="0-1-我的近况"><a class="header-anchor" href="#0-1-我的近况"></a>0.1 我的近况</h2>
+<p>最近一两个月甚是怠惰，自从购入新电脑后，每周除了宅着打游戏就还是打游戏，在嚎哭深渊里刻苦研究雪球的运动轨迹，最终也没得出什么结论，六、七月里新博文的更新屈指可数。</p>
+<p>言归正传，最近一个月来自己只做了两个任务项，但为实现这两个功能竟然用了将近 4000 行代码，以我看来，能够出现如此庞大的编码量是因为前期的不合理设计，前期的设计完全不能沿用到本次任务项的实现中，最终只能重写处理逻辑，造成如此庞大的工作量。</p>
+<p>反省结束。</p>
+<p>本次的两个任务项并不复杂，但切合我司的业务来谈，繁琐却也是真的。个人认为完成得较为出色，但自己也能隐约感到在接口设计方面还有不足，但具体到详细点自己也答不上，这应该是自己技术力不够导致的，半桶水的水平下，对不合理点有感知，但又列不出具体。</p>
+<p>虽说反省结束，但在不知不觉中又开始了反省。为了能够更好地反省，决定谈谈其中的接口设计，以及部分实现细节，相比于实际业务肯定会得到简化，但也大差不差。</p>
+<p>与其说本文的标题是《Reduce-Functions》，倒不如是《我的反省》？🤣</p>
+<h2 id="0-2-给你讲讲需求"><a class="header-anchor" href="#0-2-给你讲讲需求"></a>0.2 给你讲讲需求</h2>
+<p>给出一个 JSON 数组，定义数组中的每一项都是一个“节点”，这些节点有不同的类型，并且拥有不同的内部结构。</p>
+<p>给出几个 JSON 对象，定义这些 JSON 对象为“组件”，已知每个节点可能包含若干个组件。</p>
+<p>现需要 <strong>根据给定的组件标识，在每个节点中定位这些组件，以便后续对这一类组件进行其他操作。</strong></p>
+<p>比如：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;nodeId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;A&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;nodeType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;A_TYPE&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;componentA&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;fieldA&quot;</span><span class="punctuation">:</span> <span class="string">&quot;A-A&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;componentB&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;fieldA&quot;</span><span class="punctuation">:</span> <span class="string">&quot;B-A&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">]</span></span><br></pre></td></tr></table></figure>
+<p>其中 <code>nodeId</code> 和 <code>nodeType</code> 是节点的附加信息，而 <code>componentA</code> 和 <code>componentB</code> 显然就是两个不同的组件。</p>
+<h1 id="1-需求分析与实现思路"><a class="header-anchor" href="#1-需求分析与实现思路"></a>1. 需求分析与实现思路</h1>
+<h2 id="1-1-组件的划分"><a class="header-anchor" href="#1-1-组件的划分"></a>1.1 组件的划分</h2>
+<p>一个节点包含若干个组件，组件也可以划分为很多种。</p>
+<blockquote>
+<p>顶层组件</p>
+</blockquote>
+<p>规定 <strong>顶层组件</strong> 是能够在节点中直接通过一个 key 就能被定位到的组件，比如：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;nodeId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;A&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;nodeType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;A_TYPE&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;componentA&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;fieldA&quot;</span><span class="punctuation">:</span> <span class="string">&quot;A-A&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;componentB&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;fieldA&quot;</span><span class="punctuation">:</span> <span class="string">&quot;B-A&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>其中的 <code>componentA</code> 和 <code>componentB</code> 指向的 JSON 对象就是顶层组件。</p>
+<p>为了描述的简洁性，后续将直接使用 key 指代其对应的 JSON 对象。</p>
+<blockquote>
+<p>普通组件与子组件</p>
+</blockquote>
+<p>在某些情况下，一个顶层组件也可以由若干个组件组成，比如：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;nodeId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;B&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;nodeType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;B_TYPE&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;componentC&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;componentA&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;fieldA&quot;</span><span class="punctuation">:</span> <span class="string">&quot;C-A-A&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;componentB&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;fieldA&quot;</span><span class="punctuation">:</span> <span class="string">&quot;C-B-A&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;componentD&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;fieldA&quot;</span><span class="punctuation">:</span> <span class="string">&quot;D-A&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>其中的 <code>componentC</code> 是一个顶层组件，它由 <code>componentA</code>、<code>componentB</code> 和 <code>componentD</code> 组成，前两个组件还是顶层组件，而 <code>componentD</code> 是一个普通组件（或者说非顶层组件）。</p>
+<p>针对 <code>componentC</code>，还可以说 <code>componentA</code>、<code>componentB</code> 和 <code>componentD</code> 是 <code>componentC</code> 的子组件。</p>
+<p><strong>每个组件都可以有子组件，这些子组件可以是顶层组件，也可以是普通组件</strong>。 这里的“每个组件”也包括子组件，也就是说子组件也可以有子组件（或者说孙组件？这不重要）。</p>
+<blockquote>
+<p>列表组件</p>
+</blockquote>
+<p>多个同种类型组件可以聚合为一个列表组件。</p>
+<p>对列表组件来说，它的子组件就是列表中的每一项相同类型的组件。</p>
+<p>列表组件既可以作为顶层组件，也可以作为普通组件。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;nodeId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;C&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;nodeType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;C_TYPE&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;componentDs&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;fieldA&quot;</span><span class="punctuation">:</span> <span class="string">&quot;D0-A&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;fieldA&quot;</span><span class="punctuation">:</span> <span class="string">&quot;D1-A&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>其中的 <code>componentDs</code> 就是一个列表组件，它也还是一个顶层组件，它由 <code>componentD</code> 聚合而成。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;nodeId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;D&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;nodeType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;D_TYPE&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;componentF&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;componentEs&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">      <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;fieldA&quot;</span><span class="punctuation">:</span> <span class="string">&quot;E0-A&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;fieldA&quot;</span><span class="punctuation">:</span> <span class="string">&quot;E1-A&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>其中的 <code>componentEs</code> 也是一个列表组件，但它只是一个普通组件，是顶层组件 <code>componentF</code> 的子组件。</p>
+<h2 id="1-2-从节点角度"><a class="header-anchor" href="#1-2-从节点角度"></a>1.2 从节点角度</h2>
+<p>每个节点有不同的类型，可以通过 <code>nodeType</code> 对节点进行分类，如果存在相同的节点，则使用 <code>nodeId</code> 进行区分（<code>nodeId</code> 在本文中无需关心，实现中并不会用到）。</p>
+<p>对节点来说，它由若干个顶层组件组成，顶层组件可能又由若干个普通组件聚合而成。</p>
+<p>给出若干个节点，需要找出这些节点中的目标组件，从节点角度出发，一般思路是：</p>
+<ol>
+<li>首先由节点定位到顶层组件；</li>
+<li>然后通过顶层组件定位到子组件；</li>
+<li>不断深度搜索与回溯，直到找到所有目标组件。</li>
+</ol>
+<p>这样会有一个问题，假设组件数量固定，节点又可以由任意个顶层组件组成，可以认为在顶层组件数量确定的情况下，可以组成无数个不同类型的节点。这样的话，如果从节点角度出发，后续每增加一种节点，岂不是就要增加一种节点处理类？</p>
+<h2 id="1-3-从组件角度"><a class="header-anchor" href="#1-3-从组件角度"></a>1.3 从组件角度</h2>
+<p>一个节点由若干个顶层组件构成，不同类型的节点可能存在相同的顶层组件。</p>
+<p>组件的组合（包括顶层组件）可以形成另一个组件，也就是说一个组件可以有若干个依赖项（即多个子组件）。</p>
+<p>顶层组件也是组件，“顶层”是指能够从节点角度出发，通过一个 key 就定位到目标组件，而不是不能再组合的意思。</p>
+<p><strong>针对任意组件来说，可以在定位到其父级组件后，通过一个 key 定位到当前组件。</strong> 对于顶层组件，可以认为其父级组件就是节点。</p>
+<p>通过这样的节点依赖关系，可以绘制出节点依赖图。<strong>如果需要定位目标组件，那么就是在依赖图中找到到目标组件的所有路径。</strong> 这个路径就是定位路径，已知的是，这些路径的第一个节点一定是顶层组件，最后一个节点是目标组件，这不难理解。</p>
+<h2 id="1-4-路径的表示"><a class="header-anchor" href="#1-4-路径的表示"></a>1.4 路径的表示</h2>
+<p>组件依赖图构建成功后，如何表示从顶层组件到目标组件这一段路径呢？</p>
+<p>单从顶层组件来说，肯定是从节点出发，然后通过一个 key 定位到顶层组件，如果要抽象这个行为，显然是传入一个参数经过运算后得到结果，可以使用函数式接口 <code>Function</code> 来表示，入参是节点对象，返回值是顶层组件。</p>
+<p>在 Jackson 中，可以使用 <code>JsonNode</code> 来表示 JSON 中的任意节点，包括布尔、数值、文本、对象、数组等等类型的节点。</p>
+<p>对于顶层组件，可以认为节点是它的父级组件，那么 <code>Function</code> 的入参就是节点，可以用  <code>JsonNode</code> 表示，出参是顶级组件，因此也可以设置为 <code>JsonNode</code>，但更好的方式是选择 <code>List&lt;Optional&lt;JsonNode&gt;&gt;</code> 作为出参，因为：</p>
+<ul>
+<li>一个节点也可以有多个相同的顶层组件</li>
+<li>这些顶层组件并不是一定存在的</li>
+</ul>
+<p>综上所述，使用 <code>Function&lt;JsonNode, List&lt;Optional&lt;JsonNode&gt;&gt;&gt;</code> 来表示从节点定位到顶层组件的行为，而对于从组件定位到其子组件，也可以继续沿用。</p>
+<p>这个 <code>Function</code> 的出入参可以认为都是 <code>JsonNode</code>，如果可以将这些 <code>Function</code> 进行合并，那么不就可以表示从顶层组件到目标组件的路径的吗？</p>
+<p>或许 <code>JsonNode</code> 难以理解，换成 <code>Integer</code> 呢？比如 <code>Function&lt;Integer, List&lt;Optional&lt;Integer&gt;&gt;&gt;</code>：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/reduce-integer-function.png" alt="reduce-integer-function"></p>
+<p>上述代码就是本文的核心：reduce function。</p>
+<p>将 <code>Integer</code> 换成 <code>JsonNode</code>，将定位的行为 reduce 后，传入表示节点信息的 <code>JsonNode</code>，得到包含目标组件的 <code>List&lt;Optional&lt;JsonNode&gt;&gt;</code>，再对 <code>List</code> 进行遍历，不就能得到每个目标组件了吗？</p>
+<h1 id="2-接口定义"><a class="header-anchor" href="#2-接口定义"></a>2. 接口定义</h1>
+<h2 id="2-1-顶级接口"><a class="header-anchor" href="#2-1-顶级接口"></a>2.1 顶级接口</h2>
+<blockquote>
+<p>组件标识</p>
+</blockquote>
+<p>对于每个组件来说，它们都有自己的标识，用于区分彼此，定义 <code>ComponentIdentity</code> 接口用于获取组件标识：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">ComponentIdentity</span> &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 获取组件标识，以组件的 Class Name 作为标识</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    Class&lt;? <span class="keyword">extends</span> <span class="title class_">MyComponent</span>&gt; getComponentIdentity();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>MyComponent</code> 是组件对象化后的基类。</p>
+<blockquote>
+<p>组件处理器</p>
+</blockquote>
+<p>定位到目标组件后，需要对目标组件进行处理，使用统一的处理方式，定义 <code>SimpleComponentHandler</code> 接口用于实现每种组件的处理方式。为了区分不同组件的处理方式，令 <code>SimpleComponentHandler</code> 继承 <code>ComponentIdentity</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">SimpleComponentHandler</span> <span class="keyword">extends</span> <span class="title class_">ComponentIdentity</span> &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 组件处理</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> context   处理器上下文，组件处理时可能需要的一些信息</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> component 对象，组件对象，保证该值不为 null</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">handleComponent</span><span class="params">(HandlerContext context, <span class="meta">@NonNull</span> JsonNode component)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-2-组件定位器存储器"><a class="header-anchor" href="#2-2-组件定位器存储器"></a>2.2 组件定位器存储器</h2>
+<p>前文已经讨论过使用 <code>Function</code> 来定义从父级组件（或节点）中获取组件的行为，对于某一组件，从父级组件（或节点）定位到其自身的行为极有可能不止一种，也就是说一种组件可能被不同的组件（或节点）依赖。这种定位的行为需要得到统一的存储，定义存储器实现这样的功能。</p>
+<p>对于顶层组件来说，它可以被多种节点包含；对于所有组件来说，它们可以拥有多种子组件。</p>
+<p>显然需要两种存储器，分别是 <code>TopLevelComponentLocatorStore</code> 和 <code>ComponentLocatorStore</code>，前者存储从节点定位到顶层组件的行为，后者用于存储从父级组件定位到子组件的行为。</p>
+<p>两种存储器中都定义了添加定位器、获取定位器、获取定位器的 key 集合共三种抽象方法。</p>
+<h2 id="2-3-组件定位器"><a class="header-anchor" href="#2-3-组件定位器"></a>2.3 组件定位器</h2>
+<blockquote>
+<p>组件定位器</p>
+</blockquote>
+<p>对于每个组件来说，它都有若干个子组件组成，当然这个“若干”可以是 Zero。</p>
+<p>如果要对组件进行分类，可以分为列表组件和非列表组件。</p>
+<p>定义 <code>ComponentLocator</code> 接口，它提供 <strong>判断组件是否为列表组件</strong> 和 <strong>初始化子组件定位器</strong> 的抽象方法。</p>
+<p><code>ComponentLocator</code> 接口继承了以下接口：</p>
+<ul>
+<li><code>ComponentLocatorStore</code>：用于存储定位子组件的行为；</li>
+<li><code>ComponentIdentity</code>：每种定位器定位的目标组件；</li>
+<li><code>SmartInitializingSingleton</code>：由 Spring 提供的接口，其抽象方法 <code>afterSingletonsInstantiated()</code> 将在单例 Bean 初始化完成后执行，可以执行初始化子组件定位器的逻辑。</li>
+</ul>
+<p>除此之外，<code>ComponentLocator</code> 接口还提供了默认方法 <code>handleSubComponent()</code> 用于处理其每个子组件。</p>
+<pre><code class="highlight mermaid">classDiagram
+direction BT
+
+class ComponentIdentity &#123;
+&lt;&lt;Interface&gt;&gt;
+&#125;
+
+class ComponentLocator &#123;
+&lt;&lt;Interface&gt;&gt;
+&#125;
+
+class ComponentLocatorStore &#123;
+&lt;&lt;Interface&gt;&gt;
+&#125;
+
+class SmartInitializingSingleton &#123;
+&lt;&lt;Interface&gt;&gt;
+&#125;
+
+ComponentLocator  --&gt;  ComponentIdentity
+ComponentLocator  --&gt;  ComponentLocatorStore
+ComponentLocator  --&gt;  SmartInitializingSingleton</code></pre>
+<blockquote>
+<p>顶层组件定位器</p>
+</blockquote>
+<p>顾名思义，用于定位顶层组件，命名为 <code>TopLevelComponentLocator</code>，提供 <strong>初始化（顶层）组件定位器</strong> 的抽象方法。</p>
+<p><code>TopLevelComponentLocator</code> 接口继承了以下接口：</p>
+<ul>
+<li><code>TopLevelComponentLocatorStore</code>：用于存储定位顶层组件的行为；</li>
+<li><code>ComponentLocator</code>：顶层组件也是组件，它也可能有子组件；</li>
+<li><code>SmartInitializingSingleton</code>：执行初始化（顶层）组件定位器的逻辑。</li>
+</ul>
+<pre><code class="highlight mermaid">classDiagram
+direction BT
+class ComponentIdentity &#123;
+&lt;&lt;Interface&gt;&gt;
+
+&#125;
+class ComponentLocator &#123;
+&lt;&lt;Interface&gt;&gt;
+
+&#125;
+class ComponentLocatorStore &#123;
+&lt;&lt;Interface&gt;&gt;
+
+&#125;
+class SmartInitializingSingleton &#123;
+&lt;&lt;Interface&gt;&gt;
+
+&#125;
+class TopLevelComponentLocator &#123;
+&lt;&lt;Interface&gt;&gt;
+
+&#125;
+class TopLevelComponentLocatorStore &#123;
+&lt;&lt;Interface&gt;&gt;
+
+&#125;
+
+ComponentLocator  --&gt;  ComponentIdentity 
+ComponentLocator  --&gt;  ComponentLocatorStore 
+ComponentLocator  --&gt;  SmartInitializingSingleton 
+TopLevelComponentLocator  --&gt;  ComponentLocator 
+TopLevelComponentLocator  --&gt;  SmartInitializingSingleton 
+TopLevelComponentLocator  --&gt;  TopLevelComponentLocatorStore 
+</code></pre>
+<h2 id="2-4-组件处理器"><a class="header-anchor" href="#2-4-组件处理器"></a>2.4 组件处理器</h2>
+<p>定位到目标组件后，需要根据业务需求对其进行特定的处理，无论是顶层组件还是非顶层组件，都应该有这样的逻辑。</p>
+<p>定义 <code>ComponentHandler</code> 接口，该接口继承 <code>SimpleComponentHandler</code> 和 <code>ComponentLocator</code> 接口，用于在定位到任意组件后，具备处理目标组件的能力。该接口只是一个标记接口，不提供任何抽象方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">ComponentHandler</span> <span class="keyword">extends</span> <span class="title class_">SimpleComponentHandler</span>, ComponentLocator &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">classDiagram
+direction BT
+class ComponentHandler &#123;
+&lt;&lt;Interface&gt;&gt;
+
+&#125;
+class ComponentIdentity &#123;
+&lt;&lt;Interface&gt;&gt;
+
+&#125;
+class ComponentLocator &#123;
+&lt;&lt;Interface&gt;&gt;
+
+&#125;
+class ComponentLocatorStore &#123;
+&lt;&lt;Interface&gt;&gt;
+
+&#125;
+class SimpleComponentHandler &#123;
+&lt;&lt;Interface&gt;&gt;
+
+&#125;
+class SmartInitializingSingleton &#123;
+&lt;&lt;Interface&gt;&gt;
+
+&#125;
+
+ComponentHandler  --&gt;  ComponentLocator 
+ComponentHandler  --&gt;  SimpleComponentHandler 
+ComponentLocator  --&gt;  ComponentIdentity 
+ComponentLocator  --&gt;  ComponentLocatorStore 
+ComponentLocator  --&gt;  SmartInitializingSingleton 
+SimpleComponentHandler  --&gt;  ComponentIdentity 
+</code></pre>
+<p>定义 <code>TopLevelComponentHandler</code> 接口，该接口继承 <code>ComponentHandler</code> 和 <code>TopLevelComponentLocator</code>，用于在定位到顶层组件后能够对其进行处理。该接口同样是一个标记接口，不提供任何抽象方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">TopLevelComponentHandler</span> <span class="keyword">extends</span> <span class="title class_">ComponentHandler</span>, TopLevelComponentLocator &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">classDiagram
+direction BT
+class ComponentHandler &#123;
+&lt;&lt;Interface&gt;&gt;
+
+&#125;
+class ComponentIdentity &#123;
+&lt;&lt;Interface&gt;&gt;
+
+&#125;
+class ComponentLocator &#123;
+&lt;&lt;Interface&gt;&gt;
+
+&#125;
+class ComponentLocatorStore &#123;
+&lt;&lt;Interface&gt;&gt;
+
+&#125;
+class SimpleComponentHandler &#123;
+&lt;&lt;Interface&gt;&gt;
+
+&#125;
+class SmartInitializingSingleton &#123;
+&lt;&lt;Interface&gt;&gt;
+
+&#125;
+class TopLevelComponentHandler &#123;
+&lt;&lt;Interface&gt;&gt;
+
+&#125;
+class TopLevelComponentLocator &#123;
+&lt;&lt;Interface&gt;&gt;
+
+&#125;
+class TopLevelComponentLocatorStore &#123;
+&lt;&lt;Interface&gt;&gt;
+
+&#125;
+
+ComponentHandler  --&gt;  ComponentLocator 
+ComponentHandler  --&gt;  SimpleComponentHandler 
+ComponentLocator  --&gt;  ComponentIdentity 
+ComponentLocator  --&gt;  ComponentLocatorStore 
+ComponentLocator  --&gt;  SmartInitializingSingleton 
+SimpleComponentHandler  --&gt;  ComponentIdentity 
+TopLevelComponentHandler  --&gt;  ComponentHandler 
+TopLevelComponentHandler  --&gt;  TopLevelComponentLocator 
+TopLevelComponentLocator  --&gt;  ComponentLocator 
+TopLevelComponentLocator  --&gt;  SmartInitializingSingleton 
+TopLevelComponentLocator  --&gt;  TopLevelComponentLocatorStore</code></pre>
+<h1 id="3-接口实现"><a class="header-anchor" href="#3-接口实现"></a>3. 接口实现</h1>
+<h2 id="3-1-抽象组件处理器"><a class="header-anchor" href="#3-1-抽象组件处理器"></a>3.1 抽象组件处理器</h2>
+<p>如果对组件进行分类，可以分成 <strong>列表组件</strong> 与 <strong>非列表组件</strong>，也可以分成 <strong>顶层组件</strong> 和 <strong>非顶层组件</strong>。</p>
+<p>将两种分类结果进行排列组合，形成共四种类型，比如非列表非顶层组件，每种类型都有自己的处理方式。</p>
+<blockquote>
+<p>非列表非顶层组件处理器</p>
+</blockquote>
+<p>定义 <code>BaseSimpleComponentHandler</code> 抽象类用于处理非列表非顶层组件。</p>
+<p>该类实现 <code>ComponentHandler</code> 接口即可。</p>
+<p>类中声明 <code>ComponentLocatorStore</code> 类型的成员变量，将存储定位组件的行为的实现委派给 <code>ComponentLocatorStore</code> 的默认实现类，而不是由其本身完成。</p>
+<blockquote>
+<p>列表非顶层组件处理器</p>
+</blockquote>
+<p>定义 <code>BaseSimpleArrayComponentHandler</code> 抽象类用于处理列表非顶层组件。</p>
+<p>该类也实现了 <code>ComponentHandler</code> 接口，除此之外还实现了 Spring 提供的 <code>ApplicationContextAware</code> 接口，用于获取 <code>ApplicationContext</code> 对象，提供获取 Bean 的方式。</p>
+<p>对列表组件来说，其组件标识（ComponentIdentity）就是列表中每项组件的组件标识，其子组件就是列表中的每项，这些逻辑可以在此抽象类中完成。</p>
+<p>类中同样声明 <code>ComponentLocatorStore</code> 类型的成员变量，将存储定位组件的行为的实现委派给 <code>ComponentLocatorStore</code> 的默认实现类。</p>
+<p>除此之外，声明 <code>elementComponent()</code> 抽象方法表明当前列表组件中每项的组件处理器是什么：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="keyword">abstract</span> Class&lt;? <span class="keyword">extends</span> <span class="title class_">SimpleComponentHandler</span>&gt; elementComponent();</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>非列表顶层组件处理器</p>
+</blockquote>
+<p>定义 <code>BaseSingleTopLevelComponentHandler</code> 抽象类处理非列表顶层组件。</p>
+<p>该类继承 <code>BaseSimpleComponentHandler</code>，使其具备添加子组件的能力，除此之外实现 <code>TopLevelComponentHandler</code> 接口，拥有处理顶层组件的能力。</p>
+<p>类中声明 <code>TopLevelComponentLocatorStore</code> 类型的成员变量，将存储定位顶层组件的行为的实现委派给 <code>TopLevelComponentLocatorStore</code> 的默认实现类。</p>
+<blockquote>
+<p>列表顶层组件处理器</p>
+</blockquote>
+<p>定义 <code>BaseArrayTopLevelComponentHandler</code> 抽象类处理列表顶层组件。</p>
+<p>该类继承 <code>BaseSimpleArrayComponentHandler</code>，使其具备添加子组件的能力，除此之外同样实现 <code>TopLevelComponentHandler</code> 接口，拥有处理顶层组件的能力。</p>
+<p>类中也同样声明了 <code>TopLevelComponentLocatorStore</code> 类型的成员变量。</p>
+<blockquote>
+<p>总结</p>
+</blockquote>
+<p>四种处理器按照对组件的分类进行排列组合后得出，针对不同的组件继承不同的抽象类即可。</p>
+<p>四种处理器中对存储定位组件的行为的实现都委派给其内部的成员变量，而不是由自身实现。</p>
+<p>对列表组件进行特殊处理，认为列表组件是多个同种类型组件的聚合。</p>
+<h2 id="3-2-顶层组件处理器分发器"><a class="header-anchor" href="#3-2-顶层组件处理器分发器"></a>3.2 顶层组件处理器分发器</h2>
+<p>一个顶层组件可能被多种不同类型的节点引用，如果需要处理每种节点中的顶层组件，那么就需要一个分发器，该分发器接收一个节点对象，返回该节点中所有顶层组件的处理器。</p>
+<p>定义 <code>TopLevelComponentHandlerDispatcher</code> 接口来完成这样的功能。</p>
+<pre><code class="highlight mermaid">classDiagram
+direction BT
+class ApplicationRunner &#123;
+&lt;&lt;Interface&gt;&gt;
+
+&#125;
+class DefaultTopLevelComponentHandlerDispatcher
+class TopLevelComponentHandlerDispatcher &#123;
+&lt;&lt;Interface&gt;&gt;
+
+&#125;
+
+DefaultTopLevelComponentHandlerDispatcher  ..&gt;  ApplicationRunner 
+DefaultTopLevelComponentHandlerDispatcher  ..&gt;  TopLevelComponentHandlerDispatcher 
+</code></pre>
+<h2 id="3-3-组件关系收集器"><a class="header-anchor" href="#3-3-组件关系收集器"></a>3.3 组件关系收集器</h2>
+<p>节点由若干个组件组成，组件又可能有子组件，在查找某个组件时，如果该组件是其他组件的子组件，那么应该梳理出从节点到目标组件的定位路径，利用路径实现传入节点对象后返回目标组件列表。</p>
+<p>组件被分为列表组件和非列表组件，对列表组件来说，它是某种非列表组件的聚合，它们具有相同的组件标识（ComponentIdentity），因此通过组件标识在若干个节点中查找目标组件时，应该明确查找的是列表组件还是非列表组件。</p>
+<p>定义 <code>ComponentRelationshipCollector</code> 类，该类暴露唯一的公共方法：<code>collect()</code>，用于获取某一组件的依赖关系：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> componentIdentity 组件标识</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> 最外层 Map 的 key，是否为列表组件；第二层 Map 的 key，顶级组件定位器的 key</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> Map&lt;Boolean, Map&lt;String, List&lt;Function&lt;JsonNode, List&lt;Optional&lt;JsonNode&gt;&gt;&gt;&gt;&gt;&gt; collect(Class&lt;? <span class="keyword">extends</span> <span class="title class_">MyComponent</span>&gt; componentIdentity) &#123;</span><br><span class="line">    <span class="comment">// --snip--</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过图建立组件的依赖关系后，获取目标组件的依赖关系问题可以转化为求解图中到指定节点的所有路径问题，具体实现参考 <code>pers.mofan.component.util.GraphUtils#getAllPath2TargetNode()</code> 方法。</p>
+<p>获取组件的依赖关系后能够得到从父组件到目标组件的一个集合，比如：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/%E4%BB%8E%E8%8A%82%E7%82%B9%E4%BE%9D%E8%B5%96%E5%85%B3%E7%B3%BB%E5%BE%97%E5%88%B0%E5%AE%9A%E4%BD%8D%E7%BB%84%E4%BB%B6%E7%9A%84Function.png" alt="从节点依赖关系得到定位组件的Function"></p>
+<p>B 类型节点中有一个顶层组件 C，该组件有一个子组件 A，子组件 A 恰好也是其中节点中的一个顶层组件。</p>
+<p>B 类型节点可以近似作为顶层组件 C 的父组件，从 B 类型节点到组件 A 有一条路径，使用 <code>List</code> 表示这条路径，<code>List</code> 中的每项都是 <code>Function&lt;JsonNode, List&lt;Optional&lt;JsonNode&gt;&gt;&gt;</code>，将这个 <code>List</code> 进行 reduce 得到单个 <code>Function&lt;JsonNode, List&lt;Optional&lt;JsonNode&gt;&gt;&gt;</code> 后，就可以实现传入一个节点对象最终返回该节点中所有目标组件的一个集合（实现参考【1.4 路径的表示】或者 <code>pers.mofan.component.lookup.ComponentRelationshipCollector#reduceFunctions()</code> 方法）。</p>
+<h2 id="3-4-组件查找器"><a class="header-anchor" href="#3-4-组件查找器"></a>3.4 组件查找器</h2>
+<p>定义 <code>ComponentLookup</code> 接口，用于查找节点下所有目标组件。</p>
+<p>该接口继承 <code>ComponentIdentity</code> 接口，获取查找的目标组件标识。</p>
+<p><code>ComponentLookup</code> 接口有个很重要的抽象实现 <code>BaseComponentLookup</code>，在该类中实现通过目标组件标识在节点中获取目标组件的逻辑。</p>
+<h2 id="3-5-组件查找器分发器"><a class="header-anchor" href="#3-5-组件查找器分发器"></a>3.5 组件查找器分发器</h2>
+<p>组件查找器中收集了从不同类型节点到目标组件的路径信息，还需要一个分发器将给定的组件标识分发到不同的组件查找器，组件查找器分发器由 <code>ComponentLookupDispatcher</code> 实现。</p>
+<h1 id="4-运行与测试"><a class="header-anchor" href="#4-运行与测试"></a>4. 运行与测试</h1>
+<p>目标数据存放在 <code>test.json</code> 文件中，其中包含一个 JSON 数组，内部数据与【1.1 组件的划分】中给出的 JSON 对象一样。</p>
+<p>测试类名为 <code>ReduceFunctionsTest</code>，内部包含两个测试方法，用于测试：</p>
+<ol>
+<li>处理节点中所有组件</li>
+<li>查找目标组件</li>
+</ol>
+<h1 id="5-总结"><a class="header-anchor" href="#5-总结"></a>5. 总结</h1>
+<p>本文从构思到完成历经三周，终究还是没能战胜懒惰。😔</p>
+<p>本文的重点有三个：</p>
+<ol>
+<li>接口的抽象</li>
+<li>求图中到目标节点的所有路径</li>
+<li>如何 reduce <code>Function</code></li>
+</ol>
+<p>单个分开都比较简单，最关键的是要想到：</p>
+<ul>
+<li>将从父组件定位到子组件的行为抽象成一个 <code>Function</code></li>
+</ul>
+<p>也只有将这样的行为抽象成 <code>Function</code> 后，后续才能求出组件依赖关系，根据依赖关系对 <code>Function</code> 进行 reduce，最终实现通过传入目标节点和目标组件标识得到节点中所有目标组件。</p>
+<p>小弟大言不惭地认为本文可以作为 Java8 函数式接口的使用范本，除此之外在实现中还使用了多个 Spring 拓展接口，因此还能进一步上升到 Java8 函数式接口与 Spring 拓展点的使用范本？🤣</p>
+<p>在实现中也存在一些问题，最大的问题就是对接口抽象不够简洁、依赖关系比较混乱，很多底层实现重复对某一接口进行了实现，我认为这是本人水平不够的象征，还需继续努力，希望未来的某天能够写出堪比 Spring 的接口设计。💪</p>
+<p>除此之外在功能完成上也有缺陷，不支持自依赖的组件，即一个组件的子组件是它自身，但我的实际需求中没有这样的场景， 就先搁置着吧。😶</p>
+<p>本文是我第一篇在实际开发中提炼出的博文，水平不高，仅仅作为总结，在书写过程中不断反省，希望以后的编码能够在此基础上得到提升，最终达到“诗一样的”代码！👊</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/Reduce-Functions/">https://mofan212.github.io/posts/Reduce-Functions/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Java-Lambda/">Java-Lambda</a><a class="post-meta__tags" href="/tags/Code-In-Practice/">Code-In-Practice</a></div><div class="post-share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/137.png" data-sites="wechat,qq,weibo,facebook,x"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/Installing-MySQL-Under-Windows/" title="【MySQL 补充】Windows 下 MySQL 的安装"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/136.png" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【MySQL 补充】Windows 下 MySQL 的安装</div></div><div class="info-2"><div class="info-item-1">本文介绍了 MySQL 在 Windows 下的安装与卸载，以及常见问题的解决。</div></div></div></a><a class="pagination-related" href="/posts/Look-At-The-Number-Of-Digits-In-Your-Deposit/" title="康康存款有几位数"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/138.png" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">康康存款有几位数</div></div><div class="info-2"><div class="info-item-1">少占小便宜，省得一身骚。</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/Using-Lambda-Expressions-To-Refactor-Backtracking/" title="使用 Lambda 表达式重构成回溯"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/143.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-12</div><div class="info-item-2">使用 Lambda 表达式重构成回溯</div></div><div class="info-2"><div class="info-item-1">使用 Lambda 表达式为代码重构提供新思路。</div></div></div></a><a class="pagination-related" href="/posts/Java-Lambda-In-Action/" title="Java Lambda In Action"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/159.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-03-19</div><div class="info-item-2">Java Lambda In Action</div></div><div class="info-2"><div class="info-item-1">讲解不一样的 Lambda 表达式用法，希望能给你带来一些启发。</div></div></div></a><a class="pagination-related" href="/posts/Code-Summary-Of-Graduation-Project/" title="毕业设计代码总结"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/87.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-27</div><div class="info-item-2">毕业设计代码总结</div></div><div class="info-2"><div class="info-item-1">记录一下毕业设计中遇到的各个问题并对这个过程做个总结，也算是记录逝去的大学时光。</div></div></div></a><a class="pagination-related" href="/posts/Java-Lambda-Expression-And-Functional-Programming/" title="Lambda 表达式与函数式编程"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/152.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-20</div><div class="info-item-2">Lambda 表达式与函数式编程</div></div><div class="info-2"><div class="info-item-1">本文介绍了 Java 中的闭包与柯里化，浅谈 Lambda 表达式的执行原理。</div></div></div></a><a class="pagination-related" href="/posts/Combinator-Pattern/" title="Combinator Pattern"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/149.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-03-28</div><div class="info-item-2">Combinator Pattern</div></div><div class="info-2"><div class="info-item-1">本文介绍了如何在 Java 中使用 Combinator Pattern。</div></div></div></a><a class="pagination-related" href="/posts/Method-Handle/" title="方法句柄"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/142.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-10-29</div><div class="info-item-2">方法句柄</div></div><div class="info-2"><div class="info-item-1">Java 中 MethodHandle 的使用。</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">默烦</div><div class="author-info-description">彩笔的打怪升级之路...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mofan212"><i class="fab fa-github"></i><span>follow me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解。<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a href="./mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载。😊</br><strong><font style="color:red">严禁未遵循规范的转载。</font></strong>😡</br><strong>死去的评论系统复活啦！欢迎到留言板畅所欲言！</strong>当然也可以使用更高效的<a target="_blank" href="https://space.bilibili.com/23658864/dynamic" style="color:#49B1F5;text-decoration:underline"> 哔哩哔哩私信 </a>或<a href="mailto:cy.mofan@foxmail.com" style="color:#49B1F5;text-decoration:underline" target="_blank">邮箱</a>。 😉</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0-%E5%89%8D%E8%A8%80"><span class="toc-text">0. 前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0-1-%E6%88%91%E7%9A%84%E8%BF%91%E5%86%B5"><span class="toc-text">0.1 我的近况</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0-2-%E7%BB%99%E4%BD%A0%E8%AE%B2%E8%AE%B2%E9%9C%80%E6%B1%82"><span class="toc-text">0.2 给你讲讲需求</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%E4%B8%8E%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF"><span class="toc-text">1. 需求分析与实现思路</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E7%BB%84%E4%BB%B6%E7%9A%84%E5%88%92%E5%88%86"><span class="toc-text">1.1 组件的划分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E4%BB%8E%E8%8A%82%E7%82%B9%E8%A7%92%E5%BA%A6"><span class="toc-text">1.2 从节点角度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-%E4%BB%8E%E7%BB%84%E4%BB%B6%E8%A7%92%E5%BA%A6"><span class="toc-text">1.3 从组件角度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-%E8%B7%AF%E5%BE%84%E7%9A%84%E8%A1%A8%E7%A4%BA"><span class="toc-text">1.4 路径的表示</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E6%8E%A5%E5%8F%A3%E5%AE%9A%E4%B9%89"><span class="toc-text">2. 接口定义</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E9%A1%B6%E7%BA%A7%E6%8E%A5%E5%8F%A3"><span class="toc-text">2.1 顶级接口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E7%BB%84%E4%BB%B6%E5%AE%9A%E4%BD%8D%E5%99%A8%E5%AD%98%E5%82%A8%E5%99%A8"><span class="toc-text">2.2 组件定位器存储器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E7%BB%84%E4%BB%B6%E5%AE%9A%E4%BD%8D%E5%99%A8"><span class="toc-text">2.3 组件定位器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-%E7%BB%84%E4%BB%B6%E5%A4%84%E7%90%86%E5%99%A8"><span class="toc-text">2.4 组件处理器</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E6%8E%A5%E5%8F%A3%E5%AE%9E%E7%8E%B0"><span class="toc-text">3. 接口实现</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E6%8A%BD%E8%B1%A1%E7%BB%84%E4%BB%B6%E5%A4%84%E7%90%86%E5%99%A8"><span class="toc-text">3.1 抽象组件处理器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E9%A1%B6%E5%B1%82%E7%BB%84%E4%BB%B6%E5%A4%84%E7%90%86%E5%99%A8%E5%88%86%E5%8F%91%E5%99%A8"><span class="toc-text">3.2 顶层组件处理器分发器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-%E7%BB%84%E4%BB%B6%E5%85%B3%E7%B3%BB%E6%94%B6%E9%9B%86%E5%99%A8"><span class="toc-text">3.3 组件关系收集器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-%E7%BB%84%E4%BB%B6%E6%9F%A5%E6%89%BE%E5%99%A8"><span class="toc-text">3.4 组件查找器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-5-%E7%BB%84%E4%BB%B6%E6%9F%A5%E6%89%BE%E5%99%A8%E5%88%86%E5%8F%91%E5%99%A8"><span class="toc-text">3.5 组件查找器分发器</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E8%BF%90%E8%A1%8C%E4%B8%8E%E6%B5%8B%E8%AF%95"><span class="toc-text">4. 运行与测试</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-%E6%80%BB%E7%BB%93"><span class="toc-text">5. 总结</span></a></li></ol></div></div><div class="card-widget card-post-series"><div class="item-headline"><i class="fa-solid fa-layer-group"></i><span>Java Lambda Expression</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/Lambda-And-Serialization/" title="Lambda 与序列化"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/104.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Lambda 与序列化"></a><div class="content"><a class="title" href="/posts/Lambda-And-Serialization/" title="Lambda 与序列化">Lambda 与序列化</a><time datetime="2022-07-03T16:00:00.000Z" title="发表于 2022-07-04 00:00:00">2022-07-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Reduce-Functions/" title="Reduce Functions"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/137.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Reduce Functions"></a><div class="content"><a class="title" href="/posts/Reduce-Functions/" title="Reduce Functions">Reduce Functions</a><time datetime="2023-08-26T16:00:00.000Z" title="发表于 2023-08-27 00:00:00">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Method-Handle/" title="方法句柄"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/142.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="方法句柄"></a><div class="content"><a class="title" href="/posts/Method-Handle/" title="方法句柄">方法句柄</a><time datetime="2023-10-28T16:00:00.000Z" title="发表于 2023-10-29 00:00:00">2023-10-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Using-Lambda-Expressions-To-Refactor-Backtracking/" title="使用 Lambda 表达式重构成回溯"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/143.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="使用 Lambda 表达式重构成回溯"></a><div class="content"><a class="title" href="/posts/Using-Lambda-Expressions-To-Refactor-Backtracking/" title="使用 Lambda 表达式重构成回溯">使用 Lambda 表达式重构成回溯</a><time datetime="2023-11-11T16:00:00.000Z" title="发表于 2023-11-12 00:00:00">2023-11-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Lambda-Expression-And-Functional-Programming/" title="Lambda 表达式与函数式编程"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/152.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Lambda 表达式与函数式编程"></a><div class="content"><a class="title" href="/posts/Java-Lambda-Expression-And-Functional-Programming/" title="Lambda 表达式与函数式编程">Lambda 表达式与函数式编程</a><time datetime="2024-07-19T16:00:00.000Z" title="发表于 2024-07-20 00:00:00">2024-07-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Lambda-In-Action/" title="Java Lambda In Action"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/159.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java Lambda In Action"></a><div class="content"><a class="title" href="/posts/Java-Lambda-In-Action/" title="Java Lambda In Action">Java Lambda In Action</a><time datetime="2025-03-18T16:00:00.000Z" title="发表于 2025-03-19 00:00:00">2025-03-19</time></div></div></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/Something-About-Blog/" title="博客搭建与维护"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="博客搭建与维护"/></a><div class="content"><a class="title" href="/posts/Something-About-Blog/" title="博客搭建与维护">博客搭建与维护</a><time datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"/></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="更新于 2026-01-03 00:00:00">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"/></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/103.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 的类资源加载"/></a><div class="content"><a class="title" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载">Java 的类资源加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/20.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="注解、类的加载、反射"/></a><div class="content"><a class="title" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射">注解、类的加载、反射</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/ren-zhi-jue-xing/" title="认知觉醒"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/172.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="认知觉醒"/></a><div class="content"><a class="title" href="/posts/ren-zhi-jue-xing/" title="认知觉醒">认知觉醒</a><time datetime="2025-12-28T16:00:00.000Z" title="更新于 2025-12-29 00:00:00">2025-12-29</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://gcore.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script src="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/js/mine.min.js"></script><script src="/js/tip_portal.js"></script><script defer="defer" id="ribbon" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script id="click-show-text" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="Azathoth,Yog-Sothoth,Shub-Niggurath,Nyarlathotep,Cthulhu,Hastur,Abhoth,Ghroth,Tsathoggua,Cthugha,Deep Ones,Dagon,Chaugnar Faugn,Mordiggian,Shoggoth,Old One,Mi-Go,Great Race of Yith,Flying Polyp,Hounds of Tindalos,Dhole" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div class="docsearch-wrap"><div id="docsearch" style="display:none"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@docsearch/css/dist/style.min.css"/><script src="https://testingcf.jsdelivr.net/npm/@docsearch/js/dist/umd/index.min.js"></script><script>(() => {
+  docsearch(Object.assign({
+    appId: 'BAFEL7A6K1',
+    apiKey: '89fcb5961984c5c054bf04149f345f38',
+    indexName: 'mofan212io',
+    container: '#docsearch',
+    placeholder: '输入关键字进行搜索',
+  }, null))
+
+  const handleClick = () => {
+    document.querySelector('.DocSearch-Button').click()
+  }
+
+  const searchClickFn = () => {
+    btf.addEventListenerPjax(document.querySelector('#search-button > .search'), 'click', handleClick)
+  }
+
+  searchClickFn()
+  window.addEventListener('pjax:complete', searchClickFn)
+})()</script></div></div></body></html>

@@ -1,0 +1,736 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【MySQL 五】视图、存储过程与存储函数 | Mofan</title><meta name="author" content="默烦,cy.mofan@foxmail.com"><meta name="copyright" content="默烦"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本文介绍了 MySQL 中视图、存储过程和存储函数的语法与使用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【MySQL 五】视图、存储过程与存储函数">
+<meta property="og:url" content="https://mofan212.github.io/posts/View-Procedure-And-Function-Of-MySQL/">
+<meta property="og:site_name" content="Mofan">
+<meta property="og:description" content="本文介绍了 MySQL 中视图、存储过程和存储函数的语法与使用。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/109.png">
+<meta property="article:published_time" content="2022-09-23T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-09-23T16:00:00.000Z">
+<meta property="article:author" content="默烦">
+<meta property="article:tag" content="MySQL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/109.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "【MySQL 五】视图、存储过程与存储函数",
+  "url": "https://mofan212.github.io/posts/View-Procedure-And-Function-Of-MySQL/",
+  "image": "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/109.png",
+  "datePublished": "2022-09-23T16:00:00.000Z",
+  "dateModified": "2022-09-23T16:00:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "默烦",
+      "url": "https://mofan212.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/View-Procedure-And-Function-Of-MySQL/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":true,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 默烦","link":"链接: ","source":"来源: Mofan","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://testingcf.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '【MySQL 五】视图、存储过程与存储函数',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="referrer" content="no-referrer-when-downgrade" /><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/css/myStyle.min.css"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css" /><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css" /><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Mofan" type="application/atom+xml">
+</head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+btf.addGlobalFn('pjaxSend', () => {
+  Pace.restart()
+}, 'pace_restart')
+
+</script><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources/css/minimal.min.css"/><script src="https://testingcf.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/post_top_img.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Mofan</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【MySQL 五】视图、存储过程与存储函数</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-09-23T16:00:00.000Z" title="发表于 2022-09-24 00:00:00">2022-09-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-09-23T16:00:00.000Z" title="更新于 2022-09-24 00:00:00">2022-09-24</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/MySQL/">MySQL</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">7.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>26分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;距离本文上次更新已经过去&quot;,&quot;messageNext&quot;:&quot;天，请注意时效性。&quot;,&quot;postUpdate&quot;:&quot;2022-09-24 00:00:00&quot;}" hidden></div><p>封面来源：本文封面来源于 MySQL 官网，如有侵权，请联系删除。</p>
+<p>本文参考：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1iq4y1u7vj">MySQL数据库教程天花板，mysql安装到mysql高级，强！硬！</a></p>
+<h1 id="1-视图的概述"><a class="header-anchor" href="#1-视图的概述"></a>1. 视图的概述</h1>
+<h2 id="1-1-常见的数据库对象"><a class="header-anchor" href="#1-1-常见的数据库对象"></a>1.1 常见的数据库对象</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">对象</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">表</td>
+<td style="text-align:center">表是存储数据的逻辑单元，以行和列的形式存在，列是字段，行是记录</td>
+</tr>
+<tr>
+<td style="text-align:center">数据字典</td>
+<td style="text-align:center">即系统表，存放数据库相关信息的表。系统表中的数据通常由数据库系统维护，程序员不应该修改，只可查看</td>
+</tr>
+<tr>
+<td style="text-align:center">约束</td>
+<td style="text-align:center">执行数据校验的规则，用于保证数据完整性的规则</td>
+</tr>
+<tr>
+<td style="text-align:center">视图</td>
+<td style="text-align:center">一个或者多个数据表里的数据的逻辑显示，视图并不存储数据</td>
+</tr>
+<tr>
+<td style="text-align:center">索引</td>
+<td style="text-align:center">用于提高查询性能，相当于书的目录</td>
+</tr>
+<tr>
+<td style="text-align:center">存储过程</td>
+<td style="text-align:center">用于完成一次完整的业务处理，没有返回值，但可通过传出参数将多个值传给调用环境</td>
+</tr>
+<tr>
+<td style="text-align:center">存储函数</td>
+<td style="text-align:center">用于完成一次特定的计算，具有一个返回值</td>
+</tr>
+<tr>
+<td style="text-align:center">触发器</td>
+<td style="text-align:center">相当于一个事件监听器，当数据库发生特定事件后，触发器被触发，完成相应的处理</td>
+</tr>
+</tbody>
+</table>
+<h2 id="1-2-为什么要使用视图"><a class="header-anchor" href="#1-2-为什么要使用视图"></a>1.2 为什么要使用视图</h2>
+<p>视图既可以帮我们只使用表的一部分而不是所有的表，又可以针对不同的用户制定不同的查询视图。</p>
+<p>比如，针对一个公司的销售人员，只想给他看部分数据，而不允许查看某些特殊的数据，比如采购的价格。再比如，人员薪酬是个敏感的字段，那么只给某个级别以上的人员开放，其他人的查询视图中不应该提供这个字段。</p>
+<h2 id="1-3-视图的理解"><a class="header-anchor" href="#1-3-视图的理解"></a>1.3 视图的理解</h2>
+<p>视图是一种虚拟表，本身是不具有数据的，占用很少的内存空间，是 SQL 中一个重要概念。</p>
+<p>视图建立在已有表的基础上，视图赖以建立的这些表称为 <strong>基表</strong> 。</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E7%94%A8%E6%88%B7%E3%80%81%E8%99%9A%E6%8B%9F%E8%A1%A8%E5%92%8C%E6%95%B0%E6%8D%AE%E8%A1%A8%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB.png" alt="用户、虚拟表和数据表之间的关系"></p>
+<p>视图的创建和删除只影响视图本身，不影响对应的基表，但对视图中的数据进行增加、删除和修改操作时，数据表中的数据会相应地发生变化，反之亦然。</p>
+<p>向视图提供数据内容的语句是 <code>SELECT</code> 语句，可以将视图理解为存储起来的 <code>SELECT</code> 语句。</p>
+<p>在数据库中，视图不会保存数据，数据被真正保存在数据表中。</p>
+<p>视图，是向用户展示基表数据的另一种表现形式。通常情况下，小型项目的数据库可以不使用视图，但在大型项目或数据表比较复杂的情况下，视图的价值就凸显出来了，它可以把经常查询的结果集放到虚拟表中，提高使用效率。</p>
+<h1 id="2-视图的创建"><a class="header-anchor" href="#2-视图的创建"></a>2. 视图的创建</h1>
+<h2 id="2-1-创建的语法"><a class="header-anchor" href="#2-1-创建的语法"></a>2.1 创建的语法</h2>
+<p>简单来说就是在 <code>CREATE VIEW</code> 语句中嵌入子查询：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> [<span class="keyword">OR</span> REPLACE]</span><br><span class="line">[ALGORITHM <span class="operator">=</span> &#123;UNDEFINED <span class="operator">|</span> <span class="keyword">MERGE</span> <span class="operator">|</span> TEMPTABLE&#125;]</span><br><span class="line"><span class="keyword">VIEW</span> 视图名称 [(字段列表)]</span><br><span class="line"><span class="keyword">AS</span> 查询语句</span><br><span class="line">[<span class="keyword">WITH</span> [<span class="keyword">CASCADED</span><span class="operator">|</span><span class="keyword">LOCAL</span>] <span class="keyword">CHECK</span> OPTION]</span><br></pre></td></tr></table></figure>
+<h2 id="2-2-创建单表视图"><a class="header-anchor" href="#2-2-创建单表视图"></a>2.2 创建单表视图</h2>
+<p>创建视图：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">VIEW</span> empvu80</span><br><span class="line"><span class="keyword">AS</span></span><br><span class="line"><span class="keyword">SELECT</span> employee_id, last_name, salary</span><br><span class="line"><span class="keyword">FROM</span> employees</span><br><span class="line"><span class="keyword">WHERE</span> department_id <span class="operator">=</span> <span class="number">80</span>;</span><br></pre></td></tr></table></figure>
+<p>查询视图：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> empvu80;</span><br></pre></td></tr></table></figure>
+<p>部分查询结果如下：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/empvu80%E8%A7%86%E5%9B%BE%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C.png" alt="empvu80视图查询结果"></p>
+<p>视图可以理解为在 SQL 查询语句的基础上进行的封装，基于 SQL 语句的结果集形成的一张虚拟表。</p>
+<p>在创建视图时，如果没有在视图后面指定字段列表，那么视图中字段列表默认和 <code>SELECT</code> 语句中的字段列表一致。如果 <code>SELECT</code> 语句中给字段取了别名，那么视图中的字段名和别名相同。</p>
+<h2 id="2-3-创建多表联合视图"><a class="header-anchor" href="#2-3-创建多表联合视图"></a>2.3 创建多表联合视图</h2>
+<p>比如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">VIEW</span> empview </span><br><span class="line"><span class="keyword">AS</span></span><br><span class="line"><span class="keyword">SELECT</span> employee_id emp_id, last_name NAME, department_name</span><br><span class="line"><span class="keyword">FROM</span> employees e, departments d</span><br><span class="line"><span class="keyword">WHERE</span> e.department_id <span class="operator">=</span> d.department_id;</span><br></pre></td></tr></table></figure>
+<p>再比如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">VIEW</span> dept_sum_vu(name, minsal, maxsal, avgsal) </span><br><span class="line"><span class="keyword">AS</span></span><br><span class="line"><span class="keyword">SELECT</span> d.department_name, <span class="built_in">MIN</span>(e.salary), <span class="built_in">MAX</span>(e.salary), <span class="built_in">AVG</span>(e.salary)</span><br><span class="line"><span class="keyword">FROM</span> employees e, departments d</span><br><span class="line"><span class="keyword">WHERE</span> e.department_id <span class="operator">=</span> d.department_id</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> d.department_name;</span><br></pre></td></tr></table></figure>
+<p>利用视图可以对数据进行格式化，比如想要同时输出员工姓名和对应的部门名时，可以使用视图来完成数据的格式化：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">VIEW</span> emp_depart </span><br><span class="line"><span class="keyword">AS</span></span><br><span class="line"><span class="keyword">SELECT</span> CONCAT(last_name, <span class="string">&#x27;(&#x27;</span>,department_name,<span class="string">&#x27;)&#x27;</span>) <span class="keyword">AS</span> emp_dept</span><br><span class="line"><span class="keyword">FROM</span> employees e <span class="keyword">JOIN</span> departments d</span><br><span class="line"><span class="keyword">WHERE</span> e.department_id <span class="operator">=</span> d.department_id;</span><br></pre></td></tr></table></figure>
+<h2 id="2-4-基于视图创建视图"><a class="header-anchor" href="#2-4-基于视图创建视图"></a>2.4 基于视图创建视图</h2>
+<p>视图并不是只能基于 SQL 查询语句进行创建，还可以在已有视图的基础上创建新的视图。比如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 基于视图 empview 创建新视图 emp_depart_view</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">VIEW</span> emp_depart_view</span><br><span class="line"><span class="keyword">AS</span></span><br><span class="line"><span class="keyword">SELECT</span> CONCAT(NAME, <span class="string">&#x27;(&#x27;</span>,department_name,<span class="string">&#x27;)&#x27;</span>) <span class="keyword">AS</span> emp_dept</span><br><span class="line"><span class="keyword">FROM</span> empview;</span><br></pre></td></tr></table></figure>
+<h1 id="3-查看视图信息"><a class="header-anchor" href="#3-查看视图信息"></a>3. 查看视图信息</h1>
+<blockquote>
+<p>查看数据库的表对象、视图对象</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> TABLES;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>查看视图的结构</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DESC</span> 视图名称;</span><br><span class="line"># 或者</span><br><span class="line"><span class="keyword">DESCRIBE</span> 视图名称;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>查看视图的属性信息</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 查看视图信息（显示数据表的存储引擎、版本、数据行数和数据大小等）</span><br><span class="line"><span class="keyword">SHOW</span> <span class="keyword">TABLE</span> STATUS <span class="keyword">LIKE</span> <span class="string">&#x27;视图名称&#x27;</span>\G</span><br></pre></td></tr></table></figure>
+<p>比如查看 emp_depart_view 的属性信息：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E8%A7%86%E5%9B%BEemp_depart_view%E7%9A%84%E5%B1%9E%E6%80%A7%E4%BF%A1%E6%81%AF.png" alt="视图emp_depart_view的属性信息"></p>
+<p><mark>注意：</mark> <code>\G</code> 在 Navicat 中是不支持的，在 Navicat 使用命令时，老实用 <code>;</code> 结尾。</p>
+<p>根据上图信息显示，Comment 的值是 <code>VIEW</code>，表示这个表是视图，其他信息基本都是 <code>NULL</code>，说明这是一个虚拟表。</p>
+<blockquote>
+<p>查看视图的详细定义信息</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> <span class="keyword">CREATE</span> <span class="keyword">VIEW</span> 视图名称;</span><br></pre></td></tr></table></figure>
+<h1 id="4-视图的其他操作"><a class="header-anchor" href="#4-视图的其他操作"></a>4. 视图的其他操作</h1>
+<h2 id="4-1-更新视图的数据"><a class="header-anchor" href="#4-1-更新视图的数据"></a>4.1 更新视图的数据</h2>
+<p>当对视图中的数据进行插入、更新、删除操作时，数据表中的数据也会发生变化。</p>
+<blockquote>
+<p>视图中数据的更新</p>
+</blockquote>
+<p>先创建一个视图：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">VIEW</span> emp_phone</span><br><span class="line"><span class="keyword">AS</span></span><br><span class="line"><span class="keyword">SELECT</span> employee_id, phone_number</span><br><span class="line"><span class="keyword">FROM</span> employees</span><br><span class="line"><span class="keyword">WHERE</span> job_id <span class="operator">=</span> <span class="string">&#x27;IT_PROG&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p>查询 emp_phone 视图中的数据：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/emp_phone%E8%A7%86%E5%9B%BE%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE.png" alt="emp_phone视图中的数据"></p>
+<p>对 employee_id 为 103 记录进行更新：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> emp_phone <span class="keyword">SET</span> phone_number <span class="operator">=</span> <span class="string">&#x27;590.423.4566&#x27;</span> <span class="keyword">WHERE</span> employee_id <span class="operator">=</span> <span class="number">103</span>;</span><br></pre></td></tr></table></figure>
+<p>查询数据表中的数据：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E8%A7%86%E5%9B%BE%E4%BF%AE%E6%94%B9%E5%90%8E%E6%95%B0%E6%8D%AE%E8%A1%A8%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE.png" alt="视图修改后数据表中的数据"></p>
+<p>可以看到 employee_id 为 103 的记录的 phone_number 已被修改为 <code>590.423.4566</code>。</p>
+<blockquote>
+<p>视图中数据的删除</p>
+</blockquote>
+<p>在视图中删除 employee_id 为 104 的数据：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DELETE</span> <span class="keyword">FROM</span> emp_phone <span class="keyword">WHERE</span> employee_id <span class="operator">=</span> <span class="number">104</span>;</span><br></pre></td></tr></table></figure>
+<p>在数据表中查询 employee_id 为 104 的数据，发现并不存在这条数据：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> employees <span class="keyword">WHERE</span> employee_id <span class="operator">=</span> <span class="number">104</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="4-2-不可更新的视图"><a class="header-anchor" href="#4-2-不可更新的视图"></a>4.2 不可更新的视图</h2>
+<p>并不是所有的视图都可以进行更新，要使视图可更新，视图中的行和底层基本表中的行之间必须存在 <strong>一对一</strong> 的关系。</p>
+<p>当视图定义出现如下情况时，视图不支持更新操作：</p>
+<ul>
+<li>在定义视图的时候指定了 <code>ALGORITHM = TEMPTABLE</code>，视图将不支持 INSERT 和 DELETE 操作；</li>
+<li>视图中不包含基表中 <strong>所有</strong> 被定义为非空且未指定默认值的列，视图将不支持 INSERT 操作；</li>
+<li>在定义视图的 SELECT 语句中使用了 JOIN 联合查询，视图将不支持 INSERT 和 DELETE 操作；</li>
+<li>在定义视图的 SELECT 语句后的字段列表中使用了数学表达式或子查询，视图将不支持 INSERT，也不支持 UPDATE 使用了数学表达式、子查询的字段值；</li>
+<li>在定义视图的 SELECT 语句后的字段列表中使用 DISTINCT 、聚合函数、GROUP BY 、HAVING 、UNION 等关键词或函数，视图将不支持 INSERT、UPDATE、DELETE；</li>
+<li>在定义视图的 SELECT 语句中包含了子查询，而子查询中引用了 FROM 后面的表，视图将不支持 INSERT、UPDATE、DELETE；</li>
+<li>视图定义基于一个不可更新视图；</li>
+<li>常量视图。</li>
+</ul>
+<p>虽然可以更新视图数据，但总的来说，视图作为虚拟表，主要用于方便查询，不建议更新视图的数据。对视图数据的更改都应该通过对实际数据表里数据的操作来完成。</p>
+<h2 id="4-3-修改视图"><a class="header-anchor" href="#4-3-修改视图"></a>4.3 修改视图</h2>
+<blockquote>
+<p>方式一：使用 <code>CREATE REPLACE VIEW</code> 子句修改视图</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> REPLACE <span class="keyword">VIEW</span> empvu80(id_number, name, sal, department_id)</span><br><span class="line"><span class="keyword">AS</span> </span><br><span class="line"><span class="keyword">SELECT</span> employee_id, first_name <span class="operator">||</span> <span class="string">&#x27; &#x27;</span> <span class="operator">||</span> last_name, salary, department_id</span><br><span class="line"><span class="keyword">FROM</span> employees</span><br><span class="line"><span class="keyword">WHERE</span> department_id <span class="operator">=</span> <span class="number">80</span>;</span><br></pre></td></tr></table></figure>
+<p><code>CREATE VIEW</code> 子句中各列的别名应和子查询中各列相对应。</p>
+<blockquote>
+<p>方式二：使用 <code>ALTER</code> 关键字</p>
+</blockquote>
+<p>语法如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">VIEW</span> 视图名称 </span><br><span class="line"><span class="keyword">AS</span></span><br><span class="line">查询语句;</span><br></pre></td></tr></table></figure>
+<h2 id="4-4-删除视图"><a class="header-anchor" href="#4-4-删除视图"></a>4.4 删除视图</h2>
+<p>删除视图只是删除视图的定义，不会影响到基表的数据。其语法是：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DROP</span> <span class="keyword">VIEW</span> IF <span class="keyword">EXISTS</span> 视图名称;</span><br></pre></td></tr></table></figure>
+<p>也可以一次性删除多个视图：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DROP</span> <span class="keyword">VIEW</span> IF <span class="keyword">EXISTS</span> 视图名称<span class="number">1</span>, 视图名称<span class="number">2</span>, 视图名称<span class="number">3</span>, ...;</span><br></pre></td></tr></table></figure>
+<p>比如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DROP</span> <span class="keyword">VIEW</span> empvu80;</span><br></pre></td></tr></table></figure>
+<p>由于视图可以基于其他已有视图进行创建，基于视图 A、B 创建的视图 C，当视图 A 或视图 B 被删除后，会导致视图 C 的查询失败。此时需要手动删除视图 C，因为它已经无法被使用了。</p>
+<h1 id="5-视图的优点与不足"><a class="header-anchor" href="#5-视图的优点与不足"></a>5. 视图的优点与不足</h1>
+<h2 id="5-1-视图的优点"><a class="header-anchor" href="#5-1-视图的优点"></a>5.1 视图的优点</h2>
+<blockquote>
+<p>优点一：操作简单</p>
+</blockquote>
+<p>将经常使用的查询操作定义为视图，可以使开发人员不需要关心视图对应的数据表结构、表与表之间的关联关系，也不需要关心数据表之间的业务逻辑和查询条件，而只需简单地操作视图即可，极大简化了开发人员对数据库的操作。</p>
+<blockquote>
+<p>优点二：减少数据冗余</p>
+</blockquote>
+<p>视图跟实际数据表不一样，它存储的是查询语句。所以，在使用的时候，我们要通过定义视图的查询语句来获取结果集。视图本身不存储数据，不占用数据存储的资源，减少了数据冗余。</p>
+<blockquote>
+<p>优点三：数据安全</p>
+</blockquote>
+<p>MySQL 将用户对数据的访问限制在某些数据的结果集上，而这些数据的结果集可以使用视图来实现。用户不必直接查询或操作数据表，这也可以理解为视图具有隔离性。视图相当于在用户和实际的数据表之间加了一层虚拟表。</p>
+<p>MySQL 可以根据权限将用户对数据的访问限制在某些视图上，用户无需查询数据表，就可以直接通过视图获取数据表中的信息。这在一定程度上保障了数据表中数据的安全性。</p>
+<blockquote>
+<p>优点四：适应灵活多变的需求</p>
+</blockquote>
+<p>当业务系统的需求发生变化后，如果需要改动数据表的结构，工作量相对较大，可以使用视图来减少改动的工作量。这种方式在实际工作中使用得比较多。</p>
+<blockquote>
+<p>优点五：能够分解复杂的查询逻辑</p>
+</blockquote>
+<p>数据库中如果存在复杂的查询逻辑，则可以将问题进行分解，创建多个视图获取数据，再将创建的多个视图结合起来，完成复杂的查询逻辑。</p>
+<h2 id="5-2-视图的不足"><a class="header-anchor" href="#5-2-视图的不足"></a>5.2 视图的不足</h2>
+<p>当实际数据表的结构发生变更时，需要及时对相关的视图进行相应的维护。如果是嵌套的视图（在视图的基础上创建视图），维护会变得更加复杂，容易成为系统的潜在隐患。除此之外，创建视图的 SQL 查询可能会对字段进行重命名，也可能包含复杂的逻辑，这些都会增加维护的成本。</p>
+<p>实际项目中，如果视图过多，会增加数据库的维护成本。</p>
+<p>所以，在创建视图的时候，需要结合实际项目需求，综合考虑视图的优点和不足，才能正确并合理地使用视图。</p>
+<h1 id="6-存储过程概述"><a class="header-anchor" href="#6-存储过程概述"></a>6. 存储过程概述</h1>
+<h2 id="6-1-存储过程的理解"><a class="header-anchor" href="#6-1-存储过程的理解"></a>6.1 存储过程的理解</h2>
+<p>存储过程，Stored Procedure，一组经过预先编译的 SQL 语句的封装。</p>
+<p>执行过程：存储过程预先存储在 MySQL 服务器上，需要执行的时候，客户端只需要向服务器端发出调用存储过程的命令，服务器端就可以把预先存储好的这一系列 SQL 语句全部执行。</p>
+<blockquote>
+<p>好处</p>
+</blockquote>
+<p>1、简化操作，提高了 SQL 语句的重用性，减少了开发程序员的压力；</p>
+<p>2、减少操作过程中的失误，提高效率；</p>
+<p>3、减少网络传输量（即客户端不需要把所有的 SQL 语句通过网络发给服务器） ；</p>
+<p>4、减少了 SQL 语句暴露在网上的风险，间接提高了数据查询的安全性。</p>
+<blockquote>
+<p>和视图、函数相比</p>
+</blockquote>
+<p>它和视图有着同样的优点，清晰、安全，还可以减少网络传输量。存储过程和视图也存在不同，视图是虚拟表，通常不会对底层数据表直接进行操作，而存储过程是程序化的 SQL，可以直接操作底层数据表，相比于面向集合的操作方式，能够实现一些更复杂的数据处理。</p>
+<p>存储过程一旦被创建出来，使用它就像使用函数一样简单，直接调用存储过程名即可。相较于函数，存储过程是没有返回值的。</p>
+<h2 id="6-2-存储过程的分类"><a class="header-anchor" href="#6-2-存储过程的分类"></a>6.2 存储过程的分类</h2>
+<p>存储过程的参数类型可以是 <code>IN</code>、<code>OUT</code> 和 <code>INOUT</code>。因此，存储过程可以分为：</p>
+<p>1、没有参数（无参数无返回）；</p>
+<p>2、仅仅存在 <code>IN</code> 类型（有参数无返回）；</p>
+<p>3、仅仅存在 <code>OUT</code> 类型（无参数有返回）；</p>
+<p>4、既存在 <code>IN</code> 又存在 <code>OUT</code>（有参数有返回）；</p>
+<p>5、仅仅存在 <code>INOUT</code>（有参数有返回）。</p>
+<p><mark>注意：</mark> <code>IN</code>、<code>OUT</code> 和 <code>INOUT</code> 可以在一个存储过程中存在多个。</p>
+<h1 id="7-存储过程的使用"><a class="header-anchor" href="#7-存储过程的使用"></a>7. 存储过程的使用</h1>
+<h2 id="7-1-创建存储过程的语法"><a class="header-anchor" href="#7-1-创建存储过程的语法"></a>7.1 创建存储过程的语法</h2>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">PROCEDURE</span> 存储过程名(<span class="keyword">IN</span><span class="operator">|</span><span class="keyword">OUT</span><span class="operator">|</span><span class="keyword">INOUT</span> 参数名 参数类型, ...)</span><br><span class="line">[characteristics ...]</span><br><span class="line"><span class="keyword">BEGIN</span> </span><br><span class="line">    存储过程体</span><br><span class="line"><span class="keyword">END</span></span><br></pre></td></tr></table></figure>
+<p>类似 Java 中的方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">修饰符 返回类型 方法名(参数类型 参数名, ...)&#123;</span><br><span class="line">    方法体;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>参数名前 IN、OUT、INOUT 符号的含义</p>
+</blockquote>
+<p><code>IN</code>：表示当前参数为输入参数，即入参。存储过程只读取这个参数的值，如果没有显示定义 <code>IN</code>、<code>OUT</code> 或者 <code>INOUT</code>，默认为 <code>IN</code>；</p>
+<p><code>OUT</code>：当前参数为输出参数，即出参。存储过程执行完成后，调用这个存储过程的客户端或者应用程序可以读取到这个参数的值；</p>
+<p><code>INOUT</code>：当前参数既可以作为入参，也可以作为出参。</p>
+<p><mark>注意：</mark> 形参类型可以是 MySQL 数据库中的任意类型。</p>
+<blockquote>
+<p>语法中 <code>characteristics</code> 的含义</p>
+</blockquote>
+<p><code>characteristics</code> 表示创建存储过程时指定的对存储过程的约束条件。其取值信息如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 取值一</span><br><span class="line"><span class="keyword">LANGUAGE</span> <span class="keyword">SQL</span></span><br><span class="line"># 取值二</span><br><span class="line">[<span class="keyword">NOT</span>] <span class="keyword">DETERMINISTIC</span></span><br><span class="line"># 取值三</span><br><span class="line">&#123; <span class="keyword">CONTAINS</span> <span class="keyword">SQL</span> <span class="operator">|</span> <span class="keyword">NO</span> <span class="keyword">SQL</span> <span class="operator">|</span> <span class="keyword">READS</span> <span class="keyword">SQL</span> DATA <span class="operator">|</span> <span class="keyword">MODIFIES</span> <span class="keyword">SQL</span> DATA &#125;</span><br><span class="line"># 取值四</span><br><span class="line"><span class="keyword">SQL</span> SECURITY &#123; DEFINER <span class="operator">|</span> INVOKER &#125;</span><br><span class="line"># 取值五</span><br><span class="line">COMMENT <span class="string">&#x27;string&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>1、<code>LANGUAGE SQL</code>：存储过程执行体由 SQL 语句组成的，当前系统支持的语言为 SQL。</p>
+<p>2、<code>[NOT] DETERMINISTIC</code>：指明存储过程执行的结果是否确定。<code>DETERMINISTIC</code> 表示结果是确定的，即每次执行存储过程时，相同的输入会得到相同的输出。<code>NOT DETERMINISTIC</code> 表示结果不是确定的，这种情况下，相同的输入可能会得到不同的输出。默认为 <code>NOT DETERMINISTIC</code>。</p>
+<p>3、<code>&#123; CONTAINS SQL | NO SQL | READS SQL DATA | MODIFIES SQL DATA &#125;</code>：指明子程序使用 SQL 语句的限制。</p>
+<ul>
+<li>CONTAINS SQL（默认值）：当前存储过程的子程序包含 SQL 语句，但是并不包含读写数据的 SQL 语句；</li>
+<li>NO SQL：表示当前存储过程的子程序中不包含任何 SQL 语句；</li>
+<li>READS SQL DATA：表示当前存储过程的子程序中包含读数据的 SQL 语句；</li>
+<li>MODIFIES SQL DATA：表示当前存储过程的子程序中包含写数据的 SQL 语句。</li>
+</ul>
+<p>4、<code>SQL SECURITY &#123; DEFINER | INVOKER &#125;</code>：执行当前存储过程的权限，即指明哪些用户能够执行当前存储过程。</p>
+<ul>
+<li>DEFINER（默认值）：只有当前存储过程的创建者或者定义者才能执行当前存储过程；</li>
+<li>INVOKER：拥有当前存储过程的访问权限的用户能够执行当前存储过程。</li>
+</ul>
+<p>5、<code>COMMENT 'string'</code>：注释信息，可以用来描述存储过程。</p>
+<blockquote>
+<p>存储过程体中使用到的关键词</p>
+</blockquote>
+<p>从给出的语法可以看到，存储过程体是放在 <code>BEGIN...END</code> 之间的，存储过程体中可以有多条 SQL 语句，如果仅仅只有一条 SQL 语句，可以忽略 BEGIN 和 END。</p>
+<p>1、<code>BEGIN...END</code>：中间包含了多个语句，每个语句以 <code>;</code> 为结束符。</p>
+<p>2、<code>DECLARE</code>：用来声明变量，在 <code>BEGIN...END</code> 中间使用，而且需要在其他语句使用之前进行变量的声明。</p>
+<p>3、<code>SET</code>：赋值语句，用于对变量进行赋值。</p>
+<p>4、<code>SELECT...INTO</code>：把从数据表中查询的结果存放到变量中，也就是为变量赋值。</p>
+<blockquote>
+<p>设置新的结束标记</p>
+</blockquote>
+<p>语法：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER 新的结束标记</span><br></pre></td></tr></table></figure>
+<p>由于 MySQL 默认的语句结束符号为分号 <code>;</code>，为了避免与存储过程中存储过程体里的 SQL 语句结束符相冲突，需要使用 <code>DELIMITER</code> 改变存储过程的结束符。</p>
+<p>比如：<code>DELIMITER //</code> 语句的作用是将 MySQL 的结束符设置为 <code>//</code>，并以 <code>END //</code> 结束存储过程。存储过程定义完毕后再使用 <code>DELIMITER ;</code> 恢复 MySQL 的默认结束符。</p>
+<p>当使用 <code>DELIMITER</code> 命令时，应该避免使用反斜杠 <code>\</code> 作为结束字符，因为它是 MySQL 的转义字符。</p>
+<p>比如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER $</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">PROCEDURE</span> 存储过程名(<span class="keyword">IN</span><span class="operator">|</span><span class="keyword">OUT</span><span class="operator">|</span><span class="keyword">INOUT</span> 参数名  参数类型, ...)</span><br><span class="line">[characteristics ...]</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    <span class="keyword">SQL</span>语句<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">SQL</span>语句<span class="number">2</span>;</span><br><span class="line"><span class="keyword">END</span> $</span><br></pre></td></tr></table></figure>
+<h2 id="7-2-创建存储过程示例"><a class="header-anchor" href="#7-2-创建存储过程示例"></a>7.2 创建存储过程示例</h2>
+<p>示例一：创建存储过程 <code>select_all_data()</code>，查看 emps 表的所有数据。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER $</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">PROCEDURE</span> select_all_data()</span><br><span class="line"><span class="keyword">BEGIN</span> </span><br><span class="line">    <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> emps;  </span><br><span class="line"><span class="keyword">END</span> $</span><br><span class="line"></span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+<p>示例二：创建存储过程 <code>avg_employee_salary()</code>，返回所有员工的平均工资。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER <span class="operator">/</span><span class="operator">/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">PROCEDURE</span> avg_employee_salary()</span><br><span class="line"><span class="keyword">BEGIN</span> </span><br><span class="line">    <span class="keyword">SELECT</span> <span class="built_in">AVG</span>(salary) <span class="keyword">AS</span> avg_salary <span class="keyword">FROM</span> emps;</span><br><span class="line"><span class="keyword">END</span> <span class="operator">/</span><span class="operator">/</span></span><br><span class="line"></span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+<p>示例三：创建存储过程 <code>show_max_salary()</code>，用来查看 emps 表的最高薪资值。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">PROCEDURE</span> show_max_salary()</span><br><span class="line">    <span class="keyword">LANGUAGE</span> <span class="keyword">SQL</span></span><br><span class="line">    <span class="keyword">NOT</span> <span class="keyword">DETERMINISTIC</span></span><br><span class="line">    <span class="keyword">CONTAINS</span> <span class="keyword">SQL</span></span><br><span class="line">    <span class="keyword">SQL</span> SECURITY DEFINER</span><br><span class="line">    COMMENT <span class="string">&#x27;查看最高薪资&#x27;</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">BEGIN</span></span><br><span class="line">        <span class="keyword">SELECT</span> <span class="built_in">MAX</span>(salary) <span class="keyword">FROM</span> emps;</span><br><span class="line">    <span class="keyword">END</span> <span class="operator">/</span><span class="operator">/</span></span><br><span class="line"></span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+<p>示例四：创建存储过程 <code>show_min_salary()</code>，查看 emps 表的最低薪资值，并将最低薪资通过 OUT 参数 ms 输出。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER <span class="operator">/</span><span class="operator">/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">PROCEDURE</span> show_min_salary(<span class="keyword">OUT</span> ms <span class="keyword">DOUBLE</span>)</span><br><span class="line">    <span class="keyword">BEGIN</span></span><br><span class="line">        <span class="keyword">SELECT</span> <span class="built_in">MIN</span>(salary) <span class="keyword">INTO</span> ms <span class="keyword">FROM</span> emps;</span><br><span class="line">    <span class="keyword">END</span> <span class="operator">/</span><span class="operator">/</span></span><br><span class="line">    </span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+<p>示例五：创建存储过程 <code>show_someone_salary()</code>，查看 emps 表的某个员工的薪资，并用 IN 参数 empname 输入员工姓名。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER <span class="operator">/</span><span class="operator">/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">PROCEDURE</span> show_someone_salary(<span class="keyword">IN</span> empname <span class="type">VARCHAR</span>(<span class="number">20</span>))</span><br><span class="line">    <span class="keyword">BEGIN</span> </span><br><span class="line">        <span class="keyword">SELECT</span> salary <span class="keyword">FROM</span> emps <span class="keyword">WHERE</span> ename <span class="operator">=</span> empname;</span><br><span class="line">    <span class="keyword">END</span> <span class="operator">/</span><span class="operator">/</span></span><br><span class="line"></span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+<p>示例六：创建存储过程 <code>show_someone_salary2()</code>，查看 emps 表的某个员工的薪资，并用 IN 参数 empname 输入员工姓名，用 OUT 参数 empsalary 输出员工薪资。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER <span class="operator">/</span><span class="operator">/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">PROCEDURE</span> show_someone_salary2(<span class="keyword">IN</span> empname <span class="type">VARCHAR</span>(<span class="number">20</span>), <span class="keyword">OUT</span> empsalary <span class="keyword">DOUBLE</span>)</span><br><span class="line">    <span class="keyword">BEGIN</span> </span><br><span class="line">        <span class="keyword">SELECT</span> salary <span class="keyword">INTO</span> empsalary <span class="keyword">FROM</span> emps <span class="keyword">WHERE</span> ename <span class="operator">=</span> empname;</span><br><span class="line">    <span class="keyword">END</span> <span class="operator">/</span><span class="operator">/</span></span><br><span class="line"></span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+<p>示例七：创建存储过程 <code>show_mgr_name()</code>，查询某个员工领导的姓名，并用 INOUT 数 empname 输入员工姓名，输出领导的姓名。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER <span class="operator">/</span><span class="operator">/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">PROCEDURE</span> show_mgr_name(<span class="keyword">INOUT</span> empname <span class="type">VARCHAR</span>(<span class="number">20</span>))</span><br><span class="line">    <span class="keyword">BEGIN</span></span><br><span class="line">        <span class="keyword">SELECT</span> ename <span class="keyword">INTO</span> empname <span class="keyword">FROM</span> emps</span><br><span class="line">            <span class="keyword">WHERE</span> eid <span class="operator">=</span> (<span class="keyword">SELECT</span> MID <span class="keyword">FROM</span> emps <span class="keyword">WHERE</span> ename <span class="operator">=</span> empname);</span><br><span class="line">    <span class="keyword">END</span> <span class="operator">/</span><span class="operator">/</span></span><br><span class="line"></span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+<h2 id="7-3-存储过程的调用格式"><a class="header-anchor" href="#7-3-存储过程的调用格式"></a>7.3 存储过程的调用格式</h2>
+<p>存储过程有多种调用方法。存储过程必须使用 <code>CALL</code> 语句调用，并且存储过程和数据库相关，如果要执行其他数据库中的存储过程，需要指定数据库名称，比如 <code>CALL dbname.procname</code>。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CALL</span> 存储过程名(实参列表)</span><br></pre></td></tr></table></figure>
+<p>比如：</p>
+<ul>
+<li>调用 IN 模式的参数：</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CALL</span> sp1(<span class="string">&#x27;值&#x27;</span>)；</span><br></pre></td></tr></table></figure>
+<ul>
+<li>调用 OUT 模式的参数：</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SET</span> <span class="variable">@name</span>;</span><br><span class="line"><span class="keyword">CALL</span> sp1(<span class="variable">@name</span>);</span><br><span class="line"><span class="keyword">SELECT</span> <span class="variable">@name</span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>调用 INOUT 模式的参数：</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SET</span> <span class="variable">@name</span> <span class="operator">=</span> 值;</span><br><span class="line"><span class="keyword">CALL</span> sp1(<span class="variable">@name</span>);</span><br><span class="line"><span class="keyword">SELECT</span> <span class="variable">@name</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="7-4-调用存储过程示例"><a class="header-anchor" href="#7-4-调用存储过程示例"></a>7.4 调用存储过程示例</h2>
+<blockquote>
+<p>示例一</p>
+</blockquote>
+<p>创建存储过程：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER <span class="operator">/</span><span class="operator">/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">PROCEDURE</span> CountProc(<span class="keyword">IN</span> sid <span class="type">INT</span>, <span class="keyword">OUT</span> num <span class="type">INT</span>)</span><br><span class="line">    <span class="keyword">BEGIN</span></span><br><span class="line">        <span class="keyword">SELECT</span> <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">INTO</span> num <span class="keyword">FROM</span> fruits </span><br><span class="line">        <span class="keyword">WHERE</span> s_id <span class="operator">=</span> sid;</span><br><span class="line">    <span class="keyword">END</span> <span class="operator">/</span><span class="operator">/</span></span><br><span class="line"></span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+<p>调用存储过程：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CALL</span> CountProc(<span class="number">101</span>, <span class="variable">@num</span>);</span><br></pre></td></tr></table></figure>
+<p>查看返回结果：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="variable">@num</span>;</span><br></pre></td></tr></table></figure>
+<p>该存储过程返回了指定 s_id = 101 的水果商提供的水果种类，返回值存储在 num 变量中，使用 SELECT 查看。</p>
+<blockquote>
+<p>示例二</p>
+</blockquote>
+<p>创建存储过程，实现 1 + 2 + … + n 的累加运算。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER <span class="operator">/</span><span class="operator">/</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">PROCEDURE</span> `add_num`(<span class="keyword">IN</span> n <span class="type">INT</span>)</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    <span class="keyword">DECLARE</span> i <span class="type">INT</span>;</span><br><span class="line">    <span class="keyword">DECLARE</span> sum <span class="type">INT</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">SET</span> i <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">SET</span> sum <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    WHILE i <span class="operator">&lt;=</span> n DO</span><br><span class="line">        <span class="keyword">SET</span> sum <span class="operator">=</span> sum <span class="operator">+</span> i;</span><br><span class="line">        <span class="keyword">SET</span> i <span class="operator">=</span> i <span class="operator">+</span><span class="number">1</span>;</span><br><span class="line">    <span class="keyword">END</span> WHILE;</span><br><span class="line">    <span class="keyword">SELECT</span> sum;</span><br><span class="line"><span class="keyword">END</span> <span class="operator">/</span><span class="operator">/</span></span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+<p>调用存储过程：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CALL</span> add_num(<span class="number">50</span>);</span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E8%B0%83%E7%94%A8%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8Badd_num.png" alt="调用存储过程add_num"></p>
+<p>如果使用的是 Navicat，那么在编写存储过程时，Navicat 会自动设置 DELIMITER 为其他符号，不需要再进行 DELIMITER 的操作。</p>
+<h2 id="7-5-存储过程的调试"><a class="header-anchor" href="#7-5-存储过程的调试"></a>7.5 存储过程的调试</h2>
+<p>在 MySQL 中，存储过程不像普通的编程语言（比如 C++、Java 等）那样有专门的集成开发环境。</p>
+<p>因此要调试存储过程时，只能通过 SELECT 语句，把程序执行的中间结果查询出来，验证某一个 SQL 语句的正确性。逐步推进，依次验证完所有 SQL 语句的正确性，就可以完成对存储过程中所有操作的调试了</p>
+<h1 id="8-存储函数的使用"><a class="header-anchor" href="#8-存储函数的使用"></a>8. 存储函数的使用</h1>
+<h2 id="8-1-存储函数的语法"><a class="header-anchor" href="#8-1-存储函数的语法"></a>8.1 存储函数的语法</h2>
+<p>MySQL 支持自定义函数，对自定义函数的调用与 MySQL 预定义的系统函数一样。</p>
+<p>自定义函数的语法格式：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span> 函数名(参数名 参数类型, ...)</span><br><span class="line"><span class="keyword">RETURNS</span> 返回值类型</span><br><span class="line">[characteristics ...]</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    函数体   # 函数体中肯定有 <span class="keyword">RETURN</span> 语句</span><br><span class="line"><span class="keyword">END</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>语法说明</p>
+</blockquote>
+<p>1、参数列表：在存储过程中可以使用 <code>IN</code>、<code>OUT</code> 或 <code>INOUT</code>，而在存储函数中，总是默认为 <code>IN</code>。</p>
+<p>2、<code>RETURNS</code> 关键字后紧跟存储函数的返回值类型，这是必须的，因此函数体中必须包含一个 <code>RETURN value</code> 语句。</p>
+<p>3、 <code>characteristics</code> 表示创建存储函数时对其的约束，取值与创建存储过程时一样，不在赘述。</p>
+<p>4、函数体也可以用 <code>BEGIN...END</code> 来表示 SQL 代码的开始和结束。如果函数体只有一条语句，也可以省略 <code>BEGIN...END</code>。</p>
+<h2 id="8-2-定义与调用"><a class="header-anchor" href="#8-2-定义与调用"></a>8.2 定义与调用</h2>
+<p>在 MySQL 中，存储函数的使用方法与 MySQL 内部函数的使用方法是一样的。换言之，用户自己定义的存储函数与 MySQL 内部函数是一个性质的。只不过存储函数是用户自己定义的，而内部函数是 MySQL 的开发者定义的。</p>
+<p>因此它们的调用方式都是：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> 函数名(实参列表);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>示例一</p>
+</blockquote>
+<p>创建存储函数，名称为 <code>email_by_name()</code>，参数定义为空，该函数返回 Abel 的 email 信息，数据类型为字符串型。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER <span class="operator">/</span><span class="operator">/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span> email_by_name() </span><br><span class="line"><span class="keyword">RETURNS</span> <span class="type">VARCHAR</span>(<span class="number">25</span>)</span><br><span class="line"><span class="keyword">DETERMINISTIC</span></span><br><span class="line"><span class="keyword">CONTAINS</span> <span class="keyword">SQL</span></span><br><span class="line"><span class="keyword">BEGIN</span> </span><br><span class="line">    <span class="keyword">RETURN</span> (<span class="keyword">SELECT</span> email <span class="keyword">FROM</span> employees <span class="keyword">WHERE</span> last_name <span class="operator">=</span> <span class="string">&#x27;Abel&#x27;</span>);</span><br><span class="line"><span class="keyword">END</span> <span class="operator">/</span><span class="operator">/</span></span><br><span class="line"></span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+<p>调用：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> email_by_name();</span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E5%AD%98%E5%82%A8%E5%87%BD%E6%95%B0email_by_name%E7%9A%84%E8%B0%83%E7%94%A8%E7%BB%93%E6%9E%9C.png" alt="存储函数email_by_name的调用结果"></p>
+<blockquote>
+<p>示例二</p>
+</blockquote>
+<p>创建存储函数，名称为 <code>email_by_id()</code>，参数传入 emp_id，该函数返回指定 emp_id 对应员工的 email 信息，数据类型为字符串型。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER <span class="operator">/</span><span class="operator">/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span> email_by_id(emp_id <span class="type">INT</span>) </span><br><span class="line"><span class="keyword">RETURNS</span> <span class="type">VARCHAR</span>(<span class="number">25</span>) </span><br><span class="line"><span class="keyword">DETERMINISTIC</span> </span><br><span class="line"><span class="keyword">CONTAINS</span> <span class="keyword">SQL</span> </span><br><span class="line"><span class="keyword">BEGIN</span> </span><br><span class="line">    <span class="keyword">RETURN</span> (<span class="keyword">SELECT</span> email <span class="keyword">FROM</span> employees <span class="keyword">WHERE</span> employee_id <span class="operator">=</span> emp_id);</span><br><span class="line"><span class="keyword">END</span> <span class="operator">/</span><span class="operator">/</span> </span><br><span class="line"></span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+<p>调用：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SET</span> <span class="variable">@emp_id</span> <span class="operator">=</span> <span class="number">102</span>;</span><br><span class="line"><span class="keyword">SELECT</span> email_by_id(<span class="number">102</span>);</span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E5%AD%98%E5%82%A8%E5%87%BD%E6%95%B0email_by_id%E7%9A%84%E8%B0%83%E7%94%A8%E7%BB%93%E6%9E%9C.png" alt="存储函数email_by_id的调用结果"></p>
+<blockquote>
+<p>示例三</p>
+</blockquote>
+<p>创建存储函数 <code>count_by_id()</code>，参数传入 dept_id，该函数返回 dept_id 对应部门的员工人数，数据类型为整型。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER <span class="operator">/</span><span class="operator">/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span> count_by_id(dept_id <span class="type">INT</span>)</span><br><span class="line"><span class="keyword">RETURNS</span> <span class="type">INT</span></span><br><span class="line">    <span class="keyword">LANGUAGE</span> <span class="keyword">SQL</span></span><br><span class="line">    <span class="keyword">NOT</span> <span class="keyword">DETERMINISTIC</span></span><br><span class="line">    <span class="keyword">READS</span> <span class="keyword">SQL</span> DATA</span><br><span class="line">    <span class="keyword">SQL</span> SECURITY DEFINER</span><br><span class="line">    COMMENT <span class="string">&#x27;查询某一部门的人数&#x27;</span></span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    <span class="keyword">RETURN</span> (<span class="keyword">SELECT</span> <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">FROM</span> employees <span class="keyword">WHERE</span> department_id <span class="operator">=</span> dept_id);</span><br><span class="line"><span class="keyword">END</span> <span class="operator">/</span><span class="operator">/</span></span><br><span class="line"></span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+<p>调用：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SET</span> <span class="variable">@dept_id</span> <span class="operator">=</span> <span class="number">50</span>;</span><br><span class="line"><span class="keyword">SELECT</span> count_by_id(<span class="variable">@dept_id</span>);</span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E5%AD%98%E5%82%A8%E5%87%BD%E6%95%B0count_by_id%E7%9A%84%E8%B0%83%E7%94%A8%E7%BB%93%E6%9E%9C.png" alt="存储函数count_by_id的调用结果"></p>
+<blockquote>
+<p>创建存储函数时的出错</p>
+</blockquote>
+<p>若在创建存储函数时出现以下错误信息：</p>
+<pre>
+you might want to use the less safe log_bin_trust_function_creators variable
+</pre>
+<p>有两种解决方法：</p>
+<p>1、加上必要的函数特性 <code>[NOT] DETERMINISTIC</code> 和 <code>&#123;CONTAINS SQL | NO SQL | READS SQL DATA | MODIFIES SQL DATA&#125;</code>；</p>
+<p>2、执行以下语句：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SET</span> <span class="keyword">GLOBAL</span> log_bin_trust_function_creators <span class="operator">=</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="8-3-与存储过程的对比"><a class="header-anchor" href="#8-3-与存储过程的对比"></a>8.3 与存储过程的对比</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">关键字</th>
+<th style="text-align:center">调用语法</th>
+<th style="text-align:center">返回值</th>
+<th style="text-align:center">应用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">存储过程</td>
+<td style="text-align:center">PROCEDURE</td>
+<td style="text-align:center">CALL 存储过程()</td>
+<td style="text-align:center">可以理解为 0 个或多个</td>
+<td style="text-align:center">常用于更新</td>
+</tr>
+<tr>
+<td style="text-align:center">存储函数</td>
+<td style="text-align:center">FUNCTION</td>
+<td style="text-align:center">SELECT 存储函数()</td>
+<td style="text-align:center">只能是一个</td>
+<td style="text-align:center">常用于查询结果是一个值并需要返回时</td>
+</tr>
+</tbody>
+</table>
+<p>此外，<strong>存储函数可以在查询语句中使用，存储过程不行。</strong> 但存储过程的功能更加强大，能够执行对表的操作（比如创建表，删除表等）和事务操作，存储函数并不具备这些功能。</p>
+<h1 id="9-查看、修改与删除"><a class="header-anchor" href="#9-查看、修改与删除"></a>9. 查看、修改与删除</h1>
+<h2 id="9-1-查看"><a class="header-anchor" href="#9-1-查看"></a>9.1 查看</h2>
+<p>创建完存储过程和存储函数后，怎么知晓已经创建成功呢？</p>
+<p>MySQL 存储了存储过程和存储函数的状态信息，用户可以使用 <code>SHOW STATUS</code> 语句或 <code>SHOW CREATE</code> 语句来查看，也可直接从系统的 <code>information_schema</code> 数据库中查询。</p>
+<blockquote>
+<p>使用 <code>SHOW CREATE</code> 语句查看</p>
+</blockquote>
+<p>基本语法：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> <span class="keyword">CREATE</span> &#123;<span class="keyword">PROCEDURE</span> <span class="operator">|</span> <span class="keyword">FUNCTION</span>&#125; 存储过程名或存储函数名;</span><br></pre></td></tr></table></figure>
+<p>比如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 在命令行中使用</span><br><span class="line"><span class="keyword">SHOW</span> <span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span> email_by_name \G</span><br><span class="line"># 在 Navicat 中使用</span><br><span class="line"><span class="keyword">SHOW</span> <span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span> email_by_name;</span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E4%BD%BF%E7%94%A8SHOW-CREATE%E6%9F%A5%E7%9C%8B%E5%AD%98%E5%82%A8%E5%87%BD%E6%95%B0%E4%BF%A1%E6%81%AF.png" alt="使用SHOW-CREATE查看存储函数信息"></p>
+<blockquote>
+<p>使用 <code>SHOW STATUS</code> 语句查看</p>
+</blockquote>
+<p>基本语法：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> &#123;<span class="keyword">PROCEDURE</span> <span class="operator">|</span> <span class="keyword">FUNCTION</span>&#125; STATUS [<span class="keyword">LIKE</span> <span class="string">&#x27;pattern&#x27;</span>]</span><br></pre></td></tr></table></figure>
+<p>这将返回子程序的特征，比如数据库、名字、类型、创建者、创建时间和修改时间。</p>
+<p><code>[LIKE 'pattern']</code>：匹配存储过程或存储函数的名称，可以省略。当省略不写时，会列出 MySQL 数据库中存在的所有存储过程或存储函数的信息。</p>
+<p>比如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 在命令行中使用</span><br><span class="line"><span class="keyword">SHOW</span> <span class="keyword">FUNCTION</span> STATUS <span class="keyword">LIKE</span> <span class="string">&#x27;email_by_%&#x27;</span> \G</span><br><span class="line"># 在 Navicat 中使用</span><br><span class="line"><span class="keyword">SHOW</span> <span class="keyword">FUNCTION</span> STATUS <span class="keyword">LIKE</span> <span class="string">&#x27;email_by_%&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p>上述语句将查出两个存储函数的信息，分别是 <code>email_by_id</code> 和 <code>email_by_id</code>。</p>
+<blockquote>
+<p>从 <code>information_schema.Routines</code> 表中查看</p>
+</blockquote>
+<p>MySQL 中的存储过程和存储函数的信息存储在 <code>information_schema</code> 数据库下的 <code>Routines</code> 表中，可以通过查询该表的记录来查询存储过程和函数的信息。语法如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> information_schema.Routines</span><br><span class="line"><span class="keyword">WHERE</span> ROUTINE_NAME <span class="operator">=</span> <span class="string">&#x27;存储过程或函数的名&#x27;</span> [<span class="keyword">AND</span> ROUTINE_TYPE <span class="operator">=</span> &#123;<span class="string">&#x27;PROCEDURE|FUNCTION&#x27;</span>&#125;];</span><br></pre></td></tr></table></figure>
+<p>如果在 MySQL 数据库中存在存储过程和存储函数名称相同的情况，最好指定 <code>ROUTINE_TYPE</code> 查询条件来指明查询的是存储过程还是存储函数。</p>
+<p>比如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 在命令行中使用</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> information_schema.Routines </span><br><span class="line"><span class="keyword">WHERE</span> ROUTINE_NAME <span class="operator">=</span> <span class="string">&#x27;count_by_id&#x27;</span> <span class="keyword">AND</span> ROUTINE_TYPE <span class="operator">=</span> <span class="string">&#x27;FUNCTION&#x27;</span> \G</span><br><span class="line"># 在 Navicat 中使用</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> information_schema.Routines </span><br><span class="line"><span class="keyword">WHERE</span> ROUTINE_NAME <span class="operator">=</span> <span class="string">&#x27;count_by_id&#x27;</span> <span class="keyword">AND</span> ROUTINE_TYPE <span class="operator">=</span> <span class="string">&#x27;FUNCTION&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="9-2-修改"><a class="header-anchor" href="#9-2-修改"></a>9.2 修改</h2>
+<p>修改存储过程或存储函数，不影响存储过程或函数功能，只是修改相关特性，可以使用 <code>ALTER</code> 语句实现。语法如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> &#123;<span class="keyword">PROCEDURE</span> <span class="operator">|</span> <span class="keyword">FUNCTION</span>&#125; 存储过程或函数的名 [characteristic ...]</span><br></pre></td></tr></table></figure>
+<p>其中，<code>characteristic</code> 指定存储过程或存储函数的特性，其取值信息与创建存储过程、存储函数时的取值信息略有不同。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123; <span class="keyword">CONTAINS</span> <span class="keyword">SQL</span> <span class="operator">|</span> <span class="keyword">NO</span> <span class="keyword">SQL</span> <span class="operator">|</span> <span class="keyword">READS</span> <span class="keyword">SQL</span> DATA <span class="operator">|</span> <span class="keyword">MODIFIES</span> <span class="keyword">SQL</span> DATA &#125;</span><br><span class="line"><span class="operator">|</span> <span class="keyword">SQL</span> SECURITY &#123; DEFINER <span class="operator">|</span> INVOKER &#125;</span><br><span class="line"><span class="operator">|</span> COMMENT <span class="string">&#x27;string&#x27;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>CONTAINS SQL</code>，表示子程序包含 SQL 语句，但不包含读或写数据的语句。</li>
+<li><code>NO SQL</code>，表示子程序中不包含 SQL 语句。</li>
+<li><code>READS SQL DATA</code>，表示子程序中包含读数据的语句。</li>
+<li><code>MODIFIES SQL DATA</code>，表示子程序中包含写数据的语句。</li>
+<li><code>SQL SECURITY &#123; DEFINER | INVOKER &#125;</code>，指明谁有权限来执行。<code>DEFINER</code> 表示只有定义者自己才能够执行；<code>INVOKER</code> 表示调用者可以执行。</li>
+<li><code>COMMENT 'string'</code>，表示注释信息。</li>
+</ul>
+<blockquote>
+<p>示例一</p>
+</blockquote>
+<p>修改存储过程 count_by_id 的定义，将读写权限改为 <code>MODIFIES SQL DATA</code>，并指明调用者可以执行：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">FUNCTION</span> count_by_id </span><br><span class="line"><span class="keyword">MODIFIES</span> <span class="keyword">SQL</span> DATA </span><br><span class="line"><span class="keyword">SQL</span> SECURITY INVOKER;</span><br></pre></td></tr></table></figure>
+<p>查看修改后的信息：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> specific_name, sql_data_access, security_type </span><br><span class="line"><span class="keyword">FROM</span> information_schema.`ROUTINES` </span><br><span class="line"><span class="keyword">WHERE</span> routine_name <span class="operator">=</span> <span class="string">&#x27;count_by_id&#x27;</span> <span class="keyword">AND</span> routine_type <span class="operator">=</span> <span class="string">&#x27;FUNCTION&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E4%BF%AE%E6%94%B9count_by_id%E5%90%8E%E7%9A%84%E4%BF%A1%E6%81%AF.png" alt="修改count_by_id后的信息"></p>
+<p>从查询的结果可以看出，访问数据的权限已经变成 <code>MODIFIES SQL DATA</code>，安全类型已经变成 <code>INVOKER</code>。</p>
+<blockquote>
+<p>示例二</p>
+</blockquote>
+<p>修改存储函数 count_by_id 的定义，将读写权限改为 <code>READS SQL DATA</code>，并加上注释信息 <code>Number of people in a department</code>：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">FUNCTION</span> count_by_id </span><br><span class="line"><span class="keyword">READS</span> <span class="keyword">SQL</span> DATA</span><br><span class="line">COMMENT <span class="string">&#x27;Number of people in a department&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E5%86%8D%E6%AC%A1%E4%BF%AE%E6%94%B9count_by_id%E5%90%8E%E7%9A%84%E4%BF%A1%E6%81%AF.png" alt="再次修改count_by_id后的信息"></p>
+<h2 id="9-3-删除"><a class="header-anchor" href="#9-3-删除"></a>9.3 删除</h2>
+<p>可以使用 <code>DROP</code> 语句来删除存储过程和存储函数：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DROP</span> &#123;<span class="keyword">PROCEDURE</span> <span class="operator">|</span> <span class="keyword">FUNCTION</span>&#125; [IF <span class="keyword">EXISTS</span>] 存储过程或函数的名</span><br></pre></td></tr></table></figure>
+<p><code>IF EXISTS</code>：如果存储程序或存储函数不存在，它可以防止发生错误，产生一个用 SHOW WARNINGS 查看的警告。</p>
+<p>比如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DROP</span> <span class="keyword">FUNCTION</span> count_by_id;</span><br></pre></td></tr></table></figure>
+<h1 id="10-使用存储过程的争议"><a class="header-anchor" href="#10-使用存储过程的争议"></a>10. 使用存储过程的争议</h1>
+<p>尽管存储过程有诸多优点，但是对于存储过程的使用，一直都存在着很多争议，有些公司对于大型项目要求使用存储过程，而有些公司在手册中明确禁止使用存储过程，为什么这些公司对存储过程的使用需求差别这么大呢？</p>
+<h2 id="10-1-存储过程的优点"><a class="header-anchor" href="#10-1-存储过程的优点"></a>10.1 存储过程的优点</h2>
+<p>1、存储过程可以一次编译多次使用。存储过程只在创建时进行编译，之后的使用都不需要重新编译，提升了 SQL 的执行效率。</p>
+<p>2、可以减少开发工作量。将代码封装成模块，实际上是编程的核心思想之一，这样可以把复杂的问题拆解成不同的模块，然后模块之间可以重复使用，在减少开发工作量的同时，还能保证代码的结构清晰。</p>
+<p>3、存储过程的安全性强。在创建存储过程时可以设置对用户的使用权限，和视图一样具有较强的安全性。</p>
+<p>4、可以减少网络传输量。因为代码封装到存储过程中，每次使用只需要调用存储过程即可，这样可以减少网络传输量。</p>
+<p>5、良好的封装性。在进行相对复杂的数据库操作时，原本需要使用多条SQL 语句并可能还要连接多次数据库才能完成的操作，在封装成存储过程后，只需要连接一次即可。</p>
+<h2 id="10-2-存储过程的缺点"><a class="header-anchor" href="#10-2-存储过程的缺点"></a>10.2 存储过程的缺点</h2>
+<p>基于上面这些优点，不少大公司都要求在大型项目使用存储过程，比如微软、IBM 等公司。但是国内的阿里并不推荐开发人员使用存储过程，这是为什么呢？</p>
+<blockquote>
+<p>【强制】禁止使用存储过程，存储过程难以调试和扩展，更没有移植性。</p>
+</blockquote>
+<p>存储过程的缺点也是显而易见的：</p>
+<p>1、可移植性差。存储过程不能跨数据库移植，比如在 MySQL、Oracle 或 SQL Server 里编写的存储过程，在换成其他数据库时都需要重新编写。</p>
+<p>2、调试困难。只有少数 DBMS 支持存储过程的调试。对于复杂的存储过程来说，初期开发和后续维护都不容易，并且鲜有的一些可以对存储过程进行调试的第三方工具是需要收费的。</p>
+<p>3、存储过程的版本管理很困难。比如数据表索引发生变化了，可能会导致存储过程失效。在开发软件的时候往往需要进行版本管理，但是存储过程本身没有版本控制，版本迭代更新时会很麻烦。</p>
+<p>4、不适合高并发的场景。高并发的场景需要减少数据库的压力，有时数据库会采用分库分表的方式，而且对可扩展性要求很高，在这种情况下，存储过程会变得难以维护，并增加数据库的压力。</p>
+<h2 id="10-3-小结"><a class="header-anchor" href="#10-3-小结"></a>10.3 小结</h2>
+<p>存储过程既方便，又有局限性。尽管不同的公司对使用存储过程的态度不一，但是对于开发人员来说，掌握存储过程都是必备的技能之一。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/View-Procedure-And-Function-Of-MySQL/">https://mofan212.github.io/posts/View-Procedure-And-Function-Of-MySQL/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/MySQL/">MySQL</a></div><div class="post-share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/109.png" data-sites="wechat,qq,weibo,facebook,x"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/Constraint-Of-MySQL/" title="【MySQL 四】约束"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/108.png" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【MySQL 四】约束</div></div><div class="info-2"><div class="info-item-1">本文介绍了 MySQL 中约束的使用，并给出添加、删除约束的方式。</div></div></div></a><a class="pagination-related" href="/posts/Variable-Process-Control-Cursor-And-Trigger-Of-MySQL/" title="【MySQL 六】变量、流程控制、游标与触发器"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/110.png" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【MySQL 六】变量、流程控制、游标与触发器</div></div><div class="info-2"><div class="info-item-1">本文介绍了 MySQL 中变量、流程控制、游标和触发器的语法与使用。</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/MySQL-Advanced-Seventh-Data-Storage-Structure-Of-InnoDB/" title="【MySQL 高级篇七】InnoDB 的数据存储结构"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/146.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-01-14</div><div class="info-item-2">【MySQL 高级篇七】InnoDB 的数据存储结构</div></div><div class="info-2"><div class="info-item-1">本文介绍了 MySQL 中 InnoDB 存储引擎的数据存储结构，包括页的内部结构、行格式等。</div></div></div></a><a class="pagination-related" href="/posts/MySQL-Advanced-First-Use-Of-MySQL-Under-Linux/" title="【MySQL 高级篇一】Linux 下 MySQL 的使用"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/128.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-02-26</div><div class="info-item-2">【MySQL 高级篇一】Linux 下 MySQL 的使用</div></div><div class="info-2"><div class="info-item-1">本文介绍了 Linux 下 MySQL 的使用以及 MySQL 的字符集、SQL 大小写规范和 sql_mode 的合理设置。</div></div></div></a><a class="pagination-related" href="/posts/MySQL-Advanced-Fourth-Logical-Architecture/" title="【MySQL 高级篇四】逻辑架构"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/134.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-13</div><div class="info-item-2">【MySQL 高级篇四】逻辑架构</div></div><div class="info-2"><div class="info-item-1">本文剖析了 MySQL 的逻辑架构，介绍了 SQL 执行流程和数据库缓冲池。</div></div></div></a><a class="pagination-related" href="/posts/DDL-And-DML-Of-MySQL/" title="【MySQL 二】DDL 与 DML"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/106.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-09-11</div><div class="info-item-2">【MySQL 二】DDL 与 DML</div></div><div class="info-2"><div class="info-item-1">本文介绍了 MySQL 中的 DDL 与 DML，并对其进行拓展。</div></div></div></a><a class="pagination-related" href="/posts/New-Features-Of-MySQL-8/" title="【MySQL 七】MySQL 8.0 的新特性"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/111.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-10-03</div><div class="info-item-2">【MySQL 七】MySQL 8.0 的新特性</div></div><div class="info-2"><div class="info-item-1">本文介绍了 MySQL 8.0 中的新特性，包括窗口函数和共用表表达式。</div></div></div></a><a class="pagination-related" href="/posts/MySQL-Advanced-Sixth-Data-Structure-Of-Index/" title="【MySQL 高级篇六】索引的数据结构"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/145.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-01-10</div><div class="info-item-2">【MySQL 高级篇六】索引的数据结构</div></div><div class="info-2"><div class="info-item-1">本文介绍了 MySQL 中 InnoDB 存储引擎的索引的数据结构。</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">默烦</div><div class="author-info-description">彩笔的打怪升级之路...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mofan212"><i class="fab fa-github"></i><span>follow me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解。<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a href="./mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载。😊</br><strong><font style="color:red">严禁未遵循规范的转载。</font></strong>😡</br><strong>死去的评论系统复活啦！欢迎到留言板畅所欲言！</strong>当然也可以使用更高效的<a target="_blank" href="https://space.bilibili.com/23658864/dynamic" style="color:#49B1F5;text-decoration:underline"> 哔哩哔哩私信 </a>或<a href="mailto:cy.mofan@foxmail.com" style="color:#49B1F5;text-decoration:underline" target="_blank">邮箱</a>。 😉</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E8%A7%86%E5%9B%BE%E7%9A%84%E6%A6%82%E8%BF%B0"><span class="toc-text">1. 视图的概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E5%B8%B8%E8%A7%81%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AF%B9%E8%B1%A1"><span class="toc-text">1.1 常见的数据库对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BD%BF%E7%94%A8%E8%A7%86%E5%9B%BE"><span class="toc-text">1.2 为什么要使用视图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-%E8%A7%86%E5%9B%BE%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-text">1.3 视图的理解</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E8%A7%86%E5%9B%BE%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="toc-text">2. 视图的创建</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E5%88%9B%E5%BB%BA%E7%9A%84%E8%AF%AD%E6%B3%95"><span class="toc-text">2.1 创建的语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E5%88%9B%E5%BB%BA%E5%8D%95%E8%A1%A8%E8%A7%86%E5%9B%BE"><span class="toc-text">2.2 创建单表视图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E5%88%9B%E5%BB%BA%E5%A4%9A%E8%A1%A8%E8%81%94%E5%90%88%E8%A7%86%E5%9B%BE"><span class="toc-text">2.3 创建多表联合视图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-%E5%9F%BA%E4%BA%8E%E8%A7%86%E5%9B%BE%E5%88%9B%E5%BB%BA%E8%A7%86%E5%9B%BE"><span class="toc-text">2.4 基于视图创建视图</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E6%9F%A5%E7%9C%8B%E8%A7%86%E5%9B%BE%E4%BF%A1%E6%81%AF"><span class="toc-text">3. 查看视图信息</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E8%A7%86%E5%9B%BE%E7%9A%84%E5%85%B6%E4%BB%96%E6%93%8D%E4%BD%9C"><span class="toc-text">4. 视图的其他操作</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E6%9B%B4%E6%96%B0%E8%A7%86%E5%9B%BE%E7%9A%84%E6%95%B0%E6%8D%AE"><span class="toc-text">4.1 更新视图的数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E4%B8%8D%E5%8F%AF%E6%9B%B4%E6%96%B0%E7%9A%84%E8%A7%86%E5%9B%BE"><span class="toc-text">4.2 不可更新的视图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-%E4%BF%AE%E6%94%B9%E8%A7%86%E5%9B%BE"><span class="toc-text">4.3 修改视图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-4-%E5%88%A0%E9%99%A4%E8%A7%86%E5%9B%BE"><span class="toc-text">4.4 删除视图</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-%E8%A7%86%E5%9B%BE%E7%9A%84%E4%BC%98%E7%82%B9%E4%B8%8E%E4%B8%8D%E8%B6%B3"><span class="toc-text">5. 视图的优点与不足</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-%E8%A7%86%E5%9B%BE%E7%9A%84%E4%BC%98%E7%82%B9"><span class="toc-text">5.1 视图的优点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-%E8%A7%86%E5%9B%BE%E7%9A%84%E4%B8%8D%E8%B6%B3"><span class="toc-text">5.2 视图的不足</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E6%A6%82%E8%BF%B0"><span class="toc-text">6. 存储过程概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#6-1-%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-text">6.1 存储过程的理解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-2-%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-text">6.2 存储过程的分类</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">7. 存储过程的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#7-1-%E5%88%9B%E5%BB%BA%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E7%9A%84%E8%AF%AD%E6%B3%95"><span class="toc-text">7.1 创建存储过程的语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-2-%E5%88%9B%E5%BB%BA%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E7%A4%BA%E4%BE%8B"><span class="toc-text">7.2 创建存储过程示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-3-%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E7%9A%84%E8%B0%83%E7%94%A8%E6%A0%BC%E5%BC%8F"><span class="toc-text">7.3 存储过程的调用格式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-4-%E8%B0%83%E7%94%A8%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E7%A4%BA%E4%BE%8B"><span class="toc-text">7.4 调用存储过程示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-5-%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E7%9A%84%E8%B0%83%E8%AF%95"><span class="toc-text">7.5 存储过程的调试</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-%E5%AD%98%E5%82%A8%E5%87%BD%E6%95%B0%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">8. 存储函数的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#8-1-%E5%AD%98%E5%82%A8%E5%87%BD%E6%95%B0%E7%9A%84%E8%AF%AD%E6%B3%95"><span class="toc-text">8.1 存储函数的语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-2-%E5%AE%9A%E4%B9%89%E4%B8%8E%E8%B0%83%E7%94%A8"><span class="toc-text">8.2 定义与调用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-3-%E4%B8%8E%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="toc-text">8.3 与存储过程的对比</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#9-%E6%9F%A5%E7%9C%8B%E3%80%81%E4%BF%AE%E6%94%B9%E4%B8%8E%E5%88%A0%E9%99%A4"><span class="toc-text">9. 查看、修改与删除</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#9-1-%E6%9F%A5%E7%9C%8B"><span class="toc-text">9.1 查看</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-2-%E4%BF%AE%E6%94%B9"><span class="toc-text">9.2 修改</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-3-%E5%88%A0%E9%99%A4"><span class="toc-text">9.3 删除</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#10-%E4%BD%BF%E7%94%A8%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E7%9A%84%E4%BA%89%E8%AE%AE"><span class="toc-text">10. 使用存储过程的争议</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#10-1-%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E7%9A%84%E4%BC%98%E7%82%B9"><span class="toc-text">10.1 存储过程的优点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-2-%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E7%9A%84%E7%BC%BA%E7%82%B9"><span class="toc-text">10.2 存储过程的缺点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-3-%E5%B0%8F%E7%BB%93"><span class="toc-text">10.3 小结</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/Something-About-Blog/" title="博客搭建与维护"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="博客搭建与维护"/></a><div class="content"><a class="title" href="/posts/Something-About-Blog/" title="博客搭建与维护">博客搭建与维护</a><time datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"/></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="更新于 2026-01-03 00:00:00">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"/></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/103.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 的类资源加载"/></a><div class="content"><a class="title" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载">Java 的类资源加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/20.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="注解、类的加载、反射"/></a><div class="content"><a class="title" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射">注解、类的加载、反射</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/ren-zhi-jue-xing/" title="认知觉醒"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/172.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="认知觉醒"/></a><div class="content"><a class="title" href="/posts/ren-zhi-jue-xing/" title="认知觉醒">认知觉醒</a><time datetime="2025-12-28T16:00:00.000Z" title="更新于 2025-12-29 00:00:00">2025-12-29</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://gcore.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script src="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/js/mine.min.js"></script><script src="/js/tip_portal.js"></script><script defer="defer" id="ribbon" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script id="click-show-text" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="Azathoth,Yog-Sothoth,Shub-Niggurath,Nyarlathotep,Cthulhu,Hastur,Abhoth,Ghroth,Tsathoggua,Cthugha,Deep Ones,Dagon,Chaugnar Faugn,Mordiggian,Shoggoth,Old One,Mi-Go,Great Race of Yith,Flying Polyp,Hounds of Tindalos,Dhole" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div class="docsearch-wrap"><div id="docsearch" style="display:none"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@docsearch/css/dist/style.min.css"/><script src="https://testingcf.jsdelivr.net/npm/@docsearch/js/dist/umd/index.min.js"></script><script>(() => {
+  docsearch(Object.assign({
+    appId: 'BAFEL7A6K1',
+    apiKey: '89fcb5961984c5c054bf04149f345f38',
+    indexName: 'mofan212io',
+    container: '#docsearch',
+    placeholder: '输入关键字进行搜索',
+  }, null))
+
+  const handleClick = () => {
+    document.querySelector('.DocSearch-Button').click()
+  }
+
+  const searchClickFn = () => {
+    btf.addEventListenerPjax(document.querySelector('#search-button > .search'), 'click', handleClick)
+  }
+
+  searchClickFn()
+  window.addEventListener('pjax:complete', searchClickFn)
+})()</script></div></div></body></html>

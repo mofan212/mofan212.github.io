@@ -1,0 +1,2044 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>一款简洁、高自定义化的 Markdown 编辑器——Typora | Mofan</title><meta name="author" content="默烦,cy.mofan@foxmail.com"><meta name="copyright" content="默烦"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="我宣布：Typora 是最好的 Markdown 编辑器，没有之一！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一款简洁、高自定义化的 Markdown 编辑器——Typora">
+<meta property="og:url" content="https://mofan212.github.io/posts/How-to-use-Typora/">
+<meta property="og:site_name" content="Mofan">
+<meta property="og:description" content="我宣布：Typora 是最好的 Markdown 编辑器，没有之一！">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/2.jpg">
+<meta property="article:published_time" content="2020-05-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-07-14T16:00:00.000Z">
+<meta property="article:author" content="默烦">
+<meta property="article:tag" content="Markdown">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/2.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "一款简洁、高自定义化的 Markdown 编辑器——Typora",
+  "url": "https://mofan212.github.io/posts/How-to-use-Typora/",
+  "image": "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/2.jpg",
+  "datePublished": "2020-05-28T16:00:00.000Z",
+  "dateModified": "2023-07-14T16:00:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "默烦",
+      "url": "https://mofan212.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/How-to-use-Typora/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":true,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 默烦","link":"链接: ","source":"来源: Mofan","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://testingcf.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '一款简洁、高自定义化的 Markdown 编辑器——Typora',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="referrer" content="no-referrer-when-downgrade" /><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/css/myStyle.min.css"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css" /><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css" /><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Mofan" type="application/atom+xml">
+</head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+btf.addGlobalFn('pjaxSend', () => {
+  Pace.restart()
+}, 'pace_restart')
+
+</script><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources/css/minimal.min.css"/><script src="https://testingcf.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/post_top_img.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Mofan</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">一款简洁、高自定义化的 Markdown 编辑器——Typora</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-05-28T16:00:00.000Z" title="发表于 2020-05-29 00:00:00">2020-05-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-07-14T16:00:00.000Z" title="更新于 2023-07-15 00:00:00">2023-07-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Tools/">Tools</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>15分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;距离本文上次更新已经过去&quot;,&quot;messageNext&quot;:&quot;天，请注意时效性。&quot;,&quot;postUpdate&quot;:&quot;2023-07-15 00:00:00&quot;}" hidden></div><p>封面来源：本文封面来源于网络，如有侵权，请联系删除。</p>
+<h1 id="Typora的使用"><a class="header-anchor" href="#Typora的使用"></a>Typora的使用</h1>
+<h2 id="下载"><a class="header-anchor" href="#下载"></a>下载</h2>
+<p>Typora官网：<a target="_blank" rel="noopener" href="https://www.typora.io/">Typora</a></p>
+<p>进入官网找到下载位置，进行下载安装即可~</p>
+<h2 id="图片处理"><a class="header-anchor" href="#图片处理"></a>图片处理</h2>
+<p>在 Typora 中，或者说 Markdown 语法中，图片都是引用的，并不是直接嵌入文章的。其实很好理解，就和 HTML 中的 <code>&lt;img&gt;</code> 一样，设置一个路径，然后图片就可以显示了，如果路径错误或者图片不存在，那图片就无法显示。</p>
+<p>而对于 Typora 来说，在文章里引用图片是十分简单的，可以直接将图片拖拽进文章，Typora 会自己定位图片的绝对路径并引用图片。各种截图可以直接在 Typora 中复制，截取的图片可以直接在 Typora 中引用，它们会保存在用户路径下。</p>
+<p>为了方便图片的整理可以将文章分成不同的类，每类文章中有单独存放的图片文件夹，以便快速寻找、图片或修改图片。比如：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/图片分类文件夹.png" alt="图片分类文件夹" style="zoom: 67%;" />
+<p>针对这一点，需要对 Typora 进行以下设置，这 Typora 顶部菜单栏找到 <strong>格式</strong> 一项：</p>
+<ul>
+<li>格式 — 图像 — 设置图片根目录…</li>
+<li>格式 — 图像 — 当插入本地图片时 — 复制图片到文件夹…</li>
+</ul>
+<blockquote>
+<p>设置图片根目录</p>
+</blockquote>
+<p>Q：为什么要设置图片根目录？</p>
+<p>A：设置了图片根目录会让图片的引用路径从绝对路径变成相对路径。</p>
+<p>Q：那这有啥用？</p>
+<p>A：每类文章都设置了不同的图片存放文件夹，并且文章和图片存放文件夹处于同一目录下，如果需要转移文章目录，直接拖动文件到目标位置即可，无需修改图片引用路径，这就是设置了根目录的魅力！ 😎</p>
+<p>A：除此之外可以更方便地备份，比如存入 U 盘，然后在不同的 PC 上查看，还可以备份到云上。绝对路径相比于相对路径，直接在 U 盘中打开文章也可以直接看到图片，备份到云上后下载下来也可以直接看到图片。这就是！ 设置了！根目录的！魅力！ 🎉</p>
+<blockquote>
+<p>复制图片到文件夹</p>
+</blockquote>
+<p>Q：为什么要设置“复制图片到文件夹”？</p>
+<p>A：截图后自接复制到 Typora 中时，Typora 会将这些图片保存到用户目录（C 盘下的一个目录）下，不方便管理。在设置了“复制图片到文件夹”后，这些图片就会保存在设置的文件夹中，实现图片分类整理。</p>
+<p>A：如果将本次设置和上一步设置搭配使用，就可以将截取的图片存放到指定的文件中，并且图片的引用还是相对路径，文章、图片的备份就会更加简单，直接将最外层文件夹拖拽进 U 盘或上传至云即可。那是相当的奈斯啊！👍</p>
+<p>Q：使用 picGo 不好吗？直接将图片传到图床，干嘛还将图片留到本地？</p>
+<p>A：这就是个人习惯的问题了，首先图床这个东西并不是绝对信任的，养成备份的习惯，更能有备无患，在本地保留一份（或多备份几份）是必要的。</p>
+<h1 id="Markdown-语法"><a class="header-anchor" href="#Markdown-语法"></a>Markdown 语法</h1>
+<p>本语法适用于在 Typora 编译器， <mark>不同的编译器对 Markdown 语法的编译可能不同，但大同小异。</mark></p>
+<h2 id="标题"><a class="header-anchor" href="#标题"></a>标题</h2>
+<ol>
+<li>可以使用 <code>#</code> 表示 1-6 级标题，一级标题对应一个 <code>#</code> 号，二级标题对应 <code>##</code> 号，依次类推。</li>
+</ol>
+<h2 id="段落格式"><a class="header-anchor" href="#段落格式"></a>段落格式</h2>
+<h3 id="段落"><a class="header-anchor" href="#段落"></a>段落</h3>
+<ol>
+<li>段落的换行是使用两个以上空格加上回车</li>
+<li>或者输入完内容后直接回车即可</li>
+</ol>
+<h3 id="字体"><a class="header-anchor" href="#字体"></a>字体</h3>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="emphasis">*斜体文本*</span></span><br><span class="line"><span class="emphasis">_斜体文本_</span></span><br><span class="line"><span class="strong">**粗体文本**</span></span><br><span class="line"><span class="strong">__粗体文本__</span></span><br><span class="line"><span class="strong">**<span class="emphasis">*粗斜体文本*</span>**</span></span><br><span class="line"><span class="strong">__<span class="emphasis">_粗斜体文本_</span>__</span></span><br></pre></td></tr></table></figure>
+<h3 id="分割线"><a class="header-anchor" href="#分割线"></a>分割线</h3>
+<p>可以在一行中用三个以上的星号、减号、底线来建立一个分隔线，行内不能有其他东西，也可以在星号或是减号中间插入空格。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="strong">***</span></span><br><span class="line"><span class="strong"></span></span><br><span class="line"><span class="strong">* * *</span></span><br><span class="line"><span class="strong"></span></span><br><span class="line"><span class="strong">**</span><span class="strong">***</span></span><br><span class="line"><span class="strong"></span></span><br><span class="line"><span class="strong">- - -</span></span><br><span class="line"><span class="strong"></span></span><br><span class="line"><span class="strong">----------</span></span><br></pre></td></tr></table></figure>
+<h3 id="删除线"><a class="header-anchor" href="#删除线"></a>删除线</h3>
+<p>如果段落上的文字要添加删除线，只需要在文字的两端加上两个波浪线 <code>~~</code> 即可：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bilibili.COM</span><br><span class="line">GOOGLE.COM</span><br><span class="line">~~BAIDU.COM~~</span><br></pre></td></tr></table></figure>
+<p>比如：<s>删除线</s></p>
+<h3 id="下划线"><a class="header-anchor" href="#下划线"></a>下划线</h3>
+<p>下划线可以通过 HTML 的 <code>&lt;u&gt;</code> 标签来实现：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">u</span>&gt;</span></span>带下划线文本<span class="language-xml"><span class="tag">&lt;/<span class="name">u</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p>比如：<u>带下划线文本</u></p>
+<h3 id="脚注"><a class="header-anchor" href="#脚注"></a>脚注</h3>
+<p>脚注是对文本的补充说明：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[^要注明的文本]</span><br></pre></td></tr></table></figure>
+<p>比如：我后面有一个脚注<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
+<h2 id="列表"><a class="header-anchor" href="#列表"></a>列表</h2>
+<p>Markdown 支持有序列表和无序列表。</p>
+<p>无序列表使用星号 <code>*</code>、加号 <code>+</code> 或是减号 <code>-</code> 作为列表标记：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">*</span> 第一项</span><br><span class="line"><span class="bullet">*</span> 第二项</span><br><span class="line"><span class="bullet">*</span> 第三项</span><br><span class="line"></span><br><span class="line"><span class="bullet">+</span> 第一项</span><br><span class="line"><span class="bullet">+</span> 第二项</span><br><span class="line"><span class="bullet">+</span> 第三项</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="bullet">-</span> 第一项</span><br><span class="line"><span class="bullet">-</span> 第二项</span><br><span class="line"><span class="bullet">-</span> 第三项</span><br></pre></td></tr></table></figure>
+<ul>
+<li>第一项</li>
+<li>第二项</li>
+<li>第三项</li>
+</ul>
+<h3 id="列表嵌套"><a class="header-anchor" href="#列表嵌套"></a>列表嵌套</h3>
+<p>列表嵌套只需在子列表中的选项添加四个空格即可：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">1.</span> 第一项：</span><br><span class="line"><span class="bullet">    -</span> 第一项嵌套的第一个元素</span><br><span class="line"><span class="bullet">    -</span> 第一项嵌套的第二个元素</span><br><span class="line"><span class="bullet">2.</span> 第二项：</span><br><span class="line"><span class="bullet">    -</span> 第二项嵌套的第一个元素</span><br><span class="line"><span class="bullet">    -</span> 第二项嵌套的第二个元素</span><br></pre></td></tr></table></figure>
+<ol>
+<li>第一项：
+<ul>
+<li>第一项嵌套的第一个元素</li>
+<li>第一项嵌套的第二个元素</li>
+</ul>
+</li>
+</ol>
+<h2 id="区块"><a class="header-anchor" href="#区块"></a>区块</h2>
+<p>Markdown 区块引用是在段落开头使用 <code>&gt;</code> 符号 ，然后后面紧跟一个 <strong>空格</strong> 符号：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="quote">&gt; 区块引用</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>区块应用</p>
+</blockquote>
+<p>区块是可以嵌套的，一个 <code>&gt;</code>  符号是最外层，两个 <code>&gt;</code> 符号是第一层嵌套，以此类推：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="quote">&gt; 最外层</span></span><br><span class="line"><span class="quote">&gt; &gt; 第一层嵌套</span></span><br><span class="line"><span class="quote">&gt; &gt; &gt; 第二层嵌套</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>最外层</p>
+<blockquote>
+<p>第一层嵌套</p>
+<blockquote>
+<p>第二层嵌套</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<h3 id="区块中使用列表"><a class="header-anchor" href="#区块中使用列表"></a>区块中使用列表</h3>
+<p>区块中使用列表实例如下：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="quote">&gt; 区块中使用列表</span></span><br><span class="line"><span class="quote">&gt; 1. 第一项</span></span><br><span class="line"><span class="quote">&gt; 2. 第二项</span></span><br><span class="line"><span class="quote">&gt; + 第一项</span></span><br><span class="line"><span class="quote">&gt; + 第二项</span></span><br><span class="line"><span class="quote">&gt; + 第三项</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>区块中使用列表</p>
+<ol>
+<li>第一项</li>
+<li>第二项</li>
+</ol>
+<ul>
+<li>第一项</li>
+<li>第二项</li>
+</ul>
+</blockquote>
+<h3 id="列表中使用区块"><a class="header-anchor" href="#列表中使用区块"></a>列表中使用区块</h3>
+<p>如果要在列表项目内放进区块，需要在 <code>&gt;</code> 前添加四个空格的缩进。</p>
+<p>区块中使用列表实例如下：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">*</span> 第一项</span><br><span class="line"><span class="code">    &gt; 我是区块</span></span><br><span class="line"><span class="code">    &gt; 我是区块</span></span><br><span class="line"><span class="code">* 第二项</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>第一项</p>
+<blockquote>
+<p>我是区块</p>
+<p>我是区块</p>
+</blockquote>
+</li>
+<li>
+<p>第二项</p>
+</li>
+</ul>
+<h2 id="代码"><a class="header-anchor" href="#代码"></a>代码</h2>
+<p>如果是段落上的一个函数或片段的代码可以用反引号 <code>`</code> 把它包起来，例如：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="code">`System.out.print()`</span> 函数</span><br></pre></td></tr></table></figure>
+<p><code>System.out.print()</code>函数</p>
+<h3 id="代码区块"><a class="header-anchor" href="#代码区块"></a>代码区块</h3>
+<p>代码区块使用 <strong>4 个空格</strong> 或者一个 <strong>制表符（Tab 键）</strong>。你也可以用三个反引号（ ``` ）包裹一段代码，并指定一种语言（也可以不指定）：</p>
+<p>实例如下：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="code">```javascript</span></span><br><span class="line"><span class="code">$(document).ready(function () &#123;</span></span><br><span class="line"><span class="code">alert(&#x27;hello world!&#x27;);</span></span><br><span class="line"><span class="code">&#125;);</span></span><br><span class="line"><span class="code">```</span></span><br></pre></td></tr></table></figure>
+<h2 id="链接"><a class="header-anchor" href="#链接"></a>链接</h2>
+<p>链接使用方法如下：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">链接名称</span>](<span class="link">链接地址</span>)</span><br><span class="line"></span><br><span class="line">或者</span><br><span class="line"></span><br><span class="line">&lt;链接地址&gt;</span><br></pre></td></tr></table></figure>
+<p>比如：这是一个 <a target="_blank" rel="noopener" href="https://www.bilibili.com">B站链接</a></p>
+<p><code>&lt;www.bilibili.com&gt;</code></p>
+<h3 id="高级链接"><a class="header-anchor" href="#高级链接"></a>高级链接</h3>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">链接也可以用变量来代替，文档末尾附带变量地址：</span><br><span class="line">这个链接用 1 作为网址变量 [<span class="string">Google</span>][<span class="symbol">1</span>]</span><br><span class="line">这个链接用 baidu 作为网址变量 [<span class="string">Baidu</span>][<span class="symbol">baidu</span>]</span><br><span class="line">然后在文档的结尾为变量赋值（网址）</span><br><span class="line"></span><br><span class="line">  [1]: https://www.google.com/</span><br><span class="line">  [baidu]: https://www.baidu.com/</span><br></pre></td></tr></table></figure>
+<p>比如：这个链接用1作为网址变量<a target="_blank" rel="noopener" href="https://www.baidu.com">百度</a></p>
+<h2 id="图片"><a class="header-anchor" href="#图片"></a>图片</h2>
+<p>Markdown 图片语法格式如下：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">![<span class="string">alt 属性文本</span>](<span class="link">图片地址</span>)</span><br><span class="line"></span><br><span class="line">![<span class="string">alt 属性文本</span>](<span class="link">图片地址 &quot;可选标题&quot;</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>开头一个感叹号 !</li>
+<li>接着一个方括号，里面放上图片的替代文字</li>
+<li>接着一个普通括号，里面放上图片的网址，最后还可以用引号包住并加上选择性的 <code>title</code> 属性的文字。</li>
+</ul>
+<p>Markdown 还没有办法指定图片的高度与宽度，如果需要，你可以使用普通的 <code>&lt;img&gt; </code>标签。比如：<code>&lt;img src=&quot;xxxxxxxxx&quot; width=&quot;50%&quot;&gt;</code></p>
+<h2 id="表格"><a class="header-anchor" href="#表格"></a>表格</h2>
+<p>Markdown 制作表格使用 <code>|</code> 来分隔不同的单元格，使用 <code>-</code> 来分隔表头和其他行。</p>
+<p>语法格式如下：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">|  表头   | 表头  |</span><br><span class="line">|  ----  | ----  |</span><br><span class="line">| 单元格  | 单元格 |</span><br><span class="line">| 单元格  | 单元格 |</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">表头</th>
+<th style="text-align:center">表头</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">单元格</td>
+<td style="text-align:center">单元格</td>
+</tr>
+<tr>
+<td style="text-align:center">单元格</td>
+<td style="text-align:center">单元格</td>
+</tr>
+</tbody>
+</table>
+<p>可以使用表格上方的对齐方式调整表格的对齐方式，也可以在书写时调整表格的对齐方式。</p>
+<ul>
+<li><code>-:</code> 表示设置内容和标题栏居右对齐。</li>
+<li><code>:-</code> 表示设置内容和标题栏居左对齐。</li>
+<li><code>:-:</code> 表示设置内容和标题栏居中对齐。</li>
+</ul>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">| 左对齐 | 右对齐 | 居中对齐 |</span><br><span class="line">| :-----| ----: | :----: |</span><br><span class="line">| 单元格 | 单元格 | 单元格 |</span><br><span class="line">| 单元格 | 单元格 | 单元格 |</span><br></pre></td></tr></table></figure>
+<h2 id="首行缩进"><a class="header-anchor" href="#首行缩进"></a>首行缩进</h2>
+<p>可以在段首加入 <code>&amp;ensp</code> 来表示一个空格，或者使用 <code>&amp;emsp</code> 表示两个空格。</p>
+<p>为什么要使用这种方式，因为在不同的 Markdown 编译器中，直接输入空格或者制表符可能无法显示。虽然在 Typora 上可以正常显示，但将文件传到个人博客之类的支持 Markdown 语法的网站可能会失效。</p>
+<h2 id="表情"><a class="header-anchor" href="#表情"></a>表情</h2>
+<p>emoji 中文网：<a target="_blank" rel="noopener" href="https://www.emojiall.com/zh-hans">EMOJIALL</a></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">😄 <code>:smile:</code></th>
+<th style="text-align:center">😆 <code>:laughing:</code></th>
+<th style="text-align:center"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">😊 <code>:blush:</code></td>
+<td style="text-align:center">😃 <code>:smiley:</code></td>
+<td style="text-align:center">☺️ <code>:relaxed:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">😏 <code>:smirk:</code></td>
+<td style="text-align:center">😍 <code>:heart_eyes:</code></td>
+<td style="text-align:center">😘 <code>:kissing_heart:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">😚 <code>:kissing_closed_eyes:</code></td>
+<td style="text-align:center">😳 <code>:flushed:</code></td>
+<td style="text-align:center">😌 <code>:relieved:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">😆 <code>:satisfied:</code></td>
+<td style="text-align:center">😁 <code>:grin:</code></td>
+<td style="text-align:center">😉 <code>:wink:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">😜 <code>:stuck_out_tongue_winking_eye:</code></td>
+<td style="text-align:center">😝 <code>:stuck_out_tongue_closed_eyes:</code></td>
+<td style="text-align:center">😀 <code>:grinning:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">😗 <code>:kissing:</code></td>
+<td style="text-align:center">😙 <code>:kissing_smiling_eyes:</code></td>
+<td style="text-align:center">😛 <code>:stuck_out_tongue:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">😴 <code>:sleeping:</code></td>
+<td style="text-align:center">😟 <code>:worried:</code></td>
+<td style="text-align:center">😦 <code>:frowning:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">😧 <code>:anguished:</code></td>
+<td style="text-align:center">😮 <code>:open_mouth:</code></td>
+<td style="text-align:center">😬 <code>:grimacing:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">😕 <code>:confused:</code></td>
+<td style="text-align:center">😯 <code>:hushed:</code></td>
+<td style="text-align:center">😑 <code>:expressionless:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">😒 <code>:unamused:</code></td>
+<td style="text-align:center">😅 <code>:sweat_smile:</code></td>
+<td style="text-align:center">😓 <code>:sweat:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">😥 <code>:disappointed_relieved:</code></td>
+<td style="text-align:center">😩 <code>:weary:</code></td>
+<td style="text-align:center">😔 <code>:pensive:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">😞 <code>:disappointed:</code></td>
+<td style="text-align:center">😖 <code>:confounded:</code></td>
+<td style="text-align:center">😨 <code>:fearful:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">😰 <code>:cold_sweat:</code></td>
+<td style="text-align:center">😣 <code>:persevere:</code></td>
+<td style="text-align:center">😢 <code>:cry:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">😭 <code>:sob:</code></td>
+<td style="text-align:center">😂 <code>:joy:</code></td>
+<td style="text-align:center">😲 <code>:astonished:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">😱 <code>:scream:</code></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">😫 <code>:tired_face:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">😠 <code>:angry:</code></td>
+<td style="text-align:center">😡 <code>:rage:</code></td>
+<td style="text-align:center">😤 <code>:triumph:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">😪 <code>:sleepy:</code></td>
+<td style="text-align:center">😋 <code>:yum:</code></td>
+<td style="text-align:center">😷 <code>:mask:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">😎 <code>:sunglasses:</code></td>
+<td style="text-align:center">😵 <code>:dizzy_face:</code></td>
+<td style="text-align:center">👿 <code>:imp:</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">😈 <code>:smiling_imp:</code></th>
+<th style="text-align:center">😐 <code>:neutral_face:</code></th>
+<th style="text-align:center">😶 <code>:no_mouth:</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">😇 <code>:innocent:</code></td>
+<td style="text-align:center">👽 <code>:alien:</code></td>
+<td style="text-align:center">💛 <code>:yellow_heart:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">💙 <code>:blue_heart:</code></td>
+<td style="text-align:center">💜 <code>:purple_heart:</code></td>
+<td style="text-align:center">❤️ <code>:heart:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">💚 <code>:green_heart:</code></td>
+<td style="text-align:center">💔 <code>:broken_heart:</code></td>
+<td style="text-align:center">💓 <code>:heartbeat:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">💗 <code>:heartpulse:</code></td>
+<td style="text-align:center">💕 <code>:two_hearts:</code></td>
+<td style="text-align:center">💞 <code>:revolving_hearts:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">💘 <code>:cupid:</code></td>
+<td style="text-align:center">💖 <code>:sparkling_heart:</code></td>
+<td style="text-align:center">✨ <code>:sparkles:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">⭐️ <code>:star:</code></td>
+<td style="text-align:center">🌟 <code>:star2:</code></td>
+<td style="text-align:center">💫 <code>:dizzy:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">💥 <code>:boom:</code></td>
+<td style="text-align:center">💥 <code>:collision:</code></td>
+<td style="text-align:center">💢 <code>:anger:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">❗️ <code>:exclamation:</code></td>
+<td style="text-align:center">❓ <code>:question:</code></td>
+<td style="text-align:center">❕ <code>:grey_exclamation:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">❔ <code>:grey_question:</code></td>
+<td style="text-align:center">💤 <code>:zzz:</code></td>
+<td style="text-align:center">💨 <code>:dash:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">💦 <code>:sweat_drops:</code></td>
+<td style="text-align:center">🎶 <code>:notes:</code></td>
+<td style="text-align:center">🎵 <code>:musical_note:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🔥 <code>:fire:</code></td>
+<td style="text-align:center">💩 <code>:hankey:</code></td>
+<td style="text-align:center">💩 <code>:poop:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">💩 <code>:shit:</code></td>
+<td style="text-align:center">👍 <code>:+1:</code></td>
+<td style="text-align:center">👍 <code>:thumbsup:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">👎 <code>:-1:</code></td>
+<td style="text-align:center">👎 <code>:thumbsdown:</code></td>
+<td style="text-align:center">👌 <code>:ok_hand:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">👊 <code>:punch:</code></td>
+<td style="text-align:center">👊 <code>:facepunch:</code></td>
+<td style="text-align:center">✊ <code>:fist:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">✌️ <code>:v:</code></td>
+<td style="text-align:center">👋 <code>:wave:</code></td>
+<td style="text-align:center">✋ <code>:hand:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">✋ <code>:raised_hand:</code></td>
+<td style="text-align:center">👐 <code>:open_hands:</code></td>
+<td style="text-align:center">☝️ <code>:point_up:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">👇 <code>:point_down:</code></td>
+<td style="text-align:center">👈 <code>:point_left:</code></td>
+<td style="text-align:center">👉 <code>:point_right:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🙌 <code>:raised_hands:</code></td>
+<td style="text-align:center">🙏 <code>:pray:</code></td>
+<td style="text-align:center">👆 <code>:point_up_2:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">👏 <code>:clap:</code></td>
+<td style="text-align:center">💪 <code>:muscle:</code></td>
+<td style="text-align:center">🤘 <code>:metal:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🖕 <code>:fu:</code></td>
+<td style="text-align:center">🚶 <code>:walking:</code></td>
+<td style="text-align:center">🏃 <code>:runner:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🏃 <code>:running:</code></td>
+<td style="text-align:center">👫 <code>:couple:</code></td>
+<td style="text-align:center">👪 <code>:family:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">👬 <code>:two_men_holding_hands:</code></td>
+<td style="text-align:center">👭 <code>:two_women_holding_hands:</code></td>
+<td style="text-align:center">💃 <code>:dancer:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">👯 <code>:dancers:</code></td>
+<td style="text-align:center">🙆 <code>:ok_woman:</code></td>
+<td style="text-align:center">🙅 <code>:no_good:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">💁 <code>:information_desk_person:</code></td>
+<td style="text-align:center">🙋 <code>:raising_hand:</code></td>
+<td style="text-align:center">👰 <code>:bride_with_veil:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🙎 <code>:person_with_pouting_face:</code></td>
+<td style="text-align:center">🙍 <code>:person_frowning:</code></td>
+<td style="text-align:center">🙇 <code>:bow:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">💑 <code>:couple_with_heart:</code></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">💆 <code>:massage:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">💇 <code>:haircut:</code></td>
+<td style="text-align:center">💅 <code>:nail_care:</code></td>
+<td style="text-align:center">👦 <code>:boy:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">👧 <code>:girl:</code></td>
+<td style="text-align:center">👩 <code>:woman:</code></td>
+<td style="text-align:center">👨 <code>:man:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">👶 <code>:baby:</code></td>
+<td style="text-align:center">👵 <code>:older_woman:</code></td>
+<td style="text-align:center">👴 <code>:older_man:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">👱 <code>:person_with_blond_hair:</code></td>
+<td style="text-align:center">👲 <code>:man_with_gua_pi_mao:</code></td>
+<td style="text-align:center">👳 <code>:man_with_turban:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">👷 <code>:construction_worker:</code></td>
+<td style="text-align:center">👮 <code>:cop:</code></td>
+<td style="text-align:center">👼 <code>:angel:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">👸 <code>:princess:</code></td>
+<td style="text-align:center">😺 <code>:smiley_cat:</code></td>
+<td style="text-align:center">😸 <code>:smile_cat:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">😻 <code>:heart_eyes_cat:</code></td>
+<td style="text-align:center">😽 <code>:kissing_cat:</code></td>
+<td style="text-align:center">😼 <code>:smirk_cat:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🙀 <code>:scream_cat:</code></td>
+<td style="text-align:center">😿 <code>:crying_cat_face:</code></td>
+<td style="text-align:center">😹 <code>:joy_cat:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">😾 <code>:pouting_cat:</code></td>
+<td style="text-align:center">👹 <code>:japanese_ogre:</code></td>
+<td style="text-align:center">👺 <code>:japanese_goblin:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🙈 <code>:see_no_evil:</code></td>
+<td style="text-align:center">🙉 <code>:hear_no_evil:</code></td>
+<td style="text-align:center">🙊 <code>:speak_no_evil:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">💂 <code>:guardsman:</code></td>
+<td style="text-align:center">💀 <code>:skull:</code></td>
+<td style="text-align:center">🐾 <code>:feet:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">👄 <code>:lips:</code></td>
+<td style="text-align:center">💋 <code>:kiss:</code></td>
+<td style="text-align:center">💧 <code>:droplet:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">👂 <code>:ear:</code></td>
+<td style="text-align:center">👀 <code>:eyes:</code></td>
+<td style="text-align:center">👃 <code>:nose:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">👅 <code>:tongue:</code></td>
+<td style="text-align:center">💌 <code>:love_letter:</code></td>
+<td style="text-align:center">👤 <code>:bust_in_silhouette:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">👥 <code>:busts_in_silhouette:</code></td>
+<td style="text-align:center">💬 <code>:speech_balloon:</code></td>
+<td style="text-align:center">💭 <code>:thought_balloon:</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Nature</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">☀️ <code>:sunny:</code></th>
+<th style="text-align:center">☔️ <code>:umbrella:</code></th>
+<th style="text-align:center">☁️ <code>:cloud:</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">❄️ <code>:snowflake:</code></td>
+<td style="text-align:center">⛄️ <code>:snowman:</code></td>
+<td style="text-align:center">⚡️ <code>:zap:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🌀 <code>:cyclone:</code></td>
+<td style="text-align:center">🌁 <code>:foggy:</code></td>
+<td style="text-align:center">🌊 <code>:ocean:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🐱 <code>:cat:</code></td>
+<td style="text-align:center">🐶 <code>:dog:</code></td>
+<td style="text-align:center">🐭 <code>:mouse:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🐹 <code>:hamster:</code></td>
+<td style="text-align:center">🐰 <code>:rabbit:</code></td>
+<td style="text-align:center">🐺 <code>:wolf:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🐸 <code>:frog:</code></td>
+<td style="text-align:center">🐯 <code>:tiger:</code></td>
+<td style="text-align:center">🐨 <code>:koala:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🐻 <code>:bear:</code></td>
+<td style="text-align:center">🐷 <code>:pig:</code></td>
+<td style="text-align:center">🐽 <code>:pig_nose:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🐮 <code>:cow:</code></td>
+<td style="text-align:center">🐗 <code>:boar:</code></td>
+<td style="text-align:center">🐵 <code>:monkey_face:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🐒 <code>:monkey:</code></td>
+<td style="text-align:center">🐴 <code>:horse:</code></td>
+<td style="text-align:center">🐎 <code>:racehorse:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🐫 <code>:camel:</code></td>
+<td style="text-align:center">🐑 <code>:sheep:</code></td>
+<td style="text-align:center">🐘 <code>:elephant:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🐼 <code>:panda_face:</code></td>
+<td style="text-align:center">🐍 <code>:snake:</code></td>
+<td style="text-align:center">🐦 <code>:bird:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🐤 <code>:baby_chick:</code></td>
+<td style="text-align:center">🐥 <code>:hatched_chick:</code></td>
+<td style="text-align:center">🐣 <code>:hatching_chick:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🐔 <code>:chicken:</code></td>
+<td style="text-align:center">🐧 <code>:penguin:</code></td>
+<td style="text-align:center">🐢 <code>:turtle:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🐛 <code>:bug:</code></td>
+<td style="text-align:center">🐝 <code>:honeybee:</code></td>
+<td style="text-align:center">🐜 <code>:ant:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🐞 <code>:beetle:</code></td>
+<td style="text-align:center">🐌 <code>:snail:</code></td>
+<td style="text-align:center">🐙 <code>:octopus:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🐠 <code>:tropical_fish:</code></td>
+<td style="text-align:center">🐟 <code>:fish:</code></td>
+<td style="text-align:center">🐳 <code>:whale:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🐋 <code>:whale2:</code></td>
+<td style="text-align:center">🐬 <code>:dolphin:</code></td>
+<td style="text-align:center">🐄 <code>:cow2:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🐏 <code>:ram:</code></td>
+<td style="text-align:center">🐀 <code>:rat:</code></td>
+<td style="text-align:center">🐃 <code>:water_buffalo:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🐅 <code>:tiger2:</code></td>
+<td style="text-align:center">🐇 <code>:rabbit2:</code></td>
+<td style="text-align:center">🐉 <code>:dragon:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🐐 <code>:goat:</code></td>
+<td style="text-align:center">🐓 <code>:rooster:</code></td>
+<td style="text-align:center">🐕 <code>:dog2:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🐖 <code>:pig2:</code></td>
+<td style="text-align:center">🐁 <code>:mouse2:</code></td>
+<td style="text-align:center">🐂 <code>:ox:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🐲 <code>:dragon_face:</code></td>
+<td style="text-align:center">🐡 <code>:blowfish:</code></td>
+<td style="text-align:center">🐊 <code>:crocodile:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🐪 <code>:dromedary_camel:</code></td>
+<td style="text-align:center">🐆 <code>:leopard:</code></td>
+<td style="text-align:center">🐈 <code>:cat2:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🐩 <code>:poodle:</code></td>
+<td style="text-align:center">🐾 <code>:paw_prints:</code></td>
+<td style="text-align:center">💐 <code>:bouquet:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🌸 <code>:cherry_blossom:</code></td>
+<td style="text-align:center">🌷 <code>:tulip:</code></td>
+<td style="text-align:center">🍀 <code>:four_leaf_clover:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🌹 <code>:rose:</code></td>
+<td style="text-align:center">🌻 <code>:sunflower:</code></td>
+<td style="text-align:center">🌺 <code>:hibiscus:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🍁 <code>:maple_leaf:</code></td>
+<td style="text-align:center">🍃 <code>:leaves:</code></td>
+<td style="text-align:center">🍂 <code>:fallen_leaf:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🌿 <code>:herb:</code></td>
+<td style="text-align:center">🍄 <code>:mushroom:</code></td>
+<td style="text-align:center">🌵 <code>:cactus:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🌴 <code>:palm_tree:</code></td>
+<td style="text-align:center">🌲 <code>:evergreen_tree:</code></td>
+<td style="text-align:center">🌳 <code>:deciduous_tree:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🌰 <code>:chestnut:</code></td>
+<td style="text-align:center">🌱 <code>:seedling:</code></td>
+<td style="text-align:center">🌼 <code>:blossom:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🌾 <code>:ear_of_rice:</code></td>
+<td style="text-align:center">🐚 <code>:shell:</code></td>
+<td style="text-align:center">🌐 <code>:globe_with_meridians:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🌞 <code>:sun_with_face:</code></td>
+<td style="text-align:center">🌝 <code>:full_moon_with_face:</code></td>
+<td style="text-align:center">🌚 <code>:new_moon_with_face:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🌑 <code>:new_moon:</code></td>
+<td style="text-align:center">🌒 <code>:waxing_crescent_moon:</code></td>
+<td style="text-align:center">🌓 <code>:first_quarter_moon:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🌔 <code>:waxing_gibbous_moon:</code></td>
+<td style="text-align:center">🌕 <code>:full_moon:</code></td>
+<td style="text-align:center">🌖 <code>:waning_gibbous_moon:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🌗 <code>:last_quarter_moon:</code></td>
+<td style="text-align:center">🌘 <code>:waning_crescent_moon:</code></td>
+<td style="text-align:center">🌜 <code>:last_quarter_moon_with_face:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🌛 <code>:first_quarter_moon_with_face:</code></td>
+<td style="text-align:center">🌔 <code>:moon:</code></td>
+<td style="text-align:center">🌍 <code>:earth_africa:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🌎 <code>:earth_americas:</code></td>
+<td style="text-align:center">🌏 <code>:earth_asia:</code></td>
+<td style="text-align:center">🌋 <code>:volcano:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🌌 <code>:milky_way:</code></td>
+<td style="text-align:center">⛅️ <code>:partly_sunny:</code></td>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Objects</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">🎍 <code>:bamboo:</code></th>
+<th style="text-align:center">💝 <code>:gift_heart:</code></th>
+<th style="text-align:center">🎎 <code>:dolls:</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">🎒 <code>:school_satchel:</code></td>
+<td style="text-align:center">🎓 <code>:mortar_board:</code></td>
+<td style="text-align:center">🎏 <code>:flags:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🎆 <code>:fireworks:</code></td>
+<td style="text-align:center">🎇 <code>:sparkler:</code></td>
+<td style="text-align:center">🎐 <code>:wind_chime:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🎑 <code>:rice_scene:</code></td>
+<td style="text-align:center">🎃 <code>:jack_o_lantern:</code></td>
+<td style="text-align:center">👻 <code>:ghost:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🎅 <code>:santa:</code></td>
+<td style="text-align:center">🎄 <code>:christmas_tree:</code></td>
+<td style="text-align:center">🎁 <code>:gift:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🔔 <code>:bell:</code></td>
+<td style="text-align:center">🔕 <code>:no_bell:</code></td>
+<td style="text-align:center">🎋 <code>:tanabata_tree:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🎉 <code>:tada:</code></td>
+<td style="text-align:center">🎊 <code>:confetti_ball:</code></td>
+<td style="text-align:center">🎈 <code>:balloon:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🔮 <code>:crystal_ball:</code></td>
+<td style="text-align:center">💿 <code>:cd:</code></td>
+<td style="text-align:center">📀 <code>:dvd:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">💾 <code>:floppy_disk:</code></td>
+<td style="text-align:center">📷 <code>:camera:</code></td>
+<td style="text-align:center">📹 <code>:video_camera:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🎥 <code>:movie_camera:</code></td>
+<td style="text-align:center">💻 <code>:computer:</code></td>
+<td style="text-align:center">📺 <code>:tv:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">📱 <code>:iphone:</code></td>
+<td style="text-align:center">☎️ <code>:phone:</code></td>
+<td style="text-align:center">☎️ <code>:telephone:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">📞 <code>:telephone_receiver:</code></td>
+<td style="text-align:center">📟 <code>:pager:</code></td>
+<td style="text-align:center">📠 <code>:fax:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">💽 <code>:minidisc:</code></td>
+<td style="text-align:center">📼 <code>:vhs:</code></td>
+<td style="text-align:center">🔉 <code>:sound:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🔈 <code>:speaker:</code></td>
+<td style="text-align:center">🔇 <code>:mute:</code></td>
+<td style="text-align:center">📢 <code>:loudspeaker:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">📣 <code>:mega:</code></td>
+<td style="text-align:center">⌛️ <code>:hourglass:</code></td>
+<td style="text-align:center">⏳ <code>:hourglass_flowing_sand:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">⏰ <code>:alarm_clock:</code></td>
+<td style="text-align:center">⌚️ <code>:watch:</code></td>
+<td style="text-align:center">📻 <code>:radio:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">📡 <code>:satellite:</code></td>
+<td style="text-align:center">➿ <code>:loop:</code></td>
+<td style="text-align:center">🔍 <code>:mag:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🔎 <code>:mag_right:</code></td>
+<td style="text-align:center">🔓 <code>:unlock:</code></td>
+<td style="text-align:center">🔒 <code>:lock:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🔏 <code>:lock_with_ink_pen:</code></td>
+<td style="text-align:center">🔐 <code>:closed_lock_with_key:</code></td>
+<td style="text-align:center">🔑 <code>:key:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">💡 <code>:bulb:</code></td>
+<td style="text-align:center">🔦 <code>:flashlight:</code></td>
+<td style="text-align:center">🔆 <code>:high_brightness:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🔅 <code>:low_brightness:</code></td>
+<td style="text-align:center">🔌 <code>:electric_plug:</code></td>
+<td style="text-align:center">🔋 <code>:battery:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">📲 <code>:calling:</code></td>
+<td style="text-align:center">✉️ <code>:email:</code></td>
+<td style="text-align:center">📫 <code>:mailbox:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">📮 <code>:postbox:</code></td>
+<td style="text-align:center">🛀 <code>:bath:</code></td>
+<td style="text-align:center">🛁 <code>:bathtub:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🚿 <code>:shower:</code></td>
+<td style="text-align:center">🚽 <code>:toilet:</code></td>
+<td style="text-align:center">🔧 <code>:wrench:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🔩 <code>:nut_and_bolt:</code></td>
+<td style="text-align:center">🔨 <code>:hammer:</code></td>
+<td style="text-align:center">💺 <code>:seat:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">💰 <code>:moneybag:</code></td>
+<td style="text-align:center">💴 <code>:yen:</code></td>
+<td style="text-align:center">💵 <code>:dollar:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">💷 <code>:pound:</code></td>
+<td style="text-align:center">💶 <code>:euro:</code></td>
+<td style="text-align:center">💳 <code>:credit_card:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">💸 <code>:money_with_wings:</code></td>
+<td style="text-align:center">📧 <code>:e-mail:</code></td>
+<td style="text-align:center">📥 <code>:inbox_tray:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">📤 <code>:outbox_tray:</code></td>
+<td style="text-align:center">✉️ <code>:envelope:</code></td>
+<td style="text-align:center">📨 <code>:incoming_envelope:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">📯 <code>:postal_horn:</code></td>
+<td style="text-align:center">📪 <code>:mailbox_closed:</code></td>
+<td style="text-align:center">📬 <code>:mailbox_with_mail:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">📭 <code>:mailbox_with_no_mail:</code></td>
+<td style="text-align:center">🚪 <code>:door:</code></td>
+<td style="text-align:center">🚬 <code>:smoking:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">💣 <code>:bomb:</code></td>
+<td style="text-align:center">🔫 <code>:gun:</code></td>
+<td style="text-align:center">🔪 <code>:hocho:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">💊 <code>:pill:</code></td>
+<td style="text-align:center">💉 <code>:syringe:</code></td>
+<td style="text-align:center">📄 <code>:page_facing_up:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">📃 <code>:page_with_curl:</code></td>
+<td style="text-align:center">📑 <code>:bookmark_tabs:</code></td>
+<td style="text-align:center">📊 <code>:bar_chart:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">📈 <code>:chart_with_upwards_trend:</code></td>
+<td style="text-align:center">📉 <code>:chart_with_downwards_trend:</code></td>
+<td style="text-align:center">📜 <code>:scroll:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">📋 <code>:clipboard:</code></td>
+<td style="text-align:center">📆 <code>:calendar:</code></td>
+<td style="text-align:center">📅 <code>:date:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">📇 <code>:card_index:</code></td>
+<td style="text-align:center">📁 <code>:file_folder:</code></td>
+<td style="text-align:center">📂 <code>:open_file_folder:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">✂️ <code>:scissors:</code></td>
+<td style="text-align:center">📌 <code>:pushpin:</code></td>
+<td style="text-align:center">📎 <code>:paperclip:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">✒️ <code>:black_nib:</code></td>
+<td style="text-align:center">✏️ <code>:pencil2:</code></td>
+<td style="text-align:center">📏 <code>:straight_ruler:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">📐 <code>:triangular_ruler:</code></td>
+<td style="text-align:center">📕 <code>:closed_book:</code></td>
+<td style="text-align:center">📗 <code>:green_book:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">📘 <code>:blue_book:</code></td>
+<td style="text-align:center">📙 <code>:orange_book:</code></td>
+<td style="text-align:center">📓 <code>:notebook:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">📔 <code>:notebook_with_decorative_cover:</code></td>
+<td style="text-align:center">📒 <code>:ledger:</code></td>
+<td style="text-align:center">📚 <code>:books:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🔖 <code>:bookmark:</code></td>
+<td style="text-align:center">📛 <code>:name_badge:</code></td>
+<td style="text-align:center">🔬 <code>:microscope:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🔭 <code>:telescope:</code></td>
+<td style="text-align:center">📰 <code>:newspaper:</code></td>
+<td style="text-align:center">🏈 <code>:football:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🏀 <code>:basketball:</code></td>
+<td style="text-align:center">⚽️ <code>:soccer:</code></td>
+<td style="text-align:center">⚾️ <code>:baseball:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🎾 <code>:tennis:</code></td>
+<td style="text-align:center">🎱 <code>:8ball:</code></td>
+<td style="text-align:center">🏉 <code>:rugby_football:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🎳 <code>:bowling:</code></td>
+<td style="text-align:center">⛳️ <code>:golf:</code></td>
+<td style="text-align:center">🚵 <code>:mountain_bicyclist:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🚴 <code>:bicyclist:</code></td>
+<td style="text-align:center">🏇 <code>:horse_racing:</code></td>
+<td style="text-align:center">🏂 <code>:snowboarder:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🏊 <code>:swimmer:</code></td>
+<td style="text-align:center">🏄 <code>:surfer:</code></td>
+<td style="text-align:center">🎿 <code>:ski:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">♠️ <code>:spades:</code></td>
+<td style="text-align:center">♥️ <code>:hearts:</code></td>
+<td style="text-align:center">♣️ <code>:clubs:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">♦️ <code>:diamonds:</code></td>
+<td style="text-align:center">💎 <code>:gem:</code></td>
+<td style="text-align:center">💍 <code>:ring:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🏆 <code>:trophy:</code></td>
+<td style="text-align:center">🎼 <code>:musical_score:</code></td>
+<td style="text-align:center">🎹 <code>:musical_keyboard:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🎻 <code>:violin:</code></td>
+<td style="text-align:center">👾 <code>:space_invader:</code></td>
+<td style="text-align:center">🎮 <code>:video_game:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🃏 <code>:black_joker:</code></td>
+<td style="text-align:center">🎴 <code>:flower_playing_cards:</code></td>
+<td style="text-align:center">🎲 <code>:game_die:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🎯 <code>:dart:</code></td>
+<td style="text-align:center">🀄️ <code>:mahjong:</code></td>
+<td style="text-align:center">🎬 <code>:clapper:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">📝 <code>:memo:</code></td>
+<td style="text-align:center">📝 <code>:pencil:</code></td>
+<td style="text-align:center">📖 <code>:book:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🎨 <code>:art:</code></td>
+<td style="text-align:center">🎤 <code>:microphone:</code></td>
+<td style="text-align:center">🎧 <code>:headphones:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🎺 <code>:trumpet:</code></td>
+<td style="text-align:center">🎷 <code>:saxophone:</code></td>
+<td style="text-align:center">🎸 <code>:guitar:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">👞 <code>:shoe:</code></td>
+<td style="text-align:center">👡 <code>:sandal:</code></td>
+<td style="text-align:center">👠 <code>:high_heel:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">💄 <code>:lipstick:</code></td>
+<td style="text-align:center">👢 <code>:boot:</code></td>
+<td style="text-align:center">👕 <code>:shirt:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">👕 <code>:tshirt:</code></td>
+<td style="text-align:center">👔 <code>:necktie:</code></td>
+<td style="text-align:center">👚 <code>:womans_clothes:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">👗 <code>:dress:</code></td>
+<td style="text-align:center">🎽 <code>:running_shirt_with_sash:</code></td>
+<td style="text-align:center">👖 <code>:jeans:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">👘 <code>:kimono:</code></td>
+<td style="text-align:center">👙 <code>:bikini:</code></td>
+<td style="text-align:center">🎀 <code>:ribbon:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🎩 <code>:tophat:</code></td>
+<td style="text-align:center">👑 <code>:crown:</code></td>
+<td style="text-align:center">👒 <code>:womans_hat:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">👞 <code>:mans_shoe:</code></td>
+<td style="text-align:center">🌂 <code>:closed_umbrella:</code></td>
+<td style="text-align:center">💼 <code>:briefcase:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">👜 <code>:handbag:</code></td>
+<td style="text-align:center">👝 <code>:pouch:</code></td>
+<td style="text-align:center">👛 <code>:purse:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">👓 <code>:eyeglasses:</code></td>
+<td style="text-align:center">🎣 <code>:fishing_pole_and_fish:</code></td>
+<td style="text-align:center">☕️ <code>:coffee:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🍵 <code>:tea:</code></td>
+<td style="text-align:center">🍶 <code>:sake:</code></td>
+<td style="text-align:center">🍼 <code>:baby_bottle:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🍺 <code>:beer:</code></td>
+<td style="text-align:center">🍻 <code>:beers:</code></td>
+<td style="text-align:center">🍸 <code>:cocktail:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🍹 <code>:tropical_drink:</code></td>
+<td style="text-align:center">🍷 <code>:wine_glass:</code></td>
+<td style="text-align:center">🍴 <code>:fork_and_knife:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🍕 <code>:pizza:</code></td>
+<td style="text-align:center">🍔 <code>:hamburger:</code></td>
+<td style="text-align:center">🍟 <code>:fries:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🍗 <code>:poultry_leg:</code></td>
+<td style="text-align:center">🍖 <code>:meat_on_bone:</code></td>
+<td style="text-align:center">🍝 <code>:spaghetti:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🍛 <code>:curry:</code></td>
+<td style="text-align:center">🍤 <code>:fried_shrimp:</code></td>
+<td style="text-align:center">🍱 <code>:bento:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🍣 <code>:sushi:</code></td>
+<td style="text-align:center">🍥 <code>:fish_cake:</code></td>
+<td style="text-align:center">🍙 <code>:rice_ball:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🍘 <code>:rice_cracker:</code></td>
+<td style="text-align:center">🍚 <code>:rice:</code></td>
+<td style="text-align:center">🍜 <code>:ramen:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🍲 <code>:stew:</code></td>
+<td style="text-align:center">🍢 <code>:oden:</code></td>
+<td style="text-align:center">🍡 <code>:dango:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🥚 <code>:egg:</code></td>
+<td style="text-align:center">🍞 <code>:bread:</code></td>
+<td style="text-align:center">🍩 <code>:doughnut:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🍮 <code>:custard:</code></td>
+<td style="text-align:center">🍦 <code>:icecream:</code></td>
+<td style="text-align:center">🍨 <code>:ice_cream:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🍧 <code>:shaved_ice:</code></td>
+<td style="text-align:center">🎂 <code>:birthday:</code></td>
+<td style="text-align:center">🍰 <code>:cake:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🍪 <code>:cookie:</code></td>
+<td style="text-align:center">🍫 <code>:chocolate_bar:</code></td>
+<td style="text-align:center">🍬 <code>:candy:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🍭 <code>:lollipop:</code></td>
+<td style="text-align:center">🍯 <code>:honey_pot:</code></td>
+<td style="text-align:center">🍎 <code>:apple:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🍏 <code>:green_apple:</code></td>
+<td style="text-align:center">🍊 <code>:tangerine:</code></td>
+<td style="text-align:center">🍋 <code>:lemon:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🍒 <code>:cherries:</code></td>
+<td style="text-align:center">🍇 <code>:grapes:</code></td>
+<td style="text-align:center">🍉 <code>:watermelon:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🍓 <code>:strawberry:</code></td>
+<td style="text-align:center">🍑 <code>:peach:</code></td>
+<td style="text-align:center">🍈 <code>:melon:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🍌 <code>:banana:</code></td>
+<td style="text-align:center">🍐 <code>:pear:</code></td>
+<td style="text-align:center">🍍 <code>:pineapple:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🍠 <code>:sweet_potato:</code></td>
+<td style="text-align:center">🍆 <code>:eggplant:</code></td>
+<td style="text-align:center">🍅 <code>:tomato:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🌽 <code>:corn:</code></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Places</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">🏠 <code>:house:</code></th>
+<th style="text-align:center">🏡 <code>:house_with_garden:</code></th>
+<th style="text-align:center">🏫 <code>:school:</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">🏢 <code>:office:</code></td>
+<td style="text-align:center">🏣 <code>:post_office:</code></td>
+<td style="text-align:center">🏥 <code>:hospital:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🏦 <code>:bank:</code></td>
+<td style="text-align:center">🏪 <code>:convenience_store:</code></td>
+<td style="text-align:center">🏩 <code>:love_hotel:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🏨 <code>:hotel:</code></td>
+<td style="text-align:center">💒 <code>:wedding:</code></td>
+<td style="text-align:center">⛪️ <code>:church:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🏬 <code>:department_store:</code></td>
+<td style="text-align:center">🏤 <code>:european_post_office:</code></td>
+<td style="text-align:center">🌇 <code>:city_sunrise:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🌆 <code>:city_sunset:</code></td>
+<td style="text-align:center">🏯 <code>:japanese_castle:</code></td>
+<td style="text-align:center">🏰 <code>:european_castle:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">⛺️ <code>:tent:</code></td>
+<td style="text-align:center">🏭 <code>:factory:</code></td>
+<td style="text-align:center">🗼 <code>:tokyo_tower:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🗾 <code>:japan:</code></td>
+<td style="text-align:center">🗻 <code>:mount_fuji:</code></td>
+<td style="text-align:center">🌄 <code>:sunrise_over_mountains:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🌅 <code>:sunrise:</code></td>
+<td style="text-align:center">🌠 <code>:stars:</code></td>
+<td style="text-align:center">🗽 <code>:statue_of_liberty:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🌉 <code>:bridge_at_night:</code></td>
+<td style="text-align:center">🎠 <code>:carousel_horse:</code></td>
+<td style="text-align:center">🌈 <code>:rainbow:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🎡 <code>:ferris_wheel:</code></td>
+<td style="text-align:center">⛲️ <code>:fountain:</code></td>
+<td style="text-align:center">🎢 <code>:roller_coaster:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🚢 <code>:ship:</code></td>
+<td style="text-align:center">🚤 <code>:speedboat:</code></td>
+<td style="text-align:center">⛵️ <code>:boat:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">⛵️ <code>:sailboat:</code></td>
+<td style="text-align:center">🚣 <code>:rowboat:</code></td>
+<td style="text-align:center">⚓️ <code>:anchor:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🚀 <code>:rocket:</code></td>
+<td style="text-align:center">✈️ <code>:airplane:</code></td>
+<td style="text-align:center">🚁 <code>:helicopter:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🚂 <code>:steam_locomotive:</code></td>
+<td style="text-align:center">🚊 <code>:tram:</code></td>
+<td style="text-align:center">🚞 <code>:mountain_railway:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🚲 <code>:bike:</code></td>
+<td style="text-align:center">🚡 <code>:aerial_tramway:</code></td>
+<td style="text-align:center">🚟 <code>:suspension_railway:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🚠 <code>:mountain_cableway:</code></td>
+<td style="text-align:center">🚜 <code>:tractor:</code></td>
+<td style="text-align:center">🚙 <code>:blue_car:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🚘 <code>:oncoming_automobile:</code></td>
+<td style="text-align:center">🚗 <code>:car:</code></td>
+<td style="text-align:center">🚗 <code>:red_car:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🚕 <code>:taxi:</code></td>
+<td style="text-align:center">🚖 <code>:oncoming_taxi:</code></td>
+<td style="text-align:center">🚛 <code>:articulated_lorry:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🚌 <code>:bus:</code></td>
+<td style="text-align:center">🚍 <code>:oncoming_bus:</code></td>
+<td style="text-align:center">🚨 <code>:rotating_light:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🚓 <code>:police_car:</code></td>
+<td style="text-align:center">🚔 <code>:oncoming_police_car:</code></td>
+<td style="text-align:center">🚒 <code>:fire_engine:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🚑 <code>:ambulance:</code></td>
+<td style="text-align:center">🚐 <code>:minibus:</code></td>
+<td style="text-align:center">🚚 <code>:truck:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🚋 <code>:train:</code></td>
+<td style="text-align:center">🚉 <code>:station:</code></td>
+<td style="text-align:center">🚆 <code>:train2:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🚅 <code>:bullettrain_front:</code></td>
+<td style="text-align:center">🚄 <code>:bullettrain_side:</code></td>
+<td style="text-align:center">🚈 <code>:light_rail:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🚝 <code>:monorail:</code></td>
+<td style="text-align:center">🚃 <code>:railway_car:</code></td>
+<td style="text-align:center">🚎 <code>:trolleybus:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🎫 <code>:ticket:</code></td>
+<td style="text-align:center">⛽️ <code>:fuelpump:</code></td>
+<td style="text-align:center">🚦 <code>:vertical_traffic_light:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🚥 <code>:traffic_light:</code></td>
+<td style="text-align:center">⚠️ <code>:warning:</code></td>
+<td style="text-align:center">🚧 <code>:construction:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🔰 <code>:beginner:</code></td>
+<td style="text-align:center">🏧 <code>:atm:</code></td>
+<td style="text-align:center">🎰 <code>:slot_machine:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🚏 <code>:busstop:</code></td>
+<td style="text-align:center">💈 <code>:barber:</code></td>
+<td style="text-align:center">♨️ <code>:hotsprings:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🏁 <code>:checkered_flag:</code></td>
+<td style="text-align:center">🎌 <code>:crossed_flags:</code></td>
+<td style="text-align:center">🏮 <code>:izakaya_lantern:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🗿 <code>:moyai:</code></td>
+<td style="text-align:center">🎪 <code>:circus_tent:</code></td>
+<td style="text-align:center">🎭 <code>:performing_arts:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">📍 <code>:round_pushpin:</code></td>
+<td style="text-align:center">🚩 <code>:triangular_flag_on_post:</code></td>
+<td style="text-align:center">🇯🇵 <code>:jp:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🇰🇷 <code>:kr:</code></td>
+<td style="text-align:center">🇨🇳 <code>:cn:</code></td>
+<td style="text-align:center">🇺🇸 <code>:us:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🇫🇷 <code>:fr:</code></td>
+<td style="text-align:center">🇪🇸 <code>:es:</code></td>
+<td style="text-align:center">🇮🇹 <code>:it:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🇷🇺 <code>:ru:</code></td>
+<td style="text-align:center">🇬🇧 <code>:gb:</code></td>
+<td style="text-align:center">🇬🇧 <code>:uk:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🇩🇪 <code>:de:</code></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Symbols</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">1️⃣ <code>:one:</code></th>
+<th style="text-align:center">2️⃣ <code>:two:</code></th>
+<th style="text-align:center">3️⃣ <code>:three:</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">4️⃣ <code>:four:</code></td>
+<td style="text-align:center">5️⃣ <code>:five:</code></td>
+<td style="text-align:center">6️⃣ <code>:six:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">7️⃣ <code>:seven:</code></td>
+<td style="text-align:center">8️⃣ <code>:eight:</code></td>
+<td style="text-align:center">9️⃣ <code>:nine:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🔟 <code>:keycap_ten:</code></td>
+<td style="text-align:center">🔢 <code>:1234:</code></td>
+<td style="text-align:center">0️⃣ <code>:zero:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">#️⃣ <code>:hash:</code></td>
+<td style="text-align:center">🔣 <code>:symbols:</code></td>
+<td style="text-align:center">◀️ <code>:arrow_backward:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">⬇️ <code>:arrow_down:</code></td>
+<td style="text-align:center">▶️ <code>:arrow_forward:</code></td>
+<td style="text-align:center">⬅️ <code>:arrow_left:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🔠 <code>:capital_abcd:</code></td>
+<td style="text-align:center">🔡 <code>:abcd:</code></td>
+<td style="text-align:center">🔤 <code>:abc:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">↙️ <code>:arrow_lower_left:</code></td>
+<td style="text-align:center">↘️ <code>:arrow_lower_right:</code></td>
+<td style="text-align:center">➡️ <code>:arrow_right:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">⬆️ <code>:arrow_up:</code></td>
+<td style="text-align:center">↖️ <code>:arrow_upper_left:</code></td>
+<td style="text-align:center">↗️ <code>:arrow_upper_right:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">⏬ <code>:arrow_double_down:</code></td>
+<td style="text-align:center">⏫ <code>:arrow_double_up:</code></td>
+<td style="text-align:center">🔽 <code>:arrow_down_small:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">⤵️ <code>:arrow_heading_down:</code></td>
+<td style="text-align:center">⤴️ <code>:arrow_heading_up:</code></td>
+<td style="text-align:center">↩️<code>:leftwards_arrow_with_hook:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">↪️ <code>:arrow_right_hook:</code></td>
+<td style="text-align:center">↔️ <code>:left_right_arrow:</code></td>
+<td style="text-align:center">↕️ <code>:arrow_up_down:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🔼 <code>:arrow_up_small:</code></td>
+<td style="text-align:center">🔃 <code>:arrows_clockwise:</code></td>
+<td style="text-align:center">🔄 <code>:arrows_counterclockwise:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">⏪ <code>:rewind:</code></td>
+<td style="text-align:center">⏩ <code>:fast_forward:</code></td>
+<td style="text-align:center">ℹ️ <code>:information_source:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🆗 <code>:ok:</code></td>
+<td style="text-align:center">🔀 <code>:twisted_rightwards_arrows:</code></td>
+<td style="text-align:center">🔁 <code>:repeat:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🔂 <code>:repeat_one:</code></td>
+<td style="text-align:center">🆕 <code>:new:</code></td>
+<td style="text-align:center">🔝 <code>:top:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🆙 <code>:up:</code></td>
+<td style="text-align:center">🆒 <code>:cool:</code></td>
+<td style="text-align:center">🆓 <code>:free:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🆖 <code>:ng:</code></td>
+<td style="text-align:center">🎦 <code>:cinema:</code></td>
+<td style="text-align:center">🈁 <code>:koko:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">📶 <code>:signal_strength:</code></td>
+<td style="text-align:center">🈹 <code>:u5272:</code></td>
+<td style="text-align:center">🈴 <code>:u5408:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🈺 <code>:u55b6:</code></td>
+<td style="text-align:center">🈯️ <code>:u6307:</code></td>
+<td style="text-align:center">🈷️ <code>:u6708:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🈶 <code>:u6709:</code></td>
+<td style="text-align:center">🈵 <code>:u6e80:</code></td>
+<td style="text-align:center">🈚️ <code>:u7121:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🈸 <code>:u7533:</code></td>
+<td style="text-align:center">🈳 <code>:u7a7a:</code></td>
+<td style="text-align:center">🈲 <code>:u7981:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🈂️ <code>:sa:</code></td>
+<td style="text-align:center">🚻 <code>:restroom:</code></td>
+<td style="text-align:center">🚹 <code>:mens:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🚺 <code>:womens:</code></td>
+<td style="text-align:center">🚼 <code>:baby_symbol:</code></td>
+<td style="text-align:center">🚭 <code>:no_smoking:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🅿️ <code>:parking:</code></td>
+<td style="text-align:center">♿️ <code>:wheelchair:</code></td>
+<td style="text-align:center">🚇 <code>:metro:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🛄 <code>:baggage_claim:</code></td>
+<td style="text-align:center">🉑 <code>:accept:</code></td>
+<td style="text-align:center">🚾 <code>:wc:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🚰 <code>:potable_water:</code></td>
+<td style="text-align:center">🚮 <code>:put_litter_in_its_place:</code></td>
+<td style="text-align:center">㊙️ <code>:secret:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">㊗️ <code>:congratulations:</code></td>
+<td style="text-align:center">Ⓜ️ <code>:m:</code></td>
+<td style="text-align:center">🛂 <code>:passport_control:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🛅 <code>:left_luggage:</code></td>
+<td style="text-align:center">🛃 <code>:customs:</code></td>
+<td style="text-align:center">🉐 <code>:ideograph_advantage:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🆑 <code>:cl:</code></td>
+<td style="text-align:center">🆘 <code>:sos:</code></td>
+<td style="text-align:center">🆔 <code>:id:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🚫 <code>:no_entry_sign:</code></td>
+<td style="text-align:center">🔞 <code>:underage:</code></td>
+<td style="text-align:center">📵 <code>:no_mobile_phones:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🚯 <code>:do_not_litter:</code></td>
+<td style="text-align:center">🚱 <code>:non-potable_water:</code></td>
+<td style="text-align:center">🚳 <code>:no_bicycles:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🚷 <code>:no_pedestrians:</code></td>
+<td style="text-align:center">🚸 <code>:children_crossing:</code></td>
+<td style="text-align:center">⛔️ <code>:no_entry:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">✳️ <code>:eight_spoked_asterisk:</code></td>
+<td style="text-align:center">✴️ <code>:eight_pointed_black_star:</code></td>
+<td style="text-align:center">💟 <code>:heart_decoration:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🆚 <code>:vs:</code></td>
+<td style="text-align:center">📳 <code>:vibration_mode:</code></td>
+<td style="text-align:center">📴 <code>:mobile_phone_off:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">💹 <code>:chart:</code></td>
+<td style="text-align:center">💱 <code>:currency_exchange:</code></td>
+<td style="text-align:center">♈️ <code>:aries:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">♉️ <code>:taurus:</code></td>
+<td style="text-align:center">♊️ <code>:gemini:</code></td>
+<td style="text-align:center">♋️ <code>:cancer:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">♌️ <code>:leo:</code></td>
+<td style="text-align:center">♍️ <code>:virgo:</code></td>
+<td style="text-align:center">♎️ <code>:libra:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">♏️ <code>:scorpius:</code></td>
+<td style="text-align:center">♐️ <code>:sagittarius:</code></td>
+<td style="text-align:center">♑️ <code>:capricorn:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">♒️ <code>:aquarius:</code></td>
+<td style="text-align:center">♓️ <code>:pisces:</code></td>
+<td style="text-align:center">⛎ <code>:ophiuchus:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🔯 <code>:six_pointed_star:</code></td>
+<td style="text-align:center">❎<code>:negative_squared_cross_mark:</code></td>
+<td style="text-align:center">🅰️ <code>:a:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🅱️ <code>:b:</code></td>
+<td style="text-align:center">🆎 <code>:ab:</code></td>
+<td style="text-align:center">🅾️ <code>:o2:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">💠<code>:diamond_shape_with_a_dot_inside:</code></td>
+<td style="text-align:center">♻️ <code>:recycle:</code></td>
+<td style="text-align:center">🔚 <code>:end:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🔛 <code>:on:</code></td>
+<td style="text-align:center">🔜 <code>:soon:</code></td>
+<td style="text-align:center">🕐 <code>:clock1:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🕜 <code>:clock130:</code></td>
+<td style="text-align:center">🕙 <code>:clock10:</code></td>
+<td style="text-align:center">🕥 <code>:clock1030:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🕚 <code>:clock11:</code></td>
+<td style="text-align:center">🕦 <code>:clock1130:</code></td>
+<td style="text-align:center">🕛 <code>:clock12:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🕧 <code>:clock1230:</code></td>
+<td style="text-align:center">🕑 <code>:clock2:</code></td>
+<td style="text-align:center">🕝 <code>:clock230:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🕒 <code>:clock3:</code></td>
+<td style="text-align:center">🕞 <code>:clock330:</code></td>
+<td style="text-align:center">🕓 <code>:clock4:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🕟 <code>:clock430:</code></td>
+<td style="text-align:center">🕔 <code>:clock5:</code></td>
+<td style="text-align:center">🕠 <code>:clock530:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🕕 <code>:clock6:</code></td>
+<td style="text-align:center">🕡 <code>:clock630:</code></td>
+<td style="text-align:center">🕖 <code>:clock7:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🕢 <code>:clock730:</code></td>
+<td style="text-align:center">🕗 <code>:clock8:</code></td>
+<td style="text-align:center">🕣 <code>:clock830:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🕘 <code>:clock9:</code></td>
+<td style="text-align:center">🕤 <code>:clock930:</code></td>
+<td style="text-align:center">💲 <code>:heavy_dollar_sign:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">©️ <code>:copyright:</code></td>
+<td style="text-align:center">®️ <code>:registered:</code></td>
+<td style="text-align:center">™️ <code>:tm:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">❌ <code>:x:</code></td>
+<td style="text-align:center">❗️ <code>:heavy_exclamation_mark:</code></td>
+<td style="text-align:center">‼️ <code>:bangbang:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">⁉️ <code>:interrobang:</code></td>
+<td style="text-align:center">⭕️ <code>:o:</code></td>
+<td style="text-align:center">✖️ <code>:heavy_multiplication_x:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">➕ <code>:heavy_plus_sign:</code></td>
+<td style="text-align:center">➖ <code>:heavy_minus_sign:</code></td>
+<td style="text-align:center">➗ <code>:heavy_division_sign:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">💮 <code>:white_flower:</code></td>
+<td style="text-align:center">💯 <code>:100:</code></td>
+<td style="text-align:center">✔️ <code>:heavy_check_mark:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">☑️ <code>:ballot_box_with_check:</code></td>
+<td style="text-align:center">🔘 <code>:radio_button:</code></td>
+<td style="text-align:center">🔗 <code>:link:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">➰ <code>:curly_loop:</code></td>
+<td style="text-align:center">〰️ <code>:wavy_dash:</code></td>
+<td style="text-align:center">〽️ <code>:part_alternation_mark:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🔱 <code>:trident:</code></td>
+<td style="text-align:center">▪️<code>:black_small_square:</code></td>
+<td style="text-align:center">▫️ <code>:white_small_square:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">✅ <code>:white_check_mark:</code></td>
+<td style="text-align:center">🔲 <code>:black_square_button:</code></td>
+<td style="text-align:center">🔳 <code>:white_square_button:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">⚫️ <code>:black_circle:</code></td>
+<td style="text-align:center">⚪️ <code>:white_circle:</code></td>
+<td style="text-align:center">🔴 <code>:red_circle:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🔵 <code>:large_blue_circle:</code></td>
+<td style="text-align:center">🔷 <code>:large_blue_diamond:</code></td>
+<td style="text-align:center">🔶 <code>:large_orange_diamond:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🔹 <code>:small_blue_diamond:</code></td>
+<td style="text-align:center">🔸 <code>:small_orange_diamond:</code></td>
+<td style="text-align:center">🔺 <code>:small_red_triangle:</code></td>
+</tr>
+<tr>
+<td style="text-align:center">🔻 <code>:small_red_triangle_down:</code></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="高级"><a class="header-anchor" href="#高级"></a>高级</h2>
+<h3 id="支持的-HTML-元素"><a class="header-anchor" href="#支持的-HTML-元素"></a>支持的 HTML 元素</h3>
+<p>不在 Markdown 涵盖范围之内的标签，都可以直接在文档里面用 HTML 撰写。</p>
+<p>目前支持的 HTML 元素有：kbd、b、i、em、sup、br 等 ，如：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">使用 <span class="language-xml"><span class="tag">&lt;<span class="name">kbd</span>&gt;</span></span>Ctrl<span class="language-xml"><span class="tag">&lt;/<span class="name">kbd</span>&gt;</span></span>+<span class="language-xml"><span class="tag">&lt;<span class="name">kbd</span>&gt;</span></span>Alt<span class="language-xml"><span class="tag">&lt;/<span class="name">kbd</span>&gt;</span></span>+<span class="language-xml"><span class="tag">&lt;<span class="name">kbd</span>&gt;</span></span>Del<span class="language-xml"><span class="tag">&lt;/<span class="name">kbd</span>&gt;</span></span> 重启电脑</span><br></pre></td></tr></table></figure>
+<h3 id="转义"><a class="header-anchor" href="#转义"></a>转义</h3>
+<p>Markdown 使用了很多特殊符号来表示特定的意义，如果需要显示特定的符号则需要使用转义字符，Markdown 使用反斜杠转义特殊字符：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="strong">**文本加粗**</span> </span><br><span class="line">\<span class="emphasis">*\*</span> 正常显示星号 \<span class="emphasis">*\*</span></span><br></pre></td></tr></table></figure>
+<p>结果：<strong>加粗</strong> 、**显示星号**</p>
+<p>Markdown 支持以下这些符号前面加上反斜杠来帮助插入普通的符号：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">\   反斜线</span><br><span class="line">`   反引号</span><br><span class="line">*   星号</span><br><span class="line">_   下划线</span><br><span class="line">&#123;&#125;  花括号</span><br><span class="line">[]  方括号</span><br><span class="line">()  小括号</span><br><span class="line">#   井字号</span><br><span class="line">+   加号</span><br><span class="line">-   减号</span><br><span class="line">.   英文句点</span><br><span class="line">!   感叹号</span><br></pre></td></tr></table></figure>
+<p>如果想要显示反引号，则可以使用 5 个反引号，注意最中间反引号与两边之间的空格：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="code">`` `</span> ``</span><br></pre></td></tr></table></figure>
+<h3 id="公式"><a class="header-anchor" href="#公式"></a>公式</h3>
+<p>需要在编辑器中插入数学公式时，可以使用两个美元符 <code>$$</code> 包裹 TeX 或 LaTeX 格式的数学公式来实现。</p>
+<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="keyword">\begin</span>&#123;Bmatrix&#125;</span><br><span class="line">   a <span class="built_in">&amp;</span> b <span class="keyword">\\</span></span><br><span class="line">   c <span class="built_in">&amp;</span> d</span><br><span class="line"><span class="keyword">\end</span>&#123;Bmatrix&#125;</span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="keyword">\begin</span>&#123;CD&#125;</span><br><span class="line">   A @&gt;a&gt;&gt; B <span class="keyword">\\</span></span><br><span class="line">@VbVV @AAcA <span class="keyword">\\</span></span><br><span class="line">   C @= D</span><br><span class="line"><span class="keyword">\end</span>&#123;CD&#125;</span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span></span><br></pre></td></tr></table></figure>
+<p>语法总结：<a target="_blank" rel="noopener" href="https://blog.csdn.net/Liu_PiPiPi/article/details/121613743">Markdown 数学公式总结</a></p>
+<blockquote>
+<p>LaTeX  公式对齐</p>
+</blockquote>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/cfan927/article/details/104349961">Markdown公式以不同方式对齐</a></p>
+<p><strong>单等号对齐：</strong></p>
+<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="keyword">\begin</span>&#123;aligned&#125;</span><br><span class="line">KPI <span class="built_in">&amp;</span>= (N + S)W <span class="keyword">\\</span></span><br><span class="line"><span class="built_in">&amp;</span>= NW + SW</span><br><span class="line"><span class="keyword">\end</span>&#123;aligned&#125;</span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span></span><br></pre></td></tr></table></figure>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable rowspacing="0.25em" columnalign="right left" columnspacing="0em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mi>K</mi><mi>P</mi><mi>I</mi></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mo stretchy="false">(</mo><mi>N</mi><mo>+</mo><mi>S</mi><mo stretchy="false">)</mo><mi>W</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mi>N</mi><mi>W</mi><mo>+</mo><mi>S</mi><mi>W</mi></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}
+KPI &amp;= (N + S)W \\
+&amp;= NW + SW
+\end{aligned}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:3em;vertical-align:-1.25em;"></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.75em;"><span style="top:-3.91em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span></span></span><span style="top:-2.41em;"><span class="pstrut" style="height:3em;"></span><span class="mord"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.25em;"><span></span></span></span></span></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.75em;"><span style="top:-3.91em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mclose">)</span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span></span></span><span style="top:-2.41em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.25em;"><span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p><strong>多公式等号对齐：</strong></p>
+<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="keyword">\begin</span>&#123;aligned&#125;</span><br><span class="line">KPI <span class="built_in">&amp;</span>= (N + S)W <span class="keyword">\\</span></span><br><span class="line">PI <span class="built_in">&amp;</span>= N + S <span class="keyword">\\</span></span><br><span class="line">I <span class="built_in">&amp;</span>= W</span><br><span class="line"><span class="keyword">\end</span>&#123;aligned&#125;</span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span></span><br></pre></td></tr></table></figure>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable rowspacing="0.25em" columnalign="right left" columnspacing="0em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mi>K</mi><mi>P</mi><mi>I</mi></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mo stretchy="false">(</mo><mi>N</mi><mo>+</mo><mi>S</mi><mo stretchy="false">)</mo><mi>W</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mi>P</mi><mi>I</mi></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mi>N</mi><mo>+</mo><mi>S</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mi>I</mi></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mi>W</mi></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}
+KPI &amp;= (N + S)W \\
+PI &amp;= N + S \\
+I &amp;= W
+\end{aligned}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:4.5em;vertical-align:-2em;"></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.5em;"><span style="top:-4.66em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span></span></span><span style="top:-3.16em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span></span></span><span style="top:-1.66em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2em;"><span></span></span></span></span></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.5em;"><span style="top:-4.66em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mclose">)</span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span></span></span><span style="top:-3.16em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span><span style="top:-1.66em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2em;"><span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p><strong>首字母对齐：</strong></p>
+<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="keyword">\begin</span>&#123;aligned&#125;</span><br><span class="line"><span class="built_in">&amp;</span>KPI = (N + S)W <span class="keyword">\\</span></span><br><span class="line"><span class="built_in">&amp;</span>PI = N + S <span class="keyword">\\</span></span><br><span class="line"><span class="built_in">&amp;</span>I = W</span><br><span class="line"><span class="keyword">\end</span>&#123;aligned&#125;</span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span></span><br></pre></td></tr></table></figure>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable rowspacing="0.25em" columnalign="right left" columnspacing="0em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mi>K</mi><mi>P</mi><mi>I</mi><mo>=</mo><mo stretchy="false">(</mo><mi>N</mi><mo>+</mo><mi>S</mi><mo stretchy="false">)</mo><mi>W</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mi>P</mi><mi>I</mi><mo>=</mo><mi>N</mi><mo>+</mo><mi>S</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mi>I</mi><mo>=</mo><mi>W</mi></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}
+&amp;KPI = (N + S)W \\
+&amp;PI = N + S \\
+&amp;I = W
+\end{aligned}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:4.5em;vertical-align:-2em;"></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.5em;"><span style="top:-4.5em;"><span class="pstrut" style="height:2.84em;"></span><span class="mord"></span></span><span style="top:-3em;"><span class="pstrut" style="height:2.84em;"></span><span class="mord"></span></span><span style="top:-1.5em;"><span class="pstrut" style="height:2.84em;"></span><span class="mord"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2em;"><span></span></span></span></span></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.5em;"><span style="top:-4.66em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mclose">)</span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span></span></span><span style="top:-3.16em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span><span style="top:-1.66em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2em;"><span></span></span></span></span></span></span></span></span></span></span></span></p>
+<blockquote>
+<p>取整</p>
+</blockquote>
+<p>向上取整 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">⌈</mo><mi>x</mi><mo stretchy="false">⌉</mo></mrow><annotation encoding="application/x-tex">\lceil x \rceil</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">⌈</span><span class="mord mathnormal">x</span><span class="mclose">⌉</span></span></span></span>：</p>
+<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">$</span><span class="keyword">\lceil</span> x <span class="keyword">\rceil</span><span class="built_in">$</span></span><br></pre></td></tr></table></figure>
+<p>向下取整 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">⌊</mo><mi>x</mi><mo stretchy="false">⌋</mo></mrow><annotation encoding="application/x-tex">\lfloor x \rfloor</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">⌊</span><span class="mord mathnormal">x</span><span class="mclose">⌋</span></span></span></span>：</p>
+<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">$</span><span class="keyword">\lfloor</span> x <span class="keyword">\rfloor</span><span class="built_in">$</span></span><br></pre></td></tr></table></figure>
+<h3 id="Typora-主题"><a class="header-anchor" href="#Typora-主题"></a>Typora 主题</h3>
+<p>Typora 主题推荐使用的 Vue 或 Pie 主题，也可以在 <a target="_blank" rel="noopener" href="https://theme.typoraio.cn/">Themes Gallery</a> 选择喜欢的主题。</p>
+<blockquote>
+<p>设置字体高亮</p>
+</blockquote>
+<p>Markdown 语法高级设置：使用 <code>==</code> 包围字体，实现字体红色加粗。</p>
+<p>步骤：</p>
+<ol>
+<li>进入对应主题的 CSS 文件，修改定义高亮部分代码为：</li>
+</ol>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* heighlight. */</span></span><br><span class="line"><span class="selector-id">#write</span> <span class="selector-tag">mark</span> &#123;</span><br><span class="line">    //<span class="attribute">background-color</span>: <span class="number">#EBFFEB</span>;</span><br><span class="line">    <span class="attribute">background</span>:<span class="number">#FFFFFF</span>;</span><br><span class="line">    <span class="attribute">border-radius</span>: <span class="number">2px</span>;</span><br><span class="line">    <span class="attribute">padding</span>: <span class="number">2px</span> <span class="number">4px</span>;</span><br><span class="line">    <span class="attribute">margin</span>: <span class="number">0</span> <span class="number">2px</span>;</span><br><span class="line">    <span class="attribute">color</span>: <span class="number">#FF0000</span>;</span><br><span class="line">    <span class="attribute">font-weight</span>: bold;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>打开 Typora，文件 &gt; Markdown &gt;  Markdown拓展语法 &gt; 打开高亮。</li>
+</ol>
+<p>还可以增加多个高亮显示：</p>
+<ol>
+<li>不修改第一步中的文件，而是在 CSS 文件末位添加代码：</li>
+</ol>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">mark</span>&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>添加快捷键：比如将新添加的高亮快捷键设置为 <code>Ctrl + q</code>
+<ul>
+<li>打开 文件 &gt; 偏好设置 &gt; 高级设置 &gt; conf.user.json</li>
+<li>加入代码: “Highlight”: “Ctrl + q” 在 “keyBinding”: 后面的大括号里面</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>设置图片边框</p>
+</blockquote>
+<p>进入对应主题的 CSS 文件，在文件内添加：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* img style */</span></span><br><span class="line"><span class="selector-tag">img</span>&#123;</span><br><span class="line">    <span class="attribute">border</span>: <span class="number">5px</span> solid <span class="number">#ddd</span>;</span><br><span class="line">    <span class="attribute">padding</span>: <span class="number">5px</span>;</span><br><span class="line">    <span class="attribute">background</span>: <span class="number">#fff</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="还可以利用-Typora-画流程图、时序图、甘特图"><a class="header-anchor" href="#还可以利用-Typora-画流程图、时序图、甘特图"></a>还可以利用 Typora 画流程图、时序图、甘特图</h3>
+<p>参考：</p>
+<ul>
+<li>
+<p><a target="_blank" rel="noopener" href="https://www.runoob.com/markdown/md-advance.html">绘制流程图、时序图、甘特图</a></p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="https://www.iodraw.com/codechart/tutorial/zh/flowchart.html#flowcharts-basic-syntax">流程图 - Mermaid教程</a></p>
+</li>
+</ul>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>我是示例的脚注！ <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/How-to-use-Typora/">https://mofan212.github.io/posts/How-to-use-Typora/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Markdown/">Markdown</a></div><div class="post-share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/2.jpg" data-sites="wechat,qq,weibo,facebook,x"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/Annotation-Of-Spring/" title="Spring 注解"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/13.jpg" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Spring 注解</div></div><div class="info-2"><div class="info-item-1">本节介绍了 Spring、SpringBoot 中一些注解的使用方式。</div></div></div></a><a class="pagination-related" href="/posts/Git/" title="Git理论与使用"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/3.jpg" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Git理论与使用</div></div><div class="info-2"><div class="info-item-1">Git 是啥？是饭桶、是蠢货！不想当饭桶？来看下这篇文章吧。</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">默烦</div><div class="author-info-description">彩笔的打怪升级之路...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mofan212"><i class="fab fa-github"></i><span>follow me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解。<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a href="./mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载。😊</br><strong><font style="color:red">严禁未遵循规范的转载。</font></strong>😡</br><strong>死去的评论系统复活啦！欢迎到留言板畅所欲言！</strong>当然也可以使用更高效的<a target="_blank" href="https://space.bilibili.com/23658864/dynamic" style="color:#49B1F5;text-decoration:underline"> 哔哩哔哩私信 </a>或<a href="mailto:cy.mofan@foxmail.com" style="color:#49B1F5;text-decoration:underline" target="_blank">邮箱</a>。 😉</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Typora%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">1.</span> <span class="toc-text">Typora的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD"><span class="toc-number">1.1.</span> <span class="toc-text">下载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BE%E7%89%87%E5%A4%84%E7%90%86"><span class="toc-number">1.2.</span> <span class="toc-text">图片处理</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Markdown-%E8%AF%AD%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text">Markdown 语法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E9%A2%98"><span class="toc-number">2.1.</span> <span class="toc-text">标题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AE%B5%E8%90%BD%E6%A0%BC%E5%BC%8F"><span class="toc-number">2.2.</span> <span class="toc-text">段落格式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AE%B5%E8%90%BD"><span class="toc-number">2.2.1.</span> <span class="toc-text">段落</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E4%BD%93"><span class="toc-number">2.2.2.</span> <span class="toc-text">字体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E5%89%B2%E7%BA%BF"><span class="toc-number">2.2.3.</span> <span class="toc-text">分割线</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E7%BA%BF"><span class="toc-number">2.2.4.</span> <span class="toc-text">删除线</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E5%88%92%E7%BA%BF"><span class="toc-number">2.2.5.</span> <span class="toc-text">下划线</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%84%9A%E6%B3%A8"><span class="toc-number">2.2.6.</span> <span class="toc-text">脚注</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%97%E8%A1%A8"><span class="toc-number">2.3.</span> <span class="toc-text">列表</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%97%E8%A1%A8%E5%B5%8C%E5%A5%97"><span class="toc-number">2.3.1.</span> <span class="toc-text">列表嵌套</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8C%BA%E5%9D%97"><span class="toc-number">2.4.</span> <span class="toc-text">区块</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8C%BA%E5%9D%97%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%88%97%E8%A1%A8"><span class="toc-number">2.4.1.</span> <span class="toc-text">区块中使用列表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%97%E8%A1%A8%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%8C%BA%E5%9D%97"><span class="toc-number">2.4.2.</span> <span class="toc-text">列表中使用区块</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81"><span class="toc-number">2.5.</span> <span class="toc-text">代码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%8C%BA%E5%9D%97"><span class="toc-number">2.5.1.</span> <span class="toc-text">代码区块</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%93%BE%E6%8E%A5"><span class="toc-number">2.6.</span> <span class="toc-text">链接</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AB%98%E7%BA%A7%E9%93%BE%E6%8E%A5"><span class="toc-number">2.6.1.</span> <span class="toc-text">高级链接</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BE%E7%89%87"><span class="toc-number">2.7.</span> <span class="toc-text">图片</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A1%A8%E6%A0%BC"><span class="toc-number">2.8.</span> <span class="toc-text">表格</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A6%96%E8%A1%8C%E7%BC%A9%E8%BF%9B"><span class="toc-number">2.9.</span> <span class="toc-text">首行缩进</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A1%A8%E6%83%85"><span class="toc-number">2.10.</span> <span class="toc-text">表情</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%AB%98%E7%BA%A7"><span class="toc-number">2.11.</span> <span class="toc-text">高级</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%AF%E6%8C%81%E7%9A%84-HTML-%E5%85%83%E7%B4%A0"><span class="toc-number">2.11.1.</span> <span class="toc-text">支持的 HTML 元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BD%AC%E4%B9%89"><span class="toc-number">2.11.2.</span> <span class="toc-text">转义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AC%E5%BC%8F"><span class="toc-number">2.11.3.</span> <span class="toc-text">公式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Typora-%E4%B8%BB%E9%A2%98"><span class="toc-number">2.11.4.</span> <span class="toc-text">Typora 主题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%98%E5%8F%AF%E4%BB%A5%E5%88%A9%E7%94%A8-Typora-%E7%94%BB%E6%B5%81%E7%A8%8B%E5%9B%BE%E3%80%81%E6%97%B6%E5%BA%8F%E5%9B%BE%E3%80%81%E7%94%98%E7%89%B9%E5%9B%BE"><span class="toc-number">2.11.5.</span> <span class="toc-text">还可以利用 Typora 画流程图、时序图、甘特图</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/Something-About-Blog/" title="博客搭建与维护"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="博客搭建与维护"/></a><div class="content"><a class="title" href="/posts/Something-About-Blog/" title="博客搭建与维护">博客搭建与维护</a><time datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"/></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="更新于 2026-01-03 00:00:00">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"/></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/103.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 的类资源加载"/></a><div class="content"><a class="title" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载">Java 的类资源加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/20.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="注解、类的加载、反射"/></a><div class="content"><a class="title" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射">注解、类的加载、反射</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/ren-zhi-jue-xing/" title="认知觉醒"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/172.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="认知觉醒"/></a><div class="content"><a class="title" href="/posts/ren-zhi-jue-xing/" title="认知觉醒">认知觉醒</a><time datetime="2025-12-28T16:00:00.000Z" title="更新于 2025-12-29 00:00:00">2025-12-29</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://testingcf.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (false) {
+      await btf.getScript('https://testingcf.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://gcore.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script src="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/js/mine.min.js"></script><script src="/js/tip_portal.js"></script><script defer="defer" id="ribbon" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script id="click-show-text" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="Azathoth,Yog-Sothoth,Shub-Niggurath,Nyarlathotep,Cthulhu,Hastur,Abhoth,Ghroth,Tsathoggua,Cthugha,Deep Ones,Dagon,Chaugnar Faugn,Mordiggian,Shoggoth,Old One,Mi-Go,Great Race of Yith,Flying Polyp,Hounds of Tindalos,Dhole" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div class="docsearch-wrap"><div id="docsearch" style="display:none"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@docsearch/css/dist/style.min.css"/><script src="https://testingcf.jsdelivr.net/npm/@docsearch/js/dist/umd/index.min.js"></script><script>(() => {
+  docsearch(Object.assign({
+    appId: 'BAFEL7A6K1',
+    apiKey: '89fcb5961984c5c054bf04149f345f38',
+    indexName: 'mofan212io',
+    container: '#docsearch',
+    placeholder: '输入关键字进行搜索',
+  }, null))
+
+  const handleClick = () => {
+    document.querySelector('.DocSearch-Button').click()
+  }
+
+  const searchClickFn = () => {
+    btf.addEventListenerPjax(document.querySelector('#search-button > .search'), 'click', handleClick)
+  }
+
+  searchClickFn()
+  window.addEventListener('pjax:complete', searchClickFn)
+})()</script></div></div></body></html>

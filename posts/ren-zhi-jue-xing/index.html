@@ -1,0 +1,716 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>认知觉醒 | Mofan</title><meta name="author" content="默烦,cy.mofan@foxmail.com"><meta name="copyright" content="默烦"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="《认知觉醒：开启自我改变的原动力》，周岭著。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="认知觉醒">
+<meta property="og:url" content="https://mofan212.github.io/posts/ren-zhi-jue-xing/">
+<meta property="og:site_name" content="Mofan">
+<meta property="og:description" content="《认知觉醒：开启自我改变的原动力》，周岭著。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/172.webp">
+<meta property="article:published_time" content="2025-12-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-12-28T16:00:00.000Z">
+<meta property="article:author" content="默烦">
+<meta property="article:tag" content="Reading">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/172.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "认知觉醒",
+  "url": "https://mofan212.github.io/posts/ren-zhi-jue-xing/",
+  "image": "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/172.webp",
+  "datePublished": "2025-12-28T16:00:00.000Z",
+  "dateModified": "2025-12-28T16:00:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "默烦",
+      "url": "https://mofan212.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/ren-zhi-jue-xing/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":true,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 默烦","link":"链接: ","source":"来源: Mofan","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://testingcf.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '认知觉醒',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="referrer" content="no-referrer-when-downgrade" /><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/css/myStyle.min.css"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css" /><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css" /><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Mofan" type="application/atom+xml">
+</head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+btf.addGlobalFn('pjaxSend', () => {
+  Pace.restart()
+}, 'pace_restart')
+
+</script><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources/css/minimal.min.css"/><script src="https://testingcf.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/post_top_img.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Mofan</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">认知觉醒</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-12-28T16:00:00.000Z" title="发表于 2025-12-29 00:00:00">2025-12-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-28T16:00:00.000Z" title="更新于 2025-12-29 00:00:00">2025-12-29</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Reading/">Reading</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">7.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>21分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;距离本文上次更新已经过去&quot;,&quot;messageNext&quot;:&quot;天，请注意时效性。&quot;,&quot;postUpdate&quot;:&quot;2025-12-29 00:00:00&quot;}" hidden></div><p>封面来源：由博主个人绘制，如需使用请联系博主。</p>
+<h1 id="1-读后感"><a class="header-anchor" href="#1-读后感"></a>1. 读后感</h1>
+<p>不得不说，读母语作家写的书就是轻松，表述更符合日常交流，没有弯弯绕绕，没有「长难句」，没有倒装句，一口气读下去就能明白其中的含义，不需要「反复阅读、深刻理解」（没错，说的就是你 —— 《为什么我们总是在防御》）。</p>
+<p>作者在第一章将人的大脑分为三个区域：本能脑、情绪脑和理智脑，后文围绕这个观点发散了许多内容，尽管对这种做法没有进行严谨的科学论证，但将这个概念运用到心理学、认知科学上，提出一些对个人发展有益、又能让读者快速接受的观点也还是不错的。</p>
+<p>在读这本书之前，我已经读过一些心理学和自我成长类的书籍，比如《活出最乐观的自己》《被讨厌的勇气》等，阅读过程中能够看到那些书的影子，换句话说，这本书提炼出了它们的精华，但缺少详细的论证的过程，这也是本书最大的缺点，因此更建议在阅读完这本书之后，围绕感兴趣的观点去阅读更多相关书籍，进一步强化理解。</p>
+<p>除此之外，书中还介绍了许多有关如何学习、提升专注力的内容，信息密度极高，完全掌握需要一定的时间，但就像本书说的那样，读书最重要的不是完全理解一本书，而是找到其中最触动自己的点并加强练习，将其转换成自己的能力。</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ReadingImages/%E8%AE%A4%E7%9F%A5%E8%A7%89%E9%86%92%E8%84%91%E5%9B%BE.png" alt="认知觉醒脑图"></p>
+<h1 id="2-摘录与想法"><a class="header-anchor" href="#2-摘录与想法"></a>2. 摘录与想法</h1>
+<h2 id="自序-开启自我改变的原动力"><a class="header-anchor" href="#自序-开启自我改变的原动力"></a>自序 开启自我改变的原动力</h2>
+<ul>
+<li>所谓心智，通俗地说，就是我们看待人和事的态度，以及由此做出的判断与选择。</li>
+<li>人生没有什么定数，不折腾，时间同样会过去，所以，去做总比不做好，开始总比放弃强。</li>
+</ul>
+<h2 id="第一章-大脑：一切问题的起源"><a class="header-anchor" href="#第一章-大脑：一切问题的起源"></a>第一章 大脑：一切问题的起源</h2>
+<ul>
+<li>我们当前遇到的几乎所有的成长问题都可以归结到目光短浅、即时满足的天性上，不过在现代社会，用避难趋易和急于求成来代指它们显然更加贴切。</li>
+<li>大多数时候我们以为自己在思考，其实都是在对自身的行为和欲望进行合理化，这正是人类被称作「自我解释的动物」的原因。</li>
+<li>习惯之所以难以改变，就是因为它是自我巩固的 —— 越用越强，越强越用。要想从既有的习惯中跳出来，最好的方法不是依靠自制力，而是依靠知识。</li>
+<li>无论个体还是群体，人类的安全感都源于自己在某一方面拥有的独特优势：或能力，或财富，或权力，或影响力。</li>
+<li>面对焦虑从来都是被动承受，主动权从来不在自己手中。</li>
+<li>焦虑的原因就两条：想同时做很多事，又想立即看到效果。焦虑就是因为欲望与能力之间差距过大。</li>
+<li>急于求成，想同时做很多事；避难趋易，想不怎么努力就立即看到效果。</li>
+<li>要想有所成就，必须保持耐心，延迟满足。</li>
+<li>社会中的精英通常是那些能更好地克服天性的人，他们的耐心水平更高，延迟满足的能力更强。</li>
+<li>要想让自己高效成长，必须让自己始终处于舒适区的边缘，贸然跨到困难区会让自己受挫，而始终停留在舒适区会让自己停滞。</li>
+<li>对于学习而言，学习之后的思考、思考之后的行动、行动之后的改变更重要，如果不盯住内层的改变量，那么在表层投入再多的学习量也会事倍功半；因此，从权重上看，改变量 ＞ 行动量 ＞ 思考量 ＞ 学习量。</li>
+<li>读书时不求记住书中的全部知识，只要有一两个观点促使自己发生了切实的改变就足够了，其收获与意义比读很多书但仅停留在知道的层面要大得多。</li>
+<li>学习进展和时间的关系并不是我们想象中的那种线性关系（学多少是多少），而是呈现一种波浪式上升曲线。</li>
+<li>当我们清楚了上述规律之后，就能在面对长期的冷寂或挫折失败时做出与他人不同的选择：有人选择放弃，而我们继续坚持。</li>
+<li>耐心不是毅力带来的结果，而是具有长远目光的结果。</li>
+<li>怎么拥有耐心：
+<ul>
+<li>首先，面对天性，放下心理包袱，坦然接纳自己。</li>
+<li>其次，面对诱惑，学会延迟满足，变对抗为沟通。耐心就是这样，不能急于求成，允许自己缓慢地改变，甚至经常失败。无论结果如何，和自己对话都会产生效果。</li>
+<li>最后，面对困难，主动改变视角，赋予行动意义。</li>
+</ul>
+</li>
+</ul>
+<h2 id="第二章-潜意识：生命留给我们的彩蛋"><a class="header-anchor" href="#第二章-潜意识：生命留给我们的彩蛋"></a>第二章 潜意识：生命留给我们的彩蛋</h2>
+<ul>
+<li>模糊，正是人生困扰之源。而人生也像是一场消除模糊的比赛，谁的模糊越严重，谁就越混沌；谁的模糊越轻微，谁就越清醒。</li>
+<li>学习知识的目的是「消除模糊」，而获取知识的方法也是「消除模糊」，目的和方法相统一。</li>
+<li>提升思考能力的方法正是不断明确核心困难和心得感悟，并专注于此。</li>
+<li>具体事件一旦变模糊，其边界就会无限扩大，原本并不困难的小事，也会在模糊的潜意识里变得难以解决。</li>
+<li>真正的困难总比想象的要小很多。人们拖延、纠结、畏惧、害怕的根本原因往往不是事情本身有多难，而是内心的想法变得模糊。</li>
+<li>要想不受其困扰，唯一的办法就是正视它、看清它、拆解它、化解它，不给它进入潜意识的机会，不给它变模糊的机会；即使已经进入潜意识，也要想办法将它挖出来。所以，当你感到心里有说不清、道不明的难受的感觉时，赶紧坐下来，向自己提问。</li>
+<li>恐惧就是一个欺软怕硬的货色，你躲避它，它就张牙舞爪，你正视它，它就原形毕露。</li>
+<li>行动力不足的真正原因是选择模糊。</li>
+<li>当我们没有足够清晰的指令或者目标时，就很容易选择享乐，放弃那些本该坚持但比较烧脑的选项。</li>
+<li>在诸多可能性中建立一条单行通道，让自己始终处于「没得选」的状态。</li>
+<li>先用感性能力帮助自己选择，再用理性能力帮助自己思考。</li>
+<li>更好的读书方法或许就是你在读完整本书后过几天再问自己：现在你印象最深的触动点是什么？牢牢抓住这个触动点，去关联、去实践，就会获得最大的收获，而其他的内容则可以先放到一边。</li>
+<li>只取一个全书最触动自己的点，然后尽可能去实践、改变。这样读书不仅收获更大，而且也不会焦虑。</li>
+<li>目标是存放我们热情和精力的地方。</li>
+<li>我们需要用心去感受什么事情让自己最触动，而不是用脑去思考什么事情最有利。</li>
+<li>正确的答案往往都是利他的，因为真正长久的人生意义和幸福只能从他人的反馈中获得。</li>
+<li>小事听从你的脑，大事听从你的心。</li>
+<li>身体不会说话，却是最诚实的。无论生理还是心理上的不适，都会通过身体如实地反映出来，记得多关注这些反馈。</li>
+</ul>
+<h2 id="第三章-元认知：人类的终极能力"><a class="header-anchor" href="#第三章-元认知：人类的终极能力"></a>第三章 元认知：人类的终极能力</h2>
+<ul>
+<li>元认知，就是最高级别的认知，它能对自身的「思考过程」进行认知和理解。</li>
+<li>元认知能力就是我们习以为常、见怪不怪的反思能力。</li>
+<li>你能意识到自己在想什么，进而意识到这些想法是否明智，再进一步纠正那些不明智的想法，最终做出更好的选择。</li>
+<li>人生是由无数个选择组成的，不同选择的累加造就了不同的人生。如果你觉得自己的人生不如意，问题十有八九就出在这里。</li>
+<li>这才是高级的元认知 —— 时刻帮你从高处、深处、远处看待现在的自己，让自己保持清醒、不迷失，保持动力、不懈怠，保持平和、不冲动。</li>
+<li>如何获取元认知：
+<ul>
+<li>第一，提升元认知能力的工具需要从「过去」端获取，包括学习前人的智慧和反思自身的经历。</li>
+<li>第二，自身的经历更是一种独特的财富。</li>
+<li>第三，如果说学习和反思是静态的，那处于当下的、动态的自己又该如何主动运用元认知呢？很简单，启用你的「灵魂伴侣」啊！我们总是这样，一开始只想找一根绳子，最后却牵出一头大象。</li>
+<li>第四，提高元认知能力的方法有很多，但最让人意想不到是冥想。监控自己的注意力，然后将其集中到自己需要关注的地方。</li>
+</ul>
+</li>
+<li>每当遇到需要选择的情况时，我们要是能先停留几秒思考一下，就有可能激活自己的理智脑，启用元认知来审视当前的思维，然后做出不一样的选择。</li>
+<li>一定要在选择节点上多花「元时间」。所有面临选择的时间节点，都可以被称作「元时间」。元时间通常分布在「选择的节点」上，比如一件事情、一个阶段或一天开始或结束时。善用这些时间会极大程度地优化后续时间的质量。在选择的节点审视自己的第一反应，并产生清晰明确的主张。要想清楚，不仅要审视第一反应，同时还要有清晰明确的主张。</li>
+<li>元认知能力强的一个突出表现是：对模糊零容忍。换句话说，就是想尽一切办法让自己找出那个最重要的、唯一的选项，让自己在某一个时间段里只有一条路可以走。</li>
+<li>成为思维舵手有 3 种方法：
+<ul>
+<li>针对当下的时间，保持觉知，审视第一反应，产生明确的主张；</li>
+<li>针对全天的日程，保持清醒，时刻明确下一步要做的事情；</li>
+<li>针对长远的目标，保持思考，想清楚长远意义和内在动机。</li>
+</ul>
+</li>
+<li>高尔基曾经说：每一次克制自己，就意味着比以前更强大。</li>
+</ul>
+<h2 id="第四章-专注力：情绪和智慧的交叉地带"><a class="header-anchor" href="#第四章-专注力：情绪和智慧的交叉地带"></a>第四章 专注力：情绪和智慧的交叉地带</h2>
+<ul>
+<li>缺少感受的行动，就像失去灵魂的躯壳；缺少感受的人对凡事都心不在焉、视而不见、听而不闻。</li>
+<li>分心走神的原因无非两个：一是觉得当下太无聊，所以追求更有意思的事情；二是觉得当下太痛苦，于是追求更舒适的事情。</li>
+<li>换句话说，就是分心走神的成本太低，而人的天性又是急于求成和避难趋易的，所以在默认情况下，我们都会不自觉地待在精神舒适区内。</li>
+<li>因为走神时，我们要么沉浸过去，要么担忧将来，要么幻想不可能实现的情况，走神可以让我们活在任何时候，唯独不能让我们活在当下。</li>
+<li>身体感受永远是进入当下状态的最好媒介，而感受事物消失的过程更是一种很好的专注力训练。它提示我们，身心合一的要领不仅是专注于当下，更是享受当下，而这种享受必将使我们更从容，不慌张。</li>
+<li>深度沉浸的方法：
+<ul>
+<li>
+<p>第一，有定义明确的目标。比如你要练琴，那就告诉自己：「连续三次不犯任何错误、以适当的速度弹奏完曲子。」而不是「我要练琴半小时」这样宽泛的目标。</p>
+</li>
+<li>
+<p>第二，练习时极度专注。所以变聪明的秘诀就是：先保持极度专注，想不出答案时再将注意力转换到另一件与此毫不相干的事情上。即事前聚精会神，让意识极度投入；事后完全忘记，让意识彻底撒手。这样，灵感和答案就会大概率地出现。</p>
+</li>
+<li>
+<p>第三，能获得有效的反馈。</p>
+</li>
+<li>
+<p>第四，始终在拉伸区练习。我们每天都要做那些让自己感到有些困难但又可以通过努力来完成的事情，即跳出舒适区，避开困难区，处在拉伸区。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="第五章-学习力：学习不是一味地努力"><a class="header-anchor" href="#第五章-学习力：学习不是一味地努力"></a>第五章 学习力：学习不是一味地努力</h2>
+<ul>
+<li>
+<p>找一个自己能坚持做下去的方式，比单纯按照标准化的时间和方式做更重要。</p>
+</li>
+<li>
+<p>距离我们太远的事物，我们通常无法把握，无论它们是令人痛苦的还是令人享受的。</p>
+</li>
+<li>
+<p>做选择是一件极为耗能的事情，如果没有与之匹配的清醒和定力，绝大多数人最终都会被强大的天性支配，去选择娱乐消遣。在有约束的环境下我们反而效率更高，生活更充实。</p>
+</li>
+<li>
+<p>能解释的现象越多，这个概念就越底层。</p>
+</li>
+<li>
+<p>你必须动用已有的知识去解释新知识，当你能够把新学的知识解释清楚时，就意味着把它纳入了自己的知识体系，同时达到了可以教授他人的水平，并可能创造新的知识。</p>
+</li>
+<li>
+<p>「缝接」是深度学习的关键，而大多数人只完成了「获取知识」，却忽略了「缝接知识」这一步，因此，他们的学习过程是不完整的。</p>
+</li>
+<li>
+<p>逼迫自己获取高质量的知识以及深度缝接新知识，再用自己的语言或文字教授他人，是为深度学习之道。</p>
+</li>
+<li>
+<p>深度学习有以下 3 个步骤：</p>
+<ol>
+<li>获取高质量的知识；</li>
+<li>深度缝接新知识；</li>
+<li>输出成果去教授。</li>
+</ol>
+</li>
+<li>
+<p>人与人之间的差距不是来自年龄，甚至不是来自经验，而是来自经验总结、反思和升华的能力。</p>
+</li>
+<li>
+<p>如果让我推荐一个不可或缺的习惯，我必推每日反思。</p>
+</li>
+<li>
+<p>深度学习除了能让我们不再浮躁，能磨炼理智，还能带来诸多好处，比如跨界能力的提升。</p>
+</li>
+<li>
+<p>深度学习还能让人产生更多灵感。</p>
+</li>
+<li>
+<p>只有在自己的领域探索得足够深入时，灵感才可能在潜意识的帮助下显现。</p>
+</li>
+<li>
+<p>与此同时，深度学习还能让我们看到不同事物之间更多的关联，产生洞见。</p>
+</li>
+<li>
+<p>专注于深度学习，同时对浅学习保持开放。</p>
+</li>
+<li>
+<p>赵周提出了读书的三个步骤：</p>
+<ul>
+<li>用自己的语言重述信息，即找到触动自己的信息点；</li>
+<li>描述自己的相关经验，即关联生活中的其他知识；</li>
+<li>我的应用，即转化为行动，让自己切实改变。</li>
+</ul>
+</li>
+<li>
+<p>绝大多数人习惯以孤立的思维看待事物，喜欢花大量时间收集和占有信息；而另一批先行者则更喜欢拨弄信息之间的关联，从而在不知不觉间变得聪明了起来。</p>
+</li>
+<li>
+<p>知识的获取不在于多少，而在于是否与自己有关联，以及这种关联有多充分。当然，还有一个更重要的隐蔽条件不能忽视：你需要明确的目标或强烈的需求。</p>
+</li>
+<li>
+<p>人生没有白走的路，每一步都算数。</p>
+</li>
+<li>
+<p>只有当知识能够帮助你做实际决策的时候，它才是你的知识。</p>
+</li>
+<li>
+<p>只学让自己触动的。</p>
+</li>
+<li>
+<p>在阅读时，我唯一要做的事情就是：寻找触动点。</p>
+</li>
+<li>
+<p>体系的本质就是用独特的视角将一些零散的、独立的知识、概念或观点整合为应对这个世界的方法和技巧。</p>
+</li>
+<li>
+<p>打碎各家的认知体系，只取其中最触动自己的点或块，然后将其拼接成自己的认知网络。</p>
+</li>
+<li>
+<p>有效关联知识的三个方面：</p>
+<ul>
+<li>一是用自己的语言重新解释新知识，这会促使自己原有的知识体系对新知识做出反应。</li>
+<li>二是在需要的时候能够顺利提取知识，提取不出来的知识就是伪触动。很多人读书的时候往往只关注自己是否理解了书中的内容，却经常忽视头脑中冒出的想法。其实这些想法是非常珍贵的，放过了它们，我们的学习效果就会大打折扣。</li>
+<li>三是在生活中能够经常练习或使用这些知识，因为实践是产生强关联的终极方法。</li>
+</ul>
+</li>
+<li>
+<p>一件事若迟迟没有完成，心里就总是记挂，期盼着早点结束；此事一旦完成，做这件事的动机就会立即趋向于零。</p>
+</li>
+<li>
+<p>这就是打卡心态的特性：学不到，假装一下；学到了，立即停止。</p>
+</li>
+<li>
+<p>破除任务心态的方法正是如此 —— 集中心力做眼前的事就好。</p>
+</li>
+<li>
+<p>是否有及时、持续的正向反馈，正是产生学习效果差异的关键。</p>
+</li>
+<li>
+<p>科学的学习策略是产出作品、获取反馈，驱动本能脑和情绪脑去「玩玩玩」，而不是一味地努力坚持，让理智脑苦苦地去「学学学」。</p>
+</li>
+<li>
+<p>万一自己分享后收到的是批评或嘲笑该怎么办？如果自信心受到打击，那岂不是更糟？</p>
+<ul>
+<li>首先，分享不是随意分享半成品，而是尽最大力气将作品打磨成自己当前能力范围内可完成的最好的样子。</li>
+<li>其次，制定分享策略，展示给那些能力不及你的人。</li>
+<li>最后，冷静客观地对待打击。</li>
+</ul>
+</li>
+<li>
+<p>所有痛苦都是上天给我们的成长提示。无论是身体不适、情绪低落，还是学业落后、事业受挫，有痛苦出现，说明哪里出了问题，这不就是在告诉我们应该努力的方向吗？（我的人生没有失败，要么成功，要么成长；我的人生没有敌人，都是老师，要么得到，要么学到；我允许一切发生，凡事发生皆有利于我。）</p>
+</li>
+<li>
+<p>主动的回想测试是最好的学习方法之一，比坐在那儿被动地重读材料要好得多。</p>
+</li>
+<li>
+<p>「刻意练习四要素」：定义明确的目标、极度的专注、有效的反馈、在拉伸区练习。</p>
+</li>
+<li>
+<p>从不过度消耗自己，只要感到精力不足，就停下来主动休息</p>
+</li>
+<li>
+<p><strong>2025/12/27 发表想法</strong></p>
+<p>科学的学习模板</p>
+<blockquote>
+<p>原文：极度专注+主动休息，如此反复。</p>
+</blockquote>
+</li>
+<li>
+<p>一个真正的自控高手，不是一个只知道冲刺的人，而是一个善于主动休息、保持平衡的人。</p>
+</li>
+<li>
+<p>你想让精力保持高位，就要学会主动停下来。</p>
+</li>
+<li>
+<p>刻苦，是一种宏观态度，轻松，是一种微观智慧。</p>
+</li>
+</ul>
+<h2 id="第六章-行动力：没有行动世界只是个概念"><a class="header-anchor" href="#第六章-行动力：没有行动世界只是个概念"></a>第六章 行动力：没有行动世界只是个概念</h2>
+<ul>
+<li>
+<p>注意力的增强回路是正向的还是负向的，很大程度上取决于你最初的选择，这也是老生常谈的道理：要事第一！</p>
+</li>
+<li>
+<p>在增强回路的起点，做出有利选择所消耗的自制力是最小的，如果等负的增强回路形成，再想改变就难喽！</p>
+</li>
+<li>
+<p>在初始阶段，强迫自己先做重要的事情，一旦进入正向的增强回路，你便能拥有强大的行动力 —— 这正是增强自制力、提升行动力的秘密。</p>
+</li>
+<li>
+<p>清晰力，也就是把目标细化、具体化的能力 —— 行动力只有在清晰力的支撑下才能得到重构。</p>
+</li>
+<li>
+<p>只有真正做过的人才能体会到写与不写，完全不同。很多时候，人与人之间真正的差距可能就体现在最后那一点点行动上。</p>
+</li>
+<li>
+<p>行动力最怕模糊，如果我们的头脑中一直有很多模糊的选项存在，我们就需要花心力不断做选择，而做选择是一件非常耗脑力的事情。</p>
+</li>
+<li>
+<p>做规划的目的并不是让自己严格地按计划执行，而只是为了让自己心中有数。</p>
+</li>
+<li>
+<p>从某种程度上说，有自己热爱的事，比行动力本身要重要得多。</p>
+</li>
+<li>
+<p>你陷入怠惰、懒散、空虚的情绪中动弹不得时，往往是因为你的大脑处于模糊状态。</p>
+</li>
+<li>
+<p>认知越清晰，行动越坚定。</p>
+</li>
+<li>
+<p>想先看到结果再行动的人往往无法看到结果。耍小聪明的人会因为结果不明朗，担心付出没有回报，所以不愿行动，以致永远停留在原地</p>
+</li>
+<li>
+<p>这个世界是有认知层次的。处在下一个认知层次的人往往看不到上一个认知层次的风景，因而只能用狭隘的视角来判断：这些东西虽然很有道理，但似乎看起来并没有什么用。</p>
+</li>
+<li>
+<p><strong>2025/12/27 发表想法</strong></p>
+<p>这和我工作中的做法（写代码）很相似：通常情况下，我都会先梳理思路，当脉络清晰后再开始写，但有时也会遇到一些难题，面对这些难题时我并不是毫无思路，属于「有一点，但不多」，这时我会先顺着这一点思路开始写代码，敲着敲着，我发现思路越来越清晰，不知不觉任务项也完成了。</p>
+<blockquote>
+<p>原文：我此前一直强调「想清楚」的重要性，但当我们绞尽脑汁去想却仍然想不清楚的时候，就要依据前人的假设先行动起来，只有这样，我们才能更接近目标的本质，才能想得更清楚。</p>
+</blockquote>
+</li>
+<li>
+<p>思考很重要，但光想不做，贻害无穷。</p>
+</li>
+<li>
+<p><strong>2025/12/27 发表想法</strong></p>
+<p>如果你是因为害怕做一件事而不去做，那我也告诉你，做成一件事并想象中没有那么难。</p>
+<blockquote>
+<p>原文：做成一件事真的很不容易。</p>
+</blockquote>
+</li>
+<li>
+<p>在行动时要专注、要持续行动，直到突破阈值，这样才能看到更高层次的风景。</p>
+</li>
+<li>
+<p>如果你觉得别人讲的道理有理有据，而自己暂时无法反驳，碰巧自己又非常想做这件事，那就相信他们说的是对的，然后笃定地行动</p>
+</li>
+<li>
+<p>道理再好，如果不去刻意练习，不去刺激相关神经元的强关联，这些美好的认知将永远不会真正对自己产生影响。</p>
+</li>
+<li>
+<p>把认知当成技能，知道或想通一个道理时，不要高兴得太早，想想后面还要做大量的练习，这样就不浮躁了。</p>
+</li>
+<li>
+<p>不发生真正改变的学习都是无效的学习。</p>
+</li>
+<li>
+<p>现实和理论都告诉我们：懂得百点不如改变一点。真正的成长不在于自己懂得了多少道理，而在于自己改变了多少。</p>
+</li>
+<li>
+<p>对成长来讲，道理都是「空头支票」，改变才是「真金白银」。当你凡事都以改变为标准时，你的成长路径会更加清晰。</p>
+</li>
+</ul>
+<h2 id="第七章-情绪力：情绪是多角度看问题的智慧"><a class="header-anchor" href="#第七章-情绪力：情绪是多角度看问题的智慧"></a>第七章 情绪力：情绪是多角度看问题的智慧</h2>
+<ul>
+<li>
+<p>在一定的前提下，贫穷确实会使人变笨，这不是因为贫穷让人能力不足，而是因为贫穷造成的稀缺俘获了人的注意力，进而降低了人的心智带宽。</p>
+</li>
+<li>
+<p>任何能制造压力的事件都会挤占我们的心智带宽。</p>
+</li>
+<li>
+<p>只要我们的注意力被某一个巨大的事物吸引，我们就有可能进入稀缺状态，进而降低心智带宽，做出不明智的行为。</p>
+</li>
+<li>
+<p>当一个人同时面临很多任务的时候，他的心智带宽就会降低，反而没有了行动力和自控力。</p>
+</li>
+<li>
+<p>如何获取心智带宽：</p>
+<ul>
+<li>
+<p>第一帖，保持环境觉知，理智选择。</p>
+</li>
+<li>
+<p>第二帖，保持目标觉知，少即是多。我时常站在一生的高度去审视自己真正要做的是什么，然后打破思维定式，拒绝所有那些即使不去做天也不会塌下来的事情。</p>
+</li>
+<li>
+<p>第三帖，保持欲望觉知，审视决策。脑子里存在大量任务和念头的时候，往往是我们行动力最弱的时候。真正的行动力高手不是有能耐在同一时间做很多事的人，而是会想办法避免同时做很多事的人。</p>
+</li>
+<li>
+<p>第四帖，保持情绪觉知，谨慎决定。</p>
+</li>
+<li>
+<p>第五帖，保持闲余觉知，自我设限。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>我们一定要保持觉知，要清醒地意识到自己的视角偏误，时刻做好向上升级、向下兼容的准备。</p>
+</li>
+<li>
+<p>不要被原始视角束缚，主动转换视角可能会看到一个新天地。</p>
+</li>
+<li>
+<p>只是有的人面对再好的事情时都盯着一点瑕疵不放，而有的人却能从任何一件糟糕的事情中找到闪光点并放大，忽视其他不足之处。</p>
+</li>
+<li>
+<p>如何摆脱单一视角的限制：</p>
+<ul>
+<li>一是勤移动。顾名思义，就是多移动你的「相机」机位，尝试用不同的视角看问题。</li>
+<li>二是善学习。</li>
+<li>三是要开放。更准确地说是保持客观、不臆断。很多人情绪不好，是因为他们把自己做的假设当成了事实，在不确定对方真实想法的情况下，直接把情绪发泄了出来。</li>
+<li>四是寻帮助。</li>
+<li>五是多运动。</li>
+<li>六是常反思。</li>
+</ul>
+</li>
+<li>
+<p>不要让事情本身束缚了你的情绪和注意力。</p>
+</li>
+<li>
+<p><strong>2025/12/28 发表想法</strong></p>
+<p>「改变对事物的解释风格」，这在《活出最乐观的自己》里有讲</p>
+<blockquote>
+<p>原文：而在整个过程中，我仅仅改变了自己对事物的看法，境况就变得完全不同，这正是积极心理学的神奇之处。</p>
+</blockquote>
+</li>
+<li>
+<p>看似悲观的事物背后肯定有乐观的一面，严肃事物的背后必然有好玩的一面，我们暂时看不见不代表它不存在。</p>
+</li>
+<li>
+<p>我并不是在做这件事，我只是在做另外一件事。</p>
+</li>
+<li>
+<p>事情本身并不重要，我们只是在通过它获取另外一种乐趣，顺便把这件事给做了。在心理学上，这个方法叫作「动机转移」。</p>
+</li>
+<li>
+<p><strong>2025/12/28 发表想法</strong></p>
+<p>为自己而活</p>
+<blockquote>
+<p>原文：为自己而做和为玩而做。</p>
+</blockquote>
+</li>
+<li>
+<p>那些对内在动机更敏感和坚持的人，总会与众不同。他们不会为外界的奖励或评价而刻意表现，只会为自己的成长和进步而努力进取，这样的人很难被困难击倒。</p>
+</li>
+<li>
+<p>成长啊，有时候要看长远，让自己明白意义，心生动力；有时候要看得近些，让自己不惧困难，欢快前行。</p>
+</li>
+</ul>
+<h2 id="第八章-早冥读写跑，人生五件套：成本最低的成长之道"><a class="header-anchor" href="#第八章-早冥读写跑，人生五件套：成本最低的成长之道"></a>第八章 早冥读写跑，人生五件套：成本最低的成长之道</h2>
+<ul>
+<li>
+<p><strong>2025/12/28 发表想法</strong></p>
+<p>怪不得吃完饭后打游戏把把 C，过了一段时间后就感觉变菜了 😂</p>
+<blockquote>
+<p>原文：人体进食后，能量也会在1小时后转变为葡萄糖，输送到大脑，人的记忆力、理解力就会提高，大脑的运转速度会迎来峰值，直至4小时后才降到谷底。</p>
+</blockquote>
+</li>
+<li>
+<p>能够迅速进入专注状态，以及能够长期保持专注状态，是高效学习的两个最重要的习惯。</p>
+</li>
+<li>
+<p><strong>2025/12/28 发表想法</strong></p>
+<p>写下来，模糊就会变得清晰</p>
+<blockquote>
+<p>原文：这也是我一直倡导大家把心中的困惑写出来的原因，因为只要写出来，那些紧张、担忧、畏惧、害怕等情绪就会在清晰的观察下无处遁形，小球的重量自然会减轻。</p>
+</blockquote>
+</li>
+<li>
+<p>想要快速成为一个行业的高手，最好的方法就是和行业专家交流，直接向他们请教。</p>
+</li>
+<li>
+<p>脚步不能丈量的地方，文字可以；眼睛无法看到的地方，文字可以</p>
+</li>
+<li>
+<p>所谓费曼技巧就是通过自己的语言，用最简单的话把一件事情讲清楚，最好让外行人也能听懂。</p>
+</li>
+<li>
+<p>我们每个人都可以在这个世界上，刻画出一条与众不同的轨迹。</p>
+</li>
+</ul>
+<h2 id="结语-一流的生活不是富有，而是觉知"><a class="header-anchor" href="#结语-一流的生活不是富有，而是觉知"></a>结语 一流的生活不是富有，而是觉知</h2>
+<ul>
+<li>无论何时，都要把对方的情绪和意见分开对待，这样，即使在最糟糕的事情中也能学到有用的东西。</li>
+<li>灵感虽然是一瞬间冒出来的，但其背后却是一段生活经历的积累。</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/ren-zhi-jue-xing/">https://mofan212.github.io/posts/ren-zhi-jue-xing/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Reading/">Reading</a></div><div class="post-share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/172.webp" data-sites="wechat,qq,weibo,facebook,x"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/Why-Do-I-Do-That/" title="为什么我们总是在防御"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/171.webp" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">为什么我们总是在防御</div></div><div class="info-2"><div class="info-item-1">《为什么我们总是在防御》，约瑟夫·布尔戈著，姜帆译。</div></div></div></a><a class="pagination-related" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">字节码与类加载</div></div><div class="info-2"><div class="info-item-1">JVM 快速入门第三部分：字节码与类加载。</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/mo-gui-liao-tian-shu/" title="魔鬼聊天术"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/167.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">魔鬼聊天术</div></div><div class="info-2"><div class="info-item-1">《魔鬼聊天术》，阮琦著。</div></div></div></a><a class="pagination-related" href="/posts/The-Courage-to-Be-Disliked/" title="被讨厌的勇气"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/170.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-30</div><div class="info-item-2">被讨厌的勇气</div></div><div class="info-2"><div class="info-item-1">《被讨厌的勇气》，岸见一郎 / 古贺史健著，渠海霞译。</div></div></div></a><a class="pagination-related" href="/posts/Attached-The-New%20Science-of-Adult-Attachment-and-How-It-Can-Help-You-Find-and-Keep-Love/" title="亲密关系与情感依赖"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/169.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-24</div><div class="info-item-2">亲密关系与情感依赖</div></div><div class="info-2"><div class="info-item-1">《亲密关系与情感依赖》，阿米尔·莱文 / 蕾切尔·赫尔勒著，李昀烨译。</div></div></div></a><a class="pagination-related" href="/posts/Nonviolent-Communication-A-Language-of-Life/" title="非暴力沟通"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/168.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-17</div><div class="info-item-2">非暴力沟通</div></div><div class="info-2"><div class="info-item-1">《非暴力沟通》，马歇尔·卢森堡著，刘轶译。</div></div></div></a><a class="pagination-related" href="/posts/Learned-Optimism/" title="活出最乐观的自己"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/166.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-03</div><div class="info-item-2">活出最乐观的自己</div></div><div class="info-2"><div class="info-item-1">《活出最乐观的自己》，马丁·赛利格曼著，洪兰译。</div></div></div></a><a class="pagination-related" href="/posts/Why-Do-I-Do-That/" title="为什么我们总是在防御"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/171.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-21</div><div class="info-item-2">为什么我们总是在防御</div></div><div class="info-2"><div class="info-item-1">《为什么我们总是在防御》，约瑟夫·布尔戈著，姜帆译。</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">默烦</div><div class="author-info-description">彩笔的打怪升级之路...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mofan212"><i class="fab fa-github"></i><span>follow me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解。<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a href="./mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载。😊</br><strong><font style="color:red">严禁未遵循规范的转载。</font></strong>😡</br><strong>死去的评论系统复活啦！欢迎到留言板畅所欲言！</strong>当然也可以使用更高效的<a target="_blank" href="https://space.bilibili.com/23658864/dynamic" style="color:#49B1F5;text-decoration:underline"> 哔哩哔哩私信 </a>或<a href="mailto:cy.mofan@foxmail.com" style="color:#49B1F5;text-decoration:underline" target="_blank">邮箱</a>。 😉</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E8%AF%BB%E5%90%8E%E6%84%9F"><span class="toc-text">1. 读后感</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E6%91%98%E5%BD%95%E4%B8%8E%E6%83%B3%E6%B3%95"><span class="toc-text">2. 摘录与想法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%BA%8F-%E5%BC%80%E5%90%AF%E8%87%AA%E6%88%91%E6%94%B9%E5%8F%98%E7%9A%84%E5%8E%9F%E5%8A%A8%E5%8A%9B"><span class="toc-text">自序 开启自我改变的原动力</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%A4%A7%E8%84%91%EF%BC%9A%E4%B8%80%E5%88%87%E9%97%AE%E9%A2%98%E7%9A%84%E8%B5%B7%E6%BA%90"><span class="toc-text">第一章 大脑：一切问题的起源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%BD%9C%E6%84%8F%E8%AF%86%EF%BC%9A%E7%94%9F%E5%91%BD%E7%95%99%E7%BB%99%E6%88%91%E4%BB%AC%E7%9A%84%E5%BD%A9%E8%9B%8B"><span class="toc-text">第二章 潜意识：生命留给我们的彩蛋</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%85%83%E8%AE%A4%E7%9F%A5%EF%BC%9A%E4%BA%BA%E7%B1%BB%E7%9A%84%E7%BB%88%E6%9E%81%E8%83%BD%E5%8A%9B"><span class="toc-text">第三章 元认知：人类的终极能力</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E4%B8%93%E6%B3%A8%E5%8A%9B%EF%BC%9A%E6%83%85%E7%BB%AA%E5%92%8C%E6%99%BA%E6%85%A7%E7%9A%84%E4%BA%A4%E5%8F%89%E5%9C%B0%E5%B8%A6"><span class="toc-text">第四章 专注力：情绪和智慧的交叉地带</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%AD%A6%E4%B9%A0%E5%8A%9B%EF%BC%9A%E5%AD%A6%E4%B9%A0%E4%B8%8D%E6%98%AF%E4%B8%80%E5%91%B3%E5%9C%B0%E5%8A%AA%E5%8A%9B"><span class="toc-text">第五章 学习力：学习不是一味地努力</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E7%AB%A0-%E8%A1%8C%E5%8A%A8%E5%8A%9B%EF%BC%9A%E6%B2%A1%E6%9C%89%E8%A1%8C%E5%8A%A8%E4%B8%96%E7%95%8C%E5%8F%AA%E6%98%AF%E4%B8%AA%E6%A6%82%E5%BF%B5"><span class="toc-text">第六章 行动力：没有行动世界只是个概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%83%E7%AB%A0-%E6%83%85%E7%BB%AA%E5%8A%9B%EF%BC%9A%E6%83%85%E7%BB%AA%E6%98%AF%E5%A4%9A%E8%A7%92%E5%BA%A6%E7%9C%8B%E9%97%AE%E9%A2%98%E7%9A%84%E6%99%BA%E6%85%A7"><span class="toc-text">第七章 情绪力：情绪是多角度看问题的智慧</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AB%E7%AB%A0-%E6%97%A9%E5%86%A5%E8%AF%BB%E5%86%99%E8%B7%91%EF%BC%8C%E4%BA%BA%E7%94%9F%E4%BA%94%E4%BB%B6%E5%A5%97%EF%BC%9A%E6%88%90%E6%9C%AC%E6%9C%80%E4%BD%8E%E7%9A%84%E6%88%90%E9%95%BF%E4%B9%8B%E9%81%93"><span class="toc-text">第八章 早冥读写跑，人生五件套：成本最低的成长之道</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E8%AF%AD-%E4%B8%80%E6%B5%81%E7%9A%84%E7%94%9F%E6%B4%BB%E4%B8%8D%E6%98%AF%E5%AF%8C%E6%9C%89%EF%BC%8C%E8%80%8C%E6%98%AF%E8%A7%89%E7%9F%A5"><span class="toc-text">结语 一流的生活不是富有，而是觉知</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/Something-About-Blog/" title="博客搭建与维护"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="博客搭建与维护"/></a><div class="content"><a class="title" href="/posts/Something-About-Blog/" title="博客搭建与维护">博客搭建与维护</a><time datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"/></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="更新于 2026-01-03 00:00:00">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"/></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/103.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 的类资源加载"/></a><div class="content"><a class="title" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载">Java 的类资源加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/20.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="注解、类的加载、反射"/></a><div class="content"><a class="title" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射">注解、类的加载、反射</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/ren-zhi-jue-xing/" title="认知觉醒"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/172.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="认知觉醒"/></a><div class="content"><a class="title" href="/posts/ren-zhi-jue-xing/" title="认知觉醒">认知觉醒</a><time datetime="2025-12-28T16:00:00.000Z" title="更新于 2025-12-29 00:00:00">2025-12-29</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://gcore.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script src="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/js/mine.min.js"></script><script src="/js/tip_portal.js"></script><script defer="defer" id="ribbon" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script id="click-show-text" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="Azathoth,Yog-Sothoth,Shub-Niggurath,Nyarlathotep,Cthulhu,Hastur,Abhoth,Ghroth,Tsathoggua,Cthugha,Deep Ones,Dagon,Chaugnar Faugn,Mordiggian,Shoggoth,Old One,Mi-Go,Great Race of Yith,Flying Polyp,Hounds of Tindalos,Dhole" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div class="docsearch-wrap"><div id="docsearch" style="display:none"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@docsearch/css/dist/style.min.css"/><script src="https://testingcf.jsdelivr.net/npm/@docsearch/js/dist/umd/index.min.js"></script><script>(() => {
+  docsearch(Object.assign({
+    appId: 'BAFEL7A6K1',
+    apiKey: '89fcb5961984c5c054bf04149f345f38',
+    indexName: 'mofan212io',
+    container: '#docsearch',
+    placeholder: '输入关键字进行搜索',
+  }, null))
+
+  const handleClick = () => {
+    document.querySelector('.DocSearch-Button').click()
+  }
+
+  const searchClickFn = () => {
+    btf.addEventListenerPjax(document.querySelector('#search-button > .search'), 'click', handleClick)
+  }
+
+  searchClickFn()
+  window.addEventListener('pjax:complete', searchClickFn)
+})()</script></div></div></body></html>

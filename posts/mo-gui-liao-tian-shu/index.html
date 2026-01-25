@@ -1,0 +1,859 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>魔鬼聊天术 | Mofan</title><meta name="author" content="默烦,cy.mofan@foxmail.com"><meta name="copyright" content="默烦"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="《魔鬼聊天术》，阮琦著。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="魔鬼聊天术">
+<meta property="og:url" content="https://mofan212.github.io/posts/mo-gui-liao-tian-shu/">
+<meta property="og:site_name" content="Mofan">
+<meta property="og:description" content="《魔鬼聊天术》，阮琦著。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/167.webp">
+<meta property="article:published_time" content="2025-11-05T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-11-06T16:00:00.000Z">
+<meta property="article:author" content="默烦">
+<meta property="article:tag" content="Reading">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/167.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "魔鬼聊天术",
+  "url": "https://mofan212.github.io/posts/mo-gui-liao-tian-shu/",
+  "image": "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/167.webp",
+  "datePublished": "2025-11-05T16:00:00.000Z",
+  "dateModified": "2025-11-06T16:00:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "默烦",
+      "url": "https://mofan212.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/mo-gui-liao-tian-shu/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":true,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 默烦","link":"链接: ","source":"来源: Mofan","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://testingcf.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '魔鬼聊天术',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="referrer" content="no-referrer-when-downgrade" /><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/css/myStyle.min.css"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css" /><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css" /><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Mofan" type="application/atom+xml">
+</head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+btf.addGlobalFn('pjaxSend', () => {
+  Pace.restart()
+}, 'pace_restart')
+
+</script><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources/css/minimal.min.css"/><script src="https://testingcf.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/post_top_img.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Mofan</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">魔鬼聊天术</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-11-05T16:00:00.000Z" title="发表于 2025-11-06 00:00:00">2025-11-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-11-06T16:00:00.000Z" title="更新于 2025-11-07 00:00:00">2025-11-07</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Reading/">Reading</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">13.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>39分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;距离本文上次更新已经过去&quot;,&quot;messageNext&quot;:&quot;天，请注意时效性。&quot;,&quot;postUpdate&quot;:&quot;2025-11-07 00:00:00&quot;}" hidden></div><p>封面来源：由博主个人绘制，如需使用请联系博主。</p>
+<h1 id="1-读后感"><a class="header-anchor" href="#1-读后感"></a>1. 读后感</h1>
+<p>本来是想学习下沟通与交流，结果没想到看了本撩妹指南。前几章还有些排斥，继续阅读下去竟发现还有些道理（不过有些例子是真油腻、真普信）。阅读之后不仅认识到男女思维上的差异，部分内容还可以用在日常人际交往上，其中的心理学分析也很赞成，后续或许可以研究下心理学？</p>
+<p>男女关系应当一步一步升级，根据作者的说法，按照以下层级递进：</p>
+<ol>
+<li>认识</li>
+<li>普通朋友</li>
+<li>好朋友</li>
+<li>情侣关系</li>
+</ol>
+<p>在哪个层级就做哪个层级的事，不要越级干其他层级的事。</p>
+<p>如果需要升级关系，应当由男性主动去升级，可以先试探，如果反馈良好，就赶紧升级，否则就应该等待机会，继续保持现有的层级关系。</p>
+<p>无论是两性交往中，还是处理日常人际关系，最重要的是保持自我。保持自我的关键又是自信，自信不是吹牛，不是要在别人面前展示多么厉害，而是要对自己的接纳程度。当一个人越自信，内心就越强大，也就越能展现自己的魅力。</p>
+<p>爱人先爱己，如果不能自己接纳自己、不能与自己相处融洽，又怎么和他人相处呢？</p>
+<p>接纳自己就是要明白自己与他人的差距，也要承认与他人的关系是不可控的。</p>
+<p>男女之间有两种沟通方式：男性思维和女性思维。其中男性思维是理性的，是结果导向的；女性思维是感性的，是活在当下的。不是说男性思维只有男人才用，也不是说女性思维只有女性才用，一个人会在男性思维和女性思维中相互切换。因此在沟通时，就需要提升自己的观察力。了解他人的态度，感受他人的情绪，理解他人的想法。我总是自诩自己是观察者，但当身入真正的人际交往时，却迷失了自我。</p>
+<p>总的来说，要想更好地处理各种人际关系，就应该培养健全的人格，不断提升自己，这种提升可以是进行大量的人际交往，也可以是通过大量的阅读和生活阅历，在这个过程中不要患得患失，真实表达自我，轻松相处，享受当下才能有更美好的未来。</p>
+<p>书中针对各种场景还给出了各种技巧，应当活学活用这些技巧，把关系处得清晰自然，但也要坚持自己的底线，自我（或者说自由意志）才是永远的第一位。</p>
+<h1 id="2-摘录与想法"><a class="header-anchor" href="#2-摘录与想法"></a>2. 摘录与想法</h1>
+<h2 id="2-1-有男伴的女孩可以搭讪吗？"><a class="header-anchor" href="#2-1-有男伴的女孩可以搭讪吗？"></a>2.1 有男伴的女孩可以搭讪吗？</h2>
+<p>当然不可以！</p>
+<ul>
+<li>目的性太强的人不一定就是恶人，更不一定就是失败者，但是有一个问题却会出现在他们身上——那就是心理人格的扭曲。</li>
+<li><strong>自由不是想做什么就做什么，而是想不做什么就不做什么。同样，尊重不是我为你做你需要的事，而是我不去做你不愿意的事。</strong></li>
+<li>当你跟一个人朝夕相处之时，如果你们对事物的感受鲜有共鸣甚至常常相悖，那么将是件不能再痛苦的事情。</li>
+</ul>
+<h2 id="2-2-你的女神能追上"><a class="header-anchor" href="#2-2-你的女神能追上"></a>2.2 你的女神能追上</h2>
+<ul>
+<li>
+<p>当女孩假装生气地说「你真讨厌」时，往往是表达好感的信号；反之，当女孩礼貌客气地说「你这人其实挺不错」时，就是要发好人卡了。</p>
+</li>
+<li>
+<p>当交往发展到一定程度时，调侃往往是进一步拉近距离的信号，而客客气气的肯定反而有疏远关系的色彩。</p>
+</li>
+<li>
+<p>所谓调情，就是双方在相互拥有之前，在语言上对彼此的高度关注。</p>
+</li>
+<li>
+<p>用对话牢牢锁定彼此，这只是调情的第一步，不但要谈论彼此，还要调侃彼此，这才是真正的调情。</p>
+</li>
+<li>
+<p>这里还有个重要前提，那就是冲突需要由女孩首先发起，这是一个好感指标，有了这个信号，追求者才可以继续扩大冲突，否则就可能有风险。</p>
+</li>
+<li>
+<p>扩大冲突是个非常有用的调情技巧。</p>
+</li>
+<li>
+<p>冲突的主题永远是人 —— 好人和坏人、男人和女人，人和人的关系（尤其是你和她的关系）总是更能挑起女人的兴致。不仅调情如此，聊天时调动情绪的技巧也符合这个原则，那就是把表达「人物化」或者「人物的关系化」。</p>
+</li>
+<li>
+<p>魔趣法则是这样一个语言模式 —— 具有联系感的夸张行为。</p>
+</li>
+<li>
+<p>感受（今天运气真不错） + 状态（出门就认识了个大美女） + 魔趣法则（晚上加班都不觉得困了）。</p>
+</li>
+<li>
+<p>对话中的安全法则是「用表达自己来代替评价对方」，魔趣法则是「有联系感的夸张行为」。</p>
+</li>
+<li>
+<p>追女孩就要聊天，聊天就要调动情绪，调动情绪就要主动出击，可是主动出击总有一个问题 —— 会暴露你的意图，甚至搞不好就显得跪舔。这里提供一个技巧，原则就是平衡，把你要说的话分成两部分，一半表达赞美或者愿望，另一半用来平衡。</p>
+</li>
+<li>
+<p><strong>2025/11/04 发表想法</strong></p>
+<p>平衡的观点不错，但例子让人觉得油腻</p>
+<blockquote>
+<p>原文：「你的眼睛真漂亮」VS「看着你的眼睛我都没心思工作了」，前者是四平八稳的赞美，后者则是用「影响我干正事」来平衡「你的眼睛真漂亮」，用表面抱怨来达到实际赞美的目的。</p>
+</blockquote>
+</li>
+<li>
+<p>释放性信息的行为包括身体语言和口头语言，身体语言包括表情和肢体动作，表情又包括笑容和眼神。</p>
+</li>
+<li>
+<p>赞美是最初级的兴趣信号，赞美的要点是具体，具体代表了你在细致观察她，所以更具有性的意味，而笼统的赞美则倾向于社交礼节。</p>
+</li>
+<li>
+<p>水平最差的那种男人完全不知道袒露自我，聊天永远只是「你做什么呢」。</p>
+</li>
+<li>
+<p>提出要求是让女性为你们的关系在行动上付出，比如留下联系方式、出来见面吃饭、跟你一起回家……</p>
+</li>
+<li>
+<p>高手 <strong>不会</strong> 在见到女人之后，脑子里先出现「我要追她」的想法，接着制订一个计划，然后再去执行。</p>
+</li>
+<li>
+<p>高手在遇到女人时完全是下意识就开始释放性信息（微笑或赞美），并且随时收集回馈，如果有正面反馈就继续互动扩大，如果是负面反馈就换个时间或者换个目标再试探，就这么简单。</p>
+</li>
+<li>
+<p>这让我想起情场菜鸟经常说的一句话：「万一她被别人追走了怎么办？」当一个男人这样表达的时候，基本上也就暴露了他在求偶竞争中的弱势地位。（强势地位的男人会说：「万一我又想追别人了怎么办？」）</p>
+</li>
+<li>
+<p>语言方面，包括适度赞美和自我袒露以及提出要求。</p>
+</li>
+<li>
+<p>会泡妞的男人的说话特点是「时刻都在表达他跟她的关系」，其目的不是展示自己而是调动对方的情绪。</p>
+</li>
+<li>
+<p>强调一下，所有这些方法使用起来还有一个必要条件，就是必须有女方的性信息回应，这样互动才可以进行下去，交往双方的基本价值才匹配，才谈得上快速推进关系。</p>
+</li>
+</ul>
+<h2 id="2-3-终于跟女神约会了，下一步该怎么办？"><a class="header-anchor" href="#2-3-终于跟女神约会了，下一步该怎么办？"></a>2.3 终于跟女神约会了，下一步该怎么办？</h2>
+<ul>
+<li>女神最关心的是你的价值是否有她期待的那样出色，因此你要控制自己的需求，不要过于关心，不要频繁示爱，更不能跪舔，这样做的后果是女神觉得你配不上她。所以， <strong>平等是关键，切忌急躁。</strong></li>
+</ul>
+<h2 id="2-4-女朋友不开心，我要不要安慰？"><a class="header-anchor" href="#2-4-女朋友不开心，我要不要安慰？"></a>2.4 女朋友不开心，我要不要安慰？</h2>
+<ul>
+<li>女人真是一种口是心非的动物！</li>
+<li>我对这种事情的认识却是：其实很少存在所谓的那个「当时我想要你如何如何」的明确想法，更多见的只是一些一闪而过且相互矛盾的念头而已。</li>
+<li>念头是短暂的本能反应，而想法是对一组持续性行为的判断和选择。</li>
+<li>女人不开心时头脑中常常会出现各种各样的念头，并且这些念头还互相矛盾，「想一个人安静」和「想男朋友陪着」就是其中一对，而且会在不同状态下轮流出现（因为她们太喜欢表达了）。</li>
+<li>由此我们可以理解，至少女人口是心非的原因之一是她们喜欢表达「念头」，并且「念头」往往又是矛盾的，而男人因为是目的性动物，所以更习惯关注「想法」或「意图」，于是这就造成了两性之间的一种常见误解。</li>
+</ul>
+<h2 id="2-5-追女生的道理：女孩对你没好感，要不要追？"><a class="header-anchor" href="#2-5-追女生的道理：女孩对你没好感，要不要追？"></a>2.5 追女生的道理：女孩对你没好感，要不要追？</h2>
+<ul>
+<li>社会化能够让男性在恋爱中找回优势。</li>
+<li>成熟的一个标志就是了解差异，所谓两性关系上的成熟就是了解男女之间的差异。这个差异不仅是指生理上的，更是心理上的以及思维方式、表达方式和行为方式上的。</li>
+<li>女人有时候表述自己的心理活动是非常主观的，男人们可以从女人们说的话去判断她们的情绪状态，但千万别把这些话当作跟她交往的指导原则。</li>
+<li>没有好感的反面不等于就是恶感。女孩子所谓的「没有好感，怎么追都没用」，这句话的问题恰恰在于把没有好感等同于只有恶感了。</li>
+<li>交往就是了解的过程，你的每一步表现都在更新她对你的认识，所以你的所作所为就至关重要。</li>
+<li>正确的做法就是可以打招呼，但不要直接要联系方式，你必须要先跟她交谈一会儿，等女孩的状态放松了，你才可以进一步提出要联系方式的要求。</li>
+<li>你还要善于在交往的每个阶段加深女孩对你的好感，同时当女孩对你的好感指数达到升级标准之后，你还要能够抓住时机，把你们的关系推进到下一阶段。</li>
+<li>唯有一个因素是可以发挥主观能动性的，那就是你和她的「联系感」，这也是女性思维的一大特征，可以表现在行动上，更可以体现在语言上，所以有时候巧妙的聊天，三言两语确实就能让关系柳暗花明。</li>
+</ul>
+<h2 id="2-6-女人都是「拜金女」吗？"><a class="header-anchor" href="#2-6-女人都是「拜金女」吗？"></a>2.6 女人都是「拜金女」吗？</h2>
+<ul>
+<li>如果一个男人对那些不漂亮的女士也能保持绅士风度，那么他才是真正的绅士。</li>
+<li>我目前是屌丝的话，就尽量做个快乐的屌丝，当然我也会努力提升自己，但这是另一码事。</li>
+<li>所谓爱情、所谓缘分，就是你在某时某地遇到了一个恰好能关注你、欣赏你的某些细节的人，得之我幸，失之我命，男人用这样的态度对待女人、对待感情才能够洒脱。</li>
+</ul>
+<h2 id="2-7-Part-2-什么叫「对我有意思」？"><a class="header-anchor" href="#2-7-Part-2-什么叫「对我有意思」？"></a>2.7 Part 2 什么叫「对我有意思」？</h2>
+<ul>
+<li>
+<p><strong>2025/11/04 发表想法</strong></p>
+<p>事不过三</p>
+<blockquote>
+<p>原文：「三三法则」具体操作要点如下。</p>
+<ol>
+<li>每次短信只发三个回合，自己主动开始，自己主动结束。（当然如果MM突然热情了，咱们也要灵活跟进。）</li>
+<li>每三至五天再联系一次。</li>
+<li>每联系三次，在第三次的第三个回合伺机进行一次模糊邀约。</li>
+</ol>
+</blockquote>
+</li>
+<li>
+<p>认可她的情绪，表达你的需求。</p>
+</li>
+<li>
+<p>表达需求也是有分寸的，在魔鬼约会学里有一个概念叫「情感过度」，指的就是对需求或好感程度的表达超出了现有关系，这在追求中的男人身上十分常见。</p>
+</li>
+<li>
+<p>除了简洁和准确之外，还可以用到我们的上推下切理论：</p>
+<ul>
+<li>「认可她的情绪」时尽量上推</li>
+<li>「表达你的需求」时尽量下切</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-8-「对我有意思」吗？"><a class="header-anchor" href="#2-8-「对我有意思」吗？"></a>2.8 「对我有意思」吗？</h2>
+<ul>
+<li>男性思维是目的优先结果导向，注重的是未来时；女性思维则是过程优先感受导向，注重的是当下与过去。</li>
+<li>不管女孩的动机如何，到头来正确的应对措施都是一样，那就是不卑不亢、不急不慢，分层升级，真实自然地交往。</li>
+<li>男人追问「有没有意思」是因为他们喜欢探寻动机，他们认为不同的动机会导致不同的策略，但是这只是男性思维对付男性思维的游戏规则，一旦男性思维遇到了女性思维，那么不管动机如何，到头来都是走一步瞧一步。</li>
+</ul>
+<h2 id="2-9-「低情商」才容易自我陶醉"><a class="header-anchor" href="#2-9-「低情商」才容易自我陶醉"></a>2.9 「低情商」才容易自我陶醉</h2>
+<ul>
+<li>当别人按你的期望向你提供了一些信息之后，你应该先针对这些信息给予一些反馈，然后再提出你的下一步需求。</li>
+<li>问一句答一句给人的感觉是，这男人对女孩子的生活其实并不关心，他不停提问只不过是为了达到把女孩子约出来的目的。就像一个翻箱倒柜找东西的人，拉开一个抽屉没有自己要的东西就扔到一边，再去拉开另一个……</li>
+<li>男人的心目中总有一个客观世界，在那个世界里一切问题都应该有终极答案，并且他们认为找到了终极答案就可以逆过来解决一切。</li>
+<li>对于单纯的情感问题，最终答案跟最初答案往往是同一个，那就是对方的意愿 —— 我对你没感觉，世界上没有比这更终极的答案了，如果你还不明白，那人家只能 —— 对你更没感觉。</li>
+<li>如果在一切已经失去可能的情况下，你还能克制着自己的失落去关注她的细微感受，这时候姑娘才会觉得这男人多少还有点儿可取之处，而好感就是这么一点一滴积累起来的。</li>
+<li><strong>智商与情商：</strong> A 和 B 有关，但你就是看不出来，这是智商问题。A 和 B 无关，但你死活不愿接受，这是情商问题。</li>
+</ul>
+<h2 id="2-10-当女孩问：-「你给报销吗？」"><a class="header-anchor" href="#2-10-当女孩问：-「你给报销吗？」"></a>2.10 当女孩问： 「你给报销吗？」</h2>
+<ul>
+<li>一定要先否定形式层面（原因这里就不细说了），然后再根据你自己的意愿，决定是否接受实质层面，这样既能保证你的利益，又能制造融洽的气氛</li>
+<li>对付脑袋进水的人，第一不要讲道理（既然进水了，讲也讲不清），第二不要试图教育他（比如惩罚，咱没这个义务），最好的方式就是 —— 我比你更水！</li>
+<li>方法让我们不犯错，好心态才会出彩。现在再加上个顺序 —— 先找好心态，再找好方法。</li>
+</ul>
+<h2 id="2-11-搭讪遇到酒托如何应对？"><a class="header-anchor" href="#2-11-搭讪遇到酒托如何应对？"></a>2.11 搭讪遇到酒托如何应对？</h2>
+<ul>
+<li>如果你们之间只有金钱关系，那么即使对方是良家，你也是个嫖客；相反，如果你们之间不是金钱的关系，那么即使对方的职业是妓女，那至少在这段关系中，你们应该也是平等的。</li>
+</ul>
+<h2 id="2-12-不能证明是好的，也不要预设它是坏的"><a class="header-anchor" href="#2-12-不能证明是好的，也不要预设它是坏的"></a>2.12 不能证明是好的，也不要预设它是坏的</h2>
+<ul>
+<li>悲观和乐观是人的性格最基本的两个方面，区别在于，对悲观的人来说，一件事如果不能证明是好的，那么就预设它是坏的；而乐观的人的思维是，一件事如果不能证明是坏的，那么就预设它是好的。</li>
+<li>男性魅力最重要的部分恰恰就是勇于面对失败和不确定性。</li>
+<li>真正有魅力的人应该是，在失败没有必然发生之前就用乐观的心态去对待一切，但如果遇到失败也不必否认逃避，而是根据实际情况去分析判断到底应该接受命运还是继续争取。</li>
+</ul>
+<h2 id="2-13-如何读懂别人的暗示？"><a class="header-anchor" href="#2-13-如何读懂别人的暗示？"></a>2.13 如何读懂别人的暗示？</h2>
+<ul>
+<li>把自己的意愿藏在肯定回答里的好处是，能够让接下来双方的选择显得一致。</li>
+<li>作为提问者，你的下意识总是希望得到肯定答复，所以你会把愿望带入问题中，这样当对方作出肯定回答的时候正好顺自己的意。</li>
+<li>男：下班后一起吃饭？女：要加班啊、在出差呀、有安排了、不舒服哦……总之，她们就是不直接说「不」。</li>
+<li>浅度的暗示性语言是说话者性格或愿望的流露。说话者有意或无意向对方传递某种信息，但不论怎样都只是在表达自己的意图，选择权还是放在对方手里。</li>
+<li>深度的暗示性语言则完全是说话者有计划的行为，目的是隐藏意图及操控对话者。</li>
+</ul>
+<h2 id="2-14-谈话中如何应对「挑衅」？"><a class="header-anchor" href="#2-14-谈话中如何应对「挑衅」？"></a>2.14 谈话中如何应对「挑衅」？</h2>
+<ul>
+<li>应对「挑衅」的难点在于对方完全是根据你的陈述得出的结论，推导的过程和结论都没有逻辑错误，所以这时你再作任何关于「什么才是真爱」方向的辩解都会显得底气不足，而且越描越黑。</li>
+<li>应对「挑衅」过程辩论的要点：
+<ol>
+<li>第一个要点 —— 永远不要从「我没说清楚」或者「你们理解错了」的角度来辩解，推卸责任会显得你很没气度。如果不幸先被敌人袭击，已经自损八百，那么自卫反击的原则就应该是争取杀敌一千了——让对方的损失比你更大一些，而不是自欺欺人、否认自己已有的损失。</li>
+<li>第二个要点 —— 不要防守，要进攻，一旦涉及「形象面子」，很多人就只顾维护，这是错误的。</li>
+<li>第三个要点 —— 立场不同时，越下切火药味儿越浓，所以要适当控制。</li>
+</ol>
+</li>
+<li>面对「挑衅」如何做到机智敏捷、对答如流：
+<ol>
+<li>正确的思路以及严密的逻辑。如果连这一条都达不到，那么即使事后有充分时间思考也还是找不对方向。我把这道题贴在微博上，下面大部分的评论都是这种水准。</li>
+<li>良好的心态。所谓良好心态不是自信能杀敌一千，而是不惧自损八百。坦然接受已经发生的打击，不让损失乱了自己的阵脚。</li>
+<li>旺盛的精力和斗志，辩论不仅是个脑力活儿，而且也是个体力活儿。</li>
+</ol>
+</li>
+<li>应对「挑衅」的方式：
+<ol>
+<li>被挑衅了就不要解释。</li>
+<li>要进攻，不要防守。</li>
+<li>自己要逻辑清晰，但表达时可以通过省略步骤来保持合适的对话气氛。</li>
+</ol>
+</li>
+</ul>
+<h2 id="2-15-金钱与爱情"><a class="header-anchor" href="#2-15-金钱与爱情"></a>2.15 金钱与爱情</h2>
+<ul>
+<li>展示真实自我，同时也提倡在相处时尽量带给女孩优质体验。</li>
+</ul>
+<h2 id="2-16-Part-3-不懂这些就别说自己会撩妹子"><a class="header-anchor" href="#2-16-Part-3-不懂这些就别说自己会撩妹子"></a>2.16 Part 3 不懂这些就别说自己会撩妹子</h2>
+<ul>
+<li>下雨接送本身并不是个多大的事儿，但对这种行为的执着却可以折射出这类男人在追求时内心的不安全感，而这正是导致他们在恋爱中屡战屡败的原因。</li>
+<li>多数男人在追求的时候会有一个原始的冲动 —— 对她好，而且极尽所能各种自己能做到的方式（发扬到极致就是跪舔）。确实也有人因此成功了，但这并不能说明「对她好」就是正确的追求方式。</li>
+<li>「对她好」的好处：
+<ol>
+<li>在她向你发出求助的时候，你帮她解决问题，她会感激你。</li>
+<li>在她没有向你求助的时候，你主动提供帮助，可以展示你具备会照顾人的品质。（这是很多男人愿意「对她好」最主要的动机，但问题是不能因为展示这一个品质而影响展示其他的品质。）</li>
+</ol>
+</li>
+<li>「对她好」的坏处：
+<ol>
+<li>失去相处和了解的机会，失去展示你其他品质的机会。</li>
+<li>筛选出了坏女孩，让坏女孩围绕在你的周围。</li>
+<li>降低你在女孩心目中的价值。本来还以为这可能是个挺优秀的男孩，结果上来就跪舔</li>
+</ol>
+</li>
+<li>大小二八原则：大二八是指在追求行为中，请吃饭的比例占 80%，对她好的比例占 20%。</li>
+<li>因为自恋，他们认为别人对他好是理所应当的，所以他们从来不珍惜「对他好」的人；其次，因为自恋，他们只会爱与自己相似的人；最后，还是因为自恋，他们会忍不住「对那个与自己相似的人极尽所能地好」。</li>
+<li>本质上，所有的恋爱都是自恋，我们都在寻找自己心中描画好的那个人。区别只是，你自己是个什么样的人。</li>
+<li>首先，成为一个人格健全的人（根本问题）；其次，了解男女交往的规律（方法问题）；最后，多去尝试，找到跟你相似的另一半（解决运气问题）。</li>
+</ul>
+<h2 id="2-17-如何培养健全人格？"><a class="header-anchor" href="#2-17-如何培养健全人格？"></a>2.17 如何培养健全人格？</h2>
+<ul>
+<li>我知道自己有不如别人的地方，但这并不影响周围人对我的接纳。</li>
+<li>正确的自我观念，包括客观的自我定位及积极的自我认同。</li>
+<li>健全人格的第二点 —— 行为的动机主要从自己的内心感受出发而不是被外界环境左右</li>
+<li>有了由内而生的动机之后，积极地与外界互动，在行动之初，对客观对象不要特别挑剔，多关注对方好的一方面，多享受当下的快乐，但我会关注和欣赏她好的那一方面（既包括她的外形也包括对我的态度）</li>
+<li>当你在不可能确定某些条件的时候却硬要去确定，这正是在浪费时间多走弯路。</li>
+<li>我在自己喜欢的异性对象面前能够保持良好心态，而很多人在面对自己喜欢的人的时候都会患得患失，无论是追求之中还是拥有之后。</li>
+<li>如果两情相悦了，这当然是世界上最美好的体验，但如果是一厢情愿，那么这也是世界上最可悲的事情。</li>
+<li>一个自我接纳度高的人不太容易在爱情中迷失自己，但这样的人并不是没有感情，更不是不真诚，他们只是不会轻易移情。</li>
+<li>所谓健全人格，就像一个逻辑严密的操作系统，它最根本的核心是自我接纳。</li>
+<li>当不知道自己被什么控制和影响的时候，我们就像在黑暗中独自行走的人，会被不知从哪里伸出来的手猛推一下坠入深渊。</li>
+<li>深度反省依然是培养健全人格最好的方法。我们需要经常从日常生活中抽身出来，站在客观角度审视自己的所作所为、所思所想。可以个人独自完成，也可以在导师或者团体的督导下进行。</li>
+</ul>
+<h2 id="2-18-女孩喜欢有教养的男士"><a class="header-anchor" href="#2-18-女孩喜欢有教养的男士"></a>2.18 女孩喜欢有教养的男士</h2>
+<ul>
+<li>在实际生活中我发现，迟到的礼节男生们基本都懂，但早到的规矩很多人却不是那么清楚。因为即使你主观上不存在催促的意思，但事实上，只要你告诉对方你到了，对方就会本能地产生无形的压力，本来人家可能有自己的安排，现在则会想着尽量别让你多等，结果就是打乱了人家的计划和节奏。</li>
+<li>类似的现象还有一个，就是不分时间发微信（尤其是大半夜）。</li>
+<li>生活中的细节有如下特点：做到了并不会让人觉得你优秀出色，但做不到你可能就在爱情的追逐竞赛中莫名其妙出局了，而且女神永远不会告诉你其中的原因。</li>
+</ul>
+<h2 id="2-19-浅析「剩女问题」"><a class="header-anchor" href="#2-19-浅析「剩女问题」"></a>2.19 浅析「剩女问题」</h2>
+<ul>
+<li>男选女，生物价值为主、社会价值为辅；女选男，社会价值为主、生物价值为辅。</li>
+<li>甚至即使女人自己过了心理关，男人还不一定能坦然接受，因为许多中国男人觉得在收入比自己高的妻子面前抬不起头，所以他宁可找个比自己社会价值低的。</li>
+<li>如果男人能在获得社会意义上的成功之前先实现个体的成熟，有钱的不浅薄，没钱的不自卑，那剩女们或许就有救了。</li>
+</ul>
+<h2 id="2-20-表白就像行贿"><a class="header-anchor" href="#2-20-表白就像行贿"></a>2.20 表白就像行贿</h2>
+<ul>
+<li>面对文字信息，即使是身为感性动物的女人，她们也会开启理性思考模式 —— 他说喜欢我……他这是要跟我确定关系……可我们彼此足够了解吗……将来发现问题会不会就没有退路了……算了，还是保持现状吧。</li>
+<li>当面表白又有两种做法，分为肢体语言表白和口头语言表白。最好的表白方法是先肢体语言冲锋，再口头语言跟进，但老实男人一般都把顺序颠倒过来。</li>
+<li>正确的态度是：我们积极争取成功，但不介意不成功，因为成功本来就不是一蹴而就的，可我们要尽力避免失败，因为失败会让争取成功的机会再也没有了。</li>
+<li>很多人以为肢体接触的顺序是拉手 —— 搂腰 —— 拥抱，其实并不一定，甚至某些情况下，欲迎还拒的女孩不让你拉手却会允许你搂腰或者拥抱，这是因为小手是受大脑支配的灵巧器官，十指相扣就等于明确接受了你的追求，但腰是不太容易控制的，你非要搂那就让你搂着吧……</li>
+<li>总之在女孩女性思维时要关注她的感受。</li>
+<li>表白之后男士的最佳策略是「镜像原则」—— 保持与之差不多的温度，女孩热情，我也热情，女孩冷静，我也冷静。</li>
+<li>方法就是知道该怎么做，心态则是明白做了也不一定有用。好方法让你不犯错，而好心态才会真正让你出彩，因为生活的美好之处恰恰在于它的不确定性。</li>
+</ul>
+<h2 id="2-21-恋爱的逻辑思维"><a class="header-anchor" href="#2-21-恋爱的逻辑思维"></a>2.21 恋爱的逻辑思维</h2>
+<ul>
+<li>同样是占据头脑，男性的喜欢往往充满着对未来的计划，而女性的喜欢则常常是对曾经体验过的美妙情绪的回味。</li>
+<li>对关系的投入：开始以及维持一段关系所需要的时间、金钱、精力、情感</li>
+<li>什么叫「目的性太强」：标准一，你向对方提出的要求超越了你们现有的关系，例如你约一个刚刚认识的女同事去酒店。标准二，虽然是符合你们现有关系的要求，但在被拒绝之后，你还执着地向对方不断提出。</li>
+<li>什么叫「有感觉」：有感觉是描述女性喜欢一个男人时的概念（与之相对，男性喜欢一个女人时叫有欲望），有感觉即是想要再次体验跟他交往时有过的美好的情绪的愿望。</li>
+<li>独立自主的女人，暖男就成了跪舔，死缠烂打更是令人讨厌，会适得其反的。</li>
+<li>保持真实自我，积极主动的同时又不死缠烂打，顺其自然才是追求的最佳策略。</li>
+</ul>
+<h2 id="2-22-恋爱的逻辑思维（续）"><a class="header-anchor" href="#2-22-恋爱的逻辑思维（续）"></a>2.22 恋爱的逻辑思维（续）</h2>
+<ul>
+<li>关心 —— 提醒她的问题、解决她的困难、满足她的需求。关注 —— 作为旁观者表现出对她的状态的兴趣。</li>
+<li>关心的前提条件（以下两点至少满足其一才可以关心）：
+<ol>
+<li>你们是好朋友及以上关系。</li>
+<li>对方有主动的感受表达。</li>
+</ol>
+</li>
+<li>尚且不熟又缺乏吸引力的关系，过于频繁的联系会让对方由爱生厌，失去友好态度。</li>
+<li>只有对方具备了对你友好的态度，才会关注你展示出来的东西。</li>
+<li>联系频率的控制原则以能获得对方的友好态度为准，太密或太疏都有可能犯错。即使情侣也不例外，有的情侣可以接受每天联系，有的就不接受，到底该用什么频率，应该从对方的感受去找平衡点，而不要机械地执行所谓的客观标准。</li>
+</ul>
+<h2 id="2-23-情人节送花指南"><a class="header-anchor" href="#2-23-情人节送花指南"></a>2.23 情人节送花指南</h2>
+<ul>
+<li>男孩把送花行为当作表达诚意，但女孩会把送花行为理解为确定关系。</li>
+<li>他们总是把客观世界看得比二人关系更为重要，情人节到了我就必须做些什么，而不是关系不够我最好什么都不做。</li>
+<li>最后讲一个我认为最好的送花方式 ——「阅后即焚」。在吃饭的时候，快递员突然把花送达现场，摆在餐桌上作为点缀，吃完饭这束花的使命就完成了。</li>
+</ul>
+<h2 id="2-24-情人节备胎攻略"><a class="header-anchor" href="#2-24-情人节备胎攻略"></a>2.24 情人节备胎攻略</h2>
+<ul>
+<li>
+<p>四种程度的好感信号：</p>
+<ul>
+<li>第四级　回应 —— 不能升级的普通朋友关系。女孩表现：接你电话、回你短信，内容平淡，态度礼貌，但至少搭理你。</li>
+<li>第三级　倾诉 —— 可以先发展为好朋友，再从好朋友向情侣关系升级的关系。女孩表现：姑娘对你说话很多，内容具体，感受丰富，话题敏感。</li>
+<li>第二级　关注 —— 可以从普通朋友向情侣关系升级，但需要继续了解的关系。女孩表现：姑娘对你的话题积极响应，对你的生活充满好奇。有关注，代表对你有兴趣有好感、关心你且在意你。你要显得轻松自信、诚恳豁达，要有点儿「我知道你对我有好感，我也喜欢你，所以咱们再深入一步，但如果你反悔了我也能理解」的态度。</li>
+<li>第一级 依顺——可以直接从普通朋友向情侣关系升级，并且能够一步成功的关系。女孩表现：容易约出来，愿意跟你在一起，听从你的建议，接受你的要求，说白了就是俩字——听话。</li>
+</ul>
+</li>
+<li>
+<p>备胎出位的策略不是强调你比主胎性能好，而是安全、可靠、不犯错以及危难之中显身手。</p>
+</li>
+<li>
+<p>如果你对别人的吸引力确实有限，而缘分又让你们有机会短暂相处，那么就好好活在当下吧，至少尽量避免苦大仇深地破坏气氛，有时候最感性的做法恰恰也是最理性的做法。</p>
+</li>
+</ul>
+<h2 id="2-25-聊天四大常见错误"><a class="header-anchor" href="#2-25-聊天四大常见错误"></a>2.25 聊天四大常见错误</h2>
+<ul>
+<li>聊天四大常见错误：
+<ol>
+<li>连续提问</li>
+<li>不说自己</li>
+<li>情感过度</li>
+<li>随意评价</li>
+</ol>
+</li>
+<li>在每次对方回答了你的问题之后，你都给予一定的响应（即自己在这个话题上的相关信息、状态或感受）</li>
+<li>正确的做法是在回答时多用状态 + 感受。</li>
+<li>如果对方对你的回答进一步表现出兴趣，你就可以顺势把话题变成关于你个人经历的一段小故事，这样你们的彼此了解以及相互关系就可以趁机推进。</li>
+<li>情感过度就是你在聊天中传递出来的情感超出了你们的现有关系，从而让对方觉得别扭。</li>
+<li>情感过度的原因有两点：
+<ol>
+<li>追求表达的极致效果，恨不得每句话都一语惊人、直捣芳心；</li>
+<li>对「真诚」的错误理解，认为真诚就是把自己做的和想的毫无保留地告诉对方。</li>
+</ol>
+</li>
+<li>随意评价包括对别人的情绪、意愿、能力、性格、角色进行不由分说的主观判定，产生的原因往往是当事者为了说出有趣的话题，自己先去设定一个前提，然后再想象伸延去表达一个意义。</li>
+<li>心理测试中有个技巧，叫作「用客观事实淡化主观意愿」。</li>
+<li>聊天四大错误的对应原则：
+<ol>
+<li>少问多说，多说自己</li>
+<li>客观陈述事实</li>
+<li>适当表达感受</li>
+<li>谨慎评价对方。</li>
+</ol>
+</li>
+<li>严格来说，很多人在交流沟通中都是存在问题的，只是在日常生活中由于人情世故的缓冲，这些问题产生的麻烦并不会马上体现。</li>
+</ul>
+<h2 id="2-26-论沟通能力在当今的重要性"><a class="header-anchor" href="#2-26-论沟通能力在当今的重要性"></a>2.26 论沟通能力在当今的重要性</h2>
+<ul>
+<li>只有彻头彻尾的 loser 才会把两性关系的不公归咎于容貌和金钱。更重要的是，这些人没有勇气面对除了丑和穷之外自己还缺少其他的能力和素质，把不幸归咎于先天和运气是失败者最常用的麻醉剂。</li>
+<li>越脱离群体，人的自我意识便越膨胀，所以当宅在家里的时候，我们对被了解、被认可的需求反而在默默增加。</li>
+<li>宅的生存方式让现代人自我认可的需求在增加，而自我表达的能力却在退化。每个人的内心都认为自己独一无二，但每个人向外界发出的信息却又高度雷同。</li>
+<li>那些善于表达、能够展现个性的人迅速成为稀缺资源，脱口秀明星的市场价值短短几年之内就已经向歌星影星看齐。</li>
+<li>我们鄙视所谓的技巧和惯例，传授的是良好的心态和正确的方法，最终改变的是你处理两性关系的思维方式。</li>
+</ul>
+<h2 id="2-27-机智应答的魅力"><a class="header-anchor" href="#2-27-机智应答的魅力"></a>2.27 机智应答的魅力</h2>
+<ul>
+<li>机智应答的原则：
+<ul>
+<li>第一项原则：「认可对方的假设」。</li>
+<li>第二项原则：按对方的假设方向继续夸张，直至找到符合自己的利益点。在严肃对话时改为 —— 用平行或者下切事实来维护自己的利益</li>
+</ul>
+</li>
+<li>很多时候，话不是说给对方听的，话是说给旁观者听的，面对挑衅，如果你的回应能做到有风度、有原则、有道理、有趣味，大家才会愿意相信你这个人，才会愿意跟着你走，这就是语言的力量。</li>
+</ul>
+<h2 id="2-28-Part-4-女孩拒绝你，怎么办？"><a class="header-anchor" href="#2-28-Part-4-女孩拒绝你，怎么办？"></a>2.28 Part 4 女孩拒绝你，怎么办？</h2>
+<ul>
+<li>看见自己喜欢的，上去搭讪就行了，剩下的交给天。</li>
+<li>搭讪的人一般都是快乐的，快乐不在于得到，而在于随时随地做自己想做的事。我不喜欢那种纠缠别人的搭讪，换句话，不要把自己的快乐建立在别人的烦恼之上。</li>
+<li>我们提倡搭讪要诚恳，但别把诚恳误会为成功的妙药，更不要把诚恳当作正义的大旗，诚恳的作用只是避免让别人有不好的感受，而好感永远都是天注定的。</li>
+</ul>
+<h2 id="2-29-如何分辨对话中的「特殊含义」？"><a class="header-anchor" href="#2-29-如何分辨对话中的「特殊含义」？"></a>2.29 如何分辨对话中的「特殊含义」？</h2>
+<ul>
+<li>我们不可能也没必要知道女孩的动机，我们只看她们当下的行为和态度即可。</li>
+<li>在对话过程中如何尽可能接近正确以及少犯错误：
+<ul>
+<li>其一，就是先不要去揣测对方的动机，不要把时间和精力浪费在这上面。揣测别人动机，其实往往是投射你自己的心理活动 —— 你希望出现的或者是你害怕出现的，最终的结果是把对客观情况的判断引向歧途。</li>
+<li>其二，就是当遇到对方的「特殊表达」时，不要急于回应，而要先搞清楚人家到底想向你传达什么信息。</li>
+</ul>
+</li>
+<li>宅男的一种常见思维 —— 他们总是把名分置于事实之上。</li>
+<li>在男女交往中，两个人到底是什么关系取决于「他和她一直在做什么事情」</li>
+<li>双方持续发生的行为才代表双方真正的关系。（有些情况下，虽然双方没有口头承诺，但一直有亲密行为，那么实际上就属于情侣关系；反之，如果双方仅有口头认可，但始终没有亲密行为，那么其实也算不上男女朋友。</li>
+<li>在我们跟别人打交道的时候，有时对方会突然说一句让我们感觉有些莫名其妙的话，这往往需要我们特别谨慎地对待</li>
+<li>如果对方突然说了一句莫名其妙的话，你不太确定其中的含义，不知道该如何应对，那么最好先别着急表态，继续聆听人家接下来还会说些什么。</li>
+<li>表白的意义包括两点：
+<ol>
+<li>表达我对你的喜欢认真而热烈。</li>
+<li>表达我愿意且能够照顾你。</li>
+</ol>
+</li>
+<li>虽说社会总是教导我们功成名就之后不难拥有真爱，但我从来都认为，恰恰只有在你不够完美之时拥有过的真情才是完美人生不可或缺的组成部分。</li>
+</ul>
+<h2 id="2-30-陷入邀约的两难境地怎么办？"><a class="header-anchor" href="#2-30-陷入邀约的两难境地怎么办？"></a>2.30 陷入邀约的两难境地怎么办？</h2>
+<ul>
+<li>遇到两难境地时，多把女神当作普通朋友去对待。</li>
+<li>这里请谨记一个道理：你在心里把对方摆在什么位置，跟你们以什么关系相处是两回事。</li>
+<li>升级关系就更应该先把现有关系相处好。轻松相处是处理好现有关系的必要条件，但不是升级关系的充分条件</li>
+</ul>
+<h2 id="2-31-女朋友有了新欢，还能挽回吗？"><a class="header-anchor" href="#2-31-女朋友有了新欢，还能挽回吗？"></a>2.31 女朋友有了新欢，还能挽回吗？</h2>
+<ul>
+<li>当苦苦追求心上人却不能得到的时候，也许这不是你匹配不匹配一个人的问题，而是你适合不适合一段关系的问题。</li>
+<li>谈恋爱不是一个人去匹配另一个人，而是一个人去匹配自己跟另一个人的一段关系。</li>
+</ul>
+<h2 id="2-32-不要做网络窥视者"><a class="header-anchor" href="#2-32-不要做网络窥视者"></a>2.32 不要做网络窥视者</h2>
+<ul>
+<li>在这种情况下，你再每天花几个小时做一些无聊无意义的事情，这只能让你的人格魅力越来越差，因为这种行为必定会影响你的心态，并且在交往中通过各种细节显现出来。</li>
+<li>不要在意在微博、朋友圈下面跟你的女神打情骂俏的那些男人，告诉你个亦悲亦喜的真相，能够嘿咻了的关系一般都不出现在微博朋友圈里，真正的对手你是看不见的。</li>
+</ul>
+<h2 id="2-33-她为什么微信不回、电话不接？"><a class="header-anchor" href="#2-33-她为什么微信不回、电话不接？"></a>2.33 她为什么微信不回、电话不接？</h2>
+<ul>
+<li>普通人在跟心上人有过良好互动以后，往往都会不由自主地夸大自己在对方心目中的重要性，提高自己在对方社交圈的关系层级</li>
+<li>当女孩突然不接我电话、不回我短信的时候，我会认为——看来我们的关系还不是我以为的那么亲近，目前还只是低一个级别的关系。那么我就回到这个级别继续跟她交往就好。事实表明，这样的做法往往会得到最好的结果。</li>
+</ul>
+<h2 id="2-34-你一直在错误地「共情」"><a class="header-anchor" href="#2-34-你一直在错误地「共情」"></a>2.34 你一直在错误地「共情」</h2>
+<ul>
+<li>通常情况下，当他人向我们表达他的感受、想法，或者释放他情绪的时候，他会希望我们在认真地听他倾诉。</li>
+<li>多数情况下倾诉者都只是希望别人理解自己的处境，只有很少时候倾诉者是请求你给予帮助或者建议，所以不要试图去帮助他解决问题。</li>
+<li>从这个意义上而言，多数时候，当对方主动表达自己的感受时，我们不应该平行自己的感受，比如电话中女孩说「我感冒了，很难受」，男的说「我上周也感冒过，也很难受」，这么说话有一种将话题重点转移到自己的倾向。</li>
+<li>日常生活中比较好的共情技巧是这样的：
+<ol>
+<li>尽量不要以评价的方式来认可对方的情绪。</li>
+<li>如果还想进一步深度释放情绪，可以采用夸张引申至荒谬的方式。</li>
+</ol>
+</li>
+<li>心理咨询的共情跟日常生活的共情的区别：
+<ol>
+<li>心理咨询中，求助者的负面情绪会对他构成相当大的困扰，所以要小心翼翼地对待，不可轻易否定，也不可开玩笑。而日常生活中的负面情绪很多时候就是需要释放一下而已，当事者明白自己的分寸在哪里，所以对话中开开玩笑，陪他一起宣泄效果更好。</li>
+<li>心理医生不可以是求助者的朋友，所以心理医生可以表达对求助者情绪的理解，但不可表现自己也有同样的情绪。而朋友角色就不受这条规矩的约束，作为朋友可以提供的恰恰就是这种我跟你感同身受的痛快。</li>
+</ol>
+</li>
+</ul>
+<h2 id="2-35-不能控制情绪会让你一败涂地"><a class="header-anchor" href="#2-35-不能控制情绪会让你一败涂地"></a>2.35 不能控制情绪会让你一败涂地</h2>
+<ul>
+<li>有句老话叫人无完人，说的就是再优秀的人也不可能在所有方面都面面俱到。即便是一直顺风顺水的人，也难免会遇到不适应的情境和无法控制的场面。</li>
+<li>好感不到不可以贸然升级关系，而且表白最好还要当面进行，绝对不要使用文字表白。</li>
+<li>遭遇危机之后，内心的紧张和惶恐带来了巨大的压力，这种压力促使他觉得自己一定要做些事情。</li>
+<li>在恋爱中没有控制好情绪的例子。一旦遭遇逆境，男人们往往就会心态失衡，赌徒心理就会抬头，开始「剑走偏锋」</li>
+<li>解释等于你默认了对方的评判逻辑，而还击则往往是用你自己的形象跟对方同归于尽。</li>
+<li>在作决策时应该使用理性（男性）思维，而在实施决策时可以采用感性（女性）思维。通俗的说法就是，对自己要男性思维，对别人要女性思维。</li>
+</ul>
+<h2 id="2-36-Part-5-去你家做什么？"><a class="header-anchor" href="#2-36-Part-5-去你家做什么？"></a>2.36 Part 5 去你家做什么？</h2>
+<ul>
+<li>初相识的关系不应该把对方的名字作为话题，因为这种做法既容易出口不慎得罪对方，也显得你不尊重别人的隐私。</li>
+<li>话题终究不是陌生人社交破冰的根本，只是破冰依赖的题材而已。</li>
+<li>破冰靠的不是话题。虽然话题不重要，但必须满足一个条件 —— 安全性。</li>
+<li>破冰分为初级和高级两种，初级破冰就是让双方避免无话可说的尴尬，高级破冰则是交流一些彼此真正感兴趣的事情。</li>
+<li>正确的破冰方式可以这样，我们姑且称之为「状态感受切换法」。</li>
+<li>初级破冰的方法：
+<ul>
+<li>第一步，选择安全性话题。</li>
+<li>第二步，从判断开始——今天是个好天气。</li>
+<li>第三步，状态（可以是现象或者行为）。</li>
+<li>第四步，感受（情绪标签或者主观判断）。</li>
+<li>第五步，主动引导对方加入（问一句「你觉得呢？」或者「你更喜欢哪一种？」或者「你认为 xx 和 yy 有什么不同？」）。</li>
+<li>第六步，如果对方不加入就回到第三步继续重复。</li>
+</ul>
+</li>
+<li>初级破冰的目的在于通过不断切换的状态和感受试探对方的兴趣以及情绪共鸣点，一旦产生共鸣话题自然打开，如果没有共鸣至少可以避免无话可说的尴尬。</li>
+</ul>
+<h2 id="2-37-表白必杀技——理性表白"><a class="header-anchor" href="#2-37-表白必杀技——理性表白"></a>2.37 表白必杀技——理性表白</h2>
+<ul>
+<li>表白分为三种：关系表白、情感表白，还有理性表白。每种表白都有不同的适用范围。</li>
+<li>你确实有能力解决问题固然更好，但现实往往不那么尽如人意，所以这种时候，一个冷静客观的男人比一个盲目乐观的男人更能给女孩带来安全感。</li>
+<li>理性表白一般需要三个要点：
+<ol>
+<li>从理性上，我知道不足且我可以放弃。</li>
+<li>从感觉上，我被你吸引我愿意活在当下。</li>
+<li>至于到底选择理性还是感性，你来决定（或者让天来决定），我都接受。</li>
+</ol>
+</li>
+<li>回头分析这个理性表白，可以用「立场、认知、状态、感受、请求」五点来划分，其中「立场、认知、请求」属于男性思维，「状态、感受」属于女性思维，虽然阴阳需要平衡，但理性表白时男性思维应该稍微多些。</li>
+<li>理性表白并不是为了一个最终结果，而是让彼此现有的关系达到「当下最好的状态」。</li>
+<li>理性表白的条件：
+<ol>
+<li>有一定的吸引力：你们之前有过美好交往吗？</li>
+<li>有交流的契机：她现在有心情听你说吗？</li>
+<li>有具体情境的对话：最好让她先出手……</li>
+</ol>
+</li>
+<li>表白不是义无反顾、勇往直前，不是冲锋的号角，更不是胜利的礼花，而是一个个阶段性的进展</li>
+<li>爱情的奇妙之处恰恰在于，面对艰难困境，男人理性了，女人才会感性。</li>
+</ul>
+<h2 id="2-38-如何回答「你觉得我整容了吗？」"><a class="header-anchor" href="#2-38-如何回答「你觉得我整容了吗？」"></a>2.38 如何回答「你觉得我整容了吗？」</h2>
+<ul>
+<li>对一个女生来说，明知故问的事情只是为了试探这个男人会不会说话。</li>
+<li>「接受」并不等于愿意在所有人面前承认，接受的意思就是自我认可，并且会在同类面前坦然面对。</li>
+<li>有时候，一个秘密本身其实无所谓，倒是它泄露的途径才容易让人不安。</li>
+</ul>
+<h2 id="2-39-如何让别人在你面前更坦诚？"><a class="header-anchor" href="#2-39-如何让别人在你面前更坦诚？"></a>2.39 如何让别人在你面前更坦诚？</h2>
+<ul>
+<li>
+<p>把「好坏」变成「不同」，减轻暴露自我的压力。</p>
+</li>
+<li>
+<p>「不同」属于客观事实，而「好坏」涉及主观判断，当对方不愿暴露自己的想法或感受的时候，可以通过让他描述客观事实引导他说出主观判断。</p>
+</li>
+<li>
+<p>对比「不同」，不但可以让别人坦诚，也可以帮助我们认识事物的本质。</p>
+</li>
+<li>
+<p><strong>2025/11/05 发表想法</strong></p>
+<p>防御自己</p>
+<blockquote>
+<p>原文：「诚实」常常是个能力问题，很多人不会「坦诚」，不是为了占别人的便宜，而是害怕自己或对方受到伤害。</p>
+</blockquote>
+</li>
+<li>
+<p>「诚实」常常是个能力问题，很多人不会「坦诚」，不是为了占别人的便宜，而是害怕自己或对方受到伤害。</p>
+</li>
+</ul>
+<h2 id="2-40-如何向女孩道歉？"><a class="header-anchor" href="#2-40-如何向女孩道歉？"></a>2.40 如何向女孩道歉？</h2>
+<ul>
+<li>当女孩由于你的失误而郁闷委屈的时候，你应该通过行动表现出想当面解决问题的态度。（发微信、打电话说「我去找你吧」是无效的，因为这不属于行动。）</li>
+<li>人共有的一种心理——烦躁时，我们都倾向于选择用「当下」目的性更明确的行为来缓解烦躁情绪。</li>
+<li>正确的做法是先让她相信你对她的委屈已经感同身受，在这个基础之上，等到女孩情绪缓和时再跟进两点：认错 + 保证以后，这样才构成最完美的道歉方案。</li>
+</ul>
+<h2 id="2-41-追女孩就像放风筝"><a class="header-anchor" href="#2-41-追女孩就像放风筝"></a>2.41 追女孩就像放风筝</h2>
+<ul>
+<li>你的个人魅力不等于你的吸引力。个人魅力是自身条件的综合评估，是个定量；而吸引力是对方在你们关系中的投入，是个变量。</li>
+<li>吸引力由对方的投入决定。</li>
+<li>吸引力常常变化不定且原因无从知晓。</li>
+<li>关系越深，男人的吸引力越大，并且越稳定；关系越浅，男人的吸引力越小，并且也越不稳定。</li>
+<li>有经验的男人会抓住吸引力大的时机推进一下关系，一旦发现吸引力变小，就知道及时退让。这些做法都很符合放风筝的技巧，他们擅长的不过是准确把握再次出手的时机，懂得什么叫张力，懂得什么叫顺势而为。</li>
+<li>他们在女人面前的表现不是卑躬屈膝就是故作姿态，不是处心积虑就是躁狂抑郁，总之，动物性本能让他们的生存价值一路跌停，最终变成女人眼中的垃圾股。</li>
+</ul>
+<h2 id="2-42-去你家做什么？"><a class="header-anchor" href="#2-42-去你家做什么？"></a>2.42 去你家做什么？</h2>
+<ul>
+<li>
+<p>女性思维应对女性思维，百分之百活；男性思维应对男性思维，避免百分之百死</p>
+</li>
+<li>
+<p><strong>2025/11/05 发表想法</strong></p>
+<p>我家的猫会后空翻，哈哈哈哈</p>
+<blockquote>
+<p>原文：「给你看看我养的小狗呀」或者「一起尝尝我收藏的红酒啊」</p>
+</blockquote>
+</li>
+<li>
+<p>对于安全感低的人，你上次的从容豁达往往能换来她下次加倍的信任依赖，因为你对她做到了多数人做不到的事，她对你就会另眼相看。</p>
+</li>
+</ul>
+<h2 id="2-43-姑娘认为你在死缠烂打，你却自以为在争取幸福"><a class="header-anchor" href="#2-43-姑娘认为你在死缠烂打，你却自以为在争取幸福"></a>2.43 姑娘认为你在死缠烂打，你却自以为在争取幸福</h2>
+<ul>
+<li>
+<p>在咱们这个环境，说得残酷一些，很多事情还停留在丛林法则的阶段，搭讪也不例外，平时是压抑着不开口，一旦跨越心理关、敢做这事了，往往又不达目的誓不罢休。</p>
+</li>
+<li>
+<p>由于女性不够独立以及安全感更低，很多女孩对两性交往也习惯于消极被动甚至口是心非，就像需要三顾茅庐的诸葛亮一样，即使遇到自己喜欢的男人，也是不先拒绝几次心里就不踏实。</p>
+</li>
+<li>
+<p>所谓技巧，是在人家愿意跟你互动时如何让互动更好，而不是诱导人家跟你互动。所谓真诚，就是不说假话，而不是逼着人家一定要听你的真话。</p>
+</li>
+<li>
+<p><strong>2025/11/05 发表想法</strong></p>
+<p>自由意志至上</p>
+<blockquote>
+<p>原文：我们是先承认、尊重一个人的自由意志，然后再去爱TA？</p>
+</blockquote>
+</li>
+<li>
+<p>真正了解魔鬼约会学之后，你会发现虽然我们经常强调尊重女性，但其实最终目的也是保护男性，因为在当今这个自由意志泛滥的时代，想通过执着、呵护、讨好、纠缠来控制女性、增加自身安全感的努力最终都无济于事。</p>
+</li>
+<li>
+<p>在两性关系上的行为原则才是积极主动但绝不死缠烂打。</p>
+</li>
+<li>
+<p>一句话，要把人家说的「不要」当成「不要」来理解。</p>
+</li>
+</ul>
+<h2 id="2-44-如何成为一个善于社交的人？"><a class="header-anchor" href="#2-44-如何成为一个善于社交的人？"></a>2.44 如何成为一个善于社交的人？</h2>
+<ul>
+<li>社交场合中的搭讪阶段，最好当时就跟希望结识的人即时交谈十五分钟以上。这对于一些人很难做到，但如果你跟对方连这点儿时间都不能一起度过，那么即使获得了联系方式也白搭。</li>
+<li>你要说出对方所讲内容对你在行为上产生的影响，这样才有利于打开话题，并且有助于建立联系感。我把这称之为「行为聊法」。比如不要只说「挺好的」「挺有意思的」……而应该说「挺好的，有机会我也要试试」或者「挺有意思的，正好我的朋友要××××，我要把这个推荐给他」。</li>
+<li>很多人在遭遇社交紧张时都爱使用评价式的语言，这是由于「内心紧张—导致想象中的敌对—为了降低敌对—用评价的方式表态—表达赞美或赞同」，但这种做法的效果其实并不好。</li>
+<li>「跟对方一起做点儿什么事情」或者「把自己做过的以及打算做的事情告诉对方」，这就是行为聊法的由来。「行为聊法」传递了更高的安全感以及更多的联系感。</li>
+<li>从这个意义上说，社交高手必须是细致的人，能够把与人交往的前后细节都记在脑子里并随时加以使用，如果你没有这份心思，妄想背诵几个惯例就引起别人的兴趣，那你还是在家打游戏吧。</li>
+<li>我把人与人的交流方式分成三个阶段：态度、情绪、想法。态度，是我想要表现给对方的状态。情绪，是我此刻真实的状态。想法，是我的认知和行为。</li>
+<li>成为真正的朋友依然需要时间的积累或者行动的证明，也就是通常所谓的「共事」过。</li>
+<li>参加一场有效的社交活动，你不一定早到但最好晚走。</li>
+<li>真正能走入女人内心世界的是那种既能够跟女人进行情绪互动，又可以跟女人深入探讨想法的男人，这才是人们常说的灵魂伴侣。</li>
+<li>越是不善于社交的人，越是忽略态度层面以及情绪层面的表达，但实际上真正到了想法层面他们也不灵，他们只是一直在 YY 各种不切实际的念头和想法而已。</li>
+<li>很多内向的人难以迈出与人交往的第一步，往往是因为他们把社交这件事想得太复杂、太神奇，总觉得要有口若悬河的本事，要有见人说人话、见鬼说鬼话的技巧……</li>
+<li>对于工作中和同性间的交际，只要主动摆出积极的态度交流，再配合前面讲的「行为聊法」，基本上就能有个良好开始；而对于男女之间的交际，情绪交流的效果往往会更为明显。</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/mo-gui-liao-tian-shu/">https://mofan212.github.io/posts/mo-gui-liao-tian-shu/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Reading/">Reading</a></div><div class="post-share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/167.webp" data-sites="wechat,qq,weibo,facebook,x"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/Learned-Optimism/" title="活出最乐观的自己"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/166.webp" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">活出最乐观的自己</div></div><div class="info-2"><div class="info-item-1">《活出最乐观的自己》，马丁·赛利格曼著，洪兰译。</div></div></div></a><a class="pagination-related" href="/posts/Nonviolent-Communication-A-Language-of-Life/" title="非暴力沟通"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/168.webp" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">非暴力沟通</div></div><div class="info-2"><div class="info-item-1">《非暴力沟通》，马歇尔·卢森堡著，刘轶译。</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/Learned-Optimism/" title="活出最乐观的自己"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/166.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-03</div><div class="info-item-2">活出最乐观的自己</div></div><div class="info-2"><div class="info-item-1">《活出最乐观的自己》，马丁·赛利格曼著，洪兰译。</div></div></div></a><a class="pagination-related" href="/posts/Attached-The-New%20Science-of-Adult-Attachment-and-How-It-Can-Help-You-Find-and-Keep-Love/" title="亲密关系与情感依赖"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/169.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-24</div><div class="info-item-2">亲密关系与情感依赖</div></div><div class="info-2"><div class="info-item-1">《亲密关系与情感依赖》，阿米尔·莱文 / 蕾切尔·赫尔勒著，李昀烨译。</div></div></div></a><a class="pagination-related" href="/posts/Nonviolent-Communication-A-Language-of-Life/" title="非暴力沟通"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/168.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-17</div><div class="info-item-2">非暴力沟通</div></div><div class="info-2"><div class="info-item-1">《非暴力沟通》，马歇尔·卢森堡著，刘轶译。</div></div></div></a><a class="pagination-related" href="/posts/ren-zhi-jue-xing/" title="认知觉醒"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/172.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-29</div><div class="info-item-2">认知觉醒</div></div><div class="info-2"><div class="info-item-1">《认知觉醒：开启自我改变的原动力》，周岭著。</div></div></div></a><a class="pagination-related" href="/posts/The-Courage-to-Be-Disliked/" title="被讨厌的勇气"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/170.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-30</div><div class="info-item-2">被讨厌的勇气</div></div><div class="info-2"><div class="info-item-1">《被讨厌的勇气》，岸见一郎 / 古贺史健著，渠海霞译。</div></div></div></a><a class="pagination-related" href="/posts/Why-Do-I-Do-That/" title="为什么我们总是在防御"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/171.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-21</div><div class="info-item-2">为什么我们总是在防御</div></div><div class="info-2"><div class="info-item-1">《为什么我们总是在防御》，约瑟夫·布尔戈著，姜帆译。</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">默烦</div><div class="author-info-description">彩笔的打怪升级之路...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mofan212"><i class="fab fa-github"></i><span>follow me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解。<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a href="./mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载。😊</br><strong><font style="color:red">严禁未遵循规范的转载。</font></strong>😡</br><strong>死去的评论系统复活啦！欢迎到留言板畅所欲言！</strong>当然也可以使用更高效的<a target="_blank" href="https://space.bilibili.com/23658864/dynamic" style="color:#49B1F5;text-decoration:underline"> 哔哩哔哩私信 </a>或<a href="mailto:cy.mofan@foxmail.com" style="color:#49B1F5;text-decoration:underline" target="_blank">邮箱</a>。 😉</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E8%AF%BB%E5%90%8E%E6%84%9F"><span class="toc-text">1. 读后感</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E6%91%98%E5%BD%95%E4%B8%8E%E6%83%B3%E6%B3%95"><span class="toc-text">2. 摘录与想法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E6%9C%89%E7%94%B7%E4%BC%B4%E7%9A%84%E5%A5%B3%E5%AD%A9%E5%8F%AF%E4%BB%A5%E6%90%AD%E8%AE%AA%E5%90%97%EF%BC%9F"><span class="toc-text">2.1 有男伴的女孩可以搭讪吗？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E4%BD%A0%E7%9A%84%E5%A5%B3%E7%A5%9E%E8%83%BD%E8%BF%BD%E4%B8%8A"><span class="toc-text">2.2 你的女神能追上</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E7%BB%88%E4%BA%8E%E8%B7%9F%E5%A5%B3%E7%A5%9E%E7%BA%A6%E4%BC%9A%E4%BA%86%EF%BC%8C%E4%B8%8B%E4%B8%80%E6%AD%A5%E8%AF%A5%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F"><span class="toc-text">2.3 终于跟女神约会了，下一步该怎么办？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-%E5%A5%B3%E6%9C%8B%E5%8F%8B%E4%B8%8D%E5%BC%80%E5%BF%83%EF%BC%8C%E6%88%91%E8%A6%81%E4%B8%8D%E8%A6%81%E5%AE%89%E6%85%B0%EF%BC%9F"><span class="toc-text">2.4 女朋友不开心，我要不要安慰？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-5-%E8%BF%BD%E5%A5%B3%E7%94%9F%E7%9A%84%E9%81%93%E7%90%86%EF%BC%9A%E5%A5%B3%E5%AD%A9%E5%AF%B9%E4%BD%A0%E6%B2%A1%E5%A5%BD%E6%84%9F%EF%BC%8C%E8%A6%81%E4%B8%8D%E8%A6%81%E8%BF%BD%EF%BC%9F"><span class="toc-text">2.5 追女生的道理：女孩对你没好感，要不要追？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-6-%E5%A5%B3%E4%BA%BA%E9%83%BD%E6%98%AF%E3%80%8C%E6%8B%9C%E9%87%91%E5%A5%B3%E3%80%8D%E5%90%97%EF%BC%9F"><span class="toc-text">2.6 女人都是「拜金女」吗？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-7-Part-2-%E4%BB%80%E4%B9%88%E5%8F%AB%E3%80%8C%E5%AF%B9%E6%88%91%E6%9C%89%E6%84%8F%E6%80%9D%E3%80%8D%EF%BC%9F"><span class="toc-text">2.7 Part 2 什么叫「对我有意思」？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-8-%E3%80%8C%E5%AF%B9%E6%88%91%E6%9C%89%E6%84%8F%E6%80%9D%E3%80%8D%E5%90%97%EF%BC%9F"><span class="toc-text">2.8 「对我有意思」吗？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-9-%E3%80%8C%E4%BD%8E%E6%83%85%E5%95%86%E3%80%8D%E6%89%8D%E5%AE%B9%E6%98%93%E8%87%AA%E6%88%91%E9%99%B6%E9%86%89"><span class="toc-text">2.9 「低情商」才容易自我陶醉</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-10-%E5%BD%93%E5%A5%B3%E5%AD%A9%E9%97%AE%EF%BC%9A-%E3%80%8C%E4%BD%A0%E7%BB%99%E6%8A%A5%E9%94%80%E5%90%97%EF%BC%9F%E3%80%8D"><span class="toc-text">2.10 当女孩问： 「你给报销吗？」</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-11-%E6%90%AD%E8%AE%AA%E9%81%87%E5%88%B0%E9%85%92%E6%89%98%E5%A6%82%E4%BD%95%E5%BA%94%E5%AF%B9%EF%BC%9F"><span class="toc-text">2.11 搭讪遇到酒托如何应对？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-12-%E4%B8%8D%E8%83%BD%E8%AF%81%E6%98%8E%E6%98%AF%E5%A5%BD%E7%9A%84%EF%BC%8C%E4%B9%9F%E4%B8%8D%E8%A6%81%E9%A2%84%E8%AE%BE%E5%AE%83%E6%98%AF%E5%9D%8F%E7%9A%84"><span class="toc-text">2.12 不能证明是好的，也不要预设它是坏的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-13-%E5%A6%82%E4%BD%95%E8%AF%BB%E6%87%82%E5%88%AB%E4%BA%BA%E7%9A%84%E6%9A%97%E7%A4%BA%EF%BC%9F"><span class="toc-text">2.13 如何读懂别人的暗示？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-14-%E8%B0%88%E8%AF%9D%E4%B8%AD%E5%A6%82%E4%BD%95%E5%BA%94%E5%AF%B9%E3%80%8C%E6%8C%91%E8%A1%85%E3%80%8D%EF%BC%9F"><span class="toc-text">2.14 谈话中如何应对「挑衅」？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-15-%E9%87%91%E9%92%B1%E4%B8%8E%E7%88%B1%E6%83%85"><span class="toc-text">2.15 金钱与爱情</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-16-Part-3-%E4%B8%8D%E6%87%82%E8%BF%99%E4%BA%9B%E5%B0%B1%E5%88%AB%E8%AF%B4%E8%87%AA%E5%B7%B1%E4%BC%9A%E6%92%A9%E5%A6%B9%E5%AD%90"><span class="toc-text">2.16 Part 3 不懂这些就别说自己会撩妹子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-17-%E5%A6%82%E4%BD%95%E5%9F%B9%E5%85%BB%E5%81%A5%E5%85%A8%E4%BA%BA%E6%A0%BC%EF%BC%9F"><span class="toc-text">2.17 如何培养健全人格？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-18-%E5%A5%B3%E5%AD%A9%E5%96%9C%E6%AC%A2%E6%9C%89%E6%95%99%E5%85%BB%E7%9A%84%E7%94%B7%E5%A3%AB"><span class="toc-text">2.18 女孩喜欢有教养的男士</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-19-%E6%B5%85%E6%9E%90%E3%80%8C%E5%89%A9%E5%A5%B3%E9%97%AE%E9%A2%98%E3%80%8D"><span class="toc-text">2.19 浅析「剩女问题」</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-20-%E8%A1%A8%E7%99%BD%E5%B0%B1%E5%83%8F%E8%A1%8C%E8%B4%BF"><span class="toc-text">2.20 表白就像行贿</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-21-%E6%81%8B%E7%88%B1%E7%9A%84%E9%80%BB%E8%BE%91%E6%80%9D%E7%BB%B4"><span class="toc-text">2.21 恋爱的逻辑思维</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-22-%E6%81%8B%E7%88%B1%E7%9A%84%E9%80%BB%E8%BE%91%E6%80%9D%E7%BB%B4%EF%BC%88%E7%BB%AD%EF%BC%89"><span class="toc-text">2.22 恋爱的逻辑思维（续）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-23-%E6%83%85%E4%BA%BA%E8%8A%82%E9%80%81%E8%8A%B1%E6%8C%87%E5%8D%97"><span class="toc-text">2.23 情人节送花指南</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-24-%E6%83%85%E4%BA%BA%E8%8A%82%E5%A4%87%E8%83%8E%E6%94%BB%E7%95%A5"><span class="toc-text">2.24 情人节备胎攻略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-25-%E8%81%8A%E5%A4%A9%E5%9B%9B%E5%A4%A7%E5%B8%B8%E8%A7%81%E9%94%99%E8%AF%AF"><span class="toc-text">2.25 聊天四大常见错误</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-26-%E8%AE%BA%E6%B2%9F%E9%80%9A%E8%83%BD%E5%8A%9B%E5%9C%A8%E5%BD%93%E4%BB%8A%E7%9A%84%E9%87%8D%E8%A6%81%E6%80%A7"><span class="toc-text">2.26 论沟通能力在当今的重要性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-27-%E6%9C%BA%E6%99%BA%E5%BA%94%E7%AD%94%E7%9A%84%E9%AD%85%E5%8A%9B"><span class="toc-text">2.27 机智应答的魅力</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-28-Part-4-%E5%A5%B3%E5%AD%A9%E6%8B%92%E7%BB%9D%E4%BD%A0%EF%BC%8C%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F"><span class="toc-text">2.28 Part 4 女孩拒绝你，怎么办？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-29-%E5%A6%82%E4%BD%95%E5%88%86%E8%BE%A8%E5%AF%B9%E8%AF%9D%E4%B8%AD%E7%9A%84%E3%80%8C%E7%89%B9%E6%AE%8A%E5%90%AB%E4%B9%89%E3%80%8D%EF%BC%9F"><span class="toc-text">2.29 如何分辨对话中的「特殊含义」？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-30-%E9%99%B7%E5%85%A5%E9%82%80%E7%BA%A6%E7%9A%84%E4%B8%A4%E9%9A%BE%E5%A2%83%E5%9C%B0%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F"><span class="toc-text">2.30 陷入邀约的两难境地怎么办？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-31-%E5%A5%B3%E6%9C%8B%E5%8F%8B%E6%9C%89%E4%BA%86%E6%96%B0%E6%AC%A2%EF%BC%8C%E8%BF%98%E8%83%BD%E6%8C%BD%E5%9B%9E%E5%90%97%EF%BC%9F"><span class="toc-text">2.31 女朋友有了新欢，还能挽回吗？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-32-%E4%B8%8D%E8%A6%81%E5%81%9A%E7%BD%91%E7%BB%9C%E7%AA%A5%E8%A7%86%E8%80%85"><span class="toc-text">2.32 不要做网络窥视者</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-33-%E5%A5%B9%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BE%AE%E4%BF%A1%E4%B8%8D%E5%9B%9E%E3%80%81%E7%94%B5%E8%AF%9D%E4%B8%8D%E6%8E%A5%EF%BC%9F"><span class="toc-text">2.33 她为什么微信不回、电话不接？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-34-%E4%BD%A0%E4%B8%80%E7%9B%B4%E5%9C%A8%E9%94%99%E8%AF%AF%E5%9C%B0%E3%80%8C%E5%85%B1%E6%83%85%E3%80%8D"><span class="toc-text">2.34 你一直在错误地「共情」</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-35-%E4%B8%8D%E8%83%BD%E6%8E%A7%E5%88%B6%E6%83%85%E7%BB%AA%E4%BC%9A%E8%AE%A9%E4%BD%A0%E4%B8%80%E8%B4%A5%E6%B6%82%E5%9C%B0"><span class="toc-text">2.35 不能控制情绪会让你一败涂地</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-36-Part-5-%E5%8E%BB%E4%BD%A0%E5%AE%B6%E5%81%9A%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-text">2.36 Part 5 去你家做什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-37-%E8%A1%A8%E7%99%BD%E5%BF%85%E6%9D%80%E6%8A%80%E2%80%94%E2%80%94%E7%90%86%E6%80%A7%E8%A1%A8%E7%99%BD"><span class="toc-text">2.37 表白必杀技——理性表白</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-38-%E5%A6%82%E4%BD%95%E5%9B%9E%E7%AD%94%E3%80%8C%E4%BD%A0%E8%A7%89%E5%BE%97%E6%88%91%E6%95%B4%E5%AE%B9%E4%BA%86%E5%90%97%EF%BC%9F%E3%80%8D"><span class="toc-text">2.38 如何回答「你觉得我整容了吗？」</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-39-%E5%A6%82%E4%BD%95%E8%AE%A9%E5%88%AB%E4%BA%BA%E5%9C%A8%E4%BD%A0%E9%9D%A2%E5%89%8D%E6%9B%B4%E5%9D%A6%E8%AF%9A%EF%BC%9F"><span class="toc-text">2.39 如何让别人在你面前更坦诚？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-40-%E5%A6%82%E4%BD%95%E5%90%91%E5%A5%B3%E5%AD%A9%E9%81%93%E6%AD%89%EF%BC%9F"><span class="toc-text">2.40 如何向女孩道歉？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-41-%E8%BF%BD%E5%A5%B3%E5%AD%A9%E5%B0%B1%E5%83%8F%E6%94%BE%E9%A3%8E%E7%AD%9D"><span class="toc-text">2.41 追女孩就像放风筝</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-42-%E5%8E%BB%E4%BD%A0%E5%AE%B6%E5%81%9A%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-text">2.42 去你家做什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-43-%E5%A7%91%E5%A8%98%E8%AE%A4%E4%B8%BA%E4%BD%A0%E5%9C%A8%E6%AD%BB%E7%BC%A0%E7%83%82%E6%89%93%EF%BC%8C%E4%BD%A0%E5%8D%B4%E8%87%AA%E4%BB%A5%E4%B8%BA%E5%9C%A8%E4%BA%89%E5%8F%96%E5%B9%B8%E7%A6%8F"><span class="toc-text">2.43 姑娘认为你在死缠烂打，你却自以为在争取幸福</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-44-%E5%A6%82%E4%BD%95%E6%88%90%E4%B8%BA%E4%B8%80%E4%B8%AA%E5%96%84%E4%BA%8E%E7%A4%BE%E4%BA%A4%E7%9A%84%E4%BA%BA%EF%BC%9F"><span class="toc-text">2.44 如何成为一个善于社交的人？</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/Something-About-Blog/" title="博客搭建与维护"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="博客搭建与维护"/></a><div class="content"><a class="title" href="/posts/Something-About-Blog/" title="博客搭建与维护">博客搭建与维护</a><time datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"/></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="更新于 2026-01-03 00:00:00">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"/></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/103.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 的类资源加载"/></a><div class="content"><a class="title" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载">Java 的类资源加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/20.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="注解、类的加载、反射"/></a><div class="content"><a class="title" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射">注解、类的加载、反射</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/ren-zhi-jue-xing/" title="认知觉醒"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/172.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="认知觉醒"/></a><div class="content"><a class="title" href="/posts/ren-zhi-jue-xing/" title="认知觉醒">认知觉醒</a><time datetime="2025-12-28T16:00:00.000Z" title="更新于 2025-12-29 00:00:00">2025-12-29</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://gcore.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script src="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/js/mine.min.js"></script><script src="/js/tip_portal.js"></script><script defer="defer" id="ribbon" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script id="click-show-text" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="Azathoth,Yog-Sothoth,Shub-Niggurath,Nyarlathotep,Cthulhu,Hastur,Abhoth,Ghroth,Tsathoggua,Cthugha,Deep Ones,Dagon,Chaugnar Faugn,Mordiggian,Shoggoth,Old One,Mi-Go,Great Race of Yith,Flying Polyp,Hounds of Tindalos,Dhole" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div class="docsearch-wrap"><div id="docsearch" style="display:none"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@docsearch/css/dist/style.min.css"/><script src="https://testingcf.jsdelivr.net/npm/@docsearch/js/dist/umd/index.min.js"></script><script>(() => {
+  docsearch(Object.assign({
+    appId: 'BAFEL7A6K1',
+    apiKey: '89fcb5961984c5c054bf04149f345f38',
+    indexName: 'mofan212io',
+    container: '#docsearch',
+    placeholder: '输入关键字进行搜索',
+  }, null))
+
+  const handleClick = () => {
+    document.querySelector('.DocSearch-Button').click()
+  }
+
+  const searchClickFn = () => {
+    btf.addEventListenerPjax(document.querySelector('#search-button > .search'), 'click', handleClick)
+  }
+
+  searchClickFn()
+  window.addEventListener('pjax:complete', searchClickFn)
+})()</script></div></div></body></html>

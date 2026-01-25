@@ -1,0 +1,80 @@
+/* 1. 核心：提高触发容器的层级 */
+.hover-tip {
+  position: relative;
+  color: #49b1f5;
+  border-bottom: 1px dashed #49b1f5;
+  cursor: help;
+  display: inline-block;
+  /* 关键：确保触发点在表格内有更高的层级，防止被下一行遮挡 */
+  z-index: 10; 
+}
+
+/* 2. 优化弹框样式 */
+.hover-tip .tip-content {
+  display: block;
+  visibility: hidden;
+  width: 200px; /* 稍微加宽一点 */
+  background-color: #333;
+  color: #fff;
+  text-align: left; /* 改为左对齐，内容多时更好看 */
+  border-radius: 8px;
+  padding: 10px 15px;
+  position: absolute;
+  
+  /* 关键：使用极高的 z-index 确保在最顶层 */
+  z-index: 9999; 
+  
+  bottom: 140%; 
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28); /* 增加一点弹性动画 */
+  
+  /* 防止文字换行导致变形 */
+  white-space: normal; 
+  word-wrap: break-word;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  pointer-events: none; /* 防止鼠标误触弹框导致闪烁 */
+}
+
+/* 3. 解决 Butterfly 表格裁剪问题 */
+/* 我们需要让表格的容器在显示弹窗时允许溢出 */
+.table-wrap:has(.hover-tip:hover) {
+  overflow: visible !important;
+}
+
+/* 鼠标悬停显示 */
+.hover-tip:hover .tip-content {
+  visibility: visible;
+  opacity: 1;
+  bottom: 115%;
+} 
+
+/* 触发文字样式 */
+.bt-tip {
+  color: #49b1f5;
+  border-bottom: 1px dashed #49b1f5;
+  cursor: help;
+}
+
+/* 全局唯一的弹窗容器 */
+#bt-tip-portal {
+  position: fixed;
+  z-index: 9999;
+  background: rgba(50, 50, 50, 0.95);
+  color: #fff;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-size: 14px;
+  max-width: 280px;
+  pointer-events: none; /* 鼠标可以穿透弹窗，防止闪烁 */
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  line-height: 1.6;
+}
+
+/* 弹窗显示时的状态 */
+#bt-tip-portal.visible {
+  opacity: 1;
+}

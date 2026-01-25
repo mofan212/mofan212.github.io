@@ -1,0 +1,768 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Spring 注解 | Mofan</title><meta name="author" content="默烦,cy.mofan@foxmail.com"><meta name="copyright" content="默烦"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本节介绍了 Spring、SpringBoot 中一些注解的使用方式。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring 注解">
+<meta property="og:url" content="https://mofan212.github.io/posts/Annotation-Of-Spring/">
+<meta property="og:site_name" content="Mofan">
+<meta property="og:description" content="本节介绍了 Spring、SpringBoot 中一些注解的使用方式。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/13.jpg">
+<meta property="article:published_time" content="2020-05-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-25T16:00:00.000Z">
+<meta property="article:author" content="默烦">
+<meta property="article:tag" content="Spring">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/13.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Spring 注解",
+  "url": "https://mofan212.github.io/posts/Annotation-Of-Spring/",
+  "image": "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/13.jpg",
+  "datePublished": "2020-05-28T16:00:00.000Z",
+  "dateModified": "2023-06-25T16:00:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "默烦",
+      "url": "https://mofan212.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/Annotation-Of-Spring/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":true,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 默烦","link":"链接: ","source":"来源: Mofan","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://testingcf.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Spring 注解',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="referrer" content="no-referrer-when-downgrade" /><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/css/myStyle.min.css"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css" /><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css" /><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Mofan" type="application/atom+xml">
+</head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+btf.addGlobalFn('pjaxSend', () => {
+  Pace.restart()
+}, 'pace_restart')
+
+</script><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources/css/minimal.min.css"/><script src="https://testingcf.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/post_top_img.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Mofan</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Spring 注解</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-05-28T16:00:00.000Z" title="发表于 2020-05-29 00:00:00">2020-05-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-06-25T16:00:00.000Z" title="更新于 2023-06-26 00:00:00">2023-06-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Spring/">Spring</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">7.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>27分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;距离本文上次更新已经过去&quot;,&quot;messageNext&quot;:&quot;天，请注意时效性。&quot;,&quot;postUpdate&quot;:&quot;2023-06-26 00:00:00&quot;}" hidden></div><p>封面画师：T5-茨舞（微博）     封面ID：67342794</p>
+<blockquote>
+<p>本文以 SpringBoot 3.1.x 为例</p>
+</blockquote>
+<h1 id="1-对象创建相关注解"><a class="header-anchor" href="#1-对象创建相关注解"></a>1. 对象创建相关注解</h1>
+<h2 id="1-1-Component"><a class="header-anchor" href="#1-1-Component"></a>1.1 @Component</h2>
+<p>作用：用于把当前 <strong>类对象</strong> 存入（注册到） Spring 容器中。</p>
+<p>主要属性：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">属性名</th>
+<th style="text-align:center">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">value</td>
+<td style="text-align:center">指定 bean 的 id 。 若未指定，则默认为当前类名首字母小写。</td>
+</tr>
+</tbody>
+</table>
+<p>如果 Spring 配置文件中使用 <code>&lt;bean&gt;</code> 标签配置的 id、class 与 <code>@Component</code> 注解指定的 id、class 一样时，配置文件的配置将覆盖注解的配置。</p>
+<p><code>@Component</code> 有以下几个衍生注解，它们与 <code>@Component</code> 的作用是一样的，但在实际开发中它们所处的位置不一样：</p>
+<p>1、<code>@Controller</code>：用于表现层</p>
+<p>2、<code>@Service</code>：用于业务层</p>
+<p>3、<code>@Repository</code>：用于持久层</p>
+<blockquote>
+<p>Spring 注解使用注意</p>
+</blockquote>
+<p>常规 SSM 项目中，使用 Spring 注解开发时，记得在 Spring 配置文件中告知 Spring 在创建容器时需要扫描的包。如：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">&quot;xxx.xxx&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="1-2-Scope"><a class="header-anchor" href="#1-2-Scope"></a>1.2 @Scope</h2>
+<p>作用：用于指定 bean 的作用范围（控制简单对象的创建次数）。未使用时，默认 bean 单例。</p>
+<p>主要属性：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">属性名</th>
+<th style="text-align:center">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">value</td>
+<td style="text-align:center">指定范围的取值。 常用的 value 属性值有：<code>singleton</code> 、<code>prototype</code>。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="1-3-Lazy"><a class="header-anchor" href="#1-3-Lazy"></a>1.3 @Lazy</h2>
+<p>作用：延时创建单例 bean。未使用时，Spring 工厂创建时就会创建 <strong>单例</strong> bean；使用后，在使用 bean 时才创建 bean。</p>
+<h2 id="1-4-PostConstruct"><a class="header-anchor" href="#1-4-PostConstruct"></a>1.4 @PostConstruct</h2>
+<p>此注解并不是由 Spring 提供的，而是 JSR-250 规范中指定的。</p>
+<p>此注解只能在 <strong>非静态无返回值</strong> 方法上使用，被此注解标记了的方法，作为 Spring 中 bean 的 <strong>初始化</strong> 方法。</p>
+<p>在整个 bean 的初始化过程中，最先执行构造方法，再进行依赖注入，然后再执行被此注解标记的方法。</p>
+<p><mark>注意：</mark> 此注解在 JDK9 中已被废弃，在 JDK11 中已被移除。要想在高版本 JDK 中使用此注解，需要添加依赖 <code>jakarta.annotation-api</code>。</p>
+<h2 id="1-5-PreDestroy"><a class="header-anchor" href="#1-5-PreDestroy"></a>1.5 @PreDestroy</h2>
+<p>此注解并不是由 Spring 提供的，而是 JSR-250 规范中指定的。</p>
+<p>此注解只能在 <strong>非静态无返回值</strong> 方法上使用，被此注解标记了的方法，作为 Spring 中 bean 的 <strong>销毁</strong> 方法。</p>
+<p><mark>注意：</mark> 此注解在 JDK9 中已被废弃，在 JDK11 中已被移除。要想在高版本 JDK 中使用此注解，需要添加依赖 <code>jakarta.annotation-api</code>。</p>
+<h2 id="1-6-Lookup"><a class="header-anchor" href="#1-6-Lookup"></a>1.6 @Lookup</h2>
+<p>Lookup，意为“查找、查阅”，在 Spring 中也有一个 <code>@Lookup</code> 注解，该注解只能作用在 <strong>方法</strong> 上。</p>
+<p>当使用 <code>ApplicationContext#getBean()</code> 方法按类型获取 Spring 容器中的 Bean 时，如果传入的类型是一个抽象类，那么会尝试在容器中查找该抽象类的实现类类型的 Bean，如果不存在这样的 Bean，则会抛出 <code>NoSuchBeanDefinitionException</code> 异常。</p>
+<blockquote>
+<p>生成抽象类的代理类类型的 Bean</p>
+</blockquote>
+<p>可以在抽象类中任意定义一个方法并使用 <code>@Lookup</code> 标记：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">AbstractBean</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Lookup</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">method</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后再尝试获取该类型的 Bean 时，将得到由 CGLib 生成的代理对象：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testLookup</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">AbstractBean</span> <span class="variable">abstractBean</span> <span class="operator">=</span> context.getBean(AbstractBean.class);</span><br><span class="line">    assertThat(abstractBean).isNotNull()</span><br><span class="line">            .extracting(i -&gt; i.getClass().getName())</span><br><span class="line">            .asString().contains(<span class="string">&quot;CGLIB$$&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在单例对象中注入多例对象</p>
+</blockquote>
+<p>向单例 Bean 中注入多例 Bean 时，尽管注入的是多例 Bean，但每次获取注入的 Bean 时都将是同一个。此时可以声明一个 <strong>无参</strong>、返回值类型是想要注入的多例 Bean 对应的类型的方法（这个方法甚至可以是抽象方法）：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PrototypeBean</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SingletonBean</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> PrototypeBean prototypeBean;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> PrototypeBean <span class="title function_">getBean</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.prototypeBean;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Lookup</span></span><br><span class="line">    <span class="keyword">public</span> PrototypeBean <span class="title function_">getPrototypeBean</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.prototypeBean;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Lookup</span></span><br><span class="line">    <span class="keyword">public</span> PrototypeBean <span class="title function_">returnNull</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testLookup</span><span class="params">()</span> &#123;</span><br><span class="line">    assertThat(context.getBean(PrototypeBean.class))</span><br><span class="line">        .isNotSameAs(context.getBean(PrototypeBean.class));</span><br><span class="line"></span><br><span class="line">    <span class="type">SingletonBean</span> <span class="variable">singletonBean</span> <span class="operator">=</span> context.getBean(SingletonBean.class);</span><br><span class="line">    <span class="comment">// @Autowired 注入的是单例对象</span></span><br><span class="line">    assertThat(singletonBean.getBean()).isSameAs(singletonBean.getBean());</span><br><span class="line">    <span class="comment">// 使用 @Lookup 后每次获取的对象都不同</span></span><br><span class="line">    assertThat(singletonBean.getPrototypeBean()).isNotSameAs(singletonBean.getPrototypeBean());</span><br><span class="line">    <span class="comment">// 使用 @Lookup 会生成代理方法，尽管原方法返回的是 null，但代理方法返回的并不是</span></span><br><span class="line">    assertThat(singletonBean.returnNull()).isNotNull()</span><br><span class="line">        .isOfAnyClassIn(PrototypeBean.class);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="2-注入相关注解"><a class="header-anchor" href="#2-注入相关注解"></a>2. 注入相关注解</h1>
+<h2 id="2-1-Autowried"><a class="header-anchor" href="#2-1-Autowried"></a>2.1 @Autowried</h2>
+<p>作用：自动按照 <strong>类型</strong> 注入。只要容器中有唯一的一个 bean 对象类型（子类）和要注解的对象类型匹配时，就可以注入成功。</p>
+<p>位置：set 方法、构造方法、成员变量。作用在成员变量上时，Spring 使用反射对其进行注入，并且 set 方法变得不再必须。</p>
+<blockquote>
+<p>注入方式</p>
+</blockquote>
+<p>先按照类型注入：</p>
+<p>1、如果有唯一的 bean 对象类型在 IoC 容器中，则注入成功。</p>
+<p>2、如果 IoC 容器中一个匹配的 bean 对象类型都没有，则报错。</p>
+<p>3、如果 IoC 容器中有多个匹配的 bean 对象类型，则再按照变量名进行注入，在圈出的多个匹配的 bean 对象类型中寻找匹配的变量名：</p>
+<ul>
+<li>如果存在，则注入成功；反之，则注入失败。有多个匹配的 bean 对象时，常与 <code>@Qualifier</code> 搭配使用。</li>
+</ul>
+<blockquote>
+<p>高端玩法</p>
+</blockquote>
+<p>如果一个泛型为自定义类型的集合对象被 <code>@Autowried</code> 标记，那么 Spring 会自动把相同的类型（包括子类）的自定义对象收集到集合中。比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowried</span></span><br><span class="line"><span class="keyword">private</span> List&lt;CustomObject&gt; list;</span><br><span class="line"><span class="meta">@Autowried</span></span><br><span class="line"><span class="keyword">private</span> Set&lt;CustomObject&gt; set;</span><br><span class="line"><span class="meta">@Autowried</span></span><br><span class="line"><span class="keyword">private</span> Map&lt;String, CustomObject&gt; map;</span><br></pre></td></tr></table></figure>
+<p>如果 <code>@Autowried</code> 作用在数组或集合上，数组或集合中的 bean 的顺序是根据 Spring 创建的顺序。如果想指定里面排序的优先级，可以使用 <code>@Order</code> 或者 <code>@Priority</code> 指定优先级，值越小，优先级就越高。</p>
+<p>如果作用在 map 集合上，其 key 类型只能为 String，表示 bean 的 id。</p>
+<p><code>@Order</code> 注解（或者实现 <code>Ordered</code> 接口、又或者实现 <code>PriorityOrdered</code>接口），不会影响 Bean 的实例化顺序和执行顺序，更不会影响 Spring 的 Bean 的扫描顺序，它影响着 Spring 将扫描的多个 Bean 放入数组、集合（Map）时的排序。</p>
+<h2 id="2-2-Qualifier"><a class="header-anchor" href="#2-2-Qualifier"></a>2.2 @Qualifier</h2>
+<p>作用：在按照类注入的基础上再按照名称注入。这个注解在给成员变量注入时，不能单独使用（与 <code>@Autowried</code> 一起搭配使用），但是在给方法参数注入时可以单独使用。</p>
+<p>主要属性：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">属性名</th>
+<th style="text-align:center">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">value</td>
+<td style="text-align:center">用于指定注入 bean 的 id。</td>
+</tr>
+</tbody>
+</table>
+<p><mark>注意：</mark> 当我们使用 <code>@Bean</code> 给一个配置类中的方法进行注解时，会判断这个方法是否有参数，Spring 框架会去容器中查找有无可用的 bean 对象，查找方式和 <code>@Autowried</code> 注解一样。如果没找到，就会报错。如果我们在 IoC 容器中添加了两个相同的对象，恰逢这个对象又出现在使用了 <code>@Bean</code> 注解的方法的参数中，这个时候可以使用 <code>@Qualifier</code> 指定具体是哪个对象（给方法参数注入，单独使用）。</p>
+<h2 id="2-3-Primary"><a class="header-anchor" href="#2-3-Primary"></a>2.3 @Primary</h2>
+<p>作用：当一个接口有多个实现类时，指定 <strong>某一个</strong> 实现类作为依赖注入的默认优先选择。</p>
+<p><mark>注意：</mark> 默认优先选择的实现类 <strong>只能有</strong> 一个。</p>
+<h2 id="2-4-Resource"><a class="header-anchor" href="#2-4-Resource"></a>2.4 @Resource</h2>
+<p>作用：默认按照 bean 的 id 进行注入，可以单独使用。</p>
+<p>主要属性：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">属性名</th>
+<th style="text-align:center">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">name</td>
+<td style="text-align:center">指定 bean 的 id。</td>
+</tr>
+<tr>
+<td style="text-align:center">type</td>
+<td style="text-align:center">指定 bean 的类型。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>属性值使用规则</p>
+</blockquote>
+<p>1、如果同时指定了 name 和 type ，则从 Spring 上下文中找到唯一匹配的 bean 进行装配，找不到则抛出异常（异常信息：找不到 “bean” 的声明）；</p>
+<p>2、如果只指定了 name ，则从上下文中查找名称（id）匹配的bean进行装配，找不到则抛出异常；</p>
+<p>3、如果只指定了 type ，则从上下文中找到类型匹配的唯一 bean 进行装配，找不到或者找到多个，都会抛出异常；</p>
+<p>4、如果既没有指定 name ，又没有指定 type ，则自动按照 byName 方式进行装配（见2）。如果没有匹配，则回退为一个原始类型进行匹配，如果匹配则自动装配，否则抛出异常。</p>
+<blockquote>
+<p>使用建议</p>
+</blockquote>
+<p>推荐使用 <code>@Resource</code> 注解，这个注解是属于 JDK 的，可以减少与 Spring 的耦合（但人们依旧习惯使用 <code>@Autowried</code> ）。</p>
+<p><code>@Autowried</code> 、 <code>@Qualifier</code> 和 <code> @Resource</code> 都只能注入其他 bean 类型的数据，而基本数据类型和 String 类型是无法使用这三个注解的。另外，集合类型的注入只能通过 XML 来实现。</p>
+<h2 id="2-5-Value"><a class="header-anchor" href="#2-5-Value"></a>2.5 @Value</h2>
+<p>作用：常用于注入基本类型和 String 类型的数据，可以作用在字段、方法、参数和注解上。</p>
+<p>主要属性：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">属性名</th>
+<th style="text-align:center">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">value</td>
+<td style="text-align:center">用于指定数据的值（可以使用 Spring 中的 EL 表达式，即 SPEL ）。</td>
+</tr>
+</tbody>
+</table>
+<p>SPEL 的写法：<code>$&#123;表达式&#125;</code>，为了避免无法匹配到值，可以设置默认值，比如 <code>@Value(&quot;$&#123;name:张三&#125;&quot;)</code>。</p>
+<blockquote>
+<p>@Value 与 EL 表达式</p>
+</blockquote>
+<p>如果要 <code>@Value</code> 注解与 EL 表达式结合使用，需要先编写一个 xxx.properties 文件：</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name</span> = <span class="string">&quot;mofan&quot;</span></span><br><span class="line"><span class="attr">age</span> = <span class="string">20</span></span><br></pre></td></tr></table></figure>
+<p>然后在 Spring 配置文件中指定这个 properties 文件的位置（<code>location</code> 属性值支持使用 <code>classpath</code>）：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">context:property-placeholder</span> <span class="attr">location</span>=<span class="string">&quot;classpath:/xxx.properties&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+<p><code>&lt;context:property-placeholder&gt;</code> 标签的命名空间为：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns:context</span>=<span class="string">&quot;http://www.springframework.org/schema/context&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>然后在成员变量上使用 <code>@Value</code> 注解即可：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Person</span>&#123;</span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;name&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;age&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>使用细节</p>
+</blockquote>
+<ol>
+<li>
+<p><code>@Value</code> 注解不能应用在 <strong>静态变量</strong> 上，否则会注入失败，但也有变通之道，可以将 <code>@Value</code> 标记在静态变量的 <code>Setter</code> 上或构造方法的参数上，在方法内部设置静态变量的值，比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyProperties</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> String str1;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> String str2;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;prop.str1&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setStr1</span><span class="params">(String str1)</span> &#123;</span><br><span class="line">        str1 = str1;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    MyProperties(<span class="meta">@Value(&quot;$&#123;prop.str2&#125;&quot;)</span> String str2)&#123;</span><br><span class="line">        str2 = str2;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><code>@Value</code> 注解不能应用在被 <code>final</code> 修饰的变量上，<code>final</code> 变量 <strong>必须</strong> 在构造方法中进行初始化，并且被赋值后不能再次更改，而 <code>@Value</code> 注解是在 Bean 实例化后才进行注入的，无法在构造方法中初始化 <code>final</code> 变量；</p>
+</li>
+<li>
+<p><code>@Value</code> 注解不能注入集合类型的数据；</p>
+</li>
+<li>
+<p><code>@Value</code> 注解只能作用在被 Spring 管理的类中，也就是说该注解必须在 Spring Bean 的生命周期中才能生效。</p>
+</li>
+</ol>
+<h1 id="3-注解扫描详解"><a class="header-anchor" href="#3-注解扫描详解"></a>3. 注解扫描详解</h1>
+<p>在扫描注解时，需要在 Spring 配置文件中指定扫描路径，即：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">&quot;xxx.xxx&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+<p>但这种方式并不能满足绝大多数场景，比如排除无需扫描的类。这时可以增加一个子标签 <code> &lt;context:exclude-filter&gt;</code>。</p>
+<p><code>&lt;context:exclude-filter&gt;</code> 标签中 <code>type</code> 属性表示排除策略，<code>expression</code> 属性用于指定排除策略对应的排除方式。比如下述配置就是排除对 <code>User</code> 类的扫描：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">&quot;indi.mofan&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">context:exclude-filter</span> <span class="attr">type</span>=<span class="string">&quot;assignable&quot;</span> <span class="attr">expression</span>=<span class="string">&quot;indi.mofan.domain.User&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">context:component-scan</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><code>type</code> 属性值有以下五种，其名称与含义如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">名称</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">assignable</td>
+<td style="text-align:center">排除特定的类型</td>
+</tr>
+<tr>
+<td style="text-align:center">annotation</td>
+<td style="text-align:center">排除特定的注解</td>
+</tr>
+<tr>
+<td style="text-align:center">aspectj</td>
+<td style="text-align:center">使用包切入点或类切入点表达式进行排除</td>
+</tr>
+<tr>
+<td style="text-align:center">regex</td>
+<td style="text-align:center">使用正则表达式进行排除</td>
+</tr>
+<tr>
+<td style="text-align:center">custom</td>
+<td style="text-align:center">自定义排除策略</td>
+</tr>
+</tbody>
+</table>
+<p><strong>排除策略是可以叠加使用的。</strong></p>
+<p><code>&lt;context:component-scan&gt;</code> 标签中还有名为 <code>&lt;context:include-filter&gt;</code> 的子标签，这个标签用于设置注解扫描包含方式，其使用方式与 <code>&lt;context:exclude-filter&gt;</code> 标签是一样的。</p>
+<p>使用 <code>&lt;context:include-filter&gt;</code> 标签时需要将 <code>&lt;context:component-scan&gt;</code> 标签的 <code>use-default-filters</code> 属性值设置为 <code>false</code>，表示不使用 Spring 默认扫描规则。</p>
+<h1 id="4-配置相关注解"><a class="header-anchor" href="#4-配置相关注解"></a>4. 配置相关注解</h1>
+<blockquote>
+<p>小知识</p>
+</blockquote>
+<p>在 Spring 中，解析 Spring 的配置文件（以 applicationContext.xml 为例），使用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">ApplicationContext</span> <span class="variable">ac</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassPathXmlApplicationContext</span>(<span class="string">&quot;applicationContext.xml&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>解析配置类使用（以MyConfiguration.java为例），使用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">ApplicationContext</span> <span class="variable">ac1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AnnotationConfigApplicationContext</span>(MyConfiguration.class);</span><br></pre></td></tr></table></figure>
+<p>分析一下 <code>AnnotationConfigApplicationContext()</code>方法，我们可以点击进入查看源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="title function_">AnnotationConfigApplicationContext</span><span class="params">(Class&lt;?&gt;... annotatedClasses)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>();</span><br><span class="line">    register(annotatedClasses);</span><br><span class="line">    refresh();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="title function_">AnnotationConfigApplicationContext</span><span class="params">(String... basePackages)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>();</span><br><span class="line">    <span class="built_in">this</span>.scan(basePackages);</span><br><span class="line">    <span class="built_in">this</span>.refresh();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个构造方法的参数是可变长度的参数，可以传入配置类（被 <code>@Configuration</code> 标记的类）的 Class 对象，也可以传入配置类所在路径。</p>
+<h2 id="4-1-Configuration"><a class="header-anchor" href="#4-1-Configuration"></a>4.1 @Configuration</h2>
+<p>作用：指定当前类是配置类。其本质也是 <code>@Component</code> 注解的衍生注解。</p>
+<p>它相当于 xml 文件的 <code>&lt;beans&gt;</code> 标签，这个类里面需要注册 bean ，相当于在 <code>&lt;beans&gt;</code> 中注册 bean 。</p>
+<p><mark>细节：</mark> 当配置类作为 <code>AnnotationConfigApplicationContext</code> 对象创建的参数时，可以 <strong>不用</strong> 写 <code>@Configuration</code> 注解在配置类上。</p>
+<blockquote>
+<p>bean 的注册方法</p>
+</blockquote>
+<p>bean 有两种方式：</p>
+<p>1、使用 <code>@Bean</code> 标记一个返回 JavaBean 的方法，返回的 JavaBean 作为 bean 注册到 beans 中。</p>
+<p>2、使用<code>@Component</code> + <code>@ComponentScan</code> 的方式：<code>@Component </code> 标记在要注册 bean 的类上，<code>@ComponentScan</code> 标记在配置类上用于扫描组件。</p>
+<p>最后，将配置类注册到上下文中来初始化容器。</p>
+<blockquote>
+<p>父配置类加载子配置类的问题</p>
+</blockquote>
+<p>如果有多个配置类，且这些配置类存在父子关系、 <code>AnnotationConfigApplicationContext</code> 对象创建的参数中只有父配置类，要想在父配置类中加载子配置类，需要在父配置类上使用 <code>@ComponentScan</code> 扫描子配置类，而且这个子配置类必须是配置类，即：子配置类上必须有 <code>@Configuration</code> 。</p>
+<p>当然你也可以在父配置类上使用 <code>@Import</code> 注解导入子配置类，这个时候子配置类可以不用有 <code>@Configuration</code>。</p>
+<h2 id="4-2-ComponentScan"><a class="header-anchor" href="#4-2-ComponentScan"></a>4.2 @ComponentScan</h2>
+<p>作用：通过注解指定 Spring 在创建容器时需要扫描的包。</p>
+<p>主要属性：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">属性名</th>
+<th style="text-align:center">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">value、basePackage</td>
+<td style="text-align:center">这俩的作用是一样的，都是用于指定创建容器时要扫描的包。</td>
+</tr>
+<tr>
+<td style="text-align:center">basePackageClasses</td>
+<td style="text-align:center">定义扫描的类。</td>
+</tr>
+</tbody>
+</table>
+<p>在没有定义<code>@ComponentScan</code>属性的情况下，它只会扫描当前包和其子包的路径。</p>
+<p><mark>细节：</mark> 在父配置类上使用该注解扫描需要被装配的类时，这个类必须被 <code>@Configuration</code> 或 <code>@Component</code> 所注解。</p>
+<blockquote>
+<p>使用方式</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ComponentScan(&quot;indi.mofan&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyConfiguration</span>()&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上代码相当于：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">beans</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">&quot;indi.mofan&quot;</span>/&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>扫描排除</p>
+</blockquote>
+<p>与 <code>&lt;context:component-scan&gt;</code> 一样，<code>@ComponentScan</code> 注解也可以配置扫描排除策略。如果在 Spring 配置文件中有这样一段配置：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">&quot;indi.mofan&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">context:exclude-filter</span> <span class="attr">type</span>=<span class="string">&quot;assignable&quot;</span> <span class="attr">expression</span>=<span class="string">&quot;indi.mofan.domain.User&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">context:exclude-filter</span> <span class="attr">type</span>=<span class="string">&quot;aspectj&quot;</span> <span class="attr">expression</span>=<span class="string">&quot;*..User&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">context:component-scan</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>那么等价于：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ComponentScan(basePackages = &quot;indi.mofan&quot;,</span></span><br><span class="line"><span class="meta">               excludeFilters = &#123;</span></span><br><span class="line"><span class="meta">                   @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = User.class),</span></span><br><span class="line"><span class="meta">                   @ComponentScan.Filter(type = FilterType.ASPECTJ, pattern = &quot;*..User&quot;)</span></span><br><span class="line"><span class="meta">               &#125;</span></span><br><span class="line"><span class="meta">)</span></span><br></pre></td></tr></table></figure>
+<p>其他排除策略使用方式与 <code>&lt;context:exclude-filter&gt;</code> 是一样的，这些排除策略也是可以叠加的。</p>
+<p><code>@ComponentScan</code> 也支持扫描包含，举一反三即可。</p>
+<h2 id="4-3-Bean"><a class="header-anchor" href="#4-3-Bean"></a>4.3 @Bean</h2>
+<p>作用：把当前 <code>public</code> 方法的返回值作为 bean 对象存入到 Spring 的 IoC 容器中。常与 <code>@Configuration</code> 配合使用。</p>
+<p>主要属性：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">属性名</th>
+<th style="text-align:center">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">name</td>
+<td style="text-align:center">用于指定 bean 的 id 。不写时，默认值为当前方法名称。</td>
+</tr>
+</tbody>
+</table>
+<p>用 <code>@Bean</code> 注解了的方法的名字，就相当于 <code>&lt;bean&gt;</code> 标签中的 id 属性；这个方法的返回值，就相当于 <code>&lt;bean&gt;</code> 标签中的 class 属性。</p>
+<p><code>@Bean</code>  注解默认作用域为单例 <strong>singleton</strong> 作用域，可通过 <code>@Scope(&quot;prototype&quot;)</code> 设置为原型作用域。</p>
+<blockquote>
+<p>细节分析</p>
+</blockquote>
+<p>当我们使用注解配置方法时，如果方法有参数，Spring 框架会去容器中查找有无可用的 bean 对象，查找方式和 <code>@Autowried</code> 注解一样。如果找到了就会进行注入，否则会报错。</p>
+<p>在被 <code>@Configuration</code> 标记的配置类中，一个 <code>@Bean</code> 标记的方法可以调用当前类中另一个被 <code>@Bean</code> 注解标记的方法，并将后者作为依赖注入到前者创建的 bean 中。虽然 <code>@Configuration</code> 是 <code>@Component</code> 的衍生注解，但是使用 <code>@Component</code> 是无法完成上述场景的。</p>
+<h2 id="4-4-Import"><a class="header-anchor" href="#4-4-Import"></a>4.4 @Import</h2>
+<p>作用：用于导入其他的配置类或 bean。</p>
+<p>主要属性：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">属性名</th>
+<th style="text-align:center">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">value</td>
+<td style="text-align:center">用于指定其他配置类的 Class 对象（可以指定多个）</td>
+</tr>
+</tbody>
+</table>
+<p>当我们使用 <code>@Import</code> 注解后，有 <code>@Import</code> 注解的类就是父配置类，而导入的都是子配置类。</p>
+<p><mark>细节：</mark> 使用 <code>@Import</code> 注解导入的子配置类上可以不用写 <code>@Configuration</code> 注解。</p>
+<blockquote>
+<p>配置优先级</p>
+</blockquote>
+<p>Spring 配置优先级如下：</p>
+<p>Spring 配置文件 <code>&lt;bean&gt;</code> 标签的优先级 <strong>大于</strong> <code>@Bean</code> 注解 <strong>大于</strong> <code>@Component</code> 及其衍生注解</p>
+<p>优先级高的配置覆盖优先级低的配置，但在进行配置覆盖值，bean 的 id 值需要保持一致。</p>
+<h2 id="4-5-ConfigurationProperties"><a class="header-anchor" href="#4-5-ConfigurationProperties"></a>4.5 @ConfigurationProperties</h2>
+<p>SpringBoot 提供了多种配置文件方便用户对配置的管理，如果需要读取配置文件中的信息，可以使用 <code>@Value</code> 注解。</p>
+<p>在 SpringBoot 的配置文件中，针对同一种配置往往有相同的前缀，为简化 <code>@Value</code> 注解的使用，SpringBoot 提供了 <code>@ConfigurationProperties</code> 注解。</p>
+<p>使用这个注解可以指定相同的前缀，SpringBoot 将根据指定的前缀和属性名称在配置文件中寻找对应的信息并完成注入。</p>
+<p>假设有这样的配置信息：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">properties:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">&quot;mofan&quot;</span></span><br><span class="line">  <span class="attr">age:</span> <span class="number">20</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>使用 <code>@Value</code> 读取</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> mofan</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2022/10/27 10:24</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyProperties</span> &#123;</span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;properties.name&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;properties.age&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试一下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> ApplicationContext context;</span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testEnableConfigurationProperties</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">MyProperties</span> <span class="variable">properties</span> <span class="operator">=</span> context.getBean(MyProperties.class);</span><br><span class="line">    Assertions.assertEquals(<span class="string">&quot;mofan&quot;</span>, properties.getName());</span><br><span class="line">    Assertions.assertEquals(<span class="number">20</span>, properties.getAge());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用 <code>@Value</code> 注解进行读取时，无需 Setter 方法。</p>
+<blockquote>
+<p>使用 <code>@ConfigurationProperties</code> 读取</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Setter</span></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@ConfigurationProperties(&quot;properties&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyProperties</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用 <code>@ConfigurationProperties</code> 注解进行读取时，<strong>必须要有 Setter 方法，</strong> 否则会报错。</p>
+<blockquote>
+<p>Spring Boot Configuration Annotation Processor not configured<br>
+在 IDEA 中使用 <code>@ConfigurationProperties</code> 注解时，顶部可能会出现以下警告：</p>
+</blockquote>
+<pre>Spring Boot Configuration Annotation Processor not configured</pre>
+<p>警告的意思是：没有配置 SpringBoot 配置注解执行器。该警告不影响代码的正常执行，如果需要消除警告，添加以下依赖即可：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-configuration-processor<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">optional</span>&gt;</span>true<span class="tag">&lt;/<span class="name">optional</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>添加 SpringBoot 配置注解执行器后，IDEA 能够给出更准确的提示信息。</p>
+<blockquote>
+<p><code>@ConfigurationProperties</code> 与 <code>@Value</code> 的混合使用<br>
+有时一个 Bean 可能会牵扯到很多信息，单用 <code>@ConfigurationProperties</code> 无法完成所有配置的注入，可以使用 <code>@Value</code> 注入剩下的配置信息：</p>
+</blockquote>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">properties:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">&quot;mofan&quot;</span></span><br><span class="line">  <span class="attr">age:</span> <span class="number">20</span></span><br><span class="line"><span class="attr">person:</span></span><br><span class="line">  <span class="attr">gender:</span> <span class="string">&quot;man&quot;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Setter</span></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@ConfigurationProperties(&quot;properties&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyProperties</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;person.gender&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String gender;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>@ConfigurationProperties</code> 的其他配置</p>
+</blockquote>
+<p><code>ignoreUnknownFields</code> 属性值默认为 <code>true</code>，如果修改为 <code>false</code>，SpringBoot 在启动时会查找所有配置文件中的内容进行匹配，当存在没有匹配的信息时就会报错。</p>
+<p>比如：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">properties:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">&quot;mofan&quot;</span></span><br><span class="line">  <span class="attr">age:</span> <span class="number">20</span></span><br><span class="line">  <span class="attr">height:</span> <span class="number">178</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Setter</span></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@ConfigurationProperties(value = &quot;properties&quot;, ignoreUnknownFields = false)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyProperties</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>配置文件中的 <code>height</code> 未在 <code>MyProperties</code> 中绑定，启动时出现以下错误：</p>
+<pre>org.springframework.boot.context.properties.bind.UnboundConfigurationPropertiesException: The elements [properties.height] were left unbound.</pre>
+<p><code>ignoreInvalidFields</code> 默认为 <code>false</code>，如果修改为 <code>true</code>，SpringBoot 启动时会忽略转换错误的值，但这可能会对后续维护带来不必要的麻烦，因此需要慎用。比如：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">properties:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">&quot;mofan&quot;</span></span><br><span class="line">  <span class="attr">age:</span> <span class="number">20</span></span><br><span class="line">  <span class="attr">bool:</span> <span class="string">&quot;invalid&quot;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Setter</span></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@ConfigurationProperties(value = &quot;properties&quot;, ignoreInvalidFields = true)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyProperties</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> Boolean bool;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>期望 <code>bool</code> 的类型是 <code>Boolean</code>，但是配置文件中的类型是 <code>String</code>，如果配置了 <code>ignoreInvalidFields = true</code>，那么会忽略这种转换错误的值，<strong>否则</strong> 启动时出现以下错误：</p>
+<pre>org.springframework.core.convert.ConversionFailedException: Failed to convert from type [java.lang.String] to type [java.lang.Boolean] for value 'invalid'; nested exception is java.lang.IllegalArgumentException: Invalid boolean value 'invalid'<br/>java.lang.IllegalArgumentException: Invalid boolean value 'invalid'</pre>
+<blockquote>
+<p>校验注入的值</p>
+</blockquote>
+<p>类加上 <code>@Validated</code> 注解，字段上加上 <code>@NotEmpty</code> 等注解，在注入值的时候会自动校验，校验不通过将报错。比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Setter</span></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="meta">@Validated</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@ConfigurationProperties(&quot;properties&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyProperties</span> &#123;</span><br><span class="line">    <span class="meta">@NotEmpty</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>@Validated</code> 是 Spring 中自带的，使用 <code>@NotEmpty</code> 等校验注解则需要导入以下依赖：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>jakarta.validation<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jakarta.validation-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.hibernate.validator<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hibernate-validator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>加载多层嵌套配置</p>
+</blockquote>
+<p>某些复杂的配置往往不是简单的一层，可能会嵌套多层，<code>@ConfigurationProperties</code> 注解也支持加载多层拥有相同前缀的配置。</p>
+<p>修改原有的配置信息：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">properties:</span></span><br><span class="line">  <span class="attr">my-name:</span> <span class="string">&quot;mofan&quot;</span></span><br><span class="line">  <span class="attr">age:</span> <span class="number">20</span></span><br><span class="line">  <span class="attr">innerProperties:</span></span><br><span class="line">    <span class="attr">integer:</span> <span class="number">212</span></span><br><span class="line"><span class="attr">person:</span></span><br><span class="line">  <span class="attr">gender:</span> <span class="string">&quot;man&quot;</span></span><br></pre></td></tr></table></figure>
+<p><code>properties</code> 下的 <code>name</code> 变成了 <code>my-name</code>，同时增加一层名为 <code>innerProperties</code> 的配置，此时需要对 <code>MyProperties</code> 配置类进行修改：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Setter</span></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="meta">@ConfigurationProperties(&quot;properties&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyProperties</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String myName;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;person.gender&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String gender;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">InnerProperties</span> <span class="variable">innerProperties</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">InnerProperties</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="meta">@Setter</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">InnerProperties</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> Integer integer;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">Boolean</span> <span class="variable">bool</span> <span class="operator">=</span> Boolean.FALSE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>重新测试下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testEnableConfigurationProperties</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">MyProperties</span> <span class="variable">properties</span> <span class="operator">=</span> context.getBean(MyProperties.class);</span><br><span class="line">    assertThat(properties)</span><br><span class="line">            .extracting(</span><br><span class="line">                    MyProperties::getMyName, MyProperties::getAge,</span><br><span class="line">                    MyProperties::getGender, i -&gt; i.getInnerProperties().getInteger(),</span><br><span class="line">                    i -&gt; i.getInnerProperties().getBool()</span><br><span class="line">            ).containsExactly(<span class="string">&quot;mofan&quot;</span>, <span class="number">20</span>, <span class="string">&quot;man&quot;</span>, <span class="number">212</span>, <span class="literal">false</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Java 中类里的字段通常采用小驼峰命名，对使用 <code>@ConfigurationProperties</code> 注解加载的配置信息，配置类中采用小驼峰命名的字段可以对应配置文件中相同的配置项，也可以对应配置文件中中划线命名的配置项。</p>
+<h2 id="4-6-EnableConfigurationProperties"><a class="header-anchor" href="#4-6-EnableConfigurationProperties"></a>4.6 @EnableConfigurationProperties</h2>
+<p>如果一个类仅仅配置 <code>@ConfigurationProperties</code> 注解，也没有被添加到 Spring 容器中，那么是不能完成配置文件与 Bean 的数据绑定。</p>
+<p>假设 A 类上使用了 <code>@ConfigurationProperties</code> 注解，且未被添加到 Spring 容器中。此时可以使用 <code>@EnableConfigurationProperties(&#123;A.class&#125;)</code> 指定 A 与配置文件进行绑定，同时将 A 添加到 Spring 容器中。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">properties:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">&quot;mofan&quot;</span></span><br><span class="line">  <span class="attr">age:</span> <span class="number">20</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> mofan</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2022/10/27 10:24</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Setter</span></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="meta">@ConfigurationProperties(&quot;properties&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyProperties</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在配置类上使用 <code>@EnableConfigurationProperties</code> 指定 <code>MyProperties.class</code>，使其与配置文件绑定并交由 Spring 管理：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> mofan</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2022/10/27 10:51</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableConfigurationProperties(&#123;MyProperties.class&#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyConfig</span> &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><mark>注意：</mark> 使用 <code>@EnableConfigurationProperties</code> 注解时，所在类必须被添加到 Spring 容器中，否则无效。</p>
+<h2 id="4-7-PropertySource"><a class="header-anchor" href="#4-7-PropertySource"></a>4.7 @PropertySource</h2>
+<p>作用：与 Spring 配置文件的 <code>&lt;context:property-placeholder&gt;</code> 标签作用一样。用于指定 <code>properties</code> 文件的位置。</p>
+<p>使用示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@PropertySource(&quot;classpath:/xxx.properties&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Person</span>&#123;</span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;name&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;age&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果需要定义多个配置文件，可以使用 <code>@PropertySources</code> 注解，在其内部声明多个 <code>@PropertySource</code> 注解即可。</p>
+<p>如果想要定义配置文件的编码，可以使用 <code>@PropertySource</code> 提供的 <code>encoding</code> 属性。</p>
+<blockquote>
+<p>绑定 yaml 配置文件</p>
+</blockquote>
+<p><code>@PropertySource</code> 只能用于指定 <code>properties</code> 文件，如果想要解析 <code>yaml</code> 文件，需要自定义配置工厂，然后使用 <code>factory</code> 属性指定自定义的配置工厂，比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">YamlPropertySourceFactory</span> <span class="keyword">implements</span> <span class="title class_">PropertySourceFactory</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> PropertySource&lt;?&gt; createPropertySource(String name, EncodedResource encodedResource) <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="type">YamlPropertiesFactoryBean</span> <span class="variable">factory</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">YamlPropertiesFactoryBean</span>();</span><br><span class="line">        factory.setResources(encodedResource.getResource());</span><br><span class="line">        <span class="type">Properties</span> <span class="variable">properties</span> <span class="operator">=</span> factory.getObject();</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">PropertiesPropertySource</span>(encodedResource.getResource().getFilename(), properties);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用时：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PropertySource(value = &quot;classpath:xxx.yaml&quot;, encoding = &quot;utf-8&quot;, factory = YamlPropertySourceFactory.class)</span></span><br></pre></td></tr></table></figure>
+<h2 id="4-8-EnbleAspectJAutoProxy"><a class="header-anchor" href="#4-8-EnbleAspectJAutoProxy"></a>4.8 @EnbleAspectJAutoProxy</h2>
+<p>使用该注解后，表示开启 Spring AOP 动态代理的自动配置。</p>
+<p><code>@EnbleAspectJAutoProxy</code> 内有两个属性：</p>
+<ul>
+<li><code>proxyTargetClass</code>：使用 CGLib 动态代理还是使用 JDK 动态代理。设置为 <code>true</code> 时表示使用 CGLib 动态代理，设置为 <code>false</code> 时表示 <strong>尽可能</strong> 使用 JDK 动态代理。如果被代理的类未实现接口，就算是 <code>false</code> 也会使用 CGLib 实现动态代理。</li>
+<li><code>exposeProxy</code>：是否暴露代理对象，设置为 <code>true</code> 时，可以使用 <code>AopContext.currentProxy()</code> 获取到代理对象。</li>
+</ul>
+<blockquote>
+<p>使用示例</p>
+</blockquote>
+<p>导入依赖：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-aop<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>SpringBoot 的启动类上添加 <code>@EnableAspectJAutoProxy(exposeProxy = true)</code> 注解，表示通过 AOP 框架暴露代理对象，可以使用 <code>AopContext.currentProxy()</code> 获取到代理对象：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@EnableAspectJAutoProxy(exposeProxy = true)</span></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Application</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        SpringApplication.run(BlogClientApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">XServiceImpl</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">methodA</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 创建代理对象</span></span><br><span class="line">        <span class="type">XServiceImpl</span> <span class="variable">xService</span> <span class="operator">=</span> (XServiceImpl) AopContext.currentProxy();</span><br><span class="line">        xService.methodB();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">methodB</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="4-9-ConstructorBinding"><a class="header-anchor" href="#4-9-ConstructorBinding"></a>4.9 @ConstructorBinding</h2>
+<p>在使用 <code>@ConfigurationProperties</code> 注解时，需要提供 Setter 方法，但如果要求对象不能被修改，就不会再提供 Setter 方法，而是只提供构造方法，此时应该怎么实现配置文件信息绑定呢？</p>
+<p>可以使用 <code>@ConstructorBinding</code> 注解，该注解可以作用在构造方法、注解上：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target(&#123; ElementType.CONSTRUCTOR, ElementType.ANNOTATION_TYPE &#125;)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> ConstructorBinding &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该注解也需要与 <code>@ConfigurationProperties</code> 搭配使用，通过构造方法将配置文件中的信息绑定到属性上。</p>
+<blockquote>
+<p>使用示例</p>
+</blockquote>
+<p>配置文件信息：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">another-properties:</span></span><br><span class="line">  <span class="attr">myName:</span> <span class="string">&quot;mofan212&quot;</span></span><br><span class="line">  <span class="attr">age:</span> <span class="number">21</span></span><br><span class="line">  <span class="attr">innerProperties:</span></span><br><span class="line">    <span class="attr">integer:</span> <span class="number">123</span></span><br><span class="line"><span class="attr">person:</span></span><br><span class="line">  <span class="attr">gender:</span> <span class="string">&quot;man&quot;</span>    </span><br></pre></td></tr></table></figure>
+<p>使用 <code>@ConstructorBinding</code> 将配置文件中的信息绑定到属性上：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> mofan</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2023/6/25 10:36</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="meta">@ConfigurationProperties(&quot;another-properties&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyAnotherProperties</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String myName;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Integer age;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;person.gender&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String gender;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> InnerProperties innerProperties;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@ConstructorBinding</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">MyAnotherProperties</span><span class="params">(String myName, Integer age, InnerProperties innerProperties)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.myName = myName;</span><br><span class="line">        <span class="built_in">this</span>.age = age;</span><br><span class="line">        <span class="comment">// 不能直接 new 一个对象，必须通过构造方法传入，否则无法绑定配置文件中的信息</span></span><br><span class="line">        <span class="comment">// this.innerProperties = new InnerProperties();</span></span><br><span class="line">        <span class="built_in">this</span>.innerProperties = innerProperties;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>简单测试下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testConstructorBinding</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">MyAnotherProperties</span> <span class="variable">properties</span> <span class="operator">=</span> context.getBean(MyAnotherProperties.class);</span><br><span class="line">    assertThat(properties)</span><br><span class="line">        .extracting(MyAnotherProperties::getMyName, </span><br><span class="line">                    MyAnotherProperties::getAge, </span><br><span class="line">                    MyAnotherProperties::getGender,</span><br><span class="line">                    i -&gt; i.getInnerProperties().getInteger(), </span><br><span class="line">                    i -&gt; i.getInnerProperties().getBool())</span><br><span class="line">        .containsExactly(<span class="string">&quot;mofan212&quot;</span>, <span class="number">21</span>, <span class="string">&quot;man&quot;</span>, <span class="number">123</span>, <span class="literal">false</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><mark>注意：</mark> 使用 <code>@ConstructorBinding</code> 注解时，不能与 <code>@Configuration</code>、<code>@Component</code> 注解及其衍生注解搭配使用。Spring 使用构造方法来创建 Bean 时，要求 Spring 容器中存在构造方法的参数类型的 Bean，而常见的 String 类型显然是不存在的，应用启动时就会抛出 <code>NoSuchBeanDefinitionException</code> 异常。在 IDEA 中出现搭配使用的场景时，会提示以下信息：</p>
+<pre>
+Annotated with @ConstructorBinding but defined as Spring component
+</pre>
+<h2 id="4-10-DurationUnit"><a class="header-anchor" href="#4-10-DurationUnit"></a>4.10 @DurationUnit</h2>
+<p>Spring 支持直接从配置文件中读取 <code>Duration</code> 类型的配置信息。</p>
+<p>在配置文件中未显式指定单位时，默认单位为毫秒，支持配置带单位（比如：<code>ns</code>、<code>us</code>、<code>ms</code>、<code>s</code>、<code>m</code>、<code>h</code>、<code>d</code> 等）的文本，也可以使用 <code>@DurationUnit</code> 注解来显式指定单位，因此 <code>@DurationUnit</code> 常与 <code>@ConfigurationProperties</code> 搭配使用。</p>
+<blockquote>
+<p>使用示例</p>
+</blockquote>
+<p>配置文件信息：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">properties:</span></span><br><span class="line">  <span class="attr">default-duration:</span> <span class="number">10</span></span><br><span class="line">  <span class="attr">duration-with-unit:</span> <span class="string">7d</span></span><br><span class="line">  <span class="attr">duration:</span> <span class="number">60</span></span><br></pre></td></tr></table></figure>
+<p>配置信息绑定类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Setter</span></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="meta">@ConfigurationProperties(&quot;properties&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyProperties</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> Duration defaultDuration;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Duration durationWithUnit;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@DurationUnit(ChronoUnit.SECONDS)</span></span><br><span class="line">    <span class="keyword">private</span> Duration duration;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>简单测试下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testEnableConfigurationProperties</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// --snip--</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// duration</span></span><br><span class="line">    assertThat(properties).extracting(</span><br><span class="line">        MyProperties::getDefaultDuration,</span><br><span class="line">        MyProperties::getDurationWithUnit,</span><br><span class="line">        MyProperties::getDuration</span><br><span class="line">    ).containsExactly(Duration.ofMillis(<span class="number">10</span>), Duration.ofDays(<span class="number">7</span>), Duration.ofSeconds(<span class="number">60</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>相似注解</p>
+</blockquote>
+<p>除 <code>@DurationUnit</code> 外，还有两个类似的注解：</p>
+<ul>
+<li><code>@PeriodUnit</code>：用于指定 <code>Period</code> 类型配置信息的单位，未显式指定单位时，默认单位为天</li>
+<li><code>@DataSizeUnit</code>：用于指定 <code>DataSize</code> 类型配置信息的单位，<code>DataSize</code> 是 Spring 提供的用于描述文件大小的类，未显式指定单位时，默认单位是 <code>bytes</code></li>
+</ul>
+<h2 id="4-11-ConfigurationPropertiesBinding"><a class="header-anchor" href="#4-11-ConfigurationPropertiesBinding"></a>4.11 @ConfigurationPropertiesBinding</h2>
+<p>Spring 内置了一些将配置文件中的信息转换成常见 Java 对象的转换器，如果要转换成自定义对象，则需要自定义转换器。</p>
+<p>比如有配置信息如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">properties:</span><br><span class="line">  # 加引号才识别为字符串，否则识别成 Double，导致找不到对应的 Convertor</span><br><span class="line">  weight: <span class="string">&quot;1000.1&quot;</span></span><br></pre></td></tr></table></figure>
+<p>且存在自定义类 <code>Weight</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Weight</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> BigDecimal value;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span> overWight;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在需要读取配置文件中的 <code>weight</code> 信息，将其绑定到 <code>Weight</code> 对象上：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Setter</span></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="meta">@ConfigurationProperties(&quot;properties&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyProperties</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> Weight weight;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>自定义转换器 <code>WeightConvertor</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">WeightConvertor</span> <span class="keyword">implements</span> <span class="title class_">Converter</span>&lt;String, Weight&gt; &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">BigDecimal</span> <span class="variable">MAX_WEIGHT</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Weight <span class="title function_">convert</span><span class="params">(String source)</span> &#123;</span><br><span class="line">        <span class="type">BigDecimal</span> <span class="variable">value</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(source);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Weight</span>(value, MAX_WEIGHT.compareTo(value) &lt; <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用 <code>@Bean</code> 注解将自定义转换器添加到 Spring 容器中，并使用 <code>@ConfigurationPropertiesBinding</code> 指定该 Bean 用于读取配置文件信息的数据转换：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PropertiesConfig</span> &#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="meta">@ConfigurationPropertiesBinding</span></span><br><span class="line">    <span class="keyword">public</span> WeightConvertor <span class="title function_">weightConvertor</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">WeightConvertor</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>简单测试下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testEnableConfigurationProperties</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// --snip--</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// custom convertor</span></span><br><span class="line">    assertThat(properties).extracting(<span class="string">&quot;weight.value&quot;</span>, <span class="string">&quot;weight.overWight&quot;</span>)</span><br><span class="line">        .containsExactly(<span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="string">&quot;1000.1&quot;</span>), <span class="literal">true</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/Annotation-Of-Spring/">https://mofan212.github.io/posts/Annotation-Of-Spring/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Spring/">Spring</a></div><div class="post-share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/13.jpg" data-sites="wechat,qq,weibo,facebook,x"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/Learning-SpringMVC-From-0/" title="从 0 开始的 SpringMVC 学习"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/12.jpg" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">从 0 开始的 SpringMVC 学习</div></div><div class="info-2"><div class="info-item-1">本文对 SpringMVC 的一些基本使用进行了介绍。</div></div></div></a><a class="pagination-related" href="/posts/How-to-use-Typora/" title="一款简洁、高自定义化的 Markdown 编辑器——Typora"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/2.jpg" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">一款简洁、高自定义化的 Markdown 编辑器——Typora</div></div><div class="info-2"><div class="info-item-1">我宣布：Typora 是最好的 Markdown 编辑器，没有之一！</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/Simple-Use-Of-BeanCopier/" title="BeanCopier 的简单使用"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/84.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-03-19</div><div class="info-item-2">BeanCopier 的简单使用</div></div><div class="info-2"><div class="info-item-1">利用 MapStruct 实现 Bean 拷贝太臃肿？试试 BeanCopier。</div></div></div></a><a class="pagination-related" href="/posts/Learning-Spring-From-0/" title="从 0 开始的 Spring 5.x 学习"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/61.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-10-22</div><div class="info-item-2">从 0 开始的 Spring 5.x 学习</div></div><div class="info-2"><div class="info-item-1">不知刷了几遍这个视频，每次都有新的收获，这次刷的时候顺便做了总结笔记，方便下次复习。</div></div></div></a><a class="pagination-related" href="/posts/SpringIoC/" title="Spring IoC 巩固理解"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/14.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-05-29</div><div class="info-item-2">Spring IoC 巩固理解</div></div><div class="info-2"><div class="info-item-1">到底什么是 Ioc？</div></div></div></a><a class="pagination-related" href="/posts/Spring's-Enhancements-To-Java-Annotation/" title="Spring 对 Java 注解的增强"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/133.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-15</div><div class="info-item-2">Spring 对 Java 注解的增强</div></div><div class="info-2"><div class="info-item-1">本文介绍了 Spring 中 @AliasFor 注解的使用方式和JDK 中一些元注解的使用。</div></div></div></a><a class="pagination-related" href="/posts/Supplementary-Content-For-Spring/" title="Spring 补充"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/99.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-07</div><div class="info-item-2">Spring 补充</div></div><div class="info-2"><div class="info-item-1">对 Spring 中的创建复杂对象、对象的生命周期、自定义类型转换器、后置处理 bean 等内容进行补充。</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">默烦</div><div class="author-info-description">彩笔的打怪升级之路...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mofan212"><i class="fab fa-github"></i><span>follow me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解。<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a href="./mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载。😊</br><strong><font style="color:red">严禁未遵循规范的转载。</font></strong>😡</br><strong>死去的评论系统复活啦！欢迎到留言板畅所欲言！</strong>当然也可以使用更高效的<a target="_blank" href="https://space.bilibili.com/23658864/dynamic" style="color:#49B1F5;text-decoration:underline"> 哔哩哔哩私信 </a>或<a href="mailto:cy.mofan@foxmail.com" style="color:#49B1F5;text-decoration:underline" target="_blank">邮箱</a>。 😉</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA%E7%9B%B8%E5%85%B3%E6%B3%A8%E8%A7%A3"><span class="toc-text">1. 对象创建相关注解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-Component"><span class="toc-text">1.1 @Component</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-Scope"><span class="toc-text">1.2 @Scope</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-Lazy"><span class="toc-text">1.3 @Lazy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-PostConstruct"><span class="toc-text">1.4 @PostConstruct</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-5-PreDestroy"><span class="toc-text">1.5 @PreDestroy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-6-Lookup"><span class="toc-text">1.6 @Lookup</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E6%B3%A8%E5%85%A5%E7%9B%B8%E5%85%B3%E6%B3%A8%E8%A7%A3"><span class="toc-text">2. 注入相关注解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-Autowried"><span class="toc-text">2.1 @Autowried</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-Qualifier"><span class="toc-text">2.2 @Qualifier</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-Primary"><span class="toc-text">2.3 @Primary</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-Resource"><span class="toc-text">2.4 @Resource</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-5-Value"><span class="toc-text">2.5 @Value</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E6%B3%A8%E8%A7%A3%E6%89%AB%E6%8F%8F%E8%AF%A6%E8%A7%A3"><span class="toc-text">3. 注解扫描详解</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3%E6%B3%A8%E8%A7%A3"><span class="toc-text">4. 配置相关注解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-Configuration"><span class="toc-text">4.1 @Configuration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-ComponentScan"><span class="toc-text">4.2 @ComponentScan</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-Bean"><span class="toc-text">4.3 @Bean</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-4-Import"><span class="toc-text">4.4 @Import</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-5-ConfigurationProperties"><span class="toc-text">4.5 @ConfigurationProperties</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-6-EnableConfigurationProperties"><span class="toc-text">4.6 @EnableConfigurationProperties</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-7-PropertySource"><span class="toc-text">4.7 @PropertySource</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-8-EnbleAspectJAutoProxy"><span class="toc-text">4.8 @EnbleAspectJAutoProxy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-9-ConstructorBinding"><span class="toc-text">4.9 @ConstructorBinding</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-10-DurationUnit"><span class="toc-text">4.10 @DurationUnit</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-11-ConfigurationPropertiesBinding"><span class="toc-text">4.11 @ConfigurationPropertiesBinding</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/Something-About-Blog/" title="博客搭建与维护"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="博客搭建与维护"/></a><div class="content"><a class="title" href="/posts/Something-About-Blog/" title="博客搭建与维护">博客搭建与维护</a><time datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"/></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="更新于 2026-01-03 00:00:00">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"/></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/103.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 的类资源加载"/></a><div class="content"><a class="title" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载">Java 的类资源加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/20.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="注解、类的加载、反射"/></a><div class="content"><a class="title" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射">注解、类的加载、反射</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/ren-zhi-jue-xing/" title="认知觉醒"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/172.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="认知觉醒"/></a><div class="content"><a class="title" href="/posts/ren-zhi-jue-xing/" title="认知觉醒">认知觉醒</a><time datetime="2025-12-28T16:00:00.000Z" title="更新于 2025-12-29 00:00:00">2025-12-29</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://gcore.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script src="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/js/mine.min.js"></script><script src="/js/tip_portal.js"></script><script defer="defer" id="ribbon" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script id="click-show-text" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="Azathoth,Yog-Sothoth,Shub-Niggurath,Nyarlathotep,Cthulhu,Hastur,Abhoth,Ghroth,Tsathoggua,Cthugha,Deep Ones,Dagon,Chaugnar Faugn,Mordiggian,Shoggoth,Old One,Mi-Go,Great Race of Yith,Flying Polyp,Hounds of Tindalos,Dhole" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div class="docsearch-wrap"><div id="docsearch" style="display:none"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@docsearch/css/dist/style.min.css"/><script src="https://testingcf.jsdelivr.net/npm/@docsearch/js/dist/umd/index.min.js"></script><script>(() => {
+  docsearch(Object.assign({
+    appId: 'BAFEL7A6K1',
+    apiKey: '89fcb5961984c5c054bf04149f345f38',
+    indexName: 'mofan212io',
+    container: '#docsearch',
+    placeholder: '输入关键字进行搜索',
+  }, null))
+
+  const handleClick = () => {
+    document.querySelector('.DocSearch-Button').click()
+  }
+
+  const searchClickFn = () => {
+    btf.addEventListenerPjax(document.querySelector('#search-button > .search'), 'click', handleClick)
+  }
+
+  searchClickFn()
+  window.addEventListener('pjax:complete', searchClickFn)
+})()</script></div></div></body></html>

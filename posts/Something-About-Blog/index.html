@@ -1,0 +1,670 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>博客搭建与维护 | Mofan</title><meta name="author" content="默烦,cy.mofan@foxmail.com"><meta name="copyright" content="默烦"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="维护博客时，总会遇到各种问题，有些问题难以找到解决方案，不如将它们记录下来，方便他人参考。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="博客搭建与维护">
+<meta property="og:url" content="https://mofan212.github.io/posts/Something-About-Blog/">
+<meta property="og:site_name" content="Mofan">
+<meta property="og:description" content="维护博客时，总会遇到各种问题，有些问题难以找到解决方案，不如将它们记录下来，方便他人参考。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg">
+<meta property="article:published_time" content="2020-06-03T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-01-24T16:00:00.000Z">
+<meta property="article:author" content="默烦">
+<meta property="article:tag" content="Hexo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "博客搭建与维护",
+  "url": "https://mofan212.github.io/posts/Something-About-Blog/",
+  "image": "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg",
+  "datePublished": "2020-06-03T16:00:00.000Z",
+  "dateModified": "2026-01-24T16:00:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "默烦",
+      "url": "https://mofan212.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/Something-About-Blog/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":true,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 默烦","link":"链接: ","source":"来源: Mofan","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://testingcf.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '博客搭建与维护',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="referrer" content="no-referrer-when-downgrade" /><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/css/myStyle.min.css"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css" /><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css" /><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Mofan" type="application/atom+xml">
+</head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+btf.addGlobalFn('pjaxSend', () => {
+  Pace.restart()
+}, 'pace_restart')
+
+</script><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources/css/minimal.min.css"/><script src="https://testingcf.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/post_top_img.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Mofan</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">博客搭建与维护</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-06-03T16:00:00.000Z" title="发表于 2020-06-04 00:00:00">2020-06-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Blog/">Blog</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">7.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>26分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;距离本文上次更新已经过去&quot;,&quot;messageNext&quot;:&quot;天，请注意时效性。&quot;,&quot;postUpdate&quot;:&quot;2026-01-25 00:00:00&quot;}" hidden></div><p>封面来源：碧蓝航线 永夜幻光 活动CG</p>
+<h1 id="0-前言"><a class="header-anchor" href="#0-前言"></a>0. 前言</h1>
+<h2 id="0-1-本文须知"><a class="header-anchor" href="#0-1-本文须知"></a>0.1 本文须知</h2>
+<p>本博客采用 <code>Hexo</code> 框架进行搭建，使用 <code>hexo-theme-butterfly</code> 主题进行美化，并对一些细节进行了魔改，部署在 <s>Gitee</s> GitHub 上（垃圾码云，又要手动部署，又要实名认证，实名就算了，还要本人手持身份证，垃圾玩意儿），<s>未来会将其部署在服务器上（先暂时白嫖一会）</s> （白嫖一时爽，一直白嫖一直爽 😆）。</p>
+<h2 id="0-2-如何搭建博客"><a class="header-anchor" href="#0-2-如何搭建博客"></a>0.2 如何搭建博客</h2>
+<blockquote>
+<p>编写目的</p>
+</blockquote>
+<p>最近没事时经常在交流群里宣传我的博客并互换友链，让博客的流量增加了不少（虽然也就几百😂），很多小伙伴看到我的博客后，都觉得还行，也想自己搭建一个博客。新手在第一次搭建博客的时候总会出一些问题，要么是不知道怎么搭建，要么看不懂主题的文档，抑或是不知道插件的使用。</p>
+<p>原本以为根据网上的众多教程可以解决这些问题，可依旧有小伙伴来问我，因此决定写一下怎么搭建一个博客。</p>
+<p>—— 本节编辑于 2020/08/13</p>
+<blockquote>
+<p>搭建须知</p>
+</blockquote>
+<p>搭建博客的前提是需要你的电脑上有 Node.js 和 Git。</p>
+<p>不会 Git 及其配置？没关系！我写过一篇关于 Git 的 <s>简易</s> （不断补充中，内容越来越多）<a href="../Git">使用教程</a>，这里面一定有你想要的内容。</p>
+<p>如果想要对搭建好的博客进行魔改美化，还需要有一定的前端基础知识（HTML、CSS、JavaScript 等）。</p>
+<p>不会以上提及的技术也没关系，我会给出参考教程来告诉你如何搭建，一些魔改美化也可以去网上搜索。</p>
+<p>编写博客文章使用的是 Typora，这是一款高自定义化的、简洁的 Markdown 编辑工具。</p>
+<p>什么？你没用过？没关系，在本博客搜索关键词 <code>Typora</code>，会得到一篇关于 Typora 和 Markdown 相关的文章。</p>
+<p>不使用 Typora 也行，任何一个 Markdown 编辑器甚至是记事本都可以，但必须掌握 Markdown 的书写语法。</p>
+<p>那么！我们就开始了！👊</p>
+<blockquote>
+<p>初步搭建</p>
+</blockquote>
+<p>首先需要先搭建出一个简单的博客，然后才可以在这个基础上进行美化，参考教程看这里：</p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Yb411a7ty">手把手教你从0开始搭建自己的个人博客</a></p>
+<p>这是一个视频教程，讲的十分详细（感谢羊哥！），我当初也是跟着这个视频进行搭建的。</p>
+<p>在视频最后，还给出了主题配置的步骤，如果不喜欢视频中的主题，可以去 GitHub 上搜索 <code>hexo theme</code> ，就能找到许多好看的主题，配置方式与视频中类似。</p>
+<p>使用 npm 全局安装 hexo 后，在 Git Bash 中使用 <code>hexo</code> 命令显示「-bash: hexo: command not found」：</p>
+<ul>
+<li>需要将 npm 的全局模块存放路径（即 node_global，可以参考 <a href="../How-to-install-Node.js-and-update-Hexo/">Node.js 的安装与 Hexo 的升级</a> 中对 Node.js 的配置）添加到环境变量 Path 中，之后重启 Git Bash 执行 <code>hexo</code> 命令</li>
+<li>如果添加后依旧存在错误，那么在 <code>hexo</code> 命令前加上 <code>npx</code>，即 <code>npx hexo</code>，然后再追加相关选项。</li>
+</ul>
+<blockquote>
+<p>配置图床</p>
+</blockquote>
+<p>完成以上步骤后，博客基本就初步搭建好了，之后就可以编写 Markdown 文件并放进博客文章目录 <code>blog/source/_posts</code> 中，这下又出现了一个问题，博客中的图片应该怎么办呢？</p>
+<p>Markdown 文件中的图片都是引用的，图片是放在本地的，那怎么在博客中引用图片呢？</p>
+<p>这里需要使用到图床，图床有很多，<s>可以使用 Gitee 或 GitHub 解决</s> <strong>（不再推荐使用这种方式，前者不在支持，后者访问速度过慢）</strong> ，也有使用其他方式解决，而我选择的是国内的<mark>阿里OSS</mark>。</p>
+<p>既然如此，得先注册一个阿里云账号，具体步骤就省略了，这个很简单。</p>
+<p>然后可以参考这篇教程： <a target="_blank" rel="noopener" href="https://blog.csdn.net/kai123wen/article/details/104027802">阿里云OSS PicGo 配置图床教程 超详细</a></p>
+<p>这篇文章配置了阿里云 OSS，然后将其与 PicGo 结合，这不重要，重点是配置阿里云 OSS 的方法。</p>
+<p>对了，还有一点，配置阿里云 OSS 时不用购买什么流量包、储存包（我记得是不用购买的，具体我也忘记了，相信你肯定懂得随机应变 😘），直接用就完事了，别忘了往里面充值几块钱，阿里云 OSS 默认是按量收费的，我们博客的访问量较低，使用默认的就行。</p>
+<p><s>当然，如果想白嫖，可以使用 GitHub 或 Gitee 来搭建一个免费的图床，具体做法可以参考羊哥的这篇文章：<a target="_blank" rel="noopener" href="https://www.bilibili.com/read/cv4065587">使用GitHub作为个人博客免费图床</a></s></p>
+<blockquote>
+<p>使用 emoji 表情</p>
+</blockquote>
+<p>你会发现我在博客中使用了一些 emoji 表情，它们很有意思，这些表情可以直接在 Typora 中使用，但是部署到博客上就成了类似 <code>:kissing_heart:</code> 这样的字符串，解决办法很简单，安装一些插件即可。</p>
+<p>在博客根目录下执行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">卸载默认渲染引擎</span></span><br><span class="line">npm un hexo-renderer-marked --save</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装新的渲染引擎</span></span><br><span class="line">npm i hexo-renderer-markdown-it --save</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">解析 emoji 简短代码</span></span><br><span class="line">npm install markdown-it-emoji --save</span><br></pre></td></tr></table></figure>
+<p>这里卸载了 Hexo 默认的 Markdown 渲染引擎，而是采用 <code>hexo-renderer-markdown-it</code> 作为新的渲染引擎，该引擎十分强大，也支持很多插件，可以按需安装一下插件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">npm i markdown-it-mark --save</span><br><span class="line">npm i markdown-it-footnote --save</span><br><span class="line">npm i markdown-it-sup --save</span><br><span class="line">npm i markdown-it-sub --save</span><br><span class="line">npm i markdown-it-abbr --save</span><br><span class="line">npm i markdown-it-emoji --save</span><br><span class="line">npm i markdown-it-checkbox --save</span><br><span class="line">npm i katex @renbaoshuo/markdown-it-katex</span><br></pre></td></tr></table></figure>
+<p>然后在博客的 <mark>主配置文件</mark> 中增加以下内容：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## 修改 markdown 渲染引擎为 hexo-renderer-marked-it，这个插件渲染速度更快，且有新特性</span></span><br><span class="line"><span class="attr">markdown:</span></span><br><span class="line">  <span class="attr">render:</span></span><br><span class="line">    <span class="attr">html:</span> <span class="literal">true</span></span><br><span class="line">    <span class="attr">xhtmlOut:</span> <span class="literal">false</span></span><br><span class="line">    <span class="attr">breaks:</span> <span class="literal">true</span></span><br><span class="line">    <span class="attr">linkify:</span> <span class="literal">false</span></span><br><span class="line">    <span class="attr">typographer:</span> <span class="literal">true</span></span><br><span class="line">    <span class="attr">quotes:</span> <span class="string">&#x27;“”‘’&#x27;</span></span><br><span class="line">  <span class="attr">plugins:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">markdown-it-mark</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">markdown-it-footnote</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">markdown-it-sup</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">markdown-it-sub</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">markdown-it-abbr</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">markdown-it-emoji</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">markdown-it-checkbox</span> <span class="comment"># tasklist</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">plugin:</span> <span class="comment"># 数学公式 Katex</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">&#x27;@renbaoshuo/markdown-it-katex&#x27;</span></span><br><span class="line">      <span class="attr">options:</span></span><br><span class="line">        <span class="attr">strict:</span> <span class="literal">false</span></span><br><span class="line">  <span class="attr">anchors:</span></span><br><span class="line">    <span class="attr">level:</span> <span class="number">1</span></span><br><span class="line">    <span class="attr">collisionSuffix:</span> <span class="string">&#x27;v&#x27;</span></span><br><span class="line">    <span class="attr">permalink:</span> <span class="literal">true</span></span><br><span class="line">    <span class="attr">permalinkClass:</span> <span class="string">header-anchor</span></span><br><span class="line">    <span class="attr">permalinkSymbol:</span> <span class="string">&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>什么是 <mark>主配置文件</mark> ？就是博客根目录下的 <code>_config.yml</code> 文件，后文也会介绍到。</p>
+<blockquote>
+<p>主题配置</p>
+</blockquote>
+<p>接下来到了美化博客，选取一个自己喜欢的主题，然后用它就完事了！</p>
+<p>本站使用的是 <code>hexo-theme-butterfly</code> 主题进行美化，如果你不喜欢这个主题，可以去 GitHub 上以 <code>hexo theme</code> 为关键词进行搜索，可以找到许多好看的主题。</p>
+<p>主题都有对应的使用文档，主题的配置不在此多说，可以参看下面这些链接：</p>
+<p>butterfly 文档：<a target="_blank" rel="noopener" href="https://butterfly.js.org/posts/21cfbf15/">Butterfly 安裝文檔(一) 快速開始 | Butterfly</a></p>
+<p>butterfly 主题魔改： <a target="_blank" rel="noopener" href="https://www.cnblogs.com/antmoe/p/12846393.html">Hexo博客之butterfly主题优雅魔改系列</a></p>
+<p>下载主题使用后，你会发现菜单栏的选项很少，只有归档，分类、标签都没有，那么你需要自己添加这些选项，做法在主题文档中也给出了，再给你一个参考链接： <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43350051/article/details/104923503">短短1天我学会了如何修改Butterfly的配置文件</a></p>
+<p><mark>主题的配置文档一定要认真读</mark> ，内容很多，不同的人有不同的表述方式，认真读就知道文档的具体含义了。</p>
+<blockquote>
+<p>主题配置补充</p>
+</blockquote>
+<p>虽然主题文档写的很详细，但我还是有些地方需要说明，以免部分小伙伴看不懂主题文档，在此以 butterfly 主题的文档为参考，其他主题的文档应该也差不多。</p>
+<p>在主题文档中，会涉及到这几个页面：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/front-matter.png" alt="front-matter"></p>
+<p>这里出现了两种页面 Page 页和 Post 页，那它们指的是什么意思呢？（Front-matter 指的是啥可以看主题文档的说明）</p>
+<p><strong>Page 页指的就是我们的博客文章详情页</strong> ，比如下图是博客文章在首页的样子，类似一张卡片，点一下可以查看文章的详细内容，跳转到的页面就是 Page 页（文章详情页）。</p>
+<p>文章首页卡片：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/文章首页卡片.png" alt="文章首页卡片" style="zoom: 50%;" />
+<p>Page页（文章详情页）：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/Page页.png" alt="Page页" style="zoom: 33%;" />
+<p>那 Post 页又是什么呢？</p>
+<p><strong>Post 页就是我们点击菜单栏选项后跳转的页面。</strong> Post 页都是使用命令 <code>hexo new page xxxx</code> 创建的页面，首页是主题本来就有的，因此不属于 Post 页。</p>
+<p>菜单栏选项（首页不属于 Post 页）：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/%E8%8F%9C%E5%8D%95%E6%A0%8F%E9%80%89%E9%A1%B9.png" alt="菜单栏选项"></p>
+<p>选中其中其中一个点击进去，就可以进入 Post 页，比如点击 “ 标签 ” ：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/标签页.png" alt="标签页" style="zoom: 33%;" />
+<p>进入的标签页就是一个 Post 页。</p>
+<p>还要说明一下 <strong>配置文件的区别</strong> ：</p>
+<p>下载 Hexo 后，进入博客文件夹，有一个名为 <code>_config.yml</code> 的文件，目录结构如下：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/主配置文件.png" alt="主配置文件" style="zoom: 50%;" />
+<p>这里的 <code>_config.yml</code> 文件是<mark>主配置文件</mark>，某些插件的使用需要在这里面添加一些配置。</p>
+<p>在主题文件中，可能也有一个名为 <code>_config.yml</code> 的文件，目录：<code>themes/主题名/_config.yml</code>。</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/主题配置文件.png" alt="主题配置文件" style="zoom:50%;" />
+<p>我们管这个 <code>_config.yml</code> 文件叫 <mark>主题配置文件</mark>，每一个主题都有一个主题配置文件，不同的主题中主题配置文件的内容不一样。 <strong>当需要对主题进行一些设置时，一般都是在主题配置文件中进行修改。</strong></p>
+<p><mark>还有很重要的一点：</mark> 这些配置文件都是 YML 文件，需要注意 YML 文件的正确书写方式，比如每个英文冒号后都要加一个空格，同级配置前的缩进保持一致等等。</p>
+<p>如果你阅读完上述内容，并成功实现了，那么一个博客基本就搭建完成了！ 🎉</p>
+<p>下文是我在搭建博客时遇到的一些问题和一些魔改，感兴趣可以阅读一下！😎</p>
+<h1 id="1-问题"><a class="header-anchor" href="#1-问题"></a>1. 问题</h1>
+<h2 id="1-1-hexo-abbrlink-插件"><a class="header-anchor" href="#1-1-hexo-abbrlink-插件"></a>1.1 hexo-abbrlink 插件</h2>
+<blockquote>
+<p>由来</p>
+</blockquote>
+<p>Hexo 框架中文章链接默认的生成规则是：<code>:year/:month/:day/:title</code>，即：按照年、月、日、标题来生成的。如果标题中没有中文还好，如果有中文，文章链接也会是中文，但是复制后的链接会变成 URL 编码形式表示的 ASCII 字符（十六进制格式）。很长一串，十分不好看，这时候可以选用安装 <code>hexo-abbrlink</code> 插件来解决。</p>
+<p>具体的安装方式参考：<a target="_blank" rel="noopener" href="https://yangchaoyi.vip/posts/520520/#%E5%9C%B0%E5%9D%80%E6%A0%8F%E6%B7%BB%E5%8A%A0-abbrlink">Hexo+Github 博客butterfly 和 matery 主题 搭建完全教程</a></p>
+<p>再补充一点，随着编写的博客数量的增加，存放 <code>.md</code> 文件的 <code>_post</code> 目录下的文件越来越多，给后续的检索和修改带来了诸多不便，其实 Hexo 是支持在 <code>_post</code> 目录下新建子目录的。在没有使用 <code>hexo-abbrlink</code> 插件的情况下，文章的详细链接与其在 <code>_post</code> 目录下的位置是有关系的，而在使用之后，无论其在哪个子目录下，最终的链接都是 <code>hexo-abbrlink</code> 所指定的，因此 <mark>强烈推荐使用该插件！</mark></p>
+<blockquote>
+<p>问题描述</p>
+</blockquote>
+<p>安装好插件后，给文章的 font 部分添加自定义 <code>abbrlink</code> 即可实现自定义文章链接。</p>
+<p>我在第一次自定义 <code>abbrlink</code> 时，没有将自定义的地址书写规范。有一天发现后，便前往文章修改，修改之后使用 <code>hexo -g</code> 命令可以看到修改后的文件，但部署后依旧没有修改，这导致在博客点击修改完的文章时直接显示 404。</p>
+<blockquote>
+<p>问题示例</p>
+</blockquote>
+<p>修改前： <code>abbrlink:Basic-CSS3-knowledge</code></p>
+<p>修改为：<code>abbrlink:Basic-CSS3-Knowledge</code>（Knowledge 的首字母修改为大写）</p>
+<p>然后一波操作：<code>hexo clean</code>、<code>hexo g</code>、<code>hexo d</code>，但在远程仓库中可以看到，文件的名字依旧没有改变，仍然是： <code>abbrlink:Basic-CSS3-knowledge</code>（这是因为 Git 不会检测文件夹名称是否修改）。</p>
+<p>之后前往博客网址，点击修改后地址的文章，不出意外地出现 404，地址栏为 <code>https://xxxxxxx/Basic-CSS3-knowledge</code>。😠</p>
+<p>同时在执行 <code>hexo d</code> 时，出现错误：😡</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The file will have its original line endings in your working directory.</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>解决方法</p>
+</blockquote>
+<p><s>暴力强制推送（不推荐，这会让你仓库的提交次数清零）：</s></p>
+<ul>
+<li><s>前往博客的文件夹，删除文件夹 <code>.deploy_git</code></s></li>
+<li><s>运行命令：<code>git config --global core.autocrlf false</code></s></li>
+<li><s>然后继续一波操作：<code>hexo clean</code>、<code>hexo g</code>、<code>hexo d</code></s></li>
+<li><s>前往远程仓库查看，名字更改成功</s></li>
+</ul>
+<p><strong>推荐的方式：</strong></p>
+<ul>
+<li>先在 <code>_posts</code> 文件夹中移除更改的文章</li>
+<li>部署一次博客</li>
+<li>再将移除的文章重新添加至 <code>_posts</code> 文件夹中</li>
+<li>最后再部署一次博客</li>
+</ul>
+<p>这种方式利用 Git 先移除旧文件，再重新生成新文件的方式完成名称的更改，并且使用这种方式不会对仓库的版本控制产生较大的影响。</p>
+<h2 id="1-2-无法显示社交图标"><a class="header-anchor" href="#1-2-无法显示社交图标"></a>1.2 无法显示社交图标</h2>
+<blockquote>
+<p>问题描述</p>
+</blockquote>
+<p>根据 Butterfly 的文档，可以在侧边栏添加社交图标，但是我的浏览器总是无法显示这些图标。同时，在文章页末尾可以设置分享按钮以分享文章，我的浏览器也无法显示。<strong>最奇怪的是，使用手机是可以看到这些内容的。</strong></p>
+<p>我曾一度认为是主题的 Bug，一直等待修复，直到一次升级主题，使用其他浏览器访问了博客，奇怪的事情发生了：社交图标和分享按钮可以正常显示。</p>
+<p>那么很显然就是浏览器的问题了。</p>
+<blockquote>
+<p>问题原因</p>
+</blockquote>
+<p>我最开始使用的是 Chrome（谷歌浏览器），无法正常显示，然后使用 QQ 浏览器可以正常访问。难道是 Chrome 的问题？</p>
+<p>可以说是，可以说不是。</p>
+<p>经过短暂的排查，我在 Chrome 上安装了广告拦截插件 <code>AdGuard</code>，就是因为这个插件对上面的内容进行了拦截才无法正常显示。</p>
+<blockquote>
+<p>解决方法</p>
+</blockquote>
+<ul>
+<li>不使用插件 <code>AdGuard</code></li>
+<li>更换广告拦截插件为 <code>AdBlock</code></li>
+<li>自定义插件 <code>AdGuard</code> 拦截规则</li>
+</ul>
+<blockquote>
+<p>错误关联</p>
+</blockquote>
+<p>因为插件 <code>AdGuard</code> 的拦截效果，也导致文章搜索功能迟迟无法成功添加。</p>
+<p>本地搜索插件一直被拦截，我也曾一度以为是搜索插件或主题的问题。</p>
+<h2 id="1-3-Node-js-版本过高？"><a class="header-anchor" href="#1-3-Node-js-版本过高？"></a>1.3 Node.js 版本过高？</h2>
+<p>运行 <code>hexo v</code> 命令，查看一下 Hexo 版本时可能会出现以下问题：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Warning: Accessing non-existent property &#x27;column&#x27; of module exports inside circular dependency</span><br><span class="line">Warning: Accessing non-existent property &#x27;filename&#x27; of module exports inside circular dependency</span><br></pre></td></tr></table></figure>
+<p>或者当执行 <code>hexo g</code> 时，出现以下问题：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Warning: Accessing non-existent property &#x27;column&#x27; of module exports inside circular dependency</span><br><span class="line">Warning: Accessing non-existent property &#x27;filename&#x27; of module exports inside circular dependency</span><br></pre></td></tr></table></figure>
+<p>出现以上两种问题很有可能是因为 Node.js 版本过高，建议换成低版本的 Node.js。</p>
+<p>比如：出现上述错误时，我的 Node.js 的版本是 14.15，最后我将其卸载重新安装了 12.18  版本的 Node.js 就解决了问题。</p>
+<p>总的来说，不建议使用版本过于高的软件，指不定会出现什么错误，而且很有可能还找不到资料。</p>
+<h2 id="1-4-重建博客时运行错误"><a class="header-anchor" href="#1-4-重建博客时运行错误"></a>1.4 重建博客时运行错误</h2>
+<blockquote>
+<p>情况一：未按要求创建文件夹</p>
+</blockquote>
+<p>在选定目录下执行完 <code>hexo init</code> 命令后，会生成博客的基本骨架，source 目录下有且仅有一个名为 <code>_posts</code> 的目录。如果曾经搭建过 Hexo 博客，很有可能会直接将旧博客目录下的 source 文件夹直接复制到新的博客目录下，但这也很有可能带来问题。</p>
+<p><mark>建议</mark> 在博客目录下执行 <code>hexo new page tags</code> 类似的命令生成对应的文件夹。比如前面的命令就是生成名为 tags 的文件夹，用于存放博客文章的分类，如果想要生成其他文件夹，将 tags 更改为想要生成的文件夹名称即可。</p>
+<blockquote>
+<p>情况二：插件缺失</p>
+</blockquote>
+<p>重建博客后运行 <code>hexo g</code> 时很有可能因为 <mark>缺失某些插件</mark> 而导致出现某些错误。</p>
+<p><strong>如果出现错误，建议检查插件是否缺失。</strong></p>
+<p>在此列举一下本站所使用的插件：</p>
+<ul>
+<li>butterfly 主题必备渲染插件： pug 以及 stylus 的渲染器：</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-renderer-pug hexo-renderer-stylus --save</span><br></pre></td></tr></table></figure>
+<ul>
+<li>文章字数统计插件：</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-wordcount --save</span><br></pre></td></tr></table></figure>
+<ul>
+<li><s>本地搜索插件：</s> （本站使用 DocSearch 实现搜索功能）</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-generator-search --save</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Markdown 渲染器与 emoji 表情显示插件：</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">卸载默认渲染引擎</span></span><br><span class="line">npm un hexo-renderer-marked --save</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装新的渲染引擎</span></span><br><span class="line">npm i hexo-renderer-markdown-it --save</span><br><span class="line">npm i markdown-it-mark --save</span><br><span class="line">npm i markdown-it-footnote --save</span><br><span class="line">npm i markdown-it-sup --save</span><br><span class="line">npm i markdown-it-sub --save</span><br><span class="line">npm i markdown-it-abbr --save</span><br><span class="line">npm i markdown-it-emoji --save</span><br><span class="line">npm i markdown-it-checkbox --save</span><br><span class="line">npm i katex @renbaoshuo/markdown-it-katex</span><br></pre></td></tr></table></figure>
+<ul>
+<li>地址栏美化，文章永久链接插件：</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-abbrlink --save</span><br></pre></td></tr></table></figure>
+<ul>
+<li>RSS 订阅插件：</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-generator-feed --save</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Git 部署插件：</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save hexo-deployer-git</span><br></pre></td></tr></table></figure>
+<ul>
+<li><s>解析 Mermaid：</s> （Butterfly 5.0.0 已支持使用代码块编写 Mermaid 图表）</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i mofan212/hexo-filter-mermaid-diagrams --save</span><br></pre></td></tr></table></figure>
+<ul>
+<li>其他必要的插件：</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-generator-sitemap hexo-generator-archive --save</span><br></pre></td></tr></table></figure>
+<h2 id="1-5-YAML-语法报错"><a class="header-anchor" href="#1-5-YAML-语法报错"></a>1.5 YAML 语法报错</h2>
+<p>最近在网上看到一款不错的字体：<a target="_blank" rel="noopener" href="https://github.com/lxgw/LxgwWenKai">霞鹜文楷</a>，于是想把它作为网站的全局字体。</p>
+<p>以 Butterfly 主题为例，在 <strong>主题配置文件</strong> 中引入字体所需的 CSS 文件：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">inject:</span></span><br><span class="line">  <span class="attr">head:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">&lt;link</span> <span class="string">rel=&quot;stylesheet&quot;</span> <span class="string">href=&quot;https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.1.0/style.css&quot;</span> <span class="string">/&gt;</span></span><br></pre></td></tr></table></figure>
+<p>然后修改博客的全局字体：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">font:</span></span><br><span class="line">  <span class="attr">global-font-size:</span> <span class="string">15px</span></span><br><span class="line">  <span class="attr">code-font-size:</span> <span class="string">16px</span> </span><br><span class="line">  <span class="attr">font-family:</span> <span class="string">&quot;LXGW WenKai Screen&quot;</span><span class="string">,</span> <span class="string">&quot;Microsoft YaHei&quot;</span><span class="string">,</span> <span class="string">sans-serif</span></span><br><span class="line">  <span class="attr">code-font-family:</span></span><br></pre></td></tr></table></figure>
+<p>你觉得上面这些配置有问题吗？</p>
+<p>其实是有问题的，在执行 <code>hexo g</code> 命令时会显示 YAML 语法解析错误。这是为什么呢？</p>
+<p>YAML 是 JSON 的超集，上述 <code>font-family</code> 后的内容需要被解析为字符串，在没有转义字符和显式声明其为一个字符串的情况下是无法解析成功的，因此需要 <strong>使用单引号将其显式声明其内容为一个字符串：</strong></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">font:</span></span><br><span class="line">  <span class="attr">global-font-size:</span> <span class="string">15px</span></span><br><span class="line">  <span class="attr">code-font-size:</span> <span class="string">16px</span> </span><br><span class="line">  <span class="attr">font-family:</span> <span class="string">&#x27;&quot;LXGW WenKai Screen&quot;, &quot;Microsoft YaHei&quot;, sans-serif&#x27;</span></span><br><span class="line">  <span class="attr">code-font-family:</span></span><br></pre></td></tr></table></figure>
+<h2 id="1-6-LaTex-公式重复显示"><a class="header-anchor" href="#1-6-LaTex-公式重复显示"></a>1.6 LaTex 公式重复显示</h2>
+<p>先说结论：LaTex 渲染插件冲突，比如 Katex 和 Mathjax 冲突，移除其中一个即可。</p>
+<p>可以从这些地方尝试修改：</p>
+<ul>
+<li>安装了多种渲染插件，尝试 <strong>只保留一个</strong>，这些渲染插件有：</li>
+</ul>
+<pre>
+hexo-renderer-marked
+hexo-renderer-kramed
+@renbaoshuo/markdown-it-katex
+@upupming/hexo-renderer-markdown-it-plus
+</pre> 
+<p><code>@renbaoshuo/markdown-it-katex</code> 插件依赖 <code>hexo-renderer-markdown-it</code> 插件，而在使用 <code>hexo-renderer-markdown-it</code> 插件时，需要移除 Hexo 默认的 Markdown 渲染插件 <code>hexo-renderer-marked</code>， <strong>这也需要注意一下！</strong></p>
+<ul>
+<li>在使用了某些主题后，需要在主题配置文件中打开 MathJax 或 KaTeX 的配置，也可能出现重复显示的情况。我在使用 butterfly 主题时就是因为没有进行配置出现了重复显示的情况。</li>
+</ul>
+<h2 id="1-7-Win11-PowerShell-无法执行-hexo-命令"><a class="header-anchor" href="#1-7-Win11-PowerShell-无法执行-hexo-命令"></a>1.7 Win11 PowerShell 无法执行 hexo 命令</h2>
+<p>全局安装 Hexo 后，在 Git Bash 能够运行 <code>hexo</code> 的相关命令，但在 Win11 的 PowerShell 中无法运行，提示“无法加载文件”。</p>
+<p>以管理员身份运行 PowerShell，执行以下命令即可解决：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-ExecutionPolicy -ExecutionPolicy UNRESTRICTED</span><br></pre></td></tr></table></figure>
+<h2 id="1-8-归档页面-404"><a class="header-anchor" href="#1-8-归档页面-404"></a>1.8 归档页面 404</h2>
+<p>某次在点击归档后跳转到了自定义的 404 页面，为什么归档页面会 404 呢？这不是 Hexo 自动生成的吗？</p>
+<p>在本地执行 <code>hexo s</code> 命令本地启动后，再点击归档页面，显示 <code>Cannot GET /archives/</code>，出现类似信息表示在博客根目录下的 <code>public</code> 目录下不存在指定目录，这里表示不存在 <code>archives</code> 目录，为什么会不存在呢？这不是 Hexo 自动生成的吗？</p>
+<p>Hexo 是通过 <code>hexo-generator-archive</code> 插件来实现归档页面的，首次执行 <code>hexo init</code> 命令后，会自动安装该插件。执行 <code>hexo g</code> 命令时会在 <code>public</code> 目录下生成 <code>archives</code> 目录，此处没有该目录可能是因为某些误操作移除了该插件，而在 <code>node_modules</code> 目录下查看是否缺少 <code>hexo-generator-archive</code> 插件时，确实也没有此插件。</p>
+<p>执行以下命令安装插件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-generator-archive --save</span><br></pre></td></tr></table></figure>
+<p>安装完成后重新部署博客。</p>
+<h2 id="1-9-消失的历史评论"><a class="header-anchor" href="#1-9-消失的历史评论"></a>1.9 消失的历史评论</h2>
+<p>本站选用的评论系统是 <a target="_blank" rel="noopener" href="https://twikoo.js.org/">Twikoo</a>，近日从 Zeabur 部署更换为 Netlify 部署，但在更换之后，历史评论和先前设置的管理员密码都丢失了。</p>
+<p>最初采用 Zeabur 部署时，使用 MongoDB 官方的数据库对 Twikoo 的评论和设置进行了存储，切换成 Netlify 后，也依旧使用了相同的 MongoDB 连接，按理说信息不应该会丢失。</p>
+<p>尝试配置新的管理员密码，能够成功配置，这说明 MongoDB 的连接没有问题，那到底是哪里出了问题？</p>
+<p>查看 MongoDB 中的数据：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/%E6%96%B0%E5%A2%9E%E7%9A%84test%E6%95%B0%E6%8D%AE%E5%BA%93.png" alt="新增的test数据库"></p>
+<p>发现新增了 <code>test</code> 数据库，而历史评论和配置则是在 <code>twikoo</code> 库中。也就是说，历史评论和配置会消失是因为连错了数据库。那为什么会连错数据库呢？这或许要从源码入手。</p>
+<p>查看 fork 的 <a target="_blank" rel="noopener" href="https://github.com/twikoojs/twikoo-netlify">twikoojs/twikoo-netlify</a> 库中 <code>twikoo.js</code> 的源码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">exports</span>.<span class="property">handler</span> = <span class="built_in">require</span>(<span class="string">&#x27;twikoo-netlify&#x27;</span>).<span class="property">handler</span></span><br></pre></td></tr></table></figure>
+<p>导入了 <code>twikoo-netlify</code> 模块，上 <a target="_blank" rel="noopener" href="https://www.npmjs.com/">NPM</a> 查看该模块的源码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> twikoo = <span class="built_in">require</span>(<span class="string">&#x27;twikoo-vercel&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>源码第一行导入了 <code>twikoo-vercel</code> 模块，并且在注释中说明：</p>
+<pre>
+Netlify 函数兼容 Vercel 函数实现，复用 Twikoo Vercel 函数代码
+</pre>
+<p>那再看看 <code>twikoo-vercel</code> 的源码，这个模块的源码就比较多了，在开头有这么一句：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title class_">MongoClient</span> = <span class="built_in">require</span>(<span class="string">&#x27;mongodb&#x27;</span>).<span class="property">MongoClient</span></span><br></pre></td></tr></table></figure>
+<p>不难猜出在源码中存在连接 MongoDB 的逻辑，使用 <code>MongoClient</code> 进行搜索，能够看到这样一个函数：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 全局变量 / variables</span></span><br><span class="line"><span class="keyword">let</span> db = <span class="literal">null</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// --snip--</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// A function for connecting to MongoDB,</span></span><br><span class="line"><span class="comment">// taking a single parameter of the connection string</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">connectToDatabase</span> (<span class="params">uri</span>) &#123;</span><br><span class="line">  <span class="comment">// If the database connection is cached,</span></span><br><span class="line">  <span class="comment">// use it instead of creating a new connection</span></span><br><span class="line">  <span class="keyword">if</span> (db) <span class="keyword">return</span> db</span><br><span class="line">  <span class="keyword">if</span> (!uri) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&#x27;未设置环境变量 MONGODB_URI&#x27;</span>)</span><br><span class="line">  <span class="comment">// If no connection is cached, create a new one</span></span><br><span class="line">  logger.<span class="title function_">info</span>(<span class="string">&#x27;Connecting to database...&#x27;</span>)</span><br><span class="line">  <span class="keyword">const</span> client = <span class="keyword">await</span> <span class="title class_">MongoClient</span>.<span class="title function_">connect</span>(uri, &#123;</span><br><span class="line">    <span class="attr">useNewUrlParser</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">useUnifiedTopology</span>: <span class="literal">true</span></span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="comment">// Select the database through the connection,</span></span><br><span class="line">  <span class="comment">// using the database path of the connection string</span></span><br><span class="line">  db = <span class="keyword">await</span> client.<span class="title function_">db</span>((<span class="keyword">new</span> <span class="title function_">URL</span>(uri)).<span class="property">pathname</span>.<span class="title function_">substr</span>(<span class="number">1</span>))</span><br><span class="line">  <span class="comment">// Cache the database connection and return the connection</span></span><br><span class="line">  logger.<span class="title function_">info</span>(<span class="string">&#x27;Connected to database&#x27;</span>)</span><br><span class="line">  <span class="keyword">return</span> db</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个函数用于连接到指定 uri 的 MongoDB，其中的 <code>db</code> 显然是要连接的库，它的值是通过截取 <code>pathname</code> 得到的，那 <code>uri</code> 是什么呢？看看哪里调用了它：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">await</span> <span class="title function_">connectToDatabase</span>(process.<span class="property">env</span>.<span class="property">MONGODB_URI</span>)</span><br></pre></td></tr></table></figure>
+<p>大胆推测 <code>process.env.MONGODB_URI</code> 就是在 Netlify 中配置的 <code>MONGODB_URI</code> 环境变量。也就是说，在 MongoDB 的连接中一定存在指定连接哪个数据库的配置，<a target="_blank" rel="noopener" href="https://www.runoob.com/mongodb/mongodb-connections.html">MongoDB 连接</a> 一文中指出 MongoDB 标准 URI 连接语法是：</p>
+<pre>
+mongodb://[username:password@]host1[:port1][,host2[:port2],...[,hostN[:portN]]][/[database][?options]]
+</pre>
+<p>并且说明 <code>/database</code> 是要连接的数据库，在不指定的情况下，默认打开 <code>test</code> 数据库。</p>
+<p>对味了，感觉正在一步步地接近真相。</p>
+<p>先前在 Netlify 中配置的 <code>MONGODB_URI</code> 环境变量类似：</p>
+<pre>
+<font>mongodb+srv://&lt;username&gt;:&lt;password&gt;@cluster0.sxuss9s.mongodb.net/?retryWrites=true&w=majority</font>
+</pre>
+<p>确实没有显式指定连接的数据库，那就修改环境变量并指定连接的数据库是 <code>twikoo</code>：</p>
+<pre>
+<font>mongodb+srv://&lt;username&gt;:&lt;password&gt;@cluster0.sxuss9s.mongodb.net/<font style="color:red">twikoo</font>?retryWrites=true&w=majority</font>
+</pre>
+<p>之后在 Netlify 左侧的菜单中点击 Deploys 进入到部署界面，点击 Trigger deploy 手动重新部署。</p>
+<p>回到博客，发现历史评论和配置的管理员密码都回来了！ 🎉</p>
+<blockquote>
+<p>一些感受</p>
+</blockquote>
+<p>解决方式虽然简单，但它离不开一系列分析，因此花了大量的篇幅讲述分析过程，从源码入手，逐步定位，再到解决问题。</p>
+<p>现实世界中，谁都有可能欺骗你，但在计算机的世界中，源码不会欺骗你。</p>
+<h1 id="2-一些魔改"><a class="header-anchor" href="#2-一些魔改"></a>2. 一些魔改</h1>
+<h2 id="2-1-移除文章页侧边栏滚动条"><a class="header-anchor" href="#2-1-移除文章页侧边栏滚动条"></a>2.1 移除文章页侧边栏滚动条</h2>
+<p>本次修改基于 Butterfly 主题。</p>
+<p>前往 blog – themes – Butterfly – layout – includes – sidebar.pug 进行修改，在下图所示的位置添加 <code>(style=&quot;overflow: hidden;&quot;)</code> 即可。</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/%E7%A7%BB%E9%99%A4%E6%96%87%E7%AB%A0%E4%BE%A7%E8%BE%B9%E6%A0%8F%E6%BB%9A%E5%8A%A8%E6%9D%A1.png" alt="移除文章侧边栏滚动条"></p>
+<h2 id="2-2-查看网页-RSS"><a class="header-anchor" href="#2-2-查看网页-RSS"></a>2.2 查看网页 RSS</h2>
+<p>本次修改基于 Butterfly 3.0.0。</p>
+<blockquote>
+<p>操作步骤</p>
+</blockquote>
+<ul>
+<li>下载插件 <code>hexo-generator-feed</code></li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo<span class="literal">-generator-feed</span> <span class="literal">--save</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>在 hexo 的主配置文件 <code>_config.yml</code> 中任意位置添加以下代码：</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">feed:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">atom</span></span><br><span class="line">  <span class="attr">path:</span> <span class="string">atom.xml</span></span><br><span class="line">  <span class="attr">limit:</span> <span class="number">20</span></span><br><span class="line">  <span class="attr">hub:</span></span><br><span class="line">  <span class="attr">content:</span></span><br><span class="line">  <span class="attr">content_limit:</span> <span class="number">140</span></span><br><span class="line">  <span class="attr">content_limit_delim:</span> <span class="string">&#x27; &#x27;</span></span><br><span class="line">  <span class="attr">order_by:</span> <span class="string">-date</span></span><br><span class="line">  <span class="attr">icon:</span> <span class="string">icon.png</span></span><br><span class="line">  <span class="attr">autodiscovery:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">template:</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>修改 butterfly 主题配置文件 <code>_config.yml</code> ，添加 RSS 的图标：</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">social:</span></span><br><span class="line">  <span class="attr">fa fa-rss:</span> <span class="string">/atom.xml</span> <span class="string">||</span> <span class="string">RSS链接</span></span><br></pre></td></tr></table></figure>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo-generator-feed">hexo-generator-feed</a></p>
+<h2 id="2-3-分割线图标更换"><a class="header-anchor" href="#2-3-分割线图标更换"></a>2.3 分割线图标更换</h2>
+<p>本次修改基于 Butterfly 3.0.0。</p>
+<p>将图标更换为“太空飞船”。</p>
+<blockquote>
+<p>操作步骤</p>
+</blockquote>
+<p>修改 butterfly 主题配置文件 <code>_config.yml</code> ：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">hr_icon:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">icon:</span> <span class="string">&#x27;\f197&#x27;</span> <span class="comment"># the unicode value of Font Awesome icon</span></span><br><span class="line">  <span class="attr">icon-top:</span> <span class="string">-10px</span></span><br></pre></td></tr></table></figure>
+<p><code>icon-top</code> 常用数值：</p>
+<p>-20px：图标位于分割线上方</p>
+<p>-10px：图标位于分割线中间</p>
+<p>0px：图标位于分割线下方</p>
+<p>效果图：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/%E5%88%86%E5%89%B2%E7%BA%BF%E5%9B%BE%E6%A0%87.png" alt="分割线图标"></p>
+<h2 id="2-4-实现-CheckBox"><a class="header-anchor" href="#2-4-实现-CheckBox"></a>2.4 实现 CheckBox</h2>
+<blockquote>
+<p>前言</p>
+</blockquote>
+<p>Hexo 默认的 Markdown 渲染引擎名为：<code>hexo-renderer-marked</code>，但这个引擎无法实现 emoji 表情，因此我将它更换为 <code>hexo-renderer-markdown-it</code>，据说它比默认的引擎渲染速度更快，它也支持很多插件，可以实现 emoji 表情的使用。</p>
+<p>某日，我想利用 Markdown 实现 CheckBox，列出自己的计划，但是 <code>markdown-it</code> 引擎默认是不支持 CheckBox，需要使用第三方插件。</p>
+<blockquote>
+<p>实现</p>
+</blockquote>
+<p>在 GitHub 上选了三种插件，分别是 <code>markdown-it-task-lists</code>、<code>markdown-it-task-checkbox</code> 和 <code>markdown-it-checkbox</code>，最终选择了 <code>markdown-it-checkbox</code> 插件，其他两个插件的使用效果都不太好。</p>
+<p><code>markdown-it-checkbox</code> 插件也有一些问题，需要小改一下。</p>
+<p>先在博客 <strong>根目录</strong> 下安装插件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install markdown-it-checkbox --save</span><br></pre></td></tr></table></figure>
+<p>然后在博客 <strong>主题文件夹</strong> 下 <code>\source\css</code> 创建一个 CSS 文件，将下面的代码复制到文件中，并 <strong>在主题配置文件内引用这个 CSS 文件：</strong></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">input</span><span class="selector-attr">[type=<span class="string">&quot;checkbox&quot;</span>]</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: none <span class="meta">!important</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-tag">input</span><span class="selector-attr">[type=<span class="string">&quot;checkbox&quot;</span>]</span> + <span class="selector-tag">label</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">&#x27;\a0&#x27;</span>;</span><br><span class="line">  <span class="attribute">display</span>: inline-block;</span><br><span class="line">  <span class="attribute">margin-right</span>: <span class="number">0.2em</span>;</span><br><span class="line">  <span class="attribute">border</span>: <span class="number">1px</span> solid;</span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">0.2em</span>;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">0.8em</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">0.8em</span>;</span><br><span class="line">  <span class="attribute">vertical-align</span>: <span class="number">0.1em</span>;</span><br><span class="line">  <span class="attribute">text-indent</span>: <span class="number">0.1em</span>;</span><br><span class="line">  <span class="attribute">line-height</span>: <span class="number">0.7</span>;</span><br><span class="line">  <span class="attribute">cursor</span>: not-allowed;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-tag">input</span><span class="selector-attr">[type=<span class="string">&quot;checkbox&quot;</span>]</span><span class="selector-pseudo">:checked</span> + <span class="selector-tag">label</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">&#x27;\2714&#x27;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>到此，美化就完毕了。这时的 CheckBox 并不是只读的，如果想要设置成只读，可以在博客 <strong>主题文件夹</strong> 下 <code>\source\js</code> 创建一个 JS 文件，将下面的代码复制到文件中，并 <strong>在主题配置文件内引用这个 JS 文件：</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*设置 checkbox 为只读*/</span></span><br><span class="line">$(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">    $(<span class="string">&quot;input[type=&#x27;checkbox&#x27;]&quot;</span>).<span class="title function_">click</span>(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">checked</span> = !<span class="variable language_">this</span>.<span class="property">checked</span>;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>最终效果可以在本站的【计划】一栏中看到效果。</p>
+<p><strong>从 Butterfly 3.4.0 开始，移除了 JQuery，因此需要采用原生 JS 的方式实现上述 JQuery 代码：</strong></p>
+ <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="property">onload</span> = <span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> inputs =  <span class="variable language_">document</span>.<span class="title function_">getElementsByTagName</span>(<span class="string">&quot;input&quot;</span>);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i &lt; inputs.<span class="property">length</span>; i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(inputs[i].<span class="property">type</span> == <span class="string">&quot;checkbox&quot;</span>)&#123;</span><br><span class="line">            inputs[i].<span class="property">onclick</span> = <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">                <span class="variable language_">this</span>.<span class="property">checked</span> = !<span class="variable language_">this</span>.<span class="property">checked</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>语法</p>
+</blockquote>
+<p>这种插件的 CheckBox 语法和 Typora 语法不一样。</p>
+<p>Typora 语法是：<code>-空格[空格]</code></p>
+<p>该插件语法是：<code>[空格] </code>，简单来说就是没有前面的 <code>-</code>。</p>
+<p>如果要实现选择已勾选的话，在中括号里添加 <code>x</code>，即 <code>[x]</code>。</p>
+<h2 id="2-5-添加图片边框"><a class="header-anchor" href="#2-5-添加图片边框"></a>2.5 添加图片边框</h2>
+<p>本节内容基于 Butterfly 5.2.1。</p>
+<p>在博客 <strong>主题文件夹</strong> 下 <code>\source\css</code> 创建一个 CSS 文件，将下面的代码复制到文件中，并在主题配置文件内引用这个 CSS 文件：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 文章图片增加边框*/</span></span><br><span class="line"><span class="selector-id">#post</span> <span class="selector-tag">img</span><span class="selector-attr">[class^=entered]</span><span class="selector-attr">[class$=loaded]</span>&#123;</span><br><span class="line">    <span class="attribute">display</span>: block;</span><br><span class="line">    <span class="attribute">border</span>: <span class="number">5px</span> solid <span class="number">#ddd</span>;</span><br><span class="line">    <span class="attribute">padding</span>: <span class="number">5px</span>;</span><br><span class="line">    <span class="attribute">background</span>: <span class="number">#fff</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-6-使用-Mermaid"><a class="header-anchor" href="#2-6-使用-Mermaid"></a>2.6 使用 Mermaid</h2>
+<p>Mermaid 是一个用于画流程图、状态图、时序图、甘特图的库，使用 JS 进行本地渲染，广泛集成于许多 Markdown 编辑器中。</p>
+<p>Typora 也支持使用 Mermaid 绘制流程图、状态图、时序图和甘特图。在 Typora 中的基本语法是：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="code">```mermaid</span></span><br><span class="line"><span class="code">内容</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">但在 Butterfly 主题中并不支持使用这种语法，而是采用了标签外挂（Tag Plugins）进行实现，基本语法是：</span><br><span class="line"></span><br><span class="line">```markdown</span><br><span class="line">&#123;% mermaid %&#125;</span><br><span class="line">内容</span><br><span class="line">&#123;% endmermaid %&#125;</span><br></pre></td></tr></table></figure>
+<p>为了能够不进行任何修改就能直接将使用 Typora 编写的 Markdown 文件迁移到 Hexo 中，使用 Mermaid 时采用的语法最好与 Typora 中一致。</p>
+<blockquote>
+<p>解决方案（适用于 Butterfly 5.0.0 及以上版本）</p>
+</blockquote>
+<p><strong>前提：</strong></p>
+<ul>
+<li>Butterfly 主题版本需要 5.0.0 及以上版本</li>
+<li>Hexo 版本需要  7.0.0 及以上版本</li>
+<li>如果使用了旧版解决方案，最好先执行 <code>npm uninstall hexo-filter-mermaid-diagrams</code> 卸载所安装的插件</li>
+</ul>
+<p><strong>修改配置文件：</strong></p>
+<p>Hexo 的配置文件添加 <code>exclude_languages: ['mermaid']</code>：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">highlight:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">line_number:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">auto_detect:</span> <span class="literal">false</span></span><br><span class="line">  <span class="attr">tab_replace:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line">  <span class="attr">wrap:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">hljs:</span> <span class="literal">false</span></span><br><span class="line">  <span class="attr">exclude_languages:</span> [<span class="string">&#x27;mermaid&#x27;</span>]</span><br><span class="line"><span class="attr">prismjs:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">false</span></span><br><span class="line">  <span class="attr">preprocess:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">line_number:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">tab_replace:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line">  <span class="attr">exclude_languages:</span> [<span class="string">&#x27;mermaid&#x27;</span>]</span><br></pre></td></tr></table></figure>
+<p>Butterfly 主题配置文件开启 <code>code_write</code>，表示以代码块的形式编写 Mermaid 图表：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">mermaid:</span></span><br><span class="line">  <span class="comment"># 启用 Mermaid</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="comment"># 使用代码块编写 Mermaid 图表</span></span><br><span class="line">  <span class="attr">code_write:</span> <span class="literal">true</span></span><br><span class="line">  <span class="comment"># built-in themes: default / forest / dark / neutral</span></span><br><span class="line">  <span class="attr">theme:</span></span><br><span class="line">    <span class="attr">light:</span> <span class="string">default</span></span><br><span class="line">    <span class="attr">dark:</span> <span class="string">dark</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>解决方法（适用于 Butterfly 5.0.0 以下版本）</p>
+</blockquote>
+<p>在博客目录下安装插件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-filter-mermaid-diagrams --save</span><br></pre></td></tr></table></figure>
+<p>在 Hexo 的配置文件 <code>_config.yml</code> 中添加以下配置：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Mermaid tag</span></span><br><span class="line"><span class="attr">mermaid:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="comment"># Available themes: default | dark | forest | neutral</span></span><br><span class="line">  <span class="attr">theme:</span></span><br><span class="line">    <span class="attr">light:</span> <span class="string">default</span></span><br><span class="line">    <span class="attr">dark:</span> <span class="string">dark</span></span><br></pre></td></tr></table></figure>
+<p>在 Butterfly 主题的配置文件 <code>_config.yml</code> 中引入 <code>mermaid.min.js</code>：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">inject:</span></span><br><span class="line">  <span class="attr">head:</span></span><br><span class="line">    <span class="comment"># - &lt;link rel=&quot;stylesheet&quot; href=&quot;/xxx.css&quot;&gt;</span></span><br><span class="line">  <span class="attr">bottom:</span></span><br><span class="line">    <span class="comment"># - &lt;script src=&quot;xxxx&quot;&gt;&lt;/script&gt;</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">&lt;script</span> <span class="string">src=&quot;https://unpkg.com/mermaid/dist/mermaid.min.js&quot;&gt;&lt;/script&gt;</span></span><br></pre></td></tr></table></figure>
+<p>参考链接：</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/moshuying/p/15801437.html">【hexo指南】hexo配置ER图流程图时序图插件</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/webappdevelp/hexo-filter-mermaid-diagrams">webappdevelp/hexo-filter-mermaid-diagrams: mermaid diagrams for hexo</a></p>
+<h1 id="3-最佳实践"><a class="header-anchor" href="#3-最佳实践"></a>3. 最佳实践</h1>
+<h2 id="3-1-Markdown-编写建议"><a class="header-anchor" href="#3-1-Markdown-编写建议"></a>3.1 Markdown 编写建议</h2>
+<p>接受以下建议能够使得 Markdown 在不同的场景更正确地进行渲染：</p>
+<ul>
+<li>
+<p>对文字进行加粗、高亮、删除、斜体等操作时，Markdown 语法前后前后使用空格隔开，比如：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">空格<span class="strong">**加粗**</span>空格</span><br><span class="line">空格==高亮==空格</span><br><span class="line">空格~~删除~~空格</span><br><span class="line">空格<span class="emphasis">_斜体_</span>空格</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>Emoji 表情前后使用空格隔开，比如：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">空格👻空格</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/Something-About-Blog/">https://mofan212.github.io/posts/Something-About-Blog/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Hexo/">Hexo</a></div><div class="post-share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" data-sites="wechat,qq,weibo,facebook,x"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/Basic-JS-Knowledge/" title="应该知晓的JS知识"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/21.png" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">应该知晓的JS知识</div></div><div class="info-2"><div class="info-item-1">本文介绍了 JavaScript 中的一些基本概念，以及如何操作 BOM 与 DOM。</div></div></div></a><a class="pagination-related" href="/posts/SpringBoot-Web-Basic-Knowledge/" title="SpringBoot-Web开发须知"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/24.jpg" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">SpringBoot-Web开发须知</div></div><div class="info-2"><div class="info-item-1">本文基于SpringBoot 2.2.4 ，介绍了在使用SpringBoot开发Web项目前应该知晓的知识。</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/How-to-install-Node.js-and-update-Hexo/" title="Node.js 的安装与 Hexo 的升级"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/66.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-11-06</div><div class="info-item-2">Node.js 的安装与 Hexo 的升级</div></div><div class="info-2"><div class="info-item-1">本文介绍了如何安装与卸载 Node.js、安装 Yarn 以及如何升级 Hexo 版本。</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">默烦</div><div class="author-info-description">彩笔的打怪升级之路...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mofan212"><i class="fab fa-github"></i><span>follow me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解。<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a href="./mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载。😊</br><strong><font style="color:red">严禁未遵循规范的转载。</font></strong>😡</br><strong>死去的评论系统复活啦！欢迎到留言板畅所欲言！</strong>当然也可以使用更高效的<a target="_blank" href="https://space.bilibili.com/23658864/dynamic" style="color:#49B1F5;text-decoration:underline"> 哔哩哔哩私信 </a>或<a href="mailto:cy.mofan@foxmail.com" style="color:#49B1F5;text-decoration:underline" target="_blank">邮箱</a>。 😉</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0-%E5%89%8D%E8%A8%80"><span class="toc-text">0. 前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0-1-%E6%9C%AC%E6%96%87%E9%A1%BB%E7%9F%A5"><span class="toc-text">0.1 本文须知</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0-2-%E5%A6%82%E4%BD%95%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2"><span class="toc-text">0.2 如何搭建博客</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E9%97%AE%E9%A2%98"><span class="toc-text">1. 问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-hexo-abbrlink-%E6%8F%92%E4%BB%B6"><span class="toc-text">1.1 hexo-abbrlink 插件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E6%97%A0%E6%B3%95%E6%98%BE%E7%A4%BA%E7%A4%BE%E4%BA%A4%E5%9B%BE%E6%A0%87"><span class="toc-text">1.2 无法显示社交图标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-Node-js-%E7%89%88%E6%9C%AC%E8%BF%87%E9%AB%98%EF%BC%9F"><span class="toc-text">1.3 Node.js 版本过高？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-%E9%87%8D%E5%BB%BA%E5%8D%9A%E5%AE%A2%E6%97%B6%E8%BF%90%E8%A1%8C%E9%94%99%E8%AF%AF"><span class="toc-text">1.4 重建博客时运行错误</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-5-YAML-%E8%AF%AD%E6%B3%95%E6%8A%A5%E9%94%99"><span class="toc-text">1.5 YAML 语法报错</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-6-LaTex-%E5%85%AC%E5%BC%8F%E9%87%8D%E5%A4%8D%E6%98%BE%E7%A4%BA"><span class="toc-text">1.6 LaTex 公式重复显示</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-7-Win11-PowerShell-%E6%97%A0%E6%B3%95%E6%89%A7%E8%A1%8C-hexo-%E5%91%BD%E4%BB%A4"><span class="toc-text">1.7 Win11 PowerShell 无法执行 hexo 命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-8-%E5%BD%92%E6%A1%A3%E9%A1%B5%E9%9D%A2-404"><span class="toc-text">1.8 归档页面 404</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-9-%E6%B6%88%E5%A4%B1%E7%9A%84%E5%8E%86%E5%8F%B2%E8%AF%84%E8%AE%BA"><span class="toc-text">1.9 消失的历史评论</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E4%B8%80%E4%BA%9B%E9%AD%94%E6%94%B9"><span class="toc-text">2. 一些魔改</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E7%A7%BB%E9%99%A4%E6%96%87%E7%AB%A0%E9%A1%B5%E4%BE%A7%E8%BE%B9%E6%A0%8F%E6%BB%9A%E5%8A%A8%E6%9D%A1"><span class="toc-text">2.1 移除文章页侧边栏滚动条</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E6%9F%A5%E7%9C%8B%E7%BD%91%E9%A1%B5-RSS"><span class="toc-text">2.2 查看网页 RSS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E5%88%86%E5%89%B2%E7%BA%BF%E5%9B%BE%E6%A0%87%E6%9B%B4%E6%8D%A2"><span class="toc-text">2.3 分割线图标更换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-%E5%AE%9E%E7%8E%B0-CheckBox"><span class="toc-text">2.4 实现 CheckBox</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-5-%E6%B7%BB%E5%8A%A0%E5%9B%BE%E7%89%87%E8%BE%B9%E6%A1%86"><span class="toc-text">2.5 添加图片边框</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-6-%E4%BD%BF%E7%94%A8-Mermaid"><span class="toc-text">2.6 使用 Mermaid</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="toc-text">3. 最佳实践</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-Markdown-%E7%BC%96%E5%86%99%E5%BB%BA%E8%AE%AE"><span class="toc-text">3.1 Markdown 编写建议</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/Something-About-Blog/" title="博客搭建与维护"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="博客搭建与维护"/></a><div class="content"><a class="title" href="/posts/Something-About-Blog/" title="博客搭建与维护">博客搭建与维护</a><time datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"/></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="更新于 2026-01-03 00:00:00">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"/></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/103.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 的类资源加载"/></a><div class="content"><a class="title" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载">Java 的类资源加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/20.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="注解、类的加载、反射"/></a><div class="content"><a class="title" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射">注解、类的加载、反射</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/ren-zhi-jue-xing/" title="认知觉醒"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/172.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="认知觉醒"/></a><div class="content"><a class="title" href="/posts/ren-zhi-jue-xing/" title="认知觉醒">认知觉醒</a><time datetime="2025-12-28T16:00:00.000Z" title="更新于 2025-12-29 00:00:00">2025-12-29</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://gcore.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script src="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/js/mine.min.js"></script><script src="/js/tip_portal.js"></script><script defer="defer" id="ribbon" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script id="click-show-text" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="Azathoth,Yog-Sothoth,Shub-Niggurath,Nyarlathotep,Cthulhu,Hastur,Abhoth,Ghroth,Tsathoggua,Cthugha,Deep Ones,Dagon,Chaugnar Faugn,Mordiggian,Shoggoth,Old One,Mi-Go,Great Race of Yith,Flying Polyp,Hounds of Tindalos,Dhole" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div class="docsearch-wrap"><div id="docsearch" style="display:none"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@docsearch/css/dist/style.min.css"/><script src="https://testingcf.jsdelivr.net/npm/@docsearch/js/dist/umd/index.min.js"></script><script>(() => {
+  docsearch(Object.assign({
+    appId: 'BAFEL7A6K1',
+    apiKey: '89fcb5961984c5c054bf04149f345f38',
+    indexName: 'mofan212io',
+    container: '#docsearch',
+    placeholder: '输入关键字进行搜索',
+  }, null))
+
+  const handleClick = () => {
+    document.querySelector('.DocSearch-Button').click()
+  }
+
+  const searchClickFn = () => {
+    btf.addEventListenerPjax(document.querySelector('#search-button > .search'), 'click', handleClick)
+  }
+
+  searchClickFn()
+  window.addEventListener('pjax:complete', searchClickFn)
+})()</script></div></div></body></html>

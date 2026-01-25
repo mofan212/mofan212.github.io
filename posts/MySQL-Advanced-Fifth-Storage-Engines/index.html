@@ -1,0 +1,777 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【MySQL 高级篇五】存储引擎 | Mofan</title><meta name="author" content="默烦,cy.mofan@foxmail.com"><meta name="copyright" content="默烦"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本文介绍了 MySQL 中的多种存储引擎的特性与适用场景。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【MySQL 高级篇五】存储引擎">
+<meta property="og:url" content="https://mofan212.github.io/posts/MySQL-Advanced-Fifth-Storage-Engines/">
+<meta property="og:site_name" content="Mofan">
+<meta property="og:description" content="本文介绍了 MySQL 中的多种存储引擎的特性与适用场景。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/135.jpg">
+<meta property="article:published_time" content="2023-05-13T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-05-13T16:00:00.000Z">
+<meta property="article:author" content="默烦">
+<meta property="article:tag" content="MySQL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/135.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "【MySQL 高级篇五】存储引擎",
+  "url": "https://mofan212.github.io/posts/MySQL-Advanced-Fifth-Storage-Engines/",
+  "image": "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/135.jpg",
+  "datePublished": "2023-05-13T16:00:00.000Z",
+  "dateModified": "2023-05-13T16:00:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "默烦",
+      "url": "https://mofan212.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/MySQL-Advanced-Fifth-Storage-Engines/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":true,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 默烦","link":"链接: ","source":"来源: Mofan","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://testingcf.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '【MySQL 高级篇五】存储引擎',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="referrer" content="no-referrer-when-downgrade" /><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/css/myStyle.min.css"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css" /><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css" /><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Mofan" type="application/atom+xml">
+</head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+btf.addGlobalFn('pjaxSend', () => {
+  Pace.restart()
+}, 'pace_restart')
+
+</script><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources/css/minimal.min.css"/><script src="https://testingcf.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/post_top_img.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Mofan</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【MySQL 高级篇五】存储引擎</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-13T16:00:00.000Z" title="发表于 2023-05-14 00:00:00">2023-05-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-13T16:00:00.000Z" title="更新于 2023-05-14 00:00:00">2023-05-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/MySQL/">MySQL</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">5.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>17分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;距离本文上次更新已经过去&quot;,&quot;messageNext&quot;:&quot;天，请注意时效性。&quot;,&quot;postUpdate&quot;:&quot;2023-05-14 00:00:00&quot;}" hidden></div><p>封面来源：由博主个人绘制，如需使用请联系博主。</p>
+<p>本文参考：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1iq4y1u7vj/?p=113">MySQL数据库教程天花板，mysql安装到mysql高级，强！硬！</a></p>
+<h1 id="1-查看存储引擎"><a class="header-anchor" href="#1-查看存储引擎"></a>1. 查看存储引擎</h1>
+<p>为了管理方便，人们把连接管理、查询缓存、语法解析、查询优化这些并不涉及真实数据存储的功能划分为 MySQL server 的功能，把真实存取数据的功能划分为存储引擎的功能。在 MySQL server 完成查询优化后，只需按照生成的执行计划调用底层存储引擎提供的 API，获取数据后返回给客户端即可。</p>
+<p>存储引擎就是指表的类型。存储引擎原本叫做表处理器，后续才改名为存储引擎，它的功能就是接收上层传下来的指令，然后对表中的数据进行提取或写入操作。</p>
+<p>查看 MySQL 提供了什么存储引擎：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SHOW ENGINES;</span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E6%9F%A5%E7%9C%8BMySQL%E6%8F%90%E4%BE%9B%E7%9A%84%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E.png" alt="查看MySQL提供的存储引擎"></p>
+<p>上述查询结果中：</p>
+<ul>
+<li><code>Engine</code> 表示存储引擎的名称；</li>
+<li><code>Support</code> 表示 MySQL 数据库管理系统是否支持该存储引擎，<code>YES</code> 表示支持，<code>NO</code> 则是不支持，<code>DEFAULT</code> 表示系统默认支持的存储引擎；</li>
+<li><code>Comment</code> 表示对存储引擎的评论，或者说简述；</li>
+<li><code>Transactions</code> 表示该存储引擎是否支持事务，<code>YES</code> 表示支持，<code>NO</code> 则是不支持；</li>
+<li><code>XA</code> 表示存储引擎所支持的分布式是否符合 <code>XA</code> 规范，代表该存储引擎是否支持分布式事务；</li>
+<li><code>Savepoints</code> 表示存储引擎是否支持事务处理的保存点，也就是是否支持部分事务的回滚。</li>
+</ul>
+<h1 id="2-设置系统默认的存储引擎"><a class="header-anchor" href="#2-设置系统默认的存储引擎"></a>2. 设置系统默认的存储引擎</h1>
+<p>查看默认的存储引擎：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SHOW VARIABLES LIKE &#x27;%storage_engine%&#x27;;</span><br><span class="line">-- 或者</span><br><span class="line">SELECT @@default_storage_engine;</span><br></pre></td></tr></table></figure>
+<pre>
+mysql> SHOW VARIABLES LIKE '%storage_engine%';
++---------------------------------+-----------+
+| Variable_name                   | Value     |
++---------------------------------+-----------+
+| default_storage_engine          | InnoDB    |
+| default_tmp_storage_engine      | InnoDB    |
+| disabled_storage_engines        |           |
+| internal_tmp_mem_storage_engine | TempTable |
++---------------------------------+-----------+
+</pre>
+<p>如果在创建表的语句中没有显式指定表的存储引擎，默认使用 InnoDB 作为表的存储引擎。</p>
+<p>如果想修改表的默认存储引擎，可以：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SET DEFAULT_STORAGE_ENGINE=MyISAM;</span><br></pre></td></tr></table></figure>
+<p>或者修改 <code>my.cnf</code> 文件：</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">default-storage-engine</span>=<span class="string">MyISAM</span></span><br></pre></td></tr></table></figure>
+<p>修改后记得重启服务：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart mysqld.service</span><br></pre></td></tr></table></figure>
+<p>查看某个表的使用的存储引擎可以使用：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SHOW CREATE TABLE 表名;</span><br></pre></td></tr></table></figure>
+<h1 id="3-设置表的存储引擎"><a class="header-anchor" href="#3-设置表的存储引擎"></a>3. 设置表的存储引擎</h1>
+<p>存储引擎是负责对表中的数据进行提取和写入工作的，可以为不同的表设置不同的存储引擎，也就是说不同的表可以有不同的物理存储结构、不同的提取和写入方式。</p>
+<h2 id="3-1-创建表时指定存储引擎"><a class="header-anchor" href="#3-1-创建表时指定存储引擎"></a>3.1 创建表时指定存储引擎</h2>
+<p>如果创建表的语句都没有指定表的存储引擎，默认使用的存储引擎是 InnoDB。如果想显式指定表所使用的存储引擎，可以：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE 表名(建表语句;) ENGINE = 存储引擎名称;</span><br></pre></td></tr></table></figure>
+<h2 id="3-2-修改表的存储引擎"><a class="header-anchor" href="#3-2-修改表的存储引擎"></a>3.2 修改表的存储引擎</h2>
+<p>对应已经创建好的表，也可以修改存储引擎，比如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE 表名 ENGINE = 存储引擎名称;</span><br></pre></td></tr></table></figure>
+<h1 id="4-引擎介绍"><a class="header-anchor" href="#4-引擎介绍"></a>4. 引擎介绍</h1>
+<h2 id="4-1-InnoDB"><a class="header-anchor" href="#4-1-InnoDB"></a>4.1 InnoDB</h2>
+<p>InnoDB 是具备外键支持功能的事务存储引擎。</p>
+<p>MySQL 从 <code>3.23.34a</code> 开始就包含 InnoDB 存储引擎，在 5.5 版本之后，默认采用 InnoDB 引擎。</p>
+<p>InnoDB 是 MySQL 的默认事务型引擎，它被设计用来处理大量的短期（short-lived）事务，可以确保事务的完整提交（Commit）和回滚（Rollback）。</p>
+<p>除增加和查询外，还需要更新、删除操作时，应优先选择 InnoDB 存储引擎。</p>
+<p><mark>除非有非常特别的原因需要使用其他存储引擎，否则应优先考虑 InnoDB 引擎。</mark></p>
+<p>数据文件结构：（在 <a href="../MySQL-Advanced-Second-Data-Directory-Of-MySQL">【MySQL 高级篇二】MySQL 的数据目录</a> 中已说明）</p>
+<ul>
+<li>
+<p><code>表名.frm</code> 存储表结构（MySQL8.0 时，合并在 <code>表名.ibd</code> 中）</p>
+</li>
+<li>
+<p><code>表名.ibd</code> 存储数据和索引</p>
+</li>
+</ul>
+<p>InnoDB 是为处理巨大数据量的最大性能设计。在以前的版本中，字典数据以元数据文件、非事务表等来存储，现在这些元数据文件被删除了，比如：<code>.frm</code>，<code>.par</code>，<code>.trn</code>，<code>.isl</code>，<code>.db.opt</code> 等都在 MySQL 8.0 中不存在了。</p>
+<p>对比 MyISAM 的存储引擎，InnoDB 写的处理效率差一些，并且会占用更多的磁盘空间以保存数据和索引。</p>
+<p>MyISAM 只缓存索引，不缓存真实数据。InnoDB 不仅缓存索引还要缓存真实数据，对内存要求较高，而且内存大小对性能有决定性的影响。</p>
+<h2 id="4-2-MyISAM"><a class="header-anchor" href="#4-2-MyISAM"></a>4.2 MyISAM</h2>
+<p>MyISAM 是主要的非事务处理存储引擎。</p>
+<p>MyISAM 提供了大量的特性，包括全文索引、压缩、空间函数（GIS）等，但 MyISAM 不支持事务、行级锁、外键，有一个重大的缺陷——崩溃后无法安全恢复。</p>
+<p>MyISAM 是 MySQL 5.5 版本之前默认的存储引擎。</p>
+<p>优势是访问的速度快，对事务完整性没有要求，即以 SELECT、INSERT 为主的应用。</p>
+<p>针对数据统计有额外的常数存储，故而 <code>COUNT(*)</code> 的查询效率很高。</p>
+<p>数据文件结构：（在 <a href="../MySQL-Advanced-Second-Data-Directory-Of-MySQL">【MySQL 高级篇二】MySQL 的数据目录</a> 中已说明）</p>
+<ul>
+<li>
+<p><code>表名.frm</code> 存储表结构</p>
+</li>
+<li>
+<p><code>表名.MYD</code> 存储数据（MYData）</p>
+</li>
+<li>
+<p><code>表名.MYI</code> 存储索引（MYIndex）</p>
+</li>
+</ul>
+<p>MyISAM 主要应用在只读应用或者以读为主的业务。</p>
+<h2 id="4-3-Archive"><a class="header-anchor" href="#4-3-Archive"></a>4.3 Archive</h2>
+<p>Archive 引擎用于数据存档。</p>
+<p>Archive（发音为：<code>[ˈɑːkaɪv]</code>） 是归档的意思，仅仅支持插入和查询两种功能（行被插入后不能再修改）。</p>
+<p>在 MySQL 5.5 后支持索引功能。</p>
+<p>拥有很好的压缩机制，使用 <code>zlib</code> 压缩库，在记录请求的时候实时进行压缩，经常被用来作为仓库使用。</p>
+<p>创建 Archive 表时，存储引擎会创建名称以表名开头的文件，数据文件的扩展名为 <code>.ARZ</code>。</p>
+<p>根据测试结论来看，同样数据量下，Archive 表比 MyISAM 表要小大约 75%，比支持事务处理的 InnoDB 表小大约83%。</p>
+<p>Archive 存储引擎采用了行级锁。ARCHIVE 引擎支持 <code>AUTO_INCREMENT</code>列属性。<code>AUTO_INCREMENT</code> 列可以具有唯一索引或非唯一索引。尝试在任何其他列上创建索引会导致错误。</p>
+<p>Archive 表适合日志和数据采集（档案）类应用，适合存储大量的、独立的作为历史记录的数据，拥有很高的插入<br>
+速度，但是对查询的支持较差。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">特征</th>
+<th style="text-align:center">支持</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">B 树索引</td>
+<td style="text-align:center">不支持</td>
+</tr>
+<tr>
+<td style="text-align:center">备份 / 时间点恢复（在服务器中实现，而不是在存储引擎中）</td>
+<td style="text-align:center">支持</td>
+</tr>
+<tr>
+<td style="text-align:center">集群数据库支持</td>
+<td style="text-align:center">不支持</td>
+</tr>
+<tr>
+<td style="text-align:center">聚集索引</td>
+<td style="text-align:center">不支持</td>
+</tr>
+<tr>
+<td style="text-align:center">压缩数据</td>
+<td style="text-align:center">支持</td>
+</tr>
+<tr>
+<td style="text-align:center">数据缓存</td>
+<td style="text-align:center">不支持</td>
+</tr>
+<tr>
+<td style="text-align:center">加密数据（加密功能在服务器中实现）</td>
+<td style="text-align:center">支持</td>
+</tr>
+<tr>
+<td style="text-align:center">外键支持</td>
+<td style="text-align:center">不支持</td>
+</tr>
+<tr>
+<td style="text-align:center">全文检索索引</td>
+<td style="text-align:center">不支持</td>
+</tr>
+<tr>
+<td style="text-align:center">地理空间数据类型支持</td>
+<td style="text-align:center">支持</td>
+</tr>
+<tr>
+<td style="text-align:center">地理空间索引支持</td>
+<td style="text-align:center">不支持</td>
+</tr>
+<tr>
+<td style="text-align:center">哈希索引</td>
+<td style="text-align:center">不支持</td>
+</tr>
+<tr>
+<td style="text-align:center">索引缓存</td>
+<td style="text-align:center">不支持</td>
+</tr>
+<tr>
+<td style="text-align:center">锁粒度</td>
+<td style="text-align:center">行锁</td>
+</tr>
+<tr>
+<td style="text-align:center">MVCC</td>
+<td style="text-align:center">不支持</td>
+</tr>
+<tr>
+<td style="text-align:center">存储限制</td>
+<td style="text-align:center">没有任何限制</td>
+</tr>
+<tr>
+<td style="text-align:center">交易</td>
+<td style="text-align:center">不支持</td>
+</tr>
+<tr>
+<td style="text-align:center">更新数据字典的统计信息</td>
+<td style="text-align:center">支持</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4-4-Blackhole"><a class="header-anchor" href="#4-4-Blackhole"></a>4.4 Blackhole</h2>
+<p>Blackhole 引擎丢弃写操作，读操作会返回空内容。</p>
+<p>Blackhole 引擎没有实现任何存储机制，它会丢弃所有插入的数据，不做任何保存。</p>
+<p>服务器会记录 Blackhole 表的日志，所以可用于复制数据到备库，或者简单地记录到日志。这种应用方式会碰到很多问题，因此并不推荐使用该存储引擎。</p>
+<h2 id="4-5-CSV"><a class="header-anchor" href="#4-5-CSV"></a>4.5 CSV</h2>
+<p>CSV 引擎在存储数据时，以逗号分隔各个数据项。</p>
+<p>CSV 引擎可以将普通的 CSV 文件作为 MySQL 的表来处理，但不支持索引。</p>
+<p>CSV 引擎可以作为一种数据交换的机制，非常有用。</p>
+<p>CSV 存储的数据可以直接用文本编辑器或 Excel 读取。</p>
+<p>对于数据的快速导入、导出有明显优势。</p>
+<p>创建 CSV 表时，服务器会创建一个纯文本数据文件，其名称以表名开头并带有 <code>.CSV</code> 扩展名。当数据存储到表中时，存储引擎将其以逗号分隔值格式保存到数据文件中。</p>
+<p>CSV 引擎不支持 <code>NULL</code> 列，CSV 表中的所有列必须是 <code>NOT NULL</code> 的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-- 创建以 CSV 作为存储引擎的表</span><br><span class="line">CREATE TABLE csv_demo(id INT NOT NULL, name CHAR(10) NOT NULL) ENGINE = CSV;</span><br><span class="line"></span><br><span class="line">-- 向表中插入两条数据</span><br><span class="line">INSERT INTO csv_demo VALUES(1, &#x27;record one&#x27;), (2, &#x27;record two&#x27;);</span><br></pre></td></tr></table></figure>
+<p>如果查看 <code>csv_demo</code> 表对应的数据文件，会存在 <code>csv_demo.CSM</code> 和 <code>csv_demo.CSV</code> 两个文件，前者表示数据表元文件，存储数据表的状态、记录行数等内容，后者存储表中的数据信息。</p>
+<p><code>csv_demo.CSV</code> 文件可以直接使用记事本或 Excel 打开并阅读其中的内容。</p>
+<h2 id="4-6-Memory"><a class="header-anchor" href="#4-6-Memory"></a>4.6 Memory</h2>
+<p>Memory 引擎是置于内存的表 。</p>
+<p>Memory 采用的逻辑介质是内存，响应速度很快，但是当 <code>mysqld</code> 守护进程崩溃的时候数据会丢失。要求存储的数据是长度不变的格式，比如 <code>blob</code> 和 <code>text</code> 类型的数据不可用（长度不固定的）。</p>
+<blockquote>
+<p>主要特征</p>
+</blockquote>
+<p>Memory 同时支持哈希（HASH）索引和 B+ 树索引。默认使用哈希索引，它对于相等性的判断更快，但对范围的比较要慢得多，可以在创建索引时使用 B+ 树索引。</p>
+<p>Memory 表至少比 MyISAM 表快一个数量级。</p>
+<p>Memory 表的大小是受到限制的。表的大小主要取决于两个参数，分别是 <code>max_rows</code> 和 <code>max_heap_table_size</code>。 <code>max_rows</code> 可以在创建表时指定，<code>max_heap_table_size</code> 的大小默认为 16MB，可以按需要扩大。</p>
+<p>数据文件与索引文件分开存储。每个基于 Memory 存储引擎的表对应一个磁盘文件，该文件的文件名与表名相同，为 <code>frm</code> 类型，该文件中只存储表的结构，数据文件都存储在内存中。这有利于数据的快速处理，提高整个表的处理效率。</p>
+<p>缺点：其数据易丢失，生命周期短。基于这个缺陷，选择 Memory 存储引擎时需要特别小心。</p>
+<blockquote>
+<p>使用 Memory 存储引擎的场景</p>
+</blockquote>
+<ul>
+<li>
+<p>目标数据比较小，需要非常频繁的进行访问，在内存中存放数据，太大的数据会造成内存溢出。可以通过参数 <code>max_heap_table_size</code> 控制 Memory 表的大小，限制 Memory 表的最大容量。</p>
+</li>
+<li>
+<p>如果数据是临时的，而且必须立即可用，可以选择 Memory 引擎。</p>
+</li>
+<li>
+<p>存储在 Memory 表中的数据如果突然间丢失也没有太大的关系。</p>
+</li>
+</ul>
+<h2 id="4-7-Federated"><a class="header-anchor" href="#4-7-Federated"></a>4.7 Federated</h2>
+<p>Federated 引擎常用于访问远程表。</p>
+<p>Federated 引擎是访问其他 MySQL 服务器的一个代理，尽管该引擎看起来提供了一种跨服务器的灵活，但也经常带来问题，因此默认被禁用。</p>
+<h2 id="4-8-Merge"><a class="header-anchor" href="#4-8-Merge"></a>4.8 Merge</h2>
+<p>Merge 引擎管理多个 MyISAM 表构成的表集合。</p>
+<h2 id="4-9-NDB"><a class="header-anchor" href="#4-9-NDB"></a>4.9 NDB</h2>
+<p>NDB 引擎是 MySQL 集群专用存储引擎。</p>
+<p>NDB 引擎也叫做 NDB Cluster 存储引擎，主要用于 MySQL Cluster 分布式集群环境，类似于 Oracle 的 RAC 集群。</p>
+<h2 id="4-10-引擎对比"><a class="header-anchor" href="#4-10-引擎对比"></a>4.10 引擎对比</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">特点</th>
+<th style="text-align:center">MyISAM</th>
+<th style="text-align:center">InnoDB</th>
+<th style="text-align:center">Memory</th>
+<th style="text-align:center">Merge</th>
+<th style="text-align:center">NDB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">存储限制</td>
+<td style="text-align:center">有</td>
+<td style="text-align:center">64TB</td>
+<td style="text-align:center">有</td>
+<td style="text-align:center">没有</td>
+<td style="text-align:center">有</td>
+</tr>
+<tr>
+<td style="text-align:center">事务安全性</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">锁机制</td>
+<td style="text-align:center">表锁，即使操作一条记录也会锁住整个表，不适合高并发的操作</td>
+<td style="text-align:center">行锁，操作时只锁某一行，不对其它行有影响，适合高并发的操作</td>
+<td style="text-align:center">表锁</td>
+<td style="text-align:center">表锁</td>
+<td style="text-align:center">行锁</td>
+</tr>
+<tr>
+<td style="text-align:center">B 数索引</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center">支持</td>
+</tr>
+<tr>
+<td style="text-align:center">哈希索引</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">支持</td>
+</tr>
+<tr>
+<td style="text-align:center">全文索引</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">集群索引</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">数据缓存</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">支持</td>
+</tr>
+<tr>
+<td style="text-align:center">索引缓存</td>
+<td style="text-align:center">只缓存索引，不缓存真实数据</td>
+<td style="text-align:center">不仅缓存索引还要缓存真实数据，对内存要求较高，而且内存大小对性能有决定性的影响</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center">支持</td>
+</tr>
+<tr>
+<td style="text-align:center">数据可压缩</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">空间使用</td>
+<td style="text-align:center">低</td>
+<td style="text-align:center">高</td>
+<td style="text-align:center">N/A</td>
+<td style="text-align:center">低</td>
+<td style="text-align:center">低</td>
+</tr>
+<tr>
+<td style="text-align:center">内存使用</td>
+<td style="text-align:center">低</td>
+<td style="text-align:center">高</td>
+<td style="text-align:center">中等</td>
+<td style="text-align:center">低</td>
+<td style="text-align:center">高</td>
+</tr>
+<tr>
+<td style="text-align:center">批量插入的速度</td>
+<td style="text-align:center">高</td>
+<td style="text-align:center">低</td>
+<td style="text-align:center">高</td>
+<td style="text-align:center">高</td>
+<td style="text-align:center">高</td>
+</tr>
+<tr>
+<td style="text-align:center">支持外键</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+<h1 id="5-MyISAM-和-InnoDB"><a class="header-anchor" href="#5-MyISAM-和-InnoDB"></a>5. MyISAM 和 InnoDB</h1>
+<p>很多人对 InnoDB 和 MyISAM 的取舍存在疑问，到底选择哪个比较好呢？</p>
+<p>MySQL 5.5 之前的默认存储引擎是 MyISAM，5.5 之后改为了 InnoDB。</p>
+<p>InnoDB 存储引擎提供了良好的事务管理、崩溃修复能力和并发控制。因为 InnoDB 存储引擎支持事务，所以对于要求事务完整性的场合需要选择 InnoDB，比如数据操作除了插入和查询以外还包含有很多更新、删除操作，像财务系统等对数据准确性要求较高的系统。缺点是其读写效率稍差，占用的数据空间相对比较大。</p>
+<p>如果是小型应用，系统以读操作和插入操作为主，只有很少的更新、删除操作，并且对事务的要求没有那么高，可以选择 MyISAM 存储引擎。MyISAM 存储引擎的优势在于占用空间小，处理速度快。缺点是不支持事务的完整性和并发性。</p>
+<p>这两种引擎各有特点，可以在 MySQL 中针对不同的数据表选择不同的存储引擎。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">对比项</th>
+<th style="text-align:center">MyISAM</th>
+<th style="text-align:center">InnoDB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">外键</td>
+<td style="text-align:center">不支持</td>
+<td style="text-align:center">支持</td>
+</tr>
+<tr>
+<td style="text-align:center">事务</td>
+<td style="text-align:center">不支持</td>
+<td style="text-align:center">支持</td>
+</tr>
+<tr>
+<td style="text-align:center">行表锁</td>
+<td style="text-align:center">表锁，即使操作一条记录也会锁住整个表，不适合高并发的操作</td>
+<td style="text-align:center">行锁，操作时只锁某一行，不对其它行有影响，适合高并发的操作</td>
+</tr>
+<tr>
+<td style="text-align:center">缓存</td>
+<td style="text-align:center">只缓存索引，不缓存真实数据</td>
+<td style="text-align:center">不仅缓存索引还要缓存真实数据，对内存要求较高，内存大小对性能有决定性的影响</td>
+</tr>
+<tr>
+<td style="text-align:center">自带系统表使用</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">N</td>
+</tr>
+<tr>
+<td style="text-align:center">关注点</td>
+<td style="text-align:center">性能：节省资源、消耗少、简单业务</td>
+<td style="text-align:center">事务：并发写、事务、更大资源</td>
+</tr>
+<tr>
+<td style="text-align:center">默认安装</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+</tr>
+<tr>
+<td style="text-align:center">默认使用</td>
+<td style="text-align:center">N</td>
+<td style="text-align:center">Y</td>
+</tr>
+</tbody>
+</table>
+<h1 id="6-阿里巴巴、淘宝的选择"><a class="header-anchor" href="#6-阿里巴巴、淘宝的选择"></a>6. 阿里巴巴、淘宝的选择</h1>
+<p>Percona 为 MySQL 数据库服务器进行了改进，在功能和性能上较 MySQL 有很显著的提升。</p>
+<p>该版本提升了在高负载情况下的 InnoDB 的性能、为 DBA 提供一些非常有用的性能诊断工具，另外有更多的参数和命令来控制服务器行为。</p>
+<p>该公司新建了一款存储引擎叫 <code>Xtradb</code> 完全可以替代 InnoDB，并且在性能和并发上做得更好，阿里巴巴大部分 MySQL 数据库使用的都是在 Percona 的原型加以修改的。</p>
+<h1 id="7-额外补充"><a class="header-anchor" href="#7-额外补充"></a>7. 额外补充</h1>
+<h2 id="7-1-InnoDB-表的优势"><a class="header-anchor" href="#7-1-InnoDB-表的优势"></a>7.1 InnoDB 表的优势</h2>
+<p>InnoDB 存储引擎在实际应用中拥有诸多优势，比如操作便利、提高了数据库的性能、维护成本低等。如果由于硬件或软件的原因导致服务器崩溃，那么在重启服务器之后不需要进行额外的操作。InnoDB 崩溃恢复功能自动将之前提交的内容定型，然后撤销没有提交的进程，重启之后继续从崩溃点开始执行。</p>
+<p>InnoDB 存储引擎在主内存中维护缓冲池，高频率使用的数据将在内存中直接被处理。这种缓存方式应用于多种信息，加速了处理进程。</p>
+<p>在专用服务器上，物理内存中高达 80% 的部分被应用于缓冲池。如果需要将数据插入不同的表中，可以设置外键加强数据的完整性。更新或者删除数据，关联数据将会被自动更新或删除。如果试图将数据插入从表，但在主表中没有对应的数据，插入的数据将被自动移除。如果磁盘或内存中的数据出现崩溃，在使用脏数据之前，校验和机制会发出警告。当每个表的主键都设置合理时，与这些列有关的操作会被自动优化。插入、更新和删除操作通过改变缓冲自动机制进行优化。InnoDB 不仅支持当前读写，也会缓冲改变的数据到数据流磁盘。</p>
+<p>InnoDB 的性能优势不只存在于长时运行查询的大型表。在同一列多次被查询时，自适应哈希索引会提高查询的速度。使用 InnoDB 可以压缩表和相关的索引，可以在不影响性能和可用性的情况下创建或删除索引。对于大型文本和 BLOB 数据，使用动态行形式，使存储布局更高效。通过查询 <code>INFORMATION_SCHEMA</code> 库中的表可以监控存储引擎的内部工作。在同一个语句中，InnoDB 表可以与其他存储引擎表混用。即使有些操作系统限制文件大小 2GB，InnoDB 仍然可以处理。当处理大数据量时，InnoDB 兼顾 CPU，以达到最大性能。</p>
+<h2 id="7-2-InnoDB-和-ACID-模型"><a class="header-anchor" href="#7-2-InnoDB-和-ACID-模型"></a>7.2 InnoDB 和 ACID 模型</h2>
+<p>ACID 模型是一系列数据库设计规则，这些规则着重强调可靠性，而可靠性对于商业数据和任务关键型应用非常重要。MySQL 包含类似 InnoDB 存储引擎的组件，与 ACID 模型紧密相连，这样出现意外时，数据不会崩溃，结果不会失真。如果依赖 ACID 模型，可以不使用一致性检查和崩溃恢复机制。如果拥有额外的软件保护，极可靠的硬件或者应用可以容忍一小部分的数据丢失和不一致，可以将 MySQL 设置调整为只依赖部分ACID特性，以达到更高的性能。</p>
+<blockquote>
+<p>原子性</p>
+</blockquote>
+<p>ACID 的原子方面主要涉及 InnoDB 事务，与 MySQL 相关的特性主要包括：</p>
+<ul>
+<li>
+<p>自动提交设置；</p>
+</li>
+<li>
+<p>COMMIT语句；</p>
+</li>
+<li>
+<p>ROLLBACK语句；</p>
+</li>
+<li>
+<p>操作 <code>INFORMATION_SCHEMA</code> 库中的表数据。</p>
+</li>
+</ul>
+<blockquote>
+<p>一致性</p>
+</blockquote>
+<p>ACID 模型的一致性主要涉及保护数据不崩溃的内部 InnoDB 处理过程，与 MySQL 相关的特性主要包括：</p>
+<ul>
+<li>
+<p>InnoDB 双写缓存；</p>
+</li>
+<li>
+<p>InnoDB 崩溃恢复。</p>
+</li>
+</ul>
+<blockquote>
+<p>隔离性</p>
+</blockquote>
+<p>隔离是应用于事务的级别，与 MySQL 相关的特性主要包括：</p>
+<ul>
+<li>
+<p>自动提交设置；</p>
+</li>
+<li>
+<p>SET ISOLATION LEVEL语句；</p>
+</li>
+<li>
+<p>InnoDB 锁的低级别信息。</p>
+</li>
+</ul>
+<blockquote>
+<p>持久性</p>
+</blockquote>
+<p>ACID 模型的持久性主要涉及与硬件配置相互影响的 MySQL 软件特性。由于硬件复杂多样化，持久性方面没有具体的规则可循。与 MySQL 相关的特性有：</p>
+<ul>
+<li>
+<p>InnoDB 双写缓存，通过 <code>innodb_doublewrite</code> 配置项配置；</p>
+</li>
+<li>
+<p>配置项 <code>innodb_flush_log_at_trx_commit</code>；</p>
+</li>
+<li>
+<p>配置项 <code>sync_binlog</code>；</p>
+</li>
+<li>
+<p>配置项 <code>innodb_file_per_table</code>；</p>
+</li>
+<li>
+<p>存储设备的写入缓存；</p>
+</li>
+<li>
+<p>存储设备的备用电池缓存；</p>
+</li>
+<li>
+<p>运行 MySQL 的操作系统；</p>
+</li>
+<li>
+<p>持续的电力供应；</p>
+</li>
+<li>
+<p>备份策略；</p>
+</li>
+<li>
+<p>对分布式或托管的应用，最主要的在于硬件设备的地点以及网络情况。</p>
+</li>
+</ul>
+<h2 id="7-3-InnoDB-架构"><a class="header-anchor" href="#7-3-InnoDB-架构"></a>7.3 InnoDB 架构</h2>
+<p><strong>缓冲池。</strong> 缓冲池是主内存中的一部分空间，用来缓存已使用的表和索引数据。缓冲池使得经常被使用的数据能够直接在内存中获得，从而提高速度。</p>
+<p><strong>更改缓存。</strong> 更改缓存是一个特殊的数据结构，当受影响的索引页不在缓存中时，更改缓存会缓存辅助索引页的更改。索引页被其他读取操作时会加载到缓存池，缓存的更改内容就会被合并。不同于集群索引，辅助索引并非独一无二的。当系统大部分闲置时，清除操作会定期运行，将更新的索引页刷入磁盘。更新缓存合并期间，可能会大大降低查询的性能。在内存中，更新缓存占用一部分 InnoDB 缓冲池。在磁盘中，更新缓存是系统表空间的一部分。更新缓存的数据类型由 <code>innodb_change_buffering</code> 配置项管理。</p>
+<p><strong>自适应哈希索引。</strong> 自适应哈希索引将负载和足够的内存结合起来，使得 InnoDB 像内存数据库一样运行，不需要降低事务上的性能或可靠性。这个特性通过 <code>innodb_adaptive_hash_index</code> 选项配置，或者通过 <code>--skip-innodb_adaptive_hash_index</code> 命令行在服务启动时关闭。</p>
+<p><strong>重做日志缓存。</strong> 重做日志缓存存放要放入重做日志的数据。重做日志缓存大小通过 <code>innodb_log_buffer_size</code> 配置项配置。重做日志缓存会定期地将日志文件刷入磁盘。大型的重做日志缓存使得大型事务能够正常运行而不需要写入磁盘。</p>
+<p><strong>系统表空间。</strong> 系统表空间包括 InnoDB 数据字典、双写缓存、更新缓存和撤销日志，同时也包括表和索引数据。多表共享，系统表空间被视为共享表空间。</p>
+<p><strong>双写缓存。</strong> 双写缓存位于系统表空间中，用于写入从缓存池刷新的数据页。只有在刷新并写入双写缓存后，InnoDB 才会将数据页写入合适的位置。</p>
+<p><strong>撤销日志。</strong> 撤销日志是一系列与事务相关的撤销记录的集合，包含如何撤销事务最近的更改。如果其他事务要查询原始数据，可以从撤销日志记录中追溯未更改的数据。撤销日志存在于撤销日志片段中，这些片段包含于回滚片段中。</p>
+<p><strong>每个表一个文件的表空间。</strong> 每个表一个文件的表空间是指每个单独的表空间创建在自身的数据文件中，而不是系统表空间中。这个功能通过 <code>innodb_file_per_table</code> 配置项开启。每个表空间由一个单独的 <code>.ibd</code> 数据文件代表，该文件默认被创建在数据库目录中。</p>
+<p><strong>通用表空间。</strong> 使用 <code>CREATE TABLESPACE</code> 语法创建共享的 InnoDB 表空间。通用表空间可以创建在 MySQL 数据目录之外能够管理多个表并支持所有行格式的表。</p>
+<p><strong>撤销表空间。</strong> 撤销表空间由一个或多个包含撤销日志的文件组成。撤销表空间的数量由 <code>innodb_undo_tablespaces</code> 配置项配置。</p>
+<p><strong>临时表空间。</strong> 用户创建的临时表空间和基于磁盘的内部临时表都创建于临时表空间。<code>innodb_temp_data_file_path</code> 配置项定义了相关的路径、名称、大小和属性。如果该值为空，默认会在 <code>innodb_data_home_dir</code> 变量指定的目录下创建一个自动扩展的数据文件。</p>
+<p><strong>重做日志。</strong> 重做日志是基于磁盘的数据结构，在崩溃恢复期间使用，用来纠正数据。正常操作期间，重做日志会将请求数据进行编码，这些请求会改变 InnoDB 表数据。遇到意外崩溃后，未完成的更改会自动在初始化期间重新进行。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/MySQL-Advanced-Fifth-Storage-Engines/">https://mofan212.github.io/posts/MySQL-Advanced-Fifth-Storage-Engines/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/MySQL/">MySQL</a></div><div class="post-share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/135.jpg" data-sites="wechat,qq,weibo,facebook,x"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/MySQL-Advanced-Fourth-Logical-Architecture/" title="【MySQL 高级篇四】逻辑架构"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/134.jpg" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【MySQL 高级篇四】逻辑架构</div></div><div class="info-2"><div class="info-item-1">本文剖析了 MySQL 的逻辑架构，介绍了 SQL 执行流程和数据库缓冲池。</div></div></div></a><a class="pagination-related" href="/posts/Installing-MySQL-Under-Windows/" title="【MySQL 补充】Windows 下 MySQL 的安装"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/136.png" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【MySQL 补充】Windows 下 MySQL 的安装</div></div><div class="info-2"><div class="info-item-1">本文介绍了 MySQL 在 Windows 下的安装与卸载，以及常见问题的解决。</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/View-Procedure-And-Function-Of-MySQL/" title="【MySQL 五】视图、存储过程与存储函数"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/109.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-09-24</div><div class="info-item-2">【MySQL 五】视图、存储过程与存储函数</div></div><div class="info-2"><div class="info-item-1">本文介绍了 MySQL 中视图、存储过程和存储函数的语法与使用。</div></div></div></a><a class="pagination-related" href="/posts/MySQL-Advanced-Seventh-Data-Storage-Structure-Of-InnoDB/" title="【MySQL 高级篇七】InnoDB 的数据存储结构"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/146.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-01-14</div><div class="info-item-2">【MySQL 高级篇七】InnoDB 的数据存储结构</div></div><div class="info-2"><div class="info-item-1">本文介绍了 MySQL 中 InnoDB 存储引擎的数据存储结构，包括页的内部结构、行格式等。</div></div></div></a><a class="pagination-related" href="/posts/MySQL-Advanced-Fourth-Logical-Architecture/" title="【MySQL 高级篇四】逻辑架构"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/134.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-13</div><div class="info-item-2">【MySQL 高级篇四】逻辑架构</div></div><div class="info-2"><div class="info-item-1">本文剖析了 MySQL 的逻辑架构，介绍了 SQL 执行流程和数据库缓冲池。</div></div></div></a><a class="pagination-related" href="/posts/MySQL-Advanced-Third-User-And-Permission-Management/" title="【MySQL 高级篇三】用户与权限管理"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/132.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-27</div><div class="info-item-2">【MySQL 高级篇三】用户与权限管理</div></div><div class="info-2"><div class="info-item-1">本文介绍了 MySQL 中的用户管理、权限管理、权限表、角色管理和配置文件的使用。</div></div></div></a><a class="pagination-related" href="/posts/MySQL-Advanced-Sixth-Data-Structure-Of-Index/" title="【MySQL 高级篇六】索引的数据结构"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/145.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-01-10</div><div class="info-item-2">【MySQL 高级篇六】索引的数据结构</div></div><div class="info-2"><div class="info-item-1">本文介绍了 MySQL 中 InnoDB 存储引擎的索引的数据结构。</div></div></div></a><a class="pagination-related" href="/posts/Variable-Process-Control-Cursor-And-Trigger-Of-MySQL/" title="【MySQL 六】变量、流程控制、游标与触发器"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/110.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-10-02</div><div class="info-item-2">【MySQL 六】变量、流程控制、游标与触发器</div></div><div class="info-2"><div class="info-item-1">本文介绍了 MySQL 中变量、流程控制、游标和触发器的语法与使用。</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">默烦</div><div class="author-info-description">彩笔的打怪升级之路...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mofan212"><i class="fab fa-github"></i><span>follow me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解。<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a href="./mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载。😊</br><strong><font style="color:red">严禁未遵循规范的转载。</font></strong>😡</br><strong>死去的评论系统复活啦！欢迎到留言板畅所欲言！</strong>当然也可以使用更高效的<a target="_blank" href="https://space.bilibili.com/23658864/dynamic" style="color:#49B1F5;text-decoration:underline"> 哔哩哔哩私信 </a>或<a href="mailto:cy.mofan@foxmail.com" style="color:#49B1F5;text-decoration:underline" target="_blank">邮箱</a>。 😉</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E6%9F%A5%E7%9C%8B%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="toc-text">1. 查看存储引擎</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E8%AE%BE%E7%BD%AE%E7%B3%BB%E7%BB%9F%E9%BB%98%E8%AE%A4%E7%9A%84%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="toc-text">2. 设置系统默认的存储引擎</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E8%AE%BE%E7%BD%AE%E8%A1%A8%E7%9A%84%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="toc-text">3. 设置表的存储引擎</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E5%88%9B%E5%BB%BA%E8%A1%A8%E6%97%B6%E6%8C%87%E5%AE%9A%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="toc-text">3.1 创建表时指定存储引擎</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E4%BF%AE%E6%94%B9%E8%A1%A8%E7%9A%84%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="toc-text">3.2 修改表的存储引擎</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E5%BC%95%E6%93%8E%E4%BB%8B%E7%BB%8D"><span class="toc-text">4. 引擎介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-InnoDB"><span class="toc-text">4.1 InnoDB</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-MyISAM"><span class="toc-text">4.2 MyISAM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-Archive"><span class="toc-text">4.3 Archive</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-4-Blackhole"><span class="toc-text">4.4 Blackhole</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-5-CSV"><span class="toc-text">4.5 CSV</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-6-Memory"><span class="toc-text">4.6 Memory</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-7-Federated"><span class="toc-text">4.7 Federated</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-8-Merge"><span class="toc-text">4.8 Merge</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-9-NDB"><span class="toc-text">4.9 NDB</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-10-%E5%BC%95%E6%93%8E%E5%AF%B9%E6%AF%94"><span class="toc-text">4.10 引擎对比</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-MyISAM-%E5%92%8C-InnoDB"><span class="toc-text">5. MyISAM 和 InnoDB</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E3%80%81%E6%B7%98%E5%AE%9D%E7%9A%84%E9%80%89%E6%8B%A9"><span class="toc-text">6. 阿里巴巴、淘宝的选择</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-%E9%A2%9D%E5%A4%96%E8%A1%A5%E5%85%85"><span class="toc-text">7. 额外补充</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#7-1-InnoDB-%E8%A1%A8%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="toc-text">7.1 InnoDB 表的优势</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-2-InnoDB-%E5%92%8C-ACID-%E6%A8%A1%E5%9E%8B"><span class="toc-text">7.2 InnoDB 和 ACID 模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-3-InnoDB-%E6%9E%B6%E6%9E%84"><span class="toc-text">7.3 InnoDB 架构</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/Something-About-Blog/" title="博客搭建与维护"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="博客搭建与维护"/></a><div class="content"><a class="title" href="/posts/Something-About-Blog/" title="博客搭建与维护">博客搭建与维护</a><time datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"/></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="更新于 2026-01-03 00:00:00">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"/></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/103.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 的类资源加载"/></a><div class="content"><a class="title" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载">Java 的类资源加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/20.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="注解、类的加载、反射"/></a><div class="content"><a class="title" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射">注解、类的加载、反射</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/ren-zhi-jue-xing/" title="认知觉醒"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/172.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="认知觉醒"/></a><div class="content"><a class="title" href="/posts/ren-zhi-jue-xing/" title="认知觉醒">认知觉醒</a><time datetime="2025-12-28T16:00:00.000Z" title="更新于 2025-12-29 00:00:00">2025-12-29</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://gcore.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script src="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/js/mine.min.js"></script><script src="/js/tip_portal.js"></script><script defer="defer" id="ribbon" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script id="click-show-text" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="Azathoth,Yog-Sothoth,Shub-Niggurath,Nyarlathotep,Cthulhu,Hastur,Abhoth,Ghroth,Tsathoggua,Cthugha,Deep Ones,Dagon,Chaugnar Faugn,Mordiggian,Shoggoth,Old One,Mi-Go,Great Race of Yith,Flying Polyp,Hounds of Tindalos,Dhole" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div class="docsearch-wrap"><div id="docsearch" style="display:none"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@docsearch/css/dist/style.min.css"/><script src="https://testingcf.jsdelivr.net/npm/@docsearch/js/dist/umd/index.min.js"></script><script>(() => {
+  docsearch(Object.assign({
+    appId: 'BAFEL7A6K1',
+    apiKey: '89fcb5961984c5c054bf04149f345f38',
+    indexName: 'mofan212io',
+    container: '#docsearch',
+    placeholder: '输入关键字进行搜索',
+  }, null))
+
+  const handleClick = () => {
+    document.querySelector('.DocSearch-Button').click()
+  }
+
+  const searchClickFn = () => {
+    btf.addEventListenerPjax(document.querySelector('#search-button > .search'), 'click', handleClick)
+  }
+
+  searchClickFn()
+  window.addEventListener('pjax:complete', searchClickFn)
+})()</script></div></div></body></html>

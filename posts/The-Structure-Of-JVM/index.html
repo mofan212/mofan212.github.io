@@ -1,0 +1,582 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>JVM 内存结构 | Mofan</title><meta name="author" content="默烦,cy.mofan@foxmail.com"><meta name="copyright" content="默烦"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="JVM 快速入门第一部分：JVM 内存结构。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM 内存结构">
+<meta property="og:url" content="https://mofan212.github.io/posts/The-Structure-Of-JVM/">
+<meta property="og:site_name" content="Mofan">
+<meta property="og:description" content="JVM 快速入门第一部分：JVM 内存结构。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/161.webp">
+<meta property="article:published_time" content="2025-05-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-05-04T16:00:00.000Z">
+<meta property="article:author" content="默烦">
+<meta property="article:tag" content="JVM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/161.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "JVM 内存结构",
+  "url": "https://mofan212.github.io/posts/The-Structure-Of-JVM/",
+  "image": "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/161.webp",
+  "datePublished": "2025-05-04T16:00:00.000Z",
+  "dateModified": "2025-05-04T16:00:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "默烦",
+      "url": "https://mofan212.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/The-Structure-Of-JVM/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":true,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 默烦","link":"链接: ","source":"来源: Mofan","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://testingcf.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'JVM 内存结构',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="referrer" content="no-referrer-when-downgrade" /><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/css/myStyle.min.css"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css" /><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css" /><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Mofan" type="application/atom+xml">
+</head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+btf.addGlobalFn('pjaxSend', () => {
+  Pace.restart()
+}, 'pace_restart')
+
+</script><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources/css/minimal.min.css"/><script src="https://testingcf.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/post_top_img.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Mofan</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">JVM 内存结构</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-05-04T16:00:00.000Z" title="发表于 2025-05-05 00:00:00">2025-05-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-05-04T16:00:00.000Z" title="更新于 2025-05-05 00:00:00">2025-05-05</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/JVM/">JVM</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">6.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>25分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;距离本文上次更新已经过去&quot;,&quot;messageNext&quot;:&quot;天，请注意时效性。&quot;,&quot;postUpdate&quot;:&quot;2025-05-05 00:00:00&quot;}" hidden></div><p>封面来源：由博主个人绘制，如需使用请联系博主。</p>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1yE411Z7AP/">黑马程序员JVM快速入门</a></p>
+<p>本文涉及的代码：<a target="_blank" rel="noopener" href="https://github.com/mofan212/jvm-demo">mofan212/jvm-demo</a></p>
+<blockquote>
+<p>除特别注明外，本文内容都基于 JDK 1.8</p>
+</blockquote>
+<h1 id="1-程序计数器"><a class="header-anchor" href="#1-程序计数器"></a>1. 程序计数器</h1>
+<p>Program Counter Register，程序计数器（寄存器）。</p>
+<p>作用：记住下一条 JVM 指令的执行地址</p>
+<p>特点：</p>
+<ul>
+<li>线程私有</li>
+<li>不存在内存溢出</li>
+</ul>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JVMImages/JVM%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84%E4%B9%8B%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%99%A8.svg" alt="JVM内存结构之程序计数器"></p>
+<p>下面是 JVM 指令与对应 Java 代码的一个示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">0: getstatic     #20                        // PrintStream out = System.out; </span><br><span class="line">3: astore_1                                 // -- </span><br><span class="line">4: aload_1                                  // out.println(1); </span><br><span class="line">5: iconst_1                                 // -- </span><br><span class="line">6: invokevirtual #26                        // -- </span><br><span class="line">9: aload_1                                  // out.println(2); </span><br><span class="line">10: iconst_2                                // -- </span><br><span class="line">11: invokevirtual #26                       // -- </span><br><span class="line">14: aload_1                                 // out.println(3); </span><br><span class="line">15: iconst_3                                // -- </span><br><span class="line">16: invokevirtual #26                       // -- </span><br><span class="line">19: aload_1                                 // out.println(4); </span><br><span class="line">20: iconst_4                                // -- </span><br><span class="line">21: invokevirtual #26                       // -- </span><br><span class="line">24: aload_1                                 // out.println(5); </span><br><span class="line">25: iconst_5                                // -- </span><br><span class="line">26: invokevirtual #26                       // -- </span><br><span class="line">29: return</span><br></pre></td></tr></table></figure>
+<p>Java 源代码经过编译后得到二进制字节码，字节码中包含许多的 JVM 指令。</p>
+<p>CPU 并不能直接执行 JVM 指令，在这中间还需要一个「解释器」。「解释器」将 JVM 指令解释为机器码，之后再由 CPU 执行这些机器码。</p>
+<p>上述示例的 JVM 指令前都有一个数字，它们是 JVM 指令的执行地址。</p>
+<p>当前一条指令执行完成后，解释器会去「程序计数器」中取得下一条 JVM 指令的执行地址，然后再执行。</p>
+<p>Java 程序支持多线程运行。当系统中有多个线程正在运行时，CPU 会为每个线程分配时间片。如果一个线程中的逻辑在一个时间片内未执行完，CPU 会将该线程的状态进行暂存，然后切换到另一个线程并执行它的逻辑，后续又轮到第一个线程执行时，能够继续执行 <strong>剩余</strong> 逻辑。</p>
+<p>由于「程序计数器」是线程私有的，线程在时间片轮转的过程中能够轻松得知下一条指令的执行地址，完成剩余逻辑的执行。</p>
+<h1 id="2-虚拟机栈"><a class="header-anchor" href="#2-虚拟机栈"></a>2. 虚拟机栈</h1>
+<h2 id="2-1-栈与栈帧"><a class="header-anchor" href="#2-1-栈与栈帧"></a>2.1 栈与栈帧</h2>
+<p>Java Virtual Machine Stacks，Java 虚拟机栈。</p>
+<ul>
+<li>每个线程运行时所需要的内存，称为「虚拟机栈」</li>
+<li>每个栈由多个「栈帧」（Frame）组成，对应着每次方法调用时所占用的内存</li>
+<li>每个线程只能有一个活动栈帧（也就是栈顶的栈帧），对应着当前正在执行的那个方法</li>
+</ul>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JVMImages/JVM%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84%E4%B9%8B%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88.svg" alt="JVM内存结构之虚拟机栈"></p>
+<p>每个 Java 线程在运行时需要一定的内存空间，这个内存空间就是「虚拟机栈」。如果有多个运行的线程，也对应着多个「虚拟机栈」。</p>
+<p>「虚拟机栈」中存放的元素是「栈帧」，一个「栈帧」对应着一次「方法调用」，是每个方法运行时需要的内存。方法可以接受参数，内部可以定义局部变量，还可以有返回值，这些信息都需要占用内存，因此在方法执行前需要预先分配一定的内存空间。</p>
+<p>Java 线程在执行一个方法时，会为该方法划分一段栈帧空间，并将「栈帧」压入「虚拟机栈」内；当方法执行完成后，再将对应「栈帧」从「虚拟机栈」中移除。</p>
+<h2 id="2-2-问题辨析"><a class="header-anchor" href="#2-2-问题辨析"></a>2.2 问题辨析</h2>
+<blockquote>
+<p>垃圾回收是否涉及栈内存？</p>
+</blockquote>
+<p>不涉及，栈中的数据在作用域结束后自行释放，垃圾回收只会回收堆中数据。</p>
+<blockquote>
+<p>栈内存分配越大越好吗？</p>
+</blockquote>
+<p>可以通过 <code>-Xss</code> 虚拟机参数来指定栈内存。64 位的 Linux 和 macOS 系统下，其默认值为 <code>1024KB</code>，而在 Windows 操作系统下，其默认值取决于虚拟内存。</p>
+<p>下面示例展示了使用不同单位设置虚拟机栈大小为 1m：</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">-Xss1m</span></span><br><span class="line"><span class="attr">-Xss1024k</span></span><br><span class="line"><span class="attr">-Xss1048576</span></span><br></pre></td></tr></table></figure>
+<p>在 IDEA 中，可以在程序的 <code>VM options</code> 中设置，设置方式与上述一致。</p>
+<p>每个线程在创建的时候都会创建一个「虚拟机栈」，由于物理内存的大小是一定的，当虚拟机栈的大小越大时， 可供使用的线程数就会越少。</p>
+<blockquote>
+<p>方法内的局部变量是否是线程安全的？</p>
+</blockquote>
+<ul>
+<li>如果方法内 <strong>局部变量没有逃离方法的作用范围</strong>，它是线程安全的</li>
+<li>如果 <strong>局部变量引用了对象</strong>，并 <strong>逃离方法的作用范围</strong>，就需要考虑线程安全问题</li>
+</ul>
+<p>存在 <code>m1()</code>、<code>m2()</code> 和 <code>m3()</code> 共三个方法，判断每个方法使用的 <code>sb</code> 对象是否是线程安全的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">m1</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">StringBuilder</span> <span class="variable">sb</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>();</span><br><span class="line">    sb.append(<span class="number">1</span>);</span><br><span class="line">    sb.append(<span class="number">2</span>);</span><br><span class="line">    sb.append(<span class="number">3</span>);</span><br><span class="line">    System.out.println(sb.toString());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">m2</span><span class="params">(StringBuilder sb)</span> &#123;</span><br><span class="line">    sb.append(<span class="number">1</span>);</span><br><span class="line">    sb.append(<span class="number">2</span>);</span><br><span class="line">    sb.append(<span class="number">3</span>);</span><br><span class="line">    System.out.println(sb.toString());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> StringBuilder <span class="title function_">m3</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">StringBuilder</span> <span class="variable">sb</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>();</span><br><span class="line">    sb.append(<span class="number">1</span>);</span><br><span class="line">    sb.append(<span class="number">2</span>);</span><br><span class="line">    sb.append(<span class="number">3</span>);</span><br><span class="line">    <span class="keyword">return</span> sb;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>m1()</code> 方法中的 <code>sb</code> 对象是线程安全的；</li>
+<li><code>m2()</code> 方法中的 <code>sb</code> 对象并不是线程安全的，因为 <code>sb</code> 是通过参数传入的，它可能会被其他线程使用</li>
+<li><code>m3()</code> 方法中的 <code>sb</code> 对象也不是线程安全的，它通过方法返回值返回出去后，可以被多个线程使用</li>
+</ul>
+<h2 id="2-3-栈内存溢出"><a class="header-anchor" href="#2-3-栈内存溢出"></a>2.3 栈内存溢出</h2>
+<p>什么情况下会导致栈内存溢出（<code>java.lang.StackOverflowError</code>）？</p>
+<ul>
+<li>栈帧过多</li>
+<li>栈帧过大</li>
+</ul>
+<p>绝大多数栈内存溢出都是由于 <strong>栈帧过多</strong> 导致，比如：</p>
+<ul>
+<li>没有正确设置递归终止条件</li>
+<li>将存在循环引用的对象进行 JSON 序列化</li>
+</ul>
+<h2 id="2-4-线程运行诊断"><a class="header-anchor" href="#2-4-线程运行诊断"></a>2.4 线程运行诊断</h2>
+<blockquote>
+<p>CPU 占用过多</p>
+</blockquote>
+<p>见 <a href="../The-Basics-Of-Linux-Part-Two/">【下篇】Linux 基础</a> 中的 「排查 Java 进程导致 CPU 飙升」</p>
+<blockquote>
+<p>程序运行很长时间没有效果</p>
+</blockquote>
+<p>这往往是因为产生了「死锁」，借助 <code>jstack pid</code> 查看对应进程下 JVM 中当前时刻的线程快照。</p>
+<p>仔细阅读最后的 <code>Java stack information for the threads listed above:</code> 信息即可定位到问题代码。</p>
+<h1 id="3-本地方法栈"><a class="header-anchor" href="#3-本地方法栈"></a>3. 本地方法栈</h1>
+<p>Native Method Stack，本地方法栈。</p>
+<p>用于管理通过 <strong>JNI（Java Native Interface）</strong> 调用的非 Java 代码（如 C/C++）的执行。</p>
+<p>与虚拟机栈类似，只不过虚拟机栈用于处理 Java 方法的调用，本地方法栈用于处理 Native 方法的调用。</p>
+<p>本地方法栈也是线程私有的。</p>
+<p>在某些 JVM 的实现中，会将本地方法栈和虚拟机栈合并为一个栈，以简化实现。</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JVMImages/JVM%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84%E4%B9%8B%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%A0%88.svg" alt="JVM内存结构之本地方法栈"></p>
+<h1 id="4-堆"><a class="header-anchor" href="#4-堆"></a>4. 堆</h1>
+<h2 id="4-1-堆的特点"><a class="header-anchor" href="#4-1-堆的特点"></a>4.1 堆的特点</h2>
+<p>Heap，堆。</p>
+<p>通过 <code>new</code> 关键字创建的对象都会使用堆内存。</p>
+<p>特点：</p>
+<ul>
+<li>堆是线程共享的，堆中对象都需要考虑线程安全的问题</li>
+<li>有垃圾回收机制</li>
+</ul>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JVMImages/JVM%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84%E4%B9%8B%E5%A0%86.svg" alt="JVM内存结构之堆"></p>
+<h2 id="4-2-堆内存溢出"><a class="header-anchor" href="#4-2-堆内存溢出"></a>4.2 堆内存溢出</h2>
+<p>堆内存溢出的异常信息：<code>java.lang.OutofMemoryError ：java heap space</code>。比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo_1</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            ArrayList&lt;String&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">            <span class="type">String</span> <span class="variable">a</span> <span class="operator">=</span> <span class="string">&quot;hello&quot;</span>;</span><br><span class="line">            <span class="comment">// 不断向 list 中添加对象</span></span><br><span class="line">            <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">                list.add(a);</span><br><span class="line">                a = a + a;</span><br><span class="line">                i++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JVMImages/%E5%A0%86%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BAOOM%E7%A4%BA%E4%BE%8B.png" alt="堆内存溢出OOM示例"></p>
+<p>与使用 <code>-Xss</code> 设置栈内存大小类似，可以使用 <code>-Xmx</code> 来指定最大堆内存大小。</p>
+<h2 id="4-3-堆内存诊断"><a class="header-anchor" href="#4-3-堆内存诊断"></a>4.3 堆内存诊断</h2>
+<p><code>jps</code> 工具：查看当前系统中有哪些 Java 进程</p>
+<p><code>jmap</code> 工具：查看某一时刻堆内存占用情况，比如 <code>jmap -heap pid</code></p>
+<p><code>jconsole</code> 工具：多功能图形界面监测工具，可以连续监测</p>
+<p><code>jvisualvm</code> 工具：图形化的虚拟机工具，可以利用它的「堆转储」（dump）功能分析某一时刻堆的使用情况。注意，在 JDK9 之后的版本中已经不再自带该工具，需要额外下载</p>
+<h1 id="5-方法区"><a class="header-anchor" href="#5-方法区"></a>5. 方法区</h1>
+<h2 id="5-1-定义与组成"><a class="header-anchor" href="#5-1-定义与组成"></a>5.1 定义与组成</h2>
+<p>​	<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JVMImages/JVM%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84%E4%B9%8B%E6%96%B9%E6%B3%95%E5%8C%BA.svg" alt="JVM内存结构之方法区"></p>
+<p>以 JDK8 为例，JVM 规范中对于 <a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html#jvms-2.5.4">方法区</a> 的定义如下：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JVMImages/JVM%E8%A7%84%E8%8C%83%E4%B8%AD%E5%AF%B9%E6%96%B9%E6%B3%95%E5%8C%BA%E7%9A%84%E5%AE%9A%E4%B9%89.png" alt="JVM规范中对方法区的定义"></p>
+<p>用 DeepSeek 翻译下主要内容：</p>
+<ul>
+<li>
+<p>Java 虚拟机拥有一个被所有线程共享的方法区。方法区类似于传统编程语言中存储编译代码的存储区域，也类似于操作系统进程中的「text」段。它存储每个类的结构信息，包括运行时常量池、字段和方法数据，以及方法和构造函数的代码，包括用于类初始化、实例初始化和接口初始化的特殊方法（就是类的构造方法，更多细节见 <a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html#jvms-2.9">§2.9</a>）。</p>
+</li>
+<li>
+<p>方法区在虚拟机启动时创建。尽管在逻辑上方法区属于堆内存的一部分，但简单的实现可以选择不进行垃圾回收或内存整理。本规范不限定方法区的具体存储位置，也不规定管理已编译代码的策略。方法区的大小可以是固定的，也可以根据计算需求进行扩展，如果不再需要较大的方法区时还可以进行收缩。方法区的内存空间不需要是连续的。</p>
+</li>
+<li>
+<p>当方法区的内存无法满足分配请求时，Java 虚拟机将抛出 <code>OutOfMemoryError</code>。</p>
+</li>
+</ul>
+<p>JDK 1.8 版本之前方法区使用堆的内存，叫永久代；JDK 1.8 之后用操作系统的内存，叫元空间。</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JVMImages/Java6%E4%B8%ADJVM%E7%9A%84%E5%A0%86%E4%B8%8E%E6%96%B9%E6%B3%95%E5%8C%BA.svg" alt="Java6中JVM的堆与方法区"></p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JVMImages/Java8%E4%B8%ADJVM%E7%9A%84%E5%A0%86%E4%B8%8E%E6%96%B9%E6%B3%95%E5%8C%BA.svg" alt="Java8中JVM的堆与方法区."></p>
+<h2 id="5-2-方法区内存溢出"><a class="header-anchor" href="#5-2-方法区内存溢出"></a>5.2 方法区内存溢出</h2>
+<p>不同 Java 版本中方法区的实现不相同，因此方法区内存溢出时的错误信息也有所区别：</p>
+<ul>
+<li>Java 8 以前会导致 <strong>永久代</strong> 内存溢出：<code>java.lang.OutOfMemoryError: PermGen space</code></li>
+<li>Java 8 以后会导致 <strong>元空间</strong> 内存溢出：<code>java.lang.OutOfMemoryError: Metaspace</code></li>
+</ul>
+<p>Java 8 中元空间的大小默认与系统内存相关，为方便演示内存溢出，执行下列演示代码前需要先设置 JVM 参数 <code>-XX:MaxMetaspaceSize=10m</code>，指定最大元空间的大小为 10m：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.sun.xml.internal.ws.org.objectweb.asm.ClassWriter;</span><br><span class="line"><span class="keyword">import</span> jdk.internal.org.objectweb.asm.Opcodes;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 演示元空间内存溢出:java.lang.OutOfMemoryError: Metaspace</span></span><br><span class="line"><span class="comment"> * -XX:MaxMetaspaceSize=10m</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> mofan</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2025/5/3 21:07</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo_2</span> <span class="keyword">extends</span> <span class="title class_">ClassLoader</span> &#123; <span class="comment">// 用来加载类的二进制字节码</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">Demo_2</span> <span class="variable">test</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Demo_2</span>();</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++, j++) &#123;</span><br><span class="line">                <span class="comment">// ClassWriter 用于生产类的二进制字节码</span></span><br><span class="line">                <span class="type">ClassWriter</span> <span class="variable">cw</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassWriter</span>(<span class="number">0</span>);</span><br><span class="line">                <span class="comment">// 版本号，public，类名，包名，所属父类，实现的接口</span></span><br><span class="line">                cw.visit(Opcodes.V1_8, Opcodes.ACC_PUBLIC, <span class="string">&quot;Class&quot;</span> + i, <span class="literal">null</span>, <span class="string">&quot;java/lang/Object&quot;</span>, <span class="literal">null</span>);</span><br><span class="line">                <span class="comment">// 返回字节码的 byte[]</span></span><br><span class="line">                <span class="type">byte</span>[] code = cw.toByteArray();</span><br><span class="line">                <span class="comment">// 执行类的加载</span></span><br><span class="line">                test.defineClass(<span class="string">&quot;Class&quot;</span> + i, code, <span class="number">0</span>, code.length);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            System.out.println(j);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JVMImages/%E6%96%B9%E6%B3%95%E5%8C%BA%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BAOOM%E7%A4%BA%E4%BE%8B.png" alt="方法区内存溢出OOM示例"></p>
+<h2 id="5-3-运行时常量池"><a class="header-anchor" href="#5-3-运行时常量池"></a>5.3 运行时常量池</h2>
+<ul>
+<li><strong>常量池</strong>：就是一张表，虚拟机指令根据这张常量表找到要执行的类名、方法名、参数类型、字面量等信息</li>
+<li><strong>运行时常量池</strong>：常量池存在于 <code>*.class</code> 文件中，当该类被加载，它的常量池信息就会被放入运行时常量池，并把里面的符号地址变为真实地址</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HelloWorld</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Hello World&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>要运行上述代码，需要将其编译成二进制字节码，它主要包括：</p>
+<ol>
+<li>类的基本信息</li>
+<li>常量池</li>
+<li>类的方法定义（包含虚拟机指令）</li>
+</ol>
+<p>使用 <code>javap -v HelloWorld.class</code> 反编译字节码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line">// ------------- 以下是「类的基本信息」-------------</span><br><span class="line">Classfile /D:/Code/Java/MyCode/jvm-demo/structure/target/classes/indi/mofan/HelloWorld.class</span><br><span class="line">  Last modified 2025-5-3; size 555 bytes</span><br><span class="line">  MD5 checksum ac4ed814f06117795da5bc9fe3c3c0ef</span><br><span class="line">  Compiled from &quot;HelloWorld.java&quot;</span><br><span class="line">public class indi.mofan.HelloWorld</span><br><span class="line">  minor version: 0</span><br><span class="line">  major version: 52</span><br><span class="line">  flags: ACC_PUBLIC, ACC_SUPER</span><br><span class="line">// ------------- 以上是「类的基本信息」-------------</span><br><span class="line">  </span><br><span class="line">// ------------- 以下是「常量池」-------------</span><br><span class="line">Constant pool:</span><br><span class="line">   #1 = Methodref          #6.#20         // java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">   #2 = Fieldref           #21.#22        // java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">   #3 = String             #23            // Hello World</span><br><span class="line">   #4 = Methodref          #24.#25        // java/io/PrintStream.println:(Ljava/lang/String;)V</span><br><span class="line">   #5 = Class              #26            // indi/mofan/HelloWorld</span><br><span class="line">   #6 = Class              #27            // java/lang/Object</span><br><span class="line">   #7 = Utf8               &lt;init&gt;</span><br><span class="line">   #8 = Utf8               ()V</span><br><span class="line">   #9 = Utf8               Code</span><br><span class="line">  #10 = Utf8               LineNumberTable</span><br><span class="line">  #11 = Utf8               LocalVariableTable</span><br><span class="line">  #12 = Utf8               this</span><br><span class="line">  #13 = Utf8               Lindi/mofan/HelloWorld;</span><br><span class="line">  #14 = Utf8               main</span><br><span class="line">  #15 = Utf8               ([Ljava/lang/String;)V</span><br><span class="line">  #16 = Utf8               args</span><br><span class="line">  #17 = Utf8               [Ljava/lang/String;</span><br><span class="line">  #18 = Utf8               SourceFile</span><br><span class="line">  #19 = Utf8               HelloWorld.java</span><br><span class="line">  #20 = NameAndType        #7:#8          // &quot;&lt;init&gt;&quot;:()V</span><br><span class="line">  #21 = Class              #28            // java/lang/System</span><br><span class="line">  #22 = NameAndType        #29:#30        // out:Ljava/io/PrintStream;</span><br><span class="line">  #23 = Utf8               Hello World</span><br><span class="line">  #24 = Class              #31            // java/io/PrintStream</span><br><span class="line">  #25 = NameAndType        #32:#33        // println:(Ljava/lang/String;)V</span><br><span class="line">  #26 = Utf8               indi/mofan/HelloWorld</span><br><span class="line">  #27 = Utf8               java/lang/Object</span><br><span class="line">  #28 = Utf8               java/lang/System</span><br><span class="line">  #29 = Utf8               out</span><br><span class="line">  #30 = Utf8               Ljava/io/PrintStream;</span><br><span class="line">  #31 = Utf8               java/io/PrintStream</span><br><span class="line">  #32 = Utf8               println</span><br><span class="line">  #33 = Utf8               (Ljava/lang/String;)V</span><br><span class="line">// ------------- 以上是「常量池」-------------</span><br><span class="line"></span><br><span class="line">// ------------- 以下是「类的方法定义」------------- </span><br><span class="line">&#123;</span><br><span class="line">  public indi.mofan.HelloWorld();</span><br><span class="line">    descriptor: ()V</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=1, locals=1, args_size=1</span><br><span class="line">         0: aload_0</span><br><span class="line">         1: invokespecial #1                  // Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">         4: return</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line 8: 0</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            0       5     0  this   Lindi/mofan/HelloWorld;</span><br><span class="line"></span><br><span class="line">  public static void main(java.lang.String[]);</span><br><span class="line">    descriptor: ([Ljava/lang/String;)V</span><br><span class="line">    flags: ACC_PUBLIC, ACC_STATIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=2, locals=1, args_size=1</span><br><span class="line">         0: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">         3: ldc           #3                  // String Hello World</span><br><span class="line">         5: invokevirtual #4                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span><br><span class="line">         8: return</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line 10: 0</span><br><span class="line">        line 11: 8</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            0       9     0  args   [Ljava/lang/String;</span><br><span class="line">&#125;</span><br><span class="line">// ------------- 以上是「类的方法定义」-------------</span><br><span class="line"></span><br><span class="line">SourceFile: &quot;HelloWorld.java&quot;</span><br></pre></td></tr></table></figure>
+<p>每条虚拟机指令都会对应常量池表中一个地址（比如 <code>getstatic #2</code> 中的 <code>#2</code> 就是常量池中的一个地址），常量池表中的地址可能对应着一个类名、方法名、参数类型等信息。</p>
+<h1 id="6-StringTable"><a class="header-anchor" href="#6-StringTable"></a>6. StringTable</h1>
+<h2 id="6-1-特性"><a class="header-anchor" href="#6-1-特性"></a>6.1 特性</h2>
+<p>StringTable（字符串常量池） 有如下特性：</p>
+<ul>
+<li>运行时常量池中的字符串仅是符号，只有在被用到时才会转化为对象</li>
+<li>利用 StringTable 的机制，避免重复创建字符串对象</li>
+<li>字符串变量拼接的原理是使用 <code>StringBuilder</code>（JDK 1.8）</li>
+<li>字符串常量拼接会被编译器优化</li>
+<li>可以使用 <code>String#intern()</code> 方法主动向 StringTable 中放入不存在的字符串对象</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo_3_1</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">s1</span> <span class="operator">=</span> <span class="string">&quot;a&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">s2</span> <span class="operator">=</span> <span class="string">&quot;b&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">s3</span> <span class="operator">=</span> <span class="string">&quot;ab&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译上述代码后，使用 <code>javap -v</code> 反编译 <code>Demo_3_1.class</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public static void main(java.lang.String[]);</span><br><span class="line">    descriptor: ([Ljava/lang/String;)V</span><br><span class="line">    flags: ACC_PUBLIC, ACC_STATIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=1, locals=4, args_size=1</span><br><span class="line">         0: ldc           #2                  // String a</span><br><span class="line">         2: astore_1</span><br><span class="line">         3: ldc           #3                  // String b</span><br><span class="line">         5: astore_2</span><br><span class="line">         6: ldc           #4                  // String ab</span><br><span class="line">         8: astore_3</span><br><span class="line">         9: return</span><br></pre></td></tr></table></figure>
+<p>StringTable 是一个 Hashtable 结构，并且不能扩容，程序刚运行时，StringTable 内没有任何元素。</p>
+<p>在加载 <code>Demo_3_1.class</code> 时，其常量池中的信息会被加载到「运行时常量池」中，这时 <code>a</code>、<code>b</code> 和 <code>ab</code> 都是常量池中的符号，不是 Java 字符串对象。</p>
+<p>当执行到 <code>ldc #2</code> 时，会把符号 <code>a</code> 变为 <code>&quot;a&quot;</code> 字符串对象，<code>b</code> 和 <code>ab</code> 也是如此（字符串延迟加载）。</p>
+<p>在 <code>main()</code> 末尾再增加一句代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">s1</span> <span class="operator">=</span> <span class="string">&quot;a&quot;</span>;</span><br><span class="line">    <span class="type">String</span> <span class="variable">s2</span> <span class="operator">=</span> <span class="string">&quot;b&quot;</span>;</span><br><span class="line">    <span class="type">String</span> <span class="variable">s3</span> <span class="operator">=</span> <span class="string">&quot;ab&quot;</span>;</span><br><span class="line">    <span class="type">String</span> <span class="variable">s4</span> <span class="operator">=</span> s1 + s2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再使用 <code>javap</code> 反编译字节码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">public static void main(java.lang.String[]);</span><br><span class="line">   descriptor: ([Ljava/lang/String;)V</span><br><span class="line">   flags: ACC_PUBLIC, ACC_STATIC</span><br><span class="line">   Code:</span><br><span class="line">     stack=2, locals=5, args_size=1</span><br><span class="line">        0: ldc           #2                  // String a</span><br><span class="line">        2: astore_1</span><br><span class="line">        3: ldc           #3                  // String b</span><br><span class="line">        5: astore_2</span><br><span class="line">        6: ldc           #4                  // String ab</span><br><span class="line">        8: astore_3</span><br><span class="line">        9: new           #5                  // class java/lang/StringBuilder</span><br><span class="line">       12: dup</span><br><span class="line">       13: invokespecial #6                  // Method java/lang/StringBuilder.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">       16: aload_1</span><br><span class="line">       17: invokevirtual #7                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span><br><span class="line">       20: aload_2</span><br><span class="line">       21: invokevirtual #7                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span><br><span class="line">       24: invokevirtual #8                  // Method java/lang/StringBuilder.toString:()Ljava/lang/String;</span><br><span class="line">       27: astore        4</span><br><span class="line">       29: return</span><br><span class="line">     LocalVariableTable:</span><br><span class="line">       Start  Length  Slot  Name   Signature</span><br><span class="line">           0      30     0  args   [Ljava/lang/String;</span><br><span class="line">           3      27     1    s1   Ljava/lang/String;</span><br><span class="line">           6      24     2    s2   Ljava/lang/String;</span><br><span class="line">           9      21     3    s3   Ljava/lang/String;</span><br><span class="line">          29       1     4    s4   Ljava/lang/String;</span><br></pre></td></tr></table></figure>
+<p><code>0:</code> 到 <code>8:</code> 与原先一样，在 <code>9:</code> 处使用了 <code>new</code> 关键字，然后在 <code>13:</code> 处执行了 <code>StringBuilder</code> 的 <code>&lt;init&gt;</code> 方法，也就是执行了 <code>StringBuilder</code> 的构造方法，对应 Java 代码是 <code>new StringBuilder()</code>。</p>
+<p>接着执行 <code>16: aload_1</code>，这会从 <code>LocalVariableTable</code> 中加载 <code>Slot = 1</code> 处的变量，也就是 <code>s1</code>；然后在 <code>17:</code> 处执行了 <code>StringBuilder</code> 的 <code>append()</code> 方法，并将刚刚加载的 <code>s1</code> 作为参数传入，对应 Java 代码是 <code>append(s1)</code>。</p>
+<p>后续使用同样的方式加载 <code>s2</code>，并将其作为参数调用 <code>append()</code> 方法。</p>
+<p>来到 <code>24:</code> 处，这里调用了 <code>StringBuilder</code> 的 <code>toString()</code> 方法。</p>
+<p>结合前面内容，整体对应的 Java 代码为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">new</span> <span class="title class_">StringBuilder</span>()).append(s1).append(s2).toString();</span><br></pre></td></tr></table></figure>
+<p>最后在 <code>27:</code> 处执行 <code>astore 4</code>，表示将 <code>toString()</code> 方法的结果放入 <code>LocalVariableTable</code> 中 <code>Slot = 4</code> 的位置。</p>
+<p>经过上述步骤得到的 <code>s4</code> 并不在 StringTable 中，与其中的 <code>ab</code> 显然不是同一个对象，因此：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(s3 == s4); <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+<p>如果在 <code>main()</code> 方法后再加一句呢？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">s5</span> <span class="operator">=</span> <span class="string">&quot;a&quot;</span> + <span class="string">&quot;b&quot;</span>;</span><br></pre></td></tr></table></figure>
+<p>同样反编译字节码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">6: ldc            #4                  // String ab</span><br><span class="line">8: astore_3</span><br><span class="line">        </span><br><span class="line">29: ldc           #4                  // String ab</span><br><span class="line">31: astore        5</span><br></pre></td></tr></table></figure>
+<p>这时执行的是 <code>ldc</code> 指令，从运行时常量池中加载 <code>#4</code> 位置的符号，对应 <code>ab</code>。没有加载符号 <code>a</code>，也没有加载符号 <code>b</code>，而是直接加载的 <code>ab</code>。</p>
+<p>与 <code>String s3 = &quot;ab&quot;;</code> 对应的字节码进行对比，它们几乎一样。</p>
+<p>这时 <code>javac</code> 在编译期间的优化，<code>s5</code> 由常量 <code>a</code> 和 <code>b</code> 进行拼接，其值能够直接在编译期间确定，因此编译器对其进行优化。那么：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(s3 == s5); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>JDK 1.8 中的 <code>String#intern()</code></p>
+</blockquote>
+<p>先来句代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;a&quot;</span>) + <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;b&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>执行这句代码后会得到 6 个对象：</p>
+<ul>
+<li>
+<p>要进行字符串拼接，首先得有一个 <code>StringBuilder</code> 对象（1 个）</p>
+</li>
+<li>
+<p>StringTable 中的字符串 <code>a</code> 和 <code>b</code>（2 个）</p>
+</li>
+<li>
+<p>堆中的 <code>new String(&quot;a&quot;)</code> 和 <code>new String(&quot;b&quot;)</code>（2 个）</p>
+</li>
+<li>
+<p>经过拼接后，调用 <code>StringBuilder</code> 的 <code>toString()</code> 方法，这个过程又会 <code>new</code> 一个 <code>String</code> 对象（1 个）</p>
+</li>
+</ul>
+<p>得到的 <code>s</code> 的值是 <code>ab</code>，注意此时 <code>ab</code> 并不在 StringTable 中。</p>
+<p>加一句代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">s2</span> <span class="operator">=</span> s.intern();</span><br></pre></td></tr></table></figure>
+<p>尝试将字符串对象 <code>s</code> 放入 StringTable 中（如果 StringTable 内已经有了对应的字符串，则不会放入），然后返回 StringTable 中对象的引用。</p>
+<p>在这时，字符串对象 <code>s</code> 对应的 <code>ab</code> 字符串已经存在于 StringTable 中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">intern1</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;a&quot;</span>) + <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;b&quot;</span>);</span><br><span class="line">    <span class="type">String</span> <span class="variable">s2</span> <span class="operator">=</span> s.intern();</span><br><span class="line">    <span class="comment">// true</span></span><br><span class="line">    System.out.println(s2 == <span class="string">&quot;ab&quot;</span>);</span><br><span class="line">    <span class="comment">// true</span></span><br><span class="line">    System.out.println(s == <span class="string">&quot;ab&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那如果这样呢？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">intern2</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">x</span> <span class="operator">=</span> <span class="string">&quot;ab&quot;</span>;</span><br><span class="line">    <span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;a&quot;</span>) + <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;b&quot;</span>);</span><br><span class="line">    <span class="type">String</span> <span class="variable">s2</span> <span class="operator">=</span> s.intern();</span><br><span class="line">    System.out.println(s2 == x);</span><br><span class="line">    System.out.println(s == x);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先将 <code>ab</code> 添加到 StringTable 中，然后又会将 <code>a</code> 和 <code>b</code> 添加到 StringTable 中。</p>
+<p>执行 <code>s.intern()</code> 时，由于 StringTable 中已经有字符串 <code>ab</code> 了，那么不会再把 <code>s</code> 对象添加到 StringTable 中，<code>intern()</code> 方法返回 StringTable 中 <code>ab</code> 字符串的引用。</p>
+<p>因此：</p>
+<ul>
+<li><code>s2</code> 和 <code>x</code> 都指向 StringTable 中的 <code>ab</code> 字符串，故 <code>s2 == x</code> 返回 <code>true</code></li>
+<li>由于 StringTable 已经先有 <code>ab</code> 字符串了，不会再把 <code>s</code> 对象放入 StringTable 中，因此 <code>s</code> 和 <code>x</code> 指向不同的对象，那么 <code>s == x</code> 返回 <code>false</code></li>
+</ul>
+<h2 id="6-2-所在位置"><a class="header-anchor" href="#6-2-所在位置"></a>6.2 所在位置</h2>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JVMImages/Java6%E4%B8%ADJVM%E7%9A%84%E5%A0%86%E4%B8%8E%E6%96%B9%E6%B3%95%E5%8C%BA.svg" alt="Java6中JVM的堆与方法区"></p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JVMImages/Java8%E4%B8%ADJVM%E7%9A%84%E5%A0%86%E4%B8%8E%E6%96%B9%E6%B3%95%E5%8C%BA.svg" alt="Java8中JVM的堆与方法区"></p>
+<h2 id="6-3-StringTable-的垃圾回收"><a class="header-anchor" href="#6-3-StringTable-的垃圾回收"></a>6.3 StringTable 的垃圾回收</h2>
+<p>先介绍几个待会要用的虚拟机参数：</p>
+<ul>
+<li><code>-Xmx10m</code>：老熟人了，用于指定最大堆内存的大小</li>
+<li><code>-XX:+PrintStringTableStatistics</code>：打印字符串常量池信息</li>
+<li><code>-XX:+PrintGCDetails</code> 和 <code>-verbose:gc</code>：打印 GC 次数，耗费时间等信息</li>
+</ul>
+<p>添加以上虚拟机参数后，运行下面的 <code>main()</code> 方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo_5</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span>  <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; <span class="number">10000</span>; j++) &#123;</span><br><span class="line">                String.valueOf(i).intern();</span><br><span class="line">                i++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>控制台输出类似以下信息：</p>
+<pre>
+[GC (Allocation Failure) [PSYoungGen: 2046K->496K(2560K)] 2046K->872K(9728K), 0.0007887 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
+</pre>
+<p>这证明触发了 GC。</p>
+<p>在堆内存空间不足时，会触发 StringTable 的垃圾回收。</p>
+<h2 id="6-4-性能调优"><a class="header-anchor" href="#6-4-性能调优"></a>6.4 性能调优</h2>
+<blockquote>
+<p>使用 <code>-XX:StringTableSize</code> 参数</p>
+</blockquote>
+<p>StringTable 的底层由 Hashtable 实现。当 Hashtable 中的桶数量太少，而添加到 StringTable 中的字符串太多时，会增加哈希碰撞的几率，也会增加将字符串添加到 StringTable 中使用的时间。</p>
+<p>可以使用以下虚拟机参数调整桶个数：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-XX:StringTableSize=桶个数</span><br></pre></td></tr></table></figure>
+<p>可选的桶个数范围是 <code>[1009, 2305843009213693951]</code>。</p>
+<blockquote>
+<p>尝试将字符串添加到 StringTable</p>
+</blockquote>
+<p>当系统中存在大量、可重复的字符串时，可以考虑调用 <code>String#intern()</code> 方法将字符串添加到 StringTable 中，以减少堆内存的使用。</p>
+<h1 id="7-直接内存"><a class="header-anchor" href="#7-直接内存"></a>7. 直接内存</h1>
+<h2 id="7-1-定义"><a class="header-anchor" href="#7-1-定义"></a>7.1 定义</h2>
+<p>Direct Memory，直接内存。</p>
+<ul>
+<li>常见于 NIO 操作时，用于数据缓冲区</li>
+<li>分配回收成本较高，但读写性能高</li>
+<li>不受 JVM 的内存回收管理</li>
+</ul>
+<p>Java 本身并不具备磁盘读写的能力，需要调用操作系统提供的函数来实现磁盘读写：</p>
+<ul>
+<li>CPU 层面从「用户态」切换到「内核态」，调用本地（native）方法读取磁盘文件</li>
+<li>内存层面将读取到的磁盘文件分次存入「系统缓存区」（总不能一次性把大文件都读到内存吧），但是 Java 代码不能在「系统缓存区」中运行，于是需要在 Java 堆内存中分配一块 Java 缓存区（也就是写 IO 相关代码时使用的 <code>byte[1024]</code> 数组），然后又把「系统缓存区」中的信息读取到 Java 缓存区</li>
+<li>使用这种方式读取磁盘文件时，相关数据会被复制两次，因此效率也比较低下</li>
+</ul>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JVMImages/%E4%BD%BF%E7%94%A8Java%E8%AF%BB%E5%8F%96%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6.svg" alt="使用Java读取磁盘文件"></p>
+<p>要想提高效率，那么数据就不能复制两次。</p>
+<p>「直接内存」是操作系统和 Java 代码都可以直接访问的一块区域，不用再将系统内存中的数据复制到 Java 堆内存中，相比前一种方式减少了一次数据复制，进而提高了效率。</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JVMImages/Java%E4%BD%BF%E7%94%A8%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98%E8%AF%BB%E5%8F%96%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6.svg" alt="Java使用直接内存读取磁盘文件"></p>
+<h2 id="7-2-内存溢出"><a class="header-anchor" href="#7-2-内存溢出"></a>7.2 内存溢出</h2>
+<p>使用 <code>ByteBuffer.allocateDirect()</code> 方法来分配一块直接内存。</p>
+<p>由于直接内存不受 JVM 的内存回收管理，因此使用不当可能会导致内存溢出。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo_6_1</span> &#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="type">int</span> <span class="variable">_100MB</span> <span class="operator">=</span> <span class="number">1024</span> * <span class="number">1024</span> * <span class="number">100</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        List&lt;ByteBuffer&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">                <span class="type">ByteBuffer</span> <span class="variable">byteBuffer</span> <span class="operator">=</span> ByteBuffer.allocateDirect(_100MB);</span><br><span class="line">                list.add(byteBuffer);</span><br><span class="line">                i++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre>
+Exception in thread "main" java.lang.OutOfMemoryError: Direct buffer memory
+	at java.nio.Bits.reserveMemory(Bits.java:695)
+	at java.nio.DirectByteBuffer.&lt;init&gt;(DirectByteBuffer.java:123)
+	at java.nio.ByteBuffer.allocateDirect(ByteBuffer.java:311)
+	at indi.mofan.Demo_6.main(Demo_6.java:21)
+</pre>
+<h2 id="7-3-内存释放原理"><a class="header-anchor" href="#7-3-内存释放原理"></a>7.3 内存释放原理</h2>
+<p>直接内存不受 JVM 的内存回收管理。</p>
+<p>做一个实验：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo_6_2</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="type">int</span> <span class="variable">_1GB</span> <span class="operator">=</span> <span class="number">1024</span> * <span class="number">1024</span> * <span class="number">1024</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="type">ByteBuffer</span> <span class="variable">byteBuffer</span> <span class="operator">=</span> ByteBuffer.allocateDirect(_1GB);</span><br><span class="line">        System.out.println(<span class="string">&quot;分配完毕...&quot;</span>);</span><br><span class="line">        System.in.read();</span><br><span class="line">        System.out.println(<span class="string">&quot;开始释放...&quot;</span>);</span><br><span class="line">        byteBuffer = <span class="literal">null</span>;</span><br><span class="line">        System.gc();</span><br><span class="line">        System.in.read();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 Windows 下使用任务管理器查看系统使用内存，运行上述 <code>main()</code> 方法后，发现新增一个 Java 进程，它占用了 1GB 左右的内存。</p>
+<p>在 IDEA 控制台键入回车后，刚刚新增的 Java 进程在任务管理器中消失，并且使用的系统内存下降了 1GB。</p>
+<p>不是说直接内存不受 JVM 的内存回收管理吗？怎么在执行 <code>System.gc()</code> 方法后，使用的系统内存下降了 1GB？消失的这 1GB 内存是因为触发了垃圾回收吗？</p>
+<blockquote>
+<p>内存释放原理</p>
+</blockquote>
+<p>开门见山地说，直接内存的分配与 <code>Unsafe</code> 类相关：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo_6_3</span> &#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="type">int</span> <span class="variable">_1GB</span> <span class="operator">=</span> <span class="number">1024</span> * <span class="number">1024</span> * <span class="number">1024</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="type">Unsafe</span> <span class="variable">unsafe</span> <span class="operator">=</span> getUnsafe();</span><br><span class="line">        <span class="comment">// 获取分配的直接内存地址</span></span><br><span class="line">        <span class="type">long</span> <span class="variable">base</span> <span class="operator">=</span> unsafe.allocateMemory(_1GB);</span><br><span class="line">        <span class="comment">// 分配内存</span></span><br><span class="line">        unsafe.setMemory(base, _1GB, (<span class="type">byte</span>) <span class="number">0</span>);</span><br><span class="line">        System.in.read();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 释放内存</span></span><br><span class="line">        unsafe.freeMemory(base);</span><br><span class="line">        System.in.read();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> Unsafe <span class="title function_">getUnsafe</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">Field</span> <span class="variable">field</span> <span class="operator">=</span> Unsafe.class.getDeclaredField(<span class="string">&quot;theUnsafe&quot;</span>);</span><br><span class="line">            field.setAccessible(<span class="literal">true</span>);</span><br><span class="line">            <span class="keyword">return</span> (Unsafe) field.get(<span class="literal">null</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (NoSuchFieldException | IllegalAccessException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>查看 <code>ByteBuffer#allocateDirect()</code> 方法的源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> ByteBuffer <span class="title function_">allocateDirect</span><span class="params">(<span class="type">int</span> capacity)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">DirectByteBuffer</span>(capacity);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">DirectByteBuffer(<span class="type">int</span> cap) &#123;                   <span class="comment">// package-private</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">super</span>(-<span class="number">1</span>, <span class="number">0</span>, cap, cap);</span><br><span class="line">    <span class="type">boolean</span> <span class="variable">pa</span> <span class="operator">=</span> VM.isDirectMemoryPageAligned();</span><br><span class="line">    <span class="type">int</span> <span class="variable">ps</span> <span class="operator">=</span> Bits.pageSize();</span><br><span class="line">    <span class="type">long</span> <span class="variable">size</span> <span class="operator">=</span> Math.max(<span class="number">1L</span>, (<span class="type">long</span>)cap + (pa ? ps : <span class="number">0</span>));</span><br><span class="line">    Bits.reserveMemory(size, cap);</span><br><span class="line"></span><br><span class="line">    <span class="type">long</span> <span class="variable">base</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 获取分配的直接内存地址</span></span><br><span class="line">        base = unsafe.allocateMemory(size);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (OutOfMemoryError x) &#123;</span><br><span class="line">        Bits.unreserveMemory(size, cap);</span><br><span class="line">        <span class="keyword">throw</span> x;</span><br><span class="line">    &#125;</span><br><span class="line">    unsafe.setMemory(base, size, (<span class="type">byte</span>) <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (pa &amp;&amp; (base % ps != <span class="number">0</span>)) &#123;</span><br><span class="line">        <span class="comment">// Round up to page boundary</span></span><br><span class="line">        address = base + ps - (base &amp; (ps - <span class="number">1</span>));</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        address = base;</span><br><span class="line">    &#125;</span><br><span class="line">    cleaner = Cleaner.create(<span class="built_in">this</span>, <span class="keyword">new</span> <span class="title class_">Deallocator</span>(base, size, cap));</span><br><span class="line">    att = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到确实调用了 <code>Unsafe#allocateMemory()</code> 方法来申请内存，但并没有释放内存的代码。</p>
+<p>关键在 <code>Cleaner#create()</code> 方法中，先看传入的 <code>Deallocator</code> 对象：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Deallocator</span></span><br><span class="line">    <span class="keyword">implements</span> <span class="title class_">Runnable</span></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">Unsafe</span> <span class="variable">unsafe</span> <span class="operator">=</span> Unsafe.getUnsafe();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">long</span> address;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">long</span> size;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> capacity;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">Deallocator</span><span class="params">(<span class="type">long</span> address, <span class="type">long</span> size, <span class="type">int</span> capacity)</span> &#123;</span><br><span class="line">        <span class="keyword">assert</span> (address != <span class="number">0</span>);</span><br><span class="line">        <span class="built_in">this</span>.address = address;</span><br><span class="line">        <span class="built_in">this</span>.size = size;</span><br><span class="line">        <span class="built_in">this</span>.capacity = capacity;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (address == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="comment">// Paranoia</span></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        unsafe.freeMemory(address);</span><br><span class="line">        address = <span class="number">0</span>;</span><br><span class="line">        Bits.unreserveMemory(size, capacity);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>Deallocator</code> 实现了 <code>Runnable</code> 接口，是一个「回调任务」对象，在重写的 <code>run()</code> 方法中调用了 <code>Unsafe#freeMemory()</code> 方法。</p>
+<p>那么是怎么使用 <code>Cleaner</code> 将它们串联起来呢？</p>
+<p><code>Cleaner</code> 是虚引用类型，当其关联的对象被回收时，就会触发它的 <code>clean()</code> 方法。</p>
+<p>在调用 <code>Cleaner#create()</code> 方法时，传入的第一个参数就是它关联的对象：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cleaner = Cleaner.create(<span class="built_in">this</span>, <span class="keyword">new</span> <span class="title class_">Deallocator</span>(base, size, cap));</span><br></pre></td></tr></table></figure>
+<p><code>this</code> 表示 <code>DirectByteBuffer</code> 对象。</p>
+<p>也就是当 <code>DirectByteBuffer</code> 对象被垃圾回收时，就会触发 <code>Cleaner#clean()</code> 方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">clean</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (!remove(<span class="built_in">this</span>))</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// thunk 对象就是调用 create() 方法传入的 Deallocator 对象</span></span><br><span class="line">        thunk.run();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (<span class="keyword">final</span> Throwable x) &#123;</span><br><span class="line">        AccessController.doPrivileged(<span class="keyword">new</span> <span class="title class_">PrivilegedAction</span>&lt;Void&gt;() &#123;</span><br><span class="line">                <span class="keyword">public</span> Void <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">                    <span class="keyword">if</span> (System.err != <span class="literal">null</span>)</span><br><span class="line">                        <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&quot;Cleaner terminated abnormally&quot;</span>, x)</span><br><span class="line">                            .printStackTrace();</span><br><span class="line">                    System.exit(<span class="number">1</span>);</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">                &#125;&#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>禁用显式垃圾回收对直接内存的影响</p>
+</blockquote>
+<p>调用 <code>System.gc()</code> 方法显式地触发的垃圾回收是一次 Full GC，这里不展开 Full GC 的内容，知道 Full GC 是一种比较影响性能的垃圾回收即可。</p>
+<p>为防止程序员在代码中使用了 <code>System.gc()</code> 方法，在进行 JVM 调优时可以使用 <code>-XX:+DisableExplicitGC</code> 参数来禁用这种显式地垃圾回收。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">ByteBuffer</span> <span class="variable">byteBuffer</span> <span class="operator">=</span> ByteBuffer.allocateDirect(_1GB);</span><br><span class="line"><span class="comment">// --snip--</span></span><br><span class="line">byteBuffer = <span class="literal">null</span>;</span><br><span class="line">System.gc();</span><br></pre></td></tr></table></figure>
+<p>在使用 <code>-XX:+DisableExplicitGC</code> 参数后，那么上述代码中的 <code>System.gc()</code> 方法会失效，无法触发垃圾回收。尽管没有引用 <code>byteBuffer</code> 的地方（<code>byteBuffer = null;</code>），但在堆内存充裕的情况下，<code>byteBuffer</code> 对象还会一直存活，那么其对应的直接内存也无法及时得到释放，只有等到 JVM 回收 <code>byteBuffer</code> 对象时，这块直接内存才会被释放。</p>
+<p>既然这样，那把 <code>-XX:+DisableExplicitGC</code> 参数去掉呗？</p>
+<p>这肯定也不行。</p>
+<p>如果要想及时释放不再使用的直接内存，应当使用 <code>Unsafe</code> 类来分配直接内存，在使用完之后调用 <code>Unsafe#freeMemory()</code> 方法释放直接内存。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/The-Structure-Of-JVM/">https://mofan212.github.io/posts/The-Structure-Of-JVM/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/JVM/">JVM</a></div><div class="post-share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/161.webp" data-sites="wechat,qq,weibo,facebook,x"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/Implement-Dubbo-Default-Service/" title="实现 Dubbo 默认服务"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/160.webp" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">实现 Dubbo 默认服务</div></div><div class="info-2"><div class="info-item-1">总结工作与学习中阅读源码的区别。</div></div></div></a><a class="pagination-related" href="/posts/Functors-Applicatives-And-Monads-In-Pictures/" title="Functors, Applicatives and Monads In Pictures"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/162.webp" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Functors, Applicatives and Monads In Pictures</div></div><div class="info-2"><div class="info-item-1">图解 Functors, Applicatives 和 Monads。</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-02</div><div class="info-item-2">字节码与类加载</div></div><div class="info-2"><div class="info-item-1">JVM 快速入门第三部分：字节码与类加载。</div></div></div></a><a class="pagination-related" href="/posts/JVM-GC/" title="JVM 垃圾回收"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/165.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-09-21</div><div class="info-item-2">JVM 垃圾回收</div></div><div class="info-2"><div class="info-item-1">JVM 快速入门第二部分：JVM 垃圾回收。</div></div></div></a><a class="pagination-related" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-03</div><div class="info-item-2">Java 内存模型</div></div><div class="info-2"><div class="info-item-1">JVM 快速入门第四部分：Java 内存模型。</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">默烦</div><div class="author-info-description">彩笔的打怪升级之路...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mofan212"><i class="fab fa-github"></i><span>follow me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解。<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a href="./mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载。😊</br><strong><font style="color:red">严禁未遵循规范的转载。</font></strong>😡</br><strong>死去的评论系统复活啦！欢迎到留言板畅所欲言！</strong>当然也可以使用更高效的<a target="_blank" href="https://space.bilibili.com/23658864/dynamic" style="color:#49B1F5;text-decoration:underline"> 哔哩哔哩私信 </a>或<a href="mailto:cy.mofan@foxmail.com" style="color:#49B1F5;text-decoration:underline" target="_blank">邮箱</a>。 😉</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%99%A8"><span class="toc-text">1. 程序计数器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88"><span class="toc-text">2. 虚拟机栈</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E6%A0%88%E4%B8%8E%E6%A0%88%E5%B8%A7"><span class="toc-text">2.1 栈与栈帧</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E9%97%AE%E9%A2%98%E8%BE%A8%E6%9E%90"><span class="toc-text">2.2 问题辨析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E6%A0%88%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA"><span class="toc-text">2.3 栈内存溢出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-%E7%BA%BF%E7%A8%8B%E8%BF%90%E8%A1%8C%E8%AF%8A%E6%96%AD"><span class="toc-text">2.4 线程运行诊断</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%A0%88"><span class="toc-text">3. 本地方法栈</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E5%A0%86"><span class="toc-text">4. 堆</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E5%A0%86%E7%9A%84%E7%89%B9%E7%82%B9"><span class="toc-text">4.1 堆的特点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E5%A0%86%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA"><span class="toc-text">4.2 堆内存溢出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-%E5%A0%86%E5%86%85%E5%AD%98%E8%AF%8A%E6%96%AD"><span class="toc-text">4.3 堆内存诊断</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-%E6%96%B9%E6%B3%95%E5%8C%BA"><span class="toc-text">5. 方法区</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-%E5%AE%9A%E4%B9%89%E4%B8%8E%E7%BB%84%E6%88%90"><span class="toc-text">5.1 定义与组成</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-%E6%96%B9%E6%B3%95%E5%8C%BA%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA"><span class="toc-text">5.2 方法区内存溢出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-%E8%BF%90%E8%A1%8C%E6%97%B6%E5%B8%B8%E9%87%8F%E6%B1%A0"><span class="toc-text">5.3 运行时常量池</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-StringTable"><span class="toc-text">6. StringTable</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#6-1-%E7%89%B9%E6%80%A7"><span class="toc-text">6.1 特性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-2-%E6%89%80%E5%9C%A8%E4%BD%8D%E7%BD%AE"><span class="toc-text">6.2 所在位置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-3-StringTable-%E7%9A%84%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6"><span class="toc-text">6.3 StringTable 的垃圾回收</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-4-%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98"><span class="toc-text">6.4 性能调优</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98"><span class="toc-text">7. 直接内存</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#7-1-%E5%AE%9A%E4%B9%89"><span class="toc-text">7.1 定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-2-%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA"><span class="toc-text">7.2 内存溢出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-3-%E5%86%85%E5%AD%98%E9%87%8A%E6%94%BE%E5%8E%9F%E7%90%86"><span class="toc-text">7.3 内存释放原理</span></a></li></ol></li></ol></div></div><div class="card-widget card-post-series"><div class="item-headline"><i class="fa-solid fa-layer-group"></i><span>JVM 快速入门</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/The-Structure-Of-JVM/" title="JVM 内存结构"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/161.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="JVM 内存结构"></a><div class="content"><a class="title" href="/posts/The-Structure-Of-JVM/" title="JVM 内存结构">JVM 内存结构</a><time datetime="2025-05-04T16:00:00.000Z" title="发表于 2025-05-05 00:00:00">2025-05-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/JVM-GC/" title="JVM 垃圾回收"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/165.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="JVM 垃圾回收"></a><div class="content"><a class="title" href="/posts/JVM-GC/" title="JVM 垃圾回收">JVM 垃圾回收</a><time datetime="2025-09-20T16:00:00.000Z" title="发表于 2025-09-21 00:00:00">2025-09-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="发表于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="发表于 2026-01-03 00:00:00">2026-01-03</time></div></div></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/Something-About-Blog/" title="博客搭建与维护"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="博客搭建与维护"/></a><div class="content"><a class="title" href="/posts/Something-About-Blog/" title="博客搭建与维护">博客搭建与维护</a><time datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"/></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="更新于 2026-01-03 00:00:00">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"/></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/103.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 的类资源加载"/></a><div class="content"><a class="title" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载">Java 的类资源加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/20.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="注解、类的加载、反射"/></a><div class="content"><a class="title" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射">注解、类的加载、反射</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/ren-zhi-jue-xing/" title="认知觉醒"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/172.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="认知觉醒"/></a><div class="content"><a class="title" href="/posts/ren-zhi-jue-xing/" title="认知觉醒">认知觉醒</a><time datetime="2025-12-28T16:00:00.000Z" title="更新于 2025-12-29 00:00:00">2025-12-29</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://gcore.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script src="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/js/mine.min.js"></script><script src="/js/tip_portal.js"></script><script defer="defer" id="ribbon" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script id="click-show-text" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="Azathoth,Yog-Sothoth,Shub-Niggurath,Nyarlathotep,Cthulhu,Hastur,Abhoth,Ghroth,Tsathoggua,Cthugha,Deep Ones,Dagon,Chaugnar Faugn,Mordiggian,Shoggoth,Old One,Mi-Go,Great Race of Yith,Flying Polyp,Hounds of Tindalos,Dhole" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div class="docsearch-wrap"><div id="docsearch" style="display:none"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@docsearch/css/dist/style.min.css"/><script src="https://testingcf.jsdelivr.net/npm/@docsearch/js/dist/umd/index.min.js"></script><script>(() => {
+  docsearch(Object.assign({
+    appId: 'BAFEL7A6K1',
+    apiKey: '89fcb5961984c5c054bf04149f345f38',
+    indexName: 'mofan212io',
+    container: '#docsearch',
+    placeholder: '输入关键字进行搜索',
+  }, null))
+
+  const handleClick = () => {
+    document.querySelector('.DocSearch-Button').click()
+  }
+
+  const searchClickFn = () => {
+    btf.addEventListenerPjax(document.querySelector('#search-button > .search'), 'click', handleClick)
+  }
+
+  searchClickFn()
+  window.addEventListener('pjax:complete', searchClickFn)
+})()</script></div></div></body></html>

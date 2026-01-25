@@ -1,0 +1,839 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【MySQL 高级篇一】Linux 下 MySQL 的使用 | Mofan</title><meta name="author" content="默烦,cy.mofan@foxmail.com"><meta name="copyright" content="默烦"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本文介绍了 Linux 下 MySQL 的使用以及 MySQL 的字符集、SQL 大小写规范和 sql_mode 的合理设置。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【MySQL 高级篇一】Linux 下 MySQL 的使用">
+<meta property="og:url" content="https://mofan212.github.io/posts/MySQL-Advanced-First-Use-Of-MySQL-Under-Linux/">
+<meta property="og:site_name" content="Mofan">
+<meta property="og:description" content="本文介绍了 Linux 下 MySQL 的使用以及 MySQL 的字符集、SQL 大小写规范和 sql_mode 的合理设置。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/128.jpg">
+<meta property="article:published_time" content="2023-02-25T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-02-25T16:00:00.000Z">
+<meta property="article:author" content="默烦">
+<meta property="article:tag" content="MySQL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/128.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "【MySQL 高级篇一】Linux 下 MySQL 的使用",
+  "url": "https://mofan212.github.io/posts/MySQL-Advanced-First-Use-Of-MySQL-Under-Linux/",
+  "image": "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/128.jpg",
+  "datePublished": "2023-02-25T16:00:00.000Z",
+  "dateModified": "2023-02-25T16:00:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "默烦",
+      "url": "https://mofan212.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/MySQL-Advanced-First-Use-Of-MySQL-Under-Linux/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":true,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 默烦","link":"链接: ","source":"来源: Mofan","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://testingcf.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '【MySQL 高级篇一】Linux 下 MySQL 的使用',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="referrer" content="no-referrer-when-downgrade" /><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/css/myStyle.min.css"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css" /><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css" /><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Mofan" type="application/atom+xml">
+</head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+btf.addGlobalFn('pjaxSend', () => {
+  Pace.restart()
+}, 'pace_restart')
+
+</script><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources/css/minimal.min.css"/><script src="https://testingcf.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/post_top_img.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Mofan</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【MySQL 高级篇一】Linux 下 MySQL 的使用</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-02-25T16:00:00.000Z" title="发表于 2023-02-26 00:00:00">2023-02-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-02-25T16:00:00.000Z" title="更新于 2023-02-26 00:00:00">2023-02-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/MySQL/">MySQL</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">7.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>25分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;距离本文上次更新已经过去&quot;,&quot;messageNext&quot;:&quot;天，请注意时效性。&quot;,&quot;postUpdate&quot;:&quot;2023-02-26 00:00:00&quot;}" hidden></div><p>封面来源：由博主个人绘制，如需使用请联系博主。</p>
+<p>本文参考：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1iq4y1u7vj">MySQL数据库教程天花板，mysql安装到mysql高级，强！硬！</a></p>
+<h1 id="1-MySQL-的卸载"><a class="header-anchor" href="#1-MySQL-的卸载"></a>1. MySQL 的卸载</h1>
+<h2 id="1-1-查看是否安装过-MySQL"><a class="header-anchor" href="#1-1-查看是否安装过-MySQL"></a>1.1 查看是否安装过 MySQL</h2>
+<p>如果使用 <code>rpm</code> 安装，执行以下命令查看是否存在 mysql-libs 的旧版本包：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm -qa | grep -i mysql</span><br></pre></td></tr></table></figure>
+<p>还可以检查 MySQL 服务的状态：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl status mysqld.service</span><br></pre></td></tr></table></figure>
+<h2 id="1-2-卸载-MySQL"><a class="header-anchor" href="#1-2-卸载-MySQL"></a>1.2 卸载 MySQL</h2>
+<p>关闭 MySQL 服务：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop mysqld.service</span><br></pre></td></tr></table></figure>
+<p>查看安装过的 mysql-libs 版本包：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rpm -qa | grep -i mysql </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">或</span> </span><br><span class="line">yum list installed | grep mysql</span><br></pre></td></tr></table></figure>
+<p>依次卸载已安装的版本包：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum remove 版本包名称</span><br></pre></td></tr></table></figure>
+<p>查找 MySQL 的相关文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find / -name mysql</span><br></pre></td></tr></table></figure>
+<p>依次删除查询出的文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm -rf 查询出的文件</span><br></pre></td></tr></table></figure>
+<p>删除 <code>my.cnf</code>：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm -rf /etc/my.cnf</span><br></pre></td></tr></table></figure>
+<h1 id="2-MySQL-8-0-的安装"><a class="header-anchor" href="#2-MySQL-8-0-的安装"></a>2. MySQL 8.0 的安装</h1>
+<h2 id="2-1-MySQL-的版本介绍"><a class="header-anchor" href="#2-1-MySQL-的版本介绍"></a>2.1 MySQL 的版本介绍</h2>
+<p>MySQL 有四个版本，分别是：</p>
+<ol>
+<li>MySQL Community Server：社区版本，开源免费，自由下载。</li>
+<li>MySQL Enterprise Edition：企业版本，需付费，不能在线下载。</li>
+<li>MySQL Cluster：集群版，开源免费，用于架设集群服务器。</li>
+<li>MySQL Cluster CGE：高级集群版，需付费。</li>
+</ol>
+<p>本节将对 MySQL Community Server 的版本进行安装。</p>
+<h2 id="2-2-Linux-下安装-MySQL-8-0"><a class="header-anchor" href="#2-2-Linux-下安装-MySQL-8-0"></a>2.2 Linux 下安装 MySQL 8.0</h2>
+<blockquote>
+<p>安装包的获取</p>
+</blockquote>
+<p>Linux 发行版采用 CentOS 7，CentOS 源于 Red Hat Enterprise Linux（RHEL）依照开放源代码规定释出的源码所编译而成。</p>
+<p>点击 <a target="_blank" rel="noopener" href="https://dev.mysql.com/downloads/mysql/">MySQL :: Download MySQL Community Server</a> 进入 MySQL Community Downloads 下载选择，选择对应的操作系统与操作版本。比如 CentOS 7 源于 RHEL，因此有：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E9%80%89%E6%8B%A9MySQL%E6%89%80%E5%9C%A8%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%92%8C%E7%89%88%E6%9C%AC.png" alt="选择MySQL所在的操作系统和版本"></p>
+<p>下方的 <strong>Download Packages</strong> 选择 <strong>RPM Bundle</strong>，可以先在当前环境下下载压缩包，然后利用 FTP 将压缩包上传到 Linux 环境下，也可以复制压缩包名称，在 Linux 环境下使用 <code>wget</code> 命令下载。</p>
+<p>推荐在 <code>opt</code> 目录下新建 <code>mysql</code> 目录，并切换到该目录下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir /opt/mysql</span><br><span class="line">cd /opt/mysql</span><br></pre></td></tr></table></figure>
+<p>然后使用 <code>wget</code> 下载压缩包：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget http://dev.mysql.com/get/mysql-8.0.32-1.el7.x86_64.rpm-bundle.tar</span><br></pre></td></tr></table></figure>
+<p>其中的 <code>mysql-8.0.32-1.el7.x86_64.rpm-bundle.tar</code> 即为压缩包名称。</p>
+<blockquote>
+<p>安装前的检查</p>
+</blockquote>
+<p>MySQL 安装过程中会在 <code>/tmp</code> 目录下创建 <code>tmp_db</code> 文件，因此 <code>/tmp</code> 目录需要较大的权限：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod -R 777 /tmp</span><br></pre></td></tr></table></figure>
+<p>安装 MySQL 时需要使用到 <code>libaio</code> 和 <code>net-tools</code>，检查这两个依赖是否存在：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rpm -qa | grep libaio</span><br><span class="line">rpm -qa | grep net-tools</span><br></pre></td></tr></table></figure>
+<p>如果有任意一个不存在，则需要安装：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install libaio</span><br><span class="line">yum install net-tools</span><br></pre></td></tr></table></figure>
+<p>某些 CentOS 版本可能会自带 MariaDB，它会与 MySQL 冲突，因此需要将其删除。</p>
+<p>先查询下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm -qa | grep maria</span><br></pre></td></tr></table></figure>
+<p>如果查询内容不为空，执行以下删除命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm -e --nodeps mariadb-libs</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>安装过程</p>
+</blockquote>
+<p>解压安装包：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xvf mysql-8.0.32-1.el7.x86_64.rpm-bundle.tar</span><br></pre></td></tr></table></figure>
+<p>解压后，依次执行以下命令安装：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">rpm -ivh mysql-community-common-8.0.32-1.el7.x86_64.rpm</span><br><span class="line">rpm -ivh mysql-community-client-plugins-8.0.32-1.el7.x86_64.rpm</span><br><span class="line">rpm -ivh mysql-community-libs-8.0.32-1.el7.x86_64.rpm</span><br><span class="line">rpm -ivh mysql-community-client-8.0.32-1.el7.x86_64.rpm</span><br><span class="line">rpm -ivh mysql-community-icu-data-files-8.0.32-1.el7.x86_64.rpm</span><br><span class="line">rpm -ivh mysql-community-server-8.0.32-1.el7.x86_64.rpm</span><br></pre></td></tr></table></figure>
+<p>不同版本之间需要安装或依赖的软件包可能不一样，如果发生错误，会给出详细的提示，根据提示操作即可。</p>
+<p>所有软件包安装完成后，执行以下命令，查看安装的 MySQL 信息：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql --version</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">或</span></span><br><span class="line">mysqladmin --version</span><br></pre></td></tr></table></figure>
+<p>出现以下信息，证明安装成功：</p>
+<pre>
+[root@mofan mysql]# mysql --version
+mysql  Ver 8.0.32 for Linux on x86_64 (MySQL Community Server - GPL)
+</pre>
+<p>还可以执行以下命令查看安装的软件包：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm -qa | grep -i mysql</span><br></pre></td></tr></table></figure>
+<pre>
+[root@mofan mysql]# rpm -qa | grep -i mysql
+mysql-community-common-8.0.32-1.el7.x86_64
+mysql-community-icu-data-files-8.0.32-1.el7.x86_64
+mysql-community-client-plugins-8.0.32-1.el7.x86_64
+mysql-community-libs-8.0.32-1.el7.x86_64
+mysql-community-server-8.0.32-1.el7.x86_64
+mysql-community-client-8.0.32-1.el7.x86_64
+</pre>
+<blockquote>
+<p>服务的初始化</p>
+</blockquote>
+<p>为了保证数据库目录与文件的所有者都为 MySQL 登录用户，如果以 root 身份运行 MySQL 服务，需要执行以下命令初始化：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqld --initialize --user=mysql</span><br></pre></td></tr></table></figure>
+<p><code>--initialize</code> 选项默认以安全模式进行初始化，会为 root 用户生成一个密码并将该密码标记为过期，登录后需要设置一个新的密码。</p>
+<p>生成的临时密码会被记录在日志文件中，执行以下命令查看临时密码：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep &quot;password&quot; /var/log/mysqld.log</span><br></pre></td></tr></table></figure>
+<p>暂时保存下这个密码，后续首次登录 MySQL 时需要使用。</p>
+<p>MySQL 服务的相关操作：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">启动</span></span><br><span class="line">systemctl start mysqld.service</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">关闭</span> </span><br><span class="line">systemctl stop mysqld.service</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重启</span> </span><br><span class="line">systemctl restart mysqld.service</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看状态</span></span><br><span class="line">systemctl status mysqld.service</span><br></pre></td></tr></table></figure>
+<p><code>mysqld.service</code> 这个可执行文件代表 MySQL 服务器程序，运行该文件就可以直接启动一个服务器进程。</p>
+<p>查看 MySQL 进程信息：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps -ef | grep -i mysql</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>服务的自启动</p>
+</blockquote>
+<p>查看 MySQL 服务是否是自启动：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl list-unit-files | grep mysqld.service</span><br></pre></td></tr></table></figure>
+<p>默认为 <code>enabled</code>，为自启动。</p>
+<p>可以进行如下设置，设置服务是否自启动：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">服务自启动</span></span><br><span class="line">systemctl enable mysqld.service</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">关闭自启动</span></span><br><span class="line">systemctl disable mysqld.service</span><br></pre></td></tr></table></figure>
+<h2 id="2-3-登录-MySQL"><a class="header-anchor" href="#2-3-登录-MySQL"></a>2.3 登录 MySQL</h2>
+<p>执行以下命令以 root 用户登录 MySQL：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -hlocalhost -P3306 -uroot -p</span><br></pre></td></tr></table></figure>
+<p>之后在 <code>Enter password:</code> 后输入前面保存的临时密码。</p>
+<p>临时密码是会过期的，登录成功后首先修改密码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 将 root 用户的密码修改为 new_password</span><br><span class="line">ALTER USER &#x27;root&#x27;@&#x27;localhost&#x27; IDENTIFIED BY &#x27;new_password&#x27;;</span><br></pre></td></tr></table></figure>
+<p>密码要稍微复杂点，太简单将报错。</p>
+<p>当然也可以修改密码验证策略，使其接受简单的密码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set global validate_password_policy=0;</span><br></pre></td></tr></table></figure>
+<p>最后执行以下命令使密码生效：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flush privileges;</span><br></pre></td></tr></table></figure>
+<h2 id="2-4-使用-Navicat-连接"><a class="header-anchor" href="#2-4-使用-Navicat-连接"></a>2.4 使用 Navicat 连接</h2>
+<p>本文并未在虚拟机上安装 MySQL，而是在阿里云 ECS 上进行安装，因此使用 Navicat 连接 MySQL 相对简单，无需进行确认网络、关闭防火墙、开放端口等操作。</p>
+<p>使用 Navicat 连接阿里云 ECS 上的 MySQL 有两种方式：</p>
+<ol>
+<li>直连</li>
+<li>使用 SSH 通道</li>
+</ol>
+<blockquote>
+<p>直连</p>
+</blockquote>
+<p>首先需要进入阿里云 ECS 的安全组配置列表，在 <strong>入方向</strong> 的安全组规则中开放 3306 端口，作为外部访问 MySQL 的端口。</p>
+<p>在 Linux 终端以 root 用户登录 MySQL 后，查看 <code>user</code> 表中的信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">use user;</span><br><span class="line">select Host, User from user;</span><br></pre></td></tr></table></figure>
+<pre>
++-----------+------------------+
+| Host      | User             |
++-----------+------------------+
+| localhost | mysql.infoschema |
+| localhost | mysql.session    |
+| localhost | mysql.sys        |
+| localhost | root             |
++-----------+------------------+
+</pre>
+<p>可以看到 root 用户对应的 Host 为 <code>localhost</code>，也就说 root 用户只能通过本机客户端去访问，其他 IP 无法访问。</p>
+<p>Host 列指定了允许用户登录所使用的 IP。比如对于 <code>user=root, Host=192.168.1.1</code> 来说，root 用户只能通过 IP 为 <code>192.168.1.1</code> 的客户端去访问。Host 列支持 <code>%</code> 通配符，比如 <code>192.168.1.%</code> 表示 IP 地址前为 <code>192.168.1.</code> 的客户端都可以连接。如果 <code>Host=%</code> ，那么所有 IP 都有连接权限。</p>
+<p>在生产环境下不能为了将 Host 设置为 <code>%</code>，这会存在安全问题，具体的设置要根据生产环境的 IP 进行设置。</p>
+<p>在学习过程中直接将 Host 设置为 <code>%</code>，方便 Navicat 的连接：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">update user set host = &#x27;%&#x27; where user =&#x27;root&#x27;;</span><br></pre></td></tr></table></figure>
+<p>最后执行 <code>flush privileges;</code> 使配置生效。</p>
+<p>最后在 Navicat 上按照以下方式连接：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E7%9B%B4%E8%BF%9E%E9%98%BF%E9%87%8C%E4%BA%91ECS%E4%B8%8A%E7%9A%84MySQL.png" alt="直连阿里云ECS上的MySQL"></p>
+<blockquote>
+<p>使用 SSH 通道</p>
+</blockquote>
+<p>直连云服务器上的 MySQL 时，不仅要开放服务器的 3306 端口，还要设置 MySQL 中 root 用户的主机配置信息，这对服务器带来了安全隐患。使用 SSH 通道连接 MySQL，对服务器上的 MySQL 就相当于是本地连接。</p>
+<p>首先配置 SSH 通道：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E9%85%8D%E7%BD%AENavicat%E8%BF%9E%E6%8E%A5MySQL%E6%97%B6%E4%BD%BF%E7%94%A8%E7%9A%84SSH%E9%80%9A%E9%81%93.png" alt="配置Navicat连接MySQL时使用的SSH通道"></p>
+<p>此处的【用户名】和【密码】不是登录 MySQL 使用的用户名和密码，而是连接 SSH 使用的用户名和密码！</p>
+<p>然后通过 <strong>本地</strong> 连接 MySQL：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/Navicat%E4%BB%A5%E6%9C%AC%E5%9C%B0%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5MySQL.png" alt="Navicat以本地方式连接MySQL"></p>
+<p>此处的【主机】填写 <code>localhost</code> 即可，因为是通过 SSH 通道连接的，对于 MySQL 来说就相当于是本地连接。</p>
+<blockquote>
+<p>可能存在的问题</p>
+</blockquote>
+<p>如果在测试连接时出现：</p>
+<pre>
+错误号码2058
+Plugin caching_sha2_password could not be loaded: 
+</pre>
+<p>这是因为 MySQL 密码加密方法变了。</p>
+<p>在终端执行以下命令然后重新连接即可：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER USER &#x27;root&#x27;@&#x27;%&#x27; IDENTIFIED WITH mysql_native_password BY &#x27;root用户对应的密码&#x27;;</span><br></pre></td></tr></table></figure>
+<h1 id="3-字符集"><a class="header-anchor" href="#3-字符集"></a>3. 字符集</h1>
+<h2 id="3-1-修改字符集"><a class="header-anchor" href="#3-1-修改字符集"></a>3.1 修改字符集</h2>
+<p>MySQL 8.0 之前，默认字符集为 <code>latin1</code>，<code>utf8</code> 字符集指向的是 <code>utf8mb3</code>，其中 <code>mb3</code> 表示 maximun of 3 bytes per multibyte character，即每个字符最多 3 个字节。标准 UTF-8 最多可以使用 4 个字节为字符编码，因此使用这种“残缺的 utf8”在表示某些字符时就可能出现乱码，因此也常常说 MySQL 的 <code>utf8</code> 编码是假的 UTF-8 编码。</p>
+<p>从 MySQL 8.0 开始，数据库的默认编码将改为 <code>utf8mb4</code>，从而避免上述乱码的问题。</p>
+<p>查看默认字符集：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">show variables like &#x27;character%&#x27;;</span><br><span class="line"># 或</span><br><span class="line">show variables like &#x27;%char%&#x27;;</span><br></pre></td></tr></table></figure>
+<p>在 MySQL 8.0 下是：</p>
+<pre>
++--------------------------+--------------------------------+
+| Variable_name            | Value                          |
++--------------------------+--------------------------------+
+| character_set_client     | utf8mb4                        |
+| character_set_connection | utf8mb4                        |
+| character_set_database   | utf8mb4                        |
+| character_set_filesystem | binary                         |
+| character_set_results    | utf8mb4                        |
+| character_set_server     | utf8mb4                        |
+| character_set_system     | utf8mb3                        |
+| character_sets_dir       | /usr/share/mysql-8.0/charsets/ |
++--------------------------+--------------------------------+
+</pre>
+<p>而在 MySQL 5.7 下，<code>character_set_database</code> 和 <code>character_set_server</code> 对应的值是 <code>latin1</code>，这种编码不支持中文。</p>
+<p>因此在使用 MySQL 5.7 及其以下版本时，需要修改 MySQL 服务使用的编码是 <code>utf8</code>，尽管它也不完整，但好歹支持中文。</p>
+<p>修改 <code>my.cnf</code> 文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/my.cnf</span><br></pre></td></tr></table></figure>
+<p>在文件最后加上中文字符集配置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">character_set_server=utf8</span><br></pre></td></tr></table></figure>
+<p>保存修改并退出后，重启 MySQL 服务：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart mysqld</span><br></pre></td></tr></table></figure>
+<p>如果在修改前，MySQL 中已经存在若干数据库和数据表，那么这些库表的编码并不会改变，只会影响修改后新建的库表。</p>
+<p>针对这些库表可以使用下述方式进行修改：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">alter database 数据库名称 character set &#x27;utf8&#x27;;</span><br><span class="line">alter table 数据表名称 convert to character set &#x27;utf8&#x27;;</span><br></pre></td></tr></table></figure>
+<p>如果数据表中还有数据，并且还使用了非 <code>utf8</code> 编码，这些数据的编码也不会随着库表的编码的变化而变化。针对这部分数据，只能先导出或删除，然后再重新插入。</p>
+<h2 id="3-2-各级别的字符集"><a class="header-anchor" href="#3-2-各级别的字符集"></a>3.2 各级别的字符集</h2>
+<p>MySQL 有 4 个级别的字符集和比较规则，分别是：</p>
+<ul>
+<li>
+<p>服务器级别</p>
+</li>
+<li>
+<p>数据库级别</p>
+</li>
+<li>
+<p>表级别</p>
+</li>
+<li>
+<p>列级别</p>
+</li>
+</ul>
+<p>前文使用的 <code>show variables like 'character%';</code> 语句就可以查看这些级别的字符集：</p>
+<pre>
++--------------------------+--------------------------------+
+| Variable_name            | Value                          |
++--------------------------+--------------------------------+
+| character_set_client     | utf8mb4                        |
+| character_set_connection | utf8mb4                        |
+| character_set_database   | utf8mb4                        |
+| character_set_filesystem | binary                         |
+| character_set_results    | utf8mb4                        |
+| character_set_server     | utf8mb4                        |
+| character_set_system     | utf8mb3                        |
+| character_sets_dir       | /usr/share/mysql-8.0/charsets/ |
++--------------------------+--------------------------------+
+</pre>
+<ul>
+<li>
+<p>character_set_server：服务器级别的字符集</p>
+</li>
+<li>
+<p>character_set_database：数据库的字符集</p>
+</li>
+<li>
+<p>character_set_client：服务器解码请求时使用的字符集</p>
+</li>
+<li>
+<p>character_set_connection：服务器处理请求时会把请求字符串从 character_set_client 转为 character_set_connection</p>
+</li>
+<li>
+<p>character_set_results：服务器向客户端返回数据时使用的字符集</p>
+</li>
+</ul>
+<blockquote>
+<p>服务器级别</p>
+</blockquote>
+<p>可以在启动服务器程序时通过启动选项或在服务器程序运行过程中使用 <code>SET</code> 语句修改服务器级别的字符集和比较规则。比如：</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">[server]</span></span><br><span class="line"><span class="attr">character_set_server</span>=<span class="string">gbk  # 默认字符集</span></span><br><span class="line"><span class="attr">collation_server</span>=<span class="string">gbk_chinese_ci  # 对应的默认的比较规则</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>数据库级别</p>
+</blockquote>
+<p>可以在创建、修改数据库时指定数据库的字符集和比较规则：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CREATE DATABASE 数据库名</span><br><span class="line">    [[DEFAULT] CHARACTER SET 字符集名称]</span><br><span class="line">    [[DEFAULT] COLLATE 比较规则名称];</span><br><span class="line"></span><br><span class="line">ALTER DATABASE 数据库名</span><br><span class="line">    [[DEFAULT] CHARACTER SET 字符集名称]</span><br><span class="line">    [[DEFAULT] COLLATE 比较规则名称];</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>表级别</p>
+</blockquote>
+<p>可以在创建、修改表时指定表的字符集和比较规则:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE 表名 (列的信息)</span><br><span class="line">    [[DEFAULT] CHARACTER SET 字符集名称]</span><br><span class="line">    [COLLATE 比较规则名称]]</span><br><span class="line"></span><br><span class="line">ALTER TABLE 表名</span><br><span class="line">    [[DEFAULT] CHARACTER SET 字符集名称]</span><br><span class="line">    [COLLATE 比较规则名称]</span><br></pre></td></tr></table></figure>
+<p>如果创建、修改表时没有指定，将使用该表所在数据库的字符集和比较规则作为该表的字符集和比较规则。</p>
+<blockquote>
+<p>列级别</p>
+</blockquote>
+<p>对于存储字符串的列，同一个表中的不同的列也可以有不同的字符集和比较规则。在创建、修改列定义时指定该列的字符集和比较规则：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE 表名(</span><br><span class="line">    列名 字符串类型 [CHARACTER SET 字符集名称] [COLLATE 比较规则名称],</span><br><span class="line">    其他列...</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">ALTER TABLE 表名 MODIFY 列名 字符串类型 [CHARACTER SET 字符集名称] [COLLATE 比较规则名称];</span><br></pre></td></tr></table></figure>
+<p>如果创建、修改列时没有指定，将使用该列所在表的字符集和比较规则作为该列的字符集和比较规则。</p>
+<p><mark>注意：</mark> 在转换列的字符集时，如果转换前列中存储的数据不能用转换后的字符集进行表示，那么转换时会发生错误。比如原先使用的字符集是 <code>utf8</code>，列中存储了一些汉字，然后把列的字符集转换为 <code>ascii</code> 时就会出错，因为 <code>ascii</code> 字符集不能表示汉字字符。</p>
+<p>了解字符集和比较规则后，可以根据列的类型推断出存储数据时每个列的实际数据占用的存储空间大小。比如某列先使用 <code>gbk</code> 编码，每个汉字占用两个字节，那么“默烦”两个字共占用四个字节，当编码修改为 <code>utf8</code> 之后，“默烦”两个字将占用六个字节。</p>
+<h2 id="3-3-比较规则"><a class="header-anchor" href="#3-3-比较规则"></a>3.3 比较规则</h2>
+<p>比较规则用 <code>COLLATE</code> 表示，比如 <code>utf8_general_ci</code> 就是一种比较规则，表示通用比较规则。</p>
+<p>比较规则的 <code>_</code> 后缀表示该比较规则是否区分重音、大小写，具体如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">后缀</th>
+<th style="text-align:center">英文释义</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">_ai</td>
+<td style="text-align:center">accent insensitive</td>
+<td style="text-align:center">不区分重音</td>
+</tr>
+<tr>
+<td style="text-align:center">_as</td>
+<td style="text-align:center">accent sensitive</td>
+<td style="text-align:center">区分重音</td>
+</tr>
+<tr>
+<td style="text-align:center">_ci</td>
+<td style="text-align:center">case insensitive</td>
+<td style="text-align:center">不区分大小写</td>
+</tr>
+<tr>
+<td style="text-align:center">_cs</td>
+<td style="text-align:center">case sensitive</td>
+<td style="text-align:center">区分大小写</td>
+</tr>
+<tr>
+<td style="text-align:center">_bin</td>
+<td style="text-align:center">binary</td>
+<td style="text-align:center">以二进制方式比较</td>
+</tr>
+</tbody>
+</table>
+<p>比较规则的相关操作：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"># 查看 gbk 字符集的比较规则</span><br><span class="line">SHOW COLLATION LIKE &#x27;gbk%&#x27;;</span><br><span class="line"></span><br><span class="line"># 查看 utf8 字符集的比较规则</span><br><span class="line">SHOW COLLATION LIKE &#x27;utf8%&#x27;;</span><br><span class="line"></span><br><span class="line"># 查看服务器的字符集和比较规则</span><br><span class="line">SHOW VARIABLES LIKE &#x27;%_server&#x27;;</span><br><span class="line"></span><br><span class="line"># 查看数据库的字符集和比较规则</span><br><span class="line">SHOW VARIABLES LIKE &#x27;%_database&#x27;;</span><br><span class="line"></span><br><span class="line"># 查看具体数据库的字符集</span><br><span class="line">SHOW CREATE DATABASE 数据库名;</span><br><span class="line"></span><br><span class="line"># 修改具体数据库的字符集</span><br><span class="line">ALTER DATABASE 数据库名 DEFAULT CHARACTER SET &#x27;utf8&#x27; COLLATE &#x27;utf8_general_ci&#x27;;</span><br><span class="line"></span><br><span class="line">#查看表的字符集</span><br><span class="line">show create table 数据表名;</span><br><span class="line"></span><br><span class="line">#查看表的比较规则</span><br><span class="line">show table status from 数据表名 like &#x27;employees&#x27;;</span><br><span class="line"></span><br><span class="line"># 修改表的字符集和比较规则</span><br><span class="line">ALTER TABLE 数据表名 DEFAULT CHARACTER SET &#x27;utf8&#x27; COLLATE &#x27;utf8_general_ci&#x27;;</span><br></pre></td></tr></table></figure>
+<p><code>utf8_unicode_ci</code> 和 <code>utf8_general_ci</code> 对中英文来说没有实质的区别。</p>
+<p><code>utf8_general_ci</code> 校对速度快，但准确度较差；<code>utf8_unicode_ci</code> 校准度高，但校对速度稍慢。</p>
+<p>一般情况下使用 <code>utf8_general_ci</code> 即可，但如果存储了德语、法语或俄语，务必使用 <code>utf8_unicode_ci</code>。</p>
+<h2 id="3-4-请求到响应过程中字符集的变化"><a class="header-anchor" href="#3-4-请求到响应过程中字符集的变化"></a>3.4 请求到响应过程中字符集的变化</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">系统变量</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>character_set_client</code></td>
+<td style="text-align:center">服务器解码请求时使用的字符集</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>character_set_connection</code></td>
+<td style="text-align:center">服务器处理请求时会把请求字符串从 <code>character_set_client</code> 转为 <code>character_set_connection</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>character_set_results</code></td>
+<td style="text-align:center">服务器向客户端返回数据时使用的字符集</td>
+</tr>
+</tbody>
+</table>
+<p>这三个值在 MySQL 8.0 中的默认值都是 <code>utf8mb4</code>。</p>
+<p>为了体现出字符集在请求处理过程中的变化，将 <code>character_set_connection</code> 的值修改为 <code>gbk</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set character_set_connection = gbk;</span><br></pre></td></tr></table></figure>
+<p>假设在客户端中需要查询 <code>t</code> 表中 <code>col</code> 列等于 <code>我</code> 的所有信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM t WHERE col = &#x27;我&#x27;;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>请求从发送到结果返回过程中字符集的变化</p>
+</blockquote>
+<ol>
+<li>
+<p>客户端发送请求所使用的字符集：一般情况下客户端所使用的字符集和当前操作系统一致，不同操作系统使用的字符集可能不一样。类 Unix 系统使用的是 <code>utf8</code>，Windows 系统使用的是 <code>gbk</code>。如果使用的是 Navicat 等可视化工具，这些工具可能会使用自定义的字符集来编码发送到服务器的字符串，而不采用操作系统默认的字符集。当客户端使用的是 <code>utf8</code> 字符集，字符 <code>我</code> 在发送给服务器的请求中的字节形式是 <code>0xE68891</code>。</p>
+</li>
+<li>
+<p>服务器接收到客户端发送来的请求是一串二进制的字节，它会认为这串字节采用的字符集是 <code>character_set_client</code>，然后把这串字节转换为 <code>character_set_connection</code> 字符集编码的字符。</p>
+<p>假设当前计算机上 <code>character_set_client</code> 的值是 <code>utf8</code>，那么首先会按照 <code>utf8</code> 字符集对字节串 <code>0xE68891</code> 进行解码，得到的字符串 <code>我</code>，然后按照 <code>character_set_connection</code> 代表的字符集，即 <code>gbk</code> 进行编码，得到结果字节串 <code>0xCED2</code>。</p>
+</li>
+<li>
+<p>表 <code>t</code> 的列 <code>col</code> 采用 <code>gbk</code> 字符集，与 <code>character_set_connection</code> 一致，直接到列中查找字节值为 <code>0xCED2</code> 的记录，最后找到了一条记录。如果某个列使用的字符集和 <code>character_set_connection</code> 代表的字符集不一致，则还需进行一次字符集转换。</p>
+</li>
+<li>
+<p>上一步骤找到的记录中的 <code>col</code> 列是一个字节串 <code>0xCED2</code>，<code>col</code> 列采用 <code>gbk</code> 进行编码，所以首先会将这个字节串使用 <code>gbk</code> 进行解码，得到字符串 <code>我</code>，然后再把这个字符串使用 <code>character_set_results</code> 代表的字符集，即 <code>utf8</code> 进行编码，得到了新的字节串 <code>0xE68891</code> 并发送给客户端。</p>
+</li>
+<li>
+<p>由于客户端使用的字符集是 <code>utf8</code>，所以可以顺利地将 <code>0xE68891</code> 解释成字符 <code>我</code>，从而显示到显示器上。</p>
+</li>
+</ol>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E8%AF%B7%E6%B1%82%E4%BB%8E%E5%8F%91%E9%80%81%E5%88%B0%E7%BB%93%E6%9E%9C%E8%BF%94%E5%9B%9E%E8%BF%87%E7%A8%8B%E4%B8%AD%E5%AD%97%E7%AC%A6%E9%9B%86%E7%9A%84%E5%8F%98%E5%8C%96.png" alt="请求从发送到结果返回过程中字符集的变化"></p>
+<p>从上述分析中可知：</p>
+<ul>
+<li>服务器认为客户端发过来的请求是用 <code>character_set_client</code> 编码的。假设客户端采用的是字符集和 <code>character_set_client</code> 不一致时，就会出现识别不准确的情况。比如客户端使用 <code>utf8</code>，而 <code>character_set_client</code> 的值设置为 <code>ascii</code> 就会出现识别不准确。</li>
+<li>服务器将把得到的结果集使用 <code>character_set_results</code> 编码后发送给客户端。如果客户端采用的字符集和 <code>character_set_results</code> 不一致时，客户端可能无法解码结果集，导致出现乱码。</li>
+<li><code>character_set_connection</code> 只是服务器在将请求的字节串从 <code>character_set_client</code> 转换为 <code>character_set_connection</code> 时使用。<mark>注意，</mark> 该字符集包含的字符范围一定涵盖请求中的字符，否则会导致有的字符无法使用 <code>character_set_connection</code> 代表的字符集进行编码。</li>
+</ul>
+<blockquote>
+<p>开发中的经验</p>
+</blockquote>
+<p>实际开发中一般会把这三个系统变量设置成和客户端使用的字符集一样，MySQL 提供了一条简洁的语句完成这三个系统变量的设置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SET NAMES 字符集名;</span><br></pre></td></tr></table></figure>
+<p>比如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SET NAMES utf8;</span><br></pre></td></tr></table></figure>
+<p>执行这条语句的效果和执行下面三条语句的效果一致：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SET character_set_client = 字符集名;</span><br><span class="line">SET character_set_connection = 字符集名;</span><br><span class="line">SET character_set_results = 字符集名;</span><br></pre></td></tr></table></figure>
+<p>除此之外，可以在启动客户端时把这三个系统变量的值设置成一样，需要在配置文件中指定 <code>default-character-set</code> 的启动选项：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[client]</span><br><span class="line">default-character-set=utf8</span><br></pre></td></tr></table></figure>
+<h1 id="4-SQL-大小写规范"><a class="header-anchor" href="#4-SQL-大小写规范"></a>4. SQL 大小写规范</h1>
+<h2 id="4-1-Windows-和-Linux平台区别"><a class="header-anchor" href="#4-1-Windows-和-Linux平台区别"></a>4.1 Windows 和 Linux平台区别</h2>
+<p>在 SQL 中，关键字和函数名是不用区分字母大小写的，比如 SELECT、WHERE、ORDER、GROUP BY 等关键字，以及 ABS、MOD、ROUND、MAX 等函数名。</p>
+<p>在不同的操作系统中，对大小写的敏感程度是不一样的。比如 Windows 系统默认大小写不敏感，而 Linux 系统下是大小写敏感的。</p>
+<p>是否大小写敏感可以通过下列语句查看：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SHOW VARIABLES LIKE &#x27;%lower_case_table_names%&#x27;;</span><br></pre></td></tr></table></figure>
+<pre>
++------------------------+-------+
+| Variable_name          | Value |
++------------------------+-------+
+| lower_case_table_names | 0     |
++------------------------+-------+
+</pre>
+<p><code>lower_case_table_names</code> 参数值的设置：</p>
+<ul>
+<li>默认为 <code>0</code>，表示大小写敏感。</li>
+<li>设置为 <code>1</code>，表示大小写不敏感。创建的表、数据库将以小写形式存放在磁盘上，对于 SQL 语句都是转换为小写然后对表和数据库进行查找。</li>
+<li>设置为 <code>2</code>，创建的表、数据库依据语句上格式存放，凡是查找都是转换为小写进行。</li>
+</ul>
+<p>MySQL 在 Linux 下数据库名、表名、列名、别名的大小写规则：</p>
+<ul>
+<li>数据库名、表名、表的别名、变量名严格区分大小写；</li>
+<li>关键字、函数名称在 SQL 中不区分大小写；</li>
+<li>列名（或字段名）与列的别名（或字段别名）在所有的情况下均忽略大小写；</li>
+</ul>
+<p>MySQL 在 Windows 环境下全都不区分大小写。</p>
+<h2 id="4-2-Linux-下大小写规则设置"><a class="header-anchor" href="#4-2-Linux-下大小写规则设置"></a>4.2 Linux 下大小写规则设置</h2>
+<p>当想设置为大小写不敏感时，要在 <code>my.cnf</code> 配置文件 <code>[mysqld]</code> 选项中加入 <code>lower_case_table_names=1</code>，然后重启服务器。</p>
+<p><mark>注意：</mark> 在重启数据库实例之前需要将原来的数据库和表转换为小写，否则将找不到数据库名。假设原本大小写敏感，存在名为 <code>Emp</code> 的表，磁盘上也以 <code>Emp</code> 的形式进行存储，当修改为大小写不敏感时，将会把 SQL 语句转换为小写然后进行查询，比如对于 <code>Emp</code> 则会转换为 <code>emp</code>，而磁盘上存储的 <code>Emp</code> 显然无法与 <code>emp</code> 匹配成功。</p>
+<p>除此之外，<code>lower_case_table_names</code> 参数只适用于 MySQL 5.7，在 MySQL 8.0 下禁止在重新启动 MySQL 服务时将 <code>lower_case_table_names</code> 设置成不同于初始化 MySQL 服务时设置的 <code>lower_case_table_names</code> 值。</p>
+<p>如果非要将 MySQL 8.0 设置为大小写不敏感，可以：</p>
+<ol>
+<li>停止 MySQL 服务；</li>
+<li>删除数据目录，即删除 <code>/var/lib/mysql</code> 目录（该目录下存放了数据库文件，删除后相当于删库）；</li>
+<li>在 MySQL 配置文件 <code>/etc/my.cnf</code> 中添加 <code>lower_case_table_names=1</code>；</li>
+<li>启动 MySQL 服务。</li>
+</ol>
+<p><mark>注意：</mark> 在进行数据库参数设置前，需要知晓该参数带来的影响，切忌盲目修改。 <strong>总结下来就是不要修改！</strong></p>
+<h2 id="4-3-SQL-编写建议"><a class="header-anchor" href="#4-3-SQL-编写建议"></a>4.3 SQL 编写建议</h2>
+<p>如果变量名命名规范没有统一，就可能产生错误。一个有关命名规范的建议：</p>
+<ol>
+<li>关键字和函数名称全部大写；</li>
+<li>数据库名、表名、表别名、字段名、字段别名等全部小写；</li>
+<li>SQL 语句必须以分号结尾。</li>
+</ol>
+<p>数据库名、表名和字段名在 Linux MySQL 环境下是区分大小写的，因此建议统一这些字段的命名规则，比如全部采用小写的方式。</p>
+<p>虽然关键字和函数名称在 SQL 中不区分大小写，也就是小写同样可以执行。建议将关键词和函数名称全部大写，以便于区分数据库名、表名、字段名。</p>
+<h1 id="5-sql-mode-的合理设置"><a class="header-anchor" href="#5-sql-mode-的合理设置"></a>5. sql_mode 的合理设置</h1>
+<h2 id="5-1-简介"><a class="header-anchor" href="#5-1-简介"></a>5.1 简介</h2>
+<p><code>sql_mode</code> 会影响 MySQL 支持的 SQL 语法以及它执行的数据验证检查。通过设置 <code>sql_mode</code> 可以完成不同程度的数据校验，有效地保障数据的准确性。</p>
+<p>MySQL 服务器可以在不同的 SQL 模式下运行，并且可以针对不同的客户端以不同的方式应用这些模式，具体取决于 <code>sql_mode</code> 的值。</p>
+<p>MySQL 5.6 和 MySQL 5.7 下 <code>sql_mode</code> 的默认参数是不一样的：</p>
+<ul>
+<li>MySQL 5.6 下的默认值为空，即 <code>NO_ENGINE_SUBSTITUTION</code>，相当于没有任何模式设置，可以理解为 <strong>宽松模式</strong>。在这种模式下允许一些非法操作，比如允许非法数据的插入。</li>
+<li>MySQL 5.7 下的默认值是 <code>STRICT_TRANS_TABLES</code>，也就是 <strong>严格模式</strong>。用于进行数据的严格校验，非法数据不能插入，直接报错，然后回滚事务。</li>
+</ul>
+<h2 id="5-2-宽松模式-VS-严格模式"><a class="header-anchor" href="#5-2-宽松模式-VS-严格模式"></a>5.2 宽松模式 VS 严格模式</h2>
+<blockquote>
+<p>宽松模式</p>
+</blockquote>
+<p>如果设置的是宽松模式，那么在插入数据的时候，即便给了一个错误的数据，也可能会被接受，并且不报错。</p>
+<p>比如：在创建一个表时，该表中有一个字段为 <code>name</code>，给 <code>name</code> 设置的字段类型时 <code>char(10)</code>，如果在插入数据时，<code>name</code> 字段对应的某条数据的长度超过了 10，比如 <code>1234567890abc</code>，超过了设定的字段长度 10。在宽松模式下不会报错，并且取前 10 个字符进行存储，也就是说该数据被存为 <code>1234567890</code>，而末尾的 <code>abc</code> 被截取了。</p>
+<p>插入的数据是非法的，因为超过了规定的字段长度，但并没有报错，并且 MySQL 自行处理并接受了，这就是宽松模式的效果。</p>
+<p><strong>应用场景：</strong> 通过设置 <code>sql_mode</code> 为宽松模式，来保证大多数 SQL 符合标准的 SQL 语法，这样在不同数据库之间进行迁移时，无需对业务 SQL 进行较大的修改。</p>
+<blockquote>
+<p>严格模式</p>
+</blockquote>
+<p>当插入非法数据时，应该报错才对，所以 MySQL 5.7 版本就将 <code>sql_mode</code> 的默认值修改为严格模式。在生产环境中，必须采用严格模式，进而开发、测试环境的数据库也必须要设置，这样在开发测试阶段就可以发现问题。即便用的 MySQL 5.6，也应该自行将其改为严格模式。</p>
+<p><strong>开发经验：</strong> MySQL 等数据库总想把关于数据的所有操作都自己包揽下来，包括数据的校验。但在实际开发中，工程师应该在程序级别完成数据校验，虽然增加了一些编码步骤，但这样做之后，在进行数据库迁移或项目迁移时，就会方便许多。</p>
+<p>严格模式下也可能存在一些问题：若设置模式中包含了 <code>NO_ZERO_DATE</code>，那么 MySQL 数据库不允许插入零日期，插入零日期会抛出错误而不是警告。例如，表中 <code>TIMESTAMP</code> 类型的列在未声明为 <code>NULL</code> 或显式设置 <code>DEFAULT</code> 子句时将被自动分配为 <code>DEFAULT '0000-00-00 00:00:00'</code>（零时间戳），这显然是不满足 <code>sql_mode</code> 中的 <code>NO_ZERO_DATE</code> 进而报错。</p>
+<h2 id="5-3-模式查看和设置"><a class="header-anchor" href="#5-3-模式查看和设置"></a>5.3 模式查看和设置</h2>
+<p>查看当前的 <code>sql_mode</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select @@session.sql_mode; # 当前会话</span><br><span class="line">select @@global.sql_mode; # 全局</span><br><span class="line"># 或者</span><br><span class="line">show variables like &#x27;sql_mode&#x27;;</span><br></pre></td></tr></table></figure>
+<p>MySQL 8.0 下 <code>sql_mode</code> 的默认值是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,</span><br><span class="line">NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>临时设置 <code>sql_mode</code></p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SET GLOBAL sql_mode = &#x27;模式值&#x27;; # 全局</span><br><span class="line">SET SESSION sql_mode = &#x27;模式值&#x27;; # 当前会话</span><br></pre></td></tr></table></figure>
+<p><code>sql_mode</code> 常用值可参考 【5.5 sql_mode 的常用值】。</p>
+<p>比如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 改为严格模式。此方法只在当前会话中生效，关闭当前会话后失效。</span><br><span class="line">set SESSION sql_mode=&#x27;STRICT_TRANS_TABLES&#x27;;</span><br><span class="line"># 改为严格模式。此方法在当前服务中生效，重启 MySQL 服务后失效。</span><br><span class="line">set GLOBAL sql_mode=&#x27;STRICT_TRANS_TABLES&#x27;;  </span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>永久设置 <code>sql_mode</code></p>
+</blockquote>
+<p>永久设置 <code>sql_mode</code> 需要在 <code>/etc/my.cnf</code> 配置文件中配置 <code>sql_mode</code>。</p>
+<p>在 <code>my.cnf</code> 文件（Windows 环境下是 <code>my.ini</code> 文件），新增：</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">[mysqld]</span></span><br><span class="line"><span class="attr">sql_mode</span>=<span class="string">ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR</span></span><br><span class="line"><span class="attr">_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION</span></span><br></pre></td></tr></table></figure>
+<p>修改完成后重启 MySQL。</p>
+<p>在生产环境上禁止随意重启 MySQL 服务，所以采用 <strong>临时设置方式 + 永久设置方式</strong> 来解决线上问题，即便有一天真的重启了 MySQL 服务，也会永久生效。</p>
+<h2 id="5-4-宽松模式的使用"><a class="header-anchor" href="#5-4-宽松模式的使用"></a>5.4 宽松模式的使用</h2>
+<p>运行以下语句，初始化数据：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE mytbl2(id INT, NAME VARCHAR(16), age INT, dept INT);</span><br><span class="line"></span><br><span class="line">INSERT INTO mytbl2 VALUES(1, &#x27;zhang3&#x27;, 33, 10);</span><br><span class="line">INSERT INTO mytbl2 VALUES(2, &#x27;li4&#x27;, 34, 101);</span><br><span class="line">INSERT INTO mytbl2 VALUES(3, &#x27;wang5&#x27;, 34, 102);</span><br><span class="line">INSERT INTO mytbl2 VALUES(4, &#x27;zhao6&#x27;, 34, 102);</span><br><span class="line">INSERT INTO mytbl2 VALUES(5, &#x27;tian7&#x27;, 36, 102);</span><br></pre></td></tr></table></figure>
+<p>查询每个部门年龄最大的人：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT NAME, dept, MAX(age) FROM mytbl2 GROUP BY dept;</span><br></pre></td></tr></table></figure>
+<p>运行查询语句时会报错，因为 <code>GROUP BY</code> 的使用原则是 <code>SELECT</code> 后面只能放函数和 <code>GROUP BY</code> 后面的字段。</p>
+<pre>
+ERROR 1055 (42000): Expression #1 of SELECT list is not in GROUP BY clause and
+contains nonaggregated column 'dbtest1.mytbl2.NAME' which is not functionally
+dependent on columns in GROUP BY clause; this is incompatible with
+sql_mode=only_full_group_by
+</pre>
+<p>正确的查询：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT m.*</span><br><span class="line">FROM mytbl2 m</span><br><span class="line">INNER JOIN(SELECT dept, MAX(age) maxage FROM mytbl2 GROUP BY dept) as ab</span><br><span class="line">ON ab.dept = m.dept AND m.age = ab.maxage;</span><br></pre></td></tr></table></figure>
+<pre>
++------+--------+------+------+
+| id   | NAME   | age  | dept |
++------+--------+------+------+
+|    1 | zhang3 |   33 |   10 |
+|    2 | li4    |   34 |  101 |
+|    5 | tian7  |   36 |  102 |
++------+--------+------+------+
+</pre>
+<p>或者修改当前会话的 <code>sql_mode</code> 为 <strong>宽松模式</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SET SESSION sql_mode = &#x27;&#x27;;</span><br></pre></td></tr></table></figure>
+<p>执行以下语句不会报错：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT NAME, dept, MAX(age) FROM mytbl2 GROUP BY dept;</span><br></pre></td></tr></table></figure>
+<pre>
++--------+------+----------+
+| NAME   | dept | MAX(age) |
++--------+------+----------+
+| zhang3 |   10 |       33 |
+| li4    |  101 |       34 |
+| wang5  |  102 |       36 |
++--------+------+----------+
+</pre>
+<p>再尝试插入非法的数据（<code>age</code> 列的类型是 <code>INT</code>）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO mytbl2(id, NAME, age) VALUES(6, &#x27;Tom&#x27;, &#x27;aaa&#x27;);</span><br></pre></td></tr></table></figure>
+<p>同样不会报错，查看插入的数据：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM mytbl2 WHERE id = 6;</span><br></pre></td></tr></table></figure>
+<pre>
++------+------+------+------+
+| id   | NAME | age  | dept |
++------+------+------+------+
+|    6 | Tom  |    0 | NULL |
++------+------+------+------+
+</pre>
+<p><code>age</code> 列的值为 <code>0</code>。</p>
+<h2 id="5-5-sql-mode-的常用值"><a class="header-anchor" href="#5-5-sql-mode-的常用值"></a>5.5 sql_mode 的常用值</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">模式名称</th>
+<th style="text-align:center">模式说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">ONLY_FULL_GROUP_BY</td>
+<td style="text-align:center">对于 GROUP BY 聚合操作，如果在 SELECT 中的列没有在 GROUP BY 中出现，那么这个 SQL 是非法的，因为列不在 GROUP BY 从句中</td>
+</tr>
+<tr>
+<td style="text-align:center">NO_AUTO_VALUE_ON_ZERO</td>
+<td style="text-align:center">该值影响自增长列的插入。默认设置下，插入 0 或 NULL 代表生成下一个自增长值。如果用户希望插入的值为 0，而该列又是自增长的，那么这个选项就有用了</td>
+</tr>
+<tr>
+<td style="text-align:center">STRICT_TRANS_TABLES</td>
+<td style="text-align:center">在该模式下，如果一个值不能插入到一个事务表中，则中断当前的操作，对非事务表不做限制，只对支持事务的表启用严格模式</td>
+</tr>
+<tr>
+<td style="text-align:center">NO_ZERO_IN_DATE</td>
+<td style="text-align:center">在严格模式下，不允许日期和月份为零</td>
+</tr>
+<tr>
+<td style="text-align:center">NO_ZERO_DATE</td>
+<td style="text-align:center">在非严格模式下，可以插入形如 <code>00-00-0000:00:00</code> 的非法日期，MySQL 仅抛出一个警告，而启用该选项后，MySQL 不允许插入零日期，插入零日期会抛出错误而非警告</td>
+</tr>
+<tr>
+<td style="text-align:center">ERROR_FOR_DIVISION_BY_ZERO</td>
+<td style="text-align:center">在 INSERT 或 UPDATE 过程中，如果数据被零除，则产生错误而非警告。如果未给出该模式，那么数据被零除时 MySQL 返回 NULL</td>
+</tr>
+<tr>
+<td style="text-align:center">NO_AUTO_CREATE_USER</td>
+<td style="text-align:center">禁止 GRANT 创建密码为空的用户</td>
+</tr>
+<tr>
+<td style="text-align:center">PIPES_AS_CONCAT</td>
+<td style="text-align:center">将 `</td>
+</tr>
+<tr>
+<td style="text-align:center">ANSI_QUOTES</td>
+<td style="text-align:center">启用后，不能用双引号来引用字符串，因为它被解释为识别符</td>
+</tr>
+<tr>
+<td style="text-align:center">REAL_AS_FLOAT</td>
+<td style="text-align:center">将 real 视为 float 的同义词而不是 double 的同义词</td>
+</tr>
+<tr>
+<td style="text-align:center">STRICT_ALL_TABLES</td>
+<td style="text-align:center">对所有引擎的表都启用严格模式</td>
+</tr>
+</tbody>
+</table>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/MySQL-Advanced-First-Use-Of-MySQL-Under-Linux/">https://mofan212.github.io/posts/MySQL-Advanced-First-Use-Of-MySQL-Under-Linux/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/MySQL/">MySQL</a></div><div class="post-share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/128.jpg" data-sites="wechat,qq,weibo,facebook,x"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/Quick-Start-To-Arthas/" title="Arthas 快速入门"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/127.png" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Arthas 快速入门</div></div><div class="info-2"><div class="info-item-1">Arthas 是一款由阿里巴巴出品的线上监控诊断产品。</div></div></div></a><a class="pagination-related" href="/posts/MySQL-Advanced-Second-Data-Directory-Of-MySQL/" title="【MySQL 高级篇二】MySQL 的数据目录"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/129.jpg" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【MySQL 高级篇二】MySQL 的数据目录</div></div><div class="info-2"><div class="info-item-1">本文介绍了 MySQL 8.0 的主要目录结构、数据库和文件系统的关系。</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/Variable-Process-Control-Cursor-And-Trigger-Of-MySQL/" title="【MySQL 六】变量、流程控制、游标与触发器"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/110.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-10-02</div><div class="info-item-2">【MySQL 六】变量、流程控制、游标与触发器</div></div><div class="info-2"><div class="info-item-1">本文介绍了 MySQL 中变量、流程控制、游标和触发器的语法与使用。</div></div></div></a><a class="pagination-related" href="/posts/MySQL-Advanced-Fourth-Logical-Architecture/" title="【MySQL 高级篇四】逻辑架构"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/134.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-13</div><div class="info-item-2">【MySQL 高级篇四】逻辑架构</div></div><div class="info-2"><div class="info-item-1">本文剖析了 MySQL 的逻辑架构，介绍了 SQL 执行流程和数据库缓冲池。</div></div></div></a><a class="pagination-related" href="/posts/MySQL-Advanced-Second-Data-Directory-Of-MySQL/" title="【MySQL 高级篇二】MySQL 的数据目录"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/129.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-05</div><div class="info-item-2">【MySQL 高级篇二】MySQL 的数据目录</div></div><div class="info-2"><div class="info-item-1">本文介绍了 MySQL 8.0 的主要目录结构、数据库和文件系统的关系。</div></div></div></a><a class="pagination-related" href="/posts/Data-Type-Of-MySQL/" title="【MySQL 三】数据类型"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/107.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-09-12</div><div class="info-item-2">【MySQL 三】数据类型</div></div><div class="info-2"><div class="info-item-1">本文介绍了 MySQL 中的十一种数据类型，并在每种数据类型的讲解中给出使用示例。</div></div></div></a><a class="pagination-related" href="/posts/Installing-MySQL-Under-Windows/" title="【MySQL 补充】Windows 下 MySQL 的安装"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/136.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-06-06</div><div class="info-item-2">【MySQL 补充】Windows 下 MySQL 的安装</div></div><div class="info-2"><div class="info-item-1">本文介绍了 MySQL 在 Windows 下的安装与卸载，以及常见问题的解决。</div></div></div></a><a class="pagination-related" href="/posts/DQL-Of-MySQL/" title="【MySQL 一】DQL"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/105.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-08-28</div><div class="info-item-2">【MySQL 一】DQL</div></div><div class="info-2"><div class="info-item-1">本文介绍了 MySQL 中查询语句的用法与示例，包括多表查询、单行函数、聚合函数、子查询等内容。</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">默烦</div><div class="author-info-description">彩笔的打怪升级之路...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mofan212"><i class="fab fa-github"></i><span>follow me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解。<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a href="./mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载。😊</br><strong><font style="color:red">严禁未遵循规范的转载。</font></strong>😡</br><strong>死去的评论系统复活啦！欢迎到留言板畅所欲言！</strong>当然也可以使用更高效的<a target="_blank" href="https://space.bilibili.com/23658864/dynamic" style="color:#49B1F5;text-decoration:underline"> 哔哩哔哩私信 </a>或<a href="mailto:cy.mofan@foxmail.com" style="color:#49B1F5;text-decoration:underline" target="_blank">邮箱</a>。 😉</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-MySQL-%E7%9A%84%E5%8D%B8%E8%BD%BD"><span class="toc-text">1. MySQL 的卸载</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E6%9F%A5%E7%9C%8B%E6%98%AF%E5%90%A6%E5%AE%89%E8%A3%85%E8%BF%87-MySQL"><span class="toc-text">1.1 查看是否安装过 MySQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E5%8D%B8%E8%BD%BD-MySQL"><span class="toc-text">1.2 卸载 MySQL</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-MySQL-8-0-%E7%9A%84%E5%AE%89%E8%A3%85"><span class="toc-text">2. MySQL 8.0 的安装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-MySQL-%E7%9A%84%E7%89%88%E6%9C%AC%E4%BB%8B%E7%BB%8D"><span class="toc-text">2.1 MySQL 的版本介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-Linux-%E4%B8%8B%E5%AE%89%E8%A3%85-MySQL-8-0"><span class="toc-text">2.2 Linux 下安装 MySQL 8.0</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E7%99%BB%E5%BD%95-MySQL"><span class="toc-text">2.3 登录 MySQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-%E4%BD%BF%E7%94%A8-Navicat-%E8%BF%9E%E6%8E%A5"><span class="toc-text">2.4 使用 Navicat 连接</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E5%AD%97%E7%AC%A6%E9%9B%86"><span class="toc-text">3. 字符集</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E4%BF%AE%E6%94%B9%E5%AD%97%E7%AC%A6%E9%9B%86"><span class="toc-text">3.1 修改字符集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E5%90%84%E7%BA%A7%E5%88%AB%E7%9A%84%E5%AD%97%E7%AC%A6%E9%9B%86"><span class="toc-text">3.2 各级别的字符集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-%E6%AF%94%E8%BE%83%E8%A7%84%E5%88%99"><span class="toc-text">3.3 比较规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-%E8%AF%B7%E6%B1%82%E5%88%B0%E5%93%8D%E5%BA%94%E8%BF%87%E7%A8%8B%E4%B8%AD%E5%AD%97%E7%AC%A6%E9%9B%86%E7%9A%84%E5%8F%98%E5%8C%96"><span class="toc-text">3.4 请求到响应过程中字符集的变化</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-SQL-%E5%A4%A7%E5%B0%8F%E5%86%99%E8%A7%84%E8%8C%83"><span class="toc-text">4. SQL 大小写规范</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-Windows-%E5%92%8C-Linux%E5%B9%B3%E5%8F%B0%E5%8C%BA%E5%88%AB"><span class="toc-text">4.1 Windows 和 Linux平台区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-Linux-%E4%B8%8B%E5%A4%A7%E5%B0%8F%E5%86%99%E8%A7%84%E5%88%99%E8%AE%BE%E7%BD%AE"><span class="toc-text">4.2 Linux 下大小写规则设置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-SQL-%E7%BC%96%E5%86%99%E5%BB%BA%E8%AE%AE"><span class="toc-text">4.3 SQL 编写建议</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-sql-mode-%E7%9A%84%E5%90%88%E7%90%86%E8%AE%BE%E7%BD%AE"><span class="toc-text">5. sql_mode 的合理设置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-%E7%AE%80%E4%BB%8B"><span class="toc-text">5.1 简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-%E5%AE%BD%E6%9D%BE%E6%A8%A1%E5%BC%8F-VS-%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F"><span class="toc-text">5.2 宽松模式 VS 严格模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-%E6%A8%A1%E5%BC%8F%E6%9F%A5%E7%9C%8B%E5%92%8C%E8%AE%BE%E7%BD%AE"><span class="toc-text">5.3 模式查看和设置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-4-%E5%AE%BD%E6%9D%BE%E6%A8%A1%E5%BC%8F%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">5.4 宽松模式的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-5-sql-mode-%E7%9A%84%E5%B8%B8%E7%94%A8%E5%80%BC"><span class="toc-text">5.5 sql_mode 的常用值</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/Something-About-Blog/" title="博客搭建与维护"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="博客搭建与维护"/></a><div class="content"><a class="title" href="/posts/Something-About-Blog/" title="博客搭建与维护">博客搭建与维护</a><time datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"/></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="更新于 2026-01-03 00:00:00">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"/></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/103.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 的类资源加载"/></a><div class="content"><a class="title" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载">Java 的类资源加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/20.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="注解、类的加载、反射"/></a><div class="content"><a class="title" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射">注解、类的加载、反射</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/ren-zhi-jue-xing/" title="认知觉醒"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/172.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="认知觉醒"/></a><div class="content"><a class="title" href="/posts/ren-zhi-jue-xing/" title="认知觉醒">认知觉醒</a><time datetime="2025-12-28T16:00:00.000Z" title="更新于 2025-12-29 00:00:00">2025-12-29</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://gcore.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script src="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/js/mine.min.js"></script><script src="/js/tip_portal.js"></script><script defer="defer" id="ribbon" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script id="click-show-text" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="Azathoth,Yog-Sothoth,Shub-Niggurath,Nyarlathotep,Cthulhu,Hastur,Abhoth,Ghroth,Tsathoggua,Cthugha,Deep Ones,Dagon,Chaugnar Faugn,Mordiggian,Shoggoth,Old One,Mi-Go,Great Race of Yith,Flying Polyp,Hounds of Tindalos,Dhole" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div class="docsearch-wrap"><div id="docsearch" style="display:none"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@docsearch/css/dist/style.min.css"/><script src="https://testingcf.jsdelivr.net/npm/@docsearch/js/dist/umd/index.min.js"></script><script>(() => {
+  docsearch(Object.assign({
+    appId: 'BAFEL7A6K1',
+    apiKey: '89fcb5961984c5c054bf04149f345f38',
+    indexName: 'mofan212io',
+    container: '#docsearch',
+    placeholder: '输入关键字进行搜索',
+  }, null))
+
+  const handleClick = () => {
+    document.querySelector('.DocSearch-Button').click()
+  }
+
+  const searchClickFn = () => {
+    btf.addEventListenerPjax(document.querySelector('#search-button > .search'), 'click', handleClick)
+  }
+
+  searchClickFn()
+  window.addEventListener('pjax:complete', searchClickFn)
+})()</script></div></div></body></html>

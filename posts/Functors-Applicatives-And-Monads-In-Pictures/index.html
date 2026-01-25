@@ -1,0 +1,469 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Functors, Applicatives and Monads In Pictures | Mofan</title><meta name="author" content="默烦,cy.mofan@foxmail.com"><meta name="copyright" content="默烦"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="图解 Functors, Applicatives 和 Monads。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Functors, Applicatives and Monads In Pictures">
+<meta property="og:url" content="https://mofan212.github.io/posts/Functors-Applicatives-And-Monads-In-Pictures/">
+<meta property="og:site_name" content="Mofan">
+<meta property="og:description" content="图解 Functors, Applicatives 和 Monads。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/162.webp">
+<meta property="article:published_time" content="2025-07-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-07-04T16:00:00.000Z">
+<meta property="article:author" content="默烦">
+<meta property="article:tag" content="Functional-Programming">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/162.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Functors, Applicatives and Monads In Pictures",
+  "url": "https://mofan212.github.io/posts/Functors-Applicatives-And-Monads-In-Pictures/",
+  "image": "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/162.webp",
+  "datePublished": "2025-07-04T16:00:00.000Z",
+  "dateModified": "2025-07-04T16:00:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "默烦",
+      "url": "https://mofan212.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/Functors-Applicatives-And-Monads-In-Pictures/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":true,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 默烦","link":"链接: ","source":"来源: Mofan","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://testingcf.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Functors, Applicatives and Monads In Pictures',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="referrer" content="no-referrer-when-downgrade" /><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/css/myStyle.min.css"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css" /><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css" /><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Mofan" type="application/atom+xml">
+</head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+btf.addGlobalFn('pjaxSend', () => {
+  Pace.restart()
+}, 'pace_restart')
+
+</script><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources/css/minimal.min.css"/><script src="https://testingcf.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/post_top_img.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Mofan</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Functors, Applicatives and Monads In Pictures</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-07-04T16:00:00.000Z" title="发表于 2025-07-05 00:00:00">2025-07-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-07-04T16:00:00.000Z" title="更新于 2025-07-05 00:00:00">2025-07-05</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Functional-Programming/">Functional-Programming</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">3.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>12分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;距离本文上次更新已经过去&quot;,&quot;messageNext&quot;:&quot;天，请注意时效性。&quot;,&quot;postUpdate&quot;:&quot;2025-07-05 00:00:00&quot;}" hidden></div><p>封面来源：由博主个人绘制，如需使用请联系博主。</p>
+<blockquote>
+<p>本文是 <a target="_blank" rel="noopener" href="https://github.com/skopylov58/monads-in-pictures-in-java">skopylov58/monads-in-pictures-in-java</a> 中文译文，最初的原文是 Haskell 版本的 <a target="_blank" rel="noopener" href="https://www.adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html">Functors, Applicatives, And Monads In Pictures</a>，希望本文能对不懂 Haskell 的中文读者有所帮助。</p>
+<p>本文并未进行逐词逐句地翻译，而是在尽量保证语义不发生变化的情况下，使其更符合中文读者的阅读习惯。如有错误，希望各位看官不吝赐教，批评指正。</p>
+<p>本文将使用 JShell 来演示代码片段：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\Mofan&gt;jshell</span><br><span class="line">|  欢迎使用 JShell -- 版本 21.0.7</span><br><span class="line">|  要大致了解该版本, 请键入: /help intro</span><br><span class="line"></span><br><span class="line">jshell&gt;</span><br></pre></td></tr></table></figure>
+<p>注意：JShell 是 Java 9 新增的交互式脚本工具，请保证使用的 Java 版本符合要求。</p>
+</blockquote>
+<p>这是一个简单的值：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/value.png" alt="value"></p>
+<p>我们知道如何将一个「函数」应用到这个值：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/value_apply.png" alt="value_apply"></p>
+<p>在 JShell 中，它看起来像这样：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">jshell&gt; Function&lt;Integer, Integer&gt; add3 = x -&gt; x + 3</span><br><span class="line">add3 ==&gt; $Lambda/0x000002d83a00a1f8@5ec0a365</span><br><span class="line"></span><br><span class="line">jshell&gt; var res = add3.apply(2)</span><br><span class="line">res ==&gt; 5</span><br></pre></td></tr></table></figure>
+<p>这很简单。</p>
+<p>我们可以将其扩展为：任何值都可以出现在「上下文」（Context）中。目前你可以将「上下文」想象成一个可以放入值的盒子：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/value_and_context.png" alt="value_and_context"></p>
+<p>当你将一个函数应用于这个值时，你将 <strong>依赖于上下文</strong> 而得到不同的值。Functors、Applicatives、Monads，Arrows 等概念都是基于这种思想。</p>
+<p><code>Maybe</code> 数据类型定义了两种相关的上下文：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/context.png" alt="context"></p>
+<p>Java 中没有 <code>Maybe</code> 数据类型，可以用 <code>Optional&lt;T&gt;</code> 来代替它，用于模拟值 <code>T</code> 的缺失。</p>
+<p>可以参考下表将 Haskell 中的一些概念用 Java 类进行替代：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Haskell</th>
+<th style="text-align:center">Java</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>Maybe</code></td>
+<td style="text-align:center"><code>Optional&lt;T&gt;</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Just 2</code></td>
+<td style="text-align:center"><code>Optional.of(2)</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Nothing</code></td>
+<td style="text-align:center"><code>Optional.empty()</code></td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">jshell&gt; var just2 = Optional.of(2)</span><br><span class="line">just2 ==&gt; Optional[2]</span><br><span class="line"></span><br><span class="line">jshell&gt; var nothing = Optional.&lt;Integer&gt;empty()</span><br><span class="line">nothing ==&gt; Optional.empty</span><br></pre></td></tr></table></figure>
+<p>稍后我们将看到当某物是 <code>Just a</code> 而不是 <code>Nothing</code> 时，应用一个函数会有怎样的不同。首先让我们来聊聊 Functors！</p>
+<h1 id="1-Functors"><a class="header-anchor" href="#1-Functors"></a>1. Functors</h1>
+<p>Functor，函子。</p>
+<p>当值被封装到上下文中时，不能对其应用一个普通函数：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/no_fmap_ouch.png" alt="no_fmap_ouch"></p>
+<p>这就是 <code>map</code> 发挥作用的地方（在 Haskell 中是 <code>fmap</code>）。</p>
+<p><code>map</code> 是混江湖的，<code>map</code> 对上下文门儿清（感谢 DeepSeek 给出的译文参考）。它懂得如何将函数应用于封装在上下文中的值。</p>
+<p>假设你想将 <code>add3</code> 应用于 <code>just2</code>，使用 <code>map</code> 吧：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">jshell&gt; var just5 = just2.map(add3)</span><br><span class="line">just5 ==&gt; Optional[5]</span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/fmap_apply.png" alt="fmap_apply"></p>
+<p>哇哦！<code>map</code> 向我们展示了它是如何做到的！但 <code>map</code> 是怎么知道应该怎么应用这个函数的呢？</p>
+<h1 id="2-究竟什么是-Functor？"><a class="header-anchor" href="#2-究竟什么是-Functor？"></a>2. 究竟什么是 Functor？</h1>
+<p>Functor 是一个抽象基类（在 Haskell 中叫 <a target="_blank" rel="noopener" href="https://learnyouahaskell.com/types-and-typeclasses#typeclasses-101">typeclass</a>）。</p>
+<p>Haskell 中的定义如下：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/functor_def.png" alt="functor_def"></p>
+<p>在 Java 中，它可以是这样的一个函数式接口：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Functor</span>&lt;T&gt; &#123;</span><br><span class="line">    &lt;R&gt; Functor&lt;R&gt; <span class="title function_">map</span><span class="params">(Function&lt;T, R&gt; mapper)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Functor 是一个定义了 <code>map</code> 如何应用于他的数据类型。</p>
+<p>Haskell 中 <code>fmap</code> 的工作原理如下：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/fmap_def.png" alt="fmap_def"></p>
+<p>所以在 Java 里可以这样做：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">jshell&gt; just2.map(x -&gt; x + 3)</span><br><span class="line">$6 ==&gt; Optional[5]</span><br></pre></td></tr></table></figure>
+<p><code>map</code> 神奇地应用了这个函数，因为 <code>Optional</code> 是一个 Functor。它指定 了 <code>map</code> 如何应用于空的和非空的 <code>Optional</code>。</p>
+<p>当我们写下 <code>just2.map(x -&gt; x + 3)</code> 时，背后发生的事情是这样的：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/fmap_just.png" alt="fmap_just"></p>
+<p>所以你可能会想，好吧 <code>map</code>，请将 <code>x -&gt; x + 3</code> 应用到 <code>Nothing</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">jshell&gt; nothing.map(x -&gt; x + 3)</span><br><span class="line">$7 ==&gt; Optional.empty</span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/bill.png" alt="bill"></p>
+<p><span style="text-align: center;display:block;">比尔・奥莱利（Bill O’Reilly ）对 Maybe 函子一无所知</span></p>
+<p>就像《黑客帝国》中的墨菲斯<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>一样，<code>map</code> 知道该怎么做；从 <code>Nothing</code> 开始，最后得到的也是 <code>Nothing</code>。<code>map</code> 颇具禅意。现在明白了为什么会存在 <code>Optional</code> 数据类型。例如，在没有 <code>Optional</code> 数据类型的语言中，你会这样处理数据库记录：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">var</span> <span class="variable">post</span> <span class="operator">=</span> Post.find_by_id(<span class="number">1</span>);</span><br><span class="line"><span class="keyword">if</span> (post != <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> post.getTitle();</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;N/A&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但在 Java 中使用 <code>Optional</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> Optional.ofNullable(Post.find_by_id(<span class="number">1</span>))</span><br><span class="line">    .map(Post::getTitle)</span><br><span class="line">    .orElse(<span class="string">&quot;N/A&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>如果 <code>find_by_id()</code> 返回了一个帖子，我们将用 <code>getTitle()</code> 获取其标题；如果它返回 <code>Nothing</code>，我们也将返回 <code>Nothing</code>。挺酷的，对吧？</p>
+<p>这里还有另一个例子：当你将一个函数应用于一个列表会发生什么呢？</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/fmap_list.png" alt="fmap_list"></p>
+<p>在 Java 中，可以使用 <code>List#stream()</code> 方法将 <code>List</code> 对象转换为 <code>Stream</code> 对象，也可以直接构建包含指定元素的 <code>Stream</code> 对象。</p>
+<p><code>Stream</code> 也是函子，在 Java 中有：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">jshell&gt; Stream.of(2,4,6).map(add3).toList()</span><br><span class="line">$8 ==&gt; [5, 7, 9]</span><br></pre></td></tr></table></figure>
+<p>好的，好的，再举一个例子：当你把一个函数应用到另一个函数上时又会发生什么呢？</p>
+<p>这是一个函数：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/function_with_value.png" alt="function_with_value"></p>
+<p>然后将一个函数应用到另一个函数上：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/fmap_function.png" alt="fmap_function"></p>
+<p>结果依旧是一个函数！</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">jshell&gt; var add5 = add3.andThen(x -&gt; x + 2)</span><br><span class="line">add5 ==&gt; java.util.function.Function$$Lambda/0x000002a98105c070@6ddf90b0</span><br><span class="line"></span><br><span class="line">jshell&gt; add5.apply(10)</span><br><span class="line">$10 ==&gt; 15</span><br></pre></td></tr></table></figure>
+<p>因此函数也是函子！</p>
+<h1 id="3-Applicatives"><a class="header-anchor" href="#3-Applicatives"></a>3. Applicatives</h1>
+<p>Applicative，适用函子（应用函子）。</p>
+<p>它是 Functor 的扩展类型，除了具备 Functor 的功能外，还能处理「函数位于上下文中」的情况，支持将封装在上下文中的函数应用到封装的值上。</p>
+<p>使用 Applicative 时，我们的值会被封装在一个上下文中，就像 Functor 一样：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/value_and_context.png" alt="value_and_context"></p>
+<p>但我们的函数也能被封装在一个上下文中！</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/function_and_context.png" alt="function_and_context"></p>
+<p>好的，先让这个概念沉淀一下。Applicatives 不会开玩笑。它知道如何将一个封装在上下文中的函数应用到一个封装在上下文中的值：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/applicative_just.png" alt="applicative_just"></p>
+<p>Java 中的 <code>Optional</code> 并不是 Applicatives，但我们可以为它编写一个 <code>aplicative()</code> 函数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;T, R&gt; Optional&lt;R&gt; <span class="title function_">applicative</span><span class="params">(Optional&lt;Function&lt;T, R&gt;&gt; func, Optional&lt;T&gt; value)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> func.flatMap(f -&gt; value.flatMap(v -&gt; Optional.ofNullable(f.apply(v))));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">jshell&gt; &lt;T, R&gt; Optional&lt;R&gt; applicative(Optional&lt;Function&lt;T, R&gt;&gt; func, Optional&lt;T&gt; value) &#123;</span><br><span class="line">   ...&gt;         return func.flatMap(f -&gt; value.flatMap(v -&gt; Optional.ofNullable(f.apply(v))));</span><br><span class="line">   ...&gt; &#125;</span><br><span class="line">|  已创建 方法 applicative(Optional&lt;Function&lt;T, R&gt;&gt;,Optional&lt;T&gt;)</span><br></pre></td></tr></table></figure>
+<p>让我们来测试一下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">jshell&gt; applicative(Optional.of(add3), just2)</span><br><span class="line">$12 ==&gt; Optional[5]</span><br><span class="line"></span><br><span class="line">jshell&gt; applicative(Optional.empty(), just2)</span><br><span class="line">$13 ==&gt; Optional.empty</span><br><span class="line"></span><br><span class="line">jshell&gt; applicative(Optional.of(add3), nothing)</span><br><span class="line">$14 ==&gt; Optional.empty</span><br></pre></td></tr></table></figure>
+<p>在 Haskell 中使用 <code>&lt;*&gt;</code> 可能会导致一些有趣的情况，比如：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/applicative_list.png" alt="applicative_list"></p>
+<p>Java 里并没有 <code>&lt;*&gt;</code> 运算符，但可以使用以下方式实现相同的效果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">jshell&gt; Function&lt;Integer, Integer&gt; mult2 = x -&gt; 2 * x</span><br><span class="line">mult2 ==&gt; $Lambda/0x000002a98100dc50@3a5ed7a6</span><br><span class="line"></span><br><span class="line">jshell&gt; Stream.of(mult2, add3).flatMap(f -&gt; Stream.of(1,2,3).map(f)).toList()</span><br><span class="line">$16 ==&gt; [2, 4, 6, 4, 5, 6]</span><br></pre></td></tr></table></figure>
+<p>这里有一些可以用 Applicatives 做到、但用 Functors 做不到的事情。如何将一个接收两个参数的函数应用于两个被封装的值？</p>
+<p>Applicatives 将 Functors 推到一边，「大男孩可以使用任意参数数量的函数」，它说，「凭借 Haskell 中的 <code>&lt;$&gt;</code> 和 <code>&lt;*&gt;</code>，我可以处理接收任意数量未封装值的任意函数，然后将所有封装的值都传递给这个函数，最后得到一个封装值！哈哈哈哈！」。</p>
+<p>而且还有一个名为 <code>lift_a2</code> 的方法也能做到相同的事（Java 无法处理 aplicative 调用中任意数量的参数，但我们可以创建一个类似的 <code>lift_a2</code> 方法）：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;A, B, C&gt; Optional&lt;C&gt; <span class="title function_">lift_a2</span><span class="params">(Optional&lt;A&gt; optA, Optional&lt;B&gt; optB, BiFunction&lt;A, B, C&gt; bifunc)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> optA.flatMap(a -&gt; optB.flatMap(b -&gt; Optional.of(bifunc.apply(a, b))));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该方法接收两个封装的值（使用 <code>Optional</code> 封装），还有一个接收两个未封装值的 <code>bifunc</code> 函数：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">jshell&gt; &lt;A, B, C&gt; Optional&lt;C&gt; lift_a2(Optional&lt;A&gt; optA, Optional&lt;B&gt; optB, BiFunction&lt;A, B, C&gt; bifunc) &#123;</span><br><span class="line">   ...&gt;         return optA.flatMap(a -&gt; optB.flatMap(b -&gt; Optional.of(bifunc.apply(a, b))));</span><br><span class="line">   ...&gt; &#125;</span><br><span class="line">|  已创建 方法 lift_a2(Optional&lt;A&gt;,Optional&lt;B&gt;,BiFunction&lt;A, B, C&gt;)</span><br></pre></td></tr></table></figure>
+<p>让我们测试一下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">jshell&gt; lift_a2(just2, Optional.of(3), (x, y) -&gt; x * y)</span><br><span class="line">$18 ==&gt; Optional[6]</span><br><span class="line"></span><br><span class="line">jshell&gt; lift_a2(just2, nothing, (x, y) -&gt; x * y)</span><br><span class="line">$19 ==&gt; Optional.empty</span><br></pre></td></tr></table></figure>
+<h1 id="4-Monads"><a class="header-anchor" href="#4-Monads"></a>4. Monads</h1>
+<p>Monad，单子。</p>
+<p>它进一步拓展了 Applicative，用于处理嵌套上下文。</p>
+<p>如何学习 Monad：</p>
+<ol>
+<li>获得计算机科学博士学位。</li>
+<li>扔掉它，因为你不需要它来学习这一部分！</li>
+</ol>
+<p>Monad 增加了新的变化。</p>
+<p>Functor 能够将一个函数应用于被封装的值：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/fmap.png" alt="fmap"></p>
+<p>Applicative 能够将一个被封装的函数应用于一个被封装的值：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/applicative.png" alt="applicative"></p>
+<p>Monad 则能够将一个返回封装的值的函数应用于一个被封装的值。Monad 有一个 <code>flatMap</code> 函数（在 Haskell 中是 <code>&gt;&gt;=</code>，发音为 <code>bind</code>）来完成这个操作。</p>
+<p>让我们来看一个例子。经典的 <code>Maybe</code> 数据类型就一个 Monad：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/context.png" alt="context"></p>
+<p>假设 <code>half</code> 是一个仅适用于偶数的函数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Function&lt;Integer, Optional&lt;Integer&gt;&gt; half = i -&gt; i % <span class="number">2</span> == <span class="number">0</span> ? Optional.of(i / <span class="number">2</span>) : Optional.empty();</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">jshell&gt; Function&lt;Integer, Optional&lt;Integer&gt;&gt; half = i -&gt; i % 2 == 0 ? Optional.of(i / 2) : Optional.</span><br><span class="line">empty()</span><br><span class="line">half ==&gt; $Lambda/0x000002b01500f740@131276c2</span><br></pre></td></tr></table></figure>
+<p>当传入 <code>half</code> 函数的参数是偶数时，返回由 <code>Optional</code> 包装的一半的值，否则返回 <code>Optional.empty()</code>，即 <code>Nothing</code>。</p>
+<p>如果传入 <code>half</code> 函数的参数是一个被封装的值：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/half_ouch.png" alt="half_ouch"></p>
+<p><code>half</code> 函数无法正常工作。</p>
+<p>我们需要使用 <code>flatMap</code>（在 Haskell 中是 <code>&gt;&gt;=</code>）将封装后的值传入函数中。这是 <code>flatMap</code> 的照片 🤣：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/plunger.jpg" alt="plunger"></p>
+<p>它的工作原理如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">jshell&gt; Optional.of(4).flatMap(half)</span><br><span class="line">$21 ==&gt; Optional[2]</span><br><span class="line"></span><br><span class="line">jshell&gt; Optional.of(2).flatMap(half)</span><br><span class="line">$22 ==&gt; Optional[1]</span><br><span class="line"></span><br><span class="line">jshell&gt; Optional.of(1).flatMap(half)</span><br><span class="line">$23 ==&gt; Optional.empty</span><br></pre></td></tr></table></figure>
+<p>这里面发生了什么？Monad 是另一个抽象基类（在 Haskell 中，它是另一个 <a target="_blank" rel="noopener" href="https://learnyouahaskell.com/types-and-typeclasses#typeclasses-101">typeclass</a>）。这是它在 Java 中的部分定义：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Monad</span>&lt;T&gt; &#123;</span><br><span class="line">    &lt;R&gt; Monad&lt;R&gt; <span class="title function_">flatMap</span><span class="params">(Function&lt;? <span class="built_in">super</span> T, ? extends Monad&lt;R&gt;&gt; mapper)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>bind</code> （在 Java 中是 <code>flatMap</code>，在 Haskell 中是 <code>&gt;&gt;=</code>）的含义是：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/bind_def.png" alt="bind_def"></p>
+<p>因此 Java 中的 <code>Optional&lt;T&gt;</code> 实际上是一个 Monad。</p>
+<p>用 <code>Just 3</code> 来演示下使用示例：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/monad_just.png" alt="monad_just"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">jshell&gt; Optional.of(3).flatMap(half)</span><br><span class="line">$24 ==&gt; Optional.empty</span><br></pre></td></tr></table></figure>
+<p>如果你传入一个 <code>Nothing</code>，那就更简单了：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/monad_nothing.png" alt="monad_nothing"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">jshell&gt; nothing.flatMap(half)</span><br><span class="line">$25 ==&gt; Optional.empty</span><br></pre></td></tr></table></figure>
+<p>你也可以链式调用它们：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/monad_chain.png" alt="monad_chain"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">jshell&gt; Optional.of(20).flatMap(half).flatMap(half).flatMap(half)</span><br><span class="line">$26 ==&gt; Optional.empty</span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/whoa.png" alt="whoa"></p>
+<p>酷毙了！</p>
+<p>在 Haskell 中，<code>Maybe</code> 既是一个 <code>Functor</code>，也是一个 <code>Applicative</code>，还是一个 <code>Monad</code>。</p>
+<p>但在 Java 中，<code>Optional</code> 只是一个 <code>Functor</code> 和 <code>Monad</code>，它不是 <code>Applicative</code>，但如果需要，可以提供一个 <code>applicative</code> 函数。</p>
+<h1 id="5-IO-Monad"><a class="header-anchor" href="#5-IO-Monad"></a>5. IO Monad</h1>
+<p>现在让我们来看另一个例子，IO Monad：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/io.png" alt="io"></p>
+<blockquote>
+<p>Java 标准库中并没有 IO Monad，为了翻译，我们需要完成一个最小的 IO Monad 实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">IO</span>&lt;T&gt; &#123;</span><br><span class="line"></span><br><span class="line">    T <span class="title function_">run</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">default</span> &lt;R&gt; IO&lt;R&gt; <span class="title function_">flatMap</span><span class="params">(Function&lt;T, IO&lt;R&gt;&gt; mapper)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> () -&gt; mapper.apply(run()).run();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>它和 <code>Supplier&lt;T&gt;</code> 很类似，内部增加了一个 <code>flatMap</code> 方法。</p>
+</blockquote>
+<p>具体来说有三个函数。<code>getLine</code> 不接受任何参数，直接获取用户的输入：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/getLine.png" alt="getLine"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">IO&lt;String&gt; <span class="title function_">getLine</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// 模拟从控制台读取真实的输入</span></span><br><span class="line">    <span class="keyword">return</span> () -&gt; <span class="string">&quot;read line&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>readFile</code> 接收一个字符串（文件名）并返回该文件的内容：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/readFile.png" alt="readFile"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">IO&lt;String&gt; <span class="title function_">readFile</span><span class="params">(String fileName)</span> &#123;</span><br><span class="line">    <span class="comment">// 模拟从文件中读取内容</span></span><br><span class="line">    <span class="keyword">return</span> () -&gt; <span class="string">&quot;file content&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>putStrLn</code> 接收一个字符串并打印它：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/putStrLn.png" alt="putStrLn"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">IO&lt;Void&gt; <span class="title function_">printLine</span><span class="params">(String text)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> () -&gt; &#123;</span><br><span class="line">        <span class="comment">// 这个不用模拟，这个简单 :)</span></span><br><span class="line">        System.out.println(text);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这三个函数都接收一个普通值（或者不接收值），并返回一个分装的值。我们可以使用 <code>flatMap</code> 将它们串联起来：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/monad_io.png" alt="monad_io"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">var</span> <span class="variable">io</span> <span class="operator">=</span> getLine().flatMap(s -&gt; readFile(s)).flatMap(s -&gt; printLine(s));</span><br><span class="line"></span><br><span class="line">io.run();</span><br></pre></td></tr></table></figure>
+<p>哇哦！前排的各位请看 Monad 的表演！</p>
+<p>Haskell 还为我们提供了一些关于 Monad 的语法糖，称为 <code>do</code> 表示法：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">foo</span> = <span class="keyword">do</span></span><br><span class="line">    filename &lt;- getLine</span><br><span class="line">    contents &lt;- readFile filename</span><br><span class="line">    putStrLn contents</span><br></pre></td></tr></table></figure>
+<p>可惜，这在 Java 中并没有。</p>
+<h1 id="6-总结"><a class="header-anchor" href="#6-总结"></a>6. 总结</h1>
+<ol>
+<li>一个 functor 是一种实现了 <code>Functor</code> 抽象基类的数据类型。</li>
+<li>一个 applicative 是一种实现了 <code>Applicative</code> 抽象基类的数据类型。</li>
+<li>一个 monad 是一种实现了 <code>Monad</code> 抽象基类的数据类型。</li>
+<li>Haskell 中的 <code>Maybe</code> 实现了全部三个，因此它既是 functor，也是 applicative，还是 monad；但 Java 中的 <code>Optional&lt;T&gt;</code> 只实现了 <code>Functor</code> 和 <code>Monad</code>。</li>
+</ol>
+<p>这三个有什么区别呢？</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/FunctionalProgrammingImages/recap.png" alt="recap"></p>
+<ul>
+<li><code>functors</code>：使用 <code>map</code> 将一个函数应用于一个被封装的值；</li>
+<li><code>applicatives</code>： 使用 <code>applicative</code> 将一个被封装的函数应用于一个被封装的值；</li>
+<li><code>monads</code>：使用 <code>flatMap</code> 将一个返回被封装的值的函数应用于一个被封装的值。</li>
+</ul>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>墨菲斯清楚虚拟与现实的规则，能精准指引尼奥应对未知。<code>map</code> 也是这样，它知道如何处理 <code>Optional</code>，有值就处理值，没值就保持原样，就像墨菲斯看穿规则一样，<code>map</code> 也看穿了 <code>Optional</code> 的操作逻辑，能够给出对应的应对方案。 <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/Functors-Applicatives-And-Monads-In-Pictures/">https://mofan212.github.io/posts/Functors-Applicatives-And-Monads-In-Pictures/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Functional-Programming/">Functional-Programming</a></div><div class="post-share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/162.webp" data-sites="wechat,qq,weibo,facebook,x"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/The-Structure-Of-JVM/" title="JVM 内存结构"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/161.webp" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">JVM 内存结构</div></div><div class="info-2"><div class="info-item-1">JVM 快速入门第一部分：JVM 内存结构。</div></div></div></a><a class="pagination-related  no-desc" href="/posts/Quick-Start-With-LangChain4j/" title="LangChain4j 快速入门"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/163.png" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">LangChain4j 快速入门</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/Java-Lambda-In-Action/" title="Java Lambda In Action"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/159.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-03-19</div><div class="info-item-2">Java Lambda In Action</div></div><div class="info-2"><div class="info-item-1">讲解不一样的 Lambda 表达式用法，希望能给你带来一些启发。</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">默烦</div><div class="author-info-description">彩笔的打怪升级之路...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mofan212"><i class="fab fa-github"></i><span>follow me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解。<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a href="./mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载。😊</br><strong><font style="color:red">严禁未遵循规范的转载。</font></strong>😡</br><strong>死去的评论系统复活啦！欢迎到留言板畅所欲言！</strong>当然也可以使用更高效的<a target="_blank" href="https://space.bilibili.com/23658864/dynamic" style="color:#49B1F5;text-decoration:underline"> 哔哩哔哩私信 </a>或<a href="mailto:cy.mofan@foxmail.com" style="color:#49B1F5;text-decoration:underline" target="_blank">邮箱</a>。 😉</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-Functors"><span class="toc-text">1. Functors</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E7%A9%B6%E7%AB%9F%E4%BB%80%E4%B9%88%E6%98%AF-Functor%EF%BC%9F"><span class="toc-text">2. 究竟什么是 Functor？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-Applicatives"><span class="toc-text">3. Applicatives</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-Monads"><span class="toc-text">4. Monads</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-IO-Monad"><span class="toc-text">5. IO Monad</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-%E6%80%BB%E7%BB%93"><span class="toc-text">6. 总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/Something-About-Blog/" title="博客搭建与维护"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="博客搭建与维护"/></a><div class="content"><a class="title" href="/posts/Something-About-Blog/" title="博客搭建与维护">博客搭建与维护</a><time datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"/></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="更新于 2026-01-03 00:00:00">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"/></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/103.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 的类资源加载"/></a><div class="content"><a class="title" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载">Java 的类资源加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/20.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="注解、类的加载、反射"/></a><div class="content"><a class="title" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射">注解、类的加载、反射</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/ren-zhi-jue-xing/" title="认知觉醒"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/172.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="认知觉醒"/></a><div class="content"><a class="title" href="/posts/ren-zhi-jue-xing/" title="认知觉醒">认知觉醒</a><time datetime="2025-12-28T16:00:00.000Z" title="更新于 2025-12-29 00:00:00">2025-12-29</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://gcore.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script src="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/js/mine.min.js"></script><script src="/js/tip_portal.js"></script><script defer="defer" id="ribbon" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script id="click-show-text" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="Azathoth,Yog-Sothoth,Shub-Niggurath,Nyarlathotep,Cthulhu,Hastur,Abhoth,Ghroth,Tsathoggua,Cthugha,Deep Ones,Dagon,Chaugnar Faugn,Mordiggian,Shoggoth,Old One,Mi-Go,Great Race of Yith,Flying Polyp,Hounds of Tindalos,Dhole" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div class="docsearch-wrap"><div id="docsearch" style="display:none"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@docsearch/css/dist/style.min.css"/><script src="https://testingcf.jsdelivr.net/npm/@docsearch/js/dist/umd/index.min.js"></script><script>(() => {
+  docsearch(Object.assign({
+    appId: 'BAFEL7A6K1',
+    apiKey: '89fcb5961984c5c054bf04149f345f38',
+    indexName: 'mofan212io',
+    container: '#docsearch',
+    placeholder: '输入关键字进行搜索',
+  }, null))
+
+  const handleClick = () => {
+    document.querySelector('.DocSearch-Button').click()
+  }
+
+  const searchClickFn = () => {
+    btf.addEventListenerPjax(document.querySelector('#search-button > .search'), 'click', handleClick)
+  }
+
+  searchClickFn()
+  window.addEventListener('pjax:complete', searchClickFn)
+})()</script></div></div></body></html>

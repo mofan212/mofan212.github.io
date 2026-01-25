@@ -1,0 +1,521 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【MySQL 七】MySQL 8.0 的新特性 | Mofan</title><meta name="author" content="默烦,cy.mofan@foxmail.com"><meta name="copyright" content="默烦"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本文介绍了 MySQL 8.0 中的新特性，包括窗口函数和共用表表达式。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【MySQL 七】MySQL 8.0 的新特性">
+<meta property="og:url" content="https://mofan212.github.io/posts/New-Features-Of-MySQL-8/">
+<meta property="og:site_name" content="Mofan">
+<meta property="og:description" content="本文介绍了 MySQL 8.0 中的新特性，包括窗口函数和共用表表达式。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/111.png">
+<meta property="article:published_time" content="2022-10-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-10-02T16:00:00.000Z">
+<meta property="article:author" content="默烦">
+<meta property="article:tag" content="MySQL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/111.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "【MySQL 七】MySQL 8.0 的新特性",
+  "url": "https://mofan212.github.io/posts/New-Features-Of-MySQL-8/",
+  "image": "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/111.png",
+  "datePublished": "2022-10-02T16:00:00.000Z",
+  "dateModified": "2022-10-02T16:00:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "默烦",
+      "url": "https://mofan212.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/New-Features-Of-MySQL-8/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":true,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 默烦","link":"链接: ","source":"来源: Mofan","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://testingcf.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '【MySQL 七】MySQL 8.0 的新特性',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="referrer" content="no-referrer-when-downgrade" /><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/css/myStyle.min.css"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css" /><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css" /><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Mofan" type="application/atom+xml">
+</head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+btf.addGlobalFn('pjaxSend', () => {
+  Pace.restart()
+}, 'pace_restart')
+
+</script><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources/css/minimal.min.css"/><script src="https://testingcf.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/post_top_img.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Mofan</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【MySQL 七】MySQL 8.0 的新特性</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-10-02T16:00:00.000Z" title="发表于 2022-10-03 00:00:00">2022-10-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-10-02T16:00:00.000Z" title="更新于 2022-10-03 00:00:00">2022-10-03</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/MySQL/">MySQL</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>24分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;距离本文上次更新已经过去&quot;,&quot;messageNext&quot;:&quot;天，请注意时效性。&quot;,&quot;postUpdate&quot;:&quot;2022-10-03 00:00:00&quot;}" hidden></div><p>封面来源：本文封面来源于 MySQL 官网，如有侵权，请联系删除。</p>
+<p>本文参考：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1iq4y1u7vj">MySQL数据库教程天花板，mysql安装到mysql高级，强！硬！</a></p>
+<p>官方文档：<a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/mysql-nutshell.html">MySQL :: MySQL 8.0 Reference Manual :: 1.3 What Is New in MySQL 8.0</a></p>
+<h1 id="1-新特性概述"><a class="header-anchor" href="#1-新特性概述"></a>1. 新特性概述</h1>
+<h2 id="1-1-MySQL-8-0-新增特性"><a class="header-anchor" href="#1-1-MySQL-8-0-新增特性"></a>1.1  MySQL 8.0 新增特性</h2>
+<p><strong>1、更简便的 NoSQL支持。</strong> NoSQL 泛指非关系型数据库和数据存储。随着互联网平台的规模飞速发展，传统的关系型数据库已经越来越不能满足需求。从 MySQL 5.6 版本开始，MySQL 就开始支持简单的 NoSQL 存储功能。MySQL 8.0 对这一功能做了优化，以更灵活的方式实现 NoSQL 功能，不再依赖模式（schema）。</p>
+<p><strong>2、更好的索引。</strong> 在查询中，正确地使用索引可以提高查询的效率。MySQL 8.0 中新增了隐藏索引和降序索引。隐藏索引可以用来测试去掉索引对查询性能的影响。在查询中混合存在多列索引时，使用降序索引可以提高查询的性能。</p>
+<p><strong>3、更完善的JSON支持。</strong> MySQL 从 5.7 版本开始支持原生 JSON 数据的存储，MySQL 8.0 对这一功能做了优化，增加了聚合函数 <code>JSON_ARRAYAGG()</code> 和 <code>JSON_OBJECTAGG()</code>，将参数聚合为 JSON 数组或对象，新增了行内操作符 <code>-&gt;&gt;</code>，该操作符是列路径运算符 <code>-&gt;</code> 的增强，对 JSON 排序做了提升，并优化了 JSON 的更新操作。</p>
+<p><strong>4、安全和账户管理。</strong> MySQL 8.0 中新增了 <code>caching_sha2_password</code> 授权插件、角色、密码历史记录和 FIPS 模式支持，这些特性提高了数据库的安全性和性能，使数据库管理员能够更灵活地进行账户管理工作。</p>
+<p><strong>5、InnoDB的变化。</strong> InnoDB 是 MySQL 默认的存储引擎，是事务型数据库的首选引擎，支持事务安全表（ACID），支持行锁定和外键。在 MySQL 8.0 版本中，InnoDB 在自增、索引、加密、死锁、共享锁等方面做了大量的改进和优化，并且支持原子数据定义语言（DDL），提高了数据安全性，对事务提供更好的支持。</p>
+<p><strong>6、数据字典。</strong> 在之前的 MySQL 版本中，字典数据都存储在元数据文件和非事务表中。从 MySQL 8.0 开始新增了事务数据字典，在这个字典里存储着数据库对象信息，这些数据字典存储在内部事务表中。</p>
+<p><strong>7、原子数据定义语句。</strong> MySQL 8.0 开始支持原子数据定义语句（Automic DDL），即原子 DDL 。目前只有 InnoDB 存储引擎支持原子 DDL。原子数据定义语句（DDL）将与 DDL 操作相关的数据字典更新、存储引擎操作、二进制日志写入结合到一个单独的原子事务中，这使得即使服务器崩溃，事务也会提交或回滚。使用支持原子操作的存储引擎所创建的表，在执行 <code>DROP TABLE</code>、<code>CREATE TABLE</code>、<code>ALTER TABLE</code>、<code>RENAME TABLE</code>、<code>TRUNCATE TABLE</code>、<code>CREATE TABLESPACE</code>、<code>DROP TABLESPACE</code> 等操作时，都支持原子操作，即事务要么完全操作成功，要么失败后回滚，不再进行部分提交。 对于从 MySQL 5.7 复制到 MySQL 8.0 版本中的语句，可以添加 <code>IF EXISTS</code> 或 <code>IF NOT EXISTS</code> 语句来避免发生错误。</p>
+<p><strong>8、资源管理。</strong> MySQL 8.0 开始支持创建和管理资源组，允许将服务器内运行的线程分配给特定的分组，以便线程根据组内可用资源执行。组属性能够控制组内资源，启用或限制组内资源消耗。数据库管理员能够根据不同的工作负载适当地更改这些属性。 目前，CPU 时间是可控资源，由“虚拟 CPU”这个概念来表示，此术语包含 CPU 的核心数，超线程，硬件线程等等。服务器在启动时确定可用的虚拟 CPU 数量。拥有对应权限的数据库管理员可以将这些 CPU 与资源组关联，并为资源组分配线程。 资源组组件为 MySQL 中的资源组管理提供了 SQL 接口。资源组的属性用于定义资源组。MySQL 中存在两个默认组，系统组和用户组，默认的组不能被删除，其属性也不能被更改。对于用户自定义的组，资源组创建时可初始化所有的属性，除去名字和类型，其他属性都可在创建之后进行更改。 在一些平台下，或进行了某些 MySQL 的配置时，资源管理的功能将受到限制，甚至不可用。例如，如果安装了线程池插件，或者使用的是 macOS 系统，资源管理将处于不可用状态。在 FreeBSD 和 Solaris 系统中，资源线程优先级将失效。在 Linux 系统中，只有配置了 <code>CAP_SYS_NICE</code> 属性，资源管理优先级才能发挥作用。</p>
+<p><strong>9、字符集支持。</strong> MySQL 8.0 中默认的字符集由 <code>latin1</code> 更改为 <code>utf8mb4</code>，并首次增加了日语所特定使用的集合 <code>utf8mb4_ja_0900_as_cs</code>。</p>
+<p><strong>10、优化器增强。</strong> MySQL 优化器开始支持隐藏索引和降序索引。隐藏索引不会被优化器使用，验证索引的必要性时不需要删除索引，先将索引隐藏，如果优化器性能无影响就可以真正地删除索引。降序索引允许优化器对多个列进行排序，并且允许排序顺序不一致。</p>
+<p><strong>11、公用表表达式。</strong> 公用表表达式（Common Table Expressions），简称为 CTE，MySQL 现在支持递归和非递归两种形式的 CTE。CTE 通过在 <code>SELECT</code> 语句或其他特定语句前使用 <code>WITH</code> 语句对临时结果集进行命名。基本语法如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WITH</span> cte_name (col_name1, col_name2 ...) <span class="keyword">AS</span> (Subquery) </span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> cte_name;</span><br></pre></td></tr></table></figure>
+<p><code>Subquery</code> 代表子查询，子查询前使用 <code>WITH</code> 语句将结果集命名为 <code>cte_name</code>，在后续的查询中即可使用 <code>cte_name</code> 进行查询。</p>
+<p><strong>12、窗口函数。</strong> MySQL 8.0 开始支持窗口函数，在之前的版本中已存在的大部分聚合函数在 MySQL 8.0 中也可以作为窗口函数来使用。</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/MySQL8.0%E7%9A%84%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0.png" alt="MySQL8.0的窗口函数"></p>
+<p><strong>13、正则表达式支持。</strong> MySQL 在 8.0.4 以后的版本中采用支持 Unicode 的国际化组件库实现正则表达式操作，这种方式不仅能提供完全的 Unicode 支持，而且是多字节安全编码。MySQL 增加了 <code>REGEXP_LIKE()</code>、<code>EGEXP_INSTR()</code>、<code>REGEXP_REPLACE()</code> 和 <code>REGEXP_SUBSTR()</code> 等函数来提升性能。另外，<code>regexp_stack_limit</code> 和 <code>regexp_time_limit</code> 系统变量能够通过匹配引擎来控制资源消耗。</p>
+<p><strong>14、内部临时表。</strong> TempTable 存储引擎取代 MEMORY 存储引擎成为内部临时表的默认存储引擎。TempTable 存储引擎为 <code>VARCHAR</code> 和 <code>VARBINARY</code> 列提供高效存储。<code>internal_tmp_mem_storage_engine</code> 会话变量定义了内部临时表的存储引擎，有 <code>TempTable</code> 和 <code>MEMORY</code> 两个可选值，其中 <code>TempTable</code> 为默认的存储引擎。<code>temptable_max_ram</code> 系统配置项定义了 TempTable 存储引擎可使用的最大内存数量。</p>
+<p><strong>15、日志记录。</strong> 在 MySQL 8.0 中错误日志子系统由一系列 MySQL 组件构成。这些组件的构成由系统变量 <code>log_error_services</code> 来配置，能够实现日志事件的过滤和写入。</p>
+<p><strong>16、备份锁。</strong> 新的备份锁允许在线备份期间执行数据操作语句，同时阻止可能造成快照不一致的操作。新备份锁由 <code>LOCK INSTANCE FOR BACKUP</code> 和 <code>UNLOCK INSTANCE</code> 语法提供支持，执行这些操作需要备份管理员特权。</p>
+<p><strong>17、增强的 MySQL 复制。</strong> MySQL 8.0 复制支持对 JSON 文档进行部分更新的二进制日志记录，该记录使用紧凑的二进制格式，从而节省记录完整 JSON 文档的空间。当使用基于语句的日志记录时，这种紧凑的日志记录会自动完成，并且可以通过将新的 <code>binlog_row_value_options</code> 系统变量值设置为 <code>PARTIAL_JSON</code> 来启用。</p>
+<h2 id="1-2-MySQL-8-0-移除的特性"><a class="header-anchor" href="#1-2-MySQL-8-0-移除的特性"></a>1.2 MySQL 8.0 移除的特性</h2>
+<p>在 MySQL 5.7 版本上开发的应用程序如果使用了 MySQL 8.0 移除的特性，语句可能会失败，或者产生不同的执行结果。为了避免这些问题，对于使用了移除特性的应用，应当尽力修正避免使用这些特性，并尽可能使用替代方法。</p>
+<p><strong>1、查询缓存。</strong> 查询缓存已被移除，删除的项有：</p>
+<ul>
+<li>
+<p>语句：FLUSH QUERY CACHE 和 RESET QUERY CACHE。</p>
+</li>
+<li>
+<p>系统变量：query_cache_limit、query_cache_min_res_unit、query_cache_size、query_cache_type、query_cache_wlock_invalidate。</p>
+</li>
+<li>
+<p>状态变量：Qcache_free_blocks、Qcache_free_memory、Qcache_hits、Qcache_inserts、Qcache_lowmem_prunes、Qcache_not_cached、Qcache_queries_in_cache、Qcache_total_blocks。</p>
+</li>
+<li>
+<p>线程状态：checking privileges on cached query、checking query cache for query、invalidating query cache entries、sending cached result to client、storing result in query cache、waiting for query cache lock。</p>
+</li>
+</ul>
+<p><strong>2、加密相关。</strong> 删除的加密相关的内容有：<code>ENCODE()</code>、<code>DECODE()</code>、<code>ENCRYPT()</code>、<code>DES_ENCRYPT()</code> 和 <code>DES_DECRYPT()</code> 函数，配置项 des-key-file，系统变量 have_crypt，FLUSH 语句的 DES_KEY_FILE 选项和 HAVE_CRYPT CMake 选项。 对于移除的 <code>ENCRYPT()</code> 函数，考虑使用 <code>SHA2()</code> 替代，对于其他移除的函数，使用 <code>AES_ENCRYPT()</code> 和 <code>AES_DECRYPT()</code> 替代。</p>
+<p><strong>3、空间函数相关。</strong> 在 MySQL 5.7 版本中，多个空间函数已被标记为过时。这些过时函数在 MySQL 8.0 中都已被移除，只保留了对应的 <code>ST_</code> 和 <code>MBR</code> 函数。</p>
+<p><strong>4、<code>\N</code> 和 <code>NULL</code>。</strong> 在 SQL 语句中，解析器不再将 <code>\N</code> 视为 <code>NULL</code>，所以在 SQL 语句中应使用 <code>NULL</code> 代替 <code>\N</code>。这项变化不会影响使用 <code>LOAD DATA INFILE</code> 或者 <code>SELECT...INTO OUTFILE</code> 操作文件的导入和导出。在这类操作中，<code>NULL</code> 仍等同于 <code>\N</code>。</p>
+<p><strong>5、mysql_install_db。</strong> <code>mysql_install_db</code> 程序已从 MySQL 发行版中删除。数据字典初始化应该使用带有 <code>--initialize</code> 或 <code>--initialize-insecure</code> 选项的 mysqld 来实现。另外，<code>mysql_install_db</code> 使用的 mysqld 的 <code>--bootstrap</code> 选项和控制 <code>mysql_install_db</code> 安装位置的 <code>INSTALL_SCRIPTDIR CMake</code> 选项也被删除了。</p>
+<p><strong>6、通用分区处理程序。</strong> 通用分区处理程序已从 MySQL 服务中被移除。为了实现给定表分区，表所使用的存储引擎需要自有的分区处理程序。 提供本地分区支持的 MySQL 存储引擎有两个，即 InnoDB 和 NDB，而在 MySQL 8.0 中只支持 InnoDB。</p>
+<p><strong>7、系统和状态变量信息。</strong> 在 INFORMATION_SCHEMA 数据库中，对系统和状态变量信息不再进行维护。GLOBAL_VARIABLES、SESSION_VARIABLES、GLOBAL_STATUS、SESSION_STATUS 表都已被删除。另外，系统变量 <code>show_compatibility_56</code> 也已被删除。被删除的状态变量有 Slave_heartbeat_period、Slave_last_heartbeat、Slave_received_heartbeats、Slave_retried_transactions 和 Slave_running。以上被删除的内容都可使用性能模式中对应的内容进行替代。</p>
+<p><strong>8、mysql_plugin 工具。</strong> mysql_plugin 工具用来配置 MySQL 服务器插件，现已被删除，可使用 <code>--plugin-load</code> 或 <code>--plugin-load-add</code> 选项在服务器启动时加载插件或者在运行时使用 <code>INSTALL PLUGIN</code>语句加载插件来替代该工具。</p>
+<h1 id="2-窗口函数"><a class="header-anchor" href="#2-窗口函数"></a>2. 窗口函数</h1>
+<h2 id="2-1-使用窗口函数的前后对比"><a class="header-anchor" href="#2-1-使用窗口函数的前后对比"></a>2.1 使用窗口函数的前后对比</h2>
+<p>假设现有这样一个数据表，它显示了某购物网站在每个城市每个区的销售额：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE TABLE</span> sales(</span><br><span class="line">    id <span class="type">INT</span> <span class="keyword">PRIMARY KEY</span> AUTO_INCREMENT,</span><br><span class="line">    city <span class="type">VARCHAR</span>(<span class="number">15</span>),</span><br><span class="line">    county <span class="type">VARCHAR</span>(<span class="number">15</span>),</span><br><span class="line">    sales_value <span class="type">DECIMAL</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT INTO</span> sales(city,county,sales_value) </span><br><span class="line"><span class="keyword">VALUES</span> (<span class="string">&#x27;北京&#x27;</span>,<span class="string">&#x27;海淀&#x27;</span>,<span class="number">10.00</span>), (<span class="string">&#x27;北京&#x27;</span>,<span class="string">&#x27;朝阳&#x27;</span>,<span class="number">20.00</span>), </span><br><span class="line">    (<span class="string">&#x27;上海&#x27;</span>,<span class="string">&#x27;黄埔&#x27;</span>,<span class="number">30.00</span>), (<span class="string">&#x27;上海&#x27;</span>,<span class="string">&#x27;长宁&#x27;</span>,<span class="number">10.00</span>);</span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/sales%E8%A1%A8%E4%B8%AD%E6%95%B0%E6%8D%AE.png" alt="sales表中数据"></p>
+<p><strong>需求：</strong> 计算这个网站在每个城市的销售总额、在全国的销售总额、每个区的销售额占所在城市销售额中的比率，以及占总销售额中的比率。</p>
+<blockquote>
+<p>不使用窗口函数</p>
+</blockquote>
+<p>首先计算总销售金额，并存入临时表 a 中：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> TEMPORARY <span class="keyword">TABLE</span> a</span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">SUM</span>(sales_value) <span class="keyword">AS</span> sales_value</span><br><span class="line"><span class="keyword">FROM</span> sales;</span><br></pre></td></tr></table></figure>
+<p>看看临时表 a 中的数据：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E4%B8%B4%E6%97%B6%E8%A1%A8a%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE.png" alt="临时表a中的数据"></p>
+<p>计算每个城市的销售总额并存入临时表 b 中：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> TEMPORARY <span class="keyword">TABLE</span> b </span><br><span class="line"><span class="keyword">SELECT</span> city, <span class="built_in">SUM</span>(sales_value) <span class="keyword">AS</span> sales_value </span><br><span class="line"><span class="keyword">FROM</span> sales </span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> city;</span><br></pre></td></tr></table></figure>
+<p>看看临时表 b 中的数据：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E4%B8%B4%E6%97%B6%E8%A1%A8b%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE.png" alt="临时表b中的数据"></p>
+<p>计算各区的销售占所在城市的总计金额的比例，和占全部销售总计金额的比例。可以通过下面的连接查询获得需要的结果：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> s.city <span class="keyword">AS</span> 城市, s.county <span class="keyword">AS</span> 区, s.sales_value <span class="keyword">AS</span> 区销售额, b.sales_value <span class="keyword">AS</span> 市销售额, s.sales_value <span class="operator">/</span> b.sales_value <span class="keyword">AS</span> 市比率,</span><br><span class="line">a.sales_value <span class="keyword">AS</span> 总销售额, s.sales_value <span class="operator">/</span> a.sales_value <span class="keyword">AS</span> 总比率 </span><br><span class="line"><span class="keyword">FROM</span> sales s </span><br><span class="line"><span class="keyword">JOIN</span> b <span class="keyword">ON</span> (s.city <span class="operator">=</span> b.city) </span><br><span class="line"><span class="keyword">JOIN</span> a </span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> s.city,s.county;</span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E4%B8%8D%E4%BD%BF%E7%94%A8%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0%E5%BE%97%E5%88%B0%E7%9A%84%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C.png" alt="不使用窗口函数得到的查询结果"></p>
+<p>通过上面的查询语句，市销售金额、市销售占比、总销售金额、总销售占比都计算出来了。</p>
+<blockquote>
+<p>使用窗口函数</p>
+</blockquote>
+<p>如果使用窗口函数，就简单多了：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> city <span class="keyword">AS</span> 城市, county <span class="keyword">AS</span> 区, sales_value <span class="keyword">AS</span> 区销售额, </span><br><span class="line"><span class="built_in">SUM</span>(sales_value) <span class="keyword">OVER</span>(<span class="keyword">PARTITION</span> <span class="keyword">BY</span> city) <span class="keyword">AS</span> 市销售额, </span><br><span class="line">sales_value <span class="operator">/</span> <span class="built_in">SUM</span>(sales_value) <span class="keyword">OVER</span>(<span class="keyword">PARTITION</span> <span class="keyword">BY</span> city) <span class="keyword">AS</span> 市比率, </span><br><span class="line"><span class="built_in">SUM</span>(sales_value) <span class="keyword">OVER</span>() <span class="keyword">AS</span> 总销售额, </span><br><span class="line">sales_value <span class="operator">/</span> <span class="built_in">SUM</span>(sales_value) <span class="keyword">OVER</span>() <span class="keyword">AS</span> 总比率 </span><br><span class="line"><span class="keyword">FROM</span> sales </span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> city, county;</span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E4%BD%BF%E7%94%A8%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0%E5%BE%97%E5%88%B0%E7%9A%84%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C.png" alt="使用窗口函数得到的查询结果"></p>
+<p>使用窗口函数后得到了与不使用窗口函数一样的结果，但很显然，使用窗口函数后只需一步就完成了查询，还没有使用到临时表，执行效率也更高。因此，在需要用到分组统计的结果对每一条记录进行计算的场景下，使用窗口函数更好。</p>
+<h2 id="2-2-窗口函数分类"><a class="header-anchor" href="#2-2-窗口函数分类"></a>2.2 窗口函数分类</h2>
+<p>MySQL 从 8.0 版本开始支持窗口函数。窗口函数的作用类似于在查询中对数据进行分组，不同的是，分组操作会把分组的结果聚合成一条记录，而窗口函数是将结果置于每一条数据记录中。</p>
+<p>窗口函数可以分为 <strong>静态窗口函数</strong> 和 <strong>动态窗口函数</strong>：</p>
+<ul>
+<li>
+<p>静态窗口函数的窗口大小是固定的，不会因为记录的不同而不同；</p>
+</li>
+<li>
+<p>动态窗口函数的窗口大小会随着记录的不同而变化。</p>
+</li>
+</ul>
+<p>MySQL 官方关于窗口函数的介绍：<a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/window-function-descriptions.html#function_row-number">12.21.1 Window Function Descriptions</a></p>
+<p>窗口函数总体上可以分为序号函数、分布函数、前后函数、首尾函数和其他函数，如下表：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0%E7%9A%84%E5%88%86%E7%B1%BB.png" alt="窗口函数的分类"></p>
+<h2 id="2-3-语法结构"><a class="header-anchor" href="#2-3-语法结构"></a>2.3 语法结构</h2>
+<p>窗口函数的语法结构是：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">函数 <span class="keyword">OVER</span>([<span class="keyword">PARTITION</span> <span class="keyword">BY</span> 字段名 <span class="keyword">ORDER</span> <span class="keyword">BY</span> 字段名 <span class="keyword">ASC</span><span class="operator">|</span><span class="keyword">DESC</span>])</span><br></pre></td></tr></table></figure>
+<p>或者：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">函数 <span class="keyword">OVER</span> 窗口名 ... <span class="keyword">WINDOW</span> 窗口名 <span class="keyword">AS</span> ([<span class="keyword">PARTITION</span> <span class="keyword">BY</span> 字段名 <span class="keyword">ORDER</span> <span class="keyword">BY</span> 字段名 <span class="keyword">ASC</span><span class="operator">|</span><span class="keyword">DESC</span>])</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>语法解析</p>
+</blockquote>
+<p>1、<code>OVER</code> 关键字指定窗口函数的范围：</p>
+<ul>
+<li>
+<p>如果省略后面括号中的内容，则窗口会包含满足 <code>WHERE</code> 条件的所有记录，窗口函数会基于所有满足 <code>WHERE</code> 条件的记录进行计算。</p>
+</li>
+<li>
+<p>如果 <code>OVER</code> 关键字后面的括号不为空，则使用括号内的语法设置窗口。</p>
+</li>
+</ul>
+<p>2、窗口名：为窗口设置一个别名，用来标识窗口。</p>
+<p>3、<code>PARTITION BY</code> 子句：指定窗口函数按照哪些字段进行分组。分组后，窗口函数可以在每个分组中分别执行。</p>
+<p>4、<code>ORDER BY</code> 子句：指定窗口函数按照哪些字段进行排序。执行排序操作可以使窗口函数按照排序后的数据记录的顺序进行编号。</p>
+<p>5、<code>FRAME</code> 子句：为分区中的某个子集定义规则，可以用来作为滑动窗口使用。</p>
+<h2 id="2-4-讲解前的准备"><a class="header-anchor" href="#2-4-讲解前的准备"></a>2.4 讲解前的准备</h2>
+<p>创建表：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE TABLE</span> goods(</span><br><span class="line">    id <span class="type">INT</span> <span class="keyword">PRIMARY KEY</span> AUTO_INCREMENT,</span><br><span class="line">    category_id <span class="type">INT</span>,</span><br><span class="line">    category <span class="type">VARCHAR</span>(<span class="number">15</span>),</span><br><span class="line">    NAME <span class="type">VARCHAR</span>(<span class="number">30</span>),</span><br><span class="line">    price <span class="type">DECIMAL</span>(<span class="number">10</span>,<span class="number">2</span>),</span><br><span class="line">    stock <span class="type">INT</span>,</span><br><span class="line">    upper_time DATETIME</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>添加数据：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT INTO</span> goods(category_id, category, NAME, price, stock, upper_time) </span><br><span class="line"><span class="keyword">VALUES</span> </span><br><span class="line">(<span class="number">1</span>, <span class="string">&#x27;女装/女士精品&#x27;</span>, <span class="string">&#x27;T恤&#x27;</span>, <span class="number">39.90</span>, <span class="number">1000</span>, <span class="string">&#x27;2020-11-10 00:00:00&#x27;</span>), </span><br><span class="line">(<span class="number">1</span>, <span class="string">&#x27;女装/女士精品&#x27;</span>, <span class="string">&#x27;连衣裙&#x27;</span>, <span class="number">79.90</span>, <span class="number">2500</span>, <span class="string">&#x27;2020-11-10 00:00:00&#x27;</span>), </span><br><span class="line">(<span class="number">1</span>, <span class="string">&#x27;女装/女士精品&#x27;</span>, <span class="string">&#x27;卫衣&#x27;</span>, <span class="number">89.90</span>, <span class="number">1500</span>, <span class="string">&#x27;2020-11-10 00:00:00&#x27;</span>), </span><br><span class="line">(<span class="number">1</span>, <span class="string">&#x27;女装/女士精品&#x27;</span>, <span class="string">&#x27;牛仔裤&#x27;</span>, <span class="number">89.90</span>, <span class="number">3500</span>, <span class="string">&#x27;2020-11-10 00:00:00&#x27;</span>), </span><br><span class="line">(<span class="number">1</span>, <span class="string">&#x27;女装/女士精品&#x27;</span>, <span class="string">&#x27;百褶裙&#x27;</span>, <span class="number">29.90</span>, <span class="number">500</span>, <span class="string">&#x27;2020-11-10 00:00:00&#x27;</span>), </span><br><span class="line">(<span class="number">1</span>, <span class="string">&#x27;女装/女士精品&#x27;</span>, <span class="string">&#x27;呢绒外套&#x27;</span>, <span class="number">399.90</span>, <span class="number">1200</span>, <span class="string">&#x27;2020-11-10 00:00:00&#x27;</span>), </span><br><span class="line">(<span class="number">2</span>, <span class="string">&#x27;户外运动&#x27;</span>, <span class="string">&#x27;自行车&#x27;</span>, <span class="number">399.90</span>, <span class="number">1000</span>, <span class="string">&#x27;2020-11-10 00:00:00&#x27;</span>), </span><br><span class="line">(<span class="number">2</span>, <span class="string">&#x27;户外运动&#x27;</span>, <span class="string">&#x27;山地自行车&#x27;</span>, <span class="number">1399.90</span>, <span class="number">2500</span>, <span class="string">&#x27;2020-11-10 00:00:00&#x27;</span>), </span><br><span class="line">(<span class="number">2</span>, <span class="string">&#x27;户外运动&#x27;</span>, <span class="string">&#x27;登山杖&#x27;</span>, <span class="number">59.90</span>, <span class="number">1500</span>, <span class="string">&#x27;2020-11-10 00:00:00&#x27;</span>), </span><br><span class="line">(<span class="number">2</span>, <span class="string">&#x27;户外运动&#x27;</span>, <span class="string">&#x27;骑行装备&#x27;</span>, <span class="number">399.90</span>, <span class="number">3500</span>, <span class="string">&#x27;2020-11-10 00:00:00&#x27;</span>), </span><br><span class="line">(<span class="number">2</span>, <span class="string">&#x27;户外运动&#x27;</span>, <span class="string">&#x27;运动外套&#x27;</span>, <span class="number">799.90</span>, <span class="number">500</span>, <span class="string">&#x27;2020-11-10 00:00:00&#x27;</span>), </span><br><span class="line">(<span class="number">2</span>, <span class="string">&#x27;户外运动&#x27;</span>, <span class="string">&#x27;滑板&#x27;</span>, <span class="number">499.90</span>, <span class="number">1200</span>, <span class="string">&#x27;2020-11-10 00:00:00&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<p>接下来对窗口函数的讲解都会以上方 goods 表中的数据为基础。</p>
+<h2 id="2-5-序号函数"><a class="header-anchor" href="#2-5-序号函数"></a>2.5 序号函数</h2>
+<blockquote>
+<p><code>ROW_NUMBER()</code> 函数</p>
+</blockquote>
+<p><code>ROW_NUMBER()</code> 函数能够对数据中的序号进行顺序显示。</p>
+<p>比如，按商品分类分组后，以价格降序排序展示商品信息：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="built_in">ROW_NUMBER</span>() <span class="keyword">OVER</span>(<span class="keyword">PARTITION</span> <span class="keyword">BY</span> category_id <span class="keyword">ORDER</span> <span class="keyword">BY</span> price <span class="keyword">DESC</span>) </span><br><span class="line"><span class="keyword">AS</span> row_num, id, category_id, category, NAME, price, stock </span><br><span class="line"><span class="keyword">FROM</span> goods;</span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E5%BA%8F%E5%8F%B7%E5%87%BD%E6%95%B0ROW_NUMBER%E7%9A%84%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B%E4%B8%80.png" alt="序号函数ROW_NUMBER的使用示例一"></p>
+<p>在比如，按商品分类分组后，展示价格最高的 3 种商品信息：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> <span class="built_in">ROW_NUMBER</span>() <span class="keyword">OVER</span>(<span class="keyword">PARTITION</span> <span class="keyword">BY</span> category_id <span class="keyword">ORDER</span> <span class="keyword">BY</span> price <span class="keyword">DESC</span>) </span><br><span class="line">    <span class="keyword">AS</span> row_num, id, category_id, category, NAME, price, stock <span class="keyword">FROM</span> goods</span><br><span class="line">) t <span class="keyword">WHERE</span> row_num <span class="operator">&lt;=</span> <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E5%BA%8F%E5%8F%B7%E5%87%BD%E6%95%B0ROW_NUMBER%E7%9A%84%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B%E4%BA%8C.png" alt="序号函数ROW_NUMBER的使用示例二"></p>
+<blockquote>
+<p><code>RANK()</code> 函数</p>
+</blockquote>
+<p><code>RANK()</code> 函数能够对序号进行 <strong>并列</strong> 排序，并且会跳过重复的序号，比如序号为 1、1、3。</p>
+<p>比如，按商品分类分组后，以价格降序排序展示商品信息：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="built_in">RANK</span>() <span class="keyword">OVER</span>(<span class="keyword">PARTITION</span> <span class="keyword">BY</span> category_id <span class="keyword">ORDER</span> <span class="keyword">BY</span> price <span class="keyword">DESC</span>) </span><br><span class="line"><span class="keyword">AS</span> row_num, id, category_id, category, NAME, price, stock</span><br><span class="line"><span class="keyword">FROM</span> goods;</span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E5%BA%8F%E5%8F%B7%E5%87%BD%E6%95%B0RANK%E7%9A%84%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B%E4%B8%80.png" alt="序号函数RANK的使用示例一"></p>
+<p>再比如，展示分类名称为“女装/女士精品”的商品中价格最高的 4 款商品信息：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span>(</span><br><span class="line">    <span class="keyword">SELECT</span> <span class="built_in">RANK</span>() <span class="keyword">OVER</span>(<span class="keyword">PARTITION</span> <span class="keyword">BY</span> category_id <span class="keyword">ORDER</span> <span class="keyword">BY</span> price <span class="keyword">DESC</span>) </span><br><span class="line">    <span class="keyword">AS</span> row_num, id, category_id, category, NAME, price, stock <span class="keyword">FROM</span> goods</span><br><span class="line">) t <span class="keyword">WHERE</span> category_id <span class="operator">=</span> <span class="number">1</span> <span class="keyword">AND</span> row_num <span class="operator">&lt;=</span> <span class="number">4</span>;</span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E5%BA%8F%E5%8F%B7%E5%87%BD%E6%95%B0RANK%E7%9A%84%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B%E4%BA%8C.png" alt="序号函数RANK的使用示例二"></p>
+<p>根据查询结果可以看到，使用 <code>RANK()</code> 函数得出的序号为 1、2、2、4，相同价格的商品序号相同，后面的商品序号是不连续的，跳过了重复的序号。</p>
+<blockquote>
+<p><code>DENSE_RANK()</code> 函数</p>
+</blockquote>
+<p><code>DENSE_RANK()</code> 函数能够对序号进行并列排序，并且 <strong>不会跳过重复的序号，</strong> 比如序号为 1、1、2。这个函数与 <code>RANK()</code> 函数很类似，只不过它不会跳过重复的序号。</p>
+<p>比如，按商品分类分组后，以价格降序排序展示商品信息：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="built_in">DENSE_RANK</span>() <span class="keyword">OVER</span>(<span class="keyword">PARTITION</span> <span class="keyword">BY</span> category_id <span class="keyword">ORDER</span> <span class="keyword">BY</span> price <span class="keyword">DESC</span>) </span><br><span class="line"><span class="keyword">AS</span> row_num, id, category_id, category, NAME, price, stock</span><br><span class="line"><span class="keyword">FROM</span> goods;</span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E5%BA%8F%E5%8F%B7%E5%87%BD%E6%95%B0DENSE_RANK%E7%9A%84%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B%E4%B8%80.png" alt="序号函数DENSE_RANK的使用示例一"></p>
+<p>再比如，展示分类名称为“女装/女士精品”的商品中价格最高的 4 款商品信息：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span>(</span><br><span class="line">    <span class="keyword">SELECT</span> <span class="built_in">DENSE_RANK</span>() <span class="keyword">OVER</span>(<span class="keyword">PARTITION</span> <span class="keyword">BY</span> category_id <span class="keyword">ORDER</span> <span class="keyword">BY</span> price <span class="keyword">DESC</span>) </span><br><span class="line">    <span class="keyword">AS</span> row_num, id, category_id, category, NAME, price, stock <span class="keyword">FROM</span> goods</span><br><span class="line">) t <span class="keyword">WHERE</span> category_id <span class="operator">=</span> <span class="number">1</span> <span class="keyword">AND</span> row_num <span class="operator">&lt;=</span> <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E5%BA%8F%E5%8F%B7%E5%87%BD%E6%95%B0DENSE_RANK%E7%9A%84%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B%E4%BA%8C.png" alt="序号函数DENSE_RANK的使用示例二"></p>
+<p>根据查询结果可以看到，使用 <code>DENSE_RANK()</code> 函数得出的行号为 1、2、2、3，相同价格的商品序号相同，后面的商品序号是连续的，并且没有跳过重复的序号，这也是与 <code>RANK()</code> 函数的区别。</p>
+<h2 id="2-6-分布函数"><a class="header-anchor" href="#2-6-分布函数"></a>2.6 分布函数</h2>
+<blockquote>
+<p><code>PERCENT_RANK()</code> 函数</p>
+</blockquote>
+<p><code>PERCENT_RANK()</code> 函数是等级值百分比函数。它按照如下方式进行计算：</p>
+<pre>
+(rank - 1) / (rows - 1)
+</pre>
+<p>其中，rank 的值为使用 <code>RANK()</code> 函数产生的序号，rows 的值为当前窗口的总记录数。</p>
+<p>比如，计算分类名称为“女装/女士精品”的商品的 PERCENT_RANK 值：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># 写法一</span><br><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line"><span class="built_in">RANK</span>() <span class="keyword">OVER</span>(<span class="keyword">PARTITION</span> <span class="keyword">BY</span> category_id <span class="keyword">ORDER</span> <span class="keyword">BY</span> price <span class="keyword">DESC</span>) <span class="keyword">AS</span> r,</span><br><span class="line"><span class="built_in">PERCENT_RANK</span>() <span class="keyword">OVER</span>(<span class="keyword">PARTITION</span> <span class="keyword">BY</span> category_id <span class="keyword">ORDER</span> <span class="keyword">BY</span> price <span class="keyword">DESC</span>) <span class="keyword">AS</span> pr, id, category_id, category, NAME, price, stock</span><br><span class="line"><span class="keyword">FROM</span> goods</span><br><span class="line"><span class="keyword">WHERE</span> category_id <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"># 写法二</span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">RANK</span>() <span class="keyword">OVER</span> w <span class="keyword">AS</span> r,</span><br><span class="line"><span class="built_in">PERCENT_RANK</span>() <span class="keyword">OVER</span> w <span class="keyword">AS</span> pr, id, category_id, category, NAME, price, stock</span><br><span class="line"><span class="keyword">FROM</span> goods</span><br><span class="line"><span class="keyword">WHERE</span> category_id <span class="operator">=</span> <span class="number">1</span> <span class="keyword">WINDOW</span> w <span class="keyword">AS</span> (<span class="keyword">PARTITION</span> <span class="keyword">BY</span> category_id <span class="keyword">ORDER</span> <span class="keyword">BY</span> price </span><br><span class="line"><span class="keyword">DESC</span>);</span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E5%88%86%E5%B8%83%E5%87%BD%E6%95%B0PERCENT_RANK%E7%9A%84%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B%E4%B8%80.png" alt="分布函数PERCENT_RANK的使用示例一"></p>
+<blockquote>
+<p><code>CUME_DIST()</code> 函数</p>
+</blockquote>
+<p><code>CUME_DIST()</code> 函数主要用于查询小于或等于某个值的比例。它按照如下方式进行计算：</p>
+<ul>
+<li>如果是升序排序，统计 <code>小于等于当前值的行数 / 总行数</code>；</li>
+<li>如果是降序排序，统计 <code>大于等于当前值的行数 / 总行数</code>。</li>
+</ul>
+<p>比如，按商品分类分组后，获取小于等于当前商品价格的比例：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="built_in">CUME_DIST</span>() <span class="keyword">OVER</span>(<span class="keyword">PARTITION</span> <span class="keyword">BY</span> category_id <span class="keyword">ORDER</span> <span class="keyword">BY</span> price <span class="keyword">ASC</span>) </span><br><span class="line"><span class="keyword">AS</span> cd, id, category, NAME, price</span><br><span class="line"><span class="keyword">FROM</span> goods;</span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E5%88%86%E5%B8%83%E5%87%BD%E6%95%B0CUME_DIST%E7%9A%84%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B%E4%B8%80.png" alt="分布函数CUME_DIST的使用示例一"></p>
+<h2 id="2-7-前后函数"><a class="header-anchor" href="#2-7-前后函数"></a>2.7 前后函数</h2>
+<blockquote>
+<p><code>LAG(expr, n)</code> 函数</p>
+</blockquote>
+<p><code>LAG(expr, n)</code> 函数可以返回当前行的前 n 行的 expr 的值。</p>
+<p>比如，按商品分类分组、按价格升序排序后，获取前一个商品与当前商品价格的差值：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> id, category, NAME, price, pre_price, price <span class="operator">-</span> pre_price <span class="keyword">AS</span> diff_price</span><br><span class="line"><span class="keyword">FROM</span> (<span class="keyword">SELECT</span>  id, category, NAME, price, <span class="built_in">LAG</span>(price, <span class="number">1</span>) <span class="keyword">OVER</span> w <span class="keyword">AS</span> pre_price</span><br><span class="line"><span class="keyword">FROM</span> goods <span class="keyword">WINDOW</span> w <span class="keyword">AS</span> (<span class="keyword">PARTITION</span> <span class="keyword">BY</span> category_id <span class="keyword">ORDER</span> <span class="keyword">BY</span> price)) t;</span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E5%89%8D%E5%90%8E%E5%87%BD%E6%95%B0LAG%E7%9A%84%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B%E4%B8%80.png" alt="前后函数LAG的使用示例一"></p>
+<blockquote>
+<p><code>LEAD(expr, n)</code> 函数</p>
+</blockquote>
+<p>与 <code>LAG(expr, n)</code> 函数相反，<code>LEAD(expr, n)</code> 函数返回当前行的后 n 行的 expr 的值。</p>
+<p>比如，按商品分类分组、按价格升序排序后，获取后一个商品与当前商品价格的差值：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> id, category, NAME, behind_price, price, behind_price <span class="operator">-</span> price <span class="keyword">AS</span> diff_price</span><br><span class="line"><span class="keyword">FROM</span>(<span class="keyword">SELECT</span> id, category, NAME, price,<span class="built_in">LEAD</span>(price, <span class="number">1</span>) <span class="keyword">OVER</span> w <span class="keyword">AS</span> behind_price</span><br><span class="line"><span class="keyword">FROM</span> goods <span class="keyword">WINDOW</span> w <span class="keyword">AS</span> (<span class="keyword">PARTITION</span> <span class="keyword">BY</span> category_id <span class="keyword">ORDER</span> <span class="keyword">BY</span> price)) t;</span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E5%89%8D%E5%90%8E%E5%87%BD%E6%95%B0LEAD%E7%9A%84%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B%E4%B8%80.png" alt="前后函数LEAD的使用示例一"></p>
+<h2 id="2-8-首尾函数"><a class="header-anchor" href="#2-8-首尾函数"></a>2.8 首尾函数</h2>
+<blockquote>
+<p><code>FIRST_VALUE(expr)</code> 函数</p>
+</blockquote>
+<p><code>FIRST_VALUE(expr)</code> 函数返回第一个 expr 的值。</p>
+<p>比如，按商品分类分组、按价格升序排序后，获取第一个商品的价格信息：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> id, category, NAME, price, stock, <span class="built_in">FIRST_VALUE</span>(price) <span class="keyword">OVER</span> w </span><br><span class="line"><span class="keyword">AS</span> first_price</span><br><span class="line"><span class="keyword">FROM</span> goods <span class="keyword">WINDOW</span> w <span class="keyword">AS</span> (<span class="keyword">PARTITION</span> <span class="keyword">BY</span> category_id <span class="keyword">ORDER</span> <span class="keyword">BY</span> price);</span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E9%A6%96%E5%B0%BE%E5%87%BD%E6%95%B0FIRST_VALUE%E7%9A%84%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B%E4%B8%80.png" alt="首尾函数FIRST_VALUE的使用示例一"></p>
+<blockquote>
+<p><code>LAST_VALUE(expr)</code> 函数</p>
+</blockquote>
+<p><code>LAST_VALUE(expr)</code> 函数返回最后一个 expr 的值。</p>
+<p>比如，按商品分类分组、按价格升序排序后，获取最后一个商品的价格信息：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> id, category, NAME, price, stock, <span class="built_in">LAST_VALUE</span>(price) <span class="keyword">OVER</span> w </span><br><span class="line"><span class="keyword">AS</span> last_price</span><br><span class="line"><span class="keyword">FROM</span> goods <span class="keyword">WINDOW</span> w <span class="keyword">AS</span> (<span class="keyword">PARTITION</span> <span class="keyword">BY</span> category_id <span class="keyword">ORDER</span> <span class="keyword">BY</span> price);</span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E9%A6%96%E5%B0%BE%E5%87%BD%E6%95%B0LAST_VALUE%E7%9A%84%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B%E4%B8%80.png" alt="首尾函数LAST_VALUE的使用示例一"></p>
+<h2 id="2-9-其他函数"><a class="header-anchor" href="#2-9-其他函数"></a>2.9 其他函数</h2>
+<blockquote>
+<p><code>NTH_VALUE(expr, n)</code> 函数</p>
+</blockquote>
+<p><code>NTH_VALUE(expr, n)</code> 函数返回第 n 个 expr 的值。</p>
+<p>比如，按商品分类分组、按价格升序排序后，获取价格排名第 2 和第 3 的商品信息：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> id, category, NAME, price, </span><br><span class="line"><span class="built_in">NTH_VALUE</span>(price, <span class="number">2</span>) <span class="keyword">OVER</span> w <span class="keyword">AS</span> second_price,</span><br><span class="line"><span class="built_in">NTH_VALUE</span>(price, <span class="number">3</span>) <span class="keyword">OVER</span> w <span class="keyword">AS</span> third_price</span><br><span class="line"><span class="keyword">FROM</span> goods <span class="keyword">WINDOW</span> w <span class="keyword">AS</span> (<span class="keyword">PARTITION</span> <span class="keyword">BY</span> category_id <span class="keyword">ORDER</span> <span class="keyword">BY</span> price);</span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0NTH_VALUE%E7%9A%84%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B%E4%B8%80.png" alt="窗口函数NTH_VALUE的使用示例一"></p>
+<blockquote>
+<p><code>NTILE(n)</code> 函数</p>
+</blockquote>
+<p><code>NTILE(n)</code> 函数将分区中的有序数据分为 n 个桶，记录桶编号。</p>
+<p>比如，按商品分类分组、按价格升序排序后，按照价格将商品分为 3 组：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="built_in">NTILE</span>(<span class="number">3</span>) <span class="keyword">OVER</span> w <span class="keyword">AS</span> nt, id, category, NAME, price</span><br><span class="line"><span class="keyword">FROM</span> goods <span class="keyword">WINDOW</span> w <span class="keyword">AS</span> (<span class="keyword">PARTITION</span> <span class="keyword">BY</span> category_id <span class="keyword">ORDER</span> <span class="keyword">BY</span> price);</span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0NTILE%E7%9A%84%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B%E4%B8%80.png" alt="窗口函数NTILE的使用示例一"></p>
+<h2 id="2-10-窗口函数小结"><a class="header-anchor" href="#2-10-窗口函数小结"></a>2.10 窗口函数小结</h2>
+<p>窗口函数的特点是可以分组，还可以在分组内排序。另外，窗口函数不会因为分组而减少原表中的行数，这对于在原表数据的基础上进行统计和排序非常有用。</p>
+<h1 id="3-公用表表达式"><a class="header-anchor" href="#3-公用表表达式"></a>3. 公用表表达式</h1>
+<p>公用表表达式（或通用表表达式）简称为 CTE（Common Table Expressions）。CTE 是一个命名的临时结果集，作用范围是当前语句。CTE 可以理解成一个可以复用的子查询，当然跟子查询还是有点区别的，CTE 可以引用其他 CTE，但子查询不能引用其他子查询，所以可以使用 CTE 代替子查询。</p>
+<p>依据语法结构和执行方式的不同，公用表表达式分为 <strong>普通公用表表达式</strong> 和 <strong>递归公用表表达式</strong> 2 种。</p>
+<h2 id="3-1-普通公用表表达式"><a class="header-anchor" href="#3-1-普通公用表表达式"></a>3.1 普通公用表表达式</h2>
+<p>其语法结构如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WITH</span> CTE名称 </span><br><span class="line"><span class="keyword">AS</span> (子查询)</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">|</span> <span class="keyword">DELETE</span> <span class="operator">|</span> <span class="keyword">UPDATE</span> 语句;</span><br></pre></td></tr></table></figure>
+<p>普通公用表表达式类似于子查询，不过跟子查询不同的是，它可以被多次引用，而且可以被其他的普通公用表表达式所引用。</p>
+<p>比如，查询员工所在部门的详细信息：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> departments <span class="keyword">WHERE</span> department_id </span><br><span class="line"><span class="keyword">IN</span> (<span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span> department_id <span class="keyword">FROM</span> employees);</span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E4%BD%BF%E7%94%A8%E5%AD%90%E6%9F%A5%E8%AF%A2%E8%8E%B7%E5%8F%96%E5%91%98%E5%B7%A5%E6%89%80%E5%9C%A8%E9%83%A8%E9%97%A8%E7%9A%84%E8%AF%A6%E7%BB%86%E4%BF%A1%E6%81%AF.png" alt="使用子查询获取员工所在部门的详细信息"></p>
+<p>使用普通公用表表达式查询员工所在部门的详细信息：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WITH</span> emp_dept_id</span><br><span class="line"><span class="keyword">AS</span> (<span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span> department_id <span class="keyword">FROM</span> employees)</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> departments d <span class="keyword">JOIN</span> emp_dept_id e</span><br><span class="line"><span class="keyword">ON</span> d.department_id <span class="operator">=</span> e.department_id;</span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E4%BD%BF%E7%94%A8%E6%99%AE%E9%80%9A%E5%85%AC%E7%94%A8%E8%A1%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%9F%A5%E8%AF%A2%E5%91%98%E5%B7%A5%E6%89%80%E5%9C%A8%E9%83%A8%E9%97%A8%E7%9A%84%E8%AF%A6%E7%BB%86%E4%BF%A1%E6%81%AF.png" alt="使用普通公用表表达式查询员工所在部门的详细信息"></p>
+<p>普通公用表表达式可以起到子查询的作用。遇到需要使用子查询的场景，可以在查询之前，先定义普通公用表表达式，然后在查询中用它来代替子查询。跟子查询相比，定义过普通公用表表达式之后的查询，可以像一个表一样多次引用公用表表达式，而子查询则不能。</p>
+<h2 id="3-2-递归公用表表达式"><a class="header-anchor" href="#3-2-递归公用表表达式"></a>3.2 递归公用表表达式</h2>
+<p>递归公用表表达式也是一种公用表表达式，不过除了有普通公用表表达式的特点以外，它还可以调用自己。其语法结构如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WITH</span> <span class="keyword">RECURSIVE</span></span><br><span class="line">CTE名称 <span class="keyword">AS</span> (子查询)</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">|</span> <span class="keyword">DELETE</span> <span class="operator">|</span> <span class="keyword">UPDATE</span> 语句;</span><br></pre></td></tr></table></figure>
+<p>递归公用表表达式由 2 部分组成，分别是种子查询和递归查询，中间通过关键字 <code>UNION [ALL]</code> 进行连接。这里的种子查询表示获得递归的初始值。这个查询只会运行一次，以创建初始数据集，之后一直执行递归查询，直到没有任何新的查询数据产生，最后递归返回。</p>
+<blockquote>
+<p>使用案例</p>
+</blockquote>
+<p>针对于常用的 employees 表，包含 employee_id、last_name 和 manager_id 三个字段。如果 a 是 b 的管理者，那么可以把 b 叫做 a 的下属，如果同时 b 又是 c 的管理者，那么 c 就是 b 的下属，是 a 的下下属。</p>
+<p>尝试用查询语句列出所有具有下下属身份的人员信息，根据之前学过的知识，至少需要进行 4 次查询才能完成这个需求：</p>
+<p>1、先找出初代管理者，即不以任何别人为管理者的人，把结果存入临时表；</p>
+<p>2、找出所有以初代管理者为管理者的人，得到一个下属集，把结果存入临时表；</p>
+<p>3、找出所有以下属为管理者的人，得到一个下下属集，把结果存入临时表；</p>
+<p>4、找出所有以下下属为管理者的人，得到一个结果集。</p>
+<p>如果第四步的结果集为空，则计算结束，第三步的结果集就是需要的下下属集，否则继续进行第四步，直到结果集为空。如果进行了多次第四步，最终还需要对结果集进行合并。比如需要到第五步才能得到空结果集，那么最后还要把第三步和第四步的结果集合并，合并得到的结果集才是最终的结果集。</p>
+<p>如果用递归公用表表达式，操作步骤会变得简单起来：</p>
+<p>1、用递归公用表表达式中的种子查询，找出初代管理者。字段 n 表示代次，初始值为 1，表示第一代管理者；</p>
+<p>2、用递归公用表表达式中的递归查询，查出以这个递归公用表表达式中的人为管理者的人，并让代次的值加 1，直到没有人以这个递归公用表表达式中的人为管理者才递归返回；</p>
+<p>3、在最后的查询中，选出所有代次大于等于 3 的人，他们肯定是第三代及以上代次的下属，即下下属。</p>
+<p>虽然这里的步骤看似有三部，实际上是一个查询的三个部分，只需要执行一次即可，并且不需要用临时表保存中间结果。</p>
+<p>代码实现如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WITH</span> <span class="keyword">RECURSIVE</span> cte </span><br><span class="line"><span class="keyword">AS</span> </span><br><span class="line">(</span><br><span class="line">    <span class="keyword">SELECT</span> employee_id, last_name, manager_id, <span class="number">1</span> <span class="keyword">AS</span> n </span><br><span class="line">    <span class="keyword">FROM</span> employees <span class="keyword">WHERE</span> employee_id <span class="operator">=</span> <span class="number">100</span> </span><br><span class="line">    <span class="comment">-- 种子查询，找到第一代领导</span></span><br><span class="line">    <span class="keyword">UNION</span> <span class="keyword">ALL</span></span><br><span class="line">    <span class="keyword">SELECT</span> a.employee_id, a.last_name, a.manager_id, n <span class="operator">+</span> <span class="number">1</span> </span><br><span class="line">    <span class="keyword">FROM</span> employees <span class="keyword">AS</span> a <span class="keyword">JOIN</span> cte <span class="keyword">ON</span> (a.manager_id <span class="operator">=</span> cte.employee_id) </span><br><span class="line">    <span class="comment">-- 递归查询，找出以递归公用表表达式的人为领导的人</span></span><br><span class="line">)</span><br><span class="line"><span class="keyword">SELECT</span> employee_id, last_name <span class="keyword">FROM</span> cte <span class="keyword">WHERE</span> n <span class="operator">&gt;=</span> <span class="number">3</span>; </span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SQLImages/%E9%80%92%E5%BD%92%E5%85%AC%E7%94%A8%E8%A1%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B%E9%83%A8%E5%88%86%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C.png" alt="递归公用表表达式使用示例部分查询结果"></p>
+<p>递归公用表表达式对于查询一个有共同的根节点的树形结构数据非常有用。它可以不受层级的限制，轻松查出所有节点的数据。</p>
+<h2 id="3-3-公用表表达式小结"><a class="header-anchor" href="#3-3-公用表表达式小结"></a>3.3 公用表表达式小结</h2>
+<p>公用表表达式的作用是可以替代子查询，并且可以被多次引用。递归公用表表达式对查询有一个共同根节点的树形结构数据非常高效，可以轻松搞定其他查询方式难以处理的查询。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/New-Features-Of-MySQL-8/">https://mofan212.github.io/posts/New-Features-Of-MySQL-8/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/MySQL/">MySQL</a></div><div class="post-share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/111.png" data-sites="wechat,qq,weibo,facebook,x"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/Variable-Process-Control-Cursor-And-Trigger-Of-MySQL/" title="【MySQL 六】变量、流程控制、游标与触发器"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/110.png" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【MySQL 六】变量、流程控制、游标与触发器</div></div><div class="info-2"><div class="info-item-1">本文介绍了 MySQL 中变量、流程控制、游标和触发器的语法与使用。</div></div></div></a><a class="pagination-related" href="/posts/Design-Pattern-Singleton-Pattern/" title="【设计模式】单例模式"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/112.png" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【设计模式】单例模式</div></div><div class="info-2"><div class="info-item-1">本文主要对 Java 设计模式中的单例模式进行了介绍。</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/MySQL-Advanced-Seventh-Data-Storage-Structure-Of-InnoDB/" title="【MySQL 高级篇七】InnoDB 的数据存储结构"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/146.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-01-14</div><div class="info-item-2">【MySQL 高级篇七】InnoDB 的数据存储结构</div></div><div class="info-2"><div class="info-item-1">本文介绍了 MySQL 中 InnoDB 存储引擎的数据存储结构，包括页的内部结构、行格式等。</div></div></div></a><a class="pagination-related" href="/posts/MySQL-Advanced-Fourth-Logical-Architecture/" title="【MySQL 高级篇四】逻辑架构"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/134.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-13</div><div class="info-item-2">【MySQL 高级篇四】逻辑架构</div></div><div class="info-2"><div class="info-item-1">本文剖析了 MySQL 的逻辑架构，介绍了 SQL 执行流程和数据库缓冲池。</div></div></div></a><a class="pagination-related" href="/posts/Data-Type-Of-MySQL/" title="【MySQL 三】数据类型"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/107.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-09-12</div><div class="info-item-2">【MySQL 三】数据类型</div></div><div class="info-2"><div class="info-item-1">本文介绍了 MySQL 中的十一种数据类型，并在每种数据类型的讲解中给出使用示例。</div></div></div></a><a class="pagination-related" href="/posts/MySQL-Advanced-Second-Data-Directory-Of-MySQL/" title="【MySQL 高级篇二】MySQL 的数据目录"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/129.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-05</div><div class="info-item-2">【MySQL 高级篇二】MySQL 的数据目录</div></div><div class="info-2"><div class="info-item-1">本文介绍了 MySQL 8.0 的主要目录结构、数据库和文件系统的关系。</div></div></div></a><a class="pagination-related" href="/posts/MySQL-Advanced-Sixth-Data-Structure-Of-Index/" title="【MySQL 高级篇六】索引的数据结构"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/145.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-01-10</div><div class="info-item-2">【MySQL 高级篇六】索引的数据结构</div></div><div class="info-2"><div class="info-item-1">本文介绍了 MySQL 中 InnoDB 存储引擎的索引的数据结构。</div></div></div></a><a class="pagination-related" href="/posts/DDL-And-DML-Of-MySQL/" title="【MySQL 二】DDL 与 DML"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/106.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-09-11</div><div class="info-item-2">【MySQL 二】DDL 与 DML</div></div><div class="info-2"><div class="info-item-1">本文介绍了 MySQL 中的 DDL 与 DML，并对其进行拓展。</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">默烦</div><div class="author-info-description">彩笔的打怪升级之路...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mofan212"><i class="fab fa-github"></i><span>follow me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解。<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a href="./mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载。😊</br><strong><font style="color:red">严禁未遵循规范的转载。</font></strong>😡</br><strong>死去的评论系统复活啦！欢迎到留言板畅所欲言！</strong>当然也可以使用更高效的<a target="_blank" href="https://space.bilibili.com/23658864/dynamic" style="color:#49B1F5;text-decoration:underline"> 哔哩哔哩私信 </a>或<a href="mailto:cy.mofan@foxmail.com" style="color:#49B1F5;text-decoration:underline" target="_blank">邮箱</a>。 😉</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E6%96%B0%E7%89%B9%E6%80%A7%E6%A6%82%E8%BF%B0"><span class="toc-text">1. 新特性概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-MySQL-8-0-%E6%96%B0%E5%A2%9E%E7%89%B9%E6%80%A7"><span class="toc-text">1.1  MySQL 8.0 新增特性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-MySQL-8-0-%E7%A7%BB%E9%99%A4%E7%9A%84%E7%89%B9%E6%80%A7"><span class="toc-text">1.2 MySQL 8.0 移除的特性</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0"><span class="toc-text">2. 窗口函数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E4%BD%BF%E7%94%A8%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0%E7%9A%84%E5%89%8D%E5%90%8E%E5%AF%B9%E6%AF%94"><span class="toc-text">2.1 使用窗口函数的前后对比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0%E5%88%86%E7%B1%BB"><span class="toc-text">2.2 窗口函数分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E8%AF%AD%E6%B3%95%E7%BB%93%E6%9E%84"><span class="toc-text">2.3 语法结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-%E8%AE%B2%E8%A7%A3%E5%89%8D%E7%9A%84%E5%87%86%E5%A4%87"><span class="toc-text">2.4 讲解前的准备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-5-%E5%BA%8F%E5%8F%B7%E5%87%BD%E6%95%B0"><span class="toc-text">2.5 序号函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-6-%E5%88%86%E5%B8%83%E5%87%BD%E6%95%B0"><span class="toc-text">2.6 分布函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-7-%E5%89%8D%E5%90%8E%E5%87%BD%E6%95%B0"><span class="toc-text">2.7 前后函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-8-%E9%A6%96%E5%B0%BE%E5%87%BD%E6%95%B0"><span class="toc-text">2.8 首尾函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-9-%E5%85%B6%E4%BB%96%E5%87%BD%E6%95%B0"><span class="toc-text">2.9 其他函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-10-%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0%E5%B0%8F%E7%BB%93"><span class="toc-text">2.10 窗口函数小结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E5%85%AC%E7%94%A8%E8%A1%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-text">3. 公用表表达式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E6%99%AE%E9%80%9A%E5%85%AC%E7%94%A8%E8%A1%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-text">3.1 普通公用表表达式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E9%80%92%E5%BD%92%E5%85%AC%E7%94%A8%E8%A1%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-text">3.2 递归公用表表达式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-%E5%85%AC%E7%94%A8%E8%A1%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%B0%8F%E7%BB%93"><span class="toc-text">3.3 公用表表达式小结</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/Something-About-Blog/" title="博客搭建与维护"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="博客搭建与维护"/></a><div class="content"><a class="title" href="/posts/Something-About-Blog/" title="博客搭建与维护">博客搭建与维护</a><time datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"/></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="更新于 2026-01-03 00:00:00">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"/></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/103.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 的类资源加载"/></a><div class="content"><a class="title" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载">Java 的类资源加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/20.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="注解、类的加载、反射"/></a><div class="content"><a class="title" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射">注解、类的加载、反射</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/ren-zhi-jue-xing/" title="认知觉醒"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/172.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="认知觉醒"/></a><div class="content"><a class="title" href="/posts/ren-zhi-jue-xing/" title="认知觉醒">认知觉醒</a><time datetime="2025-12-28T16:00:00.000Z" title="更新于 2025-12-29 00:00:00">2025-12-29</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://gcore.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script src="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/js/mine.min.js"></script><script src="/js/tip_portal.js"></script><script defer="defer" id="ribbon" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script id="click-show-text" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="Azathoth,Yog-Sothoth,Shub-Niggurath,Nyarlathotep,Cthulhu,Hastur,Abhoth,Ghroth,Tsathoggua,Cthugha,Deep Ones,Dagon,Chaugnar Faugn,Mordiggian,Shoggoth,Old One,Mi-Go,Great Race of Yith,Flying Polyp,Hounds of Tindalos,Dhole" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div class="docsearch-wrap"><div id="docsearch" style="display:none"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@docsearch/css/dist/style.min.css"/><script src="https://testingcf.jsdelivr.net/npm/@docsearch/js/dist/umd/index.min.js"></script><script>(() => {
+  docsearch(Object.assign({
+    appId: 'BAFEL7A6K1',
+    apiKey: '89fcb5961984c5c054bf04149f345f38',
+    indexName: 'mofan212io',
+    container: '#docsearch',
+    placeholder: '输入关键字进行搜索',
+  }, null))
+
+  const handleClick = () => {
+    document.querySelector('.DocSearch-Button').click()
+  }
+
+  const searchClickFn = () => {
+    btf.addEventListenerPjax(document.querySelector('#search-button > .search'), 'click', handleClick)
+  }
+
+  searchClickFn()
+  window.addEventListener('pjax:complete', searchClickFn)
+})()</script></div></div></body></html>

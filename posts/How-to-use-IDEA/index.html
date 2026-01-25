@@ -1,0 +1,663 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>帅气地使用 IDEA | Mofan</title><meta name="author" content="默烦,cy.mofan@foxmail.com"><meta name="copyright" content="默烦"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本文意在记录使用 IDEA 时学到的一些「奇技淫巧」，既方便后续查询，也方便为他人提供帮助。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="帅气地使用 IDEA">
+<meta property="og:url" content="https://mofan212.github.io/posts/How-to-use-IDEA/">
+<meta property="og:site_name" content="Mofan">
+<meta property="og:description" content="本文意在记录使用 IDEA 时学到的一些「奇技淫巧」，既方便后续查询，也方便为他人提供帮助。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/37.jpg">
+<meta property="article:published_time" content="2020-07-19T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-12-17T16:00:00.000Z">
+<meta property="article:author" content="默烦">
+<meta property="article:tag" content="IntelliJ-IDEA">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/37.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "帅气地使用 IDEA",
+  "url": "https://mofan212.github.io/posts/How-to-use-IDEA/",
+  "image": "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/37.jpg",
+  "datePublished": "2020-07-19T16:00:00.000Z",
+  "dateModified": "2025-12-17T16:00:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "默烦",
+      "url": "https://mofan212.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/How-to-use-IDEA/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":true,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 默烦","link":"链接: ","source":"来源: Mofan","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://testingcf.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '帅气地使用 IDEA',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="referrer" content="no-referrer-when-downgrade" /><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/css/myStyle.min.css"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css" /><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css" /><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Mofan" type="application/atom+xml">
+</head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+btf.addGlobalFn('pjaxSend', () => {
+  Pace.restart()
+}, 'pace_restart')
+
+</script><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources/css/minimal.min.css"/><script src="https://testingcf.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/post_top_img.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Mofan</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">帅气地使用 IDEA</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-07-19T16:00:00.000Z" title="发表于 2020-07-20 00:00:00">2020-07-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-17T16:00:00.000Z" title="更新于 2025-12-18 00:00:00">2025-12-18</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Tools/">Tools</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">7.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>23分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;距离本文上次更新已经过去&quot;,&quot;messageNext&quot;:&quot;天，请注意时效性。&quot;,&quot;postUpdate&quot;:&quot;2025-12-18 00:00:00&quot;}" hidden></div><p>封面来源：碧蓝航线 箱庭疗法 活动CG</p>
+<div class="note green icon-padding flat"><i class="note-icon fas fa-bullhorn"></i><p>本文大部分内容基于 IDEA 2020.3，最近更新内容基于 IDEA 2025.1</p>
+</div>
+<h1 id="0-前言"><a class="header-anchor" href="#0-前言"></a>0. 前言</h1>
+<h2 id="0-1-IDEA-简介"><a class="header-anchor" href="#0-1-IDEA-简介"></a>0.1 IDEA 简介</h2>
+<p>百度百科：</p>
+<p>IDEA 全称 IntelliJ IDEA，是 Java 编程语言开发的集成环境。IntelliJ IDEA 在业界被公认为最好的 Java 开发工具，尤其在智能代码助手、代码自动提示、重构、JavaEE 支持、各类版本工具（Git、SVN 等）、JUnit、CVS 整合、代码分析、 创新的 GUI 设计等方面的功能可以说是超常的。IDEA 是 <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/JetBrains">JetBrains</a> 公司的产品，这家公司总部位于 <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%8D%B7%E5%85%8B%E5%85%B1%E5%92%8C%E5%9B%BD/418555">捷克共和国</a> 的首都 <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%B8%83%E6%8B%89%E6%A0%BC/632">布拉格</a>，开发人员以严谨著称的东欧程序员为主。它的旗舰版本还支持 HTML，CSS，PHP，MySQL，Python 等。免费版只支持 Java，Kotlin 等少数语言。</p>
+<h2 id="0-3-编写目的"><a class="header-anchor" href="#0-3-编写目的"></a>0.3 编写目的</h2>
+<p>在学习 Java 时，除了安装 Java 环境外，还需要安装一个 IDE（集成开发环境），比如： Eclipse、MyEclipse、IDEA 等等。如今大家使用最多的 Java IDE 是 IDEA，据说能大大提高编码效率，而从 Eclipse 或 MyEclipse 转到 IDEA 使用的用户也对 IDEA 赞不绝口。虽然我已经使用了很久的 IDEA 了，但是并没有熟练运用其特性，仅仅使用了它的自动补全。</p>
+<p>本文意在记录我使用 IDEA 时学到的一些 <s>「奇技淫巧」</s>  （基本操作），同时也方便后续查询，为他人提供帮助！😋</p>
+<p>PS ： <mark>每学到新操作都会及时更新…</mark></p>
+<h1 id="1-IDEA的快捷键"><a class="header-anchor" href="#1-IDEA的快捷键"></a>1. IDEA的快捷键</h1>
+<p><a target="_blank" rel="noopener" href="https://www.baidu.com/s?tn=02003390_42_hao_pg&amp;ie=utf-8&amp;wd=IDEA%E5%BF%AB%E6%8D%B7%E9%94%AE">IDEA的快捷键</a>，百度啥都有，这里主要介绍一些个人常用的、容易遗忘的快捷键，以及一些骚操作。😝</p>
+<p>再喂口饭到嘴里 ： 👉 <a target="_blank" rel="noopener" href="https://www.cnblogs.com/yjd_hycf_space/p/7479646.html">IDEA快捷键整理（最详细的）</a></p>
+<h2 id="1-1-搜索查看"><a class="header-anchor" href="#1-1-搜索查看"></a>1.1 搜索查看</h2>
+<ol>
+<li>
+<p><strong>Ctrl+N</strong> ： 使用之后就可以<strong>利用类名来找到类文件</strong> ，并且我们在使用这个快捷键搜索类名的时候也能够对我们的搜索内容自动记忆性匹配。一些非自己编写的类也可以找到，但在匹配的时候系统会优先选择自己编写的类</p>
+</li>
+<li>
+<p><strong>Ctrl+Shift+N</strong> ： 使用<strong>文件名</strong>来进行搜索，因此在搜索的时候只搜索类似的类，但可以匹配所有的文件</p>
+</li>
+<li>
+<p><strong>Ctrl+H</strong> ：查看类继承关系</p>
+</li>
+<li>
+<p><strong>Ctrl+Alt+B</strong> ： 要导航到抽象方法的实现，请将插入符号置于其用法或声明中的名称，然后输入快捷键</p>
+</li>
+<li>
+<p><strong>Alt+F7</strong> ： 用来查找类和方法在哪里被使用的</p>
+</li>
+<li>
+<p><strong>Ctrl+F</strong> ： 整个页面中查找。选择某些代码，然后按下 <code>Ctrl + F</code> 可以在整个界面查找选中的代码，在点击顶部的<code>Select All Occurrences</code>图标或使用快捷键<code>Ctrl + Alt + Shift + J </code>可以进行批量修改</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/SelectAllOccurrences.png" alt="SelectAllOccurrences"></p>
+</li>
+<li>
+<p><strong>Ctrl+Shift+F</strong> ： 整个项目中查找</p>
+</li>
+<li>
+<p><strong>Shift+Shift</strong> ： 全能！ 查看文件、类、方法、内容等等。</p>
+</li>
+</ol>
+<h2 id="1-2-流弊的Alt键"><a class="header-anchor" href="#1-2-流弊的Alt键"></a>1.2 流弊的Alt键</h2>
+<p>使用在编写代码时，经常会用到 Alt 键，使用它加上另外的键形成组合键可以增加我们的编码效率，比如：</p>
+<ul>
+<li>使用 <code>Alt + Enter</code>，可以快速修复，还可以帮助我们声明对象、变量</li>
+<li>使用<code>Alt + Insert</code>，可以在当前位置生成构造器、生成Getter / Setter、重写方法等</li>
+</ul>
+<p>除了这两种常用的快捷组合键（履历所限，常用的就这俩），Alt 还可以与鼠标搭配使用。</p>
+<p>Alt 与鼠标结合可以实现批量修改，具体操作是： 按住 Alt 键，再按住鼠标左键，然后移动鼠标，可以让光标延长多行，以实现批量修改。如：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/alt批量修改.gif" alt="alt批量修改" style="zoom:50%;" />
+<h2 id="1-3-锁定光标处"><a class="header-anchor" href="#1-3-锁定光标处"></a>1.3 锁定光标处</h2>
+<p>返回上次光标处：<code>Ctrl + Alt + ←</code></p>
+<p>返回下次光标处：<code>Ctrl + Alt + →</code></p>
+<p>注意，这两个快捷键可能会与其他快捷键发生冲突，可以按照习惯进行修改。如果想要修改 IDEA 的快捷键，可以在 Settings 中进行修改：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/修改光标锁定快捷键.png" alt="修改光标锁定快捷键" style="zoom:50%;" />
+<h2 id="1-4-常用快捷键"><a class="header-anchor" href="#1-4-常用快捷键"></a>1.4 常用快捷键</h2>
+<ol>
+<li>Ctrl + G ： 定位到当前文件的指定处</li>
+<li>Ctr + Shift + U ： 对选中字符串进行大小写切换</li>
+<li>Ctrl+ Shift+ 加号：代码折叠；Ctrl + Shift + 减号：代码展开</li>
+<li>Ctrl + Alt + [ 或 ]：多项目窗口切换</li>
+<li>Ctrl + Shift + Z：取消撤销，注意可能会与搜狗输入法的快捷键发生冲突，同时 Windows 中的取消撤销是 Ctrl + Y，而在 IDEA 中，Ctrl + Y 是删除当前行</li>
+<li>Ctrl + Tab：切换编辑窗口</li>
+<li>Alt + ←或→：切换至左边或右边的 Tab</li>
+<li>Ctrl + B：相当于按住 Ctrl 后使用鼠标左击</li>
+<li>Ctrl + BackSpace：删除光标处的单词</li>
+<li>Shift + ESC：关闭侧边栏或工具栏</li>
+<li>Alt + ↑ 或 ↓：跳转到上一个或下一个方法</li>
+<li>Ctrl + E：查看最近使用的文件</li>
+<li>Ctrl + N 或者 Ctrl + Shift + N：文件搜索，也在可以使用 Double Shift 后，利用 Tab 或者 Shift + Tab 切换搜索类型</li>
+<li>Ctrl + Shift + Enter：在行尾加分号，或者为 <code>if(condition)</code> 添加 <code>&#123;&#125;</code> 并将光标移动至下一行</li>
+<li>Ctrl + W：以单词为单位选中文本，连续按可扩大选中范围</li>
+<li>Ctrl + Shift + Alt + N：按照 Symbols 进行搜索，也在可以使用 Double Shift 后，利用 Tab 或者 Shift + Tab 切换搜索类型。进行 Symbols 搜索时，可以通过几个字母或单词模糊搜索到对应的类或方法，也可以按照 <code>类名.方法名</code> 的格式模糊搜索目标类中的方法</li>
+<li>Ctrl + Shift + N：进行文件搜索，也在可以使用 Double Shift 后，利用 Tab 或者 Shift + Tab 切换搜索类型。在这种模式下，可以使用 <code>/目录名称</code> 的格式来搜索指定目录</li>
+<li>Ctrl + F12：在弹出框中搜索当前类的方法，也可以使用 Alt + 7 以 SideBar 的形式展示</li>
+<li>Ctrl + Alt + O：优化导入的包和类，比如移除导入的未使用的类</li>
+</ol>
+<blockquote>
+<p>组合的快捷键</p>
+</blockquote>
+<ol>
+<li>移动分割线：使用 Alt + 1 将光标移动到 Project 视图里，使用 Ctrl + Shift + ← 或 → 来移动分割线，使得能够看到完整的文件名；使用 Alt + 9 打开 Git 视图，使用 Ctrl + Shift + ↑ 或 ↓ 来移动分割线，使得能够看到更多的 Git 提交日志</li>
+<li>当前文件中多光标批量修改：使用 Ctrl + W 选中文本，多次使用 Alt + J 实现选中文本的多光标操作</li>
+<li>进入不同的 SideBar：使用 Alt + F1 进入 Select In 视图，选择需要进入的 SideBar；使用 ESC 或 F4 再次将光标移动到代码里，或者使用 Shift + ESC 隐藏 SideBar 并将光标移动到代码里</li>
+</ol>
+<blockquote>
+<p>ReferenceCard</p>
+</blockquote>
+<p>双击 Shift，输入 <code>Keyboard Shortcuts PDF</code> 后，进入所选项即可打开 PDF 版的 IDEA 快捷键大全，该 PDF 中对各种快捷键进行了分类并描述了其主要作用。</p>
+<h2 id="1-5-自定义快捷键"><a class="header-anchor" href="#1-5-自定义快捷键"></a>1.5 自定义快捷键</h2>
+<p>在 IDEA 中并不是所有操作都能找到对应的快捷键，针对一些没有对应快捷键的操作我们可以自定义它们的快捷键。</p>
+<p>比如我最近喜欢上了在 IDEA 全屏的环境下「搬砖」，但是 IDEA 全屏设置并没有对应的快捷键，只能通过点选 <code>View - Appearance - Enter Full Screen</code> 的方式点选，这给我带来了一定的困扰，为此我们可以自定义全屏设置的快捷键。</p>
+<p>打开 Settings 后，找到 Keymap，然后在搜索框中输入 <code>full</code> 检索，找到 <code>Toggle full screen mode</code> 后使用鼠标右击，选择 <code>Add keyboard Shortcut</code>，最后在键盘上输入想要设置成的快捷键即可，比如我使用 <code>Alt + F</code> 作为全屏设置的快捷键。</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/IDEA%E8%87%AA%E5%AE%9A%E4%B9%89%E5%85%A8%E5%B1%8F%E5%BF%AB%E6%8D%B7%E9%94%AE.png" alt="IDEA自定义全屏快捷键"></p>
+<h1 id="2-奇技淫巧"><a class="header-anchor" href="#2-奇技淫巧"></a>2. 奇技淫巧</h1>
+<h2 id="2-1-后缀代码补全"><a class="header-anchor" href="#2-1-后缀代码补全"></a>2.1 后缀代码补全</h2>
+<p>使用后缀代码自动补全能够减少在编程时光标向后跳跃。</p>
+<p>后缀提示已经成为基本提示的一部分，可以使用快捷键 <code>Ctrl + j</code> 直接呼出后缀提示。</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/Ctrl%2bj.gif" alt="Ctrl+j" style="zoom: 50%;" />
+<blockquote>
+<p>常用后缀表达式</p>
+</blockquote>
+<p><strong>if</strong> ：使用 if 检查布尔表达式是否为 <code>true</code> ，如：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/if.gif" alt="if" style="zoom:50%;" />
+<p><strong>else</strong> ： 使用 else 可以检查布尔表达式为是否为 <code>false</code> ，如：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/else.gif" alt="else" style="zoom:50%;" />
+<p><strong>for</strong> ： 遍历数组、集合，如：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/for-iter.gif" alt="for-iter" style="zoom:50%;" />
+<p><strong>fori</strong> ： 使用索引进行遍历，如：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/fori.gif" alt="fori" style="zoom:50%;" />
+<p><strong>new</strong> ： 为某个类新建一个对象，可以配合快捷键 <code>Alt + Enter</code> 使用，如：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/new.gif" alt="new" style="zoom:50%;" />
+<p><strong>var</strong> ： 声明，效果与快捷键 <code>Alt + Enter</code>类似，如：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/var.gif" alt="var" style="zoom:50%;" />
+<p><strong>nn / notnull</strong> ： 判断某个表达式是否非空，如：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/nn与notnull.gif" alt="nn与notnull" style="zoom:50%;" />
+<p><strong>null</strong> ： 检查某个表达式是否为空，如：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/null.gif" alt="null" style="zoom:50%;" />
+<p><strong>not</strong> ： 取反，如：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/not.gif" alt="not" style="zoom:50%;" />
+<p><strong>return</strong> ： 返回某个值，如：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/return.gif" alt="return" style="zoom:50%;" />
+<p><strong>sout</strong> ： 输出某个值或直接显示<code>System.out.println();</code>，如：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/sout.gif" alt="sout" style="zoom:50%;" />
+<p><strong>try</strong> ： 在 try/catch 块中插入语句，如：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/try.gif" alt="try" style="zoom:50%;" />
+<p><strong>twr</strong> ： 在 try-with-resources 块中插入语句（需要 Java 7 或更高版本），如：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/twr.gif" alt="twr" style="zoom:50%;" />
+<p><strong>while</strong> ： 布尔表达式为 true 时进行循环，也可以与 not 搭配使用，如：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/while.gif" alt="while" style="zoom:50%;" />
+<p><strong>cast</strong> ： 强制类型转换，如：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/cast.gif" alt="cast" style="zoom:50%;" />
+<blockquote>
+<p>自定义后缀补全</p>
+</blockquote>
+<p><strong>IDEA 在 2021.1 的版本上线了自定义后缀补全的功能</strong>，使得用户能够使用除预定义之外的补全模板。</p>
+<p>Settings - Editor - General - Postfix Completion 点击  <code>+</code> 号，选择需要添加的后缀补全的语言，比如选择 Java，然后就可以自定义属于自己的后缀补全了。</p>
+<p>最近在使用流式断言神器 AssertJ，它的静态方法 <code>Assertions.assertThat()</code> 能够接受多种类型的参数，但在 IDEA 中提示又慢又卡（不排除是电脑的问题 😖），于是就想到了自定义后缀补全：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/%E8%87%AA%E5%AE%9A%E4%B9%89%E5%90%8E%E7%BC%80%E8%A1%A5%E5%85%A8%E6%A8%A1%E6%9D%BF.png" alt="自定义后缀补全模板"></p>
+<p>在后缀补全展开后的表达式中，<code>$EXPR$</code> 表示匹配的变量，<code>$END$</code> 表示光标结尾，更多模板变量参考 <a target="_blank" rel="noopener" href="https://www.jetbrains.com/help/idea/template-variables.html">Live template variables</a>。</p>
+<p>使用效果：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/%E8%87%AA%E5%AE%9A%E4%B9%89%E5%90%8E%E7%BC%80%E8%A1%A5%E5%85%A8assertThat.gif" alt="自定义后缀补全assertThat"></p>
+<h2 id="2-2-代码模板"><a class="header-anchor" href="#2-2-代码模板"></a>2.2 代码模板</h2>
+<p>当我们使用 IDEA 编写普通的 Java 代码时，总会用到代码模板。什么？你说你没用过？</p>
+<p>哈哈，那你肯定是不知道你用了。😏</p>
+<p>就像我们输入 <code>psvm</code> 时，IDEA 会自动帮我们把 Java 中的 <code>main()</code> 方法编写出来，就像：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/psvm.gif" alt="psvm" style="zoom:50%;" />
+<p>而这就是代码模板。又比如，我们输入 <code>St</code> 时可以直接打出 <code>String</code>：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/St.gif" alt="St" style="zoom:50%;" />
+<p>但是我觉得这个有点「憨憨」的，我还要按下 Shift 键输入一个大写的 S ，就不能直接输入 <code>st</code> 就显示 <code>String</code> 吗？😕</p>
+<p>那当然是可以的，我们只需要设置一下就可以了。</p>
+<p>使用快捷键 <code>Ctrl + Alt + S</code>，或者点击 File - Settings ，打开 IDEA 的设置：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/Settings.png" alt="Settings" style="zoom:50%;" />
+<p>在上面的图中可以看到 IDEA 自带的一些代码模板，我已经找到了 <code>St</code> 模板所在的位置，对它进行设置：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/st.png" alt="st" style="zoom:50%;" />
+<p>设置完成后，看看效果：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/修改为st.gif" alt="修改为st" style="zoom:50%;" />
+<p>🎊大功告成 🎉</p>
+<p>除了可以修改 IDEA 自带的代码模板外，还支持自定义添加模板，只需要点击右上方的 <code>+</code> 即可，当然对于一些不想要的模板点击 <code>-</code> 就可以删除。</p>
+<h1 id="3-疑难杂症"><a class="header-anchor" href="#3-疑难杂症"></a>3. 疑难杂症</h1>
+<h2 id="3-1-卸载错误"><a class="header-anchor" href="#3-1-卸载错误"></a>3.1 卸载错误</h2>
+<p>有时候需要卸载 IDEA 并重装 IDEA，在卸载后应检查 <code>C:\Users\&lt;YOUR_USERNAME&gt;</code> 目录下是否有与卸载的 IDEA 相关的文件。如果有，请将他们删除，否则重装的 IDEA 可能无法启动。</p>
+<h2 id="3-2-快捷键冲突"><a class="header-anchor" href="#3-2-快捷键冲突"></a>3.2 快捷键冲突</h2>
+<blockquote>
+<p>全局搜索快捷键无用？</p>
+</blockquote>
+<p>IDEA 全局搜索的快捷键是 <code>Shift + Ctrl + F</code>，但是在使用的时候可能会出现无用的情况，这通常是快捷键冲突了。</p>
+<p>比如：我使用的是搜狗输入法，搜狗输入法中，<code>Shift + Ctrl + F</code> 是用于切换繁简的，我们只需要把这个快捷键取消或者设置为其他的组合就可以了。</p>
+<blockquote>
+<p>无法补全 Lambda 表达式</p>
+</blockquote>
+<p>IDEA 中的 <code>Ctrl + Shift + Space</code> 组合快捷键可以进行智能代码补全，主要是按预期类型筛选方法、变量列表，这经常用于补全 Lambda 表达式。</p>
+<p>在 Windows 操作系统下，<code>Ctrl + Space</code> 常用于系统输入法的中/英文模式切换，这将产生快捷键冲突。</p>
+<p>在 Windows 11 下，右击右下角输入法图标，选择 <strong>按键配置</strong>，取消勾选 <strong>模式切换</strong> 下使用 <code>Ctrl + 空格键</code> 进行中/英文模式切换。</p>
+<blockquote>
+<p>Windows 11 新版输入法的 BUG</p>
+</blockquote>
+<p>一次系统更新后，<code>Shift + F6</code> 重命名、<code>Shift + F10</code> 运行等一众快捷键全部失效，这是 Windows 11 新版输入法的 BUG 导致的，在设置中勾选 <strong>使用以前版本的微软拼音输入法</strong> 即可（或者换个输入法也行）。</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/%E8%AE%BE%E7%BD%AE%E4%BD%BF%E7%94%A8%E4%BB%A5%E5%89%8D%E7%89%88%E6%9C%AC%E7%9A%84%E5%BE%AE%E8%BD%AF%E6%8B%BC%E9%9F%B3%E8%BE%93%E5%85%A5%E6%B3%95.png" alt="设置使用以前版本的微软拼音输入法"></p>
+<blockquote>
+<p>代码格式化快捷键无用？</p>
+</blockquote>
+<p>代码格式化默认快捷键是 <code>Ctrl + Alt + L</code>，可能与以下软件快捷键冲突：</p>
+<ul>
+<li>网易云音乐</li>
+<li>QQ</li>
+<li>华硕 Armoury Crate</li>
+</ul>
+<p>主要说下华硕 Armoury Crate，华硕电脑上可能会有这玩意，这玩意会悄悄更新，然后在后台自启把快捷键覆盖，巨坑！ 😡</p>
+<p>修改快捷键的位置也很隐蔽：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/%E5%A5%A5%E5%88%9B%E4%B8%AD%E5%BF%83%E5%BF%AB%E6%8D%B7%E9%94%AE%E8%AE%BE%E7%BD%AE.png" alt="奥创中心快捷键设置"></p>
+<h2 id="3-3-编译项目时出错"><a class="header-anchor" href="#3-3-编译项目时出错"></a>3.3 编译项目时出错</h2>
+<p>运行项目时，出现编译错误：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">java.lang.ClassCastException: </span><br><span class="line">org.jetbrains.jps.builders.java.dependencyView.TypeRepr$PrimitiveType cannot be cast to </span><br><span class="line">org.jetbrains.jps.builders.java.dependencyView.TypeRepr$ClassType</span><br></pre></td></tr></table></figure>
+<p>解决方法：</p>
+<p>Goto menu option “Build” - “Rebuild project” （基本上做了这一步就不会报错了）<br>
+Goto menu “File” - “Invalidate caches / Restart…” - “Invalidate and Restart”.</p>
+<h2 id="3-4-xxx-包不存在？"><a class="header-anchor" href="#3-4-xxx-包不存在？"></a>3.4 xxx 包不存在？</h2>
+<p>今天使用公司设置的命令创建 SpringBoot 项目后，用 IDEA 2020.1 打开项目并运行启动类，结果提示 xxx 包不存在，但是一看依赖，是存在的，查了好久都不知道该怎么解决。</p>
+<p>最终发现，这是 IDEA 2020.1 的问题，于是将其卸载并安装 IDEA 2019，再次运行项目，成功地启动了项目。</p>
+<blockquote>
+<p>如果并不是使用的这个版本的 IDEA，或许可以使用下面的方法解决：</p>
+</blockquote>
+<p><strong>方式一：</strong> 清除缓存并重启，注意将 IDEA 的配置进行备份。（以 IDEA 2019 为例）</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/清除缓存并重启.png" alt="清除缓存并重启" style="zoom:50%;" />
+<p><strong>方式二：</strong> 找到对应的无法编译的模块，右键再次编译。（以 IDEA 2019 为例，圈出的两项都点一下）</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/右击模块并rebuild.png" alt="右击模块并rebuild" style="zoom:50%;" />
+<p><strong>方式三：</strong> 检查是否使用了 Lombok 插件，如果使用了，卸载插件重启 IDEA，然后再安装插件。</p>
+<p><strong>方式四：</strong> 执行 <code>mvn idea:idea</code> 命令，检查项目编码是否为 UTF-8。</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/%E6%89%A7%E8%A1%8Cmvn-idea%E5%91%BD%E4%BB%A4.png" alt="执行mvn-idea命令"></p>
+<p>执行上述命令前，可以把项目内已经存在的 iml，iws，ipr 文件删掉再执行。</p>
+<p>等待 <code>mvn idea:idea</code> 命令执行结束后，再执行 <code>mvn idea:module</code> 命令。</p>
+<h2 id="3-5-Coverage-窗口无法显示"><a class="header-anchor" href="#3-5-Coverage-窗口无法显示"></a>3.5 Coverage 窗口无法显示</h2>
+<p>在 IDEA 有一个默认自带的插件，名为 <code>Coverage</code>。当我们需要进行本地单元测试的时候就需要用到这个插件，具体使用方法就不赘述了。</p>
+<p>正常情况下使用 IDEA 的 Coverage 插件进行单元测试时，当对某个测试方法或测试类测试完毕后，会在 IDEA 的右下角 Sidebar 显示一个 Coverage 的窗口，这个窗口会显示单元测试的覆盖率，比如：行（Line）覆盖率、分支（Branch）覆盖率。</p>
+<p>但是！我在使用的时候并没有在右下角 Sidebar 出现 Coverage 窗口，同时还在控制台爆红，显示 <code>FileNotFoundException</code>，还提示在 C 盘用户目录下找不到某个 <code>exec</code> 文件。</p>
+<p>问题的产生的主要原因就是找不到那个 <code>exec</code> 文件，而找不到文件的原因是用户目录是中文，产生了乱码，然后找不到文件。比如，就 IDEA 2019.3 来说，<code>exec</code> 文件的位置在这个文件夹下的某个目录中：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/.IntelliJIdea2019.3%E6%96%87%E4%BB%B6%E5%A4%B9.png" alt=".IntelliJIdea2019.3文件夹"></p>
+<p>就是因为那个中文目录，然后产生乱码，找不到 <code>exec</code> 文件，才导致 Coverage 窗口没有显示。</p>
+<p>对此，有两个方法可以解决：</p>
+<ol>
+<li>修改用户目录</li>
+<li>修改 IDEA 配置文件夹（.IntelliJIdea2019.3 文件夹）的位置</li>
+</ol>
+<p>第一种方法虽然一劳永逸，但是需要修改注册表等「高端操作」，稍不注意，电脑连机都打不开。</p>
+<p>在此选择第二种方法，下面介绍一下如何自定义 IDEA 的配置文件夹与系统文件夹的位置。</p>
+<blockquote>
+<p>IDEA 2019 3.x 及以下版本修改配置文件夹位置</p>
+</blockquote>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://ld246.com/article/1581524711230">IDEA_2019.3.2 修改默认配置文件路径</a></p>
+<p>假设将配置文件夹位置转移在 <code>D:\IDEAConfig\.IntelliJIdea2019.3</code> 目录下，这个位置随便选，但是不要包含中文目录。</p>
+<p>关闭 IDEA 所有的运行程序，然后需要修改系统环境变量。</p>
+<p>如果你是 32 位操作系统，就需要添加如下两个环境变量：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">IDEA_PROPERTIES=（转移之后文件夹的绝对路径）\config\idea.properties</span><br><span class="line">IDEA_VM_OPTIONS=（转移之后文件夹的绝对路径）\config\idea64.exe.vmoptions</span><br></pre></td></tr></table></figure>
+<p>如果是 64 位操作系统，就需要添加如下两个环境变量：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">IDEA_PROPERTIES=（转移之后文件夹的绝对路径）\config\idea.properties</span><br><span class="line">IDEA64_VM_OPTIONS=（转移之后文件夹的绝对路径）\config\idea64.exe.vmoptions</span><br></pre></td></tr></table></figure>
+<p>比如我是 64 位操作系统，我就需要这样配置：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/IDEA%E7%9A%84%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F.png" alt="IDEA的环境变量"></p>
+<p>配置好环境变量后，前往 IDEA 安装目录的 bin 目录下，找到名为 <code>idea.properties</code> 的文件，打开它并添加一些配置：</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">idea.config.path</span>=<span class="string">（转移之后文件夹的绝对路径）/config</span></span><br><span class="line"><span class="attr">idea.system.path</span>=<span class="string">（转移之后文件夹的绝对路径）/system</span></span><br><span class="line"><span class="attr">idea.plugins.path</span>=<span class="string">$&#123;idea.config.path&#125;/plugins</span></span><br><span class="line"><span class="attr">idea.log.path</span>=<span class="string">$&#123;idea.system.path&#125;/log</span></span><br></pre></td></tr></table></figure>
+<p>比如我是这样配置的：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/IDEA%E7%9A%84idea.properties%E6%96%87%E4%BB%B6.png" alt="IDEA的idea.properties文件"></p>
+<p>最后启动 IDEA 即可。</p>
+<p>这样在使用 Coverage 插件进行单元测试时就会在右下角 Sidebar 出现 Coverage 窗口了。</p>
+<blockquote>
+<p>IDEA 2020 1.x 及以上版本修改配置文件夹位置</p>
+</blockquote>
+<p>基本步骤与前文一致，先选定磁盘空间足够且不含有中文目录的一个位置存放 IDEA 配置文件，假设选定的位置是：<code>D:/IDEAConfig/.IntelliJIdea2020.3</code>。</p>
+<p>与前文一致，先关闭 IDEA 所有的运行程序，然后配置环境变量，比如 64 位的操作系统是这样配置的（省略 32 位操作系统的配置）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">IDEA_PROPERTIES=D:\IDEAConfig\.IntelliJIdea2020.3\config\idea.properties</span><br><span class="line">IDEA64_VM_OPTIONS=D:\IDEAConfig\.IntelliJIdea2020.3\config\idea64.exe.vmoptions</span><br></pre></td></tr></table></figure>
+<p>接下来前往 IDEA 安装目录的 bin 目录下，找到名为 <code>idea.properties</code> 的文件，增加与前文类似的配置：</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">idea.config.path</span>=<span class="string">D:/IDEAConfig/.IntelliJIdea2020.3/config</span></span><br><span class="line"><span class="attr">idea.system.path</span>=<span class="string">D:/IDEAConfig/.IntelliJIdea2020.3/system</span></span><br><span class="line"><span class="attr">idea.plugins.path</span>=<span class="string">$&#123;idea.config.path&#125;/plugins</span></span><br><span class="line"><span class="attr">idea.log.path</span>=<span class="string">$&#123;idea.system.path&#125;/log</span></span><br></pre></td></tr></table></figure>
+<p>最后启动 IDEA 即可，IDEA 启动完毕后，前往最开始选定的 <code>D:/IDEAConfig/.IntelliJIdea2020.3</code> 目录，可以看到自动生成了 config 和 system 目录。</p>
+<p>那么 IDEA 2020 1.x 及以上版本的配置文件在哪呢？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\用户名\AppData\Roaming\JetBrains\IntelliJIdea2020.1</span><br></pre></td></tr></table></figure>
+<p><code>IntelliJIdea2020.1</code> 就是默认的配置文件夹。上述配置完成后，完全可以删除此文件夹，以节约磁盘空间。</p>
+<h2 id="3-6-国际化文件中文乱码"><a class="header-anchor" href="#3-6-国际化文件中文乱码"></a>3.6 国际化文件中文乱码</h2>
+<p>当使用 IDEA 进行开发，并且用到了国际化文件时，文件中可能会出现中文乱码情况：中文全都变成了 Unicode 字符，比如像这种：<code>\u9ED8\u70E6</code>。</p>
+<p>解决方法很简单：</p>
+<p>File - Settings - Editor - File Encodings：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/%E5%9B%BD%E9%99%85%E5%8C%96%E6%96%87%E4%BB%B6%E4%B8%AD%E6%96%87%E4%B9%B1%E7%A0%81%E8%AE%BE%E7%BD%AE.png" alt="国际化文件中文乱码设置"></p>
+<p>打上勾就完事了。</p>
+<h2 id="3-7-找回-add-但未-commit-的代码"><a class="header-anchor" href="#3-7-找回-add-但未-commit-的代码"></a>3.7  找回 add 但未 commit 的代码</h2>
+<blockquote>
+<p>场景</p>
+</blockquote>
+<p>先写了一些代码，这些代码已经被 IDEA 自动 add，但是没有 commit。</p>
+<p>此时拉取最新的代码到本地，结果产生了冲突，由于冲突过多，打算放弃拉取，就点了 IDEA 的 rollback，结果自己编写的代码也被回滚了。</p>
+<blockquote>
+<p>解决方式一</p>
+</blockquote>
+<p>IDEA 有静默搁置的功能，在那里面保存了以前的代码。</p>
+<p>在 IDEA 的工具栏找到 Git，选择 Uncommitted Changes，再点击 Show Shelf， 此时 IDEA 左侧会显示以前保存的代码，最后右击需要应用的代码，点击 Unshelve… 即可。</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/Show-Shelf.png" alt="Show-Shelf"></p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/Unshelve.png" alt="Unshelve"></p>
+<blockquote>
+<p>解决方式二</p>
+</blockquote>
+<p>除了静默搁置以外，IDEA 还提供了查看文件历史的功能。</p>
+<p>右击目标项目，找到 Local History，再选择 Show History 查看文件历史，在这里面选择被回滚的历史，右击目标历史，点击 Revert 即可还原。</p>
+<h2 id="3-8-IDEA-的-project-不显示项目"><a class="header-anchor" href="#3-8-IDEA-的-project-不显示项目"></a>3.8 IDEA 的 project 不显示项目</h2>
+<p>解决方式：关闭项目，删除项目目录下的 <code>.idea</code> 目录，然后重新打开项目即可解决。</p>
+<h2 id="3-9-使用-Optional-作为参数出现警告"><a class="header-anchor" href="#3-9-使用-Optional-作为参数出现警告"></a>3.9 使用 Optional 作为参数出现警告</h2>
+<p>当使用 JDK 1.8 引入的 <code>Optional</code> 作为方法参数、成员变量时，IDEA 会给出如下警告：</p>
+<pre>
+'Optional&lt;xxx&gt;' used as type for parameter 'xxx'
+</pre>
+<p>意思就是说 <code>Optional</code> 作为了参数 <code>xxx</code> 的参数类型。</p>
+<p>为什么 IDEA 会给出警告呢？</p>
+<p><code>Optional</code> 的引入是为了减少空指针的出现，一般来说，针对可能返回 <code>null</code> 的方法可以使用 <code>Optional</code> 作为返回值类型。如果使用 <code>Optional</code> 作为参数类型，传入的参数依旧可以是 <code>null</code>，不仅不能避免空指针，甚至还会带来额外的判断。</p>
+<p><strong>如果非要使用 <code>Optional</code> 作为方法参数，可以用 <code>Supplier</code> 再包一下。</strong></p>
+<h2 id="3-10-使用本地-Redis-时出现-Windows-安全中心弹窗"><a class="header-anchor" href="#3-10-使用本地-Redis-时出现-Windows-安全中心弹窗"></a>3.10 使用本地 Redis 时出现 Windows 安全中心弹窗</h2>
+<p>粗暴一点选择直接关闭防火墙。</p>
+<p>也可以单独针对 Redis 应用，允许其通过防火墙。</p>
+<h2 id="3-11-no-tests-were-found"><a class="header-anchor" href="#3-11-no-tests-were-found"></a>3.11 no tests were found</h2>
+<p>运行单元测试方法时，控制台显示 <code>no tests were found</code>。尝试从以下几个角度解决：</p>
+<ul>
+<li>单元测试方法不能有返回值</li>
+<li>单元测试方法应该被 <code>public</code> 修饰</li>
+<li>项目的 <code>.idea</code> 文件夹和 <code>.iml</code> 文件路径不匹配。首先尝试删除 <code>.iml</code> 文件后重新打开项目，如果仍然不能解决问题，再选择将两者都删除后重新打开项目，因为 <code>.idea</code> 文件夹中存放了当前项目的一些配置，比如配置的远程调试端口，冒然删除会导致配置丢失</li>
+</ul>
+<h2 id="3-12-执行-Maven-命令时控制台乱码"><a class="header-anchor" href="#3-12-执行-Maven-命令时控制台乱码"></a>3.12 执行 Maven 命令时控制台乱码</h2>
+<p>在 Settings 面板中增加 Maven Runner 的 VM Options 信息：<code>-Dfile.encoding=UTF-8</code>。</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/%E5%A2%9E%E5%8A%A0Maven-Runner-VM-Options%E4%BF%A1%E6%81%AF.png" alt="增加Maven-Runner-VM-Options信息"></p>
+<h1 id="4-基本设置"><a class="header-anchor" href="#4-基本设置"></a>4. 基本设置</h1>
+<h2 id="4-1-呼出-serialVersionUID"><a class="header-anchor" href="#4-1-呼出-serialVersionUID"></a>4.1 呼出 serialVersionUID</h2>
+<p>我们在使用到序列化时，难免会使用到 serialVersionUID ，serialVersionUID 是序列化前后的唯一标识符，如果没有人为显式声明过 serialVersionUID ，IDEA 会自动生成一个。</p>
+<p>为了 serialVersionUID 的确定性，凡是 <code>implements Serializable</code> 的类，最好都人为地显式声明一个 serialVersionUID 的明确值。</p>
+<p>关于序列化和 serialVersionUID 的讲解，可以参考这篇文章： <a target="_blank" rel="noopener" href="https://www.bilibili.com/read/cv6257046">序列化/反序列化，我忍你很久了！</a></p>
+<p>IDEA 是一个很棒的 Java 编译器，它可以自动帮我们生成 serialVersionUID （当然也可以手动设置），但是需要进行一些设置。</p>
+<blockquote>
+<p>设置与呼出方式</p>
+</blockquote>
+<p>打开 IDEA 后 ，点击 File - Settings ，然后按照下图进行设置：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/serialVersionUID的设置.png" alt="serialVersionUID的设置" style="zoom: 50%;" />
+<p>设置完成后，在 <code>implements Serializable</code> 的类上使用快捷键 <code>Alt + Enter</code> 即可自动添加 serialVersionUID。</p>
+<h2 id="4-2-导出设置文件"><a class="header-anchor" href="#4-2-导出设置文件"></a>4.2 导出设置文件</h2>
+<p>当我们更换或卸载旧版本的 IDEA 并安装新的 IDEA 后，需要对新版 IDEA 中的部分设置进行修改，以符合个人使用习惯。</p>
+<p>如果每次下载新版本都重新进行设置就显得异常繁琐（设置要是比较多的话，直接爆炸 💥），IDEA 为了方便我们使用提供了导出导入设置文件的选项。</p>
+<p>在 IDEA 2020.1 的版本中，应该这样设置：</p>
+<p><strong>File - Manage IDE Settings - Import Settings / Export Settings</strong></p>
+<h2 id="4-3-代码字体设置"><a class="header-anchor" href="#4-3-代码字体设置"></a>4.3 代码字体设置</h2>
+<p>在使用 IDEA 时，不太喜欢默认的代码字体，因此想要按照自己的习惯设置字体，在此列举一些常见的字体设置。</p>
+<blockquote>
+<p>设置字体字号</p>
+</blockquote>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/IDEA%E5%AD%97%E4%BD%93%E4%B8%8E%E5%AD%97%E5%8F%B7%E8%AE%BE%E7%BD%AE.png" alt="IDEA字体与字号设置"></p>
+<p>按照上图所标识的步骤就可以实现字体与字号的设置，推荐字号为 18。关于字体，在 IDEA 2020.1 中，推荐 <code>JetBrains Mono</code>，个人使用起来是比较舒服的（从 IDEA 2019.3 版本开始，已经自带 Mono 字体啦）。</p>
+<p>上图中使用椭圆圈出的设置属于设置备用字体，有些字体只有英文字体，并没有中文，可以在此处设置备用字体以正确显示中文（推荐使用 <code>SimHei</code> 作为备用字体以显示中文，感觉还不错）。</p>
+<p>IDEA 还支持使用鼠标滚轮来调整字体大小，具体设置如下：</p>
+<p><strong>Settings</strong> - <strong>Editor</strong> - <strong>General</strong> - 勾选 <strong>change font size whith ctrl+mouse wheet</strong> 即可</p>
+<blockquote>
+<p>字体加粗</p>
+</blockquote>
+<p>IDEA 默认的字体是细细的，像我这种近视玩家看着就有点费劲，IDEA 当然也可以设置字体加粗，具体操作如下：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/IDEA%E4%BB%A3%E7%A0%81%E5%AD%97%E4%BD%93%E5%8A%A0%E7%B2%97.png" alt="IDEA代码字体加粗"></p>
+<p>像上面这样设置后，IDEA 中代码和注释的字体会加粗，但是文档注释的字体并不会加粗，如果想要将文档注释字体也加粗，可以这样设置：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/IDEA%E6%96%87%E6%A1%A3%E6%B3%A8%E9%87%8A%E5%AD%97%E4%BD%93%E5%8A%A0%E7%B2%97.png" alt="IDEA文档注释字体加粗"></p>
+<p>这里还把文档注释的字体颜色设置为 <code>629755</code>，可以试一试~</p>
+<blockquote>
+<p>修改代码注释字体颜色</p>
+</blockquote>
+<p>IDEA 中代码注释字体的颜色是灰色的，在黑色背景下不是很明显，看得比较吃力，我们可以这样设置一下以修改注释的字体颜色：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/IDEA%E4%BF%AE%E6%94%B9%E6%B3%A8%E9%87%8A%E5%AD%97%E4%BD%93%E9%A2%9C%E8%89%B2.png" alt="IDEA修改注释字体颜色"></p>
+<p>我设置的字体颜色代码是 <code>36806E</code>，自我感觉看着比较舒服，当然你也可以设置成自己喜欢的颜色。</p>
+<p>Block comment 是块注释，Line comment 是行注释，可以按需分别自定义。</p>
+<h2 id="4-4-自动导包"><a class="header-anchor" href="#4-4-自动导包"></a>4.4 自动导包</h2>
+<p>只需要这样设置即可：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/%E8%87%AA%E5%8A%A8%E5%AF%BC%E5%8C%85%E8%AE%BE%E7%BD%AE.png" alt="自动导包设置"></p>
+<h2 id="4-4-Alt-Enter-生成变量"><a class="header-anchor" href="#4-4-Alt-Enter-生成变量"></a>4.4 Alt + Enter 生成变量</h2>
+<p>IDEA 中 <code>Alt + Enter</code> 快捷键是可以生成变量的，如果这个快捷键失效了，我们可以这么进行设置（本节基于 IDEA 2019.3 进行说明）。</p>
+<ol>
+<li>在 Keymap 中搜索 Show Context Actions 这个快捷键（如果版本较低，可以搜索 Show Intention Actions）：</li>
+</ol>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/Show-Context-Actions.png" alt="Show-Context-Actions"></p>
+<ol start="2">
+<li>然后在 Settings 中的 Editor 的 Intention 一栏中搜索 <code>Refactorings</code>，然后进如下的设置即可：</li>
+</ol>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/Intention%E4%B8%AD%E6%90%9C%E7%B4%A2Refactorings.png" alt="Intention中搜索Refactorings"></p>
+<h2 id="4-5-项目中显示-target-目录"><a class="header-anchor" href="#4-5-项目中显示-target-目录"></a>4.5 项目中显示 target 目录</h2>
+<p>在 IDEA 的项目目录中，可能无法看到 <code>target</code> 目录，但是有时候我们又需要使用到这个目录，那怎么显示 <code>target</code> 目录呢？</p>
+<p>以 IDEA 2019.3 为例，单击目录上的 ⛭ 小齿轮 <code>Show Options Menu</code>：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/Show-Options-Menu.png" alt="Show-Options-Menu"></p>
+<p>然后勾选 <code>Show Excluded Files</code> 即可：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/Show-Excluded-Files.png" alt="Show-Excluded-Files"></p>
+<h2 id="4-6-只加载本地仓库依赖"><a class="header-anchor" href="#4-6-只加载本地仓库依赖"></a>4.6 只加载本地仓库依赖</h2>
+<p>现在有这样一个场景：当进行多人协同开发时，我的模块 A 依赖了同事的模块 B，A、B 模块分处不同的项目中，模块 B 为模块 A 提供了基础组件能力。这时我发现了模块 B 的 BUG，让同事修改后本应推送至 GitLab，然后使用 Jenkins 构建，构建完成后我再重新导入所有 Maven 工程，拉取到同事修改完成的代码。但是由于某种原因，公司 master 收回了所有人的代码 push 权限，无法将修改后的代码推送至 GitLib，那这时应该怎么办呢？</p>
+<p>同事修改完代码后，利用 <code>mvn install</code> 将修改后的代码打包至本地 Maven 仓库，然后将手动打包的 jar 包所在文件夹（本地 Maven 仓库中）发送给我，替换我本地 Maven 仓库中的文件夹。</p>
+<p>但是这样又有一个问题，进行替换后，IDEA 的索引失效，需要重新导入 Maven 工程，但我重新导入时又会拉取远程仓库中的 jar 包，这怎么办呢？</p>
+<p>如果可以在重新导入 Maven 工程时只加载本地依赖，而不拉取远程仓库依赖不就可以了？对 IDEA 进行以下配置即可：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/%E8%AE%BE%E7%BD%AEMaven%E7%A6%BB%E7%BA%BF%E6%A8%A1%E5%BC%8F.png" alt="设置Maven离线模式"></p>
+<p>勾选上图中的序号 1 对应的所圈选项即可，这样的话 Maven 将使用离线模式，重新导入 Maven 工程时只加载本地 Maven 仓库的代码，而不会再从远程仓库中拉取。</p>
+<p>除此之外，上图中还有一个序号 2，将此选项勾选后，每次重新导入 Maven 工程时将会拉取远程 Maven 仓库中最近一次快照的 jar 包，以避免 Jenkins 构建后无法从远程 Maven 仓库拉取到最新代码的情况。</p>
+<h1 id="5-一些小技巧"><a class="header-anchor" href="#5-一些小技巧"></a>5. 一些小技巧</h1>
+<h2 id="5-1-Bookmarks"><a class="header-anchor" href="#5-1-Bookmarks"></a>5.1 Bookmarks</h2>
+<p>在处理大型项目或阅读源码时，搜索文件或文件夹是非常耗时的。针对这种情况，IDEA 提供了 Bookmarks（书签）的特性。在 IDEA 中不仅可以将重要代码的所在行标记为书签，也可以将文件、文件夹、包、模块和类标记为书签。</p>
+<p>以常用的将某行代码标记为书签为例，IDEA 提供了以下操作方式：</p>
+<ul>
+<li>
+<p>创建匿名书签：在目标行键入 <code>F11</code>，再次键入 <code>F11</code> 可以删除该书签</p>
+</li>
+<li>
+<p>基于匿名书签创建助记书签：先创建匿名书签，然后使用 <code>Ctrl + F11</code> 呼出 Add Mnemonic Bookmark 菜单，然后按下 0-9 或 A-Z 中的某个键即可为书签添加助记符</p>
+</li>
+<li>
+<p>快速创建助记书签：在目标行键入 <code>Ctrl + Shift + 数字键</code>，这种方式只支持 0-9 共十个数字助记书签的添加</p>
+</li>
+<li>
+<p>打开 Bookmarks 菜单查看所有书签：在弹窗中显式：<code>Shift + F11</code>，在侧边栏中显式：<code>Alt + 2</code></p>
+</li>
+<li>
+<p>快速跳转到某个数字助记标签：<code>Ctrl + 数字键</code></p>
+</li>
+</ul>
+<p>在 Bookmarks 菜单中支持以下快捷键对选中书签进行操作：</p>
+<ul>
+<li>跳转到选中书签标记的行：<code>Enter</code></li>
+<li>修改选中书签描述：<code>F2</code></li>
+<li>删除选中书签：<code>Delete</code></li>
+<li>修改选中书签助记符：<code>Ctrl + F11</code></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/How-to-use-IDEA/">https://mofan212.github.io/posts/How-to-use-IDEA/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/IntelliJ-IDEA/">IntelliJ-IDEA</a></div><div class="post-share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/37.jpg" data-sites="wechat,qq,weibo,facebook,x"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/DataStructure-RedBlackTree/" title="数据结构之红黑树"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/36.png" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">数据结构之红黑树</div></div><div class="info-2"><div class="info-item-1">HashMap 解决哈希冲突使用的红黑树是长什么样子的？一起来看看吧。</div></div></div></a><a class="pagination-related" href="/posts/DataStructure-Set-And-Map/" title="数据结构之集合与映射"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/38.png" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">数据结构之集合与映射</div></div><div class="info-2"><div class="info-item-1">本文基于Java语言，介绍了集合与映射的基本概念，并使用以前编写的数据结构实现了集合与映射。</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">默烦</div><div class="author-info-description">彩笔的打怪升级之路...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mofan212"><i class="fab fa-github"></i><span>follow me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解。<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a href="./mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载。😊</br><strong><font style="color:red">严禁未遵循规范的转载。</font></strong>😡</br><strong>死去的评论系统复活啦！欢迎到留言板畅所欲言！</strong>当然也可以使用更高效的<a target="_blank" href="https://space.bilibili.com/23658864/dynamic" style="color:#49B1F5;text-decoration:underline"> 哔哩哔哩私信 </a>或<a href="mailto:cy.mofan@foxmail.com" style="color:#49B1F5;text-decoration:underline" target="_blank">邮箱</a>。 😉</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0-%E5%89%8D%E8%A8%80"><span class="toc-text">0. 前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0-1-IDEA-%E7%AE%80%E4%BB%8B"><span class="toc-text">0.1 IDEA 简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0-3-%E7%BC%96%E5%86%99%E7%9B%AE%E7%9A%84"><span class="toc-text">0.3 编写目的</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-IDEA%E7%9A%84%E5%BF%AB%E6%8D%B7%E9%94%AE"><span class="toc-text">1. IDEA的快捷键</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E6%90%9C%E7%B4%A2%E6%9F%A5%E7%9C%8B"><span class="toc-text">1.1 搜索查看</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E6%B5%81%E5%BC%8A%E7%9A%84Alt%E9%94%AE"><span class="toc-text">1.2 流弊的Alt键</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-%E9%94%81%E5%AE%9A%E5%85%89%E6%A0%87%E5%A4%84"><span class="toc-text">1.3 锁定光标处</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE"><span class="toc-text">1.4 常用快捷键</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-5-%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BF%AB%E6%8D%B7%E9%94%AE"><span class="toc-text">1.5 自定义快捷键</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E5%A5%87%E6%8A%80%E6%B7%AB%E5%B7%A7"><span class="toc-text">2. 奇技淫巧</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E5%90%8E%E7%BC%80%E4%BB%A3%E7%A0%81%E8%A1%A5%E5%85%A8"><span class="toc-text">2.1 后缀代码补全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E4%BB%A3%E7%A0%81%E6%A8%A1%E6%9D%BF"><span class="toc-text">2.2 代码模板</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E7%96%91%E9%9A%BE%E6%9D%82%E7%97%87"><span class="toc-text">3. 疑难杂症</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E5%8D%B8%E8%BD%BD%E9%94%99%E8%AF%AF"><span class="toc-text">3.1 卸载错误</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E5%BF%AB%E6%8D%B7%E9%94%AE%E5%86%B2%E7%AA%81"><span class="toc-text">3.2 快捷键冲突</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-%E7%BC%96%E8%AF%91%E9%A1%B9%E7%9B%AE%E6%97%B6%E5%87%BA%E9%94%99"><span class="toc-text">3.3 编译项目时出错</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-xxx-%E5%8C%85%E4%B8%8D%E5%AD%98%E5%9C%A8%EF%BC%9F"><span class="toc-text">3.4 xxx 包不存在？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-5-Coverage-%E7%AA%97%E5%8F%A3%E6%97%A0%E6%B3%95%E6%98%BE%E7%A4%BA"><span class="toc-text">3.5 Coverage 窗口无法显示</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-6-%E5%9B%BD%E9%99%85%E5%8C%96%E6%96%87%E4%BB%B6%E4%B8%AD%E6%96%87%E4%B9%B1%E7%A0%81"><span class="toc-text">3.6 国际化文件中文乱码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-7-%E6%89%BE%E5%9B%9E-add-%E4%BD%86%E6%9C%AA-commit-%E7%9A%84%E4%BB%A3%E7%A0%81"><span class="toc-text">3.7  找回 add 但未 commit 的代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-8-IDEA-%E7%9A%84-project-%E4%B8%8D%E6%98%BE%E7%A4%BA%E9%A1%B9%E7%9B%AE"><span class="toc-text">3.8 IDEA 的 project 不显示项目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-9-%E4%BD%BF%E7%94%A8-Optional-%E4%BD%9C%E4%B8%BA%E5%8F%82%E6%95%B0%E5%87%BA%E7%8E%B0%E8%AD%A6%E5%91%8A"><span class="toc-text">3.9 使用 Optional 作为参数出现警告</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-10-%E4%BD%BF%E7%94%A8%E6%9C%AC%E5%9C%B0-Redis-%E6%97%B6%E5%87%BA%E7%8E%B0-Windows-%E5%AE%89%E5%85%A8%E4%B8%AD%E5%BF%83%E5%BC%B9%E7%AA%97"><span class="toc-text">3.10 使用本地 Redis 时出现 Windows 安全中心弹窗</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-11-no-tests-were-found"><span class="toc-text">3.11 no tests were found</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-12-%E6%89%A7%E8%A1%8C-Maven-%E5%91%BD%E4%BB%A4%E6%97%B6%E6%8E%A7%E5%88%B6%E5%8F%B0%E4%B9%B1%E7%A0%81"><span class="toc-text">3.12 执行 Maven 命令时控制台乱码</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E5%9F%BA%E6%9C%AC%E8%AE%BE%E7%BD%AE"><span class="toc-text">4. 基本设置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E5%91%BC%E5%87%BA-serialVersionUID"><span class="toc-text">4.1 呼出 serialVersionUID</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E5%AF%BC%E5%87%BA%E8%AE%BE%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">4.2 导出设置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-%E4%BB%A3%E7%A0%81%E5%AD%97%E4%BD%93%E8%AE%BE%E7%BD%AE"><span class="toc-text">4.3 代码字体设置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-4-%E8%87%AA%E5%8A%A8%E5%AF%BC%E5%8C%85"><span class="toc-text">4.4 自动导包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-4-Alt-Enter-%E7%94%9F%E6%88%90%E5%8F%98%E9%87%8F"><span class="toc-text">4.4 Alt + Enter 生成变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-5-%E9%A1%B9%E7%9B%AE%E4%B8%AD%E6%98%BE%E7%A4%BA-target-%E7%9B%AE%E5%BD%95"><span class="toc-text">4.5 项目中显示 target 目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-6-%E5%8F%AA%E5%8A%A0%E8%BD%BD%E6%9C%AC%E5%9C%B0%E4%BB%93%E5%BA%93%E4%BE%9D%E8%B5%96"><span class="toc-text">4.6 只加载本地仓库依赖</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%8A%80%E5%B7%A7"><span class="toc-text">5. 一些小技巧</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-Bookmarks"><span class="toc-text">5.1 Bookmarks</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/Something-About-Blog/" title="博客搭建与维护"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="博客搭建与维护"/></a><div class="content"><a class="title" href="/posts/Something-About-Blog/" title="博客搭建与维护">博客搭建与维护</a><time datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"/></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="更新于 2026-01-03 00:00:00">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"/></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/103.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 的类资源加载"/></a><div class="content"><a class="title" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载">Java 的类资源加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/20.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="注解、类的加载、反射"/></a><div class="content"><a class="title" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射">注解、类的加载、反射</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/ren-zhi-jue-xing/" title="认知觉醒"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/172.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="认知觉醒"/></a><div class="content"><a class="title" href="/posts/ren-zhi-jue-xing/" title="认知觉醒">认知觉醒</a><time datetime="2025-12-28T16:00:00.000Z" title="更新于 2025-12-29 00:00:00">2025-12-29</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://gcore.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script src="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/js/mine.min.js"></script><script src="/js/tip_portal.js"></script><script defer="defer" id="ribbon" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script id="click-show-text" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="Azathoth,Yog-Sothoth,Shub-Niggurath,Nyarlathotep,Cthulhu,Hastur,Abhoth,Ghroth,Tsathoggua,Cthugha,Deep Ones,Dagon,Chaugnar Faugn,Mordiggian,Shoggoth,Old One,Mi-Go,Great Race of Yith,Flying Polyp,Hounds of Tindalos,Dhole" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div class="docsearch-wrap"><div id="docsearch" style="display:none"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@docsearch/css/dist/style.min.css"/><script src="https://testingcf.jsdelivr.net/npm/@docsearch/js/dist/umd/index.min.js"></script><script>(() => {
+  docsearch(Object.assign({
+    appId: 'BAFEL7A6K1',
+    apiKey: '89fcb5961984c5c054bf04149f345f38',
+    indexName: 'mofan212io',
+    container: '#docsearch',
+    placeholder: '输入关键字进行搜索',
+  }, null))
+
+  const handleClick = () => {
+    document.querySelector('.DocSearch-Button').click()
+  }
+
+  const searchClickFn = () => {
+    btf.addEventListenerPjax(document.querySelector('#search-button > .search'), 'click', handleClick)
+  }
+
+  searchClickFn()
+  window.addEventListener('pjax:complete', searchClickFn)
+})()</script></div></div></body></html>

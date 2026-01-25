@@ -1,0 +1,789 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>为什么我们总是在防御 | Mofan</title><meta name="author" content="默烦,cy.mofan@foxmail.com"><meta name="copyright" content="默烦"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="《为什么我们总是在防御》，约瑟夫·布尔戈著，姜帆译。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="为什么我们总是在防御">
+<meta property="og:url" content="https://mofan212.github.io/posts/Why-Do-I-Do-That/">
+<meta property="og:site_name" content="Mofan">
+<meta property="og:description" content="《为什么我们总是在防御》，约瑟夫·布尔戈著，姜帆译。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/171.webp">
+<meta property="article:published_time" content="2025-12-20T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-12-21T16:00:00.000Z">
+<meta property="article:author" content="默烦">
+<meta property="article:tag" content="Reading">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/171.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "为什么我们总是在防御",
+  "url": "https://mofan212.github.io/posts/Why-Do-I-Do-That/",
+  "image": "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/171.webp",
+  "datePublished": "2025-12-20T16:00:00.000Z",
+  "dateModified": "2025-12-21T16:00:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "默烦",
+      "url": "https://mofan212.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/Why-Do-I-Do-That/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":true,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 默烦","link":"链接: ","source":"来源: Mofan","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://testingcf.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '为什么我们总是在防御',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="referrer" content="no-referrer-when-downgrade" /><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/css/myStyle.min.css"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css" /><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css" /><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Mofan" type="application/atom+xml">
+</head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+btf.addGlobalFn('pjaxSend', () => {
+  Pace.restart()
+}, 'pace_restart')
+
+</script><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources/css/minimal.min.css"/><script src="https://testingcf.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/post_top_img.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Mofan</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">为什么我们总是在防御</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-12-20T16:00:00.000Z" title="发表于 2025-12-21 00:00:00">2025-12-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-21T16:00:00.000Z" title="更新于 2025-12-22 00:00:00">2025-12-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Reading/">Reading</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">12.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>36分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;距离本文上次更新已经过去&quot;,&quot;messageNext&quot;:&quot;天，请注意时效性。&quot;,&quot;postUpdate&quot;:&quot;2025-12-22 00:00:00&quot;}" hidden></div><p>封面来源：由博主个人绘制，如需使用请联系博主。</p>
+<h1 id="1-读后感"><a class="header-anchor" href="#1-读后感"></a>1. 读后感</h1>
+<h2 id="1-1-阅读感受"><a class="header-anchor" href="#1-1-阅读感受"></a>1.1 阅读感受</h2>
+<p>行文有些拖沓，总是在介绍当前内容时提到会在后续介绍更多内容，导致沉浸感打折扣，影响阅读体验。</p>
+<p>文中运用了许多「长难句」（又长、又难读懂），对于这些句子总是需要读很多遍才能理解其中的含义，这导致整个阅读过程费时费力（不排除是翻译的问题）。</p>
+<p>每个章节后都会有一个练习，并且内容较多。在这之后，还有针对练习的分析，此时需要不断结合练习与分析才能更好地理解当前章节的内容。对我个人而言，我并不喜欢这样的形式，尽管这种模式可以让阅读更深刻，但也削弱了沉浸感，我更喜欢作者将其观念反复植入内容中，使读者能够在阅读过程中潜移默化地进行理解。</p>
+<p>不仅如此，这些练习会要求读者不断回忆过去，甚至要求详细地写下来。我认为这是一种思维反刍，我并不喜欢这样。这种做法不仅可能会加重我的焦虑，而且我记性确实不太好，「详细地写下来」的要求有些强人所难。</p>
+<p>尽管如此，<strong>我依旧认为这是一本值得反复阅读的书籍。</strong> 一方面是其中的内容确实很有价值，对自己、他人的防御机制有了更多的了解，另一方面是花费十多个小时读完后，只理解了其中一小部分内容，更多的内容需要经过反复阅读后才能充分理解，除去翻译的原因，这与本书的知识密度相关，一个小段落里往往隐藏着好几个知识点。</p>
+<p>总得来说，这本书的阅读体验并不好，<strong>但它依旧是一本优秀的书，</strong> 如果可以静下心来慢慢阅读，「嚼碎」其中的长难句，依旧能够有许多的收获。</p>
+<p>如果决定要阅读这本书，这里有一个请务必采纳的建议：在「第 2 章 - 3 种常见的心理困扰」的末尾有一个练习，练习中有 3 类陈述，每类陈述里有两组。阅读所有陈述，选出其中最能代表自己情况的陈述，记录下选择的组号。其中可能存在多组都符合的情况，也请一并记录。这个组号十分重要，会在书的第二部分里反复提及，以便读者更好地了解自己的防御机制。</p>
+<h2 id="1-2-章节概括"><a class="header-anchor" href="#1-2-章节概括"></a>1.2 章节概括</h2>
+<p>在第一部分（第一章到第三章），作者概括性的介绍了心理防御机制，提出心理防御机制是一种无形的应对方式，让我们将不可接受的想法和感受排除到意识之外。心理防御机制的产生是正常的，但如果变得过于根深蒂固，就会影响我们的生活、阻碍我们的成长。</p>
+<p>过度的心理防御机制体现在 3 种常见的心理困扰：</p>
+<ol>
+<li>对需要与依赖的感受</li>
+<li>应对强烈情绪的能力</li>
+<li>陷入羞耻感和低自尊</li>
+</ol>
+<p>在介绍这 3 种心理困扰时，作者使用婴儿的行为来进行论述。或许是因为婴儿许多的做法更多是出于本能，受情绪影响小，从婴儿的行为进行论述更能表现每个人内心的本能反应。</p>
+<p>在第二部分（第四章到第十一章），作者介绍了 10 种心理防御机制：</p>
+<ol>
+<li>压抑</li>
+<li>否认</li>
+<li>置换</li>
+<li>反向形成</li>
+<li>分裂</li>
+<li>理想化</li>
+<li>投射</li>
+<li>控制</li>
+<li>思考</li>
+<li>羞耻防御</li>
+</ol>
+<p>这 10 种心理防御机制并不是独立的，它们更像是你中有我，我中有你。</p>
+<p>在第三部分（第十二章到第十四章），作者教导我们如何放下防御并找到应对防御的有效方法。防御机制是有惯性的，当我们心烦意乱时，会很容易地触发这些防御机制。防御机制是难以摆脱的，我们应该充分地了解自己，认识到自己的防御机制，形成个人应对困难的方式，自己才能开始成长。真正的改变依赖于做出的选择，依赖于在这一生中不断做出的选择，只有通过反复做出不同的选择，才能养成新的习惯。</p>
+<h1 id="2-摘录与想法"><a class="header-anchor" href="#2-摘录与想法"></a>2. 摘录与想法</h1>
+<h2 id="第-1-章-我所不了解的自己"><a class="header-anchor" href="#第-1-章-我所不了解的自己"></a>第 1 章 我所不了解的自己</h2>
+<ul>
+<li>
+<p>「弗洛伊德式口误」(Freudian slip)，这指的是一种语言上的差错，反映了某些说者无意透露的真相。</p>
+</li>
+<li>
+<p>许多人能从某些行为（例如「忘记」某项令人厌倦的职责或琐事）背后推断出无意识的动机：并非此人故意忽视自己的承诺；相反，遗忘的现象暴露了他不愿履行承诺的想法。</p>
+</li>
+<li>
+<p>忽视和口误通常会揭示某些我们不曾意识到、不想承认（哪怕是向自己承认）的隐情。</p>
+</li>
+<li>
+<p>无意识中承载的想法和感受对我们来说，要么过于痛苦，要么与我们的道德和价值观抵触，有损我们的自我意象。换句话说，我们不想知道自己无意识的内容。如果我们真的想知道，这些想法和感受当初就不会进入无意识。</p>
+</li>
+<li>
+<p>心理防御机制是一种无形的应对方式，使我们将不可接受的想法和感受排除到意识之外。在此过程之中，心理防御机制悄悄地扭曲了我们对现实的感知，包括我们对人际关系和自身情绪的感知。</p>
+</li>
+<li>
+<p>这就是心理防御的内在问题：对于我们每个人来说，尽管在应对人生中不可避免的痛苦时，防御是必要的、有用的，可一旦它们变得过于根深蒂固，就会阻碍我们，不让我们触及我们需要面对的重要情感。</p>
+</li>
+<li>
+<p>屏蔽我们自身的大部分情绪体验会让我们感到耗竭，削弱我们在生活中做出应对的力量与能力。</p>
+</li>
+<li>
+<p>心理防御机制往往会转移或误导我们某些最强烈的情感，导致我们做出与自身需求南辕北辙的行为，不能得到真正需要的东西。这可能会带给我们自我挫败感，甚至使我们产生自毁倾向。</p>
+</li>
+<li>
+<p>如果你屏蔽了自己对需要的觉知，你就无法建立真正的亲密关系。</p>
+</li>
+<li>
+<p>逃避事实能让我们当下好受一些，但长远来看，它只会把事情弄得更糟。</p>
+</li>
+<li>
+<p>心理防御机制只管此时此地，不考虑明天。它们就像一种反射，不假思索，只关注如何避开当下的痛苦，不考虑这样做的长期代价。</p>
+</li>
+<li>
+<p><strong>2025/12/01 发表想法</strong></p>
+<p>是「很难」，不是「不可能」，尝试改变，就会进步</p>
+<blockquote>
+<p>原文：人类是遵循习惯的动物，改变是很难的。</p>
+</blockquote>
+</li>
+<li>
+<p>事实上，我们会倾向于形成一些特有的、习惯性的防御，或者形成几组防御，而这些惯常的逃避痛苦的方法会影响我们完整人格的塑造。</p>
+</li>
+<li>
+<p>威廉·赖希相信，一个人的人格，或者说「整体性格特征，是一种浓缩的防御机制」，这种「防御机制」与其他任何心理防御一样，具有逃避的功效。</p>
+</li>
+<li>
+<p>我们的语言里充满了总结他人人格特点的表达方式，而这些人的人格反映了他们特有的交往方式。</p>
+</li>
+<li>
+<p>不同的文化可能会对不同的情绪持有容忍或谴责的态度，从而塑造了我们的人格，以及我们规避不被社会接纳的情绪的方式。</p>
+</li>
+<li>
+<p>每当有人用批评的言语来评论我们，或者用「所有事情」和「总是」这样的词来攻击我们时，不论他们的观察有多准确，我们自然都很难听进去。</p>
+</li>
+<li>
+<p>心理防御机制的基本定义：我们为了逃避痛苦而对自己撒的谎。</p>
+</li>
+<li>
+<p><strong>2025/12/03 发表想法</strong></p>
+<p>简单来说：急了，戳到痛处了</p>
+<blockquote>
+<p>原文：使用了某种心理防御机制，我们自然而然地会阻抗任何可能唤醒那种痛苦的事物。</p>
+</blockquote>
+</li>
+<li>
+<p>请尽量对自己保持诚实和不评判的态度。试着只关注事实（你真实的感受、你未经修饰的反应），而不是你觉得自己应该做出什么回应。不要逼迫自己做出改变。</p>
+</li>
+</ul>
+<h2 id="第-2-章-3-种常见的心理困扰"><a class="header-anchor" href="#第-2-章-3-种常见的心理困扰"></a>第 2 章 3 种常见的心理困扰</h2>
+<ul>
+<li>
+<p>生而为人，就必然脆弱。—— 诺曼·O.布朗(Norman O. Brown)</p>
+</li>
+<li>
+<p>情绪反应系统能帮助我们在关键情况下开展应对，并迅速对威胁性刺激源做出反应。</p>
+</li>
+<li>
+<p>3 种常见的心理困扰：</p>
+<ul>
+<li>
+<p>在婴儿时期，我们是全然脆弱与无助的，如果我们的需求没能得到满足，如果我们的父母很早就让我们觉得这个世界是不安全的，这种经历会影响我们一生中信任与依赖他人的能力。</p>
+</li>
+<li>
+<p>如果照料者让我们失望，无法为我们提供需要的情感支持，我们将始终难以管理自己的情绪。</p>
+</li>
+<li>
+<p>我们每个人都需要觉得自己是重要的，在世界上有一席之地；我们需要内在的价值感，也需要感觉到我们生活中的其他人（我们「聚落」中的人）重视我们、尊重我们。如果我们的早期环境无法为我们提供这种个体价值感与重视，我们就会陷入终生的羞耻感与低自尊的问题里。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>如果有这些心理困扰，需要：</p>
+<ul>
+<li>容忍需要与依赖的存在，将它们看作关系中不可缺少的部分；</li>
+<li>管理强烈的情绪；</li>
+<li>培养自尊（相对于羞耻感与缺损感）。</li>
+</ul>
+</li>
+</ul>
+<h2 id="第-3-章-我们的情绪清单"><a class="header-anchor" href="#第-3-章-我们的情绪清单"></a>第 3 章 我们的情绪清单</h2>
+<ul>
+<li>
+<p>没有痛苦就没有清醒的意识。—— 卡尔·荣格(Carl Jung)</p>
+</li>
+<li>
+<p>我们需要接纳这种生而为人的现实：我们有许多无法避免的情绪。</p>
+</li>
+<li>
+<p>情绪是一种短暂的体验，它们来来去去，肯定没有人会一直保持一种情绪。既然如此，你不可能获得「快乐」，就好像你不可能达到某种情绪状态，并且一直待在这个状态里一样。</p>
+</li>
+<li>
+<p>总会有事情出错，意外也总会发生。沮丧、失望、愤怒、悲伤与哀痛都是生而为人不可避免的体验。最后，每个人都必须面对自己必然走向死亡的事实。</p>
+</li>
+<li>
+<p><strong>2025/12/08 发表想法</strong></p>
+<p>弗洛伊德的原因论</p>
+<blockquote>
+<p>原文：我们从子宫出生时遇到的环境如何帮助或阻碍我们应对主要心理困扰，会在很大程度上影响我们会成为什么样的人。那些最痛苦的、我们终生都在与之斗争的情绪，就是我们最初感受到的情绪。</p>
+</blockquote>
+</li>
+<li>
+<p>许多成年人害怕新的、不熟悉的体验。这样的恐惧会让我们成为风险厌恶者，不愿意放弃熟悉的事物和追求未知的事物，不愿意冒险接受一份新工作、新关系，甚至新发型。</p>
+</li>
+<li>
+<p>我们的闷闷不乐是一种愤怒的表达，是由不愉快的体验引起的，而我们往往会把这种愤怒指向身边的人，就好像这是他们的错。</p>
+</li>
+<li>
+<p>一个足够好的环境能使我们产生自信，拥有忍受「情绪风暴」的能力。</p>
+</li>
+<li>
+<p>有太多父母沉浸在自身的需要与个人的困扰里，以至于他们心中容不下其他人。</p>
+</li>
+<li>
+<p>羞耻感是童年困境的痛苦遗产，是最强有力、最不被人理解的情绪。这种情绪迫使我们过度依赖心理防御机制。</p>
+</li>
+<li>
+<p>当嫉妒与羞耻感结合在一起时，就会变成无法忍受、破坏性极强的情绪。为了得到解脱，我们可能想要毁掉我们嫉妒的客体。</p>
+</li>
+<li>
+<p>嫉妒与妒忌都是正常的情绪，但当它们与羞耻感结合时，就会变得使人难以忍受。</p>
+</li>
+<li>
+<p>共情就是想象自己处在别人的位置上会怎么样，所以就情绪而言（进入他人的情绪体验），你要能够忍受那些情绪，这样才能与他人感同身受。</p>
+</li>
+<li>
+<p>我们可能会发展出过度活跃的共情，过度关注他人的需要。这种共情的目的是实现某种理想的自我意象，从而与羞耻感对抗，它与未得到满足的需要有关，而不是真正的慷慨。</p>
+</li>
+<li>
+<p>虽然标签能为我们提供某些安慰，就好像我们真正知道某些有关自己或他人的重要信息，但实际上，这些人造的、割裂的分类掩盖了人类体验极大的多样性。人不等同于类别，没有人能完全符合任何类别的描述。</p>
+</li>
+</ul>
+<h2 id="第-4-章-压抑与否认"><a class="header-anchor" href="#第-4-章-压抑与否认"></a>第 4 章 压抑与否认</h2>
+<ul>
+<li>
+<p>在弗洛伊德阐述压抑的论文中，他用一句话描述了这个概念：「压抑的实质仅仅是避开并远离某些事物，把它们排除到意识之外。」</p>
+</li>
+<li>
+<p>进入无意识领域的所有事物，一定都是被我们压抑到觉知以外的东西。</p>
+</li>
+<li>
+<p><strong>2025/12/09 发表想法</strong></p>
+<p>那不就是内耗？</p>
+<blockquote>
+<p>原文：压抑不会只出现一次，而是一个需要持续付出心理能量的、阻止被压抑的事物返回意识的过程。</p>
+</blockquote>
+</li>
+<li>
+<p>在大多数自助书里，心理成长似乎主要在于放下非适应性的行为和思维模式，掌握新的认知行为技术，并不断地进行自我肯定。但如果你不理解压抑的运作方式，就无法获得真正的成长，因为你很难接触自己逃避的那部分痛苦。</p>
+</li>
+<li>
+<p>愤怒会不可避免地以隐秘的方式表现出来，比如幽默而微妙的挖苦或讽刺。</p>
+</li>
+<li>
+<p>许多压抑敌意的人会通过隐秘、间接的方式将敌意表达出来，而他们通常不会意识到这种表达。</p>
+</li>
+<li>
+<p>我们不会直接说出自己的愤怒，或采取攻击性的行为，相反，我们可能会在做某件重要的事情时拖延再三、抱怨不止，并且顽固地拒绝合作，或者仅仅是把这回事「忘」得一干二净。</p>
+</li>
+<li>
+<p>应对成瘾的基础就是承认自己是成瘾者，而不是仍然否认这一点。</p>
+</li>
+<li>
+<p>一旦某个无法接受的事实存在，它与我们的希望与信念相悖，我们就会否认它的真实性。</p>
+</li>
+<li>
+<p>所有的心理防御机制都是在无意识层面，在我们的觉察之外起作用的 —— 如果我们知道自己在做什么，防御就失效了！</p>
+</li>
+<li>
+<p>许多家庭不鼓励表达需要，重视自力更生。其结果是，这些家庭里的成员学会了否认自己的需要，并且往往变得极度渴望成功。</p>
+</li>
+<li>
+<p>如果我们完全剥离了自己的需要，极端的压抑就会让我们虚弱不堪。否认我们对他人的需要与依赖可能会导致我们对他人的贬低，从而损害我们的关系。</p>
+</li>
+<li>
+<p>你经常能在成瘾型人格者身上看到一种动力模式，即对某种物质的偏好，这些人更喜欢能够购买、在理论上能够控制的东西，而不是不可靠的人际接触。</p>
+</li>
+<li>
+<p>愤怒可以促使我们离开具有破坏性的关系，在生活中做出我们需要的改变。无论是在家、在工作场合，还是在更广大的社会情境中，愤怒都可以帮我们与不公做斗争。</p>
+</li>
+<li>
+<p>否认自身缺陷感的人经常刻意地营造优越感，炫耀那种优越感，并要求得到他人的赞赏。</p>
+</li>
+<li>
+<p>频繁地指责他人会导致关系中的剧烈冲突，让受到指责的人想要远离亲密的接触。因此，指责者的朋友、同事或爱的人都会与他保持情感距离。</p>
+</li>
+<li>
+<p>特别害怕强烈情绪的人可能会否认某种特定的感受，但他们会倾向于压抑自己所有的情绪。如果你有时觉得自己不能尽情享受生活，在工作与关系中很少存在情绪的参与，那你可能有着强有力的压抑。</p>
+</li>
+<li>
+<p>每个人都在一定程度上依赖压抑与否认，但如果你的依赖过度了，你就会发现自己的情感生活受到了限制，难以建立任何深度的关系。</p>
+</li>
+<li>
+<p>当我们主动选择做某些事情，而不是去做那些在我们看来最自然和最容易的事情时，真正的心理成长才最有可能发生。</p>
+</li>
+</ul>
+<h2 id="第-5-章-置换与反向形成"><a class="header-anchor" href="#第-5-章-置换与反向形成"></a>第 5 章 置换与反向形成</h2>
+<ul>
+<li>即使在照顾孩子方面分工更公平的夫妻心里，也可能暗暗滋生怨愤，夫妻双方都可能觉得自己承担的那部分职责更繁重。</li>
+<li>偶尔的愤怒与怨恨似乎是育儿过程的一部分。</li>
+<li>如果一个人唤起了我们的情绪，而将这种情绪指向此人是不可接受或太过危险的，我们就会将这种情绪置换到另一个人身上。</li>
+<li>父亲更加重要且常被忽视的作用，即当妻子无法也不能对孩子发火的时候容纳她的愤怒。</li>
+<li>反向形成是指将一种不可接受的感受或冲动变成与之相反的感受或冲动。</li>
+<li>如果他们过度强调某种表现，过度看重被人视为「好人」，这通常说明他们正在无意识中与另一些完全不同的感受做斗争，尤其是愤怒与憎恨。</li>
+<li>无羞耻是指炫耀某种特定的行为，对某种社会规范或价值观公开地表达反抗。此人完全不是漠不关心，也不是真的以此为荣。相反，无羞耻的行为体现了他对于无法忍受的羞耻感的反向形成。</li>
+<li>如果无意识的羞耻感主导了一个人的感受，他就会害怕被人真正地看见。他害怕自己在别人眼中是有缺陷的，甚至是畸形的，因此他努力保持美好的外表，从而引起他人的赞赏。</li>
+<li>无意识中对被看见的恐惧，变成了意识里对关注的渴求。</li>
+<li>许多人不能忍受自己需要别人，或者不能容忍自己在别人不能立即给他们想要的东西时的沮丧感。</li>
+<li>如果一个人对软弱和过度需要他人的人表示轻蔑，那他可能在逃避自身想要得到照顾的愿望。</li>
+<li>只要反应的强度看上去不太合理，就可能反映了一种从真正的愤怒客体（伴侣、朋友或家人）身上置换而来的愤怒。</li>
+<li>同事是否经常对你的行为产生一些让你意外的反应？你是否经常说：「可我不是那个意思！」对方可能对你在无意识中表达的感受做出了回应，而那种感受与你在意识中的意图恰恰相反。</li>
+<li>深受羞耻感困扰的人经常把羞耻感置换到自己的外表或财产上。对内在缺陷的痛苦感受可能会表现为过度关注自身丑陋的外貌、寒酸的衣着、「低端」的车，以及令人难堪的公寓等方面。</li>
+<li>不寻常或不合理的情绪强度是心理防御机制起作用的信号。</li>
+<li>如果你发现自己经常在心里为自己辩解，在头脑里与他人争论，试图证明他们错了，而你是对的，那么这说明你可能在为心理防御辩解。</li>
+</ul>
+<h2 id="第-6-章-分裂"><a class="header-anchor" href="#第-6-章-分裂"></a>第 6 章 分裂</h2>
+<ul>
+<li>
+<p>爱一个人越深，就越为他痴狂。爱一个人越深，就越恨不得让他去死！—— 出自百老汇音乐剧《Q大道》(Avenue Q)</p>
+</li>
+<li>
+<p>强烈的爱有时会被暴怒所替代。</p>
+</li>
+<li>
+<p>我们更常使用矛盾这个词的另一个含义 —— 无法下定决心，或不确定我们最想做什么。这说明我们被不止一个方向上的渴望吸引着。</p>
+</li>
+<li>
+<p>当我们因为矛盾而感到不舒服时，我们通常想要尽快消除「该做什么」的不确定性。</p>
+</li>
+<li>
+<p>有时我们随便做出一个选择，只是为了消除那种不确定性，因为我们实在无法忍受了。</p>
+</li>
+<li>
+<p>F. 斯科特·菲茨杰拉德(F. Scott Fitzgerald)曾经说过：「检验一流智力的标准就是在头脑中同时持有两种相反观念，但仍能保持行动的能力。」</p>
+</li>
+<li>
+<p>非黑即白的思维方式反映了一种叫作「分裂」的防御机制。</p>
+</li>
+<li>
+<p>如果你发现自己在与某人争论，而对方坚信自己掌握了绝对的真理，你就会理解这是一种多么令人沮丧、毫无希望的体验。</p>
+</li>
+<li>
+<p><strong>2025/12/13 发表想法</strong></p>
+<p>我的一个粗鄙的理解：憎恨就像你我都有的生殖器官一样，这是事实，但作为文明人，我们不能随时随地向外展示它。😂</p>
+<blockquote>
+<p>原文：憎恨是生活中的事实，而应对憎恨，学着克制憎恨的表达，尤其是在我们的重要关系中克制憎恨，是成为文明人的过程。</p>
+</blockquote>
+</li>
+<li>
+<p>在情感的领域里，分裂意味着把爱与恨的冲动分隔开，并让它们保持完全分离的状态。这通常意味着把憎恨转移到另一个人身上，而不对我们真正憎恨的对象心怀恨意。</p>
+</li>
+<li>
+<p>在恋爱关系中，我们需要容忍愤怒，有时甚至还要容忍憎恨，而不要做出破坏性的行为，在情绪爆发的时候伤害我们爱的人，这种能力让我们得以与另一个人长期维持亲密关系。这个道理也适用于我们的友谊与家庭关系。</p>
+</li>
+<li>
+<p>容忍矛盾情绪意味着能够思考并真正相信：我可能现在是恨你的，我可能现在想把你大卸八块，但我知道这种感受会过去，而我最终会重新找回对你的爱。</p>
+</li>
+<li>
+<p>如果你不能忍受五味杂陈的情感，就难以维持亲密的人际关系。</p>
+</li>
+<li>
+<p>分裂会导致对他人的感知产生巨大的起伏，一个人可能一夜之间就会从神坛跌进垃圾堆。非黑即白的思维方式更是家常便饭。</p>
+</li>
+<li>
+<p>如果人们无法忍受依赖他人必然带来的沮丧，就可能会很快坠入爱河，又很快一刀两断，他们起初会相信新伴侣是完美无缺的，然后又把他们看得毫无价值，弃之如敝履。</p>
+</li>
+<li>
+<p>强烈而喜怒无常的情绪是分裂的标志。</p>
+</li>
+<li>
+<p>在一天之内，有些人可能会在极端的情绪之间来回变化。你对身边的人的看法可能会很快地从敬爱变成鄙视。</p>
+</li>
+<li>
+<p>如果我们处在个人价值感的挣扎里，当我们爱的人让我们沮丧或失望时，我们往往会把这种行为当作对我们个人的轻视，这样会让我们受到深深的伤害。</p>
+</li>
+<li>
+<p>请记住，所有的情绪都是暂时的，都是会过去的。</p>
+</li>
+</ul>
+<h2 id="第-7-章-理想化"><a class="header-anchor" href="#第-7-章-理想化"></a>第 7 章 理想化</h2>
+<ul>
+<li>理想是完美、美好或优秀的标准，理想化意味着把普通的事物或人抬高到完美的地位上。</li>
+<li>理想化地看待一种经历，就是相信这种经历会完全满足我们，或者解决我们所有的问题。例如，一个人总是相信，只要发生这样或那样的事，生活中的所有事情都会变得很完美。</li>
+<li>理想化是对抑郁情绪的防御，一旦这种防御失效，他就会再次触及那些他原本想要逃避的感受。</li>
+<li>躁郁症与连续多次的恋爱都反映了一种逃避到理想心态（迷恋或亢奋），从而逃避掉无法忍受的痛苦的企图。</li>
+<li>理想化的恋爱代表了一种轻度躁狂，其目的可能是治愈无法忍受的抑郁情绪。</li>
+<li>对理想化恋爱的追寻，意味着渴望达到完美的状态，希望一劳永逸地解决所有问题，消除所有的痛苦与苦难。</li>
+<li>浪漫之爱取决于对爱人的理想化，而更加现实的爱涉及对对方更加复杂的理解，这种理解往往包括对对方令人讨厌的特质或惹人生气的行为的理解。理想化的恋爱则容不下这些困难的情绪。</li>
+<li>最好的情况是，当理想化逐渐消退的时候，我们能发自内心地欣赏伴侣，并能与伴侣在这种欣赏的基础上产生真正的亲密。</li>
+<li>在我们的文化中，我们通过崇拜名人来逃避平凡人的庸常。</li>
+<li>我们迷恋著名影星、运动员的生活，也能为我们在大街小巷、高中校园以及公司大楼里的闲谈提供素材。这里涉及了一定程度的替代性满足，即我们短暂地参与了那些名人光鲜亮丽的生活，逃离了我们平凡的世界。</li>
+<li>有些人相信「只要」某件事发生，他们就会得到渴望已久的幸福。他们通常把未来的事件理想化了，因为他们觉得自己无法应对真实的困难，这种困难有时是外部的，但通常是内部的。</li>
+<li>自恋者依靠他人的欣赏和羡慕来支撑对自我的理想化。对自我的理想化是自恋者防御羞耻感的主要方式。</li>
+<li>试图完全地、一劳永逸地解决内在或外在的复杂问题是理想化的标志。由于理想化经常与分裂同时出现，所以也会出现在好与坏（完美与无价值）、爱与恨的态度转换中。</li>
+<li>过度依赖理想化这一心理防御机制的人很难接纳相互依赖的关系，因为在这种关系里，沮丧与失望是不可避免的。当这些感受出现的时候，他们对某人的态度可能会从理想化转变为贬低，甚至憎恨。</li>
+<li>理想化看待他人的人往往想要与另一个人建立完美的亲密关系，有时几乎要将彼此的身份认同合二为一。</li>
+<li>有些人对朋友和恋爱对象持有不近人情的标准，他们也在使用理想化这种防御，这往往是因为他们无法忍受真实关系中必然出现的沮丧与失望。</li>
+<li>在躁狂—抑郁的循环中，人们会在过度乐观和绝望悲观这两种状态间转换，在这个循环中，既存在分裂，也存在理想化。</li>
+<li>为什么你一周前似乎还春风得意，对生活和未来充满热情，一周后就跌入了谷底，却找不出明显的缘由。这可能是理想化的作用。</li>
+<li>请留意理想化事物让你失望时你产生的痛苦感受。那些感受可能不是失望的结果，而是你寻求理想化事物的原因。</li>
+</ul>
+<h2 id="第-8-章-投射"><a class="header-anchor" href="#第-8-章-投射"></a>第 8 章 投射</h2>
+<ul>
+<li>
+<p>当我们向朋友大倒苦水时（「宣泄」或「倾吐」），我们把情绪的负担转移到了另一个人身上。</p>
+</li>
+<li>
+<p>就像你一整晚聆听朋友的倾诉后感觉糟糕一样，父母会吸收孩子的痛苦，感到非常不舒服，以至于他们觉得自己需要采取行动。</p>
+</li>
+<li>
+<p>投射是亲子关系中正常而常见的部分，也是其他大多数关系偶尔会有的特点。</p>
+</li>
+<li>
+<p><strong>2025/12/14 发表想法</strong></p>
+<p>是不是可以这么认为：如果在婴儿时期没有充分得到照料者的帮助，在成年以后，这些人往往难以忍受那些不好的情绪。 在此不妨大胆推测，作者接受了弗洛伊德的许多观念，包括其中的原因论。相比而言，我更喜欢阿德勒的目的论，这不是说这两种观念有孰优孰劣之分，更多是一种无奈，此刻的我没法改变过去，能做的只有活在当下，把此刻做的更好。</p>
+<blockquote>
+<p>原文：也就是说，在照料者的帮助下，婴儿无法忍受的恐惧、痛苦、焦虑等情绪，会逐渐变得能够容忍。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>2025/12/14 发表想法</strong></p>
+<p>翻译得太雅了，我来翻译一下：「屎往低处流」</p>
+<blockquote>
+<p>原文：正如俗话所说，坏事只会顺流而下(shit travels downstream)。</p>
+</blockquote>
+</li>
+<li>
+<p>当我们无法忍受自己的感受时，替我们承担这些感受就成了我们所爱之人的职责（有时是个不怎么受欢迎的职责）。扛起这种负担（投射）是关爱与照料他人的一部分。</p>
+</li>
+<li>
+<p>任何持续的批评或严厉的态度都会让内疚变得无法忍受，这时，许多人会推卸所有的责任，把自己的内疚（良心的不安）投射到外界，从而摆脱这种感受。</p>
+</li>
+<li>
+<p>恋爱中的人往往非常渴望像药物成瘾一样的迷恋，不愿让自己觉察到爱人身上任何不好的人格特质，这就是完美之爱的幻想。</p>
+</li>
+<li>
+<p><strong>2025/12/14 发表想法</strong></p>
+<p>放下助人情节，尊重他人命运</p>
+<blockquote>
+<p>原文：如果一个人在自欺欺人，不愿面对真相，你却试图让他睁开眼睛，你的行为可能会让他觉得很糟糕，甚至怀有敌意，他很容易就会把你当作敌人。</p>
+</blockquote>
+</li>
+<li>
+<p>伴侣中的一方摆脱了自身情感生活中的一大部分，并将其投射进了另一方心里，让对方替他保管这部分情感。</p>
+</li>
+<li>
+<p>投射作为性格的一个方面会发生在觉知以外，也就是说，它是无意识的。投射的过程在这样的男人的性格中根深蒂固，且受到了他婚姻的支持：他娶了一个女人，这个女人替他承担了所有他无法忍受、不愿承认的感觉。</p>
+</li>
+<li>
+<p>当人们依赖投射这种防御机制时，他们往往会试图证实投射的内容，也就是通过说一些或做一些事来让对方产生被自己否认的情绪，从而说服自己防御机制已经生效了。</p>
+</li>
+<li>
+<p>他们的焦虑反映了对某些情绪的恐惧，他们害怕这种情绪会回来，淹没他们。这种感觉很可怕，而且他们不理解自己害怕的是什么，于是就更害怕了。</p>
+</li>
+<li>
+<p>理想化地看待自我并炫耀自己的优越性的人，也想让你对自己感觉不好 —— 事实上，这就是他们这样做的目的。</p>
+</li>
+<li>
+<p>那些虚张声势、自吹自擂的人所投射的，是自卑的感觉。他们在无意识中想要伤害你的自尊，想要让你满心嫉妒，想要让你显得不如他们，这样他们才能感到比你优越，在你之上。</p>
+</li>
+<li>
+<p>足够成熟的关系中的情感是相互的，双方都依赖彼此来满足自己的需要，并且也能反过来满足对方的需要。</p>
+</li>
+</ul>
+<h2 id="第-9-章-控制"><a class="header-anchor" href="#第-9-章-控制"></a>第 9 章 控制</h2>
+<ul>
+<li>迷信说明我们渴望掌控这个不可预测的世界，我们渴望感到自己能对发生在自己身上的事情有一定程度的控制，而事实上，我们往往是非常无助的。</li>
+<li>无助的体验是痛苦的、难以承受的，试图控制我们的环境，减轻这种无助，是我们的自然反应。</li>
+<li>我们会尽力控制不可预测的环境，但事实上，我们比自己愿意承认的更加脆弱无力。</li>
+<li>我们可以把秩序、传统和惯例看作健康的心理防御机制 —— 为了在这个很大程度上不可预测的世界里生存，我们对自己说了一些小小的「谎言」来逃避存在性焦虑。</li>
+<li>自残者的想法：如果我现在在这里割伤自己，我就能决定痛苦发生的时间，以及痛苦给我带来的感受。我想让痛苦持续多久，它就会持续多久。</li>
+<li>每当我们与其他人建立关系时，对方对我们而言就会变得重要起来，从而能够影响我们的感受。一旦我爱上了你，我就给予了你伤害我的巨大权限。如果你成了我的朋友，你就能用冷漠无情的行为伤害我的感情。</li>
+<li>人们结婚的一个原因就是希望在面对妒忌、对被遗弃的恐惧等可怕情绪时，能使生活有基本的可预测性。</li>
+<li>有些人会通过自己的无助来控制他们的伴侣。虽然他们看上去极度黏人、无能，但他们往往有着一种未被意识到的、控制伴侣的幻想。</li>
+<li>看起来极度黏人、无助的人往往无法忍受真正的依赖。</li>
+<li>有时，拖延的背后有着相同的动力模式，就是你希望自己拖得足够久，别人会替你做这件事。</li>
+<li>透过表面上的无助，你会发现这些人无法容忍真实的需要，并且怀有胁迫、控制的隐匿幻想。</li>
+<li>尽管人际关系会让我们在某些方面变得更强大，但它也会让我们变得更脆弱，并将影响我们自我感受的权力拱手相让。</li>
+<li>所有人都会在一定程度上管理他人对自己的看法。</li>
+<li>出于防御的目的，努力控制别人对自己的看法，是自恋的核心。</li>
+<li>为了完全掌控自己的生活，过度依赖控制的人绝不会允许自己依赖另一个人，他总是保留「按照自己的想法生活，做自己想做的事」的权利。</li>
+<li>过度依赖控制来管理情绪的人，可能看上去性情平和，或者也可能有些疏离。</li>
+<li>我们可以把强迫行为看作高度仪式化的例行事务，它们有着同样的目的，即控制无法管理的情绪，以及与之相伴的无助感。</li>
+<li>有时深受羞耻感困扰的人可能会故意贬低自己，以免别人来贬低他们，他们用各种方式宣布：你不能说我是个失败者，因为我已经主动指出这一点了。</li>
+<li>不要做那些最让你舒服的寻常的事，试着面对未知。留意自己的新感受。</li>
+</ul>
+<h2 id="第-10-章-「思考」"><a class="header-anchor" href="#第-10-章-「思考」"></a>第 10 章 「思考」</h2>
+<ul>
+<li>笛卡尔说，「我思，故我在」：我对自我的感知，一定程度上来自我脑海中流动的话语。</li>
+<li>有时思考会变成一种内在的谎言，让我们远离丑陋的真相，或者掩盖痛苦的现实。在这种情况下，我们其实把思考当作了一种心理防御机制。</li>
+<li>当我们不想为自己的所作所为承担全部的责任时，就会为自己的行为找借口，也就是说，我们会把自己的行为合理化。</li>
+<li>如果没有一定程度的自我欺骗，我们的生活会很艰难。</li>
+<li>合理化能使我们觉得自己生活在一个有序的世界里，这个世界依照某种上天的旨意运行，但这个宇宙其实是随机的，痛苦的产生经常是毫无缘由的。</li>
+<li>通常来说，这种合理化不是一种很强的防御：我们并没有把真相隐藏得太深，只要得到一点点帮助，只要有人摆出事实，同时不让我们觉得被批评或被指责，我们就可能在短暂的挣扎后承认事实。</li>
+<li>将体验理智化的人把许多注意力投入了大脑的思维中，因此注意不到身体里发生的变化。</li>
+<li>理智化是一种大量的、持续的努力，其目的在于将注意力从产生情绪的身体转移到没有情绪的理智中去。</li>
+<li>这类人在无意识中很害怕自己无法预测、难以控制的感受，他们为了逃避感受，躲进了没有情绪的思维领域。</li>
+<li>痛苦造成的困扰，比不上我们为防御痛苦而采取的做法造成的困扰。</li>
+<li>我们会把自己打破长期计划的行为合理化，从而满足眼下的渴望。也就是说，我们会对自己撒谎，以便立即得到自己想要的东西。</li>
+<li>当我们的长期目标或价值感与需要即刻满足的愿望相抵触时，合理化往往会出现。我们试图用谎言掩盖我们真正的动机，或者我们行为的真实结果，从而避免需要未得到满足的痛苦。</li>
+<li>合理化往往会给我们不守承诺的借口，或者会表达出我们在意识里不会承认的敌意。</li>
+<li>理智化的人害怕强烈的情绪，他们倾向于逃避所有可能激起那些情绪的情境与人际交往。这些冷淡、疏远、冷漠的人害怕强烈情绪带来的压力。</li>
+<li>每当思维的语速加快、音量升高，这就说明某些痛苦的感受即将压垮你，而你正在试图躲避这种情绪。</li>
+<li>我们会向自己重复合理化的话语，以便稳固防御。如果你发现自己在一遍又一遍地解释自己为什么不应该感到羞愧或内疚，那就要注意了。</li>
+</ul>
+<h2 id="第-11-章-羞耻防御"><a class="header-anchor" href="#第-11-章-羞耻防御"></a>第 11 章 羞耻防御</h2>
+<ul>
+<li>我将这种深层的内在缺陷感称为基本羞耻感。在基本羞耻感体验的核心，往往存在着一种无意识的感觉，这种感觉像是一种内在的丑陋感，即我们相信，如果他人真正「看见」我们，他们就会因为轻蔑与厌恶而远离我们。</li>
+<li>对于发展中的婴儿来说，当父母虐待他或给他带来创伤的时候，他对养育环境的先天期待就落空了。这种体验的确属于这个词的第 2 种含义 —— 可惜，而且会导致这个词的原始含义所代表的感受 —— 羞耻感。</li>
+<li>如果父母不断地在情感上让婴儿失望，婴儿的大脑终生都会带有这种损伤，这种损伤主要体现在自我价值感及与他人建立情感联结的能力方面。</li>
+<li>为了在出生后正常发展，我们需要父母来满足我们的需求，帮助我们在充满爱意和快乐的关系中学会管理自己的情绪，并且对世界产生安全感。</li>
+<li>基本羞耻感会随着环境的恶化而变得强烈：早期体验中的缺陷越多，缺损感就越普遍，甚至变得无处不在，基本羞耻感也是如此。孩子终生都会背负着这样的感觉。</li>
+<li>自恋是针对（无意识）羞耻感的主要防御。</li>
+<li>关注自己，重视自己，确信其他人也会重视自己，是一种很健康的心态。普通的自恋正是自尊与自信的核心。</li>
+<li>普通的自恋是对个人价值不言自明、理所当然的信念，防御性自恋与此不同，它始终要证明某些事情。</li>
+<li>在社交方面很无趣的人总是不断地谈论自己，对其他人没有任何兴趣。</li>
+<li>对于所有的自恋者来说，他们的目标都是独占他人的关注。因为他们在无意识中觉得自己是缺损的、丑陋的、无价值的，所以他们会要求他人关注他们，钦佩他们。</li>
+<li>在羞耻感中挣扎的人往往期待自己表现得很完美，从而逃避并驳斥自己的内在缺损感。他们要求自己十全十美，一旦他们没能达到这个标准，他们就会攻击自己。</li>
+<li>在羞耻感中挣扎的人往往有着非常残酷（而且有着可怕的完美主义）的超我。未能达到完美标准的代价就是残酷的自我憎恨，这种自我憎恨是对自己的完全否定。</li>
+<li>大多数有着严厉、完美主义意识的人，都很难相信我们可以随着时间的推移，一点一点地成长。</li>
+<li>自恋者否认了自己的羞耻感，并将其投射进了另一个人心里，从而战胜了自己的羞耻感。</li>
+<li>他们会从人间消失，躲进书籍与电影里，通过替代性的满足，仅凭自己的努力逃离羞耻感，丢下受损的自我。你可以把这种行为当作一种隐匿的自恋形式。</li>
+<li>他们拒绝接受这样的现实：他们必须做好真实的自己，面对自己的羞耻感与缺损，从最基本的层面上开始成长。这种彻底的自我排斥与自我憎恨带有完美主义的性质，是针对羞耻感的最后防御。</li>
+<li>有着优越感的伴侣可能会鄙视有依赖问题的人，他们可能会责备伴侣的软弱与黏人。</li>
+<li>看见其他人拥有幸福、充满爱意的关系，他们可能会产生痛苦的妒忌。他们可能会避免与这些人来往，从而逃避那些痛苦的情绪。这可能让他们孑然一身，或者只与那些不会让他们感到嫉妒或妒忌的人来往。</li>
+<li>自恋者无法忍受悔恨，必须永远正确。这样的个体会不断地试图让伴侣、家人和朋友在每件事情上都感到内疚，就好像在对他们进行人格的控诉：你应该感到内疚，因为你是个很糟糕的人。</li>
+</ul>
+<h2 id="第-12-章-改变始于接纳的心态"><a class="header-anchor" href="#第-12-章-改变始于接纳的心态"></a>第 12 章 改变始于接纳的心态</h2>
+<ul>
+<li>你永远无法摆脱你心灵中的任何东西，你只能不断成长，发展你自己的其他方面，为那些问题做出补偿。</li>
+<li>真正、持久改变的心态，始于承认这个事实：彻底的治愈与完全的转变是不可能的。只有通过充分地了解自己，发现自己有困难的方面，以及形成自己应对困难的典型方式，你才能开始成长。</li>
+<li>只有保持警惕，不断地关注自己，观察自己常用的防御如何运作，然后尽量选择不使用这些防御，你才能动摇它们对你的控制。只有通过反复做出不同的选择，你才能养成新的习惯。</li>
+<li>真正的改变依赖于你做出的选择，依赖于你在这一生中不断做出的选择。</li>
+<li>我们把痛苦掩埋在许许多多的感官噪声之下。培养改变的心态，意味着在这些噪声中开辟一个安静的空间，让你能看见自己的情绪。</li>
+<li>在一天中多次回到对呼吸的觉知，并且尝试让自己与流动的思维语言分离，或者让这些思维完全安静下来。</li>
+<li>所有的人类情绪都带有「生理唤醒、表达行为，以及意识体验」。</li>
+<li>我们先学着让内心安静下来，让注意力远离日常生活的干扰，离开我们的头脑，进入我们的身体，这样我们才可能注意到自己真正的感受。</li>
+<li>不要相信自己所有的感受。在情急之下，强烈的情绪可能会让我们觉得它们的真实性是不容否认的，而我们要是让这些情绪来决定我们的行为，往往会伤害我们自己。</li>
+<li>人类不是一直都那么友善的。</li>
+<li>改变的心态要求我们接纳自己无法摆脱这些情绪的事实，我们能做的最好的事情就是在这些情绪出现的时候学会更好的应对方式。</li>
+<li>你不是在学习如何成为一个更加开悟、更加友善，永远不必为这些问题烦恼的人，而是在试着在这些困难情绪必然出现的时候，用更健康的方式去应对它们。</li>
+<li>要试着关注并接纳自己「本来的样子」，而不是努力让自己有「应该有」的感受。</li>
+<li>一方面，不要让自己轻易地在情绪挑战面前退缩；另一方面，不要过度逼迫自己。</li>
+<li>让自己进入一种改变的心态，就意味着接纳许多难以接受的事实，并养成某些心理习惯。</li>
+<li>我们需要接纳不可避免的、痛苦的或丑陋的情绪，并对其他一些感受保持怀疑，因为那些感受可能带有防御的性质。</li>
+<li>领悟与自我觉察不会带走我们的困难情绪。相反，它们会让我们不再本能地、无意识地逃避痛苦，而是选择一种不同的、更有效的反应。</li>
+</ul>
+<h2 id="第-13-章-真正的改变源于你做出的选择"><a class="header-anchor" href="#第-13-章-真正的改变源于你做出的选择"></a>第 13 章 真正的改变源于你做出的选择</h2>
+<ul>
+<li>你改变的程度取决于你对自己有多诚实，你有多善于发现内心的谎言，也就是说，你有多善于做出明智的选择。</li>
+<li>改变是一个持续努力的过程，不完全是一次性的：有时你成功地面对了自己的痛苦，有时你陷入了旧日的习惯。</li>
+<li>你不可能一劳永逸，不可能在某一天达到圆满的状态，然后余生四处度假、高枕无忧。</li>
+<li>真实的自尊建立在接纳羞耻的现实，选择不防御的基础上。</li>
+<li>「一切都会过去」这句俗语既说明了所有实物的状态都是暂时的，也说明了我们的情绪是暂时的。迷恋终会消失，人们的爱情也会消散；在一段时间的痛苦哀悼之后，大多数人会从深深的悲痛中走出来；惊恐发作也会结束。</li>
+<li>一旦防御变得根深蒂固，它们往往会限制我们的生活，阻碍我们的情绪成长。一旦我们不再防御，我们可能需要为失去的时光、错失的机会以及失败的关系而哀伤。放下防御始终与面对痛苦有关。</li>
+<li>与心理防御机制的角力是一场终生的斗争。如果你坚持不懈，你就能持续地成长与改变，但你永远不会达到圆满的状态，永远不会变成一个全新而完全不同的你，一个不需要面对相同问题的你。</li>
+<li>选择的能力代表了我们最重要的一种自由 —— 一旦防御不再完全主宰我们的行为，以建设性的方式管理我们的情绪与行为的心理自由，将不再遥不可及。</li>
+</ul>
+<h2 id="第-14-章-与防御同在但不被其主宰"><a class="header-anchor" href="#第-14-章-与防御同在但不被其主宰"></a>第 14 章 与防御同在但不被其主宰</h2>
+<ul>
+<li>你不再像过去那样自以为是，但你依然觉得没有理由深究自己为什么厌恶吸烟的人。</li>
+<li>世界似乎不是一个黑白分明、敌我分明的世界。我们需要付出更多的努力，去平衡不同的观点，接纳不那么绝对的答案。</li>
+<li>当你对自己关心的人心怀憎恨的时候，你最好记住，你也爱着这个人，不要把所有的火气都撒在他身上。</li>
+<li>你知道那种「从此幸福地生活下去」的结局只会出现在童话和浪漫喜剧里。</li>
+<li>当你依赖那些真实的、不完美的人时，你必然会产生沮丧的感觉，而你已经能更好地容忍那种感受了。</li>
+<li>他们也知道你的缺点，尽管你有时会惹他们生气，但他们依然爱你。</li>
+<li>当你找回真正的自我，与亲爱的人重建联结时，你往往会热泪盈眶。你无法用语言来形容那种哀伤与感恩 —— 为蹉跎的岁月而哀伤，为现在的幸福生活而感恩。</li>
+<li>你不必在每场争执中都战胜对方。</li>
+<li>在大多数时间里，你为自己活在世上而感到高兴。</li>
+<li>佛陀的第一条圣谛就是「苦谛」。众生皆苦，各种痛苦与失望是人生中不可避免的部分。</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/Why-Do-I-Do-That/">https://mofan212.github.io/posts/Why-Do-I-Do-That/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Reading/">Reading</a></div><div class="post-share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/171.webp" data-sites="wechat,qq,weibo,facebook,x"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/The-Courage-to-Be-Disliked/" title="被讨厌的勇气"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/170.webp" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">被讨厌的勇气</div></div><div class="info-2"><div class="info-item-1">《被讨厌的勇气》，岸见一郎 / 古贺史健著，渠海霞译。</div></div></div></a><a class="pagination-related" href="/posts/ren-zhi-jue-xing/" title="认知觉醒"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/172.webp" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">认知觉醒</div></div><div class="info-2"><div class="info-item-1">《认知觉醒：开启自我改变的原动力》，周岭著。</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/ren-zhi-jue-xing/" title="认知觉醒"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/172.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-29</div><div class="info-item-2">认知觉醒</div></div><div class="info-2"><div class="info-item-1">《认知觉醒：开启自我改变的原动力》，周岭著。</div></div></div></a><a class="pagination-related" href="/posts/Learned-Optimism/" title="活出最乐观的自己"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/166.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-03</div><div class="info-item-2">活出最乐观的自己</div></div><div class="info-2"><div class="info-item-1">《活出最乐观的自己》，马丁·赛利格曼著，洪兰译。</div></div></div></a><a class="pagination-related" href="/posts/Attached-The-New%20Science-of-Adult-Attachment-and-How-It-Can-Help-You-Find-and-Keep-Love/" title="亲密关系与情感依赖"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/169.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-24</div><div class="info-item-2">亲密关系与情感依赖</div></div><div class="info-2"><div class="info-item-1">《亲密关系与情感依赖》，阿米尔·莱文 / 蕾切尔·赫尔勒著，李昀烨译。</div></div></div></a><a class="pagination-related" href="/posts/mo-gui-liao-tian-shu/" title="魔鬼聊天术"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/167.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">魔鬼聊天术</div></div><div class="info-2"><div class="info-item-1">《魔鬼聊天术》，阮琦著。</div></div></div></a><a class="pagination-related" href="/posts/Nonviolent-Communication-A-Language-of-Life/" title="非暴力沟通"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/168.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-17</div><div class="info-item-2">非暴力沟通</div></div><div class="info-2"><div class="info-item-1">《非暴力沟通》，马歇尔·卢森堡著，刘轶译。</div></div></div></a><a class="pagination-related" href="/posts/The-Courage-to-Be-Disliked/" title="被讨厌的勇气"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/170.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-30</div><div class="info-item-2">被讨厌的勇气</div></div><div class="info-2"><div class="info-item-1">《被讨厌的勇气》，岸见一郎 / 古贺史健著，渠海霞译。</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">默烦</div><div class="author-info-description">彩笔的打怪升级之路...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mofan212"><i class="fab fa-github"></i><span>follow me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解。<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a href="./mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载。😊</br><strong><font style="color:red">严禁未遵循规范的转载。</font></strong>😡</br><strong>死去的评论系统复活啦！欢迎到留言板畅所欲言！</strong>当然也可以使用更高效的<a target="_blank" href="https://space.bilibili.com/23658864/dynamic" style="color:#49B1F5;text-decoration:underline"> 哔哩哔哩私信 </a>或<a href="mailto:cy.mofan@foxmail.com" style="color:#49B1F5;text-decoration:underline" target="_blank">邮箱</a>。 😉</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E8%AF%BB%E5%90%8E%E6%84%9F"><span class="toc-text">1. 读后感</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E9%98%85%E8%AF%BB%E6%84%9F%E5%8F%97"><span class="toc-text">1.1 阅读感受</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E7%AB%A0%E8%8A%82%E6%A6%82%E6%8B%AC"><span class="toc-text">1.2 章节概括</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E6%91%98%E5%BD%95%E4%B8%8E%E6%83%B3%E6%B3%95"><span class="toc-text">2. 摘录与想法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC-1-%E7%AB%A0-%E6%88%91%E6%89%80%E4%B8%8D%E4%BA%86%E8%A7%A3%E7%9A%84%E8%87%AA%E5%B7%B1"><span class="toc-text">第 1 章 我所不了解的自己</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC-2-%E7%AB%A0-3-%E7%A7%8D%E5%B8%B8%E8%A7%81%E7%9A%84%E5%BF%83%E7%90%86%E5%9B%B0%E6%89%B0"><span class="toc-text">第 2 章 3 种常见的心理困扰</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC-3-%E7%AB%A0-%E6%88%91%E4%BB%AC%E7%9A%84%E6%83%85%E7%BB%AA%E6%B8%85%E5%8D%95"><span class="toc-text">第 3 章 我们的情绪清单</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC-4-%E7%AB%A0-%E5%8E%8B%E6%8A%91%E4%B8%8E%E5%90%A6%E8%AE%A4"><span class="toc-text">第 4 章 压抑与否认</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC-5-%E7%AB%A0-%E7%BD%AE%E6%8D%A2%E4%B8%8E%E5%8F%8D%E5%90%91%E5%BD%A2%E6%88%90"><span class="toc-text">第 5 章 置换与反向形成</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC-6-%E7%AB%A0-%E5%88%86%E8%A3%82"><span class="toc-text">第 6 章 分裂</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC-7-%E7%AB%A0-%E7%90%86%E6%83%B3%E5%8C%96"><span class="toc-text">第 7 章 理想化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC-8-%E7%AB%A0-%E6%8A%95%E5%B0%84"><span class="toc-text">第 8 章 投射</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC-9-%E7%AB%A0-%E6%8E%A7%E5%88%B6"><span class="toc-text">第 9 章 控制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC-10-%E7%AB%A0-%E3%80%8C%E6%80%9D%E8%80%83%E3%80%8D"><span class="toc-text">第 10 章 「思考」</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC-11-%E7%AB%A0-%E7%BE%9E%E8%80%BB%E9%98%B2%E5%BE%A1"><span class="toc-text">第 11 章 羞耻防御</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC-12-%E7%AB%A0-%E6%94%B9%E5%8F%98%E5%A7%8B%E4%BA%8E%E6%8E%A5%E7%BA%B3%E7%9A%84%E5%BF%83%E6%80%81"><span class="toc-text">第 12 章 改变始于接纳的心态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC-13-%E7%AB%A0-%E7%9C%9F%E6%AD%A3%E7%9A%84%E6%94%B9%E5%8F%98%E6%BA%90%E4%BA%8E%E4%BD%A0%E5%81%9A%E5%87%BA%E7%9A%84%E9%80%89%E6%8B%A9"><span class="toc-text">第 13 章 真正的改变源于你做出的选择</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC-14-%E7%AB%A0-%E4%B8%8E%E9%98%B2%E5%BE%A1%E5%90%8C%E5%9C%A8%E4%BD%86%E4%B8%8D%E8%A2%AB%E5%85%B6%E4%B8%BB%E5%AE%B0"><span class="toc-text">第 14 章 与防御同在但不被其主宰</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/Something-About-Blog/" title="博客搭建与维护"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="博客搭建与维护"/></a><div class="content"><a class="title" href="/posts/Something-About-Blog/" title="博客搭建与维护">博客搭建与维护</a><time datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"/></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="更新于 2026-01-03 00:00:00">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"/></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/103.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 的类资源加载"/></a><div class="content"><a class="title" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载">Java 的类资源加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/20.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="注解、类的加载、反射"/></a><div class="content"><a class="title" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射">注解、类的加载、反射</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/ren-zhi-jue-xing/" title="认知觉醒"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/172.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="认知觉醒"/></a><div class="content"><a class="title" href="/posts/ren-zhi-jue-xing/" title="认知觉醒">认知觉醒</a><time datetime="2025-12-28T16:00:00.000Z" title="更新于 2025-12-29 00:00:00">2025-12-29</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://gcore.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script src="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/js/mine.min.js"></script><script src="/js/tip_portal.js"></script><script defer="defer" id="ribbon" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script id="click-show-text" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="Azathoth,Yog-Sothoth,Shub-Niggurath,Nyarlathotep,Cthulhu,Hastur,Abhoth,Ghroth,Tsathoggua,Cthugha,Deep Ones,Dagon,Chaugnar Faugn,Mordiggian,Shoggoth,Old One,Mi-Go,Great Race of Yith,Flying Polyp,Hounds of Tindalos,Dhole" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div class="docsearch-wrap"><div id="docsearch" style="display:none"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@docsearch/css/dist/style.min.css"/><script src="https://testingcf.jsdelivr.net/npm/@docsearch/js/dist/umd/index.min.js"></script><script>(() => {
+  docsearch(Object.assign({
+    appId: 'BAFEL7A6K1',
+    apiKey: '89fcb5961984c5c054bf04149f345f38',
+    indexName: 'mofan212io',
+    container: '#docsearch',
+    placeholder: '输入关键字进行搜索',
+  }, null))
+
+  const handleClick = () => {
+    document.querySelector('.DocSearch-Button').click()
+  }
+
+  const searchClickFn = () => {
+    btf.addEventListenerPjax(document.querySelector('#search-button > .search'), 'click', handleClick)
+  }
+
+  searchClickFn()
+  window.addEventListener('pjax:complete', searchClickFn)
+})()</script></div></div></body></html>

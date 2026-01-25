@@ -1,0 +1,540 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>臭虫治理方案（一） | Mofan</title><meta name="author" content="默烦,cy.mofan@foxmail.com"><meta name="copyright" content="默烦"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本文作为日常学习工作总结，主要用于记录遇到的各种顽固“臭虫”。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="臭虫治理方案（一）">
+<meta property="og:url" content="https://mofan212.github.io/posts/Ways-To-Eliminate-Bugs-1/">
+<meta property="og:site_name" content="Mofan">
+<meta property="og:description" content="本文作为日常学习工作总结，主要用于记录遇到的各种顽固“臭虫”。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/70.png">
+<meta property="article:published_time" content="2020-12-01T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-09-19T16:00:00.000Z">
+<meta property="article:author" content="默烦">
+<meta property="article:tag" content="Code-In-Practice">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/70.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "臭虫治理方案（一）",
+  "url": "https://mofan212.github.io/posts/Ways-To-Eliminate-Bugs-1/",
+  "image": "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/70.png",
+  "datePublished": "2020-12-01T16:00:00.000Z",
+  "dateModified": "2024-09-19T16:00:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "默烦",
+      "url": "https://mofan212.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/Ways-To-Eliminate-Bugs-1/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":true,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 默烦","link":"链接: ","source":"来源: Mofan","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://testingcf.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '臭虫治理方案（一）',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="referrer" content="no-referrer-when-downgrade" /><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/css/myStyle.min.css"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css" /><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css" /><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Mofan" type="application/atom+xml">
+</head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+btf.addGlobalFn('pjaxSend', () => {
+  Pace.restart()
+}, 'pace_restart')
+
+</script><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources/css/minimal.min.css"/><script src="https://testingcf.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/post_top_img.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Mofan</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">臭虫治理方案（一）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-12-01T16:00:00.000Z" title="发表于 2020-12-02 00:00:00">2020-12-02</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-09-19T16:00:00.000Z" title="更新于 2024-09-20 00:00:00">2024-09-20</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Code-In-Practice/">Code-In-Practice</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">4.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>15分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;距离本文上次更新已经过去&quot;,&quot;messageNext&quot;:&quot;天，请注意时效性。&quot;,&quot;postUpdate&quot;:&quot;2024-09-20 00:00:00&quot;}" hidden></div><p>封面来源：本文封面来源于网络，如有侵权，请联系删除。</p>
+<h1 id="0-前言"><a class="header-anchor" href="#0-前言"></a>0.前言</h1>
+<p>拥有臭虫（BUG）聚集体质的我，总会遇到各种各样的臭虫，有些臭虫还很顽固，驱散半天都不走，为了以后的美好生活，我将这些臭虫的驱散（DEBUG）方式总结下来，方便其他小伙伴遇到这些臭虫时可以“对症下药”、“药到病除”。</p>
+<h1 id="1-问题与解决方法"><a class="header-anchor" href="#1-问题与解决方法"></a>1. 问题与解决方法</h1>
+<h2 id="1-1-Assert-assertEquals"><a class="header-anchor" href="#1-1-Assert-assertEquals"></a>1.1 Assert.assertEquals()</h2>
+<p>在使用 Junit 的 <code>Assert.assertEquals()</code> 对预期值和实际值进行比较时：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Assert.assertEquals(<span class="number">6L</span>, borrowInfo.getBorrowId());</span><br></pre></td></tr></table></figure>
+<p>编译器出现了一下的错误信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Ambiguous method call. Both assertEquals(Object, Object) in Assert and assertEquals(long, </span><br><span class="line">long)in Assert match</span><br></pre></td></tr></table></figure>
+<p>产生这样的原因是：<code>borrowInfo.getBorrowId()</code> 返回的是 <code>Long</code>，而不是 <code>long</code>。<code>Assert</code> 类中有很多 <code>assertEquals()</code> 方法的重载，因此编译器就蒙了，是该将参数类型都转换成 <code>Object</code> 呢？还是只将 <code>Long</code>  转换成 <code>long</code> 呢？</p>
+<p>解决方式：明确指定参数是基本数据类型，还是 <code>Object</code> 类型。比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Assert.assertEquals(<span class="number">6L</span>, borrowInfo.getBorrowId().longValue());</span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Assert.assertEquals(<span class="number">6L</span>, (<span class="type">long</span>)borrowInfo.getBorrowId());</span><br></pre></td></tr></table></figure>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/41893633/ambiguous-method-call-both-assertequalsobject-object-in-assert-and-assertequa">Ambiguous method call Both assertEquals(Object, Object) in Assert and assertEquals(double, double) in Assert match:</a></p>
+<h2 id="1-2-日期校验注解-Past"><a class="header-anchor" href="#1-2-日期校验注解-Past"></a>1.2 日期校验注解 @Past</h2>
+<p>在 DTO 中对某个日期类型的属性使用了 <code>@Past</code> 校验注解，这个注解可以校验日期属性值是否是过去的日期。</p>
+<p>在编写单元测试时，采用 <code>new Date()</code> 的方式设置属性值：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dto.setBirth(<span class="keyword">new</span> <span class="title class_">Date</span>());</span><br></pre></td></tr></table></figure>
+<p>这样的方式在对单个测试方法进行测试时不会出现问题，如果 All in 单元测试时，有一定概率校验不通过，提示该属性值必须是过去的日期。</p>
+<p><mark>注意：</mark> 是一定概率校验不通过，就是有时候是可以通过的，但是有时候又不能通过（薛定谔的测试？）。</p>
+<p>解决方式很简单，设置属性值时传入固定的日期，且这个日期是过去的日期，比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 2020-12-01 00:00:00 ==&gt; 1606752000000</span></span><br><span class="line">dto.setBirth(<span class="keyword">new</span> <span class="title class_">Date</span>(<span class="number">1606752000000L</span>));</span><br></pre></td></tr></table></figure>
+<p><code>1606752000000L</code> 是一个时间戳，表示：2020-12-01 00:00:00</p>
+<blockquote>
+<p>更多与日期时间校验相关的注解</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">注解</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>@Past</code></td>
+<td style="text-align:center">目标日期时间必须小于当前时间</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>@PastOrPresent</code></td>
+<td style="text-align:center">目标日期时间必须小于或等于当前时间</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>@Future</code></td>
+<td style="text-align:center">目标日期时间必须大于当前时间</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>@FutureOrPresent</code></td>
+<td style="text-align:center">目标日期时间必须大于或等于当前日期</td>
+</tr>
+</tbody>
+</table>
+<h2 id="1-3-无法创建-SpringBoot-项目"><a class="header-anchor" href="#1-3-无法创建-SpringBoot-项目"></a>1.3 无法创建 SpringBoot 项目</h2>
+<p>使用 IDEA 创建 SpringBoot 项目时，可能由于 <code>https://start.spring.io/</code> 网址的原因（比如，无法访问）导致无法常见项目，或者创建项目失败，项目结构无法创建，我们可以更改默认的创建网址来拉取 SpringBoot 项目：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/%E6%9B%B4%E6%94%B9%E6%8B%89%E5%8F%96SpringBoot%E9%A1%B9%E7%9B%AE%E5%9C%B0%E5%9D%80.png" alt="更改拉取SpringBoot项目地址"></p>
+<p>网址为：<code>https://start.springboot.io/</code></p>
+<h2 id="1-4-Redis-BGSAVE方法失败"><a class="header-anchor" href="#1-4-Redis-BGSAVE方法失败"></a>1.4 Redis BGSAVE方法失败</h2>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/u014071875/article/details/103715183">MISCONF Redis is configured to save RDB snapshots, but it is currently not a</a></p>
+<blockquote>
+<p>快速应急方案</p>
+</blockquote>
+<p>修改 Redis 的配置文件 <code>redis.conf</code>，将 <code>stop-writes-on-bgsave-error yes</code> 修改为 <code>stop-writes-on-bgsave-error no</code>，或者在 Redis 客户端中执行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">config <span class="built_in">set</span> stop-writes-on-bgsave-error no</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>解决方案</p>
+</blockquote>
+<p>在 Linux 系统中，切换至 <code>/</code> 目录下，执行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/sysctl.conf</span><br></pre></td></tr></table></figure>
+<p>修改  /etc/sysctl.conf 文件，添加配置：</p>
+<pre>
+vm.overcommit_memory=1
+</pre>
+<p>如：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/%E4%BF%AE%E6%94%B9sysctl.conf%E6%96%87%E4%BB%B6.jpg" alt="修改sysctl.conf文件"></p>
+<p>添加完毕后，在 <strong>管理员模式</strong> 下，执行以下命令，使其生效：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sysctl -p /etc/sysctl.conf</span><br></pre></td></tr></table></figure>
+<h2 id="1-5-Command-line-is-too-long"><a class="header-anchor" href="#1-5-Command-line-is-too-long"></a>1.5 Command line is too long</h2>
+<p>使用 IDEA 启动测试类进行测试时，出现以下错误：</p>
+<pre>
+Error running 'Test1.test': Command line is too long. Shorten command line for Test1.test or also for JUnit default configuration.
+</pre>
+<blockquote>
+<p>解决方法一</p>
+</blockquote>
+<p>最简单粗暴的方法：</p>
+<p>创建一个新的测试类，然后在这个测试类中将报错的测试类中的代码复制过来，就完事了。</p>
+<blockquote>
+<p>解决方式二</p>
+</blockquote>
+<p>1、打开当前项目的 <code>.idea</code> 文件夹，找到文件夹中的 <code>workspace.xml</code>文件。</p>
+<p>2、搜索 <code>PropertiesComponent</code>：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/PropertiesComponent.png" alt="PropertiesComponent" style="zoom: 50%;" />
+<p>3、然后在这个父级结构中添加：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;dynamic.classpath&quot;</span> <span class="attr">value</span>=<span class="string">&quot;true&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/%E6%B7%BB%E5%8A%A0dynamic.classpath%E7%9A%84property.png" alt="添加dynamic.classpath的property"></p>
+<p>4、如果这样配置后还是有问题，可以在以下界面中，将 <code>Shorten command line</code> 修改为 <code>JAR manifest</code>：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/修改Shorten-command-line.png" alt="修改Shorten-command-line" style="zoom:50%;" />
+<h2 id="1-6-整合-Redis-时出现-Unable-to-connect-to"><a class="header-anchor" href="#1-6-整合-Redis-时出现-Unable-to-connect-to"></a>1.6 整合 Redis 时出现 Unable to connect to</h2>
+<blockquote>
+<p>Springboot 配置 Redis 时出现 Unable to connect to 和 ERR invalid password</p>
+</blockquote>
+<p>检查配置文件后发现是密码字段没有使用引号，只需要加上引号之后就可以了。</p>
+<p>但一般来说，即使不使用引号应该也是可以连接上的。</p>
+<h2 id="1-7-Sourcetree-提示-SSH-密钥认证失败"><a class="header-anchor" href="#1-7-Sourcetree-提示-SSH-密钥认证失败"></a>1.7 Sourcetree 提示 SSH 密钥认证失败</h2>
+<p>使用 Sourcetree 在推送代码时，可能会出现 <strong>启用 SSH 代理？</strong> 的提示框，并告诉你：</p>
+<pre>
+通过SSH密钥认证失败, 你想要运行SSH密钥代理( Pageant )并重试吗?
+</pre>
+<p>一般来说，在安装 Git 后都会绑定 SSH 公钥（不知道如何操作可在本站搜索【Git理论与使用 - Gitee的使用】进行查看），既然已经绑定了，为什么还会出现这个提示框呢？</p>
+<p>只需要在 Sourcetree 进行如下设置即可：</p>
+<p>点击菜单栏的 <strong>工具</strong> - <strong>选项</strong> - <strong>一般</strong>，对 SSH 客户端进行配置：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/对Sourcetree的SSH客户端进行配置.png" alt="对Sourcetree的SSH客户端进行配置" style="zoom:50%;" />
+<p>将 SSH 客户端配置为 OpenSSH 即可，SSH 秘钥会自动填写（如果没有，自行选择）。</p>
+<h2 id="1-8-npm-ERR-Cannot-read-property-‘match’-of-undefined"><a class="header-anchor" href="#1-8-npm-ERR-Cannot-read-property-‘match’-of-undefined"></a>1.8 npm ERR! Cannot read property ‘match’ of undefined</h2>
+<p>当我们对前端项目执行 <code>npm install</code> 命令时，出现了以下错误：</p>
+<pre>
+npm ERR! Cannot read property 'match' of undefined
+</pre>
+<p>解决方法：把项目中 package-lock.json 文件删除，再次运行 npm 命令即可。</p>
+<h2 id="1-9-VS-Code-自带终端-无法执行-yarn"><a class="header-anchor" href="#1-9-VS-Code-自带终端-无法执行-yarn"></a>1.9 VS Code 自带终端 无法执行 yarn</h2>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_30960005/article/details/110946880">vscode 自带终端无法执行yarn</a></p>
+<p>当我们安装并配置好 Yarn 后，使用 VS Code 自带的终端执行 <code>yarn start</code> 命令启动项目时，出现了以下错误：</p>
+<pre>
+找不到或无法加载主类
+</pre>
+<p><strong>原因：</strong> VS Code 中的集成终端使用的是 PowerShell，所以我们要设置一下 PowerShell 的执行权限或者说策略。</p>
+<p>其默认执行策略为 <code>Restricted</code>（默认设置），该不允许任何脚本运行。我们可以将其设置为 <code>RemoteSigned</code>，该执行策略可防止 Windows PowerShell 运行没有数字签名的脚本。</p>
+<p>有关 Windows PowerShell 执行策略的详细信息，可以查考：<a target="_blank" rel="noopener" href="https:/go.microsoft.com/fwlink/?LinkID=135170">关于执行策略</a></p>
+<blockquote>
+<p>结局方式一</p>
+</blockquote>
+<p>这种方式最简单，在 VS Code 内部中安装名为 <code>yarn</code> 的插件即可。它长这样：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/VSCode%E4%B8%ADyarn%E6%8F%92%E4%BB%B6.png" alt="VSCode中yarn插件"></p>
+<blockquote>
+<p>解决方式二</p>
+</blockquote>
+<p>1、以 <strong>管理员身份</strong> 运行 VS Code。</p>
+<p>2、打开 VS Code 终端，执行以下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">get-ExecutionPolicy # 查看执行策略</span><br><span class="line">set-ExecutionPolicy RemoteSigned # 设置执行策略</span><br></pre></td></tr></table></figure>
+<p>3、重启 VS Code，再打开终端，执行 <code>yarn start</code> 试试？ 😉</p>
+<h2 id="1-10-SpringBoot-项目运行后无法打开-Swagger-界面"><a class="header-anchor" href="#1-10-SpringBoot-项目运行后无法打开-Swagger-界面"></a>1.10 SpringBoot 项目运行后无法打开 Swagger 界面</h2>
+<p>运行 SpringBoot 项目后，能够访问到 Swagger 的 api-docs 页面，数据能够正常显示，但是无法加载 Swagger 界面，界面出现 404 错误码。</p>
+<p>除了网上能够找到的解决方法外，还可能是由于 IDEA 的配置造成的。</p>
+<p>修改项目的启动配置：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/SwaggerUI%E6%97%A0%E6%B3%95%E8%AE%BF%E9%97%AE%E8%BF%9B%E8%A1%8C%E7%9A%84%E9%85%8D%E7%BD%AE.png" alt="SwaggerUI无法访问进行的配置"></p>
+<p>将 <code>Shorten command line</code> 修改为 <code>classpath file</code> 即可，当然使用默认的 <code>user-local default</code> 也行，但是使用 <code>JAR manifest</code> 是不行的，将无法访问 Swagger UI 界面。</p>
+<h2 id="1-11-Error-java-Compilation-failed-internal-java-compiler-error"><a class="header-anchor" href="#1-11-Error-java-Compilation-failed-internal-java-compiler-error"></a>1.11 Error:java: Compilation failed: internal java compiler error</h2>
+<p>在 IDEA 中运行项目时，在编译期控制台可能会出现这个错误：</p>
+<pre>
+Error:java: Compilation failed: internal java compiler error
+</pre>
+<p>出现这个问题主要是因为 JDK 的版本问题。一个是编译版本不匹配，一个是当前项目 JDK 版本不支持。</p>
+<blockquote>
+<p>主要需要在 IDEA 查看以下三个地方的 JDK 版本，看它们是否一致且符合要求：</p>
+</blockquote>
+<p>首先进行以下步骤查看项目的 JDK 版本：</p>
+<p>1、 File  -&gt; Project Structure -&gt; Project Settings  -&gt; Project</p>
+<p>2、或者使用快捷键 Ctrl + Alt + Shift + S</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/查看项目JDK版本.png" alt="查看项目JDK版本" style="zoom:50%;" />
+<p>然后点击上图中 Modules 查看当前 Module 对应 JDK 版本：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/当前Module对应JDK版本.png" alt="当前Module对应JDK版本" style="zoom:50%;" />
+<p>最后查看 Java 编译器版本：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/查看Java编译器版本.png" alt="查看Java编译器版本" style="zoom:50%;" />
+<h2 id="1-12-MySQL-查询条件不区分大小写？"><a class="header-anchor" href="#1-12-MySQL-查询条件不区分大小写？"></a>1.12 MySQL 查询条件不区分大小写？</h2>
+<blockquote>
+<p>场景重现</p>
+</blockquote>
+<p>今天在对数据库进行如下条件查询时出现了意想不到的结果：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> tb_user <span class="keyword">WHERE</span> username <span class="operator">=</span> <span class="string">&#x27;mofan&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p>很显然，我这里是想要查询 <code>username</code> 为 <code>mofan</code> 的数据，结果在运行上述 SQL 语句时，查询得到了 <code>username</code> 为 <code>Mofan</code> 的数据。</p>
+<p>这是怎么个情况，数据库不区分大小写？</p>
+<p>不对啊，我记得区分啊，那咋回事？难不成是我使用的 MyBatis-Plus 的问题？</p>
+<blockquote>
+<p>解决思路</p>
+</blockquote>
+<p>在使用数据库可视化工具（比如 Navicat）创建 MySQL 数据库时，需要我们指定数据库名称、字符集（CHARSET）和排序规则（COLLATE）。</p>
+<p>指定之后，当我们在这个数据库下创建表时、在表中新添字段时，都会 <strong>默认</strong> 采用数据库的字符集和排序规则。</p>
+<p><mark>小贴士：</mark> 我们一般将数据库、表、表中字段的字符集设置为 <code>utf8mb4</code>。MySQL 中 <code>utf8</code> 字符集不是真正的 <code>UTF-8</code>，<code>utf8mb4</code>  才是真正的 <code>UTF-8</code>。</p>
+<p>如果在创建数据表时，<strong>没有指定</strong> 字符集和排序规则，那么这张数据表将会默认采用所在数据库的字符集和排序规则；如果在表中新增字段时 <strong>没有指定</strong> 字符集和排序规则，那么这个字段将会默认采用所在数据表的字符集和排序规则。</p>
+<p>回归正题，在进行条件查询时没有区分查询条件的大小写是 <strong>由字段的排序规则造成的</strong>。</p>
+<p>MySQL 的各个排序规则结尾由以下三种组成，它们也代表了不同的含义：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">结尾</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">_bin</td>
+<td style="text-align:center">将字符串中的每一个字符用二进制数据存储，区分大小写。</td>
+</tr>
+<tr>
+<td style="text-align:center">_ci</td>
+<td style="text-align:center">不区分大小写，ci 为 case insensitive 的缩写，即大小写不敏感。</td>
+</tr>
+<tr>
+<td style="text-align:center">_cs</td>
+<td style="text-align:center">区分大小写，cs为 case sensitive 的缩写，即大小写敏感。</td>
+</tr>
+</tbody>
+</table>
+<p>因此，MySQL 查询条件不区分大小写的解决方案就是：<strong>将字段的排序规则设置为以 _cs 或 _bin 结尾</strong>。</p>
+<p>当然为了后续操作方便，建议一并将数据库和数据表的排序规则也设置为以 <code>_cs</code> 或 <code>_bin</code> 结尾。</p>
+<h2 id="1-13-移除-Goovy-导致编译报错"><a class="header-anchor" href="#1-13-移除-Goovy-导致编译报错"></a>1.13 移除 Goovy 导致编译报错</h2>
+<p>近期公司移除了项目中的 Goovy，但由于 IDEA 会默认对其进行编译，所以 IDEA 出现了编译报错，我们只需要在设置中删除 <code>!?*.groovy</code> 即可：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/%E5%88%A0%E9%99%A4goovy%E7%9A%84%E7%BC%96%E8%AF%91%E8%AE%BE%E7%BD%AE.png" alt="删除goovy的编译设置"></p>
+<h2 id="1-14-Chrome-打开开发者工具缓慢"><a class="header-anchor" href="#1-14-Chrome-打开开发者工具缓慢"></a>1.14 Chrome 打开开发者工具缓慢</h2>
+<p>在有次更新 Chrome 后，不知道点到了那，后续在打开开发者工具时等半天才打开。可以对 Chrome 的设置进行重置就好了：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/%E9%87%8D%E7%BD%AEChrome%E8%AE%BE%E7%BD%AE.png" alt="重置Chrome设置"></p>
+<h2 id="1-15-Java-编译时显示-code-too-large"><a class="header-anchor" href="#1-15-Java-编译时显示-code-too-large"></a>1.15 Java 编译时显示 code too large</h2>
+<p>在 IDEA 中不会报错，手动进行编译时则会提示 code too large，这是因为Java 里一个方法编译后的字节码不能超过 64KB 大小，因此可以考虑将一个大方法拆解为多个小方法。</p>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/396024065">java程序过长无法编译，目前百度上只能查到java文件中的方法不能超过64k，到底是什么原因呢？</a></p>
+<h2 id="1-16-子类覆写父类的-JSR-303-校验"><a class="header-anchor" href="#1-16-子类覆写父类的-JSR-303-校验"></a>1.16 子类覆写父类的 JSR-303 校验</h2>
+<p>如果在父类字段上使用了 JSR-303 注解，子类如果想覆写父类的校验规则，<strong>不能</strong> 直接在子类定义相同的字段进行覆写，这样是无效的。比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Setter</span></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">Parent</span> &#123;</span><br><span class="line">    <span class="meta">@Max(100)</span></span><br><span class="line">    <span class="keyword">private</span> Integer integer;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Setter</span></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Child</span> <span class="keyword">extends</span> <span class="title class_">Parent</span> &#123;</span><br><span class="line">    <span class="meta">@Max(90)</span></span><br><span class="line">    <span class="keyword">private</span> Integer integer;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以 Hibernate Validator 作为 JSR-303 的实现为例，其在执行相关校验时，会去获取被校验对象的类继承关系，因此父类上的校验也会执行。</p>
+<p>如果针对不同的子类需要定制不同的校验规则，那么应该将父类上的校验规则转移到每个子类的 Getter 上，由各个子类单独实现。比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Setter</span></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">Parent</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> Integer integer;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Setter</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ChildOne</span> <span class="keyword">extends</span> <span class="title class_">Parent</span> &#123;</span><br><span class="line">    <span class="meta">@Max(100)</span></span><br><span class="line">    <span class="keyword">public</span> Long <span class="title function_">getInteger</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">super</span>.getInteger();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Setter</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ChildTwo</span> <span class="keyword">extends</span> <span class="title class_">Parent</span> &#123;</span><br><span class="line">    <span class="meta">@Max(90)</span></span><br><span class="line">    <span class="keyword">public</span> Long <span class="title function_">getInteger</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">super</span>.getInteger();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="2-经验之谈"><a class="header-anchor" href="#2-经验之谈"></a>2. 经验之谈</h1>
+<h2 id="2-1-Spring-的-Scope-注解"><a class="header-anchor" href="#2-1-Spring-的-Scope-注解"></a>2.1 Spring 的 @Scope 注解</h2>
+<p><code>@Scope</code> 可以用来设置 Spring 容器中 Bean 的作用域，默认作用域是单例的，使用这个注解后可以将其设置成其他作用域。</p>
+<p>在此不介绍 <code>@Scope</code> 注解的使用方式，但需要明白的是：</p>
+<p>默认的单例作用域适用 90% 的场景。如果需要更改作用域，请在更改之前确认是不是由于自己的代码设计缺陷而导致需要更改作用域。</p>
+<h2 id="2-2-单元测试心得"><a class="header-anchor" href="#2-2-单元测试心得"></a>2.2 单元测试心得</h2>
+<p>在进行单元测试时：</p>
+<p>对于数据库相关的查询，更新，删除等操作，不能假设数据库里的数据是存在的，或者直接操作数据库把数据插入进去，请使用程序插入或者导入数据的方式来准备数据。</p>
+<p>保持单元测试的独立性。为了保证单元测试稳定可靠且便于维护，单元测试用例之间决不能互相调用，也不能依赖执行的先后次序。</p>
+<p>单元测试应该是全自动执行的，并且非交互式的。测试用例通常是被定期执行的，执行过程必须完全自动化才有意义。输出结果需要人工检查的测试不是一个好的单元测试。单元测试中不准使用 <code>System.out</code> 来进行人肉验证，必须使用 <code>assert</code> 或 JUnit 的 <code>Assert</code> 等来验证。</p>
+<p><mark>注意：</mark> 注意在测试类中的 <strong>成员变量</strong> 和 <strong>静态变量</strong> 的区别。如果需要所有测试方法共享那个变量，需要使用静态变量，反之使用成员变量，并且各测试方法每次使用成员变量时，都会初始化成员变量。</p>
+<blockquote>
+<p>【强烈建议】</p>
+</blockquote>
+<p>1、运行单元测试前后，数据库表中都不能存在数据。如果在运行测试代码时，出现数据无法保存导致的异常或错误，请检查数据库中数据是否符合该条件。</p>
+<p>2、为了测试覆盖率能够达标，有时会对同一个方法进行多次调用测试以便能够覆盖到各个分支，但 <strong>在每次调用时不要使用同一份入参</strong> 进行测试，因此在被测试的方法内部很可能会对入参进行修改，这时再使用这份数据进行测试产生的结果就很有可能不符合我们的预期结果。</p>
+<h2 id="2-3-Accessors-与-链式"><a class="header-anchor" href="#2-3-Accessors-与-链式"></a>2.3 @Accessors 与 链式</h2>
+<p>在 Lombok 中有这样一个注解 <code>@Accessors</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target(&#123;ElementType.TYPE, ElementType.FIELD&#125;)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.SOURCE)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Accessors &#123;</span><br><span class="line">    <span class="type">boolean</span> <span class="title function_">fluent</span><span class="params">()</span> <span class="keyword">default</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="type">boolean</span> <span class="title function_">chain</span><span class="params">()</span> <span class="keyword">default</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    String[] prefix() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中有一个默认值为 <code>false</code>，类型为 <code>boolean</code> 名为 <code>chain</code> 的属性，如果在使用 <code>Accessors</code> 注解时将 <code>chain</code> 设置为 <code>true</code>，即：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Accessors(chain = true)</span></span><br></pre></td></tr></table></figure>
+<p>表示当前类下所有属性或当前字段支持链式编程，即：Setter 方法不再返回 <code>void</code>，而是 <code>this</code>。</p>
+<p>但需要注意的是，链式编程用起来很爽，但不要随意使用，尤其是在涉及到 Bean 映射的场景，比如：BeanCopier、MapStruct 等都不支持链式，同时 EasyExcel 也不支持链式。</p>
+<p>主要原因是：它们都存在从源中 get 出数据，然后 set 到目标中，而它们所使用的 Setter 都是返回 <code>void</code>。</p>
+<p>因此：<strong>不推荐随意使用链式编程。</strong></p>
+<h2 id="2-4-多翻-Issues"><a class="header-anchor" href="#2-4-多翻-Issues"></a>2.4 多翻 Issues</h2>
+<p>事实证明，解决开源软件（或组件）使用过程中遇到的问题不应该在求助百度之类的中文搜索引擎，而是 <strong>应该直接去托管开源软件（或组件）的平台翻 Issues</strong>，因为总有人在你之前就已经发现了问题。</p>
+<p>无论是 Reflections 的 <code>ClasspathHelper#forPackage()</code> 的解析错误 <a target="_blank" rel="noopener" href="https://github.com/ronmamo/reflections/issues/178">#178</a>，还是 Jackson 的 configure-first-then-use <a target="_blank" rel="noopener" href="https://github.com/FasterXML/jackson-databind/issues/2426">#2426</a> 都困扰了我很长一段时间，别无他法只能翻 Issues 寻求解决方案，幸运的是每次都能成功解决，这也算是给了我一点启示，希望下次不要再消耗过多的时间在解决软件（或组件）使用过程中遇到的问题上。</p>
+<h1 id="3-生活中的运用"><a class="header-anchor" href="#3-生活中的运用"></a>3. 生活中的运用</h1>
+<h2 id="3-1-Windows-下的-start-命令"><a class="header-anchor" href="#3-1-Windows-下的-start-命令"></a>3.1 Windows 下的 start 命令</h2>
+<p>参考链接：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/73967827/trying-to-start-multiple-exe-files-in-order-with-a-bat-file-but-first-line-fail">cmd - Trying to start multiple .exe files in order with a bat file but first line fails and second line is successful</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_40650190/article/details/104362181">start命令</a></li>
+</ul>
+<p>官方文档：<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/start">start | Microsoft Learn</a></p>
+<p>工作后一直使用的是公司配置的 Windows 电脑，那玩意隔三差五一蓝屏、七天九日一死机，总结下来就两个字：折磨。</p>
+<p>我并没有让 Windows 系统的电脑一直保持开机的习惯，每当下班时都会 <code>Win + X</code>、<code>U</code>、<code>U</code> 一套组合技结束一天的工作，但每天早上开机后启动各种软件是又枯燥、又繁琐。</p>
+<p>那为啥不把它们设置开机自启呢？因为设置成开机自启后开机速度、蓝屏概率都将大幅增加。</p>
+<p>因此我想到了使用 Windows 下的批处理命令，在 Windows 下一定存在一个能运行某个位置的软件的命令，使用这个命令编写一个 <code>bat</code> 脚本，至少可以让多次的点击合并成一次。</p>
+<p>使用 <code>start</code> 命令可以在命令行下运行一个程序，打开指定的盘符、文件、文件夹、网址等。</p>
+<p>比如运行 WeChat 和 IDEA：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">start <span class="string">&quot;&quot;</span> <span class="string">&quot;C:\IDEA\IntelliJ IDEA 2020.3\bin\idea64.exe&quot;</span></span><br><span class="line">start D:\WeChat\WeChat.exe</span><br></pre></td></tr></table></figure>
+<p><mark>注意：</mark> 当路径中包含空格时，路径需要使用双引号括起来，否则路径会被截断导致命令执行失败。除此之外，路径前也要添加一对双引号，表示空标题，否则会在给定路径下打开 CMD，而不是运行指定的程序。</p>
+<h2 id="3-2-Windows-系统关闭指定端口"><a class="header-anchor" href="#3-2-Windows-系统关闭指定端口"></a>3.2 Windows 系统关闭指定端口</h2>
+<p>比如需要关闭 <code>9090</code> 端口，需要先查询到占用该端口的 PID：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat <span class="literal">-ano</span> | findstr <span class="number">9090</span></span><br></pre></td></tr></table></figure>
+<p>假设查询得到的 PID 是 <code>13400</code>，执行以下命令关闭即可：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">taskkill /f /pid <span class="number">13400</span></span><br></pre></td></tr></table></figure>
+<h2 id="3-3-更改默认安装路径"><a class="header-anchor" href="#3-3-更改默认安装路径"></a>3.3 更改默认安装路径</h2>
+<p>在安装某些软件时会强制安装到 C 盘，还不让自定义安装路径，比如 Xmind。</p>
+<p>在安装包所在目录下打开 CMD，执行以下命令指定安装路径：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;Xmind-for-Windows-x64bit-25.01.01061-202501070746.exe&quot; /D=&quot;D:\Software\Xmind&quot;</span><br></pre></td></tr></table></figure>
+<p>其中：</p>
+<ul>
+<li><code>Xmind-for-Windows-x64bit-25.01.01061-202501070746.exe</code> 是安装包</li>
+<li>使用 <code>/D</code> 指定安装目录，<code>D:\Software\Xmind</code> 是目标安装目录</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/Ways-To-Eliminate-Bugs-1/">https://mofan212.github.io/posts/Ways-To-Eliminate-Bugs-1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Code-In-Practice/">Code-In-Practice</a></div><div class="post-share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/70.png" data-sites="wechat,qq,weibo,facebook,x"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/The-Basis-Of-Dubbo/" title="【RPC框架】Dubbo 入门"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/69.png" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【RPC框架】Dubbo 入门</div></div><div class="info-2"><div class="info-item-1">本文介绍了 Dubbo 基本知识、配置、高可用和原理四个部分的内容。</div></div></div></a><a class="pagination-related" href="/posts/Record-A-Test/" title="【随笔】记一次入职测试"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/71.jpg" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【随笔】记一次入职测试</div></div><div class="info-2"><div class="info-item-1">虚心学习，加油努力。自己要走的路还有很远，要学习的知识还有很多。</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/Implement-Dubbo-Default-Service/" title="实现 Dubbo 默认服务"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/160.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-04-20</div><div class="info-item-2">实现 Dubbo 默认服务</div></div><div class="info-2"><div class="info-item-1">总结工作与学习中阅读源码的区别。</div></div></div></a><a class="pagination-related" href="/posts/Java-Lambda-In-Action/" title="Java Lambda In Action"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/159.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-03-19</div><div class="info-item-2">Java Lambda In Action</div></div><div class="info-2"><div class="info-item-1">讲解不一样的 Lambda 表达式用法，希望能给你带来一些启发。</div></div></div></a><a class="pagination-related" href="/posts/Record-A-Test/" title="【随笔】记一次入职测试"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/71.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-12-03</div><div class="info-item-2">【随笔】记一次入职测试</div></div><div class="info-2"><div class="info-item-1">虚心学习，加油努力。自己要走的路还有很远，要学习的知识还有很多。</div></div></div></a><a class="pagination-related" href="/posts/Code-Summary-Of-Graduation-Project/" title="毕业设计代码总结"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/87.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-27</div><div class="info-item-2">毕业设计代码总结</div></div><div class="info-2"><div class="info-item-1">记录一下毕业设计中遇到的各个问题并对这个过程做个总结，也算是记录逝去的大学时光。</div></div></div></a><a class="pagination-related" href="/posts/Using-Lambda-Expressions-To-Refactor-Backtracking/" title="使用 Lambda 表达式重构成回溯"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/143.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-12</div><div class="info-item-2">使用 Lambda 表达式重构成回溯</div></div><div class="info-2"><div class="info-item-1">使用 Lambda 表达式为代码重构提供新思路。</div></div></div></a><a class="pagination-related" href="/posts/Reduce-Functions/" title="Reduce Functions"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/137.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-27</div><div class="info-item-2">Reduce Functions</div></div><div class="info-2"><div class="info-item-1">Stream 就是 Lambda 表达式的全部？或许本文可以给你一点启发。</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">默烦</div><div class="author-info-description">彩笔的打怪升级之路...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mofan212"><i class="fab fa-github"></i><span>follow me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解。<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a href="./mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载。😊</br><strong><font style="color:red">严禁未遵循规范的转载。</font></strong>😡</br><strong>死去的评论系统复活啦！欢迎到留言板畅所欲言！</strong>当然也可以使用更高效的<a target="_blank" href="https://space.bilibili.com/23658864/dynamic" style="color:#49B1F5;text-decoration:underline"> 哔哩哔哩私信 </a>或<a href="mailto:cy.mofan@foxmail.com" style="color:#49B1F5;text-decoration:underline" target="_blank">邮箱</a>。 😉</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0-%E5%89%8D%E8%A8%80"><span class="toc-text">0.前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E9%97%AE%E9%A2%98%E4%B8%8E%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="toc-text">1. 问题与解决方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-Assert-assertEquals"><span class="toc-text">1.1 Assert.assertEquals()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E6%97%A5%E6%9C%9F%E6%A0%A1%E9%AA%8C%E6%B3%A8%E8%A7%A3-Past"><span class="toc-text">1.2 日期校验注解 @Past</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-%E6%97%A0%E6%B3%95%E5%88%9B%E5%BB%BA-SpringBoot-%E9%A1%B9%E7%9B%AE"><span class="toc-text">1.3 无法创建 SpringBoot 项目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-Redis-BGSAVE%E6%96%B9%E6%B3%95%E5%A4%B1%E8%B4%A5"><span class="toc-text">1.4 Redis BGSAVE方法失败</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-5-Command-line-is-too-long"><span class="toc-text">1.5 Command line is too long</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-6-%E6%95%B4%E5%90%88-Redis-%E6%97%B6%E5%87%BA%E7%8E%B0-Unable-to-connect-to"><span class="toc-text">1.6 整合 Redis 时出现 Unable to connect to</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-7-Sourcetree-%E6%8F%90%E7%A4%BA-SSH-%E5%AF%86%E9%92%A5%E8%AE%A4%E8%AF%81%E5%A4%B1%E8%B4%A5"><span class="toc-text">1.7 Sourcetree 提示 SSH 密钥认证失败</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-8-npm-ERR-Cannot-read-property-%E2%80%98match%E2%80%99-of-undefined"><span class="toc-text">1.8 npm ERR! Cannot read property ‘match’ of undefined</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-9-VS-Code-%E8%87%AA%E5%B8%A6%E7%BB%88%E7%AB%AF-%E6%97%A0%E6%B3%95%E6%89%A7%E8%A1%8C-yarn"><span class="toc-text">1.9 VS Code 自带终端 无法执行 yarn</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-10-SpringBoot-%E9%A1%B9%E7%9B%AE%E8%BF%90%E8%A1%8C%E5%90%8E%E6%97%A0%E6%B3%95%E6%89%93%E5%BC%80-Swagger-%E7%95%8C%E9%9D%A2"><span class="toc-text">1.10 SpringBoot 项目运行后无法打开 Swagger 界面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-11-Error-java-Compilation-failed-internal-java-compiler-error"><span class="toc-text">1.11 Error:java: Compilation failed: internal java compiler error</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-12-MySQL-%E6%9F%A5%E8%AF%A2%E6%9D%A1%E4%BB%B6%E4%B8%8D%E5%8C%BA%E5%88%86%E5%A4%A7%E5%B0%8F%E5%86%99%EF%BC%9F"><span class="toc-text">1.12 MySQL 查询条件不区分大小写？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-13-%E7%A7%BB%E9%99%A4-Goovy-%E5%AF%BC%E8%87%B4%E7%BC%96%E8%AF%91%E6%8A%A5%E9%94%99"><span class="toc-text">1.13 移除 Goovy 导致编译报错</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-14-Chrome-%E6%89%93%E5%BC%80%E5%BC%80%E5%8F%91%E8%80%85%E5%B7%A5%E5%85%B7%E7%BC%93%E6%85%A2"><span class="toc-text">1.14 Chrome 打开开发者工具缓慢</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-15-Java-%E7%BC%96%E8%AF%91%E6%97%B6%E6%98%BE%E7%A4%BA-code-too-large"><span class="toc-text">1.15 Java 编译时显示 code too large</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-16-%E5%AD%90%E7%B1%BB%E8%A6%86%E5%86%99%E7%88%B6%E7%B1%BB%E7%9A%84-JSR-303-%E6%A0%A1%E9%AA%8C"><span class="toc-text">1.16 子类覆写父类的 JSR-303 校验</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E7%BB%8F%E9%AA%8C%E4%B9%8B%E8%B0%88"><span class="toc-text">2. 经验之谈</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-Spring-%E7%9A%84-Scope-%E6%B3%A8%E8%A7%A3"><span class="toc-text">2.1 Spring 的 @Scope 注解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E5%BF%83%E5%BE%97"><span class="toc-text">2.2 单元测试心得</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-Accessors-%E4%B8%8E-%E9%93%BE%E5%BC%8F"><span class="toc-text">2.3 @Accessors 与 链式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-%E5%A4%9A%E7%BF%BB-Issues"><span class="toc-text">2.4 多翻 Issues</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E7%94%9F%E6%B4%BB%E4%B8%AD%E7%9A%84%E8%BF%90%E7%94%A8"><span class="toc-text">3. 生活中的运用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-Windows-%E4%B8%8B%E7%9A%84-start-%E5%91%BD%E4%BB%A4"><span class="toc-text">3.1 Windows 下的 start 命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-Windows-%E7%B3%BB%E7%BB%9F%E5%85%B3%E9%97%AD%E6%8C%87%E5%AE%9A%E7%AB%AF%E5%8F%A3"><span class="toc-text">3.2 Windows 系统关闭指定端口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-%E6%9B%B4%E6%94%B9%E9%BB%98%E8%AE%A4%E5%AE%89%E8%A3%85%E8%B7%AF%E5%BE%84"><span class="toc-text">3.3 更改默认安装路径</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/Something-About-Blog/" title="博客搭建与维护"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="博客搭建与维护"/></a><div class="content"><a class="title" href="/posts/Something-About-Blog/" title="博客搭建与维护">博客搭建与维护</a><time datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"/></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="更新于 2026-01-03 00:00:00">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"/></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/103.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 的类资源加载"/></a><div class="content"><a class="title" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载">Java 的类资源加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/20.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="注解、类的加载、反射"/></a><div class="content"><a class="title" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射">注解、类的加载、反射</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/ren-zhi-jue-xing/" title="认知觉醒"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/172.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="认知觉醒"/></a><div class="content"><a class="title" href="/posts/ren-zhi-jue-xing/" title="认知觉醒">认知觉醒</a><time datetime="2025-12-28T16:00:00.000Z" title="更新于 2025-12-29 00:00:00">2025-12-29</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://gcore.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script src="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/js/mine.min.js"></script><script src="/js/tip_portal.js"></script><script defer="defer" id="ribbon" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script id="click-show-text" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="Azathoth,Yog-Sothoth,Shub-Niggurath,Nyarlathotep,Cthulhu,Hastur,Abhoth,Ghroth,Tsathoggua,Cthugha,Deep Ones,Dagon,Chaugnar Faugn,Mordiggian,Shoggoth,Old One,Mi-Go,Great Race of Yith,Flying Polyp,Hounds of Tindalos,Dhole" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div class="docsearch-wrap"><div id="docsearch" style="display:none"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@docsearch/css/dist/style.min.css"/><script src="https://testingcf.jsdelivr.net/npm/@docsearch/js/dist/umd/index.min.js"></script><script>(() => {
+  docsearch(Object.assign({
+    appId: 'BAFEL7A6K1',
+    apiKey: '89fcb5961984c5c054bf04149f345f38',
+    indexName: 'mofan212io',
+    container: '#docsearch',
+    placeholder: '输入关键字进行搜索',
+  }, null))
+
+  const handleClick = () => {
+    document.querySelector('.DocSearch-Button').click()
+  }
+
+  const searchClickFn = () => {
+    btf.addEventListenerPjax(document.querySelector('#search-button > .search'), 'click', handleClick)
+  }
+
+  searchClickFn()
+  window.addEventListener('pjax:complete', searchClickFn)
+})()</script></div></div></body></html>

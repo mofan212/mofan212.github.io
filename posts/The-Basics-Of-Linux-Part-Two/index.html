@@ -1,0 +1,1914 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【下篇】Linux 基础 | Mofan</title><meta name="author" content="默烦,cy.mofan@foxmail.com"><meta name="copyright" content="默烦"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本文介绍了 Linux 中的安装工具、环境搭建、Shell 编程、日志管理、备份与恢复等内容。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【下篇】Linux 基础">
+<meta property="og:url" content="https://mofan212.github.io/posts/The-Basics-Of-Linux-Part-Two/">
+<meta property="og:site_name" content="Mofan">
+<meta property="og:description" content="本文介绍了 Linux 中的安装工具、环境搭建、Shell 编程、日志管理、备份与恢复等内容。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/97.png">
+<meta property="article:published_time" content="2021-12-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-04-10T16:00:00.000Z">
+<meta property="article:author" content="默烦">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/97.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "【下篇】Linux 基础",
+  "url": "https://mofan212.github.io/posts/The-Basics-Of-Linux-Part-Two/",
+  "image": "https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/97.png",
+  "datePublished": "2021-12-04T16:00:00.000Z",
+  "dateModified": "2024-04-10T16:00:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "默烦",
+      "url": "https://mofan212.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/The-Basics-Of-Linux-Part-Two/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":true,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 默烦","link":"链接: ","source":"来源: Mofan","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://testingcf.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '【下篇】Linux 基础',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="referrer" content="no-referrer-when-downgrade" /><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/css/myStyle.min.css"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css" /><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css" /><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Mofan" type="application/atom+xml">
+</head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+btf.addGlobalFn('pjaxSend', () => {
+  Pace.restart()
+}, 'pace_restart')
+
+</script><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources/css/minimal.min.css"/><script src="https://testingcf.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/post_top_img.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Mofan</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【下篇】Linux 基础</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-12-04T16:00:00.000Z" title="发表于 2021-12-05 00:00:00">2021-12-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-04-10T16:00:00.000Z" title="更新于 2024-04-11 00:00:00">2024-04-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Linux/">Linux</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">19.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>70分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;距离本文上次更新已经过去&quot;,&quot;messageNext&quot;:&quot;天，请注意时效性。&quot;,&quot;postUpdate&quot;:&quot;2024-04-11 00:00:00&quot;}" hidden></div><p>封面来源：本文封面来源于网络，如有侵权，请联系删除。</p>
+<p>本文参考：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Sv411r7vd">【小白入门 通俗易懂】2021 韩顺平 一周学会Linux</a></p>
+<h1 id="1-RPM-与-YUM"><a class="header-anchor" href="#1-RPM-与-YUM"></a>1. RPM 与 YUM</h1>
+<h2 id="1-1-RPM-包的管理"><a class="header-anchor" href="#1-1-RPM-包的管理"></a>1.1 RPM 包的管理</h2>
+<p>RPM 是用于互联网下载包的打包及安装工具，它包含在某些 Linux 分发版中。它生成具有 <code>.RPM</code> 扩展名的文件。RPM 是 RedHat Package Manager（RedHat 软件包管理工具）的缩写，类似 Windows 的 setup.exe，这一文件格式名称虽然打上了 RedHat 的标志，但理念是通用的。</p>
+<p>Linux 的分发版本都有采用（SUSE，RedHat，CentOS 等等），可以算是公认的行业标准了。</p>
+<p>rpm 包的简单查询指令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rpm -qa # 查询所安装的所有 rpm 软件包</span><br><span class="line">rpm -qa | more # 分页查看所安装的所有 rpm 软件包</span><br><span class="line">rpm -qa | grep xx # 查询是否已安装 xx</span><br></pre></td></tr></table></figure>
+<p>比如查看当前系统是否安装了 firefox，可以用：<code>rpm -qa | grep firefox</code>。</p>
+<blockquote>
+<p>rpm 包名的基本形式</p>
+</blockquote>
+<p>对于一个 rpm 包名 <code>firefox-60.2.2-1.el7.centos.x86_64</code> 而言：</p>
+<p><code>firefox</code> 表示名称，<code>60.2.2-1</code> 表示版本号，<code>el7.centos.x86_64</code> 表示适用的操作系统，这里指 CentOS 7.x 的 64 位操作系统，如果是 i686、i386 则表示 32 位操作系统，noarch 表示通用。</p>
+<blockquote>
+<p>rpm 包其他查询指令</p>
+</blockquote>
+<p>1、查询某软件包是否安装：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm -q 软件包名 # 比如：rpm -q firefox</span><br></pre></td></tr></table></figure>
+<p>2、查询软件包信息：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm -qi 软件包名 # 比如：rpm -qi firefox</span><br></pre></td></tr></table></figure>
+<p>3、查询软件包中的文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm -ql 软件包名 # 比如：rpm -ql firefox</span><br></pre></td></tr></table></figure>
+<p>4、查询文件所属的软件包：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm -qf 文件全路径名</span><br></pre></td></tr></table></figure>
+<p>5、卸载 rpm 包：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm -e RPM包的名称 # 比如：rpm -e firefox</span><br></pre></td></tr></table></figure>
+<p><code>-e</code> 中的 e 表示 erase，[ɪˈreɪs]，意为擦除、清除、消去等。</p>
+<p>6、安装 rpm 包：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm -ivh RPM包全路径名称</span><br></pre></td></tr></table></figure>
+<p>关于使用的 <code>ivh</code> 的含义：<code>i</code> 表示 install，表示安装；<code>v</code> 表示 verbose，意为提示；<code>h</code> 表示 hash，意为进度条。</p>
+<blockquote>
+<p>卸载 rpm 时的注意要点</p>
+</blockquote>
+<p>1、如果其他软件包依赖于需要被卸载的软件包，卸载时会产生错误信息。</p>
+<p>2、如果非要删除被依赖的软件包，可以增加 <code>--nodeps</code> 参数以强制删除，但是不推荐怎么使用。比如：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm -e --nodeps foo # 强制删除 foo 软件包</span><br></pre></td></tr></table></figure>
+<h2 id="1-2-Yum-的使用"><a class="header-anchor" href="#1-2-Yum-的使用"></a>1.2 Yum 的使用</h2>
+<p>Yum 是一个 Shell 前端软件包管理器。基于 RPM 包管理，能够从指定的服务器自动下载 RPM 包并安装，可以自动处理依赖关系，并且一次安装所有依赖的软件包。</p>
+<blockquote>
+<p>yum 的基本指令</p>
+</blockquote>
+<p>1、查询 yum 服务器是否有需要安装的软件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum list | grep xx软件列表</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">或者</span></span><br><span class="line">yum list xx软件名称</span><br></pre></td></tr></table></figure>
+<p>2、安装指定的 yum 包：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install xxx软件名称</span><br></pre></td></tr></table></figure>
+<p>比如我们使用 yum 来安装 firefox，最后再卸载它：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum list | grep firefox # 查看 yum 服务器上是否含有 firefox</span><br><span class="line">yum install firefox # 安装 firefox</span><br><span class="line">rpm -q firefox # 查看 firefox 是否被安装</span><br><span class="line">rpm -e firefox # 卸载 firefox</span><br></pre></td></tr></table></figure>
+<h1 id="2-搭建-JavaEE-开发环境"><a class="header-anchor" href="#2-搭建-JavaEE-开发环境"></a>2. 搭建 JavaEE 开发环境</h1>
+<h2 id="2-1-安装-JDK8"><a class="header-anchor" href="#2-1-安装-JDK8"></a>2.1 安装 JDK8</h2>
+<p>首先前往 Oracle 官网下载 Linux 环境下 JDK 的压缩包（假设下载的压缩包名为 <code>jdk-8u301-linux-x64.tar.gz</code>），然后执行以下指令创建 JDK 压缩包存放目录：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir /opt/jdk</span><br></pre></td></tr></table></figure>
+<p>通过 Xftp 将本地的 JDK 压缩包上传至 Linux 的 /opt/jdk 目录下，然后依次执行以下指令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /opt/jdk # 进入存放压缩包的目录</span><br><span class="line">tar -zxvf jdk-8u301-linux-x64.tar.gz # 解压</span><br><span class="line">mkdir /usr/local/java # 创建 jdk 存放目录</span><br><span class="line">mv /opt/jdk/jdk1.8.0_301 /usr/local/java # 将解压后的文件移动到 jdk 存放目录中</span><br><span class="line">vim /etc/profile # 修改文件配置环境变量</span><br></pre></td></tr></table></figure>
+<p>进入 vim 编辑环境后，键入 <code>i</code> 进入编辑模式，在文件末尾追加以下内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=/usr/local/java/jdk1.8.0_301</span><br><span class="line">export PATH=$JAVA_HOME/bin:$PATH</span><br></pre></td></tr></table></figure>
+<p>然后键入 ESC 退出编辑模式，再键入 <code>:wq</code> 保存并退出 vim 编辑模式。</p>
+<p>执行以下命令让配置文件生效：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source /etc/profile</span><br></pre></td></tr></table></figure>
+<p>然后执行以下命令查看 JDK 是否安装成功：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -version</span><br></pre></td></tr></table></figure>
+<p>如果出现以下类似内容表明安装成功：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/LinuxImages/%E6%9F%A5%E7%9C%8BJDK%E6%98%AF%E5%90%A6%E5%AE%89%E8%A3%85%E6%88%90%E5%8A%9F%E7%9A%84%E5%91%BD%E4%BB%A4.png" alt="查看JDK是否安装成功的命令"></p>
+<h2 id="2-2-安装-Tomcat"><a class="header-anchor" href="#2-2-安装-Tomcat"></a>2.2 安装 Tomcat</h2>
+<p>与 JDK 的安装类似，需要先下载相应的压缩包（假设下载的压缩包名为 <code>apache-tomcat-10.0.12.tar.gz</code>），再上传至 Linux 并解压，相关命令如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mkdir /opt/tomcat # 创建 tomcat 压缩包存放路径</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">上传压缩包至 Linux 环境下</span></span><br><span class="line">tar -zxvf apache-tomcat-10.0.12.tar.gz # 解压</span><br><span class="line">cd apache-tomcat-10.0.12 # 进入解压后的目录</span><br><span class="line">cd bin # 进入 bin 目录</span><br><span class="line">./startup.sh # 运行 tomcat</span><br></pre></td></tr></table></figure>
+<p>如果出现以下类似内容表明 Tomcat 启动成功：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/LinuxImages/%E5%90%AF%E5%8A%A8Tomcat%E5%90%8E%E7%9A%84%E6%88%90%E5%8A%9F%E4%BF%A1%E6%81%AF.png" alt="启动Tomcat后的成功信息"></p>
+<p>除此之外，我们还可以开放 8080 端口，使用 <code>IP地址:8080</code> 的方式访问 Tomcat 首页。如果成功出现以下界面，也表明启动成功：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/LinuxImages/Tomcat%E5%90%AF%E5%8A%A8%E5%90%8E%E9%A6%96%E9%A1%B5.png" alt="Tomcat启动后首页"></p>
+<p><strong>备注：</strong> 阿里云 ECS 开放 8080 端口的方式参考《【上篇】Linux 基础》一文中文首配置安全组规则的方式开放 8080 端口。</p>
+<p>同时还可以进入 Tomcat 安装目录下的 <code>/webapps/ROOT</code> 目录，在此目录中编写一个 HTML 静态页面，然后可以通过 <code>IP地址:8080/xx.html</code> 的方式进行访问。</p>
+<h2 id="2-3-安装-IDEA"><a class="header-anchor" href="#2-3-安装-IDEA"></a>2.3 安装 IDEA</h2>
+<p>安装 IDEA 主要是用于在 Linux 上进行办公，在服务器上我们不需要安装 IDEA。</p>
+<p>首先进入以下地址下载 Linux 版本的 IDEA：</p>
+<pre>
+https://www.jetbrains.com/idea/download/#section=linux
+</pre>
+<p>然后与前面的安装步骤一直：创建存放压缩包的文件夹，解压文件，运行即可。</p>
+<p>关于运行 IDEA 不能在远程连接上运行，这样是看不到界面的，需要在有界面的环境下运行，运行方式如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd bin # 进入 IDEA 安装目录下的 bin 目录</span><br><span class="line">./idea.sh # 运行 IDEA</span><br></pre></td></tr></table></figure>
+<p>然后使用方式就和在 Windows 上一样了。</p>
+<h2 id="2-4-安装-MySQL-5-7"><a class="header-anchor" href="#2-4-安装-MySQL-5-7"></a>2.4 安装 MySQL 5.7</h2>
+<p>创建 MySQL 压缩包存放目录并进入这个目录：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir /opt/mysql</span><br><span class="line">cd /opt/mysql</span><br></pre></td></tr></table></figure>
+<p>通过 <strong>网络</strong> 获取 MySQL 安装包：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget http://dev.mysql.com/get/mysql-5.7.26-1.el7.x86_64.rpm-bundle.tar</span><br></pre></td></tr></table></figure>
+<p>由于文件比较大，下载需要一定的时间，请耐心等待。</p>
+<p>下载完毕后，对其进行解压：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xvf mysql-5.7.26-1.el7.x86_64.rpm-bundle.tar</span><br></pre></td></tr></table></figure>
+<p>注意解压指令不要使用 <code>z</code> 选项，因为添加此选项表示通过 gzip 指令处理备份文件，此压缩文件没有 <code>.gz</code> 后缀，因此是不能使用 <code>z</code> 选项的。</p>
+<p>CentOS 7.6 会自带一个类 MySQL 数据库 mariadb，它会和 MySQL 冲突，因此需要将其删除。</p>
+<p>运行以下指令，查询 mariadb 相关安装包：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm -qa | grep maria</span><br></pre></td></tr></table></figure>
+<p>如果查询内容不为空，需要将相关安装包删除。</p>
+<p>我当前的系统存在 <code>mariadb-libs-5.5.68-1.el7.x86_64</code>，因此需要执行以下命令，强制卸载它：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm -e --nodeps mariadb-libs</span><br></pre></td></tr></table></figure>
+<p>卸载之后再执行一次查询命令，看看是否卸载成功。</p>
+<p>然后按顺序执行以下命令，进入 MySQL 真正的安装：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">rpm -ivh mysql-community-common-5.7.26-1.el7.x86_64.rpm</span><br><span class="line">rpm -ivh mysql-community-libs-5.7.26-1.el7.x86_64.rpm</span><br><span class="line">rpm -ivh mysql-community-client-5.7.26-1.el7.x86_64.rpm</span><br><span class="line">rpm -ivh mysql-community-server-5.7.26-1.el7.x86_64.rpm</span><br></pre></td></tr></table></figure>
+<p>前三条执行都很顺利，但是第四条指令执行后出现以下错误：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/LinuxImages/%E5%AE%89%E8%A3%85MySQL%E7%BC%BA%E5%B0%91libaio.png" alt="安装MySQL缺少libaio"></p>
+<p>这是因为缺少 libaio 依赖，安装它就行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install libaio</span><br></pre></td></tr></table></figure>
+<p>安装完成后再次执行安装 MySQL 的第四条指令。</p>
+<p>执行完毕后，启动 MySQL：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl start mysqld.service</span><br></pre></td></tr></table></figure>
+<p>启动完成后并没有任何提示，运行以下指令查看 MySQL 启动状态：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl status mysqld.service</span><br></pre></td></tr></table></figure>
+<p>如果看到 Active 为 <code>active (running)</code> 就表明启动成功。</p>
+<p>MySQL 会自动给 root 用户设置随机密码，运行以下指令可看到初始密码：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep &quot;password&quot; /var/log/mysqld.log</span><br></pre></td></tr></table></figure>
+<p>使用以下指令与初始密码登录：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -u root -p # 执行指令后输入初始密码</span><br></pre></td></tr></table></figure>
+<p>成功登录后要修改初始密码，密码中必须包含大小写字母数字及符号，但对于个人开发设置一个简单的密码就行了，因此可以执行以下语句更改 MySQL 密码验证策略（默认策略是 1）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set global validate_password_policy=0;</span><br></pre></td></tr></table></figure>
+<p>运行以下语句设置新密码为 12345678：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set password for &#x27;root&#x27;@&#x27;localhost&#x27;=password(&#x27;12345678&#x27;);</span><br></pre></td></tr></table></figure>
+<p>如果上述语句执行失败，可以使用以下语句：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER USER &#x27;root&#x27;@&#x27;localhost&#x27; IDENTIFIED BY &#x27;12345678&#x27;;</span><br></pre></td></tr></table></figure>
+<p>最后运行以下语句使密码生效：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flush privileges;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>MySQL 常用命令</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">systemctl start mysqld.service # 开启服务</span><br><span class="line">systemctl stop mysqld.service # 关闭服务</span><br><span class="line">systemctl status mysqld.service # 查看服务状态</span><br><span class="line">mysql -u root -p # 进入命令窗口</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">show databases; # 查看所有数据库</span><br><span class="line">use 数据库名; # 使用该数据进行编辑</span><br><span class="line">show tables; # 查看某数据库所有表</span><br><span class="line">quit; # 退出命令窗口</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>MySQL 密码验证策略</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">长度要求（默认 8 位）</th>
+<th style="text-align:center">数字</th>
+<th style="text-align:center">字母大小写</th>
+<th style="text-align:center">特殊字符</th>
+<th style="text-align:center">字典文件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">❌</td>
+<td style="text-align:center">❌</td>
+<td style="text-align:center">❌</td>
+<td style="text-align:center">❌</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">❌</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">✔️</td>
+</tr>
+</tbody>
+</table>
+<p>MySQL 密码验证策略有三种，其中 0 密码复杂度最低，2 密码复杂度最高。</p>
+<h2 id="2-5-安装-Maven"><a class="header-anchor" href="#2-5-安装-Maven"></a>2.5 安装 Maven</h2>
+<p>前面已经安装了好几个软件了，在此就省略下载解压等步骤。Maven 的下载地址可去：<a target="_blank" rel="noopener" href="https://maven.apache.org/download.cgi">Maven 下载地址</a>。</p>
+<p>当我们加压好 Maven 后，进入 Maven 安装目录下的 conf 目录并修改 settings.xml 文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd conf</span><br><span class="line">vim settings.xml</span><br></pre></td></tr></table></figure>
+<p>在此文件中追加以下内容：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 设置本地仓库的位置 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">localRepository</span>&gt;</span>/usr/local/apache-maven-3.8.1/repository<span class="tag">&lt;/<span class="name">localRepository</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 设置下载镜像 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mirror</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">id</span>&gt;</span>alimaven<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>aliyun maven<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://maven.aliyun.com/nexus/content/groups/public/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>central<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mirror</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>追加完毕后保存并退出，接下来修改环境变量：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/profile # 进入环境变量配置文件</span><br></pre></td></tr></table></figure>
+<p>然后在此文件最底部追加以下内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export MAVEN_HOME=/usr/local/maven/apache-maven-3.8.1</span><br><span class="line">export PATH=$PATH:$MAVEN_HOME/bin</span><br></pre></td></tr></table></figure>
+<p>其中 <code>MAVEN_HOME</code> 表示 Maven 的安装目录，根据自己的实际进行修改。</p>
+<p>追加完毕后保存并退出，执行以下命令让环境变量生效：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source /etc/profile</span><br></pre></td></tr></table></figure>
+<p>最后执行以下命令，查看 Maven 是否安装成功：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn -v</span><br></pre></td></tr></table></figure>
+<h1 id="3-Shell-编程"><a class="header-anchor" href="#3-Shell-编程"></a>3. Shell 编程</h1>
+<h2 id="3-1-Shell-编程引言"><a class="header-anchor" href="#3-1-Shell-编程引言"></a>3.1 Shell 编程引言</h2>
+<blockquote>
+<p>为什么要学习 Shell 编程？</p>
+</blockquote>
+<p>1、Linux 运维工程师在进行服务器集群管理时，需要编写 Shell 程序来进行服务器管理。</p>
+<p>2、对于 JavaEE 和 Python 程序员来说，由于工作的需要，你的老大会要求你编写一些 Shell 脚本进行程序或是服务器的维护，比如编写一个定时备份数据库的脚本。</p>
+<p>3、对于大数据程序员来说，需要编写 Shell 程序来管理集群。</p>
+<blockquote>
+<p>Shell 是什么</p>
+</blockquote>
+<p>Shell 是一个命令行解释器，它为用户提供了一个向 Linux 内核发送请求以便运行程序的界面系统级程序，用户可以用 Shell 来启动、挂起、停止甚至是编写一些程序。</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/LinuxImages/Linux系统结构.png" alt="Linux系统结构" style="zoom:67%;" />
+<h2 id="3-2-Shell-脚本的执行方式"><a class="header-anchor" href="#3-2-Shell-脚本的执行方式"></a>3.2 Shell 脚本的执行方式</h2>
+<blockquote>
+<p>格式要求</p>
+</blockquote>
+<p>脚本要以 <code>#!/bin/bash</code> 开头。脚本需要有可执行权限。</p>
+<blockquote>
+<p>常用执行方式</p>
+</blockquote>
+<p>方式 1：输入脚本的绝对路径或相对路径执行。在执行之前需要赋予脚本 <code>+x</code> 权限。</p>
+<p>方式 2：采用 <code>sh 脚本</code> 的方式运行，这种运行方式无需赋予脚本可执行权限，直接执行即可。</p>
+<blockquote>
+<p>简单案例</p>
+</blockquote>
+<p>创建一个 Shell 脚本，输出“hello world!”。</p>
+<p>执行以下命令创建 Shell 脚本，Shell 一般以 <code>.sh</code> 作为后缀名，当然也可以不是：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim hello.sh</span><br></pre></td></tr></table></figure>
+<p>在这个脚本中进行如下编码：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line">echo &quot;hello world!&quot;</span><br></pre></td></tr></table></figure>
+<p>保存并退出 Vim 编辑模式。使用 <code>ll</code> 指令可以看到 hello.sh 并没有执行权限，使用第二种方式执行脚本：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh ./hello.sh</span><br></pre></td></tr></table></figure>
+<p>可以成功输出“hello world!”，为 hello.sh 赋予可执行权限：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod u+x hello.sh</span><br></pre></td></tr></table></figure>
+<p>然后使用第一种方式执行脚本：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./hello.sh</span><br></pre></td></tr></table></figure>
+<p>也可以成功输出“hello world!”。</p>
+<h2 id="3-3-Shell-的变量"><a class="header-anchor" href="#3-3-Shell-的变量"></a>3.3 Shell 的变量</h2>
+<p>在 Linux Shell 中的变量分为系统变量和用户自定义变量。</p>
+<p>系统变量比如：<code>$HOME</code>、<code>$PWD</code>、<code>$SHELL</code>、<code>$USER</code> 等等。如果需要查看 <code>$HOME</code> 系统变量的值，可以十一 <code>echo $HOME</code> 指令。</p>
+<p>显示当前 Shell 中所有的变量使用指令 <code>set</code> 即可。</p>
+<blockquote>
+<p>Shell 自定义变量的定义</p>
+</blockquote>
+<p>定义变量：<code>变量名=值</code></p>
+<p>撤销变量：<code>unset 变量名</code></p>
+<p>声明静态变量：<code>readonly 变量名</code></p>
+<p><mark>注意：</mark> 声明变量 <code>=</code>前后不能添加空格！静态变量不能被撤销。</p>
+<blockquote>
+<p>变量声明案例</p>
+</blockquote>
+<p>案例 1：声明变量 A</p>
+<p>案例 2：撤销变量 A</p>
+<p>案例 3：声明静态变量 B = 2</p>
+<p>案例 4：把变量提升为全局环境变量，可供其他 Shell 程序使用</p>
+<p>执行 <code>vim var.sh</code> 指令创建 Shell 脚本，在脚本中追加以下内容：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">案例 1：声明变量 A</span></span><br><span class="line">A=100</span><br><span class="line">echo A=$A # 输出变量时需要使用 $ 符号</span><br><span class="line">echo &quot;A=$A&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">案例 2：撤销变量 A</span></span><br><span class="line">unset A</span><br><span class="line">echo &quot;A=$A&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">案例 3：声明静态变量 B = 2</span></span><br><span class="line">readonly B=2</span><br><span class="line">echo &quot;B=$B&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">把指令的返回结果赋值给变量</span></span><br><span class="line">C=`date`</span><br><span class="line">D=$(date)</span><br><span class="line">echo &quot;C=$C&quot;</span><br><span class="line">echo &quot;D=$D&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">案例 4：把变量提升为全局环境变量，可供其他 Shell 程序使用</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">在 /etc/profile 文件中定义环境变量，然后在此使用</span></span><br><span class="line">echo &quot;java_home=$JAVA_HOME&quot;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>变量的定义规则</p>
+</blockquote>
+<p>1、变量名称由字母、数组和下划线组成，不能以数字开头；</p>
+<p>2、等号两侧不能有空格；</p>
+<p>3、变量名称一般习惯大写。</p>
+<blockquote>
+<p>将命令的返回值赋给变量</p>
+</blockquote>
+<p>1、使用反引号。将运行反引号里的命令，并把结果赋值给变量，比如：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">A=`date`</span><br></pre></td></tr></table></figure>
+<p>2、使用 <code>$()</code>。比如：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">A=$(date)</span><br></pre></td></tr></table></figure>
+<h2 id="3-3-环境变量"><a class="header-anchor" href="#3-3-环境变量"></a>3.3 环境变量</h2>
+<p>设置环境变量的基本语法（在 /etc/profile 文件中添加）：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export 变量名=变量值 # 将 Shell 变量输出为环境变量/全局变量</span><br></pre></td></tr></table></figure>
+<p>如果想要让修改后的配置信息立即生效，可以使用：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source 配置文件</span><br></pre></td></tr></table></figure>
+<p>设置好环境变量后，就可以在不同的 Shell 脚本中使用。</p>
+<p>查询环境变量的值可以使用：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo $variableName # 使用 $ + 变量名</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>应用实例</p>
+</blockquote>
+<p>1、在 /etc/profile 文件中定义 TOMCAT_HOME 环境变量；</p>
+<p>2、查看环境变量 TOMCAT_HOME  的值；</p>
+<p>3、在另一个 Shell 程序中使用 TOMCAT_HOME；</p>
+<p><mark>注意：</mark> 在输出 TOMCAT_HOME  环境变量前，需要让其生效，使用 <code>source /etc/profile</code> 指令。</p>
+<blockquote>
+<p>补充：Shell 中的多行注释</p>
+</blockquote>
+<p>多行注释的语法：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">:&lt;&lt;!</span><br><span class="line">内容</span><br><span class="line">!</span><br></pre></td></tr></table></figure>
+<p>比如：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">:&lt;&lt;!</span><br><span class="line">C=`date`</span><br><span class="line">D=$(date)</span><br><span class="line">echo &quot;C=$C&quot;</span><br><span class="line">echo &quot;D=$D&quot;</span><br><span class="line">!</span><br></pre></td></tr></table></figure>
+<h2 id="3-4-位置参数变量"><a class="header-anchor" href="#3-4-位置参数变量"></a>3.4 位置参数变量</h2>
+<p>当我们执行一个 Shell 脚本时，如果希望获取到命令行的参数信息，就可以使用到位置参数变量。</p>
+<p>比如：<code>./myshell.sh 100 200</code>，这是一个执行 Shell 脚本的命令，可以在 myshell 脚本中获取到参数 100 和 200 的信息。</p>
+<p>简单来说：Shell 脚本相当于一个 Java 中的方法，而位置参数变量就是方法的参数。</p>
+<blockquote>
+<p>基本语法</p>
+</blockquote>
+<p><code>$n</code>（n 为数字，$0 代表命令本身，$1- <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>9</mn><mtext>代表第一到第九个参数，十以上的参数需要用大括号，如</mtext></mrow><annotation encoding="application/x-tex">9 代表第一到第九个参数，十以上的参数需要用大括号，如</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">9</span><span class="mord cjk_fallback">代表第一到第九个参数，十以上的参数需要用大括号，如</span></span></span></span>{10}）</p>
+<p><code>$*</code>（这个变量代表命令行中所有的参数，<code>$*</code> 把所有的参数看成一个整体）</p>
+<p><code>$@</code>(这个变量也代表命令行中所有的参数，不过 <code>$@</code> 把每个参数区分对待）</p>
+<p><code>$#</code>（这个变量代表命令行中所有参数的个数）</p>
+<blockquote>
+<p>使用案例</p>
+</blockquote>
+<p>编写一个 Shell 脚本 position.sh，在脚本中获取到命令行的各个参数信息。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim position.sh # 编写 Shell 脚本</span><br></pre></td></tr></table></figure>
+<p>Shell 脚本中的内容如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line">echo &quot;0=$0 1=$1 2=$2&quot;</span><br><span class="line">echo &quot;所有的参数=$*&quot;</span><br><span class="line">echo &quot;$@&quot;</span><br><span class="line">echo &quot;参数的个数=$#&quot;</span><br></pre></td></tr></table></figure>
+<p>赋予脚本可执行权限并执行脚本：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chmod u+x position.sh # 赋予可执行权限</span><br><span class="line">./position.sh 100 200# 执行脚本</span><br></pre></td></tr></table></figure>
+<p>执行结果：</p>
+<pre>
+0=./position.sh 1=100 2=200
+所有的参数=100 200
+100 200
+参数的个数=2
+</pre>
+<h2 id="3-5-预定义变量"><a class="header-anchor" href="#3-5-预定义变量"></a>3.5 预定义变量</h2>
+<p>预定义变量是 Shell 设计者事先已经定义好的变量，可以直接在 Shell 脚本中使用。</p>
+<blockquote>
+<p>基本语法</p>
+</blockquote>
+<p><code>$$</code>（当前进程的进程号，即 PID）<br>
+<code>$!</code>（后台运行的最后一个进程的进程号）<br>
+<code>$?</code>（最后一次执行的命令的返回状态。如果这个变量值为 0，表明上一个命令正确执行；如果这个变量值为非 0，表明上一个命令执行不正确，至于具体是哪个数，由命令决定）</p>
+<blockquote>
+<p>使用案例</p>
+</blockquote>
+<p>创建一个名为 preVar.sh 的脚本，在此脚本中使用预定义变量。</p>
+<p>preVar.sh 脚本中的内容：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line">echo &quot;当前执行的进程号=$$&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">以后台的方式运行一个脚本，并获取它的进程号</span></span><br><span class="line">/root/shcode/position.sh &amp;</span><br><span class="line">echo &quot;最后一个后台方式运行的进程号=$!&quot;</span><br><span class="line">echo &quot;执行的结果是=$?&quot;</span><br></pre></td></tr></table></figure>
+<p>当我们为此脚本赋予执行权限并执行后，会“卡住”，这是因为在 Shell 脚本中执行了另一个脚本，使用 <code>Ctrl + C</code> 退出即可。</p>
+<h2 id="3-6-运算符"><a class="header-anchor" href="#3-6-运算符"></a>3.6 运算符</h2>
+<p>可以使用运算符在 Shell 脚本中进行各种运算操作。其基本语法是：</p>
+<p>1、使用 <code>$((运算式))</code> 或 <code>$[运算式]</code> 或 <code>expr m + n</code>；</p>
+<p>2、注意 <code>expr</code> 运算符之间要有空格，除 <code>+</code> 之外，还有 <code>\* / %</code> 等多种。</p>
+<blockquote>
+<p>应用实例</p>
+</blockquote>
+<p>1、计算 (2+3)*4 的值；</p>
+<p>2、求出命令行的两个参数（参数是整数）的和；</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">1.计算 (2+3)*4 的值</span></span><br><span class="line">RES1=$(((2+3)*4))</span><br><span class="line">RES2=$[(2+3)*4] # 推荐使用这种方式</span><br><span class="line">TEMP=`expr 2 + 3` # 需要一步步地计算，运算符之间要有空格，否则会当成一个整体</span><br><span class="line">RES3=`expr $TEMP \* 4` # 注意乘号的书写方式</span><br><span class="line">echo &quot;RES1=$RES1&quot;</span><br><span class="line">echo &quot;RES2=$RES2&quot;</span><br><span class="line">echo &quot;TEMP=$TEMP&quot;</span><br><span class="line">echo &quot;RES3=$RES3&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">2.求出命令行的两个参数（参数是整数）的和</span></span><br><span class="line">SUM=$[$1+$2]</span><br><span class="line">echo &quot;参数之和是 $SUM&quot;</span><br></pre></td></tr></table></figure>
+<p>赋予执行权限后，使用以下命令执行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./oper.sh 100 200</span><br></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<pre>
+RES1=20
+RES2=20
+TEMP=5
+RES3=20
+参数之和是 300
+</pre>
+<h2 id="3-7-条件判断"><a class="header-anchor" href="#3-7-条件判断"></a>3.7 条件判断</h2>
+<p>在 Shell 编程中，条件判断使用 <code>[]</code> 来完成，其基本语法是：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">if [ condition ]</span><br></pre></td></tr></table></figure>
+<p><mark>注意：</mark> condition 前后要有空格！</p>
+<p>非空返回 <code>true</code>，可以使用 <code>$?</code> 来验证，如果为 0 表示 <code>true</code>，大于 1 表示 <code>false</code>。</p>
+<blockquote>
+<p>简单的应用实例</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[ mofan ] # 返回 true</span><br><span class="line">[ ] # 返回 false</span><br><span class="line">[ condition ] &amp;&amp; echo OK || echo notOK # 条件满足，执行后面的语句</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>判断语句</p>
+</blockquote>
+<p>1、判断两个字符串是否相等，可以使用 <code>=</code>；</p>
+<p>2、判断两个整数之间的大小关系，可以使用：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">-lt # 小于</span><br><span class="line">-le # 小于等于</span><br><span class="line">-eq # 等于</span><br><span class="line">-gt # 大于</span><br><span class="line">-ge # 大于等于</span><br><span class="line">-ne # 不等于</span><br></pre></td></tr></table></figure>
+<p>3、按照文件权限进行判断：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-r # 有读的权限</span><br><span class="line">-w # 有写的权限</span><br><span class="line">-x # 有执行的权限</span><br></pre></td></tr></table></figure>
+<p>4、按照文件类型进行判断：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-f # 文件存在并且是一个常规文件</span><br><span class="line">-e # 文件存在</span><br><span class="line">-d # 文件存在并且是一个目录</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>应用实例</p>
+</blockquote>
+<p>案例 1：“ok” 是否等于 “ok”</p>
+<p>案例 2：23 是否大于等于 22</p>
+<p>案例 3：/root/shcode/aaa.txt 文件是否存在</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">“ok” 是否等于 “ok”</span></span><br><span class="line">if [ &quot;ok&quot; = &quot;ok&quot; ]</span><br><span class="line">then</span><br><span class="line">        echo &quot;equal&quot;</span><br><span class="line">fi</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">23 是否大于等于 22</span></span><br><span class="line">if [ 23 -gt 22 ]</span><br><span class="line">then</span><br><span class="line">        echo &quot;大于&quot;</span><br><span class="line">fi</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">/root/shcode/aaa.txt 文件是否存在</span></span><br><span class="line">if [ -f /root/shcode/aaa.txt ]</span><br><span class="line">then</span><br><span class="line">        echo &quot;存在&quot;</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<h2 id="3-8-流程控制之-if"><a class="header-anchor" href="#3-8-流程控制之-if"></a>3.8 流程控制之 if</h2>
+<p>通过前一节的条件判断，我们已经知道了 <code>if</code> 的基本使用，那其基本语法是怎样的呢？</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">if [ condition ]</span><br><span class="line">then </span><br><span class="line"><span class="meta prompt_">    # </span><span class="language-bash">code</span></span><br><span class="line">fi</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">或者</span></span><br><span class="line"></span><br><span class="line">if [ condition ]</span><br><span class="line">then</span><br><span class="line"><span class="meta prompt_">    # </span><span class="language-bash">code</span></span><br><span class="line">elif [ condition ]</span><br><span class="line"><span class="meta prompt_">    # </span><span class="language-bash">code</span></span><br><span class="line">fi    </span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>应用案例</p>
+</blockquote>
+<p>编写 ifcase.sh，如果输入的参数大于等于 60，就输出“及格了”，反之输出“不及格”。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line">if [ $1 -ge 60 ]</span><br><span class="line">then</span><br><span class="line">        echo &quot;及格了&quot;</span><br><span class="line">else</span><br><span class="line">        echo &quot;不及格&quot;</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<h2 id="3-9-流程控制之-case"><a class="header-anchor" href="#3-9-流程控制之-case"></a>3.9 流程控制之 case</h2>
+<p>Shell 编程中也有类似于 <code>switch...case</code> 的语法，其基本语法是：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">case $VariableName in</span><br><span class="line">&quot;值1&quot;）</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">分支 1</span></span><br><span class="line">;;</span><br><span class="line">&quot;值2&quot;)</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">分支 2</span></span><br><span class="line">;;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">省略其他分支</span></span><br><span class="line">*)</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">默认执行的分支</span></span><br><span class="line">;;</span><br><span class="line">esac</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>应用实例</p>
+</blockquote>
+<p>当命令行参数是 1 时，输出“周一”，是 2 时，输出“周二”，其他情况输出“other”。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line">case $1 in</span><br><span class="line">&quot;1&quot;)</span><br><span class="line">echo &quot;周一&quot;</span><br><span class="line">;;</span><br><span class="line">&quot;2&quot;)</span><br><span class="line">echo &quot;周二&quot;</span><br><span class="line">;;</span><br><span class="line">*)</span><br><span class="line">echo &quot;other&quot;</span><br><span class="line">;;</span><br><span class="line">esac</span><br></pre></td></tr></table></figure>
+<h2 id="3-10-流程控制之-for"><a class="header-anchor" href="#3-10-流程控制之-for"></a>3.10 流程控制之 for</h2>
+<p>基本语法 1：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">for 变量 in 值1 值2 值3...</span><br><span class="line">do</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">code</span></span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<p>基本语法 2：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">for ((初始值;循环控制条件;变量变化))</span><br><span class="line">do</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">code</span></span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>应用实例</p>
+</blockquote>
+<p><strong>案例 1：打印命令行输入的参数。</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">打印命令行输入的参数，注意 $* 和 <span class="variable">$@</span> 的区别</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">$* 是把输入的参数当成一个整体</span></span><br><span class="line">for i in &quot;$*&quot;</span><br><span class="line">do</span><br><span class="line">        echo &quot;num is $i&quot;</span><br><span class="line">done</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="variable">$@</span> 会把输入的参数当成一个集合，区别对待每一个参数</span></span><br><span class="line">echo &quot;一条分割线&quot;</span><br><span class="line">for j in &quot;$@&quot;</span><br><span class="line">do</span><br><span class="line">        echo &quot;num is $j&quot;</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<p>执行指令与对应的输出结果：</p>
+<pre>
+[root@mofan shcode]# ./testfor1.sh 100 200 300
+num is 100 200 300
+一条分割线
+num is 100
+num is 200
+num is 300
+</pre>
+<p><strong>案例 2：输出显示从 1 到 100 累加的值。</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line">SUM=0</span><br><span class="line">for((i=1; i&lt;=100; i++))</span><br><span class="line">do</span><br><span class="line">        SUM=$[$SUM+$i]</span><br><span class="line">done</span><br><span class="line">echo &quot;SUM=$SUM&quot; # 输出 5050</span><br></pre></td></tr></table></figure>
+<h2 id="3-11-流程控制之-while"><a class="header-anchor" href="#3-11-流程控制之-while"></a>3.11 流程控制之 while</h2>
+<p>除了 <code>for</code> 之外，Shell 编程还支持 <code>while</code> 循环。其基本语法是：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">while [ condition ]</span><br><span class="line">do </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">code</span></span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>应用实例</p>
+</blockquote>
+<p>从命令行输入一个数 n，统计从 1 到 n 的累加值。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line">i=0</span><br><span class="line">SUM=0</span><br><span class="line">while [ $i -le $1 ]</span><br><span class="line">do</span><br><span class="line">        SUM=$[$SUM+$i]</span><br><span class="line">        i=$[$i+1]</span><br><span class="line">done</span><br><span class="line">echo &quot;SUM=$SUM&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="3-12-读取控制台输入"><a class="header-anchor" href="#3-12-读取控制台输入"></a>3.12 读取控制台输入</h2>
+<p>可参考的教程：<a target="_blank" rel="noopener" href="https://www.baeldung.com/linux/read-command">Guide to the Linux read Command</a></p>
+<p>使用 <code>read</code> 可以读取控制台的输入，其基本语法是：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">read [选项] [参数]</span><br></pre></td></tr></table></figure>
+<p><code>read</code> 常用的选项：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">选项</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">-p</td>
+<td style="text-align:center">指定读取值时的提示符</td>
+</tr>
+<tr>
+<td style="text-align:center">-t</td>
+<td style="text-align:center">指定读取值时等待的时间（秒）。如果没在指定时间输入，就不再等待。</td>
+</tr>
+<tr>
+<td style="text-align:center">-n</td>
+<td style="text-align:center">后跟一个数字，定义输入文本的长度</td>
+</tr>
+<tr>
+<td style="text-align:center">-r</td>
+<td style="text-align:center">屏蔽 <code>\</code>，如果没有该选项，<code>\</code> 将作为转义字符，反之为正常字符</td>
+</tr>
+<tr>
+<td style="text-align:center">-e</td>
+<td style="text-align:center">使用 Bash 内置的 <a target="_blank" rel="noopener" href="https://www.gnu.org/software/bash/manual/html_node/Readline-Interaction.html">Readline</a> 库读取输入行，添加 <code>-e</code> 参数后能够更好地修改输入错误的内容</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>应用案例</p>
+</blockquote>
+<p>案例 1：读取控制台输入一个 NUM1 值；</p>
+<p>案例 2：读取控制台输入一个 NUM2 值，在 10 秒后输入。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">案例 1</span> </span><br><span class="line">read -p &quot;请输入一个数NUM1= &quot; NUM1</span><br><span class="line">echo &quot;你输入的数NUM1= $NUM1&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">案例 2</span></span><br><span class="line">read -t 10 -p &quot;请输入一个数NUM2= &quot; NUM2</span><br><span class="line">echo &quot;你输入的数NUM2= $NUM2&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="3-13-系统函数"><a class="header-anchor" href="#3-13-系统函数"></a>3.13 系统函数</h2>
+<p>Shell 编程和其它编程语言一样，有系统函数，也可以自定义函数。在此介绍两个系统函数。</p>
+<blockquote>
+<p><code>basename</code></p>
+</blockquote>
+<p><code>basename </code> 指令可以返回完整路径最后一个 <code>/</code> 的后续部分，常用于获取文件名。比如：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">basename [pathname] [suffix]</span><br><span class="line">basename [string] [suffix] # basename 会删掉所有的前缀包括最后的 /，然后将字符串显示出来</span><br></pre></td></tr></table></figure>
+<p>suffix 为后缀，如果 suffix 被指定了，basename 会将 pathname 或 string 中的 suffix 去掉。</p>
+<p>应用案例：请返回 <code>/home/aaa/test.txt</code> 的“test.txt”部分。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">basename /home/aaa/test.txt # 输出 test.txt</span><br><span class="line">basename /home/aaa/test.txt .txt  # 输出 test</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>dirname</code></p>
+</blockquote>
+<p><code>dirname</code> 可以返回完整路径最后一个 <code>/</code> 的前面部分，常用于返回文件的路径。其基本语法是：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dirname 文件绝对路径 # 从给定的包含绝对路径的文件名中去除文件名（非目录的部分） ,然后返回剩下的路径（目录的部分）</span><br></pre></td></tr></table></figure>
+<p>应用实例：请返回 <code>/home/aaa/test.txt</code> 的 <code>/home/aaa</code>。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dirname /home/aaa/test.txt</span><br></pre></td></tr></table></figure>
+<h2 id="3-14-自定义函数"><a class="header-anchor" href="#3-14-自定义函数"></a>3.14 自定义函数</h2>
+<p>自定义函数的基本语法：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[ function ] funcname[()]</span><br><span class="line">&#123;</span><br><span class="line">    Action;</span><br><span class="line">    [return int;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用自定义函数使用：funcname [值]</p>
+<blockquote>
+<p>应用实例</p>
+</blockquote>
+<p>自定义函数 <code>getSum</code> 用于计算两个参数的值。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">自定义函数 getSum</span></span><br><span class="line">function getSum() &#123;</span><br><span class="line"></span><br><span class="line">        SUM=$[$n1+$n2]</span><br><span class="line">        echo &quot;和是 $SUM&quot;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">输入两个值</span></span><br><span class="line">read -p &quot;请输入第一个加数 &quot; n1</span><br><span class="line">read -p &quot;请输入第二个加数 &quot; n2</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">调用自定义函数</span></span><br><span class="line">getSum $n1 $n2</span><br></pre></td></tr></table></figure>
+<h2 id="3-15-综合案例"><a class="header-anchor" href="#3-15-综合案例"></a>3.15 综合案例</h2>
+<blockquote>
+<p>需求分析</p>
+</blockquote>
+<p>1、每天凌晨 2:30 备份数据库 MofanDB 到 /data/backup/db；</p>
+<p>2、备份开始和备份结束能够给出相应的提示信息；</p>
+<p>3、备份后的文件要求以备份时间为文件名，并打包成 <code>.tar.gz</code> 的形式，比如：2021-03-12_230201.tar.gz；</p>
+<p>4、在备份的同时检查是否有 10 天前备份的数据库文件，如果有就将其删除。</p>
+<blockquote>
+<p>前置准备</p>
+</blockquote>
+<p>执行以下命令并输入密码，进入 MySQL 数据库命令行界面：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -u root -p</span><br></pre></td></tr></table></figure>
+<p>在 MySQL 数据库命令行中依次输入以下命令，完成数据库的创建、数据表的创建和数据的插入：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">SHOW DATABASES; -- 查看数据表信息</span><br><span class="line">CREATE DATABASE IF NOT EXISTS MofanDB; -- 创建数据表</span><br><span class="line">USE MofanDB; -- 使用 MofanDB 数据库</span><br><span class="line">CREATE TABLE tb_student(id INT(16), name VARCHAR(10), age INT(3)); -- 创建表</span><br><span class="line">SHOW TABLES; -- 显示当前库中的表信息</span><br><span class="line">DESC tb_student; -- 查看表结构</span><br><span class="line">INSERT INTO tb_student VALUES(123456789, &#x27;mofan&#x27;, 19); -- 插入一条数据</span><br><span class="line">SELECT * FROM tb_student; -- 查询数据</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>脚本编写步骤</p>
+</blockquote>
+<p>执行以下指令进入 sbin 目录并创建 Shell 脚本：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/sbin </span><br><span class="line">vim mysql_db_backup.sh</span><br></pre></td></tr></table></figure>
+<p>然后在 Shell 脚本中编写以下指令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">备份目录</span></span><br><span class="line">BACKUP=/data/backup/db</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">当前时间</span></span><br><span class="line">DATETIME=$(date +%Y-%m-%d_%H%M%S)</span><br><span class="line">echo $DATETIME</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">数据库地址，就算在阿里云 ECS 上也使用 localhost</span></span><br><span class="line">HOST=localhost</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">数据库用户名</span></span><br><span class="line">DB_USER=root</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">数据库密码</span></span><br><span class="line">DB_PW=12345678</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">备份的数据库名</span></span><br><span class="line">DATABASE=MofanDB</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">创建备份目录，如果不存在就创建</span></span><br><span class="line">[ ! -d &quot;$&#123;BACKUP&#125;/$&#123;DATETIME&#125;&quot; ] &amp;&amp; mkdir -p &quot;$&#123;BACKUP&#125;/$&#123;DATETIME&#125;&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">备份数据库</span></span><br><span class="line">mysqldump -u$&#123;DB_USER&#125; -p$&#123;DB_PW&#125; --host=$&#123;HOST&#125; -q -R --databases $&#123;DATABASE&#125; | gzip &gt; $&#123;BACKUP&#125;/$&#123;DATETIME&#125;/$DATETIME.sql.gz</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将文件处理成 tar.gz</span></span><br><span class="line">cd $&#123;BACKUP&#125;</span><br><span class="line">tar -zcvf $DATETIME.tar.gz $&#123;DATETIME&#125;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">删除对应的备份目录</span></span><br><span class="line">rm -rf $&#123;BACKUP&#125;/$&#123;DATETIME&#125;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">删除10天前的备份文件</span></span><br><span class="line">find $&#123;BACKUP&#125; -atime +10 -name &quot;*.tar.gz&quot; -exec rm -rf &#123;&#125; \;</span><br><span class="line">echo &quot;备份数据库 $&#123;DATABASE&#125; 成功&quot;</span><br></pre></td></tr></table></figure>
+<p>最后就是要让编写的脚本定时执行即可。</p>
+<p>先执行以下指令进入调度文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">crontab -e</span><br></pre></td></tr></table></figure>
+<p>在调度文件中追加以下内容，表示每天 2:30 执行备份脚本：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">30 2 * * * /usr/sbin/mysql_db_backup.sh</span><br></pre></td></tr></table></figure>
+<p>然后保存并退出，执行以下指令查看当前任务调度信息中是否有刚刚追加的调度任务：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">crontab -l</span><br></pre></td></tr></table></figure>
+<p>到此，我们的定时备份脚本就写完了。</p>
+<h2 id="3-16-字符串截取"><a class="header-anchor" href="#3-16-字符串截取"></a>3.16 字符串截取</h2>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://www.jb51.net/article/56563.htm">Shell脚本8种字符串截取方法总结</a></p>
+<blockquote>
+<p><code>#</code> 截取，删除左边字符，保留右边字符</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var=http://www.aaa.com/123.htm</span><br><span class="line">echo $&#123;var#*//&#125;</span><br></pre></td></tr></table></figure>
+<p>其中 <code>var</code> 是变量名，<code>#</code> 是运算符，<code>*//</code> 表示从左边开始删除第一个 <code>//</code> 号及左边的所有字符，即删除 <code>http://</code>。最终结果是 <code>www.aaa.com/123.htm</code>。</p>
+<blockquote>
+<p><code>##</code> 截取，删除左边字符，保留右边字符</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var=http://www.aaa.com/123.htm</span><br><span class="line">echo $&#123;var##*/&#125;</span><br></pre></td></tr></table></figure>
+<p><code>##*/</code> 表示从左边开始删除最后（最右边）一个 <code>/</code> 及左边的所有字符，即删除 <code>http://www.aaa.com/</code>。最终结果是 <code>123.htm</code>。</p>
+<blockquote>
+<p><code>%</code> 截取，删除右边字符，保留左边字符</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var=http://www.aaa.com/123.htm</span><br><span class="line">echo $&#123;var%/*&#125;</span><br></pre></td></tr></table></figure>
+<p><code>%/*</code> 表示从右边开始，删除第一个 <code>/</code> 号及右边的字符。最终结果是：<code>http://www.aaa.com</code>。</p>
+<blockquote>
+<p><code>%%</code> 号截取，删除右边字符，保留左边字符</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var=http://www.aaa.com/123.htm</span><br><span class="line">echo $&#123;var%%/*&#125;</span><br></pre></td></tr></table></figure>
+<p><code>%%/*</code> 表示从右边开始，删除最后（最左边）一个 <code>/</code> 号及右边的字符。最终结果是 <code>http:</code>。</p>
+<blockquote>
+<p>从左边第几个字符开始，及字符的个数</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var=http://www.aaa.com/123.htm</span><br><span class="line">echo $&#123;var:0:5&#125;</span><br></pre></td></tr></table></figure>
+<p>其中的 <code>0</code> 表示左边第一个字符开始，<code>5</code> 表示字符的总个数。最终结果是：<code>http:</code>。</p>
+<blockquote>
+<p>从左边第几个字符开始，一直到结束</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var=http://www.aaa.com/123.htm</span><br><span class="line">echo $&#123;var:7&#125;</span><br></pre></td></tr></table></figure>
+<p>其中的 <code>7</code> 表示左边第 <code>8</code> 个字符开始，一直到结束。最终结果是 <code>www.aaa.com/123.htm</code>。</p>
+<blockquote>
+<p>从右边第几个字符开始，及字符的个数</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var=http://www.aaa.com/123.htm</span><br><span class="line">echo $&#123;var:0-7:3&#125;</span><br></pre></td></tr></table></figure>
+<p>其中的 <code>0-7</code> 表示右边算起第七个字符开始，<code>3</code> 表示字符的个数。最终结果是 <code>123</code>。</p>
+<blockquote>
+<p>从右边第几个字符开始，一直到结束</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var=http://www.aaa.com/123.htm</span><br><span class="line">echo $&#123;var:0-7&#125;</span><br></pre></td></tr></table></figure>
+<p>表示从右边第 7 个字符开始，一直到结束。最终结果是 <code>123.htm</code>。</p>
+<p>注：（左边的第一个字符是用 <code>0</code> 表示，右边的第一个字符用 <code>0-1</code> 表示）</p>
+<h2 id="3-17-更多参考资料"><a class="header-anchor" href="#3-17-更多参考资料"></a>3.17 更多参考资料</h2>
+<p>自己编写 Shell 脚本的机会并不多，相反理解他人的 Shell 脚本含义倒十分常见，以下文章可作为本节补充资料：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/264346586">一篇教会你写90%的shell脚本</a></li>
+<li><a target="_blank" rel="noopener" href="https://omid.dev/2024/06/19/advanced-shell-scripting-techniques-automating-complex-tasks-with-bash/">Advanced Shell Scripting Techniques: Automating Complex Tasks with Bash</a></li>
+</ul>
+<h1 id="4-Ubuntu-的使用"><a class="header-anchor" href="#4-Ubuntu-的使用"></a>4. Ubuntu 的使用</h1>
+<h2 id="4-1-Ubuntu-的简述"><a class="header-anchor" href="#4-1-Ubuntu-的简述"></a>4.1 Ubuntu 的简述</h2>
+<p>Ubuntu（友帮拓、优般图、乌班图）是一个以桌面应用为主的开源 GNU/Linux 操作系统，Ubuntu 是基于 GNU/Linux，支持 x86、amd64 （即 x64）和 PPC 架构，由全球化的专业开发团队（Canonical Ltd）打造的。</p>
+<p>专业的 Python 开发者一般会选择 Ubuntu 这款 Linux 系统作为生产平台，因为当 Ubuntu 安装成功后，默认就安装了 Python 环境。</p>
+<p>温馨提示：</p>
+<p>Ubuntu 和 CentOS 都是基于 GNU/Linux 内核的，因此基本使用和 CentOS 是几乎一样的，它们的各种指令可以通用,在学习和使用 Ubuntu 的过程中，会发现各种操作指令在前面学习 CentOS 都使用过，只是界面和预安装的软件有所差别。</p>
+<p>PS：在此省略 Ubuntu 的安装。</p>
+<h2 id="4-2-Ubuntu-的中文支持"><a class="header-anchor" href="#4-2-Ubuntu-的中文支持"></a>4.2 Ubuntu 的中文支持</h2>
+<p>默认安装的 Ubuntu 中只有英文语言，因此是不能显示汉字的。要正确显示汉字，需要安装中文语言包。</p>
+<p>安装中文支持步骤：</p>
+<p>1、单击左侧图标栏打开 Language Support 菜单，点击打开 Language Support（语言支持）选项卡。</p>
+<p>2、点击 Install/Remove Languages，在弹出的选项卡中下拉找到 Chinese(Simplified)，即中文简体，在后面的选项框中打勾。然后点击 Apply Changes 提交变更，系统会自动联网下载中文语言包。（这里需要保证 Ubuntu 是联网的）。</p>
+<p>3、这时“汉语(中国)”在最后一位因为当前第一位是“English”，所以默认显示都是英文。如果我们希望默认显示用中文，则应该将“汉语中国)”设置为第一位。设置方法是拖动，鼠标单击“汉语(中国)”，当底色变化（表示选中了）后,按住鼠标左键不松手，向上拖动放置到第一位。</p>
+<p>4、设置后不会即刻生效，需要下一次登录时才会生效。</p>
+<h2 id="4-3-Ubuntu-的-root"><a class="header-anchor" href="#4-3-Ubuntu-的-root"></a>4.3 Ubuntu 的 root</h2>
+<p>安装 Ubuntu 成功后，都是普通用户权限，并没有最高 root 权限。如果需要使用 root 权限，通常都会在命令前面加上 <code>sudo</code>。</p>
+<p>我们一般使用 <code>su</code> 指令来直接切换到 root 用户的，但如果没有给 root 设置初始密码，就会出现以下问题：</p>
+<pre>
+su: Authentication failure
+</pre>
+<p>所以，我们需要给 root 用户设置一个初始密码。</p>
+<blockquote>
+<p>给 root 用户设置密码</p>
+</blockquote>
+<p>1、输入 <code>sudo passwd</code> 指令，输入一般用户密码并设定 root 用户密码。</p>
+<p>2、设定 root 密码成功后，输入 <code>su</code> 指令，并输入刚才设定的 root 密码，就可以切换成 root 了。提示符 <code>$</code> 代一般用户，而提示符 <code>#</code> 代表 root 用户。<br>
+3、输入 <code>exit</code> 指令，退出 root 并返回一般用户。</p>
+<h2 id="4-4-APT-软件管理"><a class="header-anchor" href="#4-4-APT-软件管理"></a>4.4 APT 软件管理</h2>
+<p>APT 是 Advanced Packaging Tool 的简称，是一款安装包管理工具。 在 Ubuntu下，我们可以使用 <code>apt</code> 指令进行软件包的安装、删除、清理等，类似于 Windows 中的软件管理工具。</p>
+<blockquote>
+<p>APT 相关命令</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update # 更新源</span><br><span class="line">sudo apt-get install package # 安装包</span><br><span class="line">sudo apt-get remove package # 删除包</span><br><span class="line"></span><br><span class="line">sudo apt-cache search package # 搜索软件包</span><br><span class="line">sudo apt-cache show package # 获取包的相关信息，比如说明、大小、版本等</span><br><span class="line">sudo apt-get install package --reinstall # 重新安装包</span><br><span class="line"></span><br><span class="line">sudo apt-get -f install # 修复安装</span><br><span class="line">sudo apt-get remove package --purge # 删除包，包括配置文件等</span><br><span class="line">sudo apt-get build-dep package # 安装相关的编译环境</span><br><span class="line"></span><br><span class="line">sudo apt-get upgrade # 更新已安装的包</span><br><span class="line">sudo apt-get dist-upgrade # 升级系统</span><br><span class="line">sudo apt-cache depends package # 了解使用该包依赖哪些包</span><br><span class="line">sudo apt-cache rdepends package # 查看该包被哪些包依赖</span><br><span class="line">sudo apt-get source package # 下载该包的源代码</span><br></pre></td></tr></table></figure>
+<p>为了更快地下载需要安装的包，我们需要配置 APT 的下载镜像。</p>
+<p>可以先查看 APT 默认的安装服务器地址：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/apt/sources.list</span><br></pre></td></tr></table></figure>
+<p>前往 <a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/">清华大学开源软件镜像站</a>，然后找到 <a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/">Ubuntu 镜像使用帮助</a>，复制其中的内容替换 APT 下载源。</p>
+<p><mark>注意：</mark> 在替换 sources.list 文件时，我们最好备份原文件。</p>
+<blockquote>
+<p>镜像源更换步骤</p>
+</blockquote>
+<p>1、备份 Ubuntu 默认的源地址：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo cp /etc/apt/sources.list /etc/apt/sources.list.backup</span><br></pre></td></tr></table></figure>
+<p>2、进入 root 用户：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">su # 然后输入密码</span><br></pre></td></tr></table></figure>
+<p>3、先清空 sources.list 文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &#x27;&#x27; &gt; /etc/apt/sources.list</span><br></pre></td></tr></table></figure>
+<p>4、复制镜像网站的地址，拷贝到 sources.list 文件。</p>
+<p>5、最后更新源地址：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>APT 的简单使用</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get remove vim # 删除 vim</span><br><span class="line">sudo apt-get install vim # 安装 vim</span><br><span class="line">sudo apt-cache show vim # 查看 vim 的信息</span><br></pre></td></tr></table></figure>
+<h2 id="4-5-远程登录"><a class="header-anchor" href="#4-5-远程登录"></a>4.5 远程登录</h2>
+<p>SSH 为 Secure Shell 的缩写，由 IETF 的网络工作小组（Network Working Group）所制定。SSH 是建立在应用层和传输层基础上的安全协议。</p>
+<p>SSH 是目前较可靠、专为远程登录会话和其他网络服务提供安全性的协议，常用于远程登录。几乎所有 UNIX/LInux平台都可运行 SSH。</p>
+<p>使用 SSH 服务，需要安装相应的服务器和客户端。客户端和服务器的关系：如果 A 机器想被 B 机器远程控制，那么 A 机器需要安装 SSH 服务器，B 机器需要安装 SSH 客户端。</p>
+<p>和 CentOS 不一样，Ubuntu 默认没有安装 SSHD 服务（可以使用 <code>netstat</code> 指令查看），因此我们不能进行远程登录。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -nap | more # 查看端口号和协议信息</span><br></pre></td></tr></table></figure>
+<p>如果显示没有 <code>netstat</code> 指令，可以执行以下指令进行安装：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install net-tools # 安装 net-tools</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>安装 SSH 并使用</p>
+</blockquote>
+<p>执行以下指令安装 SSH 服务器和客户端：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install openssh-server</span><br></pre></td></tr></table></figure>
+<p>再执行以下指令启动 SSHD 服务并监听 22 端口：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service sshd restart</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>从一台 Linux 系统远程登录到另一台 Linux 系统</p>
+</blockquote>
+<p>在创建服务器集群时，会使用到该技术。其基本语法是：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh 用户名@IP</span><br></pre></td></tr></table></figure>
+<p>例如：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh mofan@192.168.200.222</span><br></pre></td></tr></table></figure>
+<p>如果使用 SSH 访问时出现错误，可以查看是否有 ~/.ssh/known_ssh 文件，如果存在可以尝试删除该文件来解决。</p>
+<p>如果需要登出，可以使用以下指令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">exit </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">或者</span> </span><br><span class="line">logout</span><br></pre></td></tr></table></figure>
+<h1 id="5-日志管理"><a class="header-anchor" href="#5-日志管理"></a>5. 日志管理</h1>
+<h2 id="5-1-基本介绍"><a class="header-anchor" href="#5-1-基本介绍"></a>5.1 基本介绍</h2>
+<p>日志文件是重要的系统信息文件，其中记录了许多重要的系统事件，包括用户的登录信息、系统的启动信息、系统的安全信息、邮件相关信息、各种服务相关信息等。</p>
+<p>日志对于安全来说也很重要，它记录了系统每天发生的各种事情，通过日志来检查错误发生的原因，或者受到攻击时攻击者留下的痕迹。</p>
+<p>简单来说，日志是用来记录重大事件的工具。</p>
+<p><code>/var/log/</code> 目录是系统日志文件的保存位置：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/LinuxImages/Linux%E4%B8%8B%E6%97%A5%E5%BF%97%E5%AD%98%E6%94%BE%E4%BD%8D%E7%BD%AE.png" alt="Linux下日志存放位置"></p>
+<blockquote>
+<p>系统常用的日志</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">日志文件</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">/var/log/boot.log</td>
+<td style="text-align:center">系统启动日志</td>
+</tr>
+<tr>
+<td style="text-align:center">/var/log/cron</td>
+<td style="text-align:center">与系统定时任务相关的日志</td>
+</tr>
+<tr>
+<td style="text-align:center">/var/log/cups</td>
+<td style="text-align:center">打印信息的日志</td>
+</tr>
+<tr>
+<td style="text-align:center">/var/log/dmesg</td>
+<td style="text-align:center">系统在开机时内核自检信息，也可以使用 <code>dmesg</code> 指令直接查看内核自检信息。</td>
+</tr>
+<tr>
+<td style="text-align:center">/var/log/btmp</td>
+<td style="text-align:center">错误登录的日志。该文件是二进制文件，不能直接使用 <code>vi</code> 查看，而是要使用 <code>lastb</code> 指令查看</td>
+</tr>
+<tr>
+<td style="text-align:center">/var/log/lasllog</td>
+<td style="text-align:center">系统中所有用户最后一次的登录时间的日志，该文件是二进制文件，要使用 <code>lastlog</code> 指令查看</td>
+</tr>
+<tr>
+<td style="text-align:center">/var/log/mailog</td>
+<td style="text-align:center">邮件信息的日志</td>
+</tr>
+<tr>
+<td style="text-align:center">/var/log/message</td>
+<td style="text-align:center">系统重要消息的日志。这个日志文件中会记录 Linux 系统中绝大多数重要信息。如果系统出现问题，首先要检查的应该就是这个日志文件</td>
+</tr>
+<tr>
+<td style="text-align:center">/var/log/secure</td>
+<td style="text-align:center">记录验证和授权方面的倍息，只要涉及账户和密码的程序都会记录，比如系统的登录、ssh 的登录、su 切换用户，sudo 授权，甚至添加用户和修改用户密码都会记录在该文件中</td>
+</tr>
+<tr>
+<td style="text-align:center">/var/log/wtmp</td>
+<td style="text-align:center">永久记录所有用户的登陆、注销信息，同时记录系统的后动、重启、关机事件。该文件是二进制文件，要使用 <code>last</code> 指令查看</td>
+</tr>
+<tr>
+<td style="text-align:center">/var/log/ulmp</td>
+<td style="text-align:center">记录当前已经登录的用户的信息。这个文件会随着用户的登录和注销而不断变化，只记录当前登录用户的信息。这个文件不能用 <code>vi</code> 查着，而要使用 <code>w</code>、<code>who</code>、<code>users</code> 等命令查看</td>
+</tr>
+</tbody>
+</table>
+<h2 id="5-2-日志管理服务"><a class="header-anchor" href="#5-2-日志管理服务"></a>5.2 日志管理服务</h2>
+<p>CentOS 7.6 日志服务是 rsyslogd，CentOS 6.x 日志服务是 syslogd。rsyslogd 功能更强大。rsyslogd 的使用、日志文件的格式，和 syslogd 服务兼容的。</p>
+<p>在 /ect/rsyslog.conf 文件中记录了日志服务管理的日志有哪些。</p>
+<blockquote>
+<p>查询 Linux 中的 rsyslogd 服务是否启动</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps aux | grep &quot;rsyslog&quot; | grep -v &quot;grep&quot;</span><br></pre></td></tr></table></figure>
+<p>在上述指令中，<code>grep -v</code> 是什么意思呢？<code>-v</code> 可以改变匹配的意义，只选择不匹配的行。因此 <code>grep -v &quot;grep&quot;</code> 就是挑选出不含有 <code>grep</code> 字符串的行。</p>
+<blockquote>
+<p>查询 rsyslogd 服务的自启动状态</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl list-unit-files | grep rsyslog</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>rsyslog.conf 配置文件</p>
+</blockquote>
+<p>我们已经知道 /ect/rsyslog.conf 文件的作用是记录了日志服务管理的日志有哪些，除了系统预置的内容外，我们也可以添加自定义内容。</p>
+<p>在编辑这个文件是，其格式为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*.*             存放日志文件</span><br></pre></td></tr></table></figure>
+<p>其中第一个 <code>*</code> 表示日志类型，第二个 <code>*</code> 表示日志级别。</p>
+<p>日志类型：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">日志类型</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">auth</td>
+<td style="text-align:center">pam 产生的日志</td>
+</tr>
+<tr>
+<td style="text-align:center">authpriv</td>
+<td style="text-align:center">ssh、ftp 等登录信息的验证信息</td>
+</tr>
+<tr>
+<td style="text-align:center">cron</td>
+<td style="text-align:center">时间任务相关</td>
+</tr>
+<tr>
+<td style="text-align:center">kern</td>
+<td style="text-align:center">内核</td>
+</tr>
+<tr>
+<td style="text-align:center">lpr</td>
+<td style="text-align:center">打印</td>
+</tr>
+<tr>
+<td style="text-align:center">mail</td>
+<td style="text-align:center">邮件</td>
+</tr>
+<tr>
+<td style="text-align:center">mark(syslog)-rsyslog</td>
+<td style="text-align:center">服务内部的信息，时间标识</td>
+</tr>
+<tr>
+<td style="text-align:center">news</td>
+<td style="text-align:center">新闻组</td>
+</tr>
+<tr>
+<td style="text-align:center">user</td>
+<td style="text-align:center">用户程序产生的相关信息</td>
+</tr>
+<tr>
+<td style="text-align:center">uucp</td>
+<td style="text-align:center">unix to unix copy 主机之间相关的通信</td>
+</tr>
+<tr>
+<td style="text-align:center">local 1-7</td>
+<td style="text-align:center">自定义的日志设备</td>
+</tr>
+</tbody>
+</table>
+<p>日志级别：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">日志级别</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">debug</td>
+<td style="text-align:center">有调试信息的，日志通信最多</td>
+</tr>
+<tr>
+<td style="text-align:center">info</td>
+<td style="text-align:center">一般信息日志，最常用</td>
+</tr>
+<tr>
+<td style="text-align:center">notice</td>
+<td style="text-align:center">最具有重要性的普通条件信息</td>
+</tr>
+<tr>
+<td style="text-align:center">warning</td>
+<td style="text-align:center">警告级别</td>
+</tr>
+<tr>
+<td style="text-align:center">err</td>
+<td style="text-align:center">错误级别，阻止某个功能或模块不能正常工作的信息</td>
+</tr>
+<tr>
+<td style="text-align:center">crit</td>
+<td style="text-align:center">严重级别，阻止整个系统或整个软件不能正常工作的信息</td>
+</tr>
+<tr>
+<td style="text-align:center">alert</td>
+<td style="text-align:center">需要立刻修改的信息</td>
+</tr>
+<tr>
+<td style="text-align:center">emerg</td>
+<td style="text-align:center">内核崩溃等重要信息</td>
+</tr>
+<tr>
+<td style="text-align:center">nono</td>
+<td style="text-align:center">什么都不记录</td>
+</tr>
+</tbody>
+</table>
+<p>对上述日志级别而言，从上到下级别从低到高，记录信息越来越少。</p>
+<p>由日志服务 rsyslogd 记录的日志文件，日志文件的格式包含以下 4 列：</p>
+<p>1、事件产生的时间</p>
+<p>2、产生事件的服务器的主机名</p>
+<p>3、产生事件的服务名或程序名</p>
+<p>4、事件的具体信息</p>
+<h2 id="5-3-自定义日志服务"><a class="header-anchor" href="#5-3-自定义日志服务"></a>5.3 自定义日志服务</h2>
+<p>在 /etc/rsyslog.conf 中添加一个日志文件 /var/log/mofan.log。当有事件发送时（比如 sshd 服务相关事件），该文件会接收到信息并保存。</p>
+<p>编辑 /etc/rsyslog.conf 文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/rsyslog.conf</span><br></pre></td></tr></table></figure>
+<p>在此文件中增加以下信息：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">增加自定义的日志</span></span><br><span class="line">*.*                            /var/log/mofan.log</span><br></pre></td></tr></table></figure>
+<p>表示记录所有类型、所有级别的日志信息到 /var/log/mofan.log 文件中。</p>
+<p>添加完信息后，保存修改并重启 Linux 系统。</p>
+<p>重启完成后，我们执行以下指令，前往日志目录：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /var/log</span><br></pre></td></tr></table></figure>
+<p>在此目录下可以看到我们自定义的日志文件：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/LinuxImages/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6.png" alt="自定义日志文件"></p>
+<p>执行以下指令，查看与 sshd 服务相关的日志内容：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat mofan.log | grep sshd</span><br></pre></td></tr></table></figure>
+<p>通过自定义日志服务，可以将我们关心的日志内容记录到指定的日志文件中。</p>
+<h2 id="5-4-日志轮替"><a class="header-anchor" href="#5-4-日志轮替"></a>5.4 日志轮替</h2>
+<p>日志轮替就是把旧的日志文件移动并改名，同时建立新的空日志文件，当旧日志文件超出保存的范围之后，就会进行删除。</p>
+<blockquote>
+<p>日志轮替文件命名</p>
+</blockquote>
+<p>1、CentOS7 使用 logrotate 进行日志轮替管理，要想改变日志轮替文件名字，需要通过修改 /etc/logrotate.conf 配置文件中 <code>dateext</code> 参数。</p>
+<p>2、如果配置文件中有 <code>dateext</code> 参数，那么日志会用日期来作为日志文件的后缀，例如 <code>secure-20201010</code>。这样日志文件名不会重复，也不需要日志文件的改名，只需要指定保存日志个数，删除多余的日志文件即可。</p>
+<p>3、如果配置文件中没有 <code>dateext</code> 参数，日志文件就需要进行改名了。当第一次进行日志轮替时，当前的  <code>secure</code> 日志会自动改名为 <code>secure.1</code>，然后新建 <code>secure</code> 日志，用来保存新的日志。当第二次进行日志轮替时，<code>secure.1</code> 会自动改名为 <code>secure.2</code>，当前的 <code>secure</code> 日志会自动改名为 <code>secure.1</code>，然后也会新建<br>
+<code>secure</code> 日志，用来保存新的日志，以此类推。</p>
+<blockquote>
+<p>/etc/logrotate.conf 文件</p>
+</blockquote>
+<p>/etc/logrotate.conf 文件就是全局的日志轮替策略，也可以单独为某个日志文件指定策略。</p>
+<p>也可以把某个日志文件的轮替规则，写到 /etc/iogrotate.d 目录下，在 /etc/logrotate.conf 文件中采用 <code>include</code> 的方式进行加载。</p>
+<p>初始 /etc/logrotate.conf 文件内容解析：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">see <span class="string">&quot;man logrotate&quot;</span> <span class="keyword">for</span> details</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">rotate <span class="built_in">log</span> files weekly</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">每周对日志文件进行一次轮替</span></span><br><span class="line">weekly </span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">keep 4 weeks worth of backlogs</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">共保存 4 份日志文件，当建立新的日志文件时，旧的会被删除</span></span><br><span class="line">rotate 4 </span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">create new (empty) <span class="built_in">log</span> files after rotating old ones</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">在日志轮替后，创建新的空的日志文件</span></span><br><span class="line">create</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">use <span class="built_in">date</span> as a suffix of the rotated file</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用日期作为日志轮替文件的后缀</span></span><br><span class="line">dateext</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">uncomment this <span class="keyword">if</span> you want your <span class="built_in">log</span> files compressed</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">日志文件是否压缩。如果取消注释，表示日志会在转储的同时被压缩</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">compress</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">RPM packages drop <span class="built_in">log</span> rotation information into this directory</span></span><br><span class="line">include /etc/logrotate.d</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">包含 /etc/logrotate.d 目录下所有的子配置文件，也就是说会把这个目录中所有子配置文件读取出来</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">单独为某个日志文件进行设置，优先级更高</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">no packages own wtmp and btmp -- we<span class="string">&#x27;ll rotate them here</span></span></span><br><span class="line">/var/log/wtmp &#123;</span><br><span class="line"><span class="meta prompt_">    # </span><span class="language-bash"><span class="string">每月对日志文件进行一次轮替</span></span></span><br><span class="line">    monthly</span><br><span class="line">    # 创建新的日志文件，权限是 0664，所有者是 root，所属组是 utmp 组</span><br><span class="line">    create 0664 root utmp</span><br><span class="line">        # 日志文件最小轮替大小是 1M。也就是日志文件大小超过 1M 时才会轮替，否则就算时间到达一个月也不会进行日志转储</span><br><span class="line">        minsize 1M</span><br><span class="line">    # 仅保留一个日志备份，也就是只有 wtmp 和 wtmp.1 日志保留</span><br><span class="line">    rotate 1</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/var/log/btmp &#123;</span><br><span class="line"><span class="meta prompt_">    # </span><span class="language-bash"><span class="string">如果日志不存在，这忽略该日志的警告信息</span></span></span><br><span class="line">    missingok</span><br><span class="line">    monthly</span><br><span class="line">    create 0600 root utmp</span><br><span class="line">    rotate 1</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">system-specific logs may be also be configured here.</span></span></span><br></pre></td></tr></table></figure>
+<h2 id="5-5-自定义日志轮替"><a class="header-anchor" href="#5-5-自定义日志轮替"></a>5.5 自定义日志轮替</h2>
+<p>logrotate.conf 配置文件参数说明：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">参数</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">daily</td>
+<td style="text-align:center">日志的轮替周期是每天</td>
+</tr>
+<tr>
+<td style="text-align:center">weekly</td>
+<td style="text-align:center">日志的轮替周期是每周</td>
+</tr>
+<tr>
+<td style="text-align:center">monthly</td>
+<td style="text-align:center">日志的轮替周期是每月</td>
+</tr>
+<tr>
+<td style="text-align:center">rotate 数字</td>
+<td style="text-align:center">保留的日志文件的个数。0 指没有备份</td>
+</tr>
+<tr>
+<td style="text-align:center">compress</td>
+<td style="text-align:center">日志轮替时，旧的日志进行压缩</td>
+</tr>
+<tr>
+<td style="text-align:center">create mode owner group</td>
+<td style="text-align:center">建立新日志，同时指定新日志的权限与所有者和所属组</td>
+</tr>
+<tr>
+<td style="text-align:center">mail address</td>
+<td style="text-align:center">当日志轮替时，输出内容并通过邮件发送到指定的邮件地址</td>
+</tr>
+<tr>
+<td style="text-align:center">missingok</td>
+<td style="text-align:center">如果日志不存在，则忽略该日志的警告信息</td>
+</tr>
+<tr>
+<td style="text-align:center">notifempty</td>
+<td style="text-align:center">如果日志为空文件，则不进行日志轮替。多用于第一次轮替</td>
+</tr>
+<tr>
+<td style="text-align:center">minsize 大小</td>
+<td style="text-align:center">日志轮替的最小值。当日志一定要达到这个最小值才会轮替，否则就算时间达到也不轮替</td>
+</tr>
+<tr>
+<td style="text-align:center">size 大小</td>
+<td style="text-align:center">日志只有大于指定大小才进行日志轮替，而不是按照时间轮替</td>
+</tr>
+<tr>
+<td style="text-align:center">dateext</td>
+<td style="text-align:center">使用日期作为日志轮替文件的后缀</td>
+</tr>
+<tr>
+<td style="text-align:center">sharedscripts</td>
+<td style="text-align:center">在此关键字之后的脚本只执行一次</td>
+</tr>
+<tr>
+<td style="text-align:center">prerotate/endscripts</td>
+<td style="text-align:center">在日志轮替之前执行脚本命令</td>
+</tr>
+<tr>
+<td style="text-align:center">postrotate/endscripts</td>
+<td style="text-align:center">在日志轮替之后执行脚本命令</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>把自己的日志加入日志轮替</p>
+</blockquote>
+<p>第一种方法是直接在 /etc/logrotate.conf 配置文件中写入该日志的轮替策略；</p>
+<p>第二种方法是在 /etc/logrotate.d/ 目录中新建立该日志的轮替文件，在该轮替文件中写入正确的轮替策略，该目录中的文件都会被 <code>include</code> 到主配置文件中，所以也可以把日志加入轮替。</p>
+<p>推荐使用第二种方法，因为系统中需要轮替的日志非常多，如果全都直接写入 /etc/logrotate.conf 配置文件中，那么这个文件的可管理性就会非常差，不利于此文件的维护。</p>
+<p>比如在 /etc/logrotate.d/ 目录下创建 mofanlog 轮替文件，在此文件中指定 /var/log/mofan.log 日志文件的轮替策略：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">/var/log/mofan.log</span><br><span class="line">&#123;</span><br><span class="line">    missingok</span><br><span class="line">    daily</span><br><span class="line">    copytruncate</span><br><span class="line">    rotate 7</span><br><span class="line">    notifempty</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="5-6-日志轮替原理"><a class="header-anchor" href="#5-6-日志轮替原理"></a>5.6 日志轮替原理</h2>
+<p>日志轮替之所以可以在指定的时间备份日志，是依赖系统定时任务。在 /etc/cron.daily/ 目录中会发现有个可执行的 logrotate 文件，日志轮替就是通过这个文件依赖定时任务执行的。</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/LinuxImages/%E5%8F%AF%E6%89%A7%E8%A1%8C%E7%9A%84logrotate%E6%96%87%E4%BB%B6.png" alt="可执行的logrotate文件"></p>
+<h2 id="5-7-查看内存日志"><a class="header-anchor" href="#5-7-查看内存日志"></a>5.7 查看内存日志</h2>
+<p>使用 <code>journalctl</code> 指令可以查看内存日志，以下列举常用的相关指令：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">指令</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">journalctl</td>
+<td style="text-align:center">查看全部</td>
+</tr>
+<tr>
+<td style="text-align:center">journalctl -n 3</td>
+<td style="text-align:center">查看最新 3 条</td>
+</tr>
+<tr>
+<td style="text-align:center">journalctl --since 19:00 --until 19:10:10</td>
+<td style="text-align:center">查看起始时间到结束时间的日志可加日期</td>
+</tr>
+<tr>
+<td style="text-align:center">journalctl -p err</td>
+<td style="text-align:center">报错日志</td>
+</tr>
+<tr>
+<td style="text-align:center">journalctl -o verbose</td>
+<td style="text-align:center">日志详细内容</td>
+</tr>
+<tr>
+<td style="text-align:center">journalctl _PID= 1245 _COMM=sshd</td>
+<td style="text-align:center">查看包含这些参数的日志（在详细日志查看）</td>
+</tr>
+<tr>
+<td style="text-align:center">journalctl | grep sshd</td>
+<td style="text-align:center">查看包含这些参数的日志（在详细日志查看）</td>
+</tr>
+</tbody>
+</table>
+<p><mark>注意：</mark> <code>journalctl</code> 查看的是内存日志，重启系统后将会清空。</p>
+<p>例如使用以下指令来看看用户登录情况，然后重启系统，再次查询，看看日志有什么变化：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">journalctl | grep sshd</span><br></pre></td></tr></table></figure>
+<p>就像我们前面说的那样，重启系统后，以前的日志将会被清空。</p>
+<h1 id="6-定制自己的-Linux"><a class="header-anchor" href="#6-定制自己的-Linux"></a>6. 定制自己的 Linux</h1>
+<p>通过裁剪现有 Linux 系统（在此以 CentOS 7.6 为例），创建属于自己的 Min Linux 小系统，以加深我们对 Linux 的理解。</p>
+<p>以下操作均在虚拟机上进行演示。</p>
+<h2 id="6-1-Linux-启动流程介绍"><a class="header-anchor" href="#6-1-Linux-启动流程介绍"></a>6.1 Linux 启动流程介绍</h2>
+<p>1、Linux首先要通过自检，检查硬件设备有没有故障；</p>
+<p>2、如果有多块启动盘的话，需要在 BIOS中 选择启动磁盘；</p>
+<p>3、启动 MBR 中的 bootloader 引导程序；</p>
+<p>4、加载内核文件；</p>
+<p>5、执行所有进程的父进程、老祖宗 systemd；</p>
+<p>6、进入欢迎界面。</p>
+<p>在 Linux 的启动流程中，加载内核文件时的关键文件：</p>
+<p>① kernel 文件：vmlinuz-3.10.0-957.el7.x86_ 64<br>
+② initrd 文件：initramfs-3.10.0-957.el7.x86_64.img</p>
+<h2 id="6-2-制作-Min-Linux-思路分析"><a class="header-anchor" href="#6-2-制作-Min-Linux-思路分析"></a>6.2 制作 Min Linux 思路分析</h2>
+<p>1、在现有的 Linux 系统（CentOS 7.6）上加一块硬盘 <code>/dev/sdb</code>，在硬盘上分两个分区，一个是 <code>/boot</code>，一个是 <code>/</code>，并将其格式化。需要明确的是，现在加的这个硬盘在现有的 Linux 系统中是 <code>/dev/sdb</code>，但是，当我们把东西全部设置好时，要把这个硬盘拔除，放在新系统上，此时就是 <code>/dev/sda</code>。</p>
+<p>2、在 <code>/dev/sdb</code> 硬盘上将其打造成独立的 Linux 系统，里面的所有的文件是需要拷贝进去的。</p>
+<p>3、作为能独立运行的 Linux 系统，内核是一定不能少的 ，要把内核文件和 <code>initramfs</code> 文件也一起拷到 <code>/dev/sdb</code>上。</p>
+<p>4、以上步骤完成，我们的自制 Linux 就完成了，创建一个新的 Linux 虚拟机，将其硬盘指向我们创建的硬盘，启动即可。</p>
+<p>具体制作流程参考：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Sv411r7vd?p=127">定制自己的 Linux(2)</a></p>
+<h1 id="7-Linux-内核源码与升级"><a class="header-anchor" href="#7-Linux-内核源码与升级"></a>7. Linux 内核源码与升级</h1>
+<h2 id="7-1-初探-Linux-内核源码"><a class="header-anchor" href="#7-1-初探-Linux-内核源码"></a>7.1 初探 Linux 内核源码</h2>
+<p>现阶段的 Linux 源码是十分庞大的，因此可以使用 Linux 的 0.01 版本进行阅读，在这个版本下，源码仅有 1w 行。</p>
+<p>Linux 源码地址：<a target="_blank" rel="noopener" href="https://www.kernel.org/">The Linux Kernel Archives</a></p>
+<blockquote>
+<p>Linux 0.01 源码阅读技巧</p>
+</blockquote>
+<p>1、Linux 0.01 的阅读需要一定的 C 语言知识；</p>
+<p>2、阅读源码前，应知道 Linux 内核源码的整体分布情况。现代的操作系统一般由进程管理、 内存管理、文件系统、驱动程序和网络等组成。Linux 内核源码的各个目录大致与此相对应。</p>
+<p>3、在阅读方法或顺序上，有纵向和横向之分。所谓纵向就是跟着程序的执行顺序逐步进行阅读，而横向就是按模块进行阅读。它们经常结合在一起进行。</p>
+<p>4、对于 Linux 启动的代码可顺着 Linux 的启动顺序一 步步来阅读；对于像内存管理部分，可以单独拿出来进行阅读分析。实际上这是一个反复的过程，不可能读一遍就理解。</p>
+<blockquote>
+<p>Linux 0.01 源码目录介绍</p>
+</blockquote>
+<p>下载好 Linux 0.01 的源码后，可以看到以下文件或目录：</p>
+<pre>
+boot 和系统引导相关的代码
+fs	 存放 Linux 支持的文件系统代码
+include  存放编译 Linux 核心需要的头文件，比如 asm、linux、sys
+init   存放核心初始化代码
+kernel 和系统内核相关的源码
+lib    存放着库代码
+Makefile 用于编译
+mm     和内存管理相关的代码
+tools  工具代码
+</pre>
+<blockquote>
+<p>init 目录下的 main.c</p>
+</blockquote>
+<p>在 main.c 文件下有这样一段代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 初始化运行时间</span></span><br><span class="line">    time_init();</span><br><span class="line">    <span class="comment">// tty 初始化</span></span><br><span class="line">    tty_init();</span><br><span class="line">    <span class="comment">// 陷阱门（硬件中断向量）初始化</span></span><br><span class="line">    trap_init();</span><br><span class="line">    <span class="comment">// 调度程序初始化</span></span><br><span class="line">    sched_init();</span><br><span class="line">    <span class="comment">// 缓冲管理初始化</span></span><br><span class="line">    buffer_init();</span><br><span class="line">    <span class="comment">// 硬盘初始化</span></span><br><span class="line">    hd_init();</span><br><span class="line">    <span class="comment">// 所有初始化工作完成后，开启中断</span></span><br><span class="line">    sti();</span><br><span class="line">    <span class="comment">// 进入用户模式</span></span><br><span class="line">    move_to_user_mode();</span><br><span class="line">    <span class="keyword">if</span> (!fork()) &#123;</span><br><span class="line">        init();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(;;) pause();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="7-2-Linux-内核升级"><a class="header-anchor" href="#7-2-Linux-内核升级"></a>7.2 Linux 内核升级</h2>
+<blockquote>
+<p>Linux 内核下载</p>
+</blockquote>
+<p>在联网环境下，使用以下指令可以在 Linux 上下载对应版本的 Linux 内核：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.8.16.tar.gz</span><br></pre></td></tr></table></figure>
+<p>下载完成后，执行以下命令进行解压：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf linux-5.8.16.tar.gz</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Linux  内核升级</p>
+</blockquote>
+<p>假设现在我们的 Linux 系统为 CentOS 7.6，我们需要将其从 7.6 内核升级到 7.8 内核（注意兼容性问题）。</p>
+<p><mark>注意：</mark> 升级的目标内核并不是随意指定的，需要考虑兼容性问题。</p>
+<p>执行以下命令，检测内核版本，显示可升级的内核：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum info kernel -q</span><br></pre></td></tr></table></figure>
+<p>使用以下指令查看当前内核版本：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uname -a</span><br></pre></td></tr></table></figure>
+<p>执行以下指令对内核进行升级：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum update kernel</span><br></pre></td></tr></table></figure>
+<p>升级完毕后，执行以下指令查看已经安装的内核：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum list kernel -q</span><br></pre></td></tr></table></figure>
+<p>执行上述指令后，可以看到两个内核版本，一个是以前的版本，另一个还是新安装的版本。</p>
+<p>如果再次使用 <code>uname -a</code> 查看内核版本，会发现依旧是以前的版本。</p>
+<p>这是因为在当前 Linux 中存在两个内核，并且新内核与当前系统下的软件是兼容的。如果重启系统，就需要进行内核选择，在此就可以选择刚刚安装的新内核并进入系统。</p>
+<h1 id="8-备份与恢复"><a class="header-anchor" href="#8-备份与恢复"></a>8. 备份与恢复</h1>
+<h2 id="8-1-基本介绍"><a class="header-anchor" href="#8-1-基本介绍"></a>8.1 基本介绍</h2>
+<p>实体机无法做快照，如果系统出现异常或者数据损坏，后果将十分严重，需要要重转系统，还会造成数据丢失。</p>
+<p>所以我们可以使用备份和恢复技术，而 Linux 的备份和恢复很简单，有两种方式：</p>
+<p>1、把需要的文件（或分区）用 TAR 打包就行，下次需要恢复的时候，再解压开覆盖即可；</p>
+<p>2、使用 <code>dump</code> 和 <code>restore</code> 指令。</p>
+<p>如果 Linux 上没有 <code>dump</code> 和 <code>restore</code> 指令，需要先执行以下指令进行安装：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum -y install dump</span><br><span class="line">yum -y install restore</span><br></pre></td></tr></table></figure>
+<p>当我们执行第二条安装指令时，可能会提示以下信息：</p>
+<pre>
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+No package restore available.
+Error: Nothing to do
+</pre>
+<p>其实这是在安装 <code>dump</code> 时一并安装了 <code>restore</code>，可以输入 <code>dump</code> 和 <code>restore</code> 查看是否安装成功。</p>
+<h2 id="8-2-使用-dump-完成备份"><a class="header-anchor" href="#8-2-使用-dump-完成备份"></a>8.2 使用 dump 完成备份</h2>
+<p><code>dump</code> 支持分卷和增量备份（所谓增量备份是指备份上次备份后修改 / 增加过的文件，也称差异备份）。</p>
+<p><code>dump</code> 的基本语法如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dump [-cu] [-123456789] [-f &lt;备份后文件名&gt;] [-T &lt;日期&gt;] [ 目录或文件系统]</span><br><span class="line">dump []-wW</span><br></pre></td></tr></table></figure>
+<p><code>dump</code> 指令常用的选项：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">选项</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">-c</td>
+<td style="text-align:center">创建新的归档文件，并将由一个或多个文件参数所指定的内容写入归档文件的开头</td>
+</tr>
+<tr>
+<td style="text-align:center">-0123456789</td>
+<td style="text-align:center">备份的层级。0 为最完整备份，会备份所有文件。若指定 0 以上的层级，则备份至上一次备份以来修改或新增的文件，到9后，可以再次轮替</td>
+</tr>
+<tr>
+<td style="text-align:center">-f  备份后文件名</td>
+<td style="text-align:center">指定备份后文件名</td>
+</tr>
+<tr>
+<td style="text-align:center">-j</td>
+<td style="text-align:center">调用 bzlib 库压缩备份文件，也就是将备份后的文件压缩成 bz2 格式，让文件更小</td>
+</tr>
+<tr>
+<td style="text-align:center">-T 日期</td>
+<td style="text-align:center">指定开始备份的时间与日期</td>
+</tr>
+<tr>
+<td style="text-align:center">-u</td>
+<td style="text-align:center">备份完毕后，在 /etc/dumpdares 中记录备份的文件系统，层级，日期与时间等</td>
+</tr>
+<tr>
+<td style="text-align:center">-t</td>
+<td style="text-align:center">指定文件名，若该文件已存在备份文件中，则列出名称</td>
+</tr>
+<tr>
+<td style="text-align:center">-W</td>
+<td style="text-align:center">显示需要备份的文件及其最后一次备份的层级、时间、日期</td>
+</tr>
+<tr>
+<td style="text-align:center">-w</td>
+<td style="text-align:center">与 -W 类似，但仅显示需要备份的文件</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>应用案例</p>
+</blockquote>
+<p><strong>应用案例 1：</strong> 将 /boot 分区下所有内容备份到 /opt/boot.bak0.bz2 文件中，备份等级为 0。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dump -0uj -f /opt/boot.bak0.bz2 /boot</span><br></pre></td></tr></table></figure>
+<p>输入上述指令后，出现以下错误信息：</p>
+<pre>
+DUMP: You can't update the dumpdates file when dumping a subdirectory
+DUMP: The ENTIRE dump is aborted.
+</pre>
+<p>当备份为一个独立的文件系统（独立的分区）时，可以使用 <code>-u</code>，如果只是备份目录下的文件时，不支持增量备份，不能使用 <code>-u</code>。我们的阿里云 ECS 上没有 /boot 分区，只有 /boot 目录。因此需要去掉 <code>-u</code> 选项，即：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dump -0j -f /opt/boot.bak0.bz2 /boot</span><br></pre></td></tr></table></figure>
+<p><strong>应用案例 2：</strong> 在 /boot 目录下增加一个新文件，备份层级为 1（只备份上次使用层级 0 备份后发生过改变的数据），并观察这次生成的备份文件 boot1.bak1.bz2 的大小。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dump -1uj -f /opt/boot.bak1.bz2 /boot</span><br></pre></td></tr></table></figure>
+<p>与案例 1 一样，我们先去掉 <code>-u</code> 选项，即：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dump -1j -f /opt/boot.bak1.bz2 /boot</span><br></pre></td></tr></table></figure>
+<p>但是出现了其他的错误信息：</p>
+<pre>
+DUMP: Only level 0 dumps are allowed on a subdirectory
+DUMP: The ENTIRE dump is aborted.
+</pre>
+<p>当备份为一个独立的文件系统（独立的分区）时，可以使用多层级备份。如果只是备份目录下的文件时，不支持增量备份，只能使用 <code>-0</code>。</p>
+<p>所以针对目录下的文件并不能使用增量备份。按照提示信息更改命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dump -0j -f /opt/boot.bak1.bz2 /boot</span><br></pre></td></tr></table></figure>
+<p>除此之外，可以使用 <code>dump</code> 指令再配合 crontab 实现无人值守备份。</p>
+<p><strong>拓展：</strong> 如果是备份一个独立的文件系统，并执行上述的两条命令，可以观察到第二次备份文件的体积是远小于第一次备份文件的体积的，这是因为第二次备份是增量备份，只备份了相较于第一次备份发生了改变的文件，而这里发生了改变的文件就是新增的那个文件。</p>
+<blockquote>
+<p>其他相关指令</p>
+</blockquote>
+<p>显示需要备份的文件及其最后一次备份的层级、时间和日期：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dump -W</span><br></pre></td></tr></table></figure>
+<p>查看备份时间文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/dumpdates</span><br></pre></td></tr></table></figure>
+<h2 id="8-3-使用-restore-完成恢复"><a class="header-anchor" href="#8-3-使用-restore-完成恢复"></a>8.3 使用 restore 完成恢复</h2>
+<p><code>restore</code> 命令可以用来恢复已备份的文件，可以从 <code>dump</code> 指令生成的备份文件中恢复原文件。</p>
+<p><code>restore</code> 的基本语法如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">restore [模式选项] [选项]</span><br></pre></td></tr></table></figure>
+<p><code>restore</code> 指令的四种模式如下，它们不能混用，在一次命令中，只能指定一种：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">模式选项</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">-C</td>
+<td style="text-align:center">使用对比模式，将备份的文件与已存在的文件相互对比</td>
+</tr>
+<tr>
+<td style="text-align:center">-i</td>
+<td style="text-align:center">使用交互模式，在进行还原操作时，restore 指令将依序询问用户</td>
+</tr>
+<tr>
+<td style="text-align:center">-r</td>
+<td style="text-align:center">进行还原模式</td>
+</tr>
+<tr>
+<td style="text-align:center">-t</td>
+<td style="text-align:center">查看模式，看备份文件有哪些文件</td>
+</tr>
+</tbody>
+</table>
+<p><code>restore</code> 指令常用的选项：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">选项</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">-f 备份设备</td>
+<td style="text-align:center">从指定的文件中读取备份数据，进行还原操作</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>应用案例</p>
+</blockquote>
+<p><strong>应用案例 1：</strong> 使用 <code>restore</code> 指令的比较模式，比较备份文件与原文件的区别。</p>
+<p>使用的备份文件是前文产生的 /opt/boot.bak1.bz2 文件，先将 /boot/hello.txt 改名为 /boot/hello1.txt：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv /boot/hello.txt /boot/hello1.txt</span><br></pre></td></tr></table></figure>
+<p>然后使用 <code>restore</code> 指令的比较模式：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">restore -C -f /opt/boot.bak1.bz2</span><br></pre></td></tr></table></figure>
+<p>指令执行后，会提示这样一段文字，表示备份前后文件发生了变化：</p>
+<pre>
+restore: unable to stat ./boot/hello.txt: No such file or directory
+Some files were modified! 
+</pre>
+<p>那如果再把文件名改回去呢？</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mv /boot/hello1.txt /boot/hello.txt</span><br><span class="line">restore -C -f /opt/boot.bak1.bz2</span><br></pre></td></tr></table></figure>
+<p>这时就不会提示某些文件被修改了。</p>
+<p><strong>应用案例 2：</strong> 使用 <code>restore</code> 指令的查看模式，查看备份文件有哪些数据或文件。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">restore -t -f /opt/boot.bak1.bz2</span><br></pre></td></tr></table></figure>
+<p><strong>应用案例 3：</strong> 使用 <code>restore</code> 指令的还原模式。如果进行了增量备份，需要把增量备份文件也进行恢复，有几个增量备份文件就要恢复几个，按顺序依次恢复即可。</p>
+<p>假设有一个全量备份文件 /opt/boot.bak0.bz2，还有一个增量备份文件 /opt/boot.bak1.bz2，现在需要将它们恢复到 /opt/boottmp 目录下，则执行以下指令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mkdir /opt/boottmp</span><br><span class="line">cd /opt/boottmp</span><br><span class="line">restore -r -f /opt/boot.bak0.bz2 # 恢复到第1次完全备份状态</span><br><span class="line">restore -r -f /opt/boot.bak1.bz2 # 恢复到第2次增量备份状态  </span><br></pre></td></tr></table></figure>
+<h1 id="9-Linux-可视化管理工具"><a class="header-anchor" href="#9-Linux-可视化管理工具"></a>9. Linux 可视化管理工具</h1>
+<h2 id="9-1-Webmin-的安装和配置"><a class="header-anchor" href="#9-1-Webmin-的安装和配置"></a>9.1 Webmin 的安装和配置</h2>
+<blockquote>
+<p>Webmin 的安装</p>
+</blockquote>
+<p>Webmin 是功能强大的基于 Web 的 Unix/Linux 系统管理工具。管理员通过浏览器访问 Webmin 的各种管理功能并完成相应的管理操作。除了各版本的 Linux 外还可用于 AIX、HPUX、Solaris、Unixware、Irix 和 FreeBSD 等系统。</p>
+<p>Webmin 的下载地址：<a target="_blank" rel="noopener" href="https://download.webmin.com/download/yum/">下载地址</a></p>
+<p>也可以在 Linux 下使用以下指令进行下载：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget http://download.webmin.com/download/yum/webmin-1.700-1.noarch.rpm</span><br></pre></td></tr></table></figure>
+<p>下载完成后，再进行安装：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm -ivh webmin-1.700-1.noarch.rpm</span><br></pre></td></tr></table></figure>
+<p>安装完成后进行重置密码：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/libexec/webmin/changepass.pl /etc/webmin root test</span><br></pre></td></tr></table></figure>
+<p>上述指令中的 root 是 webmin 的用户名，不是 Linux 操作系统的的，这里就是把 webmin 的 root 用户密码改成了 test。如果出现以下字样，表示密码修改成功：</p>
+<pre>
+Updated password of Webmin user root
+</pre>
+<p>出于安全目的，建议修改 webmin 服务的端口号（默认端口号是 10000）：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/webmin/miniserv.conf # 修改端口</span><br></pre></td></tr></table></figure>
+<p>然后将文件中的 <code>port=10000</code> 修改为其他端口号，比如 <code>port= 6666</code>。修改的地方有两处，一处是 port，另一处是 listen。比如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">port=6666</span><br><span class="line">listen=6666</span><br></pre></td></tr></table></figure>
+<p>再重启 Webmin：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/etc/webmin/restart # 重启</span><br><span class="line">/etc/webmin/start # 启动</span><br><span class="line">/etc/webmin/stop # 停止</span><br></pre></td></tr></table></figure>
+<p>还需要使防火墙开放 6666 端口：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --zone=public --add-port=6666/tcp --permanent # 配置防火墙开放6666端口</span><br><span class="line">firewall-cmd --reload # 更新防火墙配置</span><br><span class="line">firewall-cmd --zone=public --list-ports # 查看已经开放的端口号</span><br></pre></td></tr></table></figure>
+<p>由于我们使用的是阿里云 ECS，因此需要配置安全组规则，开放 6666 端口。</p>
+<p>最后使用 root 账号和重置的新密码 test 登录在 http://ip:6666 地址上登录 Webmin 即可。如：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/LinuxImages/%E7%99%BB%E5%BD%95Webmin.png" alt="登录Webmin"></p>
+<h2 id="9-2-Webmin-的基本使用"><a class="header-anchor" href="#9-2-Webmin-的基本使用"></a>9.2 Webmin 的基本使用</h2>
+<blockquote>
+<p>修改界面语言为简体中文</p>
+</blockquote>
+<p>成功登录进 Webmin 后，点击左侧菜单栏中的 Webmin，然后点击 Webmin Configuration，在界面上找到 Language 并点击进入。进入后在 Display in language 处选择 Simplified Chinese (ZH_CN.UTF-8)，最后点击按钮 Change Language 完成界面语言的修改。</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/LinuxImages/Webmin%E7%95%8C%E9%9D%A2%E8%AF%AD%E8%A8%80%E8%AE%BE%E7%BD%AE.png" alt="Webmin界面语言设置"></p>
+<p>修改后可能不会立即生效，刷新页面即可。</p>
+<blockquote>
+<p>其他操作</p>
+</blockquote>
+<p>1、在左侧菜单栏点击 Webmin，点击 Webmin 配置，选择 IP 控制访问，可以在此对 Webmin 服务器配置为禁止访问或只允许某些 IP 地址访问；</p>
+<p>2、在左侧菜单栏点击系统，点击 Change Passwords，可以在此页面选择用户并修改选择用户的密码；</p>
+<p>3、在左侧菜单栏点击系统，点击 Cron 任务调度，可以在此页面配置任务调度；</p>
+<p>4、在左侧菜单栏点击系统，点击进程管理器，可以在此页面查看当前系统的进程信息；</p>
+<p>5、在左侧菜单栏点击服务器，点击 MySQL 数据库服务器，输入用户名和密码后，可以进行数据库的可视化管理（当然记得先开启 MySQL 服务）。</p>
+<p>其余操作不再一一列举…</p>
+<h2 id="9-3-宝塔的介绍与安装"><a class="header-anchor" href="#9-3-宝塔的介绍与安装"></a>9.3 宝塔的介绍与安装</h2>
+<p>BT 宝塔 Linux 面板是提升运维效率的服务器管理软件，支持一键 LAMP/LNMP/集群/监控/网站/FTP/数据库<br>
+/Java 等多项服务器管理功能。</p>
+<blockquote>
+<p>安装和使用</p>
+</blockquote>
+<p>执行以下指令进行安装：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y wget &amp;&amp; wget -O install.sh http://download.bt.cn/install/install_6.0.sh &amp;&amp; sh install.sh</span><br></pre></td></tr></table></figure>
+<p>上述指令中 <code>&amp;&amp;</code> 表示左侧的指令成功执行后才会去执行右侧的指令。</p>
+<p>执行命令后，如果出现以下字样，表示宝塔面板安装成功：</p>
+<pre>
+Congratulations! Installed successfully!
+</pre>
+<p>安装成功后控制台会显示外网（或内网）登录地址和账户密码，复制外网（或内网）地址在浏览器打开并登录。</p>
+<p>宝塔面板的访问会需要使用到 8888 端口，若无法访问面板，请检查防火墙 / 安全组是否有放行面板 8888 端口。</p>
+<p>我成功进入宝塔面板后，弹出这样一个对话框：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/LinuxImages/%E6%81%B6%E5%BF%83%E7%9A%84%E7%BB%91%E5%AE%9A%E5%AE%9D%E5%A1%94%E8%B4%A6%E5%8F%B7.png" alt="恶心的绑定宝塔账号"></p>
+<p>What the Fxxk？</p>
+<p>这个对话框还无法关闭，强制要求绑定或注册宝塔账号，国产软件就这个尿性，不绑定就不给用，那就不用呗。</p>
+<blockquote>
+<p>宝塔的卸载</p>
+</blockquote>
+<p>既然不用它了，自然得把它写了，执行以下命令卸载宝塔：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/bt stop &amp;&amp; rm -f /etc/init.d/bt &amp;&amp; rm -rf /www/server/panel</span><br></pre></td></tr></table></figure>
+<p>或者更暴力一点，依次执行以下命令进行卸载：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget http://download.bt.cn/install/bt-uninstall.sh</span><br><span class="line">sh bt-uninstall.sh</span><br></pre></td></tr></table></figure>
+<p>虽然卸载了面板以及面板环境，可是系统还是会残留一些文件的，比如在根目录下的 www 目录，执行以下命令再次进行删除：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm –rf  /www</span><br></pre></td></tr></table></figure>
+<p>结果执行后出现以下信息：</p>
+<pre>
+rm: cannot remove ‘/www/swap’: Operation not permitted
+</pre>
+<p>执行以下指令，去除 i 属性：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chattr -i www</span><br></pre></td></tr></table></figure>
+<p>然后再执行删除命令即可。</p>
+<h1 id="10-Linux-面试题"><a class="header-anchor" href="#10-Linux-面试题"></a>10. Linux 面试题</h1>
+<h2 id="10-1-腾讯面试题"><a class="header-anchor" href="#10-1-腾讯面试题"></a>10.1 腾讯面试题</h2>
+<blockquote>
+<p>分析日志 t.log（访问量），将各个 IP 地址截取，并统计出现的次数，最后按从大到小排序。</p>
+</blockquote>
+<p>日志 t.log 内容如下：</p>
+<pre>
+http://192.168.200.10/index1.html
+http://192.168.200.10/index2.html
+http://192.168.200.20/index1.html
+http://192.168.200.30/index1.html
+http://192.168.200.40/index1.html
+http://192.168.200.30/order.html
+http://192.168.200.10/order.html
+</pre>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat t.log | cut -d &#x27;/&#x27; -f 3 | sort | uniq -c | sort -nr</span><br></pre></td></tr></table></figure>
+<p><code>uniq -c</code> 指令是统计相邻行的重复情况，所以要先使用 <code>sort</code> 排序，将相同的 IP 排在一起然后才能统计。</p>
+<blockquote>
+<p>统计连接到服务器的各个 IP 情况，并按连接数从大到小排序。</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -an | grep ESTABLISHED | awk -F &quot; &quot; &#x27;&#123;print $5&#125;&#x27; | awk -F &quot;:&quot; &#x27;&#123;print $1&#125;&#x27; | sort | uniq -c | sort -nr</span><br></pre></td></tr></table></figure>
+<p>或者：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -an | grep ESTABLISHED | awk -F &quot; &quot; &#x27;&#123;print $5&#125;&#x27; | cut -d &quot;:&quot; -f 1 | sort | uniq -c | sort -nr</span><br></pre></td></tr></table></figure>
+<p><code>cut</code> 指令不支持以空格分割，所以需要使用 <code>awk</code> 指令进行空格分析。</p>
+<blockquote>
+<p>假如你是系统管理员，在进行 Linux 系统权限划分时，应当考虑那些因素？</p>
+</blockquote>
+<p>1、首先阐述 Linux 权限的主要对象</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/LinuxImages/Linux%E6%9D%83%E9%99%90%E4%B8%80%E5%9B%BE%E6%B5%81.png" alt="Linux权限一图流"></p>
+<p>2、根据自己的实际经验谈考虑因素，如：</p>
+<ul>
+<li>
+<p>注意权限分离。比如工作中，Linux 系统权限和数据库权限不要在同一一个部门；</p>
+</li>
+<li>
+<p>权限最小原则，即在满足使用的情况下最少优先；</p>
+</li>
+<li>
+<p>减少使用 root 用户，尽量用普通用户 + sudo 提权进行日常操作；</p>
+</li>
+<li>
+<p>重要的系统文件，比如 /etc/passwd、/etc/shadow、etc/fstab、/etc/sudoers 等，日常建议使用 <code>chattr</code>锁定，需要操作时再打开。</p>
+</li>
+<li>
+<p>使用 SUID、SGID、Sticky 设置特殊权限；</p>
+</li>
+<li>
+<p>可以利用工具，比如 chkrootkit 或 rootkit hunter 检测 rootkit 脚本（rootkit 是入侵者使用工具，在不察觉的建立了入侵系统途径）；</p>
+</li>
+<li>
+<p>利用工具 Tripwire 检测文件系统完整性；</p>
+</li>
+</ul>
+<blockquote>
+<p>说明 CentOS 7 的启动流程，并说明与 CentOS 6 的差异。</p>
+</blockquote>
+<p>参考视频：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Sv411r7vd?p=148">CentOS 7 启动流程详解</a></p>
+<p>运维细看，Java 开发略过即可。</p>
+<blockquote>
+<p>补充：文件的锁定</p>
+</blockquote>
+<p>对于文件的锁定，比如对 /ect/password 进行锁定让任何用户都不能随意useradd，除非解除锁定，执行指令 <code>chattr +i /etc/passwd</code>即可。但是这样不够安全，其他人也可以通过以下指令解除权限：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chattr -i /etc/passwd</span><br></pre></td></tr></table></figure>
+<p>对此可以移动下 <code>chattr</code> 指令的位置：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv /usr/bin/chattr /opt</span><br></pre></td></tr></table></figure>
+<p>但是其他人可以通过以下指令搜索到 <code>chattr</code> 指令的位置：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find / -name chattr</span><br></pre></td></tr></table></figure>
+<p>对此可以修改 <code>chattr</code> 指令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv /opt/chattr /opt/h</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>补充：chkrootkit 的使用</p>
+</blockquote>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://www.osyunwei.com/archives/10099.html">Linux下rootkit后门检测工具chkrootkit安装使用</a></p>
+<p>安装编译工具包：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install gcc gcc-c++ make</span><br><span class="line">yum install glibc-static</span><br></pre></td></tr></table></figure>
+<p>目录切换并创建目录：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /opt</span><br><span class="line">mkdir chkrootkit</span><br></pre></td></tr></table></figure>
+<p>执行以下指令对工具进行下载：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget ftp://ftp.pangeia.com.br/pub/seg/pac/chkrootkit.tar.gz</span><br></pre></td></tr></table></figure>
+<p>解压：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tar zxvf chkrootkit.tar.gz # 解压</span><br><span class="line">cd chkrootkit-0.52</span><br><span class="line">make sense # 安装</span><br><span class="line">mv /usr/local/src/chkrootkit-0.52 /usr/local/chkrootkit # 拷贝到安装目录</span><br></pre></td></tr></table></figure>
+<p>使用 chkrootkit：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/chkrootkit # 目录切换</span><br><span class="line">./chkrootkit | grep INFECTED # 出现 INFECTED 就说明系统可能有问题了</span><br></pre></td></tr></table></figure>
+<p>在 CentOS 7.x 可能会出现下面的提示：</p>
+<pre>
+chkrootkit: can't find `netstat'.
+</pre>
+<p>原因是系统默认缺少 netstat 命令，进行安装即可：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum whatprovides *netstat # 查看命令所在的安装包</span><br><span class="line">yum install net-snmp-utils net-tools # 安装netstat命令即可</span><br></pre></td></tr></table></figure>
+<h2 id="10-2-滴滴面试题"><a class="header-anchor" href="#10-2-滴滴面试题"></a>10.2 滴滴面试题</h2>
+<blockquote>
+<p>如果忘记了 MySQL 5.7 数据库的 root 用户的密码，应该如何找回？</p>
+</blockquote>
+<p>先编辑 /etc/my.cnf 文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/my.cnf</span><br></pre></td></tr></table></figure>
+<p>在此文件中追加以下内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">skip-grant-tables</span><br></pre></td></tr></table></figure>
+<p>重启 MySQL 服务：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service mysqld restart</span><br></pre></td></tr></table></figure>
+<p>重启成功后，以空密码访问 MySQL：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -u root -p</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">show databases; -- 查看数据库</span><br><span class="line">use mysql; </span><br><span class="line">show tables; -- 查看 mysql 库内的表信息</span><br><span class="line">desc user; -- 查看字段信息</span><br><span class="line">update user set authentication_string=password(&quot;123456&quot;) where user=&#x27;root&#x27;; -- 密码修改</span><br><span class="line">flush privileges; -- 权限刷新</span><br><span class="line">exit; -- 退出 MySQL</span><br></pre></td></tr></table></figure>
+<p>然后再次编辑 /etc/my.cnf，注释或删除开始追加的内容 <code>skip-grant-tables</code>，然后再重启 MySQL 服务，重启后执行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -u root -p</span><br></pre></td></tr></table></figure>
+<p>如果还以空密码进入 MySQL 是会被访问拒绝的，需要使用刚刚重置的密码进入。</p>
+<blockquote>
+<p>列出你了解的 Web 服务器负载架构。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Nginx</span><br><span class="line">Haproxy</span><br><span class="line">Keepalived</span><br><span class="line">LVS</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>每天晚上 10 点 30 分，打包站点目录 /var/spool/mail 备份到 /home 目录下（每次备份按时间生成不同的备份包）。</p>
+</blockquote>
+<p>mail.sh Shell 脚本内容：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line">cd /var/spool/ &amp;&amp; /bin/tar zcf /home/mail-`date +%Y-%m-%d_%H%M%S`.tar.gz</span><br></pre></td></tr></table></figure>
+<p>为 mail.sh 增加执行权限并尝试运行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chmod u+x mail.sh # 增加执行权限</span><br><span class="line">./mail.sh # 尝试运行</span><br></pre></td></tr></table></figure>
+<p>定时执行 mail.sh 脚本：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">crontab -e</span><br></pre></td></tr></table></figure>
+<p>内容追加：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">30 22 * * * /root/mail.sh</span><br></pre></td></tr></table></figure>
+<h2 id="10-3-美团面试题"><a class="header-anchor" href="#10-3-美团面试题"></a>10.3 美团面试题</h2>
+<blockquote>
+<p>统计 IP 访问情况，并分析 nginx 访问日志（access.log），找出访问页面数量在前 2 位的 IP</p>
+</blockquote>
+<p>日志 access.log 的内容如下：</p>
+<pre>
+192.168.130.21	aaa.html
+192.168.130.20	aaa.htmL
+192.168.130.20	aaa.html
+192.168.130.20  aaa.htmL
+192.168.130.23  aaa.html
+192.168.130.20  aaa.html
+192.168.130.25  aaa.html
+192.168.130.20  aaa.html
+192.168.130.20  aaa.html
+192.168.130.25  aaa.html
+192.168.130.20  aaa.html
+</pre>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat access.log | awk -F &quot; &quot; &#x27;&#123;print $1&#125;&#x27; | sort | uniq -c | sort -nr | head -2 </span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>使用 tcpdump 监听本机，将来自 IP 为 192.168.200.1，TCP 端口为 22 的数据保存输出到tcpdump.log 以便将来数据分析</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tcpdump -i ens33 host 192.168.200.1 and port 22 &gt;&gt; /opt/interview/tcpdump.log</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>使用 Linux 命令计算 t2.txt 第二列的和并输出。</p>
+</blockquote>
+<p>t2.txt 的内容如下：</p>
+<pre>
+张三 40
+李四 50
+王五 60
+</pre>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat t2.txt | awk -F &quot; &quot; &#x27;&#123;sum+=$2&#125; END &#123;print sum&#125;&#x27;</span><br></pre></td></tr></table></figure>
+<h2 id="10-4-百度面试题"><a class="header-anchor" href="#10-4-百度面试题"></a>10.4 百度面试题</h2>
+<blockquote>
+<p>列举至少 6 个 Linux 高级命令。（百度）</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">netstat # 网络状态监控</span><br><span class="line">top # 系统运行状态</span><br><span class="line">lsblk # 查看硬盘分区</span><br><span class="line">find # 查找</span><br><span class="line">ps -aux # 查看运行进程</span><br><span class="line">chkconfig # 查看服务启动状态</span><br><span class="line">systemctl # 管理系统服务器</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Shell 脚本里如何检查一个文件是否存在并给出提示。</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">if [ -f 文件名 ] then echo &quot;存在&quot; else echo &quot;不存在&quot; fi</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>编写一个 Shell 脚本，对文本 t3.txt 中无序的一列数字进行排序，并输出总和。</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sort -nr t3.txt | awk &#x27;&#123;sum+=$0; print $0&#125; END &#123;print &quot;和=&quot;sum&#125;&#x27;</span><br></pre></td></tr></table></figure>
+<p><code>$0</code> 表示的是取整个部分；<code>$1</code> 表示的是取分割后的第一部分。这次没有用 <code>-F</code> 指定分割，所以用<code>$0</code>。</p>
+<h2 id="10-5-其他大厂面试题"><a class="header-anchor" href="#10-5-其他大厂面试题"></a>10.5 其他大厂面试题</h2>
+<blockquote>
+<p>常用的 Nginx 模块有哪些？它们的作用是什么？（滴滴）</p>
+</blockquote>
+<p>rewrite 模块用于重写功能；</p>
+<p>access 模块用于来源控制；</p>
+<p>ssl 模块用于安全加密；</p>
+<p>ngx_http_ gzip_ module模块 用于网络传输压缩；</p>
+<p>ngx_http_proxy_module 模块实现代理；</p>
+<p>ngx_ http_upstream_module 模块实现定义后端服务器列表；</p>
+<p>ngx_ cache_purge 模块实现缓存清除功能；</p>
+<blockquote>
+<p>Linux 查看内存、IO 读写、磁盘存储、端口占用、进程查看的命令是什么？（瓜子）</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">top # 查看内存使用情况</span><br><span class="line"></span><br><span class="line">yum install iotop # 安装 iotop</span><br><span class="line">iotop # 查看磁盘 IO 读写情况</span><br><span class="line"></span><br><span class="line">df -lh # 磁盘存储</span><br><span class="line"></span><br><span class="line">netstat -tunlp # 端口占用</span><br><span class="line"></span><br><span class="line">ps -aux | grep sshd # 查看 sshd 的进程</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>请用指令写出查找当前文件夹（/home）下所有的文本文件内容中包含有字符 cat 的文件名称。（金山）</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep -r &quot;cat&quot; /home | cut -d &quot;:&quot; -f 1</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>请写出统计 /home 目录下所有文件个数和所有文件总行数的指令。（金山面试题拓展）</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find /home -name &quot;*.*&quot; | xargs wc -l</span><br></pre></td></tr></table></figure>
+<h2 id="10-6-权限操作思考题"><a class="header-anchor" href="#10-6-权限操作思考题"></a>10.6 权限操作思考题</h2>
+<blockquote>
+<p>用户 tom 对目录 /home/test 有执行 x 和读写 rw 权限，/home/test/hello.java 是只读文件，问 tom 对 hello.java 文件能读吗？能修改吗？能删除吗？</p>
+</blockquote>
+<p>可读，不可修改（不可修改内容，可修改名称），可删除。</p>
+<blockquote>
+<p>用户 tom 对目录 /home/test 只有读写权限，/home/test/hello.java 是只读文件，问 tom 对 hello.java 文件能读吗？能修改吗？能删除吗？</p>
+</blockquote>
+<p>不可读、修改和删除。</p>
+<blockquote>
+<p>用户 tom 对目录 /home/test 只有执行权限，/home/test/hello.java 是只读文件，问 tom 对 hello.java 文件能读吗？能修改吗？能删除吗？</p>
+</blockquote>
+<p>可读，不可修改和删除。</p>
+<blockquote>
+<p>用户 tom 对目录 /home/test 只有执行和写权限，/home/test/hello.java 是只读文件，问 tom 对 hello.java 文件能读吗？能修改吗？能删除吗？</p>
+</blockquote>
+<p>可读，不可修改，可删除。</p>
+<h2 id="10-7-优化-Linux-系统"><a class="header-anchor" href="#10-7-优化-Linux-系统"></a>10.7 优化 Linux 系统</h2>
+<p>此为瓜子的一道面试题：如何优化 Linux 系统，说说你的方法。</p>
+<blockquote>
+<p>对 Linux 系统本身的优化</p>
+</blockquote>
+<p>1、不要 root，使用 sudo 提示权限；</p>
+<p>2、定时指定更新服务时间，使用 <code>nptdate npt1.aliyun.com</code> 指令，并使用 croud 定时更新；</p>
+<p>3、配置 yum 源指向国内镜像（清华、163 等）</p>
+<p>4、配置合理的防火墙策略，打开必要的端口，关闭不必要的端口；</p>
+<p>5、打开最大文件数（调整文件的描述数量）：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/profile # 修改文件</span><br></pre></td></tr></table></figure>
+<p>追加内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ulimit -SHn 65535</span><br></pre></td></tr></table></figure>
+<p>6、配置合理的监控策略；</p>
+<p>7、配置合理的系统重要文件的备份策略；</p>
+<p>8、对安装的软件进行优化，比如 Nginx、Apache Tomcat 等；</p>
+<p>9、对内核参数进行优化（/etc/sysctl.conf）；</p>
+<p>10、锁定（使用 <code>chattr</code> 指令）一些重要的系统文件；</p>
+<p>11、禁用不必要的服务（使用 <code>setup</code>、<code>ntsysv</code> 指令）；</p>
+<h1 id="11-常用指令与补充"><a class="header-anchor" href="#11-常用指令与补充"></a>11. 常用指令与补充</h1>
+<h2 id="11-1-常用指令实践"><a class="header-anchor" href="#11-1-常用指令实践"></a>11.1 常用指令实践</h2>
+<p>章节参考：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1ev411G7VE">最快Linux入门教程+最新学习路线！程序员必备组合拳</a></p>
+<p>1、连接远程服务器：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh IP地址</span><br></pre></td></tr></table></figure>
+<p>2、查看当前所在目录位置：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pwd</span><br></pre></td></tr></table></figure>
+<p>3、查看网络设备信息：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ifconfig # 或者 ip addr（推荐后者）</span><br></pre></td></tr></table></figure>
+<p>4、查看服务器下的内存：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">free</span><br></pre></td></tr></table></figure>
+<p>5、查看磁盘空间：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df -lh</span><br></pre></td></tr></table></figure>
+<p>6、新建 code 目录：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir code</span><br></pre></td></tr></table></figure>
+<p>7、切换至 code 目录：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd code/</span><br></pre></td></tr></table></figure>
+<p>8、拉取项目代码：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone xxx</span><br></pre></td></tr></table></figure>
+<p>9、进入项目目录：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd xxx</span><br></pre></td></tr></table></figure>
+<p>10、查看项目文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls</span><br></pre></td></tr></table></figure>
+<p>11、查看项目各文件大小：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">du -sh *</span><br></pre></td></tr></table></figure>
+<p>12、查看项目介绍文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat README.md</span><br></pre></td></tr></table></figure>
+<p>13、查看系统版本：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uname -a</span><br></pre></td></tr></table></figure>
+<p>14、安装 Java8：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install java-1.8.0-openjdk* -y</span><br></pre></td></tr></table></figure>
+<p>15、查看 Java 版本号：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -version</span><br></pre></td></tr></table></figure>
+<p>16、查看 <code>java</code> 命令的位置：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">which java</span><br></pre></td></tr></table></figure>
+<p>17、下载 Maven 压缩包：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget Maven安装包镜像地址</span><br></pre></td></tr></table></figure>
+<p>18、解压：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf apache-maven-3.8.2-bin.tar.gz</span><br></pre></td></tr></table></figure>
+<p>19、项目构建：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./apache-maven-3.8.2/bin/mvn install</span><br></pre></td></tr></table></figure>
+<p>20、查看构建后项目的 jar 包：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find -name &#x27;*.jar&#x27;</span><br></pre></td></tr></table></figure>
+<p>21、移动 jar 包至上级目录：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp ./target/xxx.jar ./</span><br></pre></td></tr></table></figure>
+<p>22、jar 包改名：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv xxx.jar code-nav.jar</span><br></pre></td></tr></table></figure>
+<p>23、运行 jar 包：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -jar code-nav.jar</span><br></pre></td></tr></table></figure>
+<p>24、后台启动程序：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup java -jar code-nav.jar &amp;</span><br></pre></td></tr></table></figure>
+<p>25、查看当前任务：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jobs</span><br></pre></td></tr></table></figure>
+<p>26、查看进程：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps -ef</span><br></pre></td></tr></table></figure>
+<p>27、筛选 java 进程：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps -ef | grep &#x27;java&#x27;</span><br></pre></td></tr></table></figure>
+<p>28、查看端口占用：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -ntlp</span><br></pre></td></tr></table></figure>
+<p>29、访问项目：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl localhost:8082/dog</span><br></pre></td></tr></table></figure>
+<p>30、切换至日志目录并查看日志：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd logs/</span><br><span class="line">ls</span><br><span class="line">cat error.log</span><br></pre></td></tr></table></figure>
+<p>31、查看最新 10 行日志：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail -n 10 error.log</span><br></pre></td></tr></table></figure>
+<p>32、下载日志到本地：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sz error.log</span><br></pre></td></tr></table></figure>
+<p>33、使用 vim 修改代码：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim pom.xml</span><br></pre></td></tr></table></figure>
+<p>34、杀死老进程：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kill -9 %l</span><br></pre></td></tr></table></figure>
+<p>35、重新构建项目并执行；</p>
+<p>36、查看系统中各个进程的资源占用情况：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">top</span><br></pre></td></tr></table></figure>
+<p>37、编写 Shell 脚本；</p>
+<p>38、为脚本添加可执行权限：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod a+x xxx.sh</span><br></pre></td></tr></table></figure>
+<p>39、查看历史命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">history</span><br></pre></td></tr></table></figure>
+<h2 id="11-2-指令的别名"><a class="header-anchor" href="#11-2-指令的别名"></a>11.2 指令的别名</h2>
+<p>查看系统默认设置的别名：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alias</span><br></pre></td></tr></table></figure>
+<p>新增别名：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">设置 `<span class="built_in">ls</span> -lt` 指令的别名为 llt，后续使用 llt 就能达到 <span class="built_in">ls</span> -lt 的效果</span></span><br><span class="line">alias llt=&#x27;ls -lt&#x27;</span><br></pre></td></tr></table></figure>
+<p>删除别名：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unalias llt</span><br></pre></td></tr></table></figure>
+<p>指令的别名属于内部指令，一个别名只会在它被定义的 shell 进程中有效，如果想要使其永久生效，可以把别名添加到 Linux 启动文件 <code>.bashrc</code> 或 <code>.bash_profile</code> 中，然后重启系统：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">当前用户生效</span></span><br><span class="line">echo &#x27;alias llt=&#x27;ls -lt&#x27;&#x27; &gt;&gt; ~/.bashrc</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">所有用户生效</span></span><br><span class="line">echo &#x27;alias llt=&#x27;ls -lt&#x27;&#x27; &gt;&gt; /etc/bashrc</span><br></pre></td></tr></table></figure>
+<p>因此要删除系统默认设置的别名，不仅要使用 <code>unalias</code> 移除别名，还要在启动文件中删除对应的信息。</p>
+<h2 id="11-3-查看日志"><a class="header-anchor" href="#11-3-查看日志"></a>11.3 查看日志</h2>
+<p>显示 file 文件中匹配 <code>foo</code> 字符串那行以及上下 5 行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep -C 5 foo file</span><br></pre></td></tr></table></figure>
+<p>显示 <code>foo</code> 及前 5 行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep -B 5 foo file</span><br></pre></td></tr></table></figure>
+<p>显示 <code>foo</code> 及后 5 行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep -A 5 foo file</span><br></pre></td></tr></table></figure>
+<h2 id="11-4-安全地擦除磁盘数据"><a class="header-anchor" href="#11-4-安全地擦除磁盘数据"></a>11.4 安全地擦除磁盘数据</h2>
+<ul>
+<li>中文：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/w-pMU3_TD3dEPoW-XEde-A">Linux 中如何安全地抹去磁盘数据？</a></li>
+<li>原文：<a target="_blank" rel="noopener" href="https://linuxiac.com/best-ways-to-securely-erase-disk-in-linux/">3 Best Ways to Securely Wipe Disk in Linux Using Command Line</a></li>
+</ul>
+<h2 id="11-5-排查-Java-进程导致-CPU-飙升"><a class="header-anchor" href="#11-5-排查-Java-进程导致-CPU-飙升"></a>11.5 排查 Java 进程导致 CPU 飙升</h2>
+<ol>
+<li>
+<p>使用 <code>top</code> 命令查看 CPU 占用情况，找到占用较高的进程 PID；</p>
+</li>
+<li>
+<p>使用以下命令查看对应 PID 的进程及其所有线程的 CPU 使用情况，找到占用较高的线程 ID：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">top -Hp PID</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>使用以下命令将对应线程 ID 转换成十六进制：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">printf &quot;%x\n&quot; [线程 ID]</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>使用 JDK 自带的 <code>jstack</code> 命令获取 Java 进程的线程快照并输入到 <code>jstack_result.txt</code> 文件中：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jstack -l [进程 PID] &gt; ./jstack_result.txt</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>在 <code>jstack_result.txt </code> 文件中按先前得到的十六进制线程 ID 进行搜索，查看阻塞原因：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat jstack_result.txt | grep -A 100 [十六进制线程 ID]</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/The-Basics-Of-Linux-Part-Two/">https://mofan212.github.io/posts/The-Basics-Of-Linux-Part-Two/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a></div><div class="post-share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/97.png" data-sites="wechat,qq,weibo,facebook,x"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/The-Basics-Of-Linux-Part-One/" title="【上篇】Linux 基础"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/96.png" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【上篇】Linux 基础</div></div><div class="info-2"><div class="info-item-1">本文介绍了 Linux 中用户管理、实用指令、权限管理、定时任务、网络配置和进程管理等内容。</div></div></div></a><a class="pagination-related" href="/posts/Goodbye-2021-Hello-2022/" title="再见 2021，你好 2022"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/98.jpg" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">再见 2021，你好 2022</div></div><div class="info-2"><div class="info-item-1">疫情下，毕业了，工作了，忙碌了，熬夜了，脱发了，更加怠惰了。</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/The-Basics-Of-Linux-Part-One/" title="【上篇】Linux 基础"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/96.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-17</div><div class="info-item-2">【上篇】Linux 基础</div></div><div class="info-2"><div class="info-item-1">本文介绍了 Linux 中用户管理、实用指令、权限管理、定时任务、网络配置和进程管理等内容。</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">默烦</div><div class="author-info-description">彩笔的打怪升级之路...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">174</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mofan212"><i class="fab fa-github"></i><span>follow me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解。<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a href="./mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载。😊</br><strong><font style="color:red">严禁未遵循规范的转载。</font></strong>😡</br><strong>死去的评论系统复活啦！欢迎到留言板畅所欲言！</strong>当然也可以使用更高效的<a target="_blank" href="https://space.bilibili.com/23658864/dynamic" style="color:#49B1F5;text-decoration:underline"> 哔哩哔哩私信 </a>或<a href="mailto:cy.mofan@foxmail.com" style="color:#49B1F5;text-decoration:underline" target="_blank">邮箱</a>。 😉</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-RPM-%E4%B8%8E-YUM"><span class="toc-text">1. RPM 与 YUM</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-RPM-%E5%8C%85%E7%9A%84%E7%AE%A1%E7%90%86"><span class="toc-text">1.1 RPM 包的管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-Yum-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">1.2 Yum 的使用</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E6%90%AD%E5%BB%BA-JavaEE-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83"><span class="toc-text">2. 搭建 JavaEE 开发环境</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E5%AE%89%E8%A3%85-JDK8"><span class="toc-text">2.1 安装 JDK8</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E5%AE%89%E8%A3%85-Tomcat"><span class="toc-text">2.2 安装 Tomcat</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E5%AE%89%E8%A3%85-IDEA"><span class="toc-text">2.3 安装 IDEA</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-%E5%AE%89%E8%A3%85-MySQL-5-7"><span class="toc-text">2.4 安装 MySQL 5.7</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-5-%E5%AE%89%E8%A3%85-Maven"><span class="toc-text">2.5 安装 Maven</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-Shell-%E7%BC%96%E7%A8%8B"><span class="toc-text">3. Shell 编程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-Shell-%E7%BC%96%E7%A8%8B%E5%BC%95%E8%A8%80"><span class="toc-text">3.1 Shell 编程引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-Shell-%E8%84%9A%E6%9C%AC%E7%9A%84%E6%89%A7%E8%A1%8C%E6%96%B9%E5%BC%8F"><span class="toc-text">3.2 Shell 脚本的执行方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-Shell-%E7%9A%84%E5%8F%98%E9%87%8F"><span class="toc-text">3.3 Shell 的变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-text">3.3 环境变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-%E4%BD%8D%E7%BD%AE%E5%8F%82%E6%95%B0%E5%8F%98%E9%87%8F"><span class="toc-text">3.4 位置参数变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-5-%E9%A2%84%E5%AE%9A%E4%B9%89%E5%8F%98%E9%87%8F"><span class="toc-text">3.5 预定义变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-6-%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-text">3.6 运算符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-7-%E6%9D%A1%E4%BB%B6%E5%88%A4%E6%96%AD"><span class="toc-text">3.7 条件判断</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-8-%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B9%8B-if"><span class="toc-text">3.8 流程控制之 if</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-9-%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B9%8B-case"><span class="toc-text">3.9 流程控制之 case</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-10-%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B9%8B-for"><span class="toc-text">3.10 流程控制之 for</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-11-%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B9%8B-while"><span class="toc-text">3.11 流程控制之 while</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-12-%E8%AF%BB%E5%8F%96%E6%8E%A7%E5%88%B6%E5%8F%B0%E8%BE%93%E5%85%A5"><span class="toc-text">3.12 读取控制台输入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-13-%E7%B3%BB%E7%BB%9F%E5%87%BD%E6%95%B0"><span class="toc-text">3.13 系统函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-14-%E8%87%AA%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0"><span class="toc-text">3.14 自定义函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-15-%E7%BB%BC%E5%90%88%E6%A1%88%E4%BE%8B"><span class="toc-text">3.15 综合案例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-16-%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%88%AA%E5%8F%96"><span class="toc-text">3.16 字符串截取</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-17-%E6%9B%B4%E5%A4%9A%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-text">3.17 更多参考资料</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-Ubuntu-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">4. Ubuntu 的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-Ubuntu-%E7%9A%84%E7%AE%80%E8%BF%B0"><span class="toc-text">4.1 Ubuntu 的简述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-Ubuntu-%E7%9A%84%E4%B8%AD%E6%96%87%E6%94%AF%E6%8C%81"><span class="toc-text">4.2 Ubuntu 的中文支持</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-Ubuntu-%E7%9A%84-root"><span class="toc-text">4.3 Ubuntu 的 root</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-4-APT-%E8%BD%AF%E4%BB%B6%E7%AE%A1%E7%90%86"><span class="toc-text">4.4 APT 软件管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-5-%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95"><span class="toc-text">4.5 远程登录</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86"><span class="toc-text">5. 日志管理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D"><span class="toc-text">5.1 基本介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86%E6%9C%8D%E5%8A%A1"><span class="toc-text">5.2 日志管理服务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-%E8%87%AA%E5%AE%9A%E4%B9%89%E6%97%A5%E5%BF%97%E6%9C%8D%E5%8A%A1"><span class="toc-text">5.3 自定义日志服务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-4-%E6%97%A5%E5%BF%97%E8%BD%AE%E6%9B%BF"><span class="toc-text">5.4 日志轮替</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-5-%E8%87%AA%E5%AE%9A%E4%B9%89%E6%97%A5%E5%BF%97%E8%BD%AE%E6%9B%BF"><span class="toc-text">5.5 自定义日志轮替</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-6-%E6%97%A5%E5%BF%97%E8%BD%AE%E6%9B%BF%E5%8E%9F%E7%90%86"><span class="toc-text">5.6 日志轮替原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-7-%E6%9F%A5%E7%9C%8B%E5%86%85%E5%AD%98%E6%97%A5%E5%BF%97"><span class="toc-text">5.7 查看内存日志</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-%E5%AE%9A%E5%88%B6%E8%87%AA%E5%B7%B1%E7%9A%84-Linux"><span class="toc-text">6. 定制自己的 Linux</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#6-1-Linux-%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E4%BB%8B%E7%BB%8D"><span class="toc-text">6.1 Linux 启动流程介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-2-%E5%88%B6%E4%BD%9C-Min-Linux-%E6%80%9D%E8%B7%AF%E5%88%86%E6%9E%90"><span class="toc-text">6.2 制作 Min Linux 思路分析</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-Linux-%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E4%B8%8E%E5%8D%87%E7%BA%A7"><span class="toc-text">7. Linux 内核源码与升级</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#7-1-%E5%88%9D%E6%8E%A2-Linux-%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81"><span class="toc-text">7.1 初探 Linux 内核源码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-2-Linux-%E5%86%85%E6%A0%B8%E5%8D%87%E7%BA%A7"><span class="toc-text">7.2 Linux 内核升级</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D"><span class="toc-text">8. 备份与恢复</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#8-1-%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D"><span class="toc-text">8.1 基本介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-2-%E4%BD%BF%E7%94%A8-dump-%E5%AE%8C%E6%88%90%E5%A4%87%E4%BB%BD"><span class="toc-text">8.2 使用 dump 完成备份</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-3-%E4%BD%BF%E7%94%A8-restore-%E5%AE%8C%E6%88%90%E6%81%A2%E5%A4%8D"><span class="toc-text">8.3 使用 restore 完成恢复</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#9-Linux-%E5%8F%AF%E8%A7%86%E5%8C%96%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7"><span class="toc-text">9. Linux 可视化管理工具</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#9-1-Webmin-%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE"><span class="toc-text">9.1 Webmin 的安装和配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-2-Webmin-%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-text">9.2 Webmin 的基本使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-3-%E5%AE%9D%E5%A1%94%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%B8%8E%E5%AE%89%E8%A3%85"><span class="toc-text">9.3 宝塔的介绍与安装</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#10-Linux-%E9%9D%A2%E8%AF%95%E9%A2%98"><span class="toc-text">10. Linux 面试题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#10-1-%E8%85%BE%E8%AE%AF%E9%9D%A2%E8%AF%95%E9%A2%98"><span class="toc-text">10.1 腾讯面试题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-2-%E6%BB%B4%E6%BB%B4%E9%9D%A2%E8%AF%95%E9%A2%98"><span class="toc-text">10.2 滴滴面试题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-3-%E7%BE%8E%E5%9B%A2%E9%9D%A2%E8%AF%95%E9%A2%98"><span class="toc-text">10.3 美团面试题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-4-%E7%99%BE%E5%BA%A6%E9%9D%A2%E8%AF%95%E9%A2%98"><span class="toc-text">10.4 百度面试题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-5-%E5%85%B6%E4%BB%96%E5%A4%A7%E5%8E%82%E9%9D%A2%E8%AF%95%E9%A2%98"><span class="toc-text">10.5 其他大厂面试题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-6-%E6%9D%83%E9%99%90%E6%93%8D%E4%BD%9C%E6%80%9D%E8%80%83%E9%A2%98"><span class="toc-text">10.6 权限操作思考题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-7-%E4%BC%98%E5%8C%96-Linux-%E7%B3%BB%E7%BB%9F"><span class="toc-text">10.7 优化 Linux 系统</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#11-%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4%E4%B8%8E%E8%A1%A5%E5%85%85"><span class="toc-text">11. 常用指令与补充</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#11-1-%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4%E5%AE%9E%E8%B7%B5"><span class="toc-text">11.1 常用指令实践</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-2-%E6%8C%87%E4%BB%A4%E7%9A%84%E5%88%AB%E5%90%8D"><span class="toc-text">11.2 指令的别名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-3-%E6%9F%A5%E7%9C%8B%E6%97%A5%E5%BF%97"><span class="toc-text">11.3 查看日志</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-4-%E5%AE%89%E5%85%A8%E5%9C%B0%E6%93%A6%E9%99%A4%E7%A3%81%E7%9B%98%E6%95%B0%E6%8D%AE"><span class="toc-text">11.4 安全地擦除磁盘数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-5-%E6%8E%92%E6%9F%A5-Java-%E8%BF%9B%E7%A8%8B%E5%AF%BC%E8%87%B4-CPU-%E9%A3%99%E5%8D%87"><span class="toc-text">11.5 排查 Java 进程导致 CPU 飙升</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/Something-About-Blog/" title="博客搭建与维护"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="博客搭建与维护"/></a><div class="content"><a class="title" href="/posts/Something-About-Blog/" title="博客搭建与维护">博客搭建与维护</a><time datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"/></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="更新于 2026-01-03 00:00:00">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"/></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/103.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 的类资源加载"/></a><div class="content"><a class="title" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载">Java 的类资源加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/20.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="注解、类的加载、反射"/></a><div class="content"><a class="title" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射">注解、类的加载、反射</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/ren-zhi-jue-xing/" title="认知觉醒"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/172.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="认知觉醒"/></a><div class="content"><a class="title" href="/posts/ren-zhi-jue-xing/" title="认知觉醒">认知觉醒</a><time datetime="2025-12-28T16:00:00.000Z" title="更新于 2025-12-29 00:00:00">2025-12-29</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://gcore.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script src="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/js/mine.min.js"></script><script src="/js/tip_portal.js"></script><script defer="defer" id="ribbon" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script id="click-show-text" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="Azathoth,Yog-Sothoth,Shub-Niggurath,Nyarlathotep,Cthulhu,Hastur,Abhoth,Ghroth,Tsathoggua,Cthugha,Deep Ones,Dagon,Chaugnar Faugn,Mordiggian,Shoggoth,Old One,Mi-Go,Great Race of Yith,Flying Polyp,Hounds of Tindalos,Dhole" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div class="docsearch-wrap"><div id="docsearch" style="display:none"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@docsearch/css/dist/style.min.css"/><script src="https://testingcf.jsdelivr.net/npm/@docsearch/js/dist/umd/index.min.js"></script><script>(() => {
+  docsearch(Object.assign({
+    appId: 'BAFEL7A6K1',
+    apiKey: '89fcb5961984c5c054bf04149f345f38',
+    indexName: 'mofan212io',
+    container: '#docsearch',
+    placeholder: '输入关键字进行搜索',
+  }, null))
+
+  const handleClick = () => {
+    document.querySelector('.DocSearch-Button').click()
+  }
+
+  const searchClickFn = () => {
+    btf.addEventListenerPjax(document.querySelector('#search-button > .search'), 'click', handleClick)
+  }
+
+  searchClickFn()
+  window.addEventListener('pjax:complete', searchClickFn)
+})()</script></div></div></body></html>
