@@ -192,7 +192,7 @@ btf.addGlobalFn('pjaxSend', () => {
         background: #262931 !important;
       }
     </style>
-    <html><head></head><body><p>封面来源：碧蓝航线 箱庭疗法 活动CG</p>
+    <html><head></head><body><p>封面来源：碧蓝航线 箱庭疗法 活动 CG</p>
 <p>本文参考：尚硅谷 2019-06 周阳 JUC</p>
 <h1 id="1-JUC-是什么"><a class="header-anchor" href="#1-JUC-是什么"></a>1. JUC 是什么</h1>
 <h2 id="1-1-什么是-JUC"><a class="header-anchor" href="#1-1-什么是-JUC"></a>1.1 什么是 JUC</h2>
@@ -206,7 +206,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>线程：通常在一个进程中可以包含若千个线程，当然一个进程中至少有一个线程，不然没有存在的意义。线程可以利用进程所拥有的资源，在引入线程的操作系统中，通常都是把进程作为分配资源的基本单位，而把线程作为独立运行和独立调度的基本单位。由于线程比进程更小，基本上不拥有系统资源，故对它的调度所付出的开销就会小得多，能更高效地提高系统多个程序间并发执行的程度。</p>
 <p><strong>说人话：</strong></p>
 <p>进程与操作系统有关，和编程语言无关，操作系统中后台运行的每一个程序就是一个进程。</p>
-<p>使用QQ，查看进程一定有一个 QQ.exe 的进程，我可以用 qq 和 A 文字聊天，和 B 视频聊天，给 C 传文件，给 D 发一段语言，QQ支持录入信息的搜索。</p>
+<p>使用 QQ，查看进程一定有一个 QQ.exe 的进程，我可以用 qq 和 A 文字聊天，和 B 视频聊天，给 C 传文件，给 D 发一段语言，QQ 支持录入信息的搜索。</p>
 <p>写论文时，用 word 写论文，同时用 QQ 音乐放音乐，还用 QQ 聊天，这涉及到多个进程。</p>
 <p>如果 word 如没有保存，突然停电关机，再通电后打开 word 可以恢复之前未保存的文档，word 还会检查你的拼写，这涉及到两个线程：容灾备份，语法检查。</p>
 <blockquote>
@@ -227,7 +227,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>wait 是放开手去睡，放开手里的锁。</p>
 <p>sleep 是握紧手去睡，醒了手里还有锁。</p>
 <p><strong>2、来源角度</strong></p>
-<p>sleep 来自 <code>Thread</code> 类，而 wait来自 <code>Object</code> 类。sleep 是 Thread 中的静态类方法，谁调用的谁去睡觉，即使在线程 A 里调用了 B 的 sleep 方法，实际上还是线程 A 休眠，要让 B 线程休眠要在 B 的代码中调用sleep。</p>
+<p>sleep 来自 <code>Thread</code> 类，而 wait 来自 <code>Object</code> 类。sleep 是 Thread 中的静态类方法，谁调用的谁去睡觉，即使在线程 A 里调用了 B 的 sleep 方法，实际上还是线程 A 休眠，要让 B 线程休眠要在 B 的代码中调用 sleep。</p>
 <p><strong>3、使用范围</strong></p>
 <p>wait，notify 和 notifyAll 方法只能在同步控制方法或者同步控制块里面使用，而 sleep 可以在任何地方使用。</p>
 <p><strong>4、异常捕获</strong></p>
@@ -328,7 +328,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>上面的代码是最开始学习多线程时就会接触到的代码，也是最经典的卖票系统。</p>
 <p>那这和 JUC 有什么关系吗？</p>
 <p>在实际操作中，我们一般不用 <code>synchronized </code> 关键字，而是使用 JUC 提供了 API。为什么呢？</p>
-<p>上述案例中，<code>synchronized</code> 关键字是作用在方法之上的，就是说当前只有一个线程可以进入那个方法，那一整个方法都被锁了。如果某个方法内容很多，却只有几行需要被锁住，这时候使用 <code>synchronized</code> 关键字就不很“优雅”了。</p>
+<p>上述案例中，<code>synchronized</code> 关键字是作用在方法之上的，就是说当前只有一个线程可以进入那个方法，那一整个方法都被锁了。如果某个方法内容很多，却只有几行需要被锁住，这时候使用 <code>synchronized</code> 关键字就不很「优雅」了。</p>
 <p>打个比方，在外上厕所时会将厕所里指定的坑位的门关上，解决完了，开门，人走，这个过程就和使用锁是一个道理。<code>synchronized</code> 关键字就很粗暴，我要上厕所，然后把厕所的外大门关了，谁都不许进来，属于一杆打死一船人。</p>
 <blockquote>
 <p>使用 Lock 锁</p>
@@ -602,7 +602,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#ABB2BF">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <p>运行上述代码后，会发现输出结果不再异常。</p>
-<p><strong>理解一下虚假唤醒：</strong> 假设现在有两对生产者消费者，其中 A 和 B 是生产者，C 和 D 是消费者（此时阻塞判断使用<code>if</code>）。假设生产者 A 先运行，此时没有任何商品，生产者 A 阻塞判断失败，干活，产品加一。然后生产者 A 再次运行，此时有一件商品，阻塞判断成功，A 被阻塞。生产者 B 运行，此时有一件商品，阻塞判断成功，B 也被阻塞。消费者 C 运行，此时有一件商品，商品数量不为 0，阻塞判断失败，干活，C 消费一件商品，商品数量为 0，然后唤醒所有 wait 的线程。由于 A 和 B 开始处于阻塞状态，D 处于就绪状态，唤醒阻塞状态的线程后，这些线程的优先级更高。假设生产者 A 又运行，由于 A 是被唤醒的，且采用 <code>if</code> 判断，不会进行二次判断，直接干活，商品数量加一。生产者 B 也运行，与 A 同理，不会进行二次判断，商品数量又加一。而这，就是虚假唤醒！</p>
+<p><strong>理解一下虚假唤醒：</strong> 假设现在有两对生产者消费者，其中 A 和 B 是生产者，C 和 D 是消费者（此时阻塞判断使用 <code>if</code>）。假设生产者 A 先运行，此时没有任何商品，生产者 A 阻塞判断失败，干活，产品加一。然后生产者 A 再次运行，此时有一件商品，阻塞判断成功，A 被阻塞。生产者 B 运行，此时有一件商品，阻塞判断成功，B 也被阻塞。消费者 C 运行，此时有一件商品，商品数量不为 0，阻塞判断失败，干活，C 消费一件商品，商品数量为 0，然后唤醒所有 wait 的线程。由于 A 和 B 开始处于阻塞状态，D 处于就绪状态，唤醒阻塞状态的线程后，这些线程的优先级更高。假设生产者 A 又运行，由于 A 是被唤醒的，且采用 <code>if</code> 判断，不会进行二次判断，直接干活，商品数量加一。生产者 B 也运行，与 A 同理，不会进行二次判断，商品数量又加一。而这，就是虚假唤醒！</p>
 <blockquote>
 <p>新版消费者生产者写法</p>
 </blockquote>
@@ -698,7 +698,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <blockquote>
 <p>精确通知顺序访问</p>
 </blockquote>
-<p>我们使用 <code>Lock</code> 代替了 <code>synchronized</code> ，使用 <code>await</code> 和 <code>signal</code> 代替了 <code>wait</code> 和 <code>notify</code>，那为什么要这样代替呢？很简单，新版的东西代替旧版，不仅可以干旧版能干的事，还可以干旧版不能干的事。</p>
+<p>我们使用 <code>Lock</code> 代替了 <code>synchronized</code>，使用 <code>await</code> 和 <code>signal</code> 代替了 <code>wait</code> 和 <code>notify</code>，那为什么要这样代替呢？很简单，新版的东西代替旧版，不仅可以干旧版能干的事，还可以干旧版不能干的事。</p>
 <p>假设现在我们需要精确打击：有三个线程，分别叫 A、B 和 C。A 线程打印 5 次，然后 B 线程打印 10 次，最后 C 线程打印 10 次，按照这个顺序来 10 轮。</p>
 <p>这个需求和前面的案例就不同了，因为线程的调用有顺序了，对此，我们可以引入一个标志位。</p>
 <p>示例代码：</p>
@@ -1285,16 +1285,16 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>一个对象里面如果有多个 <code>synchronized</code> 方法，某一个时刻内，只要一个线程去调用其中的一个 <code>synchronized</code> 方法了，其它的线程都只能等待。换句话说，某一个时刻内，只能有唯一一个线程去访问这些 <code>synchronized</code> 方法，即：锁的是当前对象 <code>this</code>，被锁定后，其它的线程都不能进入到当前对象的其它的 <code>synchronized</code> 方法。</p>
 <p>加个普通方法后发现和同步锁无关，换成两个对象后，不是同一把锁了，情况立刻变化。</p>
 <p>都换成静态同步方法后，情况又变化，所有的非静态同步方法用的都是同一把锁，即：实例对象本身。</p>
-<p><code>synchronized</code> 实现同步的基础：Java 中的每一个对象都可以作为锁。具体表现为以下3种形式：</p>
+<p><code>synchronized</code> 实现同步的基础：Java 中的每一个对象都可以作为锁。具体表现为以下 3 种形式：</p>
 <ul>
 <li>
-<p>对普通同步方法，锁是当前实例对象。</p>
+<p>对普通同步方法，锁是当前实例对象</p>
 </li>
 <li>
-<p>对于静态同步方法，锁是当前类的 Class 对象。</p>
+<p>对于静态同步方法，锁是当前类的 Class 对象</p>
 </li>
 <li>
-<p>对于同步方法块，锁是 <code>synchonized</code> 括号里配置的对象。</p>
+<p>对于同步方法块，锁是 <code>synchonized</code> 括号里配置的对象</p>
 </li>
 </ul>
 <p>当一个线程试图访问同步代码块时，它首先必须得到锁，退出或抛出异常时必须释放锁。</p>
@@ -1330,7 +1330,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#E06C75">    }</span></span>
 <span class="line"><span style="color:#E06C75">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<p>运行后，结果“丰富多彩”，数据有对的也有错的（有数据不一致的情况发生），但是程序一般不会报错。</p>
+<p>运行后，结果「丰富多彩」，数据有对的也有错的（有数据不一致的情况发生），但是程序一般不会报错。</p>
 <p>30 个线程执行 List 的添加和打印：</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">public</span><span style="color:#C678DD"> static</span><span style="color:#C678DD"> void</span><span style="color:#61AFEF"> main</span><span style="color:#E06C75">(</span><span style="color:#E5C07B">String</span><span style="color:#E06C75">[] args) {</span></span>
@@ -1405,10 +1405,10 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>使用 <code>ArrayList</code> 时，读数据可以多个读，但是写数据就会出现问题；使用 <code>Vector</code> 时，使用了 <code>synchronized</code> 关键字，保证读写一致，读数据和写数据都只能一个线程去读写，效率低下。要解决这个问题，可以使用写入复制（COW，CopyOnWrite）的思想，采用 <code>CopyOnWriteArrayList</code> 类。</p>
 <p>可以进入其源码查看一下 <code>add()</code> 方法的源码：</p>
 <img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JavaImages/CopyOnWriteArrayList的add方法.png" alt="CopyOnWriteArrayList的add方法" style="zoom:67%;">
-<p>CopyOnWrite 容器即写时复制的容器。往一个容器添加元素的时候，不直接往当前容器 <code>Object[]</code> 添加，而是先将当前容器 <code>Object[]</code> 进行Copy，复制出一个新的容器 <code>Object[] newElements</code>, 然后往新的容器 <code>Object[] newElements</code> 里添加元素，添加完元素之后，再将原容器的引用指向新的容器 <code>setArray(newElements);</code>。这样做的好处是可以对 CopyOnWrite 容器进行并发的读，而不需要加锁，因为当前容器不会添加任何元素。所以CopyOnWrite 容器也是一种读写分离的思想，读和写不同的容器。</p>
-<p>在并发场景下，我们一般使用 <code>CopyOnWriteArrayList</code>，而不用 <code>Vector</code>，<code>Vector</code> 的增删改查方法都加了<code>synchronized</code>，以保证同步，但是每个方法执行的时候都要去获得锁，性能就会大大下降，而<code>CopyOnWriteArrayList</code> 只是在增删改上加锁，但是读不加锁，在读方面的性能就好于 <code>Vector</code>，支持读多写少的并发情况。</p>
+<p>CopyOnWrite 容器即写时复制的容器。往一个容器添加元素的时候，不直接往当前容器 <code>Object[]</code> 添加，而是先将当前容器 <code>Object[]</code> 进行 Copy，复制出一个新的容器 <code>Object[] newElements</code>, 然后往新的容器 <code>Object[] newElements</code> 里添加元素，添加完元素之后，再将原容器的引用指向新的容器 <code>setArray(newElements);</code>。这样做的好处是可以对 CopyOnWrite 容器进行并发的读，而不需要加锁，因为当前容器不会添加任何元素。所以 CopyOnWrite 容器也是一种读写分离的思想，读和写不同的容器。</p>
+<p>在并发场景下，我们一般使用 <code>CopyOnWriteArrayList</code>，而不用 <code>Vector</code>，<code>Vector</code> 的增删改查方法都加了 <code>synchronized</code>，以保证同步，但是每个方法执行的时候都要去获得锁，性能就会大大下降，而 <code>CopyOnWriteArrayList</code> 只是在增删改上加锁，但是读不加锁，在读方面的性能就好于 <code>Vector</code>，支持读多写少的并发情况。</p>
 <h2 id="4-2-Set-不安全"><a class="header-anchor" href="#4-2-Set-不安全"></a>4.2 Set 不安全</h2>
-<p>与 List 一样，在 30个线程执行添加和打印的情况下，可能会出现 <code>ConcurrentModificationException</code> 异常。</p>
+<p>与 List 一样，在 30 个线程执行添加和打印的情况下，可能会出现 <code>ConcurrentModificationException</code> 异常。</p>
 <p>解决方法也差不多，可以使用：</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#E5C07B">Set</span><span style="color:#ABB2BF">&lt;</span><span style="color:#E5C07B">String</span><span style="color:#ABB2BF">&gt;</span><span style="color:#E06C75"> set </span><span style="color:#56B6C2">=</span><span style="color:#E5C07B"> Collections</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">synchronizedSet</span><span style="color:#ABB2BF">(</span><span style="color:#C678DD">new</span><span style="color:#E5C07B"> HashSet</span><span style="color:#ABB2BF">&lt;&gt;());</span></span></code></pre></td></tr></tbody></table>
@@ -1627,7 +1627,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>基本原理</p>
 </blockquote>
 <p><code>CountDownLatch</code> 主要有两个方法，当一个或多个线程调用 <code>await()</code> 方法时，这些线程会阻塞</p>
-<p>其它线程调用 <code>countDown()</code> 方法会将计数器减 1（调用 <code>countDown()</code>方法的线程不会阻塞）</p>
+<p>其它线程调用 <code>countDown()</code> 方法会将计数器减 1（调用 <code>countDown()</code> 方法的线程不会阻塞）</p>
 <p>当计数器的值变为 0 时，因 <code>await()</code> 方法阻塞的线程会被唤醒，继续执行</p>
 <p><mark>需要注意的是：</mark> 计数器不能重用。</p>
 <h2 id="6-2-CyclicBarrier"><a class="header-anchor" href="#6-2-CyclicBarrier"></a>6.2 CyclicBarrier</h2>
@@ -1852,7 +1852,7 @@ btf.addGlobalFn('pjaxSend', () => {
 </blockquote>
 <p>引入两个概念：排他锁与共享锁。</p>
 <p><strong>排他锁：</strong> 排他锁（exclusive locks）也叫独占锁、写锁，简称 X 锁，是指该锁一次只能被一个线程所持有。如果线程 T 对数据 A 加上排他锁后，则其他线程不能再对 A 加任何类型的锁。获得排它锁的线程即能读数据又能修改数据。JDK 中的 <code>synchronized</code> 和 JUC 中 <code>Lock</code> 的实现类就是互斥锁。</p>
-<p><strong>共享锁：</strong> 共享锁（share locks）又称为读锁，简称 S 锁，是指该锁可被多个线程所持有。如果线程 T 对数据 A 加上共享锁后，则其他线程只能对 A 再加共享锁，不能加排它锁。获得共享锁的线程只能读数据，不能修改数据。 独享锁与共享锁也是通过 AQS 来实现的，通过实现不同的方法，来实现独享或者共享。</p>
+<p><strong>共享锁：</strong> 共享锁（share locks）又称为读锁，简称 S 锁，是指该锁可被多个线程所持有。如果线程 T 对数据 A 加上共享锁后，则其他线程只能对 A 再加共享锁，不能加排它锁。获得共享锁的线程只能读数据，不能修改数据。独享锁与共享锁也是通过 AQS 来实现的，通过实现不同的方法，来实现独享或者共享。</p>
 <p>参考链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/yjn1995/article/details/98979393">独占锁与共享锁</a></p>
 <h1 id="8-阻塞队列"><a class="header-anchor" href="#8-阻塞队列"></a>8. 阻塞队列</h1>
 <h2 id="8-1-阻塞队列种类"><a class="header-anchor" href="#8-1-阻塞队列种类"></a>8.1 阻塞队列种类</h2>
@@ -2002,13 +2002,13 @@ btf.addGlobalFn('pjaxSend', () => {
 <blockquote>
 <p>SynchronousQueue 同步队列</p>
 </blockquote>
-<p><code>SynchronousQueue</code> 没有容量。与其他的 <code>BlockingQueue</code> 不同，<code>SynchronousQueue</code>是一个不存储元素的 BlockingQueue 。</p>
+<p><code>SynchronousQueue</code> 没有容量。与其他的 <code>BlockingQueue</code> 不同，<code>SynchronousQueue</code> 是一个不存储元素的 BlockingQueue。</p>
 <p>每一个 put 操作必须要等待一个 take 操作，否则不能继续添加元素。</p>
 <p>假设有两个线程，一个线程只对 SynchronousQueue 中添加三个元素，而另一个线程只对 SynchronousQueue 移除三个元素，那么一定是添加一个移除一个，如此三轮。</p>
 <h1 id="9-线程池"><a class="header-anchor" href="#9-线程池"></a>9. 线程池</h1>
 <h2 id="9-1-线程池的优势"><a class="header-anchor" href="#9-1-线程池的优势"></a>9.1 线程池的优势</h2>
 <p><strong>为什么要用线程池：</strong></p>
-<p>10 年前单核 CPU 电脑，是假的多线程，像马戏团的小丑玩多个球 ，CPU 需要来回切换。</p>
+<p>10 年前单核 CPU 电脑，是假的多线程，像马戏团的小丑玩多个球，CPU 需要来回切换。</p>
 <p>如今是多核电脑，多个线程各自跑在独立的 CPU 上，不用切换效率高。</p>
 <p><strong>线程池的优势：</strong></p>
 <p>线程池做的工作主要是：控制运行的线程数量，处理过程中将任务放入队列，然后在线程创建后启动这些任务，如果线程数量超过了最大数量，超出数量的线程排队等候，等其他线程执行完毕，再从队列中取出任务来执行。</p>
@@ -2122,14 +2122,14 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#E5C07B">    this</span><span style="color:#ABB2BF">.</span><span style="color:#E5C07B">handler</span><span style="color:#56B6C2"> =</span><span style="color:#E06C75"> handler</span><span style="color:#ABB2BF">;</span></span>
 <span class="line"><span style="color:#E06C75">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<p>下面对这 7 个参数进行一一讲解。 👊</p>
+<p>下面对这 7 个参数进行一一讲解。👊</p>
 <blockquote>
 <p>ThreadPoolExecutor 的七大参数</p>
 </blockquote>
 <p><code>corePoolSize</code>：线程池中的常驻核心线程数。</p>
 <p><code>maximumPoolSize</code>：线程池中能够容纳同时执行的最大线程数，这个值必须大于等于 1。</p>
 <p><code>keepAliveTime</code>：多余的空闲线程的存活时间。当前池中线程数量超过 <code>corePoolSize</code> 时，且空闲时间达到 <code>keepAliveTime</code> 时，多余线程会被销毁直到剩下 <code>corePoolSize</code> 个线程为止。</p>
-<p><code>unit</code>： keepAliveTime 的单位。单位有：</p>
+<p><code>unit</code>：keepAliveTime 的单位。单位有：</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#E5C07B">TimeUnit</span><span style="color:#ABB2BF">.</span><span style="color:#E5C07B">DAYS</span><span style="color:#ABB2BF">;</span><span style="color:#7F848E;font-style:italic"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;// 天</span></span>
 <span class="line"><span style="color:#E5C07B">TimeUnit</span><span style="color:#ABB2BF">.</span><span style="color:#E5C07B">HOURS</span><span style="color:#ABB2BF">;</span><span style="color:#7F848E;font-style:italic"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; // 小时</span></span>
@@ -2147,7 +2147,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>链接分享：</p>
 <p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/lveyHang/p/12060832.html">线程池的简介及底层原理</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/rinack/p/9888717.html">深入源码分析Java线程池的实现原理</a></p>
-<p><code>ThreadPoolExecutor</code>方法分析图示：</p>
+<p><code>ThreadPoolExecutor</code> 方法分析图示：</p>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JavaImages/ThreadPoolExecutor%E6%96%B9%E6%B3%95%E5%88%86%E6%9E%90%E5%9B%BE%E7%A4%BA.png" alt="ThreadPoolExecutor方法分析图示"></p>
 <p>主要处理流程：</p>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JavaImages/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E4%B8%BB%E8%A6%81%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B%E5%9B%BE.png" alt="线程池主要处理流程图"></p>
@@ -2156,7 +2156,7 @@ btf.addGlobalFn('pjaxSend', () => {
 </blockquote>
 <p>线程池就相当于一个银行网点，假设银行中共用 5 个办理窗口（maximumPoolSize），但是平时只有 2 个办理窗口（corePoolSize）一直工作，还有 3 个位置的候客区（workQueue）。</p>
 <p>假设来了 2 个用户需要办理业务，那么就去常用的 2 个窗口办理业务。</p>
-<p>接着又来了3 个用户，由于先前 2 个用户还在办理业务，那么就需要将新来了 3 个用户安置在候客区，等待先前来的 2 个用户办理完。</p>
+<p>接着又来了 3 个用户，由于先前 2 个用户还在办理业务，那么就需要将新来了 3 个用户安置在候客区，等待先前来的 2 个用户办理完。</p>
 <p>突然又来了 3 个用户，常用窗口已满，候客区已满，窗口进行扩容，增加 3 个窗口，扩容至 5 个，让新来的 3 个用户去新增的窗口中办理业务。注意，并不是让候客区的 3 个用户去新增窗口中办理业务。</p>
 <p>这时 5 个窗口都在使用了，候客区也还是满的，然后又来了两位用户，此时将按照策略（handler）处理这 2 位用户。</p>
 <p>当增加的 3 个窗口在单位为 unit，数值为 keepAliveTime 的时间之后仍然没有用户使用，就会进行缩容，将可办理业务窗口数量重置为 2 个。</p>
@@ -2174,20 +2174,20 @@ btf.addGlobalFn('pjaxSend', () => {
 </li>
 <li>
 <p>如果这个时候队列满了且正在运行的线程数量还小于 <code>maximumPoolSize</code>，那么还是要创建非<br>
-核心线程立刻运行这个任务;</p>
+核心线程立刻运行这个任务；</p>
 </li>
 <li>
-<p>如果队列满了且正在运行的线程数量大于或等于 <code>maximumPoolSize</code>，那么线程池会启动饱和拒绝策略来执行。</p>
+<p>如果队列满了且正在运行的线程数量大于或等于 <code>maximumPoolSize</code>，那么线程池会启动饱和拒绝策略来执行</p>
 </li>
 </ul>
 <p>3、当一个线程完成任务时，它会从队列中取下一个任务来执行。</p>
 <p>4、当一个线程无事可做超过一定的时间（keepA1iveTime）时，线程会判断：</p>
 <ul>
 <li>
-<p>如果当前运行的线程数大于 <code>corePoolSize</code>，那么这个线程就被停掉。</p>
+<p>如果当前运行的线程数大于 <code>corePoolSize</code>，那么这个线程就被停掉</p>
 </li>
 <li>
-<p>所以线程池的所有任务完成后，它最终会收缩到 <code>corePoolSize</code> 的大小。</p>
+<p>所以线程池的所有任务完成后，它最终会收缩到 <code>corePoolSize</code> 的大小</p>
 </li>
 </ul>
 <h2 id="9-5-线程池的使用"><a class="header-anchor" href="#9-5-线程池的使用"></a>9.5 线程池的使用</h2>
@@ -2276,7 +2276,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <blockquote>
 <p>拓展</p>
 </blockquote>
-<p>在上述代码中，我们规定线程池能够容纳的最大线程数是 5 ，这是怎么得出的呢？可以随便取吗？</p>
+<p>在上述代码中，我们规定线程池能够容纳的最大线程数是 5，这是怎么得出的呢？可以随便取吗？</p>
 <p>针对一个 CPU 密集型的程序（以计算为主的程序），使用多线程时，最好充分发挥 CPU 的核心，我们的取值一般是 <mark>CPU 的核心数加一</mark>。</p>
 <p>太大也不行，频繁切换线程也会导致效率的丢失。</p>
 <p>查看 CPU 核心的方法有很多，比如打开任务管理器 — 性能 — CPU，其中的逻辑处理器就是 CPU 核心数，还可以打开设备管理器查看。还可以通过一行代码查看：</p>
@@ -2285,7 +2285,7 @@ btf.addGlobalFn('pjaxSend', () => {
       </figure>
 <p>上述这行代码就可以输出 CPU 的核心数。</p>
 <p>我的 CPU 的逻辑处理器数是 4，因此将最大线程数取值为 5。</p>
-<p>针对一个 IO 密集型的程序（以网络或 IO 为主的程序），CPU 的消耗很少，任务的大部分时间都在等待 IO 操作完成（因为IO的速度远远低于CPU和内存的速度）。常见的大部分任务都是 IO 密集型任务，比如 Web 应用。对于 IO 密集型任务，任务越多，CPU 效率越高（但也有限度）。</p>
+<p>针对一个 IO 密集型的程序（以网络或 IO 为主的程序），CPU 的消耗很少，任务的大部分时间都在等待 IO 操作完成（因为 IO 的速度远远低于 CPU 和内存的速度）。常见的大部分任务都是 IO 密集型任务，比如 Web 应用。对于 IO 密集型任务，任务越多，CPU 效率越高（但也有限度）。</p>
 <p>一般配置是：<mark>CPU 总核心数 * 2 + 1</mark></p>
 <p>具体公式是：线程数 = CPU 总核心数 / (1 - 阻塞系数)</p>
 <p>阻塞系数：线程花在系统 IO 上的时间与 CPU 密集任务所耗的时间比值</p>
@@ -2306,28 +2306,28 @@ btf.addGlobalFn('pjaxSend', () => {
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center"><code>Consumer&lt;T&gt;</code> <br>消费型接口</td>
+<td style="text-align:center"><code>Consumer&lt;T&gt;</code> <br> 消费型接口</td>
 <td style="text-align:center">T</td>
 <td style="text-align:center">void</td>
-<td style="text-align:center">对类型为 T 的对象应用操作，<br>包含方法：<code>void accept(T t)</code></td>
+<td style="text-align:center">对类型为 T 的对象应用操作，<br> 包含方法：<code>void accept(T t)</code></td>
 </tr>
 <tr>
-<td style="text-align:center"><code>Supplier&lt;T&gt;</code> <br>供给型接口</td>
+<td style="text-align:center"><code>Supplier&lt;T&gt;</code> <br> 供给型接口</td>
 <td style="text-align:center">无</td>
 <td style="text-align:center">T</td>
-<td style="text-align:center">返回类型为 T 的对象，<br>包含方法：<code>T get()</code></td>
+<td style="text-align:center">返回类型为 T 的对象，<br> 包含方法：<code>T get()</code></td>
 </tr>
 <tr>
-<td style="text-align:center"><code>Function&lt;T, R&gt;</code> <br>函数型接口</td>
+<td style="text-align:center"><code>Function&lt;T, R&gt;</code> <br> 函数型接口</td>
 <td style="text-align:center">T</td>
 <td style="text-align:center">R</td>
-<td style="text-align:center">对类型为 T 的对象应用操作，并返回结果。结果是 R 类型的对象。<br>包含方法：<code>R apply(T t)</code></td>
+<td style="text-align:center">对类型为 T 的对象应用操作，并返回结果。结果是 R 类型的对象。<br> 包含方法：<code>R apply(T t)</code></td>
 </tr>
 <tr>
-<td style="text-align:center"><code>Predicate&lt;T&gt;</code> <br>断定型接口</td>
+<td style="text-align:center"><code>Predicate&lt;T&gt;</code> <br> 断定型接口</td>
 <td style="text-align:center">T</td>
 <td style="text-align:center">boolean</td>
-<td style="text-align:center">确定类型为 T 的对象是否满足某约束，并返回 boolean 值。<br>包含方法：<code>boolean test(T t)</code></td>
+<td style="text-align:center">确定类型为 T 的对象是否满足某约束，并返回 boolean 值。<br> 包含方法：<code>boolean test(T t)</code></td>
 </tr>
 </tbody>
 </table>
@@ -2375,12 +2375,12 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>流到底是什么</p>
 </blockquote>
 <p>流是数据渠道，用于操作数据源（集合、数组等）所生成的元素序列。</p>
-<p>“集合讲的是数据，流讲的是计算！”</p>
+<p>「集合讲的是数据，流讲的是计算！」</p>
 <p><strong>流的特点：</strong></p>
 <ul>
 <li>Stream 自己不会存储元素</li>
-<li>Stream 不会改变原对象。相反，它们会返回一个持有结果的新 Stream。</li>
-<li>Stream 操作是延迟执行的。这意味着它们会等到需要结果的时候才执行。</li>
+<li>Stream 不会改变原对象。相反，它们会返回一个持有结果的新 Stream</li>
+<li>Stream 操作是延迟执行的。这意味着它们会等到需要结果的时候才执行</li>
 </ul>
 <p><strong>怎么使用流？</strong></p>
 <p>创建一个 Stream：一个 <mark>数据源</mark> （数组、集合）</p>
@@ -2460,8 +2460,8 @@ btf.addGlobalFn('pjaxSend', () => {
 <blockquote>
 <p>Fork/Join 框架与线程池的区别</p>
 </blockquote>
-<p>1、Fork/Join 框架采用 “工作窃取” 模式 （work-stealing）：当执行新的任务时它可以将其拆分成 更小的任务执行，并将小任务加到线程队列中，当没有任务执行时，再从一个随机线程的队列中偷一个并把它放在自己的队列中。</p>
-<p>2、相对于一般的线程池实现 ，Fork / Join 框架的优势体现在对其中包含的任务的处理方式上，在一般的线程池中，如果一个线程正在执行的任务由于某些原因无法继续运行那么该线程会处于等待状态。而在 Fork / Join 框架实现中，如果某个子问题由于等待另外一个子问题的完成而无法继续运行，那么处理该子问题的线程会主动寻找其他尚未运行的子问题（窃取过来）来执行，这种方式减少了线程的等待时间，提高了性能。</p>
+<p>1、Fork/Join 框架采用 「工作窃取」 模式 （work-stealing）：当执行新的任务时它可以将其拆分成 更小的任务执行，并将小任务加到线程队列中，当没有任务执行时，再从一个随机线程的队列中偷一个并把它放在自己的队列中。</p>
+<p>2、相对于一般的线程池实现，Fork / Join 框架的优势体现在对其中包含的任务的处理方式上，在一般的线程池中，如果一个线程正在执行的任务由于某些原因无法继续运行那么该线程会处于等待状态。而在 Fork / Join 框架实现中，如果某个子问题由于等待另外一个子问题的完成而无法继续运行，那么处理该子问题的线程会主动寻找其他尚未运行的子问题（窃取过来）来执行，这种方式减少了线程的等待时间，提高了性能。</p>
 <p>参考链接：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/xuzekun/p/7434709.html">11.ForkJoinPool 分支/合并框架 （工作窃取）</a></p>
 <blockquote>
 <p>工作窃取</p>
@@ -2469,11 +2469,11 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>JDK 1.7 引入的 Fork / Join 框架就是基于工作窃取算法，可以使用 <code>LinkedBlockingDeque</code> 来实现工作窃取算法。</p>
 <p>那么什么是工作窃取？</p>
 <p>工作窃取算法是指某个线程从其他队列里窃取任务来执行。那么，为什么需要使用工作窃取算法呢？假如我们需要做一个比较大的任务，可以把这个任务分割为若干互不依赖的子任务，为了减少线程间的竞争，把这些子任务分别放到不同的队列里，并为每个队列创建一个单独的线程来执行队列里的任务，线程和队列一一对应。</p>
-<p>当 A 线程开始执行的时候，优先总是处理本地队列中的任务，当它发现本地队列已经空了，那么它会去全局队列中获取 Task，当全局队列中也是空的，那么就会发生工作窃取（work-stealing）。任务调度器会把该线程池中额外的任务分配给 A 线程处理，其效果就好比该线程会才从其他线程的队列中“窃取”一个 Task 来执行。这样的目的是提高了 CPU 的使用效率。</p>
+<p>当 A 线程开始执行的时候，优先总是处理本地队列中的任务，当它发现本地队列已经空了，那么它会去全局队列中获取 Task，当全局队列中也是空的，那么就会发生工作窃取（work-stealing）。任务调度器会把该线程池中额外的任务分配给 A 线程处理，其效果就好比该线程会才从其他线程的队列中「窃取」一个 Task 来执行。这样的目的是提高了 CPU 的使用效率。</p>
 <p>这种策略是任务调度器的默认策略，通常是不需要改变的。如果需要改变，需要在创建任务时，设置任务的 <code>TaskCreationOptions.PreferFairness</code>。</p>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JavaImages/%E5%B7%A5%E4%BD%9C%E7%AA%83%E5%8F%96.png" alt="工作窃取"></p>
 <p><strong>优点：</strong> 充分利用线程进行并行计算，减少线程间的竞争。<br>
-<strong>缺点：</strong> 在某些情况下还是会存在竞争，比如双端队列里只有一个任务时，并且该算法会消耗更多的系统资源， 比如创建多个线程和多个双端队列。</p>
+<strong>缺点：</strong> 在某些情况下还是会存在竞争，比如双端队列里只有一个任务时，并且该算法会消耗更多的系统资源，比如创建多个线程和多个双端队列。</p>
 <p>参考链接：</p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/pange1991/article/details/80944797">工作窃取算法 work-stealing</a></p>
 <p><a target="_blank" rel="noopener" href="https://yq.aliyun.com/articles/429162">Task的运行原理和工作窃取（work stealing）</a></p>
@@ -2536,7 +2536,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>简单来说，我在厨房炒菜，但是没菜没油，楼下有超市，超市卖油不卖菜，可以在美团上买菜。最终，我选择上美团买油，在快递员送货的时间里，可以前往楼下超市买油。这就是一种异步，或者说 Future 模式。</p>
 <img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JavaImages/Future模式.png" alt="Future模式" style="zoom: 50%;">
 <p>在 Java 5 中引入了 <code>Future</code> 接口，虽然 <code>Future</code> 以及相关使用方法提供了异步执行任务的能力，但是对于结果的获取却是很不方便，只能通过阻塞或者轮询的方式得到任务的结果。阻塞的方式显然和我们的异步编程的初衷相违背，轮询的方式又会耗费无谓的 CPU 资源，而且也不能及时地得到计算结果。</p>
-<p>或许 Doug Lea 大神也无法忍受了，便编写了 <code>CompletableFuture</code>。 在 Java8 中，<code>CompletableFuture</code> 提供了非常强大的 <code>Future</code> 的扩展功能，可以帮助我们简化异步编程的复杂性，并且提供了函数式编程的能力，可以通过回调的方式处理计算结果，也提供了转换和组合 <code>CompletableFuture</code> 的方法。</p>
+<p>或许 Doug Lea 大神也无法忍受了，便编写了 <code>CompletableFuture</code>。在 Java8 中，<code>CompletableFuture</code> 提供了非常强大的 <code>Future</code> 的扩展功能，可以帮助我们简化异步编程的复杂性，并且提供了函数式编程的能力，可以通过回调的方式处理计算结果，也提供了转换和组合 <code>CompletableFuture</code> 的方法。</p>
 <blockquote>
 <p>简单使用</p>
 </blockquote>
@@ -2598,7 +2598,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#C678DD">public</span><span style="color:#C678DD"> static</span><span style="color:#E5C07B"> CompletableFuture</span><span style="color:#56B6C2">&lt;</span><span style="color:#E06C75">Void</span><span style="color:#56B6C2">&gt;</span><span style="color:#61AFEF"> runAsync</span><span style="color:#E06C75">(</span><span style="color:#E5C07B">Runnable</span><span style="color:#E06C75"> runnable)</span><span style="color:#ABB2BF">;</span></span>
 <span class="line"><span style="color:#C678DD">public</span><span style="color:#C678DD"> static</span><span style="color:#E5C07B"> CompletableFuture</span><span style="color:#56B6C2">&lt;</span><span style="color:#E06C75">Void</span><span style="color:#56B6C2">&gt;</span><span style="color:#61AFEF"> runAsync</span><span style="color:#E06C75">(</span><span style="color:#E5C07B">Runnable</span><span style="color:#E06C75"> runnable</span><span style="color:#ABB2BF">,</span><span style="color:#E5C07B"> Executor</span><span style="color:#E06C75"> executor)</span><span style="color:#ABB2BF">;</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<p>两两一组，<code>supplyAsync()</code> 表示创建有返回值的异步任务，而 <code>runAsync()</code> 表示创建无返回值的异步任务，  这两个方法都存在重载形式，<code>Executor</code> 类型的参数表示可以指定执行异步任务时所用的线程池，否则使用提供的默认线程池。</p>
+<p>两两一组，<code>supplyAsync()</code> 表示创建有返回值的异步任务，而 <code>runAsync()</code> 表示创建无返回值的异步任务，这两个方法都存在重载形式，<code>Executor</code> 类型的参数表示可以指定执行异步任务时所用的线程池，否则使用提供的默认线程池。</p>
 <p>使用静态方法创建 <code>CompletableFuture</code> 时，会立马开启线程执行异步任务。</p>
 <blockquote>
 <p>获取任务执行结果</p>
@@ -2641,9 +2641,9 @@ btf.addGlobalFn('pjaxSend', () => {
       </figure>
 <p>任务正常执行完成后，如果没有出现异常，则会回调上述方法。</p>
 <ul>
-<li><code>thenApply()</code>：获取到上一个任务的执行结果，并返回处理结果；</li>
-<li><code>thenRun()</code>：上一个任务正常执行完成后，执行 <code>action</code>；</li>
-<li><code>thenAccept()</code>：获取到上一个任务的执行结果，但不会返回处理结果。</li>
+<li><code>thenApply()</code>：获取到上一个任务的执行结果，并返回处理结果</li>
+<li><code>thenRun()</code>：上一个任务正常执行完成后，执行 <code>action</code></li>
+<li><code>thenAccept()</code>：获取到上一个任务的执行结果，但不会返回处理结果</li>
 </ul>
 <p>除此之外，还要一个 <code>thenCompose()</code>，获取上一个任务的执行结果，返回新的 <code>CompletableFuture</code>，用于组合多个 <code>CompletableFuture</code>，回调结果由第二个 <code>CompletableFuture</code> 返回：</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
@@ -2652,8 +2652,8 @@ btf.addGlobalFn('pjaxSend', () => {
       </figure>
 <p><code>thenApply()</code> 与 <code>thenCompose()</code> 的区别：</p>
 <ul>
-<li><code>thenApply()</code> 相当于转换泛型类型，返回的是同一个 <code>CompletableFuture</code>；</li>
-<li><code>thenCompose()</code> 则是使用上一个任务的执行结果，在下一个 <code>CompletableFuture</code> 中进行运算，返回新的 <code>CompletableFuture</code>。</li>
+<li><code>thenApply()</code> 相当于转换泛型类型，返回的是同一个 <code>CompletableFuture</code></li>
+<li><code>thenCompose()</code> 则是使用上一个任务的执行结果，在下一个 <code>CompletableFuture</code> 中进行运算，返回新的 <code>CompletableFuture</code></li>
 </ul>
 <blockquote>
 <p>出现异常后的下一步处理</p>
@@ -2665,9 +2665,9 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>它接收的 <code>Function</code> 类型的入参，是一个接收 <code>Throwable</code> 类型的参数并返回 <code>T</code> 类型结果的函数式接口，因此可以将任务执行过程中的异常吞掉。</p>
 <p>当然，执行过程中如果没有发生异常，是不会回调该方法的。</p>
 <blockquote>
-<p>执行结果与异常的“混合型”处理</p>
+<p>执行结果与异常的「混合型」处理</p>
 </blockquote>
-<p>前面的两种处理要么只能在任务完成后回调，要么只能在出现异常后回调，而下面的处理则是一种“混合型”，不论前一个任务是否执行成功还是失败，都会进行回调：</p>
+<p>前面的两种处理要么只能在任务完成后回调，要么只能在出现异常后回调，而下面的处理则是一种「混合型」，不论前一个任务是否执行成功还是失败，都会进行回调：</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">public</span><span style="color:#56B6C2"> &lt;</span><span style="color:#E06C75">U</span><span style="color:#56B6C2">&gt;</span><span style="color:#E5C07B"> CompletableFuture</span><span style="color:#56B6C2">&lt;</span><span style="color:#E06C75">U</span><span style="color:#56B6C2">&gt;</span><span style="color:#61AFEF"> handle</span><span style="color:#E06C75">(</span></span>
 <span class="line"><span style="color:#E5C07B">        BiFunction</span><span style="color:#56B6C2">&lt;</span><span style="color:#C678DD">?</span><span style="color:#E5C07B"> super</span><span style="color:#E06C75"> T</span><span style="color:#ABB2BF">,</span><span style="color:#E06C75"> Throwable</span><span style="color:#ABB2BF">,</span><span style="color:#C678DD"> ?</span><span style="color:#E06C75"> extends U</span><span style="color:#56B6C2">&gt;</span><span style="color:#E06C75"> fn)</span></span>
@@ -2675,8 +2675,8 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#E5C07B">        BiConsumer</span><span style="color:#56B6C2">&lt;</span><span style="color:#C678DD">?</span><span style="color:#E5C07B"> super</span><span style="color:#E06C75"> T</span><span style="color:#ABB2BF">,</span><span style="color:#C678DD"> ?</span><span style="color:#E5C07B"> super</span><span style="color:#E06C75"> Throwable</span><span style="color:#56B6C2">&gt;</span><span style="color:#E06C75"> action)  </span></span></code></pre></td></tr></tbody></table>
       </figure>
 <ul>
-<li><code>handle()</code> 与 <code>exceptionally()</code> 类似，都能吞了异常，但 <code>handle()</code> 在上一个任务执行成功时也会被回调；</li>
-<li><code>whenComplete()</code> 并不影响上一个任务的返回值，主线程依旧能获取到上一个任务的返回值；与 <code>exceptionally()</code> 相比，它没法吞异常，也就是说主线程在获取执行过程中抛出异常的任务的返回值时，也会抛出异常。</li>
+<li><code>handle()</code> 与 <code>exceptionally()</code> 类似，都能吞了异常，但 <code>handle()</code> 在上一个任务执行成功时也会被回调</li>
+<li><code>whenComplete()</code> 并不影响上一个任务的返回值，主线程依旧能获取到上一个任务的返回值；与 <code>exceptionally()</code> 相比，它没法吞异常，也就是说主线程在获取执行过程中抛出异常的任务的返回值时，也会抛出异常</li>
 </ul>
 <blockquote>
 <p>集合关系</p>
@@ -2739,7 +2739,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#E06C75">)    </span></span></code></pre></td></tr></tbody></table>
       </figure>
 <p>与 <code>thenApply()</code> 相比，<code>thenApplyAsync()</code> 会另开一个线程来执行下一阶段的处理，而 <code>thenApply()</code> 依旧使用执行上一个任务所用的线程。</p>
-</body></html></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/The-Basis-Of-Java-Util-Concurrent/">https://mofan212.github.io/posts/The-Basis-Of-Java-Util-Concurrent/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Java/">Java</a></div><div class="post-share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/63.jpg" data-sites="wechat,qq,weibo,facebook,x"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/Something-About-Base64/" title="Base64 编码的那些事"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/62.jpg" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Base64 编码的那些事</div></div><div class="info-2"><div class="info-item-1">Base64 编码的原理和简单应用。</div></div></div></a><a class="pagination-related" href="/posts/The-Supplement-Of-Java-Util-Concurrent/" title="JUC 知识补充"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/64.jpg" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">JUC 知识补充</div></div><div class="info-2"><div class="info-item-1">本文是对 JUC 基础知识的相关补充，介绍了 volatile 关键字、CAS、原子引用以及 Java 锁。</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/How-to-create-an-object/" title="单身狗的福音——如何获得一个对象"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/55.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-09-05</div><div class="info-item-2">单身狗的福音——如何获得一个对象</div></div><div class="info-2"><div class="info-item-1">还在为单身烦恼吗？还在被别人撒狗粮而难受吗？本文意在拯救广大单身狗，让那寒冷的夜不再孤单！</div></div></div></a><a class="pagination-related" href="/posts/Using-Java-To-Manipulate-Excel/" title="使用 Java 操作 Excel"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/80.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-01-24</div><div class="info-item-2">使用 Java 操作 Excel</div></div><div class="info-2"><div class="info-item-1">本文介绍了如何使用 Java 来操作 Excel 以实现数据的读取与报表的导出。</div></div></div></a><a class="pagination-related" href="/posts/Java-Genericity/" title="Java 泛型"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/58.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-10-10</div><div class="info-item-2">Java 泛型</div></div><div class="info-2"><div class="info-item-1">本文介绍了 JDK 1.5 引入的新特性——泛型，并对协变、逆变、自限定类型和捕获转换进行了说明。</div></div></div></a><a class="pagination-related" href="/posts/Java-Socket/" title="Java 网络编程基础"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/60.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-10-14</div><div class="info-item-2">Java 网络编程基础</div></div><div class="info-2"><div class="info-item-1">本文介绍了 Java 中网络编程基础知识，包括 TCP 网络编程、UDP 网络编程和 URL 编程。</div></div></div></a><a class="pagination-related" href="/posts/Supplement-Of-Java-Related-Knowledge-First/" title="Java 相关知识补充"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/1.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-05-29</div><div class="info-item-2">Java 相关知识补充</div></div><div class="info-2"><div class="info-item-1">Java 基础知识、特性、技巧的一些补充。</div></div></div></a><a class="pagination-related" href="/posts/Design-Pattern-Observer-Pattern/" title="【设计模式】观察者模式"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/91.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-08-11</div><div class="info-item-2">【设计模式】观察者模式</div></div><div class="info-2"><div class="info-item-1">本文对 Java 设计模式中的观察者模式及其实现与应用进行了介绍。</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">默烦</div><div class="author-info-description">彩笔的打怪升级之路...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">175</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mofan212"><i class="fab fa-github"></i><span>follow me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解。<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a href="./mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载。😊</br><strong><font style="color:red">严禁未遵循规范的转载。</font></strong>😡</br><strong>死去的评论系统复活啦！欢迎到留言板畅所欲言！</strong>当然也可以使用更高效的<a target="_blank" href="https://space.bilibili.com/23658864/dynamic" style="color:#49B1F5;text-decoration:underline"> 哔哩哔哩私信 </a>或<a href="mailto:cy.mofan@foxmail.com" style="color:#49B1F5;text-decoration:underline" target="_blank">邮箱</a>。 😉</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-JUC-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-text">1. JUC 是什么</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E4%BB%80%E4%B9%88%E6%98%AF-JUC"><span class="toc-text">1.1 什么是 JUC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E7%9F%A5%E8%AF%86%E5%9B%9E%E9%A1%BE"><span class="toc-text">1.2 知识回顾</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BB%8F%E5%85%B8%E6%A1%88%E4%BE%8B"><span class="toc-text">2. 多线程经典案例</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E4%B9%B0%E7%A5%A8%E6%A1%88%E4%BE%8B"><span class="toc-text">2.1 买票案例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E7%94%9F%E4%BA%A7%E8%80%85%E4%B8%8E%E6%B6%88%E8%B4%B9%E8%80%85"><span class="toc-text">2.2 生产者与消费者</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E5%85%AB%E9%94%81%E7%9A%84%E7%8E%B0%E8%B1%A1"><span class="toc-text">3. 八锁的现象</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E9%9B%86%E5%90%88%E7%B1%BB%E4%B8%8D%E5%AE%89%E5%85%A8"><span class="toc-text">4. 集合类不安全</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-List-%E4%B8%8D%E5%AE%89%E5%85%A8"><span class="toc-text">4.1 List 不安全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-Set-%E4%B8%8D%E5%AE%89%E5%85%A8"><span class="toc-text">4.2 Set 不安全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-Map-%E4%B8%8D%E5%AE%89%E5%85%A8"><span class="toc-text">4.3 Map 不安全</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-Callable"><span class="toc-text">5. Callable</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-%E5%BC%BA%E5%A4%A7%E7%9A%84%E8%BE%85%E5%8A%A9%E7%B1%BB"><span class="toc-text">6. 强大的辅助类</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#6-1-CountDownLatch"><span class="toc-text">6.1 CountDownLatch</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-2-CyclicBarrier"><span class="toc-text">6.2 CyclicBarrier</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-3-Semaphore"><span class="toc-text">6.3 Semaphore</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-%E8%AF%BB%E5%86%99%E9%94%81"><span class="toc-text">7. 读写锁</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97"><span class="toc-text">8. 阻塞队列</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#8-1-%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97%E7%A7%8D%E7%B1%BB"><span class="toc-text">8.1 阻塞队列种类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-2-%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97%E7%A7%8D%E7%B1%BB-API"><span class="toc-text">8.2 阻塞队列种类 API</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#9-%E7%BA%BF%E7%A8%8B%E6%B1%A0"><span class="toc-text">9. 线程池</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#9-1-%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="toc-text">9.1 线程池的优势</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-2-%E4%B8%89%E5%A4%A7%E6%96%B9%E6%B3%95"><span class="toc-text">9.2 三大方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-3-ThreadPoolExecutor"><span class="toc-text">9.3 ThreadPoolExecutor</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-4-%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%BA%95%E5%B1%82%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-text">9.4 线程池底层工作原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-5-%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">9.5 线程池的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-6-%E6%8B%92%E7%BB%9D%E7%AD%96%E7%95%A5"><span class="toc-text">9.6 拒绝策略</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#10-Java8-%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97"><span class="toc-text">10. Java8 流式计算</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#10-1-%E5%9B%9B%E5%A4%A7%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3"><span class="toc-text">10.1 四大函数式接口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-2-Stream-%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97"><span class="toc-text">10.2 Stream 流式计算</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#11-%E5%88%86%E6%94%AF%E5%90%88%E5%B9%B6"><span class="toc-text">11. 分支合并</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#12-%E5%BC%82%E6%AD%A5%E5%9B%9E%E8%B0%83"><span class="toc-text">12. 异步回调</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#12-1-%E6%A6%82%E8%BF%B0%E4%B8%8E%E7%A4%BA%E4%BE%8B"><span class="toc-text">12.1 概述与示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-2-API-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">12.2 API 的使用</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/The-Art-of-Loving/" title="爱的艺术"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/175.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="爱的艺术"/></a><div class="content"><a class="title" href="/posts/The-Art-of-Loving/" title="爱的艺术">爱的艺术</a><time datetime="2026-04-28T16:00:00.000Z" title="更新于 2026-04-29 00:00:00">2026-04-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Git/" title="Git理论与使用"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/3.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Git理论与使用"/></a><div class="content"><a class="title" href="/posts/Git/" title="Git理论与使用">Git理论与使用</a><time datetime="2026-01-26T16:00:00.000Z" title="更新于 2026-01-27 00:00:00">2026-01-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Something-About-Blog/" title="博客搭建与维护"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="博客搭建与维护"/></a><div class="content"><a class="title" href="/posts/Something-About-Blog/" title="博客搭建与维护">博客搭建与维护</a><time datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"/></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="更新于 2026-01-03 00:00:00">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"/></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/103.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 的类资源加载"/></a><div class="content"><a class="title" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载">Java 的类资源加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.5</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+</body></html></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/The-Basis-Of-Java-Util-Concurrent/">https://mofan212.github.io/posts/The-Basis-Of-Java-Util-Concurrent/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Java/">Java</a></div><div class="post-share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/63.jpg" data-sites="wechat,qq,weibo,facebook,x"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/Something-About-Base64/" title="Base64 编码的那些事"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/62.jpg" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Base64 编码的那些事</div></div><div class="info-2"><div class="info-item-1">Base64 编码的原理和简单应用。</div></div></div></a><a class="pagination-related" href="/posts/The-Supplement-Of-Java-Util-Concurrent/" title="JUC 知识补充"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/64.jpg" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">JUC 知识补充</div></div><div class="info-2"><div class="info-item-1">本文是对 JUC 基础知识的相关补充，介绍了 volatile 关键字、CAS、原子引用以及 Java 锁。</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/Supplement-Of-Java-Related-Knowledge-First/" title="Java 相关知识补充"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/1.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-05-29</div><div class="info-item-2">Java 相关知识补充</div></div><div class="info-2"><div class="info-item-1">Java 基础知识、特性、技巧的一些补充。</div></div></div></a><a class="pagination-related" href="/posts/Design-Pattern-Mediator-Pattern/" title="【设计模式】中介者模式"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/148.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-03-03</div><div class="info-item-2">【设计模式】中介者模式</div></div><div class="info-2"><div class="info-item-1">本文主要对 Java 设计模式中的中介者模式进行了介绍。</div></div></div></a><a class="pagination-related" href="/posts/Method-Handle/" title="方法句柄"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/142.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-10-29</div><div class="info-item-2">方法句柄</div></div><div class="info-2"><div class="info-item-1">Java 中 MethodHandle 的使用。</div></div></div></a><a class="pagination-related" href="/posts/Java-Genericity/" title="Java 泛型"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/58.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-10-10</div><div class="info-item-2">Java 泛型</div></div><div class="info-2"><div class="info-item-1">本文介绍了 JDK 1.5 引入的新特性——泛型，并对协变、逆变、自限定类型和捕获转换进行了说明。</div></div></div></a><a class="pagination-related" href="/posts/Design-Pattern-Observer-Pattern/" title="【设计模式】观察者模式"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/91.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-08-11</div><div class="info-item-2">【设计模式】观察者模式</div></div><div class="info-2"><div class="info-item-1">本文对 Java 设计模式中的观察者模式及其实现与应用进行了介绍。</div></div></div></a><a class="pagination-related" href="/posts/Using-Java-To-Manipulate-Excel/" title="使用 Java 操作 Excel"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/80.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-01-24</div><div class="info-item-2">使用 Java 操作 Excel</div></div><div class="info-2"><div class="info-item-1">本文介绍了如何使用 Java 来操作 Excel 以实现数据的读取与报表的导出。</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">默烦</div><div class="author-info-description">彩笔的打怪升级之路...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">175</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mofan212"><i class="fab fa-github"></i><span>follow me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解。<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a href="./mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载。😊</br><strong><font style="color:red">严禁未遵循规范的转载。</font></strong>😡</br><strong>死去的评论系统复活啦！欢迎到留言板畅所欲言！</strong>当然也可以使用更高效的<a target="_blank" href="https://space.bilibili.com/23658864/dynamic" style="color:#49B1F5;text-decoration:underline"> 哔哩哔哩私信 </a>或<a href="mailto:cy.mofan@foxmail.com" style="color:#49B1F5;text-decoration:underline" target="_blank">邮箱</a>。 😉</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-JUC-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-text">1. JUC 是什么</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E4%BB%80%E4%B9%88%E6%98%AF-JUC"><span class="toc-text">1.1 什么是 JUC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E7%9F%A5%E8%AF%86%E5%9B%9E%E9%A1%BE"><span class="toc-text">1.2 知识回顾</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BB%8F%E5%85%B8%E6%A1%88%E4%BE%8B"><span class="toc-text">2. 多线程经典案例</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E4%B9%B0%E7%A5%A8%E6%A1%88%E4%BE%8B"><span class="toc-text">2.1 买票案例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E7%94%9F%E4%BA%A7%E8%80%85%E4%B8%8E%E6%B6%88%E8%B4%B9%E8%80%85"><span class="toc-text">2.2 生产者与消费者</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E5%85%AB%E9%94%81%E7%9A%84%E7%8E%B0%E8%B1%A1"><span class="toc-text">3. 八锁的现象</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E9%9B%86%E5%90%88%E7%B1%BB%E4%B8%8D%E5%AE%89%E5%85%A8"><span class="toc-text">4. 集合类不安全</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-List-%E4%B8%8D%E5%AE%89%E5%85%A8"><span class="toc-text">4.1 List 不安全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-Set-%E4%B8%8D%E5%AE%89%E5%85%A8"><span class="toc-text">4.2 Set 不安全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-Map-%E4%B8%8D%E5%AE%89%E5%85%A8"><span class="toc-text">4.3 Map 不安全</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-Callable"><span class="toc-text">5. Callable</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-%E5%BC%BA%E5%A4%A7%E7%9A%84%E8%BE%85%E5%8A%A9%E7%B1%BB"><span class="toc-text">6. 强大的辅助类</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#6-1-CountDownLatch"><span class="toc-text">6.1 CountDownLatch</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-2-CyclicBarrier"><span class="toc-text">6.2 CyclicBarrier</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-3-Semaphore"><span class="toc-text">6.3 Semaphore</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-%E8%AF%BB%E5%86%99%E9%94%81"><span class="toc-text">7. 读写锁</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97"><span class="toc-text">8. 阻塞队列</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#8-1-%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97%E7%A7%8D%E7%B1%BB"><span class="toc-text">8.1 阻塞队列种类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-2-%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97%E7%A7%8D%E7%B1%BB-API"><span class="toc-text">8.2 阻塞队列种类 API</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#9-%E7%BA%BF%E7%A8%8B%E6%B1%A0"><span class="toc-text">9. 线程池</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#9-1-%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="toc-text">9.1 线程池的优势</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-2-%E4%B8%89%E5%A4%A7%E6%96%B9%E6%B3%95"><span class="toc-text">9.2 三大方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-3-ThreadPoolExecutor"><span class="toc-text">9.3 ThreadPoolExecutor</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-4-%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%BA%95%E5%B1%82%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-text">9.4 线程池底层工作原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-5-%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">9.5 线程池的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-6-%E6%8B%92%E7%BB%9D%E7%AD%96%E7%95%A5"><span class="toc-text">9.6 拒绝策略</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#10-Java8-%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97"><span class="toc-text">10. Java8 流式计算</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#10-1-%E5%9B%9B%E5%A4%A7%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3"><span class="toc-text">10.1 四大函数式接口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-2-Stream-%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97"><span class="toc-text">10.2 Stream 流式计算</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#11-%E5%88%86%E6%94%AF%E5%90%88%E5%B9%B6"><span class="toc-text">11. 分支合并</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#12-%E5%BC%82%E6%AD%A5%E5%9B%9E%E8%B0%83"><span class="toc-text">12. 异步回调</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#12-1-%E6%A6%82%E8%BF%B0%E4%B8%8E%E7%A4%BA%E4%BE%8B"><span class="toc-text">12.1 概述与示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-2-API-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">12.2 API 的使用</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/The-Art-of-Loving/" title="爱的艺术"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/175.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="爱的艺术"/></a><div class="content"><a class="title" href="/posts/The-Art-of-Loving/" title="爱的艺术">爱的艺术</a><time datetime="2026-04-28T16:00:00.000Z" title="更新于 2026-04-29 00:00:00">2026-04-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Git/" title="Git理论与使用"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/3.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Git理论与使用"/></a><div class="content"><a class="title" href="/posts/Git/" title="Git理论与使用">Git理论与使用</a><time datetime="2026-01-26T16:00:00.000Z" title="更新于 2026-01-27 00:00:00">2026-01-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Something-About-Blog/" title="博客搭建与维护"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="博客搭建与维护"/></a><div class="content"><a class="title" href="/posts/Something-About-Blog/" title="博客搭建与维护">博客搭建与维护</a><time datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"/></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="更新于 2026-01-03 00:00:00">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"/></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/20.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="注解、类的加载、反射"/></a><div class="content"><a class="title" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射">注解、类的加载、反射</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.5</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
   const parseViewBox = viewBox => {
     if (!viewBox) return null
     const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))

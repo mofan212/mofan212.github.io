@@ -192,7 +192,7 @@ btf.addGlobalFn('pjaxSend', () => {
         background: #262931 !important;
       }
     </style>
-    <html><head></head><body><p>封面来源：碧蓝航线 破晓冰华 活动CG</p>
+    <html><head></head><body><p>封面来源：碧蓝航线 破晓冰华 活动 CG</p>
 <h1 id="0-前言"><a class="header-anchor" href="#0-前言"></a>0. 前言</h1>
 <p>经历高温和疫情双重居家的一个多月后迎来了 2022 年第四季度的第一个月，这个月我没有再做一些无聊的、枯燥的、与实际业务紧密相关的任务，取而代之是与图、树等数据结构相关的工作（话虽这么说，但也不是什么高大上的东西）。在与这些略显复杂的数据结构打交道的过程中，使用最多的基础数据结构是栈和队列。</p>
 <p>比如，层序遍历二叉树需要使用到队列，获取图中两个顶点之间的所有路径需要使用到栈。</p>
@@ -223,40 +223,40 @@ btf.addGlobalFn('pjaxSend', () => {
 <table>
 <thead>
 <tr>
-<th style="text-align:center">功能</th>
-<th style="text-align:center">抛异常</th>
-<th style="text-align:center">返回特殊值</th>
+<th style="text-align:left">功能</th>
+<th style="text-align:left">抛异常</th>
+<th style="text-align:left">返回特殊值</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center">增</td>
-<td style="text-align:center">add(e)</td>
-<td style="text-align:center">offer(e)</td>
+<td style="text-align:left">增</td>
+<td style="text-align:left">add(e)</td>
+<td style="text-align:left">offer(e)</td>
 </tr>
 <tr>
-<td style="text-align:center">删</td>
-<td style="text-align:center">remove()</td>
-<td style="text-align:center">poll()</td>
+<td style="text-align:left">删</td>
+<td style="text-align:left">remove()</td>
+<td style="text-align:left">poll()</td>
 </tr>
 <tr>
-<td style="text-align:center">瞧</td>
-<td style="text-align:center">element()</td>
-<td style="text-align:center">peek()</td>
+<td style="text-align:left">瞧</td>
+<td style="text-align:left">element()</td>
+<td style="text-align:left">peek()</td>
 </tr>
 </tbody>
 </table>
-<p>“增”是指增加，即：使指定元素入队；“删”是指删除，即：使指定元素出队。那么“瞧”是什么意思？</p>
-<p>单词 peek 可翻译为“窥视、瞥、偷看”，根据其含义，将这一组功能命名为“瞧”。那具体含义是什么？</p>
-<p>简单来说就是获取队首元素，与“删”不同的是，“删”是移除队首元素并返回，而“瞧”只返回队首元素，并不会删除。</p>
+<p>「增」是指增加，即：使指定元素入队；「删」是指删除，即：使指定元素出队。那么「瞧」是什么意思？</p>
+<p>单词 peek 可翻译为「窥视、瞥、偷看」，根据其含义，将这一组功能命名为「瞧」。那具体含义是什么？</p>
+<p>简单来说就是获取队首元素，与「删」不同的是，「删」是移除队首元素并返回，而「瞧」只返回队首元素，并不会删除。</p>
 <p>再说说抛异常的场景，如果操作队列是空队列（is empty），执行 <code>remove()</code> 和 <code>element()</code> 时会抛出 <code>NoSuchElementException</code> 异常，而执行 <code>poll()</code> 和 <code>peek()</code> 时仅仅返回 <code>null</code>。那增加元素为什么还要抛异常呢？</p>
 <p>某些队列会有容量的限制（比如阻塞队列 <code>BlockingQueue</code>），在达到最大容量时，这些队列不会扩容，此时再执行 <code>add()</code> 来增加元素就会抛出 <code>IllegalStateException</code> 异常，而执行 <code>offer()</code> 时仅仅返回 <code>false</code>。</p>
 <p>应需要根据需求确定是否需要抛出异常以选取合适的 API，并且使用同组 API，保持前后统一，不要一会抛异常一会又不抛异常。</p>
 <blockquote>
 <p>一个怪家伙：PriorityQueue</p>
 </blockquote>
-<p>队列应当符合“先进先出”，但有一个名为 <code>PriorityQueue</code> （优先级队列）的怪家伙，尽管它名字中带有 <code>Queue</code>，也确实实现了 <code>Queue</code> 接口，但它并不是按照入队的时间先后进行出队的。</p>
-<p><code>PriorityQueue</code> 的底层实现是最小堆，也就是说队列中“最小”的元素最先出队。</p>
+<p>队列应当符合「先进先出」，但有一个名为 <code>PriorityQueue</code> （优先级队列）的怪家伙，尽管它名字中带有 <code>Queue</code>，也确实实现了 <code>Queue</code> 接口，但它并不是按照入队的时间先后进行出队的。</p>
+<p><code>PriorityQueue</code> 的底层实现是最小堆，也就是说队列中「最小」的元素最先出队。</p>
 <p><code>PriorityQueue</code> 不是本文的主要内容，其更多内容可在本站搜索【二叉堆】和【优先级队列】进行查看。</p>
 <h2 id="1-2-Java-中的栈"><a class="header-anchor" href="#1-2-Java-中的栈"></a>1.2 Java 中的栈</h2>
 <p>栈翻译成英文是 <code>Stack</code>，读音为 <code>[stæk]</code>，同样在 IDEA 下搜索看看有没有这个类。</p>
@@ -272,7 +272,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <p><code>Vector</code> 和动态数组 <code>ArrayList</code> 类似，主要有两个区别：</p>
 <p>1、<code>Vector</code> 是线程安全的，<code>ArrayList</code> 是线程不安全的；</p>
 <p>2、默认扩容大小不一样。<code>ArrayList</code> 默认扩容为当前容量的 1.5 倍，<code>Vector</code> 可以指定扩容的大小，在没有显式指定的情况下，扩容为当前容量的 2 倍（扩容的具体实现可以前往对应的类中查看 <code>grow()</code> 方法）。</p>
-<p>线程安全的 <code>Vector</code> 看似很美好，然而在单线程无竞争的场景下就是额外的开销了。如果需要线程安全的 <code>ArrayList</code>，可以使用在 JDK 1.5  引入的 <code>CopyOnWriteArrayList</code>，因此 <code>Vector</code> 不再被推荐使用。</p>
+<p>线程安全的 <code>Vector</code> 看似很美好，然而在单线程无竞争的场景下就是额外的开销了。如果需要线程安全的 <code>ArrayList</code>，可以使用在 JDK 1.5 引入的 <code>CopyOnWriteArrayList</code>，因此 <code>Vector</code> 不再被推荐使用。</p>
 <blockquote>
 <p>不推荐使用 Stack</p>
 </blockquote>
@@ -351,22 +351,22 @@ btf.addGlobalFn('pjaxSend', () => {
 <table>
 <thead>
 <tr>
-<th style="text-align:center">功能</th>
-<th style="text-align:center">对应 API</th>
+<th style="text-align:left">功能</th>
+<th style="text-align:left">对应 API</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center">入栈</td>
-<td style="text-align:center">push(E e)</td>
+<td style="text-align:left">入栈</td>
+<td style="text-align:left">push(E e)</td>
 </tr>
 <tr>
-<td style="text-align:center">出栈</td>
-<td style="text-align:center">pop()</td>
+<td style="text-align:left">出栈</td>
+<td style="text-align:left">pop()</td>
 </tr>
 <tr>
-<td style="text-align:center">瞧</td>
-<td style="text-align:center">peek()</td>
+<td style="text-align:left">瞧</td>
+<td style="text-align:left">peek()</td>
 </tr>
 </tbody>
 </table>
@@ -378,22 +378,22 @@ btf.addGlobalFn('pjaxSend', () => {
 <p><code>LinkedList</code> 和 <code>ArrayDeque</code> 都是 <code>Deque</code> 的实现类，那应该怎么选择呢？</p>
 <p>先看看它们的特点，对于 <code>LinkedList</code> 来说 <strong>（忽略 <code>LinkedList</code> 实现 <code>List</code> 接口的特性）</strong>：</p>
 <ul>
-<li>它是基于双向链表的数据结构来存储元素的，长度没有限制，不会有扩容机制；</li>
-<li>可以存储 <code> null</code>；</li>
+<li>它是基于双向链表的数据结构来存储元素的，长度没有限制，不会有扩容机制</li>
+<li>可以存储 <code> null</code></li>
 <li>非线程安全的集合</li>
 </ul>
 <p>对于 <code>ArrayDeque</code> 来说：</p>
 <ul>
-<li>它是基于数组的数据结构来存储元素的，长度存在限制，当可用容量为 0 时，会进行扩容，扩容至原数组容量的 2 倍，存在预留的容量空间时会造成空间浪费；</li>
-<li>不能存储 <code>null</code>；</li>
+<li>它是基于数组的数据结构来存储元素的，长度存在限制，当可用容量为 0 时，会进行扩容，扩容至原数组容量的 2 倍，存在预留的容量空间时会造成空间浪费</li>
+<li>不能存储 <code>null</code></li>
 <li>非线程安全的集合</li>
 </ul>
 <h2 id="2-2-复杂度对比"><a class="header-anchor" href="#2-2-复杂度对比"></a>2.2 复杂度对比</h2>
 <p>通常来说，队列和栈只有三种操作，即：增、删、瞧。这些操作要么是作用在首节点，要么作用在尾节点，不像动态数组或链表那样，可以在任意位置执行添加或删除操作。</p>
 <p>在添加元素时：</p>
 <ul>
-<li><code>LinkedList</code> 额外维护的首指针和尾指针使得复杂度为 <code>O(1)</code>；</li>
-<li><code>ArrayDeque</code> 与 <code>ArrayList</code> 不同，<code>ArrayDeque</code> 中还记录了首位元素的索引信息，使得在不发生扩容的情况下，添加元素的复杂度为 <code>O(1)</code>；就算出现了扩容操作，其均摊复杂度依旧是 <code>O(1)</code>。</li>
+<li><code>LinkedList</code> 额外维护的首指针和尾指针使得复杂度为 <code>O(1)</code></li>
+<li><code>ArrayDeque</code> 与 <code>ArrayList</code> 不同，<code>ArrayDeque</code> 中还记录了首位元素的索引信息，使得在不发生扩容的情况下，添加元素的复杂度为 <code>O(1)</code>；就算出现了扩容操作，其均摊复杂度依旧是 <code>O(1)</code></li>
 </ul>
 <p><code>LinkedList</code> 和 <code>ArrayDeque</code> 都能精准地定位到首尾元素，因此它们在删除元素时的时间复杂度也是 <code>O(1)</code>。</p>
 <p>这样看来，似乎 <code>LinkedList</code> 更好，因为它不会有额外的扩容开销。</p>
@@ -450,16 +450,16 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>从上述注释中可以得知以下信息：</p>
 <ul>
 <li>
-<p><code>ArrayDeque</code> 继承了抽象类 <code>AbstractCollection</code>，内部存在操作集合的方法；</p>
+<p><code>ArrayDeque</code> 继承了抽象类 <code>AbstractCollection</code>，内部存在操作集合的方法</p>
 </li>
 <li>
-<p><code>ArrayDeque</code> 的底层结构是数组，并且长度总是 2 的幂；</p>
+<p><code>ArrayDeque</code> 的底层结构是数组，并且长度总是 2 的幂</p>
 </li>
 <li>
-<p><code>ArrayDeque</code> 引入了 <code>head</code> 和 <code>tail</code>，用于标识首尾。<code>head</code> 为首元素的索引，<code>tail</code> 为下一个尾元素的索引，而不是尾元素的索引；</p>
+<p><code>ArrayDeque</code> 引入了 <code>head</code> 和 <code>tail</code>，用于标识首尾。<code>head</code> 为首元素的索引，<code>tail</code> 为下一个尾元素的索引，而不是尾元素的索引</p>
 </li>
 <li>
-<p><code>ArrayDeque</code> 的最小容量是 8。</p>
+<p><code>ArrayDeque</code> 的最小容量是 8</p>
 </li>
 </ul>
 <p>得到这些信息的同时也产生出一些疑问：</p>
@@ -489,7 +489,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <li>不是说 <code>ArrayDeque</code> 的最小容量是 8 吗，怎么无参构造方法中指定的容量是 16 呢？最小容量在哪里体现？</li>
 <li><code>ArrayDeque</code> 提供了指定元素个数的构造方法方法，但传入的元素个数很有可能不会是 2 的幂，<code>ArrayDeque</code> 会怎么保证其内部数组的长度总是 2 的幂呢？</li>
 </ul>
-<p>一个疑问都没解决，反而又遇到了新的疑问。三个构造方法有两个都调用了 <code>allocateElements()</code> 方法，这个方法会与“保证内部数组的长度总是 2 的幂”的实现有关吗？</p>
+<p>一个疑问都没解决，反而又遇到了新的疑问。三个构造方法有两个都调用了 <code>allocateElements()</code> 方法，这个方法会与「保证内部数组的长度总是 2 的幂」的实现有关吗？</p>
 <h2 id="3-3-容量的计算"><a class="header-anchor" href="#3-3-容量的计算"></a>3.3 容量的计算</h2>
 <p>看看 <code>allocateElements()</code> 的源码：</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
@@ -528,7 +528,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <li>按位或</li>
 <li>无符号右移</li>
 </ul>
-<p>先说说“按位或”运算：按位或 <code>|</code> 是一个双目运算符，先求出参与运算的两个数的补码，然后使用两补码对应的二进位相或，即：有 1 为 1，全 0 才为 0。</p>
+<p>先说说「按位或」运算：按位或 <code>|</code> 是一个双目运算符，先求出参与运算的两个数的补码，然后使用两补码对应的二进位相或，即：有 1 为 1，全 0 才为 0</p>
 <p>无符号右移：先求出参与运算的数的补码，然后将得到的补码的所有位向右移动指定的位数，左方空缺的位用 0 补充。</p>
 <p>计算机中的位运算都是基于补码的，正数的补码与原码相同，负数的补码将其原码除符号位外的所有位按位取反，然后加一。0 的补码、反码、原码都是 0。</p>
 <blockquote>
@@ -539,7 +539,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>原来 <code>MIN_INITIAL_CAPACITY</code> 真的是 <code>ArrayDeque</code> 的最小容量，只是并不能直接通过无参构造方法构造出最小容量的 <code>ArrayDeque</code>。</p>
 <p>以举例的形式来看看 <code>calculateSize()</code> 方法中多次进行的位运算究竟做了什么事。</p>
 <p>假设传入的 <code>numElements</code> 值为 17，大于常量 <code>MIN_INITIAL_CAPACITY</code>，然后令初始容量为传入的 <code>numElements</code>，再进行多次无符号右移与按位或运算。</p>
-<p>执行 <code>initialCapacity |= (initialCapacity &gt;&gt;&gt;  1);</code> 时，17 的二进制表示形式为 <code>0001 0001</code>，无符号右移 1 位后得到 <code>0000 1000</code>，使用这个值与 <code>0001 0001</code> 进行按位或运算：</p>
+<p>执行 <code>initialCapacity |= (initialCapacity &gt;&gt;&gt; 1);</code> 时，17 的二进制表示形式为 <code>0001 0001</code>，无符号右移 1 位后得到 <code>0000 1000</code>，使用这个值与 <code>0001 0001</code> 进行按位或运算</p>
 <figure class="highlight plaintext line-numbers" data-language="PLAINTEXT">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span>    0000 1000</span></span>
 <span class="line"><span>  | 0001 0001</span></span>
@@ -547,7 +547,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span>    0001 1001</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <p>运算结果为 <code>0001 1001</code>，十进制表示为 25。</p>
-<p>再执行 <code>initialCapacity |= (initialCapacity &gt;&gt;&gt;  2);</code>，25 无符号右移 2 位后得到 <code>0000 0110</code>，使用这个数与 <code>0001 1001</code> 进行按位或运算：</p>
+<p>再执行 <code>initialCapacity |= (initialCapacity &gt;&gt;&gt; 2);</code>，25 无符号右移 2 位后得到 <code>0000 0110</code>，使用这个数与 <code>0001 1001</code> 进行按位或运算</p>
 <figure class="highlight plaintext line-numbers" data-language="PLAINTEXT">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span>    0000 0110</span></span>
 <span class="line"><span>  | 0001 1001</span></span>
@@ -555,7 +555,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span>    0001 1111</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <p>运算结果为 <code>0001 1111</code>，十进制表示为 31。</p>
-<p>再执行 <code>initialCapacity |= (initialCapacity &gt;&gt;&gt;  4);</code>，31 无符号右移 4 位得到 <code>0000 0001</code>，使用这个数与 <code>0001 1111</code> 进行按位或运算：</p>
+<p>再执行 <code>initialCapacity |= (initialCapacity &gt;&gt;&gt; 4);</code>，31 无符号右移 4 位得到 <code>0000 0001</code>，使用这个数与 <code>0001 1111</code> 进行按位或运算</p>
 <figure class="highlight plaintext line-numbers" data-language="PLAINTEXT">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span>    0000 0001</span></span>
 <span class="line"><span>  | 0001 1111</span></span>
@@ -563,7 +563,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span>    0001 1111</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <p>得到的结果依旧是 <code>0001 1111</code>，十进制表示为 31。</p>
-<p>再执行 <code>initialCapacity |= (initialCapacity &gt;&gt;&gt;  8);</code>，31 无符号右移 8 位得到 <code>0000 0000</code>，使用这个数与 <code>0001 1111</code> 进行按位或运算：</p>
+<p>再执行 <code>initialCapacity |= (initialCapacity &gt;&gt;&gt; 8);</code>，31 无符号右移 8 位得到 <code>0000 0000</code>，使用这个数与 <code>0001 1111</code> 进行按位或运算</p>
 <figure class="highlight plaintext line-numbers" data-language="PLAINTEXT">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span>    0000 0000</span></span>
 <span class="line"><span>  | 0001 1111</span></span>
@@ -571,7 +571,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span>    0001 1111</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <p>得到的结果还是 <code>0001 1111</code>，十进制表示为 31。</p>
-<p>然后还剩 <code>initialCapacity |= (initialCapacity &gt;&gt;&gt; 16);</code> 没有执行，31 无符号右移 16 位得到的也是 <code>0000 0000</code>，因此最终得到的结果还是 <code>0001 1111</code>，即 31。</p>
+<p>然后还剩 <code>initialCapacity |= (initialCapacity &gt;&gt;&gt; 16);</code> 没有执行，31 无符号右移 16 位得到的也是 <code>0000 0000</code>，因此最终得到的结果还是 <code>0001 1111</code>，即 31</p>
 <p>再使用 31 自增一，得到 32，32 不小于 0，最终构造的数组长度为 32。</p>
 <p>这一番操作下来，或许还没有看懂，那再回到最开始，将传入的 <code>numElements</code> 和每次进行位运算后的结果写在一起进行观察：</p>
 <table>
@@ -697,7 +697,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>为什么无符号右移的位数要按照 1、2、4、8、16 呢？</p>
 </blockquote>
 <p>给定一个正数，将其用二进制数表示，左边不补位 0，从左向右看，第一位一定是 1，这是毋庸置疑的。</p>
-<p>先无符号右移 1 位，原本给定的数相比于得到的结果，“第一位一定是 1”变成了“第二位一定是 1”，此时使用这两个数进行按位或运算，那么得到的结果相比于原本给定的数，第一位和第二位都一定是 1。</p>
+<p>先无符号右移 1 位，原本给定的数相比于得到的结果，「第一位一定是 1」变成了「第二位一定是 1」，此时使用这两个数进行按位或运算，那么得到的结果相比于原本给定的数，第一位和第二位都一定是 1。</p>
 <p>再无符号右移 2 位，此时左边第一位和第二位一定是 1 的位跑到了左边第三位和第四位，此时使用这两个数进行按位或运算，那么得到的结果的左边四位都变成了 1。</p>
 <p>再无符号右移 4 位，最后得到的结果的左边八位都变成了 1。</p>
 <p>进行了最终的无符号右移 16 位后，最终结果的左边三十二位都会变成 1。</p>
@@ -723,9 +723,9 @@ btf.addGlobalFn('pjaxSend', () => {
       </figure>
 <p><code>addFirst()</code> 方法的源码很简单：</p>
 <ul>
-<li>首先判断添加元素是否为 <code>null</code>，如果是 <code>null</code>，抛个异常；</li>
-<li>如果不为 <code>null</code>，设置 <code>head</code> 的值为 <code>(head - 1) &amp; (elements.length - 1)</code>，之后将元素添加到数组下标为 <code>head</code> 的位置；</li>
-<li>如果 <code>head</code> 等于了 <code>tail</code>，表示双向链表首尾缠绕，数组容量立即扩容为原来的 2 倍。</li>
+<li>首先判断添加元素是否为 <code>null</code>，如果是 <code>null</code>，抛个异常</li>
+<li>如果不为 <code>null</code>，设置 <code>head</code> 的值为 <code>(head - 1) &amp; (elements.length - 1)</code>，之后将元素添加到数组下标为 <code>head</code> 的位置</li>
+<li>如果 <code>head</code> 等于了 <code>tail</code>，表示双向链表首尾缠绕，数组容量立即扩容为原来的 2 倍</li>
 </ul>
 <p>很显然，<code>addFirst()</code> 的核心就是 <code>(head - 1) &amp; (elements.length - 1)</code> 的计算和 <code>doubleCapacity()</code> 方法的实现。</p>
 <blockquote>
@@ -741,14 +741,14 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#E5C07B">    deque</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">forEach</span><span style="color:#ABB2BF">(</span><span style="color:#E5C07B">System</span><span style="color:#ABB2BF">.</span><span style="color:#E5C07B">out</span><span style="color:#C678DD">::</span><span style="color:#ABB2BF">println);</span></span>
 <span class="line"><span style="color:#E06C75">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<p>除去最后的遍历打印，主体就两行代码，调用 <code>ArrayDeque</code> 的无参构造方法，之后在它的首位添加字符串“默烦”。</p>
+<p>除去最后的遍历打印，主体就两行代码，调用 <code>ArrayDeque</code> 的无参构造方法，之后在它的首位添加字符串「默烦」。</p>
 <p>调用 <code>ArrayDeque</code> 的无参构造方法后，创建一个容量为 16 的数组，数组结构与 <code>head</code>、<code>tail</code> 的关系如下图：</p>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/ArrayDeque%E4%B8%AD%E7%9A%84%E6%95%B0%E7%BB%84%E5%88%9D%E5%A7%8B%E7%BB%93%E6%9E%84.png" alt="ArrayDeque中的数组初始结构"></p>
-<p>当执行 <code>addFirst()</code> 方法添加字符串“默烦”到首位时，计算 <code>(head - 1) &amp; (elements.length - 1)</code> 的值：</p>
+<p>当执行 <code>addFirst()</code> 方法添加字符串「默烦」到首位时，计算 <code>(head - 1) &amp; (elements.length - 1)</code> 的值：</p>
 <ul>
-<li>head 指向 0，因此 head - 1 = -1；</li>
-<li>数组长度为 16，16 - 1 = 15；</li>
-<li>最后计算 -1 &amp; 15 的值即为字符串“默烦”存放的索引位置。</li>
+<li>head 指向 0，因此 head - 1 = -1</li>
+<li>数组长度为 16，16 - 1 = 15</li>
+<li>最后计算 -1 &amp; 15 的值即为字符串「默烦」存放的索引位置</li>
 </ul>
 <p>这里的 <code>&amp;</code> 表示按位与运算，它也是一个双目运算符，先求出参与运算的两个数的补码，然后使用两补码对应的二进制位相与，即：全 1 为 1，否则为 0。</p>
 <p>计算 -1 &amp; 15 的值时，15 的二进制表示为 <code>0000 1111</code>，-1 的二进制可表示为 <code>1000 0001</code>，两二进制数左边第一位都是符号位。<code>1000 0001</code> 除符号位外按位取反，得到 <code>1111 1110</code>，然后加一得到 <code>1111 1111</code> 即为 -1 的补码，使用 <code>0000 1111</code> 与 <code>1111 1111</code> 进行按位与运算：</p>
@@ -758,7 +758,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span>----------------</span></span>
 <span class="line"><span>    0000 1111</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<p>因此 <code>-1 &amp; 15 = 15</code>，那么字符串“默烦”会存放在索引为 15 的位置，即：</p>
+<p>因此 <code>-1 &amp; 15 = 15</code>，那么字符串「默烦」会存放在索引为 15 的位置，即：</p>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/%E6%B7%BB%E5%8A%A0%E5%AD%97%E7%AC%A6%E4%B8%B2%E2%80%9C%E9%BB%98%E7%83%A6%E2%80%9D%E5%88%B0%E9%A6%96%E4%BD%8D%E5%90%8E%E7%9A%84%E6%95%B0%E7%BB%84%E7%BB%93%E6%9E%84.png" alt="添加字符串“默烦”到首位后的数组结构"></p>
 <p>结果有点出乎意料，原本以为向空的 <code>ArrayDeque</code> 中添加首位元素时会将这个元素放在索引为 0 的位置，结果却放在了索引为 15 的位置。</p>
 <p>那再执行 <code>addFirst()</code> 添加一个元素呢？</p>
@@ -787,9 +787,9 @@ btf.addGlobalFn('pjaxSend', () => {
       </figure>
 <p><code>addLast()</code> 方法的源码也很简单，甚至和 <code>addFirst()</code> 的实现很相似：</p>
 <ul>
-<li>当添加的元素为 <code>null</code> 时，抛出异常；</li>
-<li>如果添加的元素不为 <code>null</code>，将添加的元素放到数组索引为 tail 的位置；</li>
-<li>最后同样是当 tail 等于 head 时，数组扩容为原来的两倍。</li>
+<li>当添加的元素为 <code>null</code> 时，抛出异常</li>
+<li>如果添加的元素不为 <code>null</code>，将添加的元素放到数组索引为 tail 的位置</li>
+<li>最后同样是当 tail 等于 head 时，数组扩容为原来的两倍</li>
 </ul>
 <p>在向末位添加元素时，不会像 <code>addFirst</code> 那样计算出索引位置，而是直接将其放到索引为 tail 的位置，这是因为最开始就说过的：head 表示首元素的索引，而 tail 表示下一个将添加到 Deque 尾部的元素的索引。</p>
 <blockquote>
@@ -947,7 +947,7 @@ btf.addGlobalFn('pjaxSend', () => {
 </ul>
 <p>简单来说，前一个就是 - 1，后一个就是 + 1，这也很符合人们的直觉。</p>
 <p>如此简单地就能够确定元素的位置，正是 <code>ArrayDeque</code> 总是保证其内部数组的长度总是 2 的幂所带来的好处。如果没有保证其内部数组长度总是 2 的幂，就得使用模运算来计算元素的位置了，效率低下不说，也不容易理解。不信？你可以尝试实现一下。</p>
-<h2 id="3-10-移除指定元素"><a class="header-anchor" href="#3-10-移除指定元素"></a>3.10 移除指定元素</h2>
+<h2 id="3-1-0-移除指定元素"><a class="header-anchor" href="#3-1-0-移除指定元素"></a>3.1 0 移除指定元素</h2>
 <p><code>ArrayDeque</code> 还支持删除指定元素，比如删除第一个指定的元素，又比如删除最后一个指定的元素，在 head 和 tail 的存在下，这样的需求很容易实现。</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">public</span><span style="color:#C678DD"> boolean</span><span style="color:#61AFEF"> removeFirstOccurrence</span><span style="color:#E06C75">(</span><span style="color:#E5C07B">Object</span><span style="color:#E06C75"> o) {</span></span>
@@ -1062,8 +1062,8 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>-4 &amp; 15 = 12，即 <code>back</code> 的值为 12。</p>
 <p>那这两个值是什么意思？根据其英文与求出的值可知：</p>
 <ul>
-<li><code>front</code> 表示 i 距首元素之间的元素个数；</li>
-<li><code>back</code> 表示 i 距尾元素之间的元素个数。</li>
+<li><code>front</code> 表示 i 距首元素之间的元素个数</li>
+<li><code>back</code> 表示 i 距尾元素之间的元素个数</li>
 </ul>
 <p>求出 <code>front</code> 和 <code>back</code> 后，又是一个判断：</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
@@ -1094,7 +1094,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <li>front &gt;= back &amp;&amp; i &gt;= t</li>
 </ul>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/%E7%9B%AE%E6%A0%87%E5%85%83%E7%B4%A0%E7%A6%BBtail%E6%9B%B4%E8%BF%91%E4%BD%86%E5%A4%A7%E4%BA%8Etail.png" alt="目标元素离tail更近但大于tail"></p>
-<h2 id="3-11-剩下的疑问"><a class="header-anchor" href="#3-11-剩下的疑问"></a>3.11 剩下的疑问</h2>
+<h2 id="3-1-1-剩下的疑问"><a class="header-anchor" href="#3-1-1-剩下的疑问"></a>3.1 1 剩下的疑问</h2>
 <p><code>ArrayDeque</code> 中的其他方法大多是前文介绍的方法实现的衍生，就不再赘述了。</p>
 <p>那在开始时提出的疑问都解决了吗？</p>
 <p>似乎还剩下一个：<code>tail</code> 为什么不是尾元素的索引，而是下一个尾元素的索引？</p>
@@ -1130,7 +1130,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>罪魁祸首还是加班，加班到家后临近 10 点，哪里还有什么时间能够提笔构思语言，可恶的是周六还要加班，更是把所剩无几的休息时间压榨得一干二净，或许周日还有一天？可惜周日也被科目三的学习完全填满。</p>
 <p>或许，我是说或许，这年头像贵司此般加班的情况已经不多，而且还是 996 且没有加班工资的情况。</p>
 <p>THE Fucking Job 🤮</p>
-</body></html></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/ArrayDeque/">https://mofan212.github.io/posts/ArrayDeque/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Data-Structure/">Data-Structure</a></div><div class="post-share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/113.png" data-sites="wechat,qq,weibo,facebook,x"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/Design-Pattern-Singleton-Pattern/" title="【设计模式】单例模式"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/112.png" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【设计模式】单例模式</div></div><div class="info-2"><div class="info-item-1">本文主要对 Java 设计模式中的单例模式进行了介绍。</div></div></div></a><a class="pagination-related" href="/posts/Algorithm-Greedy/" title="【算法】贪心"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/114.jpg" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【算法】贪心</div></div><div class="info-2"><div class="info-item-1">局部最优推导出全局最优，即为贪心。</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/DataStructure-ArrayList/" title="数据结构之动态数组"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/31.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-06-25</div><div class="info-item-2">数据结构之动态数组</div></div><div class="info-2"><div class="info-item-1">定长的数组使用起来太麻烦？来试试能自动扩容的动态数组吧。</div></div></div></a><a class="pagination-related" href="/posts/LinkedHashMap-In-JDK21/" title="JDK21 中的 LinkedHashMap"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/150.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-07</div><div class="info-item-2">JDK21 中的 LinkedHashMap</div></div><div class="info-2"><div class="info-item-1">JDK21 中 LinkedHashMap 的源码级解析。</div></div></div></a><a class="pagination-related" href="/posts/DataStructure-The-End/" title="数据结构之总结与补充"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/44.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-08-10</div><div class="info-item-2">数据结构之总结与补充</div></div><div class="info-2"><div class="info-item-1">本文为数据结构的完结篇，以绘制的脑图作为开篇，对先前的数据结构进行了总结与补充。</div></div></div></a><a class="pagination-related" href="/posts/DataStructure-Bloom-Filter/" title="高级数据结构之布隆过滤器"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/117.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-12-03</div><div class="info-item-2">高级数据结构之布隆过滤器</div></div><div class="info-2"><div class="info-item-1">布隆过滤器是一个空间效率高的概率型数据结构，可以用来判断一个元素一定不存在或者可能存在。</div></div></div></a><a class="pagination-related" href="/posts/DataStructure-BinaryHeap/" title="数据结构之二叉堆"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/40.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-08-05</div><div class="info-item-2">数据结构之二叉堆</div></div><div class="info-2"><div class="info-item-1">什么是堆？怎么构建堆？什么是 Top K 问题？</div></div></div></a><a class="pagination-related" href="/posts/DataStructure-BinarySearchTree/" title="数据结构之二叉搜索树"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/34.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-07-06</div><div class="info-item-2">数据结构之二叉搜索树</div></div><div class="info-2"><div class="info-item-1">本文介绍了实现二叉搜索树的基本接口，并对二叉树的遍历，获取前驱节点、后驱节点进行了重点介绍。</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">默烦</div><div class="author-info-description">彩笔的打怪升级之路...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">175</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mofan212"><i class="fab fa-github"></i><span>follow me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解。<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a href="./mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载。😊</br><strong><font style="color:red">严禁未遵循规范的转载。</font></strong>😡</br><strong>死去的评论系统复活啦！欢迎到留言板畅所欲言！</strong>当然也可以使用更高效的<a target="_blank" href="https://space.bilibili.com/23658864/dynamic" style="color:#49B1F5;text-decoration:underline"> 哔哩哔哩私信 </a>或<a href="mailto:cy.mofan@foxmail.com" style="color:#49B1F5;text-decoration:underline" target="_blank">邮箱</a>。 😉</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0-%E5%89%8D%E8%A8%80"><span class="toc-text">0. 前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E9%98%9F%E5%88%97%E4%B8%8E%E6%A0%88"><span class="toc-text">1. 队列与栈</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-Java-%E4%B8%AD%E7%9A%84%E9%98%9F%E5%88%97"><span class="toc-text">1.1 Java 中的队列</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-Java-%E4%B8%AD%E7%9A%84%E6%A0%88"><span class="toc-text">1.2 Java 中的栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-%E5%8F%8C%E7%AB%AF%E9%98%9F%E5%88%97-Deque"><span class="toc-text">1.3 双端队列 Deque</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E9%93%BE%E8%A1%A8-VS-%E6%95%B0%E7%BB%84"><span class="toc-text">2. 链表 VS 数组</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E5%BD%BC%E6%AD%A4%E7%9A%84%E7%89%B9%E7%82%B9"><span class="toc-text">2.1 彼此的特点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%AF%B9%E6%AF%94"><span class="toc-text">2.2 复杂度对比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E9%93%BE%E8%A1%A8%E8%B5%A2%E4%BA%86%EF%BC%9F"><span class="toc-text">2.3 链表赢了？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-ArrayDeque-%E7%9A%84%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-text">3. ArrayDeque 的源码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E5%AD%97%E6%AE%B5%E4%BF%A1%E6%81%AF"><span class="toc-text">3.1 字段信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95"><span class="toc-text">3.2 构造方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-%E5%AE%B9%E9%87%8F%E7%9A%84%E8%AE%A1%E7%AE%97"><span class="toc-text">3.3 容量的计算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-%E9%A6%96%E4%BD%8D%E6%B7%BB%E5%8A%A0%E5%85%83%E7%B4%A0"><span class="toc-text">3.4 首位添加元素</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-5-%E6%9C%AB%E4%BD%8D%E6%B7%BB%E5%8A%A0%E5%85%83%E7%B4%A0"><span class="toc-text">3.5 末位添加元素</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-6-%E6%89%A9%E5%AE%B9%E9%80%BB%E8%BE%91"><span class="toc-text">3.6 扩容逻辑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-7-%E7%A7%BB%E9%99%A4%E9%A6%96%E4%BD%8D%E5%85%83%E7%B4%A0"><span class="toc-text">3.7 移除首位元素</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-8-%E7%A7%BB%E9%99%A4%E6%9C%AB%E4%BD%8D%E5%85%83%E7%B4%A0"><span class="toc-text">3.8 移除末位元素</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-9-%E7%A1%AE%E5%AE%9A%E5%85%83%E7%B4%A0%E4%BD%8D%E7%BD%AE"><span class="toc-text">3.9 确定元素位置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-10-%E7%A7%BB%E9%99%A4%E6%8C%87%E5%AE%9A%E5%85%83%E7%B4%A0"><span class="toc-text">3.10 移除指定元素</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-11-%E5%89%A9%E4%B8%8B%E7%9A%84%E7%96%91%E9%97%AE"><span class="toc-text">3.11 剩下的疑问</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E6%80%BB%E7%BB%93%E4%B8%8E%E7%BB%93%E8%AF%AD"><span class="toc-text">4. 总结与结语</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/The-Art-of-Loving/" title="爱的艺术"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/175.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="爱的艺术"/></a><div class="content"><a class="title" href="/posts/The-Art-of-Loving/" title="爱的艺术">爱的艺术</a><time datetime="2026-04-28T16:00:00.000Z" title="更新于 2026-04-29 00:00:00">2026-04-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Git/" title="Git理论与使用"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/3.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Git理论与使用"/></a><div class="content"><a class="title" href="/posts/Git/" title="Git理论与使用">Git理论与使用</a><time datetime="2026-01-26T16:00:00.000Z" title="更新于 2026-01-27 00:00:00">2026-01-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Something-About-Blog/" title="博客搭建与维护"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="博客搭建与维护"/></a><div class="content"><a class="title" href="/posts/Something-About-Blog/" title="博客搭建与维护">博客搭建与维护</a><time datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"/></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="更新于 2026-01-03 00:00:00">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"/></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/103.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 的类资源加载"/></a><div class="content"><a class="title" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载">Java 的类资源加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.5</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+</body></html></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/ArrayDeque/">https://mofan212.github.io/posts/ArrayDeque/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Data-Structure/">Data-Structure</a></div><div class="post-share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/113.png" data-sites="wechat,qq,weibo,facebook,x"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/Design-Pattern-Singleton-Pattern/" title="【设计模式】单例模式"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/112.png" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【设计模式】单例模式</div></div><div class="info-2"><div class="info-item-1">本文主要对 Java 设计模式中的单例模式进行了介绍。</div></div></div></a><a class="pagination-related" href="/posts/Algorithm-Greedy/" title="【算法】贪心"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/114.jpg" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【算法】贪心</div></div><div class="info-2"><div class="info-item-1">局部最优推导出全局最优，即为贪心。</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/DataStructure-SkipList/" title="高级数据结构之跳表"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/118.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-12-06</div><div class="info-item-2">高级数据结构之跳表</div></div><div class="info-2"><div class="info-item-1">红黑树太难？来试试跳表吧。</div></div></div></a><a class="pagination-related" href="/posts/DataStructure-Stack-And-Queue/" title="数据结构之栈与队列"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/33.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-07-03</div><div class="info-item-2">数据结构之栈与队列</div></div><div class="info-2"><div class="info-item-1">本文重点对队列进行了介绍，并衍生出双端队列、循环队列、循环双端队列。</div></div></div></a><a class="pagination-related" href="/posts/DataStructure-B+Tree/" title="高级数据结构之B+树"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/119.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-12-11</div><div class="info-item-2">高级数据结构之B+树</div></div><div class="info-2"><div class="info-item-1">B+ 树是 B 树的变体，常用于数据库和操作系统的文件系统中。</div></div></div></a><a class="pagination-related" href="/posts/DataStructure-RedBlackTree/" title="数据结构之红黑树"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/36.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-07-19</div><div class="info-item-2">数据结构之红黑树</div></div><div class="info-2"><div class="info-item-1">HashMap 解决哈希冲突使用的红黑树是长什么样子的？一起来看看吧。</div></div></div></a><a class="pagination-related" href="/posts/LinkedHashMap-In-JDK21/" title="JDK21 中的 LinkedHashMap"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/150.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-07</div><div class="info-item-2">JDK21 中的 LinkedHashMap</div></div><div class="info-2"><div class="info-item-1">JDK21 中 LinkedHashMap 的源码级解析。</div></div></div></a><a class="pagination-related" href="/posts/DataStructure-HashMap/" title="数据结构之哈希表"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/39.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-08-04</div><div class="info-item-2">数据结构之哈希表</div></div><div class="info-2"><div class="info-item-1">本文基于 Java 介绍了哈希表中的一些概念，并且动手编写了一个简单的 HashMap。</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">默烦</div><div class="author-info-description">彩笔的打怪升级之路...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">175</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mofan212"><i class="fab fa-github"></i><span>follow me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解。<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a href="./mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载。😊</br><strong><font style="color:red">严禁未遵循规范的转载。</font></strong>😡</br><strong>死去的评论系统复活啦！欢迎到留言板畅所欲言！</strong>当然也可以使用更高效的<a target="_blank" href="https://space.bilibili.com/23658864/dynamic" style="color:#49B1F5;text-decoration:underline"> 哔哩哔哩私信 </a>或<a href="mailto:cy.mofan@foxmail.com" style="color:#49B1F5;text-decoration:underline" target="_blank">邮箱</a>。 😉</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0-%E5%89%8D%E8%A8%80"><span class="toc-text">0. 前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E9%98%9F%E5%88%97%E4%B8%8E%E6%A0%88"><span class="toc-text">1. 队列与栈</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-Java-%E4%B8%AD%E7%9A%84%E9%98%9F%E5%88%97"><span class="toc-text">1.1 Java 中的队列</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-Java-%E4%B8%AD%E7%9A%84%E6%A0%88"><span class="toc-text">1.2 Java 中的栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-%E5%8F%8C%E7%AB%AF%E9%98%9F%E5%88%97-Deque"><span class="toc-text">1.3 双端队列 Deque</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E9%93%BE%E8%A1%A8-VS-%E6%95%B0%E7%BB%84"><span class="toc-text">2. 链表 VS 数组</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E5%BD%BC%E6%AD%A4%E7%9A%84%E7%89%B9%E7%82%B9"><span class="toc-text">2.1 彼此的特点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%AF%B9%E6%AF%94"><span class="toc-text">2.2 复杂度对比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E9%93%BE%E8%A1%A8%E8%B5%A2%E4%BA%86%EF%BC%9F"><span class="toc-text">2.3 链表赢了？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-ArrayDeque-%E7%9A%84%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-text">3. ArrayDeque 的源码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E5%AD%97%E6%AE%B5%E4%BF%A1%E6%81%AF"><span class="toc-text">3.1 字段信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95"><span class="toc-text">3.2 构造方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-%E5%AE%B9%E9%87%8F%E7%9A%84%E8%AE%A1%E7%AE%97"><span class="toc-text">3.3 容量的计算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-%E9%A6%96%E4%BD%8D%E6%B7%BB%E5%8A%A0%E5%85%83%E7%B4%A0"><span class="toc-text">3.4 首位添加元素</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-5-%E6%9C%AB%E4%BD%8D%E6%B7%BB%E5%8A%A0%E5%85%83%E7%B4%A0"><span class="toc-text">3.5 末位添加元素</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-6-%E6%89%A9%E5%AE%B9%E9%80%BB%E8%BE%91"><span class="toc-text">3.6 扩容逻辑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-7-%E7%A7%BB%E9%99%A4%E9%A6%96%E4%BD%8D%E5%85%83%E7%B4%A0"><span class="toc-text">3.7 移除首位元素</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-8-%E7%A7%BB%E9%99%A4%E6%9C%AB%E4%BD%8D%E5%85%83%E7%B4%A0"><span class="toc-text">3.8 移除末位元素</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-9-%E7%A1%AE%E5%AE%9A%E5%85%83%E7%B4%A0%E4%BD%8D%E7%BD%AE"><span class="toc-text">3.9 确定元素位置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-0-%E7%A7%BB%E9%99%A4%E6%8C%87%E5%AE%9A%E5%85%83%E7%B4%A0"><span class="toc-text">3.1 0 移除指定元素</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-1-%E5%89%A9%E4%B8%8B%E7%9A%84%E7%96%91%E9%97%AE"><span class="toc-text">3.1 1 剩下的疑问</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E6%80%BB%E7%BB%93%E4%B8%8E%E7%BB%93%E8%AF%AD"><span class="toc-text">4. 总结与结语</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/The-Art-of-Loving/" title="爱的艺术"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/175.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="爱的艺术"/></a><div class="content"><a class="title" href="/posts/The-Art-of-Loving/" title="爱的艺术">爱的艺术</a><time datetime="2026-04-28T16:00:00.000Z" title="更新于 2026-04-29 00:00:00">2026-04-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Git/" title="Git理论与使用"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/3.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Git理论与使用"/></a><div class="content"><a class="title" href="/posts/Git/" title="Git理论与使用">Git理论与使用</a><time datetime="2026-01-26T16:00:00.000Z" title="更新于 2026-01-27 00:00:00">2026-01-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Something-About-Blog/" title="博客搭建与维护"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="博客搭建与维护"/></a><div class="content"><a class="title" href="/posts/Something-About-Blog/" title="博客搭建与维护">博客搭建与维护</a><time datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"/></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="更新于 2026-01-03 00:00:00">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"/></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/20.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="注解、类的加载、反射"/></a><div class="content"><a class="title" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射">注解、类的加载、反射</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.5</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
   const parseViewBox = viewBox => {
     if (!viewBox) return null
     const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))

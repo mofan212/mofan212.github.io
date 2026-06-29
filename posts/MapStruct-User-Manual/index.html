@@ -194,7 +194,7 @@ btf.addGlobalFn('pjaxSend', () => {
     </style>
     <html><head></head><body><p>封面来源：本文封面来源于 MapStruct 官网，如有侵权，请联系删除。</p>
 <p>源码仓库：<a target="_blank" rel="noopener" href="https://github.com/mofan212/mapstruct-demo">mofan212/mapstruct-demo</a></p>
-<h1 id="0-阅读前言"><a class="header-anchor" href="#0-阅读前言"></a>0. 阅读前言</h1>
+<h1 id="1-阅读前言"><a class="header-anchor" href="#1-阅读前言"></a>1. 阅读前言</h1>
 <p>本文内容基于 MapStruct 官方文档进行翻译并拓展，力求保证文章准确性，但博主英语水平堪忧，在某些处理上仍有很多不足，还望各位看官不吝赐教。</p>
 <p><mark>翻译工作极其耗时，本文禁止转载！</mark> 🙏</p>
 <blockquote>
@@ -203,9 +203,9 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>MapStruct 官网：<a target="_blank" rel="noopener" href="https://mapstruct.org/">MapStruct</a></p>
 <p>MapStruct 官方文档：<a target="_blank" rel="noopener" href="https://mapstruct.org/documentation/reference-guide/">Reference Guide</a></p>
 <p>不错的 MapStruct 博客系列：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/DDgougou/articles/12848625.html">属性映射工具——MapStruct（一）</a></p>
-<h1 id="1-MapStruct-概述"><a class="header-anchor" href="#1-MapStruct-概述"></a>1. MapStruct 概述</h1>
-<h2 id="1-1-什么是-MapStruct"><a class="header-anchor" href="#1-1-什么是-MapStruct"></a>1.1 什么是 MapStruct</h2>
-<p>MapStruct 是一个Java注释处理器，用于生成类型安全的、高性能的、无依赖的 Bean 映射类。</p>
+<h1 id="2-MapStruct-概述"><a class="header-anchor" href="#2-MapStruct-概述"></a>2. MapStruct 概述</h1>
+<h2 id="2-1-什么是-MapStruct"><a class="header-anchor" href="#2-1-什么是-MapStruct"></a>2.1 什么是 MapStruct</h2>
+<p>MapStruct 是一个 Java 注释处理器，用于生成类型安全的、高性能的、无依赖的 Bean 映射类。</p>
 <p>在实际开发中经常会将各种对象相互转换，比如 DTO 转 BO，DTO 转 VO 等等，最简单的做法就是 <code>new</code> 对象，然后对属性值进行一个个地 GET/SET，但这样既繁琐又无聊。</p>
 <p>如果有一个专门用来解决转换问题的工具就很棒了，MapStruct 就是这样的一个属性映射工具，只需要定义一个 Mapper 接口，MapStruct 就会自动实现这个映射接口，避免了复杂繁琐的映射实现。</p>
 <blockquote>
@@ -214,9 +214,9 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>关于 Java 中的各种 O，可以参考下面这两篇文章：</p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq784515681/article/details/83088089">java中各种O的含义(PO，DO，VO，TO，QO，BO，DAO，DTO，POJO)</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/wzdnwyyu/p/11163058.html">浅析DTO、VO、DO、PO的概念</a></p>
-<h2 id="1-2-MapStruct-配置选项"><a class="header-anchor" href="#1-2-MapStruct-配置选项"></a>1.2 MapStruct 配置选项</h2>
+<h2 id="2-2-MapStruct-配置选项"><a class="header-anchor" href="#2-2-MapStruct-配置选项"></a>2.2 MapStruct 配置选项</h2>
 <p>MapStruct 代码生成器可以使用注释处理器选项进行配置。</p>
-<p>在直接调用 javac 时，这些选项以 <code>-Akey = value</code> 的形式传递给编译器。 通过 Maven 使用 MapStruct 时，任何处理器选项都可以在 Maven 处理器插件的配置中使用 <code>compilerArgs</code> 传递，如下所示：</p>
+<p>在直接调用 javac 时，这些选项以 <code>-Akey = value</code> 的形式传递给编译器。通过 Maven 使用 MapStruct 时，任何处理器选项都可以在 Maven 处理器插件的配置中使用 <code>compilerArgs</code> 传递，如下所示：</p>
 <figure class="highlight xml line-numbers" data-language="XML">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#ABB2BF">...</span></span>
 <span class="line"><span style="color:#ABB2BF">&lt;</span><span style="color:#E06C75">plugin</span><span style="color:#ABB2BF">&gt;</span></span>
@@ -251,8 +251,8 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#ABB2BF">...</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <p>关于存在的选项，可以参看官方文档 <a target="_blank" rel="noopener" href="https://mapstruct.org/documentation/stable/reference/html/#configuration-options">Configuration options</a>，本文会在使用到的地方再具体讲解。</p>
-<h1 id="2-定义映射器"><a class="header-anchor" href="#2-定义映射器"></a>2. 定义映射器</h1>
-<h2 id="2-1-Hello-MapStruct"><a class="header-anchor" href="#2-1-Hello-MapStruct"></a>2.1 Hello MapStruct</h2>
+<h1 id="3-定义映射器"><a class="header-anchor" href="#3-定义映射器"></a>3. 定义映射器</h1>
+<h2 id="3-1-Hello-MapStruct"><a class="header-anchor" href="#3-1-Hello-MapStruct"></a>3.1 Hello MapStruct</h2>
 <p>创建一个 Maven 项目，在 <code>pom.xml</code> 文件中添加以下配置：</p>
 <figure class="highlight xml line-numbers" data-language="XML">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#ABB2BF">&lt;</span><span style="color:#E06C75">properties</span><span style="color:#ABB2BF">&gt;</span></span>
@@ -394,13 +394,13 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#ABB2BF">    }</span></span>
 <span class="line"><span style="color:#ABB2BF">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<p>运行测试方法，测试通过！ 🎉</p>
+<p>运行测试方法，测试通过！🎉</p>
 <blockquote>
 <p>为什么写一个接口后就能够帮我们实现实体的转换呢？</p>
 </blockquote>
 <p>其实 Java 实体映射工具有两种：</p>
 <p>1、在运行期，使用反射调用 Setter/Getter 方法或者是直接对成员变量赋值，这种方式通过 <code>invoke()</code> 执行赋值。一般会使用 Beanutil、Javassist 等开源库进行实现，代表产品有 Dozer 和 ModelMaper。</p>
-<p>2、在编译期，动态生成含有逐一赋值的 <code>class</code> 文件 ，在运行时直接调用该 <code>class</code> 文件，这类的代表有 MapStruct、Selma、Orika。</p>
+<p>2、在编译期，动态生成含有逐一赋值的 <code>class</code> 文件，在运行时直接调用该 <code>class</code> 文件，这类的代表有 MapStruct、Selma、Orika。</p>
 <p>如果不使用任何类库，手动实现实体的转换，可以使用反射（对应第一种方式），也可以对调用每个属性的 Get/Set 方法进行赋值（对应第二种方式）。</p>
 <p>还是有点懵？</p>
 <p>查看刚刚项目的 target 目录，可以看到：</p>
@@ -417,7 +417,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <p><code>@Mapper</code>：作用于接口上，告诉 MapStruct 需要编译期生成哪个接口的实现类。</p>
 <p>在生成的实现类中，当原实体的属性与其目标实体对应的属性名称 <strong>相同</strong> 时，就直接被 <strong>隐式映射</strong>。如果名称不一样，就需要使用到 <code>@Mapping</code> 注解。</p>
 <p><code>@Mapping</code>：常作用于方法上，用于原实体与目标实体属性名称不相同时指定映射关系。</p>
-<h2 id="2-2-关闭隐式映射"><a class="header-anchor" href="#2-2-关闭隐式映射"></a>2.2 关闭隐式映射</h2>
+<h2 id="3-2-关闭隐式映射"><a class="header-anchor" href="#3-2-关闭隐式映射"></a>3.2 关闭隐式映射</h2>
 <p>MapStruct 存在默认的隐式映射，也可以关闭它，只需在接口对应的方法上添加注解：</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#ABB2BF">@</span><span style="color:#E5C07B">BeanMapping</span><span style="color:#E06C75">(</span><span style="color:#D19A66">ignoreByDefault</span><span style="color:#56B6C2"> =</span><span style="color:#D19A66"> true</span><span style="color:#E06C75">)</span></span></code></pre></td></tr></tbody></table>
@@ -446,7 +446,7 @@ null
 </pre>
 <p>由于没有使用 <code>@Mapping</code> 注解为 <code>type</code> 指定映射关系，因此 <code>type</code> 的属性值是 <code>null</code>。</p>
 <p>但一般来说，没人会闲着没事把隐式映射关闭。🤨</p>
-<h2 id="2-3-Mapping-注解"><a class="header-anchor" href="#2-3-Mapping-注解"></a>2.3 @Mapping 注解</h2>
+<h2 id="3-3-Mapping-注解"><a class="header-anchor" href="#3-3-Mapping-注解"></a>3.3 @Mapping 注解</h2>
 <p><code>@Mapping</code> 注解常作用于方法上，其实它也可以作用于注解之上，允许 <code>@Mapping</code> 用于其他（用户自定义的）注释以实现重用。</p>
 <blockquote>
 <p>具体使用</p>
@@ -562,7 +562,7 @@ Tue Feb 02 18:33:11 CST 2021
       </figure>
 <p><mark>需要注意的是：</mark> <code>source</code> 属性和 <code>expression</code> 属性不能同时存在。使用 <code>expression</code> 时，其值的 Java 代码所使用的类最好使用全类名，但如果这个 Java 代码会抛异常就不要使用 <code>expression</code> 了，而是需要自定义方法并在 <code>qualifyByName</code> 中引用。</p>
 <p>像上述案例中，<code>createTime</code> 的值是指 <code>2020-11-02 21:54:29</code>，为其指定表达式后，原本的值发生了改变。</p>
-<p>如果仔细观察，还能发现 MapStruct 会对数据进行自动转换。比如在原实体中的 age 属性是 <code>Integer</code> 类型的，而 目标实体中的 age 属性是 <code>String</code> 类型的，即便如此，仍然能够映射成功。 👍</p>
+<p>如果仔细观察，还能发现 MapStruct 会对数据进行自动转换。比如在原实体中的 age 属性是 <code>Integer</code> 类型的，而 目标实体中的 age 属性是 <code>String</code> 类型的，即便如此，仍然能够映射成功。👍</p>
 <blockquote>
 <p>@Mapping 其他属性</p>
 </blockquote>
@@ -578,17 +578,17 @@ Tue Feb 02 18:33:11 CST 2021
 <p>这种方式有什么用？</p>
 </blockquote>
 <p>如果有若干个 DTO 都由同一实体转换而来，这些 DTO 有些属性名称是相同的，但有些又不一样，那么我们就可以编写一个注解，在这个注解上使用 <code>@Mapping</code> 注解，以减少重复代码。</p>
-<p>使用 <code>@Mapping</code> 注解作用与其他注解上并使用其他注解时，可以让若干个 DTO 都具备相同的特性。在官网上称这种观点为 “duck-typing”（鸭子类型），当一个东西叫声像鸭子，走路像鸭子，还会游泳，那么它很有可能就是鸭子 🦆。简单来说就是特性决定了类型，而不是类型决定了特性。鸭子类型在动态语言中经常使用，比如 Python，这使得 Python 不像 Java 那样专门去弄一大堆的设计模式。🤪</p>
+<p>使用 <code>@Mapping</code> 注解作用与其他注解上并使用其他注解时，可以让若干个 DTO 都具备相同的特性。在官网上称这种观点为 「duck-typing」（鸭子类型），当一个东西叫声像鸭子，走路像鸭子，还会游泳，那么它很有可能就是鸭子 🦆。简单来说就是特性决定了类型，而不是类型决定了特性。鸭子类型在动态语言中经常使用，比如 Python，这使得 Python 不像 Java 那样专门去弄一大堆的设计模式。🤪</p>
 <p>好了，说远了，回到 MapStruct 上。</p>
 <p>但是官网又说，这个功能尚不成熟，用户应当谨慎使用，尤其是在不确定何时始终存在属性时：</p>
 <pre>the method on which the problem occurs is displayed, as well as the concerned values in the @Mapping annotation. However, the composition aspect is not visible.
 </pre>
-<h2 id="2-4-默认方法与抽象类"><a class="header-anchor" href="#2-4-默认方法与抽象类"></a>2.4 默认方法与抽象类</h2>
+<h2 id="3-4-默认方法与抽象类"><a class="header-anchor" href="#3-4-默认方法与抽象类"></a>3.4 默认方法与抽象类</h2>
 <p>在 JDK 8 及其更高的版本中，接口中也可以有方法的实现，但是这些方法必须被 <code>static</code> 或 <code>default</code> 关键词修饰。</p>
 <p>使用 MapStruct 可以实现简单类型的映射，但是没办法完成一些带有逻辑的映射。比如在原实体中有一个名为 <code>age</code> 的属性，在映射到新实体时，想让 <code>age</code> 的值加一，这对于 MapStruct 来说是无法做到的。</p>
 <p>此时可以在接口中定义默认方法，只要参数是原实体类型，返回值是新实体类型，那么使用 MapStruct 生成接口的实现类时将调用这个默认方法。</p>
 <p><strong>除此之外，还可以使用抽象类来定义映射器，而不仅仅是接口。</strong> 在这种情况下，MapStruct 会生成抽象类的子类，并实现所有的抽象方法。而对于非抽象方法来说，只要参数和返回值类型匹配，MapStruct 也会子类中调用这些方法。与声明默认方法相比，使用抽象类来定义映射器可以在映射器类中声明额外的字段。</p>
-<h2 id="2-5-多个源参数"><a class="header-anchor" href="#2-5-多个源参数"></a>2.5 多个源参数</h2>
+<h2 id="3-5-多个源参数"><a class="header-anchor" href="#3-5-多个源参数"></a>3.5 多个源参数</h2>
 <p><strong>MapStruct 支持带有多个源参数的映射方法。</strong> 比如，可以将实体 A 中的部分属性值和实体 B 中的部分属性值映射到同一 DTO 中：</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#ABB2BF">@</span><span style="color:#E5C07B">Mapper</span></span>
@@ -610,7 +610,7 @@ Tue Feb 02 18:33:11 CST 2021
 <span class="line"><span style="color:#E5C07B">    DeliveryAddressDto</span><span style="color:#61AFEF"> personAndAddressToDeliveryAddressDto</span><span style="color:#ABB2BF">(</span><span style="color:#E5C07B">Person</span><span style="color:#E06C75;font-style:italic"> person</span><span style="color:#ABB2BF">, </span><span style="color:#E5C07B">Integer</span><span style="color:#E06C75;font-style:italic"> hn</span><span style="color:#ABB2BF">);</span></span>
 <span class="line"><span style="color:#ABB2BF">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<h2 id="2-6-多个嵌套属性映射"><a class="header-anchor" href="#2-6-多个嵌套属性映射"></a>2.6 多个嵌套属性映射</h2>
+<h2 id="3-6-多个嵌套属性映射"><a class="header-anchor" href="#3-6-多个嵌套属性映射"></a>3.6 多个嵌套属性映射</h2>
 <p>如果在实体 A 中存在某一属性 B，其类型是一个实体，现在想将实体 A 中的 B 对象映射到某一不含任何复杂对象类型属性的 DTO 中，那么需要取出属性 B 的各个属性进行一一映射。</p>
 <p>如果实体 A 存在多个复杂对象类型的属性，依次进行映射会十分繁琐。</p>
 <p>MapStruct 支持使用 <code>.</code> 作为 <code>@Mapping</code> 注释中 <code>target</code> 的属性值。这告诉 MapStruct 将原实体中所有复杂对象类型的属性中的所有属性映射到目标实体。</p>
@@ -624,7 +624,7 @@ Tue Feb 02 18:33:11 CST 2021
 <span class="line"><span style="color:#ABB2BF">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <p>上述代码将 <code>customerDto</code> 对象中的 <code>record</code> 对象和 <code>account</code> 对象的各个属性都映射到目标实体中，但由于 <code>record</code> 和 <code>account</code> 都有 <code>name</code> 属性，因此需要显式指定以消除歧义。</p>
-<h2 id="2-7-更新存在的实例"><a class="header-anchor" href="#2-7-更新存在的实例"></a>2.7 更新存在的实例</h2>
+<h2 id="3-7-更新存在的实例"><a class="header-anchor" href="#3-7-更新存在的实例"></a>3.7 更新存在的实例</h2>
 <p>在某些情况下，可能并不需要创建一个新的目标实体，而是更新一个现有的实例，这个时候就需要用到 <code>@MappingTarget</code> 注解。</p>
 <p>简单来说：一个原实体 A 的属性数量比目标实体 B 少，因此将 A 映射为 B 时，B 中有些属性值会是空。B 中的这些属性是存在于实体 C 中的，那么可以使用 C 来更新 B。</p>
 <blockquote>
@@ -731,10 +731,10 @@ Tue Feb 02 18:33:11 CST 2021
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#ABB2BF">@</span><span style="color:#E5C07B">Mapping</span><span style="color:#E06C75">(</span><span style="color:#D19A66">source</span><span style="color:#56B6C2"> =</span><span style="color:#98C379"> "gender"</span><span style="color:#ABB2BF">,</span><span style="color:#D19A66"> target</span><span style="color:#56B6C2"> =</span><span style="color:#98C379"> "sex"</span><span style="color:#E06C75">)</span></span>
 <span class="line"><span style="color:#E5C07B">TeacherDto</span><span style="color:#61AFEF"> updateTeacherDto</span><span style="color:#E06C75">(</span><span style="color:#E5C07B">PersonInfo</span><span style="color:#E06C75"> personInfo</span><span style="color:#ABB2BF">,</span><span style="color:#ABB2BF"> @</span><span style="color:#E5C07B">MappingTarget</span><span style="color:#E5C07B"> TeacherDto</span><span style="color:#E06C75"> teacherDto)</span><span style="color:#ABB2BF">;</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<h2 id="2-8-反向映射"><a class="header-anchor" href="#2-8-反向映射"></a>2.8 反向映射</h2>
+<h2 id="3-8-反向映射"><a class="header-anchor" href="#3-8-反向映射"></a>3.8 反向映射</h2>
 <p>上述实例中，都是用实体转换为 DTO，那么怎么将 DTO 转换回实体呢？</p>
 <p>当然可以使用 <code>@Mapping</code> 注解一一指定，但这样也太麻烦了，有没有什么简单的方法呢？</p>
-<p>MapStruct 提供了一个名为 <code>@InheritInverseConfiguration</code> 的注解用于反向映射。该注解只有一个属性<code>name</code>，表示原映射名，即原映射方法名。</p>
+<p>MapStruct 提供了一个名为 <code>@InheritInverseConfiguration</code> 的注解用于反向映射。该注解只有一个属性 <code>name</code>，表示原映射名，即原映射方法名。</p>
 <blockquote>
 <p>具体使用</p>
 </blockquote>
@@ -846,7 +846,7 @@ Tue Feb 02 18:33:11 CST 2021
 <span class="line"><span style="color:#ABB2BF">    }</span></span>
 <span class="line"><span style="color:#ABB2BF">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<p>编写一手测试方法： 😎</p>
+<p>编写一手测试方法：😎</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#ABB2BF">@</span><span style="color:#E5C07B">Test</span></span>
 <span class="line"><span style="color:#C678DD">public</span><span style="color:#C678DD"> void</span><span style="color:#61AFEF"> testInheritInverseConfiguration</span><span style="color:#E06C75">() {</span></span>
@@ -885,7 +885,7 @@ A 型血
 </blockquote>
 <p>由于 age 的转化中使用了 <code>expression</code>、bloodType 转化的过程中使用了 <code>constant</code>，这两个属性对应的 <code>@Mapping</code> 注释都没有指定 <code>source</code>。所以在使用 <code>@InheritInverseConfiguration</code> 注解进行反向映射时，需要使用 <code>@Mapping</code> 对这两个属性进行单独的映射，不然就会报错。</p>
 <p>在 <code>PeopleInfo</code> 中 gender 属性类型是 <code>GenderEnum</code> 枚举类型，而 <code>WorkerDto</code>  中的 gender 属性是 <code>Integer</code> 类型的，因此在进行属性映射时，需要指定映射方式，这里涉及到 <code>@Named</code> 注解和 <code>@Mapping</code> 注解中 <code>qualifiedByName </code> 属性的使用。</p>
-<h2 id="2-9-直接使用字段映射"><a class="header-anchor" href="#2-9-直接使用字段映射"></a>2.9 直接使用字段映射</h2>
+<h2 id="3-9-直接使用字段映射"><a class="header-anchor" href="#3-9-直接使用字段映射"></a>3.9 直接使用字段映射</h2>
 <p>在前面的案例中，实现与实体之间的映射时都需要实体中有 Getter 和 Setter 方法，但 MapStruct 也支持没有 Getter 和 Setter 的公共字段映射。如果 MapStruct 为属性找不到合适的 Getter 和 Setter 方法，它会把字段作为读 / 写访问器。</p>
 <p>如果一个字段被 <code>public</code> 或 <code>public final</code> 修饰，那么它会被认为是一个读访问器。如果一个字段被 <code>static</code> 修饰，它不会被认为是一个读访问器。</p>
 <p>当一个字段 <strong>仅仅只</strong> 被 <code>public</code> 修饰时，它才会被认为是一个写访问器。如果一个字段被 <code>final</code> 或 <code>static</code> 修饰，它不会被认为是一个写访问器。</p>
@@ -907,25 +907,25 @@ A 型血
 <span class="line"><span style="color:#ABB2BF">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <p>由于 <code>name</code> 属性和 <code>customerName</code> 属性名称不一样，在进行映射时，需要使用 <code>@Mapping</code> 指定规则。</p>
-<h2 id="2-10-使用构建器"><a class="header-anchor" href="#2-10-使用构建器"></a>2.10 使用构建器</h2>
+<h2 id="3-10-使用构建器"><a class="header-anchor" href="#3-10-使用构建器"></a>3.10 使用构建器</h2>
 <p>在 MapStruct 中，支持通过构建器对不可变类型进行映射。</p>
 <p>当进行映射时，MapStruct 会检查被映射的类中是否有构建器。这是通过 BuilderProvider 完成的，如果这个类存在构建器，那么该构建器将被用于映射。</p>
 <p><code>BuilderProvider</code> 的默认实现假设如下：</p>
 <ul>
 <li>
-<p>该类型拥有返回 <code>Builder</code> 对象的公共无参静态方法（该方法称为 <strong>构建器创建方法</strong>）。比如 <code>Person</code> 类中有一个公共静态方法，它返回 <code>PersonBuilder</code>。</p>
+<p>该类型拥有返回 <code>Builder</code> 对象的公共无参静态方法（该方法称为 <strong>构建器创建方法</strong>）。比如 <code>Person</code> 类中有一个公共静态方法，它返回 <code>PersonBuilder</code></p>
 </li>
 <li>
-<p><code>Builder</code> 类型有一个公共无参方法（该方法称为 <strong>构建方法</strong>），它返回正在构建的对象类型。比如 <code>PersonBuilder</code> 中有一个 <code>build()</code> 方法，该方法的返回值类型是 <code>Person</code>。</p>
+<p><code>Builder</code> 类型有一个公共无参方法（该方法称为 <strong>构建方法</strong>），它返回正在构建的对象类型。比如 <code>PersonBuilder</code> 中有一个 <code>build()</code> 方法，该方法的返回值类型是 <code>Person</code></p>
 </li>
 <li>
-<p>在有多个 <strong>构建方法</strong> 的情况下，MapStruct 会寻找一个叫做 <code>build()</code> 的方法，如果存在这样的方法，将使用这个方法，否则编译错误。</p>
+<p>在有多个 <strong>构建方法</strong> 的情况下，MapStruct 会寻找一个叫做 <code>build()</code> 的方法，如果存在这样的方法，将使用这个方法，否则编译错误</p>
 </li>
 <li>
-<p>可以在 <code>@BeanMapping</code>、<code>@Mapper</code> 或 <code>@MapperConfig</code> 等注解中使用 <code>@Builder</code> 来定义特定的 <strong>构建方法</strong>。</p>
+<p>可以在 <code>@BeanMapping</code>、<code>@Mapper</code> 或 <code>@MapperConfig</code> 等注解中使用 <code>@Builder</code> 来定义特定的 <strong>构建方法</strong></p>
 </li>
 <li>
-<p>如果有多个 <strong>构建器创建方法</strong> 满足上述条件，<code>DefaultBuilderProvider</code> 会抛出 <code>MoreThanOneBuilderCreationMethodException</code> 异常。如果发生 <code>MoreThanOneBuilderCreationMethodException</code>，MapStruct 将在编译期间写入警告，并且不使用任何生成器。</p>
+<p>如果有多个 <strong>构建器创建方法</strong> 满足上述条件，<code>DefaultBuilderProvider</code> 会抛出 <code>MoreThanOneBuilderCreationMethodException</code> 异常。如果发生 <code>MoreThanOneBuilderCreationMethodException</code>，MapStruct 将在编译期间写入警告，并且不使用任何生成器</p>
 </li>
 </ul>
 <p>如果在被映射的类中存在上述的方法和构建器，为了完成映射，MapStruct 会调用构建器的构建方法并生成代码。</p>
@@ -1073,8 +1073,8 @@ A 型血
 <span class="line"><span style="color:#C678DD">    private</span><span style="color:#C678DD"> final</span><span style="color:#E5C07B"> String</span><span style="color:#E06C75"> type</span><span style="color:#ABB2BF">;</span></span>
 <span class="line"><span style="color:#ABB2BF">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<p>将 DogDto 修改成以上形式后，运行测试方法也是可以通过的。 👊</p>
-<h2 id="2-11-使用构造函数"><a class="header-anchor" href="#2-11-使用构造函数"></a>2.11 使用构造函数</h2>
+<p>将 DogDto 修改成以上形式后，运行测试方法也是可以通过的。👊</p>
+<h2 id="3-11-使用构造函数"><a class="header-anchor" href="#3-11-使用构造函数"></a>3.11 使用构造函数</h2>
 <p>在前文中，对象映射使用 Getter / Setter 完成。MapStruct 也支持使用构造方法来映射目标类型。</p>
 <p>在进行映射时，MapStruct 会检查被映射的实体中是否存在构建器。如果没有构建器，MapStruct 会寻找一个可访问的构造方法。</p>
 <blockquote>
@@ -1221,7 +1221,7 @@ A 型血
 <p>使用目标实体的构造方法时，会使用该构造方法的参数名并与 <mark>来源实体</mark> 的属性进行匹配。<strong>务必保证这些名称是一样的，否则无法映射成功。</strong> 当然，也不是说名称不一样就不能映射，这时候可以使用 <code>@ConstructorProperties</code> 注解，使用这个注解指定构造方法的第几个参数对应来源对象的哪个 Getter 方法，从而完成参数名与属性的匹配。</p>
 <p>那如果目标实体的属性名和原实体的属性名不一致怎么办？这就需要用到前面说的 <code>@Mapping</code> 注解了。😏</p>
 <p><strong>备注：</strong> 这一块或许比较难理解，建议使用上述代码进行小改然后一一理解。😔</p>
-<h2 id="2-12-将-Map-映射到对象"><a class="header-anchor" href="#2-12-将-Map-映射到对象"></a>2.12 将 Map 映射到对象</h2>
+<h2 id="3-12-将-Map-映射到对象"><a class="header-anchor" href="#3-12-将-Map-映射到对象"></a>3.12 将 Map 映射到对象</h2>
 <p>在某些情况下，可能需要将 <code>Map&lt;String, Object&gt;</code> 映射到某个对象，MapStruct 也是支持这种需求的，此时 <code>@Mapping</code> 中的 <code>source</code> 属性值为 <code>Map</code> 中的 key（把 <code>Map</code> 当成一个没有特定类型的对象）。比如：</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#ABB2BF">@</span><span style="color:#E5C07B">Setter</span></span>
@@ -1251,8 +1251,8 @@ A 型血
 <span class="line"><span style="color:#ABB2BF">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <p>当使用 raw map（没有指定泛型的 <code>Map</code>） 或没有字符串作为键的 <code>Map</code> 时，将生成警告。如果 <code>Map</code> 本身直接映射到其他目标属性，则不会生成警告。</p>
-<h1 id="3-获取映射器"><a class="header-anchor" href="#3-获取映射器"></a>3. 获取映射器</h1>
-<h2 id="3-1-映射器工厂"><a class="header-anchor" href="#3-1-映射器工厂"></a>3.1 映射器工厂</h2>
+<h1 id="4-获取映射器"><a class="header-anchor" href="#4-获取映射器"></a>4. 获取映射器</h1>
+<h2 id="4-1-映射器工厂"><a class="header-anchor" href="#4-1-映射器工厂"></a>4.1 映射器工厂</h2>
 <p>当没有使用依赖注入框架（比如 Spring）时，可以使用 <code>org.mapstruct.factory.Mappers</code> 类来获取一个映射器（Mapper）实例。</p>
 <p><strong>使用方法：</strong> 调用该类的 <code>Mappers#getMapper()</code> 方法，传入要返回的 Mapper 接口类型。</p>
 <p>通常来说，习惯于将映射器实例命名为 <code>INSTANCE</code>。</p>
@@ -1266,9 +1266,9 @@ A 型血
       </figure>
 <p>这种模式使得客户端可以非常容易地使用映射器对象，而不需要重复实例化新的实例。</p>
 <p>MapStruct 生成的映射器是无状态和线程安全的，在多线程环境下可以放心使用。</p>
-<h2 id="3-2-使用依赖注入"><a class="header-anchor" href="#3-2-使用依赖注入"></a>3.2 使用依赖注入</h2>
+<h2 id="4-2-使用依赖注入"><a class="header-anchor" href="#4-2-使用依赖注入"></a>4.2 使用依赖注入</h2>
 <p>在实际项目中，一般都会使用依赖注入框架（比如：Spring），这个时候就需要通过依赖注入而不是通过 <code>Mappers#getMapper()</code> 来获取映射器对象。可以通过 <code>@Mapper</code> 的 <code>componentModel</code> 属性或使用配置选项中描述的 <a target="_blank" rel="noopener" href="https://mapstruct.org/documentation/stable/reference/html/#configuration-options">Configuration options</a> 指定生成的映射器类应基于的组件模型。</p>
-<p>目前，MapStruct 支持 CDI 和 Spring 。在这两种情况下，所需的注解将被添加到生成的映射器实现类中，以便使其同样受到依赖注入的影响。</p>
+<p>目前，MapStruct 支持 CDI 和 Spring。在这两种情况下，所需的注解将被添加到生成的映射器实现类中，以便使其同样受到依赖注入的影响。</p>
 <p><code>@Mapper#componentModel</code> 属性或 <code>mapstruct.defaultComponentModel</code> 配置选项支持的值：</p>
 <table>
 <thead>
@@ -1303,9 +1303,9 @@ A 型血
 <p>从 MapStruct 1.5.0.Final 开始，这些值在 <code>org.mapstruct.MappingConstants.ComponentModel</code> 类中以常量的形式存在。</p>
 <p>当 <code>mapstruct.defaultComponentModel</code> 配置选项和 <code>@Mapper#componentModel</code> 同时指定了值，以 <code>@Mapper</code> 注解的为准。</p>
 <p>使用其他映射器类的映射器将使用配置的组件模型获得这些映射器。比如，映射器 A 是一个 Spring Bean，映射器 A 中注入了映射器 B，那么映射器 B 也必须是一个可注入的 Spring Bean。</p>
-<h2 id="3-3-注入策略"><a class="header-anchor" href="#3-3-注入策略"></a>3.3 注入策略</h2>
+<h2 id="4-3-注入策略"><a class="header-anchor" href="#4-3-注入策略"></a>4.3 注入策略</h2>
 <p>使用依赖注入时，可以指定注入策略。</p>
-<p>可以通过 <code>@Mapper</code> 和 <code>@MapperConfig</code> 注解的 <code>injectionStrategy</code> 属性或 <code>mapstruct.defaultInjectionStrategy</code> 来指定注入策略。注入策略有两种：构造方法和属性注入， 默认是属性注入。</p>
+<p>可以通过 <code>@Mapper</code> 和 <code>@MapperConfig</code> 注解的 <code>injectionStrategy</code> 属性或 <code>mapstruct.defaultInjectionStrategy</code> 来指定注入策略。注入策略有两种：构造方法和属性注入，默认是属性注入。</p>
 <p>针对 <code>@Mapper</code> 的 <code>injectionStrategy</code> 属性来说，其值是一个枚举：</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">public</span><span style="color:#C678DD"> enum</span><span style="color:#E5C07B"> InjectionStrategy</span><span style="color:#E06C75"> {</span></span>
@@ -1385,19 +1385,19 @@ A 型血
 <span class="line"><span style="color:#ABB2BF">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <p>查看生成的实现类 <code>CarInjectMapperImpl</code>，可以看到这个类被 Spring 的 <code>@Component</code> 注解标记。</p>
-<h1 id="4-数据类型转换"><a class="header-anchor" href="#4-数据类型转换"></a>4. 数据类型转换</h1>
+<h1 id="5-数据类型转换"><a class="header-anchor" href="#5-数据类型转换"></a>5. 数据类型转换</h1>
 <p>在许多情况下，MapStruct 会自动处理类型转换。</p>
 <p>例如，一个属性在源 Bean 中是 <code>int</code> 类型，但在目标 Bean 中是 <code>String</code> 类型，通过生成的代码可以看到分别调用 <code>String.valueOf(int)</code> 和 <code>Integer.parseInt(String)</code> 两个方法进行了类型的转换。</p>
 <p>又比如在 <code>Car</code> 类型中有一个 <code>Person</code> 类型的 <code>driver</code> 属性，当对 <code>Car</code> 进行映射时，应当把 <code>driver</code> 映射为 <code>PersonDto</code> 类型。</p>
-<h2 id="4-1-隐式类型转换"><a class="header-anchor" href="#4-1-隐式类型转换"></a>4.1 隐式类型转换</h2>
+<h2 id="5-1-隐式类型转换"><a class="header-anchor" href="#5-1-隐式类型转换"></a>5.1 隐式类型转换</h2>
 <p>在此列举一些常见的自动类型转换：</p>
 <ul>
-<li>Java 基本数据类型和其对应的包装类之间。把包装类转换成基本数据类型时，会执行 <code>null</code> 值检查。</li>
-<li>Java 基本数据类型和封装类型之间。例如 <code>int</code> 和 <code>long</code> 之间或 <code>byte</code> 和 <code>Integer</code> 之间。</li>
+<li>Java 基本数据类型和其对应的包装类之间。把包装类转换成基本数据类型时，会执行 <code>null</code> 值检查</li>
+<li>Java 基本数据类型和封装类型之间。例如 <code>int</code> 和 <code>long</code> 之间或 <code>byte</code> 和 <code>Integer</code> 之间</li>
 </ul>
 <p><mark>注意：</mark> 从精度较大类型的数据转换为精度较小的数据时，可能会造成值或精度缺失（例如从 <code>long</code> 转换为 <code>int</code>）。<code>@Mapper</code> 和 <code>@MapperConfig</code> 注解有一个属性 <code>typeConversionPolicy</code> 来控制警告或错误，其默认值为 <code>ReportingPolicy.IGNORE</code>。</p>
 <ul>
-<li>基本数据类型及其包装类和 <code>String</code> 之间。可以在 <code>@Mapping</code> 的 <code>numberFormat</code> 属性中指定 <code>java.text.DecimalFormat</code> 能理解的格式化字符串对数值格式化。</li>
+<li>基本数据类型及其包装类和 <code>String</code> 之间。可以在 <code>@Mapping</code> 的 <code>numberFormat</code> 属性中指定 <code>java.text.DecimalFormat</code> 能理解的格式化字符串对数值格式化</li>
 </ul>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#ABB2BF">@</span><span style="color:#E5C07B">Mapper</span></span>
@@ -1412,10 +1412,10 @@ A 型血
       </figure>
 <ul>
 <li>
-<p><code>enum</code> 和 <code>String</code> 之间。</p>
+<p><code>enum</code> 和 <code>String</code> 之间</p>
 </li>
 <li>
-<p>大数类型（<code>java.math.BigInteger</code>，<code>java.math.BigDecimal</code>）和基本数据类型（及其包装类）以及 <code>String</code> 之间。同样可以使用 <code>@Mapping</code> 的 <code>numberFormat </code> 属性对数值格式化。</p>
+<p>大数类型（<code>java.math.BigInteger</code>，<code>java.math.BigDecimal</code>）和基本数据类型（及其包装类）以及 <code>String</code> 之间。同样可以使用 <code>@Mapping</code> 的 <code>numberFormat </code> 属性对数值格式化</p>
 </li>
 </ul>
 <figure class="highlight java line-numbers" data-language="JAVA">
@@ -1428,9 +1428,9 @@ A 型血
 <span class="line"><span style="color:#ABB2BF">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <ul>
-<li><code>JAXBElement&lt;T&gt;</code> 和 <code>T</code> 之间，<code>List&lt;JAXBElement&lt;T&gt;&gt;</code> 和 <code>List&lt;T&gt;</code> 之间。</li>
-<li><code>java.util.Calendar</code> 或 <code>java.util.Date</code> 和 JAXB 的 <code>XMLGregorianCalendar</code> 之间。</li>
-<li><code>java.util.Date</code> 日期类型或 <code>XMLGregorianCalendar</code> 和 <code>String</code> 之间。可以在 <code>@Mapping</code> 的 <code>dateFormat</code> 属性中指定 <code>java.text.SimpleDateFormat</code> 能理解的格式化字符串对日期字符串格式化。</li>
+<li><code>JAXBElement&lt;T&gt;</code> 和 <code>T</code> 之间，<code>List&lt;JAXBElement&lt;T&gt;&gt;</code> 和 <code>List&lt;T&gt;</code> 之间</li>
+<li><code>java.util.Calendar</code> 或 <code>java.util.Date</code> 和 JAXB 的 <code>XMLGregorianCalendar</code> 之间</li>
+<li><code>java.util.Date</code> 日期类型或 <code>XMLGregorianCalendar</code> 和 <code>String</code> 之间。可以在 <code>@Mapping</code> 的 <code>dateFormat</code> 属性中指定 <code>java.text.SimpleDateFormat</code> 能理解的格式化字符串对日期字符串格式化</li>
 </ul>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#ABB2BF">@</span><span style="color:#E5C07B">Mapper</span></span>
@@ -1445,58 +1445,58 @@ A 型血
       </figure>
 <ul>
 <li>
-<p>Jodas 中的日期时间类型（<code>DateTime</code>、<code>LocalDateTime</code>、<code>LocalDate</code>、<code>LocalTime</code>）和 <code>String</code> 之间。可以使用 <code>@Mapping</code> 的 <code>dateFormat</code> 属性对数值进行格式化。</p>
+<p>Jodas 中的日期时间类型（<code>DateTime</code>、<code>LocalDateTime</code>、<code>LocalDate</code>、<code>LocalTime</code>）和 <code>String</code> 之间。可以使用 <code>@Mapping</code> 的 <code>dateFormat</code> 属性对数值进行格式化</p>
 </li>
 <li>
-<p>Jodas 的 <code>DateTime</code> 类型和 <code>javax.xml.datatype.XMLGregorianCalendar</code>、<code>java.util.Calendar</code> 之间。</p>
+<p>Jodas 的 <code>DateTime</code> 类型和 <code>javax.xml.datatype.XMLGregorianCalendar</code>、<code>java.util.Calendar</code> 之间</p>
 </li>
 <li>
-<p>Jodas 的 <code>LocalDateTime</code>、<code>LocalDate</code> 和 <code>javax.xml.datatype.XMLGregorianCalendar</code>、<code>java.util.Date</code> 之间。</p>
+<p>Jodas 的 <code>LocalDateTime</code>、<code>LocalDate</code> 和 <code>javax.xml.datatype.XMLGregorianCalendar</code>、<code>java.util.Date</code> 之间</p>
 </li>
 <li>
-<p><code>java.time.LocalDate</code>、<code>java.time.LocalDateTime</code> 和 <code>javax.xml.datatype.XMLGregorianCalendar</code> 之间。</p>
+<p><code>java.time.LocalDate</code>、<code>java.time.LocalDateTime</code> 和 <code>javax.xml.datatype.XMLGregorianCalendar</code> 之间</p>
 </li>
 <li>
-<p>Java 8 日期时间类型（<code>ZonedDateTime</code>、<code>LocalDateTime</code>、<code>LocalDate</code>、<code>LocalTime</code>）和 <code>String</code> 之间。可以使用 <code>@Mapping</code> 的 <code>dateFormat</code> 属性对数值进行格式化。</p>
+<p>Java 8 日期时间类型（<code>ZonedDateTime</code>、<code>LocalDateTime</code>、<code>LocalDate</code>、<code>LocalTime</code>）和 <code>String</code> 之间。可以使用 <code>@Mapping</code> 的 <code>dateFormat</code> 属性对数值进行格式化</p>
 </li>
 <li>
-<p>Java 8 日期类型（<code>Instant</code>、<code>Duration</code>、<code>Period</code>）和 <code>String</code> 之间。</p>
+<p>Java 8 日期类型（<code>Instant</code>、<code>Duration</code>、<code>Period</code>）和 <code>String</code> 之间</p>
 </li>
 <li>
-<p>Java 8 的 <code>ZonedDateTime</code> 类型和 <code>Date</code> 之间，当从给定的 <code>Date</code> 转换成 <code>ZonedDateTime</code> 时，使用系统默认时区。</p>
+<p>Java 8 的 <code>ZonedDateTime</code> 类型和 <code>Date</code> 之间，当从给定的 <code>Date</code> 转换成 <code>ZonedDateTime</code> 时，使用系统默认时区</p>
 </li>
 <li>
-<p>Java 8 的 <code>LocalDateTime</code> 类型和 <code>Date</code> 之间，使用 UTC 作为时区。</p>
+<p>Java 8 的 <code>LocalDateTime</code> 类型和 <code>Date</code> 之间，使用 UTC 作为时区</p>
 </li>
 <li>
-<p>Java 8 的 <code>LocalDate</code> 类型和 <code>java.util.Date</code>、<code>java.sql.Date</code> 之间，使用 UTC 作为时区。</p>
+<p>Java 8 的 <code>LocalDate</code> 类型和 <code>java.util.Date</code>、<code>java.sql.Date</code> 之间，使用 UTC 作为时区</p>
 </li>
 <li>
-<p>Java 8 的 <code>Instant</code> 类型和 <code>Date</code> 之间。</p>
+<p>Java 8 的 <code>Instant</code> 类型和 <code>Date</code> 之间</p>
 </li>
 <li>
-<p>Java 8 的 <code>ZonedDateTime</code> 类型和 <code>Calendar</code> 之间。</p>
+<p>Java 8 的 <code>ZonedDateTime</code> 类型和 <code>Calendar</code> 之间</p>
 </li>
 <li>
-<p><code>java.sql.Date</code>、<code>java.sql.Time</code>、<code>java.sql.Timestamp</code> 和 <code>java.util.Date</code> 之间。</p>
+<p><code>java.sql.Date</code>、<code>java.sql.Time</code>、<code>java.sql.Timestamp</code> 和 <code>java.util.Date</code> 之间</p>
 </li>
 <li>
 <p>当从一个字符串转换时，如果省略 <code>@Mapping</code> 注解的 <code>dateFormat</code>，会使用默认的格式和符号来转换，但 <code>XmlGregorianCalendar</code> 是个例外，将根据 <a target="_blank" rel="noopener" href="http://www.w3.org/TR/xmlschema-2/#dateTime">XML Schema 1.0 Part 2, Section 3.2.7-14.1, Lexical Representation</a></p>
 </li>
 <li>
-<p><code>java.util.Currency</code> 和 <code>String</code> 之间。当从一个字符串转换时，其值应符合 ISO-4217 规范，否则会抛出 <code>IllegalArgumentException</code> 异常。</p>
+<p><code>java.util.Currency</code> 和 <code>String</code> 之间。当从一个字符串转换时，其值应符合 ISO-4217 规范，否则会抛出 <code>IllegalArgumentException</code> 异常</p>
 </li>
 <li>
-<p><code>java.util.UUID</code> 和 <code>String</code> 之间。当从一个字符串转换时，其值应该是一个有效的 UUID，否则会抛出 <code>IllegalArgumentException</code> 异常。</p>
+<p><code>java.util.UUID</code> 和 <code>String</code> 之间。当从一个字符串转换时，其值应该是一个有效的 UUID，否则会抛出 <code>IllegalArgumentException</code> 异常</p>
 </li>
 <li>
-<p><code>String</code> 和 <code>StringBuilder</code> 之间。</p>
+<p><code>String</code> 和 <code>StringBuilder</code> 之间</p>
 </li>
 <li>
-<p><code>java.net.URL</code> 和 <code>String</code> 之间。当从一个字符串转换时，其值应该是一个有效的 URL，否则会抛出 <code>MalformedURLException</code> 异常。</p>
+<p><code>java.net.URL</code> 和 <code>String</code> 之间。当从一个字符串转换时，其值应该是一个有效的 URL，否则会抛出 <code>MalformedURLException</code> 异常</p>
 </li>
 </ul>
-<h2 id="4-2-映射对象引用"><a class="header-anchor" href="#4-2-映射对象引用"></a>4.2 映射对象引用</h2>
+<h2 id="5-2-映射对象引用"><a class="header-anchor" href="#5-2-映射对象引用"></a>5.2 映射对象引用</h2>
 <p>通常，一个对象不仅具有基本数据类型的属性，还引用其他对象。比如，一个 <code>Cage</code> 实体内部含有 <code>Animal</code> 类型的属性，表示笼子里关着的动物。</p>
 <p>在这种情况下，也只需为引用的对象类型定义一个映射方法。</p>
 <blockquote>
@@ -1655,7 +1655,7 @@ A 型血
 <li>在自动的 <code>sub-mapping</code> 方法生成过程中，共享配置将不会被考虑在内。</li>
 <li>目标对象的构造函数属性也被视为目标属性。</li>
 </ol>
-<h2 id="4-3-控制嵌套对象映射"><a class="header-anchor" href="#4-3-控制嵌套对象映射"></a>4.3 控制嵌套对象映射</h2>
+<h2 id="5-3-控制嵌套对象映射"><a class="header-anchor" href="#5-3-控制嵌套对象映射"></a>5.3 控制嵌套对象映射</h2>
 <p>MapStruct 会使用源属性名和目标属性名生成映射方法，但不幸的是，这两个名称通常不会相等。在这这种情况下，需要使用 <code>@Mapping</code> 注解来指定属性之间的映射。</p>
 <p>比如：</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
@@ -1687,7 +1687,7 @@ A 型血
 <p>MapStruct 将对源对象中的每个嵌套属性执行 <code>null</code> 检查。</p>
 <p>MapStruct 鼓励用户编写明确的 <strong>嵌套属性映射方法</strong>，而不是通过 <code>@Mapping</code> 配置来解决一切，这样还可以实现代码复用，更加优雅~ 👊</p>
 <p>在某些情况下，用于生成嵌套方法的 <code>ReportingPolicy</code> 可能是 <code>IGNORE</code>，这意味着 MapStruct 不会显示嵌套映射中未映射的目标属性。</p>
-<h2 id="4-4-执行自定义映射方法"><a class="header-anchor" href="#4-4-执行自定义映射方法"></a>4.4  执行自定义映射方法</h2>
+<h2 id="5-4-执行自定义映射方法"><a class="header-anchor" href="#5-4-执行自定义映射方法"></a>5.4 执行自定义映射方法</h2>
 <p>有时映射并不简单，有些字段可能需要自定义逻辑。</p>
 <p>比如将 <code>FishTank</code> 中的 <code>length</code>、<code>width</code> 和 <code>height</code> 属性映射到 <code>FishTankWithVolumeDto</code> 中的 <code>volume</code> 属性，这个映射也不是一个简单的映射，需要计算鱼缸 <code>FishTank</code> 的体积，然后输出描述信息。</p>
 <p>参与转换的类：</p>
@@ -1817,7 +1817,7 @@ A 型血
 <span class="line"><span style="color:#ABB2BF">    }</span></span>
 <span class="line"><span style="color:#ABB2BF">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<h2 id="4-5-调用其他映射器"><a class="header-anchor" href="#4-5-调用其他映射器"></a>4.5  调用其他映射器</h2>
+<h2 id="5-5-调用其他映射器"><a class="header-anchor" href="#5-5-调用其他映射器"></a>5.5 调用其他映射器</h2>
 <p>MapStruct 还可以调用其他类中定义的映射方法，这些映射方法可以是 MapStruct 生成的也可以是手动编写的。这对于在多个类中编写映射代码，或者想提供无法由 MapStruct 生成的自定义映射逻辑，是非常有用的。</p>
 <p>调用其他映射器时，只需在 <code>@Mapper#uses</code> 配置想使用的映射器类即可，可以指定多个。</p>
 <blockquote>
@@ -1921,7 +1921,7 @@ A 型血
 <p>在示例代码生成的映射器实现类中，使用了 <code>new</code> 关键词 <strong>调用无参构造方法</strong> 创建了一个包含自定义映射方法的对象。</p>
 <p>因此，<strong>默认情况下，</strong> 在自定义映射方法的所在类中，一定要含有公共无参构造方法，以便能够被实例化。</p>
 <p>在使用了依赖注入时，自定义映射方法的所在类也要是一个可注入的 Bean。比如使用了 Spring 框架时，需要让自定义映射方法的所在类也被 Spring 管理。</p>
-<h2 id="4-6-将目标类型传递给自定义映射器"><a class="header-anchor" href="#4-6-将目标类型传递给自定义映射器"></a>4.6 将目标类型传递给自定义映射器</h2>
+<h2 id="5-6-将目标类型传递给自定义映射器"><a class="header-anchor" href="#5-6-将目标类型传递给自定义映射器"></a>5.6 将目标类型传递给自定义映射器</h2>
 <p>使用 <code>@Mapper#uses()</code> 将自定义映射器与生成的映射器挂钩时，可以在自定义映射方法中定义 <code>Class</code> 类型（或其超类）的附加参数，以便针对特定的目标对象类型执行常规映射任务。该属性必须使用 <code>@TargetType</code> 进行标注，以便 MapStruct 生成与目标对象中属性对应类型一致的 <code>Class</code> 实例。</p>
 <p>例如，<code>CarDto</code> 中有一个 <code>Reference</code> 类型的 <code>owner</code> 属性，它包含了 <code>Person</code> 实体的主键。现在可以创建通用的自定义映射器，将任何 <code>Reference</code> 对象解析为其对应的、由 JPA 管理的实体实例。</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
@@ -1971,7 +1971,7 @@ A 型血
 <span class="line"><span style="color:#ABB2BF">    }</span></span>
 <span class="line"><span style="color:#ABB2BF">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<h2 id="4-7-传递上下文或状态对象给自定义方法"><a class="header-anchor" href="#4-7-传递上下文或状态对象给自定义方法"></a>4.7 传递上下文或状态对象给自定义方法</h2>
+<h2 id="5-7-传递上下文或状态对象给自定义方法"><a class="header-anchor" href="#5-7-传递上下文或状态对象给自定义方法"></a>5.7 传递上下文或状态对象给自定义方法</h2>
 <p>可以通过生成的映射方法将额外上下文或状态信息传递给具有 <code>@Context</code> 参数的自定义方法。</p>
 <p>这样的参数会传递给其他映射方法、适用的情况下的 <code>@ObjectFactory</code> 方法或 <code>@BeforeMapping</code>、<code>@AfterMapping</code> 方法，因此可以在自定义代码中使用。</p>
 <p>在 <code>@ObjectFactory</code> 方法中搜索被 <code>@Context</code> 标记的参数，如果适用，将根据提供的上下文参数值调用这些方法。</p>
@@ -2006,13 +2006,13 @@ A 型血
 <span class="line"><span style="color:#C678DD">    return</span><span style="color:#ABB2BF"> carDto;</span></span>
 <span class="line"><span style="color:#ABB2BF">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<h2 id="4-8-映射方法的解析"><a class="header-anchor" href="#4-8-映射方法的解析"></a>4.8 映射方法的解析</h2>
+<h2 id="5-8-映射方法的解析"><a class="header-anchor" href="#5-8-映射方法的解析"></a>5.8 映射方法的解析</h2>
 <p>将属性从一种类型映射到另一种类型时，MapStruct 寻找将源类型映射到目标类型的最明确的方法。该方法可以是在同一个映射器接口中声明的，也可以是通过 <code>@Mapper#uses()</code> 注册的另一个映射器中声明的。这同样适用于工厂方法。</p>
 <p>寻找映射方法或工厂方法的算法与 Java 的方法解析算法很类似，尤其是具有更明确源类型的方法都将被优先获取（假如有两个方法，一个方法映射寻找的源类型，另一个映射相同的父类型）。如果有多个详细程度相当的方法时，则会引发错误。</p>
 <p>在使用 JAXB 时，比如将 <code>String</code> 转换为对应的 <code>JAXBElement&lt;String&gt;</code> 时，MapStruct 在寻找映射方法时将考虑 <code>@XmlElementDecl</code> 注解的 <code>scope</code> 和 <code>name</code> 属性值，这将确保创建的 <code>JAXBElement</code> 实例具有正确的 <code>QNAME</code> 值。</p>
-<h2 id="4-9-基于限定符的映射方法选择"><a class="header-anchor" href="#4-9-基于限定符的映射方法选择"></a>4.9 基于限定符的映射方法选择</h2>
+<h2 id="5-9-基于限定符的映射方法选择"><a class="header-anchor" href="#5-9-基于限定符的映射方法选择"></a>5.9 基于限定符的映射方法选择</h2>
 <p>在很多情况下需要具有相同方法签名（除了名称）但具有不同行为的映射方法。</p>
-<p>MapStruct 提供 <code>@Qualifier</code>（org.mapstruct.Qualifier）注解来处理这种情况。一个“qualifier”（可译为“限定符”）可以是用户自定义的一个注解，这个注解作用在一个能被使用的映射器中的映射方法上，这个映射方法可以在对象属性映射、iterable 映射或 map 映射中被引用。一个方法和映射器上可以有多个限定符。</p>
+<p>MapStruct 提供 <code>@Qualifier</code>（org.mapstruct.Qualifier）注解来处理这种情况。一个「qualifier」（可译为「限定符」）可以是用户自定义的一个注解，这个注解作用在一个能被使用的映射器中的映射方法上，这个映射方法可以在对象属性映射、iterable 映射或 map 映射中被引用。一个方法和映射器上可以有多个限定符。</p>
 <blockquote>
 <p>具体使用</p>
 </blockquote>
@@ -2048,7 +2048,7 @@ A 型血
 <span class="line"><span style="color:#C678DD">public</span><span style="color:#ABB2BF"> @</span><span style="color:#C678DD">interface</span><span style="color:#E5C07B"> TitleTranslator</span><span style="color:#E06C75"> {</span></span>
 <span class="line"><span style="color:#E06C75">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<p>由于存在多个符合条件的自定义映射方法，这些映射方法也需要使用“限定符”，再编写一些注解，这些注解作用于 <strong>自定义映射方法</strong> 上：</p>
+<p>由于存在多个符合条件的自定义映射方法，这些映射方法也需要使用「限定符」，再编写一些注解，这些注解作用于 <strong>自定义映射方法</strong> 上：</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">import</span><span style="color:#E5C07B"> org.mapstruct.Qualifier</span><span style="color:#ABB2BF">;</span></span>
 <span class="line"></span>
@@ -2136,7 +2136,7 @@ A 型血
 <span class="line"><span style="color:#ABB2BF">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <p>使用 <code>@Named</code> 需要定义一个限定名称并使用，而使用 <code>@Qualifier</code> 则比较麻烦，需要自定义注解。虽然两者都能达到相同的效果，但使用 <code>@Named</code> 时应当更加小心，因为在使用 <code>@Named</code> 注解时，IDE 并不会提示名称是否书写正确，也不会在重构限定符名称时像重构自定义注解的名称那样巧妙地重构代码中所有使用到的地方。</p>
-<h2 id="4-10-结合限定符与默认值"><a class="header-anchor" href="#4-10-结合限定符与默认值"></a>4.10 结合限定符与默认值</h2>
+<h2 id="5-10-结合限定符与默认值"><a class="header-anchor" href="#5-10-结合限定符与默认值"></a>5.10 结合限定符与默认值</h2>
 <p>请注意，<code>@Mapping#defaultValue</code> 本质上是一个 <code>String</code>，需要转换为 <code>@Mapping#target</code>。使用 <code>@Mapping#qualifiedByName</code> 或 <code>@Mapping#qualifiedBy</code> 时将强制 MapStruct 使用指定的方法。如果想要 <code>@Mapping#defaultValue</code> 有不同的行为，请提供一个适当的映射方法。这个方法需要将 <code>String</code> 转换成 <code>@Mapping#target</code> 想要的类型，同时还要被限定符标记，以便 <code>@Mapping#qualifiedByName</code> 或 <code>@Mapping#qualifiedBy</code> 能够找到。</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#ABB2BF">@</span><span style="color:#E5C07B">Mapper</span></span>
@@ -2187,8 +2187,8 @@ A 型血
 <span class="line"></span>
 <span class="line"><span style="color:#ABB2BF">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<h1 id="5-映射集合"><a class="header-anchor" href="#5-映射集合"></a>5. 映射集合</h1>
-<h2 id="5-1-映射-Set-与-List"><a class="header-anchor" href="#5-1-映射-Set-与-List"></a>5.1 映射 Set 与 List</h2>
+<h1 id="6-映射集合"><a class="header-anchor" href="#6-映射集合"></a>6. 映射集合</h1>
+<h2 id="6-1-映射-Set-与-List"><a class="header-anchor" href="#6-1-映射-Set-与-List"></a>6.1 映射 Set 与 List</h2>
 <p>MapStruct 也支持 Java 中各种集合类型（比如 Set、List）的映射，包括 <a target="_blank" rel="noopener" href="http://docs.oracle.com/javase/tutorial/collections/intro/index.html">Java Collection Framework</a> 中各种 <mark>可迭代</mark> 类型，其使用与映射对象类型一样。🐮</p>
 <p>生成的代码中将包含一个循环，在循环中遍历源集合，转换每个元素并将它们放入目标集合中。</p>
 <p>如果在给定的映射器或它使用的映射器中找到集合中元素类型的映射方法，则调用此方法执行元素转换。再或者，如果存在源元素类型和目标元素类型的隐式转换，则调用那个隐式转换。</p>
@@ -2253,7 +2253,7 @@ A 型血
 <span class="line"><span style="color:#ABB2BF">...</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <p><mark>注意：</mark> 不允许使用可迭代的源和不可迭代的目标来声明映射方法（或者相反），否则会报错。</p>
-<h2 id="5-2-映射-Map"><a class="header-anchor" href="#5-2-映射-Map"></a>5.2 映射 Map</h2>
+<h2 id="6-2-映射-Map"><a class="header-anchor" href="#6-2-映射-Map"></a>6.2 映射 Map</h2>
 <p>MapStruct 也支持映射 Map。比如：</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">public</span><span style="color:#C678DD"> interface</span><span style="color:#E5C07B"> SourceTargetMapper</span><span style="color:#ABB2BF"> {</span></span>
@@ -2290,7 +2290,7 @@ A 型血
 <span class="line"><span style="color:#C678DD">    return</span><span style="color:#E06C75"> map</span><span style="color:#ABB2BF">;</span></span>
 <span class="line"><span style="color:#E06C75">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<h2 id="5-3-集合映射策略"><a class="header-anchor" href="#5-3-集合映射策略"></a>5.3 集合映射策略</h2>
+<h2 id="6-3-集合映射策略"><a class="header-anchor" href="#6-3-集合映射策略"></a>6.3 集合映射策略</h2>
 <p>参考博文：<a target="_blank" rel="noopener" href="https://blog.csdn.net/sinat_32787481/article/details/110927957">MapStruct文档（五）——集合映射</a></p>
 <p>在 <code>@Mapper</code> 注解中有一个属性 <code>CollectionMappingStrategy</code>，表示集合映射策略，这个属性是个枚举类型，它有四个枚举值：</p>
 <ul>
@@ -2323,7 +2323,7 @@ A 型血
 <tr>
 <td style="text-align:center">ACCESSOR_ONLY</td>
 <td style="text-align:center">直接 set 集合</td>
-<td style="text-align:center">先 get 获取集合再a ddAll</td>
+<td style="text-align:center">先 get 获取集合再 a ddAll</td>
 <td style="text-align:center">直接 set 集合</td>
 <td style="text-align:center">先 get 获取集合再 addAll</td>
 <td style="text-align:center">先 get 获取集合再 addAll</td>
@@ -2357,7 +2357,7 @@ A 型血
 <p>在生成 JPA 实体的情况下，通常使用 <code>adder</code> 方法将单个元素（实体）添加到集合中。在父级（执行 <code>adder</code> 方法的实体）与子级（集合中的元素，这些元素也是实体）之间通过调用 <code>adder</code> 方法来建立父子关系。为了找到合适的 <code>adder</code>，MapStruct 将尝试在集合的泛型参数类型和候选的 <code>adder</code> 的单个参数之间进行匹配。当有更多的候选项时，复数形式的 Setter/Getter 名称将转换为单数，并用于匹配。</p>
 <p>不应该显式地使用 <code>DEFAULT</code> 选项。它用于区分用户希望显式地重写 <code>@MapperConfig</code> 中的默认值与 <code>@Mapper</code> 中 MapStruct 的隐式选择。<code>DEFAULT</code> 选项与 <code>ACCESSOR_ONLY</code> 同义。</p>
 <p>当使用 <code>adder</code> 方法和 JPA 实体时，MapStruct 假设目标集合是使用该集合类型对应的某种实现（比如 List 与 ArrayList）来初始化的。可以使用工厂创建带有已被初始化的集合的新目标实体，而不是 MapStruct 通过构造方法来创建目标实体。</p>
-<h2 id="5-4-集合映射的实现类"><a class="header-anchor" href="#5-4-集合映射的实现类"></a>5.4 集合映射的实现类</h2>
+<h2 id="6-4-集合映射的实现类"><a class="header-anchor" href="#6-4-集合映射的实现类"></a>6.4 集合映射的实现类</h2>
 <p>当迭代器映射方法或 Map 映射方法使用一个接口类型作为返回类型时，它的一个实现类型将在生成的代码中被实例化。具体接口类型与对应的实现类型如下表：</p>
 <table>
 <thead>
@@ -2413,7 +2413,7 @@ A 型血
 </tr>
 </tbody>
 </table>
-<h1 id="6-映射-Stream"><a class="header-anchor" href="#6-映射-Stream"></a>6. 映射 Stream</h1>
+<h1 id="7-映射-Stream"><a class="header-anchor" href="#7-映射-Stream"></a>7. 映射 Stream</h1>
 <p><code>java.util.Stream</code> 的映射和集合的映射是类似的，即通过在映射器接口中定义具有所需源和目标类型的映射方法。</p>
 <p>生成的代码将包含从所提供的迭代器或数组来创建一个 <code>Stream</code>，或者将所提供的 <code>Stream</code> 收集到一个迭代器或数组中。如果存在源元素类型和目标元素类型的映射方法或隐式转换，那么这种转换将在 <code>Stream#map()</code> 中完成。</p>
 <blockquote>
@@ -2430,7 +2430,7 @@ A 型血
 <span class="line"><span style="color:#E5C07B">    CarDto</span><span style="color:#61AFEF"> carToCarDto</span><span style="color:#ABB2BF">(</span><span style="color:#E5C07B">Car</span><span style="color:#E06C75;font-style:italic"> car</span><span style="color:#ABB2BF">);</span></span>
 <span class="line"><span style="color:#ABB2BF">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<p>生成的 <code>integerStreamToStringSet()</code> 方法的实现为每个元素执行从 Integer 到 String 的转换，而生成的 <code>carsToCarDtos()</code> 方法的实现为每个包含的元素执行 <code>carToCarDto()</code>方法。</p>
+<p>生成的 <code>integerStreamToStringSet()</code> 方法的实现为每个元素执行从 Integer 到 String 的转换，而生成的 <code>carsToCarDtos()</code> 方法的实现为每个包含的元素执行 <code>carToCarDto()</code> 方法。</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#7F848E;font-style:italic">//GENERATED CODE</span></span>
 <span class="line"><span style="color:#ABB2BF">@</span><span style="color:#E5C07B">Override</span></span>
@@ -2455,8 +2455,8 @@ A 型血
       </figure>
 <p><mark>注意：</mark> 如果进行了从 <code>Stream</code> 到迭代器或数组的映射，那么所传递的 <code>Stream</code> 将被消费，并且不能再消费它。因为 Java 中的 <code>Stream</code> 只允许被消费（使用）一次。</p>
 <p>在进行 Stream 到迭代器的映射时，迭代器的具体实现类型与【5.4 集合映射的实现类】中一致。</p>
-<h1 id="7-映射值"><a class="header-anchor" href="#7-映射值"></a>7. 映射值</h1>
-<h2 id="7-1-映射枚举"><a class="header-anchor" href="#7-1-映射枚举"></a>7.1 映射枚举</h2>
+<h1 id="8-映射值"><a class="header-anchor" href="#8-映射值"></a>8. 映射值</h1>
+<h2 id="8-1-映射枚举"><a class="header-anchor" href="#8-1-映射枚举"></a>8.1 映射枚举</h2>
 <p>MapStruct 支持将一种 Java 枚举类型映射到另一种 Java 枚举类型的方法的生成。</p>
 <p>默认情况下，源枚举中的每个枚举项都会被映射到目标枚举类型中同名的枚举项。</p>
 <p>如果需要，可以使用 <code>@ValueMapping</code> 注解（而非 <code>@Mapping</code>）将源枚举中的某个枚举项映射到另一个名称的枚举项。源枚举中的多个枚举项可以映射到目标枚举中的同一枚举项。</p>
@@ -2586,7 +2586,7 @@ A 型血
       </figure>
 <p>使用 <code>&lt;ANY_UNMAPPED&gt;</code> 时，MapStruct 将不会自动映射 <code>RETAIL</code> 和 <code>B2B</code>。</p>
 <p><strong>不建议</strong> 使用 <code>@Mapping</code> 注解将枚举映射到枚举。使用 <code>@Mapping</code> 注解来映射枚举的方式将在未来的 MapStruct 版本中删除。</p>
-<h2 id="7-2-枚举与字符串的相互映射"><a class="header-anchor" href="#7-2-枚举与字符串的相互映射"></a>7.2 枚举与字符串的相互映射</h2>
+<h2 id="8-2-枚举与字符串的相互映射"><a class="header-anchor" href="#8-2-枚举与字符串的相互映射"></a>8.2 枚举与字符串的相互映射</h2>
 <p>MapStruct 支持枚举与字符串间的相互映射，这与枚举与枚举之间的映射很类似，但也存在着部分差异。</p>
 <blockquote>
 <p>枚举映射到字符串</p>
@@ -2594,7 +2594,7 @@ A 型血
 <ol>
 <li>相同：在未显式定义映射方式的情况下，每个源枚举项被映射为具有相同名称的 <code>String</code> 值。</li>
 <li>相同：<code>&lt;ANY_UNMAPPED&gt;</code> 在处理定义的映射后停止，并继续执行 switch 中 default 子句值。</li>
-<li>差异：<strong>不支持</strong> <code>&lt;ANY_REMAINING&gt;</code> ，使用这个值将导致错误。它的作用前提是源枚举项和目标枚举项之间存在名称相似性，而这对于 <code>String</code> 类型没有意义。</li>
+<li>差异：<strong>不支持</strong> <code>&lt;ANY_REMAINING&gt;</code>，使用这个值将导致错误。它的作用前提是源枚举项和目标枚举项之间存在名称相似性，而这对于 <code>String</code> 类型没有意义。</li>
 <li>差异：鉴于 <code>1.</code> 和 <code>3.</code> 因此永远不会有未映射的值。</li>
 </ol>
 <blockquote>
@@ -2711,7 +2711,7 @@ A 型血
 <span class="line"><span style="color:#ABB2BF">    }</span></span>
 <span class="line"><span style="color:#ABB2BF">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<h2 id="7-3-自定义名称转换"><a class="header-anchor" href="#7-3-自定义名称转换"></a>7.3 自定义名称转换</h2>
+<h2 id="8-3-自定义名称转换"><a class="header-anchor" href="#8-3-自定义名称转换"></a>8.3 自定义名称转换</h2>
 <p>在未使用 <code>@ValueMapping</code> 的情况下，源枚举中的每个枚举项将 <strong>默认</strong> 映射到目标枚举中具有相同名称的枚举项。</p>
 <p>但在某些情况下，源枚举需要在进行映射之前进行转换。比如目标枚举相比源枚举增加了统一的后缀呢，这时候将无法进行同名自动映射。</p>
 <p>使用 <code>@ValueMapping</code> 依次指定映射规则固然可以，但相对繁琐。MapStruct 提供了一个名为 <code>@EnumMapping</code> 的注解来解决这个问题。</p>
@@ -2828,13 +2828,13 @@ A 型血
 <li><code>capital</code>：将源枚举中每个单词的首字母大写，其余字母小写，每个单词之间以下划线分割</li>
 </ul>
 <p>也可以注册自定义策略，这会在后文中讲到。</p>
-<h1 id="8-Spring-拓展"><a class="header-anchor" href="#8-Spring-拓展"></a>8. Spring 拓展</h1>
+<h1 id="9-Spring-拓展"><a class="header-anchor" href="#9-Spring-拓展"></a>9. Spring 拓展</h1>
 <p>官方文档：<a target="_blank" rel="noopener" href="https://mapstruct.org/documentation/spring-extensions/reference/html/">MapStruct Spring Extensions 1.0.0 Reference Guide</a></p>
 <p>MapStruct Spring Extensions 是一个 Java 注释处理器，它扩展了著名的 MapStruct 项目并带有 Spring 框架特性。</p>
 <p>在 Spring 有一个名为 <code>Converter</code>，重写该接口的 <code>convert()</code> 方法后，可以将某个对象转换成另一个对象，这与 MapStruct 的功能不谋而合。使用 MapStruct Spring Extensions 后，在编译期间将生成一个适配器，该适配器允许标准 MapStruct 映射器使用 Spring 的 <code>ConversionService</code>。</p>
 <p>这使开发人员能够在其 <code>uses</code> 属性中仅使用 <code>ConversionService</code> 来定义 MapStruct 映射器，而不必单独导入每个 Mapper，从而使得各个 Mapper 之间解耦。</p>
 <p><mark>注意：</mark> MapStruct Spring Extensions 至少要在 MapStruct 1.4.0.Final 的版本上运行！</p>
-<h2 id="8-1-所选依赖信息"><a class="header-anchor" href="#8-1-所选依赖信息"></a>8.1 所选依赖信息</h2>
+<h2 id="9-1-所选依赖信息"><a class="header-anchor" href="#9-1-所选依赖信息"></a>9.1 所选依赖信息</h2>
 <figure class="highlight xml line-numbers" data-language="XML">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#ABB2BF">&lt;</span><span style="color:#E06C75">properties</span><span style="color:#ABB2BF">&gt;</span></span>
 <span class="line"><span style="color:#ABB2BF">    &lt;</span><span style="color:#E06C75">project.build.sourceEncoding</span><span style="color:#ABB2BF">&gt;UTF-8&lt;/</span><span style="color:#E06C75">project.build.sourceEncoding</span><span style="color:#ABB2BF">&gt;</span></span>
@@ -2922,7 +2922,7 @@ A 型血
 <span class="line"><span style="color:#ABB2BF">    &lt;/</span><span style="color:#E06C75">plugins</span><span style="color:#ABB2BF">&gt;</span></span>
 <span class="line"><span style="color:#ABB2BF">&lt;/</span><span style="color:#E06C75">build</span><span style="color:#ABB2BF">&gt;</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<h2 id="8-2-映射器作为转换器"><a class="header-anchor" href="#8-2-映射器作为转换器"></a>8.2 映射器作为转换器</h2>
+<h2 id="9-2-映射器作为转换器"><a class="header-anchor" href="#9-2-映射器作为转换器"></a>9.2 映射器作为转换器</h2>
 <p>新建 MapStruct 映射器接口，继承 Spring 的 <code>Converter</code> 接口：</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">package</span><span style="color:#C678DD"> indi.mofan.converter</span><span style="color:#ABB2BF">;</span></span>
@@ -2983,7 +2983,7 @@ A 型血
       </figure>
 <p>其中 <code>@ComponentScan</code> 注解扫描的 <code>indi.mofan.converter</code> 包为转换器所在的包。</p>
 <p>最后再次运行测试方法后，测试通过。</p>
-<h2 id="8-3-ConversionServiceAdapter"><a class="header-anchor" href="#8-3-ConversionServiceAdapter"></a>8.3 ConversionServiceAdapter</h2>
+<h2 id="9-3-ConversionServiceAdapter"><a class="header-anchor" href="#9-3-ConversionServiceAdapter"></a>9.3 ConversionServiceAdapter</h2>
 <p>使用 MapStruct Spring Extensions 后，会生成一个包含所有转换方法的适配器类 —— <code>ConversionServiceAdapter</code>。</p>
 <p>当一个 Mapper 调用另一个 Mapper 时，需要在调用 Mapper 的 <code>@Mapper#uses</code> 属性中指定被调用的 Mapper 信息，这会造成两个 Mapper 之间的耦合。</p>
 <p>利用生成的适配器类，现在只需要在 <code>@Mapper#uses</code> 指定 <code>ConversionServiceAdapter</code> 即可，而不是具体的 Mapper。</p>
@@ -3040,7 +3040,7 @@ A 型血
 <span class="line"><span style="color:#E06C75">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <p>运行测试方法后，测试通过！</p>
-<h2 id="8-4-自定义名称"><a class="header-anchor" href="#8-4-自定义名称"></a>8.4 自定义名称</h2>
+<h2 id="9-4-自定义名称"><a class="header-anchor" href="#9-4-自定义名称"></a>9.4 自定义名称</h2>
 <p>默认情况下，生成的适配器名为 <code>ConversionServiceAdapter</code>，在 <code>org.mapstruct.extensions.spring.converter</code> 包下。</p>
 <p>如果想要自定义名称和包名，可以使用 <code>@SpringMapperConfig</code> 注解：</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
@@ -3060,7 +3060,7 @@ A 型血
 <span class="line"><span style="color:#ABB2BF">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <p>使用 <code>@SpringMapperConfig</code> 注解如果没有特别指定 <code>conversionServiceAdapterPackage</code>，那么适配器类将生成在 <code>@SpringMapperConfig</code> 所标记的类的相同路径下。</p>
-<h2 id="8-5-指定-ConversionService-Bean-的名称"><a class="header-anchor" href="#8-5-指定-ConversionService-Bean-的名称"></a>8.5 指定 ConversionService Bean 的名称</h2>
+<h2 id="9-5-指定-ConversionService-Bean-的名称"><a class="header-anchor" href="#9-5-指定-ConversionService-Bean-的名称"></a>9.5 指定 ConversionService Bean 的名称</h2>
 <p>当 Spring 容器中存在多个 <code>ConversionService</code> 类型的 Bean 时，需要指定 MapStruct Spring Extensions 所用的 <code>ConversionService</code> 类型的 Bean 的名称。</p>
 <p>可以使用 <code>@SpringMapperConfig</code> 注解的 <code>conversionServiceBeanName</code> 属性进行指定。</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
@@ -3086,7 +3086,7 @@ A 型血
 <span class="line"><span style="color:#ABB2BF">@</span><span style="color:#E5C07B">Qualifier</span><span style="color:#E06C75">(</span><span style="color:#98C379">"myConversionService"</span><span style="color:#E06C75">)</span></span>
 <span class="line"><span style="color:#C678DD">private</span><span style="color:#E5C07B"> ConversionService</span><span style="color:#E06C75"> conversionService</span><span style="color:#ABB2BF">;</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<h2 id="8-6-外置转换"><a class="header-anchor" href="#8-6-外置转换"></a>8.6 外置转换</h2>
+<h2 id="9-6-外置转换"><a class="header-anchor" href="#9-6-外置转换"></a>9.6 外置转换</h2>
 <p>Spring 提供了许多的内置转换，比如将 <code>String</code> 类型转换成 <code>Locale</code> 类型，将 <code>Object</code> 类型转换成 <code>Optional</code> 类型。为了使 MapStruct 在运行过程中也能使用这些转换器，可以在 <code>@SpringMapperConfig</code> 注解的 <code>externalConversions</code> 属性中指定使用的外置转换。</p>
 <p>在与 Spring 的整合过程中，映射器的 <code>@Mapper</code> 注解都要指定 <code>componentModel</code> 为 <code>spring</code>，如果还有调用 Mapper 的情况，还需要指定 <code>uses</code> 为生成的适配器类型。当配置更多时，重复的 <code>@Mapper</code> 看着十分恶心，此时可以使用 <code>@MapperConfig</code> 注解来共享配置，而后在 <code>@Mapper</code> 注解中指定 <code>config</code> 属性值为 <code>@MapperConfig</code> 标记的类即可。</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
@@ -3129,7 +3129,7 @@ A 型血
 <span class="line"><span style="color:#E5C07B">    Assert</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">assertNull</span><span style="color:#ABB2BF">(</span><span style="color:#E5C07B">optional</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">map</span><span style="color:#ABB2BF">(CarDto</span><span style="color:#C678DD">::</span><span style="color:#ABB2BF">getType).</span><span style="color:#61AFEF">orElse</span><span style="color:#ABB2BF">(</span><span style="color:#D19A66">null</span><span style="color:#ABB2BF">));</span></span>
 <span class="line"><span style="color:#E06C75">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<h2 id="8-7-转换-List"><a class="header-anchor" href="#8-7-转换-List"></a>8.7 转换 List</h2>
+<h2 id="9-7-转换-List"><a class="header-anchor" href="#9-7-转换-List"></a>9.7 转换 List</h2>
 <p>完成了单个对象的转换，但对于是列表的来源数据，除了可以使用循环、Stream 等操作外，可以编写一个工具类完成转换：</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#ABB2BF">@</span><span style="color:#E5C07B">Component</span></span>
@@ -3182,7 +3182,7 @@ A 型血
 <span class="line"><span style="color:#E5C07B">    Assert</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">assertEquals</span><span style="color:#ABB2BF">(</span><span style="color:#98C379">"Morris"</span><span style="color:#ABB2BF">, </span><span style="color:#E5C07B">carDto</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">getMake</span><span style="color:#ABB2BF">());</span></span>
 <span class="line"><span style="color:#E06C75">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<h1 id="9-结语"><a class="header-anchor" href="#9-结语"></a>9. 结语</h1>
+<h1 id="10-结语"><a class="header-anchor" href="#10-结语"></a>10. 结语</h1>
 <p>博主精力有限（好吧，就是懒狗 🐶），暂时就翻译这么多，以上内容足以满足日常所需，更高级的特性待使用到再进行补充。</p>
 <p>待完善的内容：</p>
 <ul>
@@ -3192,7 +3192,7 @@ A 型血
 <li>自定义映射</li>
 <li>使用 MapStruct SPI</li>
 </ul>
-</body></html></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/MapStruct-User-Manual/">https://mofan212.github.io/posts/MapStruct-User-Manual/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/MapStruct/">MapStruct</a></div><div class="post-share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/82.png" data-sites="wechat,qq,weibo,facebook,x"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/Design-Pattern-Builder-Pattern/" title="【设计模式】建造者模式"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/81.png" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【设计模式】建造者模式</div></div><div class="info-2"><div class="info-item-1">本文主要对 Java 设计模式中的建造者模式进行了介绍，同时也介绍了 Lombok 中 @Builder 注解的使用。</div></div></div></a><a class="pagination-related" href="/posts/Design-Pattern-Strategy-Pattern/" title="【设计模式】策略模式"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/83.png" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【设计模式】策略模式</div></div><div class="info-2"><div class="info-item-1">本文主要对 Java 设计模式中的策略模式进行了介绍。</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">默烦</div><div class="author-info-description">彩笔的打怪升级之路...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">175</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mofan212"><i class="fab fa-github"></i><span>follow me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解。<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a href="./mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载。😊</br><strong><font style="color:red">严禁未遵循规范的转载。</font></strong>😡</br><strong>死去的评论系统复活啦！欢迎到留言板畅所欲言！</strong>当然也可以使用更高效的<a target="_blank" href="https://space.bilibili.com/23658864/dynamic" style="color:#49B1F5;text-decoration:underline"> 哔哩哔哩私信 </a>或<a href="mailto:cy.mofan@foxmail.com" style="color:#49B1F5;text-decoration:underline" target="_blank">邮箱</a>。 😉</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0-%E9%98%85%E8%AF%BB%E5%89%8D%E8%A8%80"><span class="toc-text">0. 阅读前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-MapStruct-%E6%A6%82%E8%BF%B0"><span class="toc-text">1. MapStruct 概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E4%BB%80%E4%B9%88%E6%98%AF-MapStruct"><span class="toc-text">1.1 什么是 MapStruct</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-MapStruct-%E9%85%8D%E7%BD%AE%E9%80%89%E9%A1%B9"><span class="toc-text">1.2 MapStruct 配置选项</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84%E5%99%A8"><span class="toc-text">2. 定义映射器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-Hello-MapStruct"><span class="toc-text">2.1 Hello MapStruct</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E5%85%B3%E9%97%AD%E9%9A%90%E5%BC%8F%E6%98%A0%E5%B0%84"><span class="toc-text">2.2 关闭隐式映射</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-Mapping-%E6%B3%A8%E8%A7%A3"><span class="toc-text">2.3 @Mapping 注解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-%E9%BB%98%E8%AE%A4%E6%96%B9%E6%B3%95%E4%B8%8E%E6%8A%BD%E8%B1%A1%E7%B1%BB"><span class="toc-text">2.4 默认方法与抽象类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-5-%E5%A4%9A%E4%B8%AA%E6%BA%90%E5%8F%82%E6%95%B0"><span class="toc-text">2.5 多个源参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-6-%E5%A4%9A%E4%B8%AA%E5%B5%8C%E5%A5%97%E5%B1%9E%E6%80%A7%E6%98%A0%E5%B0%84"><span class="toc-text">2.6 多个嵌套属性映射</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-7-%E6%9B%B4%E6%96%B0%E5%AD%98%E5%9C%A8%E7%9A%84%E5%AE%9E%E4%BE%8B"><span class="toc-text">2.7 更新存在的实例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-8-%E5%8F%8D%E5%90%91%E6%98%A0%E5%B0%84"><span class="toc-text">2.8 反向映射</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-9-%E7%9B%B4%E6%8E%A5%E4%BD%BF%E7%94%A8%E5%AD%97%E6%AE%B5%E6%98%A0%E5%B0%84"><span class="toc-text">2.9 直接使用字段映射</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-10-%E4%BD%BF%E7%94%A8%E6%9E%84%E5%BB%BA%E5%99%A8"><span class="toc-text">2.10 使用构建器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-11-%E4%BD%BF%E7%94%A8%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="toc-text">2.11 使用构造函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-12-%E5%B0%86-Map-%E6%98%A0%E5%B0%84%E5%88%B0%E5%AF%B9%E8%B1%A1"><span class="toc-text">2.12 将 Map 映射到对象</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E8%8E%B7%E5%8F%96%E6%98%A0%E5%B0%84%E5%99%A8"><span class="toc-text">3. 获取映射器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E6%98%A0%E5%B0%84%E5%99%A8%E5%B7%A5%E5%8E%82"><span class="toc-text">3.1 映射器工厂</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E4%BD%BF%E7%94%A8%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5"><span class="toc-text">3.2 使用依赖注入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-%E6%B3%A8%E5%85%A5%E7%AD%96%E7%95%A5"><span class="toc-text">3.3 注入策略</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="toc-text">4. 数据类型转换</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E9%9A%90%E5%BC%8F%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="toc-text">4.1 隐式类型转换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E6%98%A0%E5%B0%84%E5%AF%B9%E8%B1%A1%E5%BC%95%E7%94%A8"><span class="toc-text">4.2 映射对象引用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-%E6%8E%A7%E5%88%B6%E5%B5%8C%E5%A5%97%E5%AF%B9%E8%B1%A1%E6%98%A0%E5%B0%84"><span class="toc-text">4.3 控制嵌套对象映射</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-4-%E6%89%A7%E8%A1%8C%E8%87%AA%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84%E6%96%B9%E6%B3%95"><span class="toc-text">4.4  执行自定义映射方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-5-%E8%B0%83%E7%94%A8%E5%85%B6%E4%BB%96%E6%98%A0%E5%B0%84%E5%99%A8"><span class="toc-text">4.5  调用其他映射器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-6-%E5%B0%86%E7%9B%AE%E6%A0%87%E7%B1%BB%E5%9E%8B%E4%BC%A0%E9%80%92%E7%BB%99%E8%87%AA%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84%E5%99%A8"><span class="toc-text">4.6 将目标类型传递给自定义映射器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-7-%E4%BC%A0%E9%80%92%E4%B8%8A%E4%B8%8B%E6%96%87%E6%88%96%E7%8A%B6%E6%80%81%E5%AF%B9%E8%B1%A1%E7%BB%99%E8%87%AA%E5%AE%9A%E4%B9%89%E6%96%B9%E6%B3%95"><span class="toc-text">4.7 传递上下文或状态对象给自定义方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-8-%E6%98%A0%E5%B0%84%E6%96%B9%E6%B3%95%E7%9A%84%E8%A7%A3%E6%9E%90"><span class="toc-text">4.8 映射方法的解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-9-%E5%9F%BA%E4%BA%8E%E9%99%90%E5%AE%9A%E7%AC%A6%E7%9A%84%E6%98%A0%E5%B0%84%E6%96%B9%E6%B3%95%E9%80%89%E6%8B%A9"><span class="toc-text">4.9 基于限定符的映射方法选择</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-10-%E7%BB%93%E5%90%88%E9%99%90%E5%AE%9A%E7%AC%A6%E4%B8%8E%E9%BB%98%E8%AE%A4%E5%80%BC"><span class="toc-text">4.10 结合限定符与默认值</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-%E6%98%A0%E5%B0%84%E9%9B%86%E5%90%88"><span class="toc-text">5. 映射集合</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-%E6%98%A0%E5%B0%84-Set-%E4%B8%8E-List"><span class="toc-text">5.1 映射 Set 与 List</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-%E6%98%A0%E5%B0%84-Map"><span class="toc-text">5.2 映射 Map</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-%E9%9B%86%E5%90%88%E6%98%A0%E5%B0%84%E7%AD%96%E7%95%A5"><span class="toc-text">5.3 集合映射策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-4-%E9%9B%86%E5%90%88%E6%98%A0%E5%B0%84%E7%9A%84%E5%AE%9E%E7%8E%B0%E7%B1%BB"><span class="toc-text">5.4 集合映射的实现类</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-%E6%98%A0%E5%B0%84-Stream"><span class="toc-text">6. 映射 Stream</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-%E6%98%A0%E5%B0%84%E5%80%BC"><span class="toc-text">7. 映射值</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#7-1-%E6%98%A0%E5%B0%84%E6%9E%9A%E4%B8%BE"><span class="toc-text">7.1 映射枚举</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-2-%E6%9E%9A%E4%B8%BE%E4%B8%8E%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E7%9B%B8%E4%BA%92%E6%98%A0%E5%B0%84"><span class="toc-text">7.2 枚举与字符串的相互映射</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-3-%E8%87%AA%E5%AE%9A%E4%B9%89%E5%90%8D%E7%A7%B0%E8%BD%AC%E6%8D%A2"><span class="toc-text">7.3 自定义名称转换</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-Spring-%E6%8B%93%E5%B1%95"><span class="toc-text">8. Spring 拓展</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#8-1-%E6%89%80%E9%80%89%E4%BE%9D%E8%B5%96%E4%BF%A1%E6%81%AF"><span class="toc-text">8.1 所选依赖信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-2-%E6%98%A0%E5%B0%84%E5%99%A8%E4%BD%9C%E4%B8%BA%E8%BD%AC%E6%8D%A2%E5%99%A8"><span class="toc-text">8.2 映射器作为转换器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-3-ConversionServiceAdapter"><span class="toc-text">8.3 ConversionServiceAdapter</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-4-%E8%87%AA%E5%AE%9A%E4%B9%89%E5%90%8D%E7%A7%B0"><span class="toc-text">8.4 自定义名称</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-5-%E6%8C%87%E5%AE%9A-ConversionService-Bean-%E7%9A%84%E5%90%8D%E7%A7%B0"><span class="toc-text">8.5 指定 ConversionService Bean 的名称</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-6-%E5%A4%96%E7%BD%AE%E8%BD%AC%E6%8D%A2"><span class="toc-text">8.6 外置转换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-7-%E8%BD%AC%E6%8D%A2-List"><span class="toc-text">8.7 转换 List</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#9-%E7%BB%93%E8%AF%AD"><span class="toc-text">9. 结语</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/The-Art-of-Loving/" title="爱的艺术"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/175.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="爱的艺术"/></a><div class="content"><a class="title" href="/posts/The-Art-of-Loving/" title="爱的艺术">爱的艺术</a><time datetime="2026-04-28T16:00:00.000Z" title="更新于 2026-04-29 00:00:00">2026-04-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Git/" title="Git理论与使用"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/3.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Git理论与使用"/></a><div class="content"><a class="title" href="/posts/Git/" title="Git理论与使用">Git理论与使用</a><time datetime="2026-01-26T16:00:00.000Z" title="更新于 2026-01-27 00:00:00">2026-01-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Something-About-Blog/" title="博客搭建与维护"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="博客搭建与维护"/></a><div class="content"><a class="title" href="/posts/Something-About-Blog/" title="博客搭建与维护">博客搭建与维护</a><time datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"/></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="更新于 2026-01-03 00:00:00">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"/></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/103.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 的类资源加载"/></a><div class="content"><a class="title" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载">Java 的类资源加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.5</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+</body></html></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/MapStruct-User-Manual/">https://mofan212.github.io/posts/MapStruct-User-Manual/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/MapStruct/">MapStruct</a></div><div class="post-share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/82.png" data-sites="wechat,qq,weibo,facebook,x"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/Design-Pattern-Builder-Pattern/" title="【设计模式】建造者模式"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/81.png" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【设计模式】建造者模式</div></div><div class="info-2"><div class="info-item-1">本文主要对 Java 设计模式中的建造者模式进行了介绍，同时也介绍了 Lombok 中 @Builder 注解的使用。</div></div></div></a><a class="pagination-related" href="/posts/Design-Pattern-Strategy-Pattern/" title="【设计模式】策略模式"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/83.png" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【设计模式】策略模式</div></div><div class="info-2"><div class="info-item-1">本文主要对 Java 设计模式中的策略模式进行了介绍。</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">默烦</div><div class="author-info-description">彩笔的打怪升级之路...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">175</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mofan212"><i class="fab fa-github"></i><span>follow me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解。<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a href="./mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载。😊</br><strong><font style="color:red">严禁未遵循规范的转载。</font></strong>😡</br><strong>死去的评论系统复活啦！欢迎到留言板畅所欲言！</strong>当然也可以使用更高效的<a target="_blank" href="https://space.bilibili.com/23658864/dynamic" style="color:#49B1F5;text-decoration:underline"> 哔哩哔哩私信 </a>或<a href="mailto:cy.mofan@foxmail.com" style="color:#49B1F5;text-decoration:underline" target="_blank">邮箱</a>。 😉</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E9%98%85%E8%AF%BB%E5%89%8D%E8%A8%80"><span class="toc-text">1. 阅读前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-MapStruct-%E6%A6%82%E8%BF%B0"><span class="toc-text">2. MapStruct 概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E4%BB%80%E4%B9%88%E6%98%AF-MapStruct"><span class="toc-text">2.1 什么是 MapStruct</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-MapStruct-%E9%85%8D%E7%BD%AE%E9%80%89%E9%A1%B9"><span class="toc-text">2.2 MapStruct 配置选项</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84%E5%99%A8"><span class="toc-text">3. 定义映射器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-Hello-MapStruct"><span class="toc-text">3.1 Hello MapStruct</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E5%85%B3%E9%97%AD%E9%9A%90%E5%BC%8F%E6%98%A0%E5%B0%84"><span class="toc-text">3.2 关闭隐式映射</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-Mapping-%E6%B3%A8%E8%A7%A3"><span class="toc-text">3.3 @Mapping 注解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-%E9%BB%98%E8%AE%A4%E6%96%B9%E6%B3%95%E4%B8%8E%E6%8A%BD%E8%B1%A1%E7%B1%BB"><span class="toc-text">3.4 默认方法与抽象类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-5-%E5%A4%9A%E4%B8%AA%E6%BA%90%E5%8F%82%E6%95%B0"><span class="toc-text">3.5 多个源参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-6-%E5%A4%9A%E4%B8%AA%E5%B5%8C%E5%A5%97%E5%B1%9E%E6%80%A7%E6%98%A0%E5%B0%84"><span class="toc-text">3.6 多个嵌套属性映射</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-7-%E6%9B%B4%E6%96%B0%E5%AD%98%E5%9C%A8%E7%9A%84%E5%AE%9E%E4%BE%8B"><span class="toc-text">3.7 更新存在的实例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-8-%E5%8F%8D%E5%90%91%E6%98%A0%E5%B0%84"><span class="toc-text">3.8 反向映射</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-9-%E7%9B%B4%E6%8E%A5%E4%BD%BF%E7%94%A8%E5%AD%97%E6%AE%B5%E6%98%A0%E5%B0%84"><span class="toc-text">3.9 直接使用字段映射</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-10-%E4%BD%BF%E7%94%A8%E6%9E%84%E5%BB%BA%E5%99%A8"><span class="toc-text">3.10 使用构建器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-11-%E4%BD%BF%E7%94%A8%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="toc-text">3.11 使用构造函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-12-%E5%B0%86-Map-%E6%98%A0%E5%B0%84%E5%88%B0%E5%AF%B9%E8%B1%A1"><span class="toc-text">3.12 将 Map 映射到对象</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E8%8E%B7%E5%8F%96%E6%98%A0%E5%B0%84%E5%99%A8"><span class="toc-text">4. 获取映射器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E6%98%A0%E5%B0%84%E5%99%A8%E5%B7%A5%E5%8E%82"><span class="toc-text">4.1 映射器工厂</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E4%BD%BF%E7%94%A8%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5"><span class="toc-text">4.2 使用依赖注入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-%E6%B3%A8%E5%85%A5%E7%AD%96%E7%95%A5"><span class="toc-text">4.3 注入策略</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="toc-text">5. 数据类型转换</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-%E9%9A%90%E5%BC%8F%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="toc-text">5.1 隐式类型转换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-%E6%98%A0%E5%B0%84%E5%AF%B9%E8%B1%A1%E5%BC%95%E7%94%A8"><span class="toc-text">5.2 映射对象引用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-%E6%8E%A7%E5%88%B6%E5%B5%8C%E5%A5%97%E5%AF%B9%E8%B1%A1%E6%98%A0%E5%B0%84"><span class="toc-text">5.3 控制嵌套对象映射</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-4-%E6%89%A7%E8%A1%8C%E8%87%AA%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84%E6%96%B9%E6%B3%95"><span class="toc-text">5.4 执行自定义映射方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-5-%E8%B0%83%E7%94%A8%E5%85%B6%E4%BB%96%E6%98%A0%E5%B0%84%E5%99%A8"><span class="toc-text">5.5 调用其他映射器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-6-%E5%B0%86%E7%9B%AE%E6%A0%87%E7%B1%BB%E5%9E%8B%E4%BC%A0%E9%80%92%E7%BB%99%E8%87%AA%E5%AE%9A%E4%B9%89%E6%98%A0%E5%B0%84%E5%99%A8"><span class="toc-text">5.6 将目标类型传递给自定义映射器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-7-%E4%BC%A0%E9%80%92%E4%B8%8A%E4%B8%8B%E6%96%87%E6%88%96%E7%8A%B6%E6%80%81%E5%AF%B9%E8%B1%A1%E7%BB%99%E8%87%AA%E5%AE%9A%E4%B9%89%E6%96%B9%E6%B3%95"><span class="toc-text">5.7 传递上下文或状态对象给自定义方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-8-%E6%98%A0%E5%B0%84%E6%96%B9%E6%B3%95%E7%9A%84%E8%A7%A3%E6%9E%90"><span class="toc-text">5.8 映射方法的解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-9-%E5%9F%BA%E4%BA%8E%E9%99%90%E5%AE%9A%E7%AC%A6%E7%9A%84%E6%98%A0%E5%B0%84%E6%96%B9%E6%B3%95%E9%80%89%E6%8B%A9"><span class="toc-text">5.9 基于限定符的映射方法选择</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-10-%E7%BB%93%E5%90%88%E9%99%90%E5%AE%9A%E7%AC%A6%E4%B8%8E%E9%BB%98%E8%AE%A4%E5%80%BC"><span class="toc-text">5.10 结合限定符与默认值</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-%E6%98%A0%E5%B0%84%E9%9B%86%E5%90%88"><span class="toc-text">6. 映射集合</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#6-1-%E6%98%A0%E5%B0%84-Set-%E4%B8%8E-List"><span class="toc-text">6.1 映射 Set 与 List</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-2-%E6%98%A0%E5%B0%84-Map"><span class="toc-text">6.2 映射 Map</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-3-%E9%9B%86%E5%90%88%E6%98%A0%E5%B0%84%E7%AD%96%E7%95%A5"><span class="toc-text">6.3 集合映射策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-4-%E9%9B%86%E5%90%88%E6%98%A0%E5%B0%84%E7%9A%84%E5%AE%9E%E7%8E%B0%E7%B1%BB"><span class="toc-text">6.4 集合映射的实现类</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-%E6%98%A0%E5%B0%84-Stream"><span class="toc-text">7. 映射 Stream</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-%E6%98%A0%E5%B0%84%E5%80%BC"><span class="toc-text">8. 映射值</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#8-1-%E6%98%A0%E5%B0%84%E6%9E%9A%E4%B8%BE"><span class="toc-text">8.1 映射枚举</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-2-%E6%9E%9A%E4%B8%BE%E4%B8%8E%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E7%9B%B8%E4%BA%92%E6%98%A0%E5%B0%84"><span class="toc-text">8.2 枚举与字符串的相互映射</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-3-%E8%87%AA%E5%AE%9A%E4%B9%89%E5%90%8D%E7%A7%B0%E8%BD%AC%E6%8D%A2"><span class="toc-text">8.3 自定义名称转换</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#9-Spring-%E6%8B%93%E5%B1%95"><span class="toc-text">9. Spring 拓展</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#9-1-%E6%89%80%E9%80%89%E4%BE%9D%E8%B5%96%E4%BF%A1%E6%81%AF"><span class="toc-text">9.1 所选依赖信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-2-%E6%98%A0%E5%B0%84%E5%99%A8%E4%BD%9C%E4%B8%BA%E8%BD%AC%E6%8D%A2%E5%99%A8"><span class="toc-text">9.2 映射器作为转换器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-3-ConversionServiceAdapter"><span class="toc-text">9.3 ConversionServiceAdapter</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-4-%E8%87%AA%E5%AE%9A%E4%B9%89%E5%90%8D%E7%A7%B0"><span class="toc-text">9.4 自定义名称</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-5-%E6%8C%87%E5%AE%9A-ConversionService-Bean-%E7%9A%84%E5%90%8D%E7%A7%B0"><span class="toc-text">9.5 指定 ConversionService Bean 的名称</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-6-%E5%A4%96%E7%BD%AE%E8%BD%AC%E6%8D%A2"><span class="toc-text">9.6 外置转换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-7-%E8%BD%AC%E6%8D%A2-List"><span class="toc-text">9.7 转换 List</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#10-%E7%BB%93%E8%AF%AD"><span class="toc-text">10. 结语</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/The-Art-of-Loving/" title="爱的艺术"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/175.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="爱的艺术"/></a><div class="content"><a class="title" href="/posts/The-Art-of-Loving/" title="爱的艺术">爱的艺术</a><time datetime="2026-04-28T16:00:00.000Z" title="更新于 2026-04-29 00:00:00">2026-04-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Git/" title="Git理论与使用"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/3.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Git理论与使用"/></a><div class="content"><a class="title" href="/posts/Git/" title="Git理论与使用">Git理论与使用</a><time datetime="2026-01-26T16:00:00.000Z" title="更新于 2026-01-27 00:00:00">2026-01-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Something-About-Blog/" title="博客搭建与维护"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="博客搭建与维护"/></a><div class="content"><a class="title" href="/posts/Something-About-Blog/" title="博客搭建与维护">博客搭建与维护</a><time datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"/></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="更新于 2026-01-03 00:00:00">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"/></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/20.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="注解、类的加载、反射"/></a><div class="content"><a class="title" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射">注解、类的加载、反射</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.5</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
   const parseViewBox = viewBox => {
     if (!viewBox) return null
     const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))

@@ -194,8 +194,8 @@ btf.addGlobalFn('pjaxSend', () => {
     </style>
     <html><head></head><body><p>封面画师：T5-茨舞（微博）     封面ID：74539039</p>
 <p>本文参考：2018 尚硅谷 雷丰阳 MyBatis 3.x</p>
-<h1 id="0-MyBatis-的初步使用"><a class="header-anchor" href="#0-MyBatis-的初步使用"></a>0. MyBatis 的初步使用</h1>
-<h2 id="0-1-为什么要使用-MyBatis？"><a class="header-anchor" href="#0-1-为什么要使用-MyBatis？"></a>0.1 为什么要使用 MyBatis？</h2>
+<h1 id="1-MyBatis-的初步使用"><a class="header-anchor" href="#1-MyBatis-的初步使用"></a>1. MyBatis 的初步使用</h1>
+<h2 id="1-1-为什么要使用-MyBatis？"><a class="header-anchor" href="#1-1-为什么要使用-MyBatis？"></a>1.1 为什么要使用 MyBatis？</h2>
 <p>MyBatis 是一个半自动化的持久层框架。</p>
 <blockquote>
 <p>JDBC</p>
@@ -208,26 +208,26 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>Hibernate 和 JPA</p>
 </blockquote>
 <ul>
-<li>长难复杂 SQL ，对于 Hibernate 而言处理也不容易</li>
+<li>长难复杂 SQL，对于 Hibernate 而言处理也不容易</li>
 <li>内部自动生产的 SQL，不容易做特殊优化</li>
 <li>基于全映射的全自动框架，大量字段的 POJO 进行部分映射时比较困难，导致数据库性能下降</li>
 </ul>
 <hr>
 <p>对于开发人员而言，核心的 SQL 还是需要自己优化。</p>
 <p>SQL 和 Java 编码分开，功能边界清晰，一个专注业务，一个专注数据！</p>
-<h2 id="0-2-简单使用步骤"><a class="header-anchor" href="#0-2-简单使用步骤"></a>0.2 简单使用步骤</h2>
+<h2 id="1-2-简单使用步骤"><a class="header-anchor" href="#1-2-简单使用步骤"></a>1.2 简单使用步骤</h2>
 <p>1、编写 xml 配置文件（全局配置文件）</p>
-<p>2、编写 SQL 映射文件（配置了每一个 SQL ，以及 SQL 的封装规则）</p>
+<p>2、编写 SQL 映射文件（配置了每一个 SQL，以及 SQL 的封装规则）</p>
 <p>3、将 SQL 映射文件注册在全局配置文件中</p>
 <p>4、写代码</p>
 <ul>
 <li>根据全局配置文件创建一个 <code>SqlSessionFactory</code> 对象</li>
 <li>使用 SqlSession 工厂，获取到 SqlSession 实例，然后使用它进行 CRUD （一个 SqlSession 代表和数据库的一次会话，使用后记得关闭）</li>
-<li>使用 SQL 的唯一标志来告诉 MyBatis 执行哪一个 SQL ，SQL 都是保存在 SQL 映射文件中的</li>
+<li>使用 SQL 的唯一标志来告诉 MyBatis 执行哪一个 SQL，SQL 都是保存在 SQL 映射文件中的</li>
 </ul>
 <p>当然还可以使用接口式编程，获取接口的实现类对象，MyBatis 会为接口自动创建一个代理对象，代理对象去实现 CRUD。（mapper 接口没有实现类，但是 MyBatis 会为这个接口生成一个代理对象）</p>
 <p>如果实体类的属性 名和数据库的字段名不对应，将无法查询出结果，可以在 SQL 语句中对相关的字段名（字段名的别名设置为属性名）使用别名进行查询。</p>
-<h1 id="1-全局配置文件标签"><a class="header-anchor" href="#1-全局配置文件标签"></a>1. 全局配置文件标签</h1>
+<h1 id="2-全局配置文件标签"><a class="header-anchor" href="#2-全局配置文件标签"></a>2. 全局配置文件标签</h1>
 <p>全局配置文件，其中包含了数据库连接池信息、事务管理器信息等系统运行环境信息（非必须，可以使用 Java 代码编写）。</p>
 <p>全局配置文件约束信息：</p>
 <figure class="highlight xml line-numbers" data-language="XML">
@@ -236,30 +236,30 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#ABB2BF">        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"</span></span>
 <span class="line"><span style="color:#ABB2BF">        "http://mybatis.org/dtd/mybatis-3-config.dtd"&gt;</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<h2 id="1-1-properties"><a class="header-anchor" href="#1-1-properties"></a>1.1 properties</h2>
+<h2 id="2-1-properties"><a class="header-anchor" href="#2-1-properties"></a>2.1 properties</h2>
 <ul>
 <li>
-<p>作用：使用该标签可以引入外部 properties 配置文件（数据库连接信息）的内容。</p>
+<p>作用：使用该标签可以引入外部 properties 配置文件（数据库连接信息）的内容</p>
 </li>
 <li>
-<p><strong><code>&lt;properties&gt;</code></strong> 标签属性：</p>
+<p><strong><code>&lt;properties&gt;</code></strong> 标签属性</p>
 <p>resource：引用类路径下的资源</p>
 <p>url：引用网络路径下或磁盘路径下的资源</p>
 </li>
 </ul>
 <p>该标签仅做了解，实际开发中会将 MyBatis 与 Spring 绑定，这些配置文件信息一般都会交给 Spring 进行管理，因此该标签的使用并不多。</p>
-<h2 id="1-2-settings"><a class="header-anchor" href="#1-2-settings"></a>1.2 settings</h2>
+<h2 id="2-2-settings"><a class="header-anchor" href="#2-2-settings"></a>2.2 settings</h2>
 <ul>
 <li>
-<p><code>&lt;settings&gt;</code> 标签包含很多重要的设置项，一个 <code>&lt;settings&gt;</code> 标签下可以包含多个 <code>&lt;setting&gt;</code> 标签， <code>&lt;setting&gt;</code> 标签用来设置一个设置项。</p>
+<p><code>&lt;settings&gt;</code> 标签包含很多重要的设置项，一个 <code>&lt;settings&gt;</code> 标签下可以包含多个 <code>&lt;setting&gt;</code> 标签，<code>&lt;setting&gt;</code> 标签用来设置一个设置项</p>
 </li>
 <li>
-<p><strong><code>&lt;setting&gt;</code></strong> 标签属性：</p>
+<p><strong><code>&lt;setting&gt;</code></strong> 标签属性</p>
 <p>name：设置相关的参数</p>
 <p>value：参数的有效值。</p>
 </li>
 <li>
-<p>属性列表（以官方文档 <a target="_blank" rel="noopener" href="https://mybatis.org/mybatis-3/configuration.html#settings">mybatis – MyBatis 3 | Configuration</a> 为准，下图仅供参考）：</p>
+<p>属性列表（以官方文档 <a target="_blank" rel="noopener" href="https://mybatis.org/mybatis-3/configuration.html#settings">mybatis – MyBatis 3 | Configuration</a> 为准，下图仅供参考）</p>
 </li>
 </ul>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SSMImages/setting%E6%A0%87%E7%AD%BE%E5%B1%9E%E6%80%A7_1.png" alt="setting标签属性_1"></p>
@@ -274,8 +274,8 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#ABB2BF">    &lt;</span><span style="color:#E06C75">setting</span><span style="color:#D19A66"> name</span><span style="color:#ABB2BF">=</span><span style="color:#98C379">"logImpl"</span><span style="color:#D19A66"> value</span><span style="color:#ABB2BF">=</span><span style="color:#98C379">"STDOUT_LOGGING"</span><span style="color:#ABB2BF"> /&gt;</span></span>
 <span class="line"><span style="color:#ABB2BF">&lt;/</span><span style="color:#E06C75">settings</span><span style="color:#ABB2BF">&gt;</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<h2 id="1-3-typeAliases"><a class="header-anchor" href="#1-3-typeAliases"></a>1.3 typeAliases</h2>
-<p>作用：别名处理器，能够为我们的 Java 类型取别名， <mark>别名不区分大小写</mark></p>
+<h2 id="2-3-typeAliases"><a class="header-anchor" href="#2-3-typeAliases"></a>2.3 typeAliases</h2>
+<p>作用：别名处理器，能够为我们的 Java 类型取别名，<mark>别名不区分大小写</mark></p>
 <p>尽管别名可以让 SQL 映射文件中的代码变得简洁，但是为了方便后续阅读代码，还是建议使用全类名</p>
 <blockquote>
 <p>单个别名</p>
@@ -284,10 +284,10 @@ btf.addGlobalFn('pjaxSend', () => {
 <p><strong><code>&lt;typeAliase&gt;</code></strong> 标签属性：</p>
 <ul>
 <li>
-<p>type：指定要取别名的类型全类名，默认别名就是类名首字母小写。</p>
+<p>type：指定要取别名的类型全类名，默认别名就是类名首字母小写</p>
 </li>
 <li>
-<p>alias：指定要取的别名。</p>
+<p>alias：指定要取的别名</p>
 </li>
 </ul>
 <blockquote>
@@ -298,56 +298,56 @@ btf.addGlobalFn('pjaxSend', () => {
 <ul>
 <li>name：指定包名（为当前包以及下面所有后代包的每一个类都取一个默认别名，默认别名是类名首字母小写）</li>
 </ul>
-<p><code>@Alias</code> ：在批量取别名的情况下（使用了 <code>&lt;package&gt;</code> 标签的情况下），可以为某个 JavaBean 指定新的别名（该注解的位置在类上），以防止别名冲突。</p>
+<p><code>@Alias</code>：在批量取别名的情况下（使用了 <code>&lt;package&gt;</code> 标签的情况下），可以为某个 JavaBean 指定新的别名（该注解的位置在类上），以防止别名冲突。</p>
 <p>MyBatis 为普通的 Java 类型提供了许多内建的类型别名，因此我们在自定义别名时应当避免与这些别名相同。比如下图的部分内建别名（全部内建别名请参考官方文档）：</p>
 <img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SSMImages/MyBatis内建部分别名.png" alt="MyBatis内建部分别名" style="zoom:67%;">
-<h2 id="1-4-typeHandlers"><a class="header-anchor" href="#1-4-typeHandlers"></a>1.4 typeHandlers</h2>
-<p>作用：类型处理器。无论是 MyBatis 在预处理语句（PreparedStatement）中设置一个参数，还是从结果集中取出一个值， 都会用类型处理器将获取的值以合适的方式转换成 Java 类型。</p>
+<h2 id="2-4-typeHandlers"><a class="header-anchor" href="#2-4-typeHandlers"></a>2.4 typeHandlers</h2>
+<p>作用：类型处理器。无论是 MyBatis 在预处理语句（PreparedStatement）中设置一个参数，还是从结果集中取出一个值，都会用类型处理器将获取的值以合适的方式转换成 Java 类型。</p>
 <blockquote>
 <p>使用示例</p>
 </blockquote>
-<p>处理枚举类型（需要从 <code>EnumTypeHandler</code> 或者 <code>EnumOrdinalTypeHandler</code> 中选一个来使用）时，MyBatis默认使用的是 <code>EnumTypeHandler</code>，现在将处理枚举类型改为 <code>EnumOrdinalTypeHandler</code>：</p>
+<p>处理枚举类型（需要从 <code>EnumTypeHandler</code> 或者 <code>EnumOrdinalTypeHandler</code> 中选一个来使用）时，MyBatis 默认使用的是 <code>EnumTypeHandler</code>，现在将处理枚举类型改为 <code>EnumOrdinalTypeHandler</code>：</p>
 <figure class="highlight xml line-numbers" data-language="XML">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#7F848E;font-style:italic">&lt;!--自定义枚举为UserStatus--&gt;</span></span>
 <span class="line"><span style="color:#ABB2BF">&lt;</span><span style="color:#E06C75">typeHandlers</span><span style="color:#ABB2BF">&gt;</span></span>
 <span class="line"><span style="color:#ABB2BF">&lt;</span><span style="color:#E06C75">typeHandler</span><span style="color:#D19A66"> handler</span><span style="color:#ABB2BF">=</span><span style="color:#98C379">"org.apache.ibatis.type.EnumOrdinalTypeHandler"</span><span style="color:#D19A66">            javaType</span><span style="color:#ABB2BF">=</span><span style="color:#98C379">"com.yang.domain.UserStatus"</span><span style="color:#ABB2BF">/&gt;</span></span>
 <span class="line"><span style="color:#ABB2BF">&lt;/</span><span style="color:#E06C75">typeHandlers</span><span style="color:#ABB2BF">&gt;</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<h2 id="1-5-plugins"><a class="header-anchor" href="#1-5-plugins"></a>1.5 plugins</h2>
+<h2 id="2-5-plugins"><a class="header-anchor" href="#2-5-plugins"></a>2.5 plugins</h2>
 <p>见 <strong>7. 插件</strong> 。</p>
-<h2 id="1-6-environments"><a class="header-anchor" href="#1-6-environments"></a>1.6 environments</h2>
+<h2 id="2-6-environments"><a class="header-anchor" href="#2-6-environments"></a>2.6 environments</h2>
 <p>作用：配置 MyBatis 环境，MyBatis 可以配置多种环境。</p>
 <p><strong><code>&lt;environments&gt;</code></strong> 标签属性：</p>
 <ul>
-<li>default：指定当前 MyBatis 使用的环境，可以达到快速切换环境。</li>
+<li>default：指定当前 MyBatis 使用的环境，可以达到快速切换环境</li>
 </ul>
-<p><mark>需要注意的是：</mark> <code>&lt;environments&gt;</code> 标签下需要包含的标签：<code>&lt;environment&gt;</code> 标签。而<code>&lt;environment&gt;</code> 标签下需要包含 <code>&lt;transactionManager&gt;</code> 标签和 <code>&lt;dataSource&gt;</code> 标签。</p>
-<h2 id="1-7-environment"><a class="header-anchor" href="#1-7-environment"></a>1.7 environment</h2>
-<p>作用：配置一个具体的环境信息。这个标签下必须包含两个标签： <code>&lt;transactionManager&gt;</code> 、 <code>&lt;dataSource&gt;</code>。</p>
+<p><mark>需要注意的是：</mark> <code>&lt;environments&gt;</code> 标签下需要包含的标签：<code>&lt;environment&gt;</code> 标签。而 <code>&lt;environment&gt;</code> 标签下需要包含 <code>&lt;transactionManager&gt;</code> 标签和 <code>&lt;dataSource&gt;</code> 标签。</p>
+<h2 id="2-7-environment"><a class="header-anchor" href="#2-7-environment"></a>2.7 environment</h2>
+<p>作用：配置一个具体的环境信息。这个标签下必须包含两个标签：<code>&lt;transactionManager&gt;</code>、<code>&lt;dataSource&gt;</code>。</p>
 <p><strong><code>&lt;environment&gt;</code></strong> 标签属性：</p>
 <ul>
-<li>id：指定当前环境的唯一标识。</li>
+<li>id：指定当前环境的唯一标识</li>
 </ul>
-<h2 id="1-8-transactionManager"><a class="header-anchor" href="#1-8-transactionManager"></a>1.8 transactionManager</h2>
+<h2 id="2-8-transactionManager"><a class="header-anchor" href="#2-8-transactionManager"></a>2.8 transactionManager</h2>
 <p>作用：事物管理器。（了解）</p>
 <p><strong><code>&lt;transactionManager&gt;</code></strong> 标签属性：</p>
 <ul>
-<li>type：事物管理器的类型。值有两种选择：JDBC 、 MANAGED ，这两个值其实是别名（分析源码可得）。</li>
+<li>type：事物管理器的类型。值有两种选择：JDBC、MANAGED，这两个值其实是别名（分析源码可得）</li>
 </ul>
 <p>自定义事物管理器：实现 <code>TransactionFactory</code> 接口，type 属性指定为全类名。</p>
-<h2 id="1-9-dataSource"><a class="header-anchor" href="#1-9-dataSource"></a>1.9 dataSource</h2>
+<h2 id="2-9-dataSource"><a class="header-anchor" href="#2-9-dataSource"></a>2.9 dataSource</h2>
 <p>作用：配置数据源。</p>
 <p><strong><code>&lt;dataSource&gt;</code></strong> 标签属性：</p>
 <ul>
-<li>type：数据库类型。值有三种选择：UNPOOLED（不使用连接池） 、 POOLED（使用连接池） 、 JNDI ，这三个值也是别名（分析源码可得）。</li>
+<li>type：数据库类型。值有三种选择：UNPOOLED（不使用连接池）、POOLED（使用连接池）、JNDI，这三个值也是别名（分析源码可得）</li>
 </ul>
 <p>自定义数据源：实现 <code>DataSourceFactory</code> 接口，type 属性指定为全类名。</p>
-<h2 id="1-10-databaseIdProvider"><a class="header-anchor" href="#1-10-databaseIdProvider"></a>1.10 databaseIdProvider</h2>
+<h2 id="2-10-databaseIdProvider"><a class="header-anchor" href="#2-10-databaseIdProvider"></a>2.10 databaseIdProvider</h2>
 <p>作用：数据库厂商标识，用于支持多数据库厂商。</p>
 <p><strong><code>&lt;databaseIdProvider&gt;</code></strong> 标签属性：</p>
 <ul>
-<li>type：值为 DB_VENDOR（这也是一个别名） ：VendorDatabaseIdProvider.class。type 属性作用就是得到数据库厂商的标识（驱动getDatabaseProductName()），MyBatis 能够根据数据库厂商标识来执行不同的 SQL 语句。</li>
-<li>常见数据库厂商标识：MySQL、Oracle、SQL Server。</li>
+<li>type：值为 DB_VENDOR（这也是一个别名）：VendorDatabaseIdProvider.class。type 属性作用就是得到数据库厂商的标识（驱动 getDatabaseProductName()），MyBatis 能够根据数据库厂商标识来执行不同的 SQL 语句</li>
+<li>常见数据库厂商标识：MySQL、Oracle、SQL Server</li>
 </ul>
 <blockquote>
 <p>具体使用</p>
@@ -366,20 +366,20 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#ABB2BF">    select * from users where id = #{uid}</span></span>
 <span class="line"><span style="color:#ABB2BF">&lt;/</span><span style="color:#E06C75">select</span><span style="color:#ABB2BF">&gt;</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<p>假设当前数据库环境是 MySQL ，同时需要根据员工的 id 来查询对应的员工，又假设在 SQL 映射文件中针对这个需求编写了两条 SQL 语句，一条没有添加数据库厂商标识，另一条添加了 MySQL 数据库厂商标识，MyBatis 在执行 SQL 语句时会<strong>优先执行指定更加明确的语句</strong> ，即：添加了 MySQL 数据库厂商标识的 SQL 语句。</p>
-<h2 id="1-11-mappers"><a class="header-anchor" href="#1-11-mappers"></a>1.11 mappers</h2>
+<p>假设当前数据库环境是 MySQL，同时需要根据员工的 id 来查询对应的员工，又假设在 SQL 映射文件中针对这个需求编写了两条 SQL 语句，一条没有添加数据库厂商标识，另一条添加了 MySQL 数据库厂商标识，MyBatis 在执行 SQL 语句时会 <strong>优先执行指定更加明确的语句</strong> ，即：添加了 MySQL 数据库厂商标识的 SQL 语句。</p>
+<h2 id="2-11-mappers"><a class="header-anchor" href="#2-11-mappers"></a>2.11 mappers</h2>
 <p>作用：将 SQL 映射文件注册到全局配置文件中，将 SQL 映射文件和全局配置文件进行关联（ <mark>重要</mark> ）。</p>
-<p><code>&lt;mappers&gt;</code> 标签下可以包含多个 <code>&lt;mapper&gt;</code> 标签， <code>&lt;mapper&gt;</code> 标签可以关联一个 SQL 映射文件。<code>&lt;mappers&gt;</code> 标签下还可以包含一个 <code>&lt;package&gt;</code> 标签，以进行批量注册。</p>
+<p><code>&lt;mappers&gt;</code> 标签下可以包含多个 <code>&lt;mapper&gt;</code> 标签，<code>&lt;mapper&gt;</code> 标签可以关联一个 SQL 映射文件。<code>&lt;mappers&gt;</code> 标签下还可以包含一个 <code>&lt;package&gt;</code> 标签，以进行批量注册。</p>
 <p><strong><code>&lt;mapper&gt;</code></strong> 标签属性：</p>
 <ul>
 <li>
-<p>resource：引用类路径下的 SQL 映射文件（注册配置文件）。</p>
+<p>resource：引用类路径下的 SQL 映射文件（注册配置文件）</p>
 </li>
 <li>
-<p>url：引用网络路径下或磁盘路径下的 SQL 映射文件（注册配置文件）。</p>
+<p>url：引用网络路径下或磁盘路径下的 SQL 映射文件（注册配置文件）</p>
 </li>
 <li>
-<p>class：引用接口（注册接口）。</p>
+<p>class：引用接口（注册接口）</p>
 </li>
 </ul>
 <blockquote>
@@ -392,17 +392,17 @@ btf.addGlobalFn('pjaxSend', () => {
 </blockquote>
 <p><strong><code>&lt;package&gt;</code></strong> 标签属性：</p>
 <ul>
-<li>name：SQL 映射文件（或接口）的包路径。</li>
+<li>name：SQL 映射文件（或接口）的包路径</li>
 </ul>
 <p><code>&lt;package&gt;</code> 标签中 name 属性使用规范：存在 SQL 映射文件时，映射文件必须和接口同名，并且放在与接口同一目录下。</p>
-<h2 id="1-12-标签书写顺序"><a class="header-anchor" href="#1-12-标签书写顺序"></a>1.12 标签书写顺序</h2>
+<h2 id="2-12-标签书写顺序"><a class="header-anchor" href="#2-12-标签书写顺序"></a>2.12 标签书写顺序</h2>
 <p><strong>MyBatis 全局配置文件中的标签顺序并不是任意的。</strong></p>
 <p>全局配置文件中可以不存在某些标签，但是存在的标签必须按照以下的先后顺序进行书写：</p>
 <figure class="highlight plaintext line-numbers" data-language="PLAINTEXT">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span>properties?, settings?, typeAliases?, typeHandlers?, objectFactory?, objectWrapperFactory?, reflectorFactory?, plugins?, environments?, databaseIdProvider?, mappers?</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<h1 id="2-获取主键值与参数处理"><a class="header-anchor" href="#2-获取主键值与参数处理"></a>2. 获取主键值与参数处理</h1>
-<h2 id="2-1-SQL-映射文件约束"><a class="header-anchor" href="#2-1-SQL-映射文件约束"></a>2.1 SQL 映射文件约束</h2>
+<h1 id="3-获取主键值与参数处理"><a class="header-anchor" href="#3-获取主键值与参数处理"></a>3. 获取主键值与参数处理</h1>
+<h2 id="3-1-SQL-映射文件约束"><a class="header-anchor" href="#3-1-SQL-映射文件约束"></a>3.1 SQL 映射文件约束</h2>
 <p>SQL 映射文件中保存了每一个 SQL 语句的信息（ <mark>必须</mark> ）。</p>
 <p>SQL 映射文件约束信息：</p>
 <figure class="highlight xml line-numbers" data-language="XML">
@@ -415,7 +415,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <blockquote>
 <p>实体类与数据库字段</p>
 </blockquote>
-<p>相关实体类：（下文中涉及的SQL语句环境都如下）</p>
+<p>相关实体类：（下文中涉及的 SQL 语句环境都如下）</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">public</span><span style="color:#C678DD"> class</span><span style="color:#E5C07B"> User</span><span style="color:#ABB2BF">{</span></span>
 <span class="line"><span style="color:#C678DD">    private</span><span style="color:#E5C07B"> Integer</span><span style="color:#E06C75"> id</span><span style="color:#ABB2BF">;</span></span>
@@ -441,24 +441,24 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span>dept table:</span></span>
 <span class="line"><span>id | deptName</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<h2 id="2-2-简单-CRUD"><a class="header-anchor" href="#2-2-简单-CRUD"></a>2.2 简单 CRUD</h2>
-<p>在 MyBatis 中，允许增删改查直接定义以下类型的返回值：<code>Integer</code> 、<code>Long</code> 、<code>Boolean</code> 、 <code>void</code> 。</p>
-<p>对于 Boolean 类型的返回值来说，如果执行增加、删除、修改等操作时影响了一行以上的数据，那么就会返回 <code>true</code> 。</p>
+<h2 id="3-2-简单-CRUD"><a class="header-anchor" href="#3-2-简单-CRUD"></a>3.2 简单 CRUD</h2>
+<p>在 MyBatis 中，允许增删改查直接定义以下类型的返回值：<code>Integer</code>、<code>Long</code>、<code>Boolean</code>、<code>void</code>。</p>
+<p>对于 Boolean 类型的返回值来说，如果执行增加、删除、修改等操作时影响了一行以上的数据，那么就会返回 <code>true</code>。</p>
 <p>在 Mybatis 中进行 CRUD 时，需要使用对应的标签，比如：<code>&lt;insert&gt;</code>、<code>&lt;delete&gt;</code>、<code>&lt;update&gt;</code> 和 <code>&lt;select&gt;</code>，在这些标签中都有一个名为 <code>parameterType</code> 的属性，这个属性是老式风格的参数映射，已被废弃，但是也可以使用，使用时指定参数类型的全类名或别名即可。既然这个属性已被废弃，因此 <strong>我们在编写时也可以不写这个属性</strong>。</p>
 <p><mark>在 SQL 映射文件中写 SQL 时，请不要在末尾写上分号！</mark></p>
-<h2 id="2-3-插入获取主键值"><a class="header-anchor" href="#2-3-插入获取主键值"></a>2.3 插入获取主键值</h2>
+<h2 id="3-3-插入获取主键值"><a class="header-anchor" href="#3-3-插入获取主键值"></a>3.3 插入获取主键值</h2>
 <blockquote>
 <p>对于支持主键自增的数据库</p>
 </blockquote>
 <p>例如，MySQL 数据库支持主键自增，MyBatis 可以利用 <code>statement.getGeneratedKeys()</code> 获取自增主键值。</p>
 <p>那么应该怎么做呢？</p>
-<p>我们只需要在 <code>&lt;insert&gt;</code> 标签中添加属性：<code>useGeneratedKeys</code> 和 <code>keyProperty</code> 。</p>
-<p>其中，需要将 <code>useGeneratedKeys</code> 设置为 <code>"true"</code> ，这表示使用自增主键获取主键值策略。</p>
-<p>而 <code>keyProperty</code> 属性用于指定对应的主键属性，也就是 MyBatis 获取到主键值后，将这个值封装给 JavaBean 的哪个属性。比如我插入数据时想让自增的主键值封装到实体类中的 id 属性，那么需要这么写： <code>keyProperty = "id"</code> 。</p>
+<p>我们只需要在 <code>&lt;insert&gt;</code> 标签中添加属性：<code>useGeneratedKeys</code> 和 <code>keyProperty</code>。</p>
+<p>其中，需要将 <code>useGeneratedKeys</code> 设置为 <code>"true"</code>，这表示使用自增主键获取主键值策略。</p>
+<p>而 <code>keyProperty</code> 属性用于指定对应的主键属性，也就是 MyBatis 获取到主键值后，将这个值封装给 JavaBean 的哪个属性。比如我插入数据时想让自增的主键值封装到实体类中的 id 属性，那么需要这么写：<code>keyProperty = "id"</code>。</p>
 <blockquote>
 <p>对于不支持主键自增的数据库：</p>
 </blockquote>
-<p>例如，Oracle不支持主键自增，因此 Oracle 需要使用序列来模拟自增， 即：每次插入数据的主键是从序列中拿到的值。那么如何获取到这个值呢？</p>
+<p>例如，Oracle 不支持主键自增，因此 Oracle 需要使用序列来模拟自增，即：每次插入数据的主键是从序列中拿到的值。那么如何获取到这个值呢？</p>
 <p>假设需要向某张表插入一行数据，且这张表拥有每次自增 1 的序列主键，那么我们可以这么写插入的 SQL：</p>
 <figure class="highlight xml line-numbers" data-language="XML">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#ABB2BF">&lt;</span><span style="color:#E06C75">insert</span><span style="color:#D19A66"> id</span><span style="color:#ABB2BF"> = </span><span style="color:#98C379">"addUser"</span><span style="color:#D19A66"> databaseId</span><span style="color:#ABB2BF"> = </span><span style="color:#98C379">"oracle"</span><span style="color:#ABB2BF">&gt;</span></span>
@@ -471,11 +471,11 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#ABB2BF">    values (#{id},#{username},#{password})</span></span>
 <span class="line"><span style="color:#ABB2BF">&lt;/</span><span style="color:#E06C75">insert</span><span style="color:#ABB2BF">&gt;</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<p>在上述语句中，使用了一个名为 <code>&lt;selectKey&gt;</code> 的标签，见名识意，这个标签就是用于“查询主键”的。在这个标签中，有三个属性：</p>
+<p>在上述语句中，使用了一个名为 <code>&lt;selectKey&gt;</code> 的标签，见名识意，这个标签就是用于「查询主键」的。在这个标签中，有三个属性：</p>
 <ul>
-<li>keyProperty：查出的主键封装给 JavaBean 的哪一个属性。比如我想将查出的主键封装给 id 属性，那么就像上述代码那样书写即可。</li>
-<li>order：用于指定 <code>&lt;selectKey&gt;</code> 包裹的 SQL 语句在插入的 SQL 语句执行之前（BEFORE）或之后（AFTER）执行。</li>
-<li>resultType：指定 <code>&lt;selectKey&gt;</code> 包裹的 SQL 语句查询的数据的返回值类型。</li>
+<li>keyProperty：查出的主键封装给 JavaBean 的哪一个属性。比如我想将查出的主键封装给 id 属性，那么就像上述代码那样书写即可</li>
+<li>order：用于指定 <code>&lt;selectKey&gt;</code> 包裹的 SQL 语句在插入的 SQL 语句执行之前（BEFORE）或之后（AFTER）执行</li>
+<li>resultType：指定 <code>&lt;selectKey&gt;</code> 包裹的 SQL 语句查询的数据的返回值类型</li>
 </ul>
 <p>使用 <code>order = "BEFORE"</code> 后插入语句的执行顺序是：先运行 <code>&lt;selectKey&gt;</code> 标签查询 id 的 SQL 语句，查出 id 的值后封装给 JavaBean 的 id 属性，然后再运行插入的 SQL 语句，这样就可以取出 id 属性对应的值。</p>
 <hr>
@@ -490,21 +490,21 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#ABB2BF">    values (USER_SQL.nextval,#{username},#{password})</span></span>
 <span class="line"><span style="color:#ABB2BF">&lt;/</span><span style="color:#E06C75">insert</span><span style="color:#ABB2BF">&gt;</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<p>使用 <code>order = "AFTER"</code> 后插入语句的执行顺序是：先运行插入的 SQL 语句（从序列中取出新值作为 id），然后再运行 <code>&lt;selectKey&gt;</code> 标签中查询 id 的 SQL 。</p>
+<p>使用 <code>order = "AFTER"</code> 后插入语句的执行顺序是：先运行插入的 SQL 语句（从序列中取出新值作为 id），然后再运行 <code>&lt;selectKey&gt;</code> 标签中查询 id 的 SQL。</p>
 <p>实际使用中通常使用 BEFORE 方式，而不是 AFTER 方式，因为  AFTER 方式插入多条数据时会出现问题，插入多条数据时只能获取到最后一个主键值！</p>
-<h2 id="2-4-参数处理"><a class="header-anchor" href="#2-4-参数处理"></a>2.4 参数处理</h2>
+<h2 id="3-4-参数处理"><a class="header-anchor" href="#3-4-参数处理"></a>3.4 参数处理</h2>
 <p>使用 MyBatis 时，我们通常会编写若干个 Mapper 接口，每个 Mapper 接口还有与之对应的 SQL 映射文件。在 SQL 映射文件中获取接口中的参数时，似乎只用 <code>#{参数名}</code> 的方式就能够获取到。其实并不是这么简单，不同情况下参数的获取方式也不同。</p>
 <blockquote>
 <p>单个参数</p>
 </blockquote>
 <p>MyBatis <strong>不会做特殊处理</strong> ，直接使用 <code>#{参数名}</code> 即可取出参数值。</p>
-<p>其实不使用 <code>#{参数名}</code> ，参数名换成任意字符串都能获取到，因为只传递了一个参数。</p>
-<p>比如，在单个参数的情况下，使用 <code>#{a}</code>、 <code>#{abc} </code> 等等方式都能准确地获取到。</p>
+<p>其实不使用 <code>#{参数名}</code>，参数名换成任意字符串都能获取到，因为只传递了一个参数。</p>
+<p>比如，在单个参数的情况下，使用 <code>#{a}</code>、<code>#{abc} </code> 等等方式都能准确地获取到。</p>
 <blockquote>
 <p>多个参数</p>
 </blockquote>
 <p>MyBatis <strong>会做特殊处理</strong> ：</p>
-<p>多个参数会被封装成一个 Map ，在这个 Map 中：</p>
+<p>多个参数会被封装成一个 Map，在这个 Map 中：</p>
 <ul>
 <li>
 <p>key：param1 … paramN，或者参数的索引（0、1…）</p>
@@ -513,18 +513,18 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>value：传入的参数值</p>
 </li>
 </ul>
-<p>在 SQL 映射文件中， <code>#{}</code> 就是从 map 中获取指定的 key 值。我们可以使用 <code>#{param1}</code> 或 <code>#{0}</code> 来获取多个参数中的第一个参数值。</p>
+<p>在 SQL 映射文件中，<code>#{}</code> 就是从 map 中获取指定的 key 值。我们可以使用 <code>#{param1}</code> 或 <code>#{0}</code> 来获取多个参数中的第一个参数值。</p>
 <p>但是参数过多的时候，使用这种方式不便于阅读，因此我们可以使用注解对参数进行命名。</p>
 <p>2021-10-13 补充：使用最新的 MyBatis 3.5.7 版本时，方法参数名称与 SQL 映射文件中参数名称相同时也可映射成功。</p>
 <blockquote>
 <p>命名参数</p>
 </blockquote>
-<p>命名参数就是明确指定封装参数时 map 的 key ，使用注解<code>@Param</code> ：</p>
+<p>命名参数就是明确指定封装参数时 map 的 key，使用注解 <code>@Param</code>：</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">public</span><span style="color:#E5C07B"> User</span><span style="color:#61AFEF"> getUserByIdAndUserName</span><span style="color:#E06C75">(</span><span style="color:#ABB2BF">@</span><span style="color:#E5C07B">Param</span><span style="color:#E06C75">(</span><span style="color:#98C379">"id"</span><span style="color:#E06C75">) </span><span style="color:#E5C07B">Integer</span><span style="color:#E06C75"> id</span><span style="color:#ABB2BF">,</span><span style="color:#E06C75">            </span></span>
 <span class="line"><span style="color:#ABB2BF">                                   @</span><span style="color:#E5C07B">Param</span><span style="color:#E06C75">(</span><span style="color:#98C379">"username"</span><span style="color:#E06C75">)</span><span style="color:#E5C07B">String</span><span style="color:#E06C75"> username)</span><span style="color:#ABB2BF">;</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<p>多个参数的情况下，在接口中使用了 <code>@Param</code> 注解后，多个参数会被封装成一个 map，在这个 map中：</p>
+<p>多个参数的情况下，在接口中使用了 <code>@Param</code> 注解后，多个参数会被封装成一个 map，在这个 map 中：</p>
 <ul>
 <li>key：使用 <code>@Param</code> 注解指定的值</li>
 <li>value：传入的参数值</li>
@@ -534,14 +534,14 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>实体类参数</p>
 </blockquote>
 <p>POJO：如果多个参数恰好是我们业务逻辑的数据模型，我们可以在接口参数中直接传入实体类。然后在 SQL 映射文件中使用 <code>#{属性名}</code> 就可以取出传入的实体类的属性值。</p>
-<p>Map：如果传入的数据不是业务模型的数据，没有对应的 POJO ，且不经常使用，我们可以传入 Map 集合。在 SQL 映射文件中使用 <code>#{key}</code> 就可取出 Map 集合中对应的 value 值。</p>
+<p>Map：如果传入的数据不是业务模型的数据，没有对应的 POJO，且不经常使用，我们可以传入 Map 集合。在 SQL 映射文件中使用 <code>#{key}</code> 就可取出 Map 集合中对应的 value 值。</p>
 <p>TO：如果多个参数不是业务模型中的数据，但需要经常使用，推荐编写一个 TO（Transfer, Object）数据传输对象。</p>
-<h2 id="2-5-参数处理思考"><a class="header-anchor" href="#2-5-参数处理思考"></a>2.5 参数处理思考</h2>
+<h2 id="3-5-参数处理思考"><a class="header-anchor" href="#3-5-参数处理思考"></a>3.5 参数处理思考</h2>
 <p>根据下列给出的接口，写出在 SQL 映射文件中获取参数的方式。</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">public</span><span style="color:#E5C07B"> User</span><span style="color:#61AFEF"> getUser</span><span style="color:#E06C75">(</span><span style="color:#ABB2BF">@</span><span style="color:#E5C07B">Param</span><span style="color:#E06C75">(</span><span style="color:#98C379">"id"</span><span style="color:#E06C75">) </span><span style="color:#E5C07B">Integer</span><span style="color:#E06C75"> id</span><span style="color:#ABB2BF">,</span><span style="color:#E5C07B"> String</span><span style="color:#E06C75"> username)</span><span style="color:#ABB2BF">;</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<p>id： #{id} 或者 #{param1}</p>
+<p>id：#{id} 或者 #{param1}</p>
 <p>username：#{param2} 或 #{username}（MyBatis 3.5.7 可成功映射）</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">public</span><span style="color:#E5C07B"> User</span><span style="color:#61AFEF"> getUser</span><span style="color:#E06C75">(</span><span style="color:#E5C07B">Integer</span><span style="color:#E06C75"> id</span><span style="color:#ABB2BF">,</span><span style="color:#ABB2BF"> @</span><span style="color:#E5C07B">Param</span><span style="color:#E06C75">(</span><span style="color:#98C379">"u"</span><span style="color:#E06C75">) </span><span style="color:#E5C07B">User</span><span style="color:#E06C75"> user)</span><span style="color:#ABB2BF">;</span></span></code></pre></td></tr></tbody></table>
@@ -551,7 +551,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">public</span><span style="color:#E5C07B"> User</span><span style="color:#61AFEF"> getUserById</span><span style="color:#E06C75">(</span><span style="color:#E5C07B">List</span><span style="color:#56B6C2">&lt;</span><span style="color:#E06C75">Integer</span><span style="color:#56B6C2">&gt;</span><span style="color:#E06C75"> ids)</span><span style="color:#ABB2BF">;</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<p>需要特别注意的是，如果接口中参数传递的是一个 Collection（List、Set） 集合或者是数组， MyBatis 也会对其进行特殊处理，也就是把传入的集合或数组封装到 Map 中。</p>
+<p>需要特别注意的是，如果接口中参数传递的是一个 Collection（List、Set） 集合或者是数组，MyBatis 也会对其进行特殊处理，也就是把传入的集合或数组封装到 Map 中。</p>
 <p>如果我们使用 <code>#{key}</code> 的方式获取 Map 中的 value 时：</p>
 <ul>
 <li>对于 Collection 集合来说，key 是 collection</li>
@@ -559,15 +559,15 @@ btf.addGlobalFn('pjaxSend', () => {
 <li>对于数组来说，key 是 array</li>
 </ul>
 <p>因此，对于上述给出的接口，我们想在 SQL 映射文件中获取第一个 id 的值时，可以使用 <code>#{list[0]}</code> 进行获取。</p>
-<h2 id="2-6-和-的区别"><a class="header-anchor" href="#2-6-和-的区别"></a>2.6 #{ } 和 ${ } 的区别</h2>
-<p>在 SQL 映射文件中获取参数值时可以使用 <code>#{ }</code>和 <code>${ }</code> 来获取 Map 中的值或者 POJO 对象属性的值。</p>
+<h2 id="3-6-和-的区别"><a class="header-anchor" href="#3-6-和-的区别"></a>3.6 #{ } 和 ${ } 的区别</h2>
+<p>在 SQL 映射文件中获取参数值时可以使用 <code>#{ }</code> 和 <code>${ }</code> 来获取 Map 中的值或者 POJO 对象属性的值。</p>
 <blockquote>
 <p>#{ } 和 ${ } 的区别</p>
 </blockquote>
-<p>1、 <code>#{ }</code> 采用<strong>预编译</strong>的形式，将参数添加到 SQL 语句中，类似 PreparedStatement，相当于jdbc的 ？。使用这种方式防止 SQL 注入，并会自动添加单引号。</p>
-<p>2、 <code>${ }</code> 取出的值会直接封装在 SQL 语句中，这种方式不能防止 SQL 注入，会有安全问题。简单来说，这种方式就是字符串的拼接，不会自动添加单引号，因此 <strong>为字符串类型或日期类型的字段进行赋值时，需要手动加单引号</strong>。</p>
+<p>1、<code>#{ }</code> 采用 <strong>预编译</strong> 的形式，将参数添加到 SQL 语句中，类似 PreparedStatement，相当于 jdbc 的？。使用这种方式防止 SQL 注入，并会自动添加单引号。</p>
+<p>2、<code>${ }</code> 取出的值会直接封装在 SQL 语句中，这种方式不能防止 SQL 注入，会有安全问题。简单来说，这种方式就是字符串的拼接，不会自动添加单引号，因此 <strong>为字符串类型或日期类型的字段进行赋值时，需要手动加单引号</strong>。</p>
 <p>3、大多数情况下，我们取参数的值都是使用 <code>#{ }</code>。</p>
-<p>4、对于原生 SQL  不支持占位符的地方（表名拼接、 SQL 关键字等）我们就可以使用 <code>${ }</code> 进行取值。</p>
+<p>4、对于原生 SQL  不支持占位符的地方（表名拼接、SQL 关键字等）我们就可以使用 <code>${ }</code> 进行取值。</p>
 <blockquote>
 <p>使用 ${ } 取值的示例</p>
 </blockquote>
@@ -578,28 +578,28 @@ btf.addGlobalFn('pjaxSend', () => {
 <p><code>#{ }</code> 内的参数</p>
 </blockquote>
 <p>MyBatis 对 <code>#{ }</code> 还指定了一些参数：javaType、jdbcType、mode（存储过程）、numericScale、resultMap、typeHandler、jdbcTypeName。</p>
-<p>jdbcType 通常需要在某些特定的环境下需要被设置。在我们数据为  <code>null</code> 时，有些数据库（比如Oracle…）可能无法识别 MyBatis 对 <code>null</code> 的默认处理。如果不进行配置就会进行报错：JdbcType OTHER（无效的类型，MyBatis 对所有 null 都映射的是原生 JDBC 的 OTHER 类型）。</p>
+<p>jdbcType 通常需要在某些特定的环境下需要被设置。在我们数据为  <code>null</code> 时，有些数据库（比如 Oracle…）可能无法识别 MyBatis 对 <code>null</code> 的默认处理。如果不进行配置就会进行报错：JdbcType OTHER（无效的类型，MyBatis 对所有 null 都映射的是原生 JDBC 的 OTHER 类型）。</p>
 <p>可以进行如下两种设置：</p>
-<p>1、对需要为 null 的字段加上 <code>jdbcType=NULL</code> 。eg：<code>#{email,  jdbcType=NULL}</code></p>
+<p>1、对需要为 null 的字段加上 <code>jdbcType=NULL</code>。eg：<code>#{email,  jdbcType=NULL}</code></p>
 <p>2、或者进行全局配置：</p>
 <figure class="highlight xml line-numbers" data-language="XML">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#ABB2BF">&lt;</span><span style="color:#E06C75">settings</span><span style="color:#ABB2BF">&gt;</span></span>
 <span class="line"><span style="color:#ABB2BF">    &lt;</span><span style="color:#E06C75">setting</span><span style="color:#D19A66"> name</span><span style="color:#ABB2BF"> = </span><span style="color:#98C379">"jdbcTypeForNull"</span><span style="color:#D19A66"> value</span><span style="color:#ABB2BF"> = </span><span style="color:#98C379">"NULL"</span><span style="color:#ABB2BF">/&gt;</span></span>
 <span class="line"><span style="color:#ABB2BF">&lt;/</span><span style="color:#E06C75">settings</span><span style="color:#ABB2BF">&gt;</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<h1 id="3-select-标签"><a class="header-anchor" href="#3-select-标签"></a>3. select 标签</h1>
-<h2 id="3-1-resultType"><a class="header-anchor" href="#3-1-resultType"></a>3.1 resultType</h2>
+<h1 id="4-select-标签"><a class="header-anchor" href="#4-select-标签"></a>4. select 标签</h1>
+<h2 id="4-1-resultType"><a class="header-anchor" href="#4-1-resultType"></a>4.1 resultType</h2>
 <p>使用 <code>&lt;select&gt;</code> 标签进行数据查询时，通常需要设置这个标签的两个属性：</p>
 <ul>
-<li>一个属性是 id ，值是 Mapper 接口中的方法名</li>
-<li>另一个属性是 resultType，值是查询结果的类型，即：接口中抽象方法返回值类型。不能和 resultMap 同时使用。</li>
+<li>一个属性是 id，值是 Mapper 接口中的方法名</li>
+<li>另一个属性是 resultType，值是查询结果的类型，即：接口中抽象方法返回值类型。不能和 resultMap 同时使用</li>
 </ul>
-<p>对于 resultType 属性来说，在使用时仍有需要注意的地方。 👇</p>
+<p>对于 resultType 属性来说，在使用时仍有需要注意的地方。👇</p>
 <blockquote>
 <p>方法返回值是 List</p>
 </blockquote>
 <p>如果返回的是一个集合（List），resultType 的值是集合中元素的类型。</p>
-<p>比如，接口返回值类型是 <code>List&lt;User&gt;</code> ，那么 <code>resultType = com.yang.pojo.User</code></p>
+<p>比如，接口返回值类型是 <code>List&lt;User&gt;</code>，那么 <code>resultType = com.yang.pojo.User</code></p>
 <blockquote>
 <p>方法返回值是 Map</p>
 </blockquote>
@@ -612,7 +612,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#ABB2BF">    select * from u ser where id = #{id}</span></span>
 <span class="line"><span style="color:#ABB2BF">&lt;/</span><span style="color:#E06C75">select</span><span style="color:#ABB2BF">&gt;</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<p><strong>多条记录封装成一个 Map 时</strong>，Map&lt;Integer, User&gt;：key 是这条记录的主键，value 是记录封装后的JavaBean：</p>
+<p><strong>多条记录封装成一个 Map 时</strong>，Map&lt;Integer, User&gt;：key 是这条记录的主键，value 是记录封装后的 JavaBean：</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#ABB2BF">@</span><span style="color:#E5C07B">MapKey</span><span style="color:#E06C75">(</span><span style="color:#98C379">"id"</span><span style="color:#E06C75">)   </span><span style="color:#7F848E;font-style:italic">//id为User中的属性，Map中key为主键</span></span>
 <span class="line"><span style="color:#C678DD">public</span><span style="color:#E5C07B"> Map</span><span style="color:#56B6C2">&lt;</span><span style="color:#E06C75">Integer</span><span style="color:#ABB2BF">,</span><span style="color:#E06C75"> User</span><span style="color:#56B6C2">&gt;</span><span style="color:#61AFEF"> getUserByUsernameLikeReturnMap</span><span style="color:#E06C75">(</span><span style="color:#E5C07B">String</span><span style="color:#E06C75"> username)</span></span>
@@ -623,7 +623,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#ABB2BF">    select * from user where username like #{username}</span></span>
 <span class="line"><span style="color:#ABB2BF">&lt;/</span><span style="color:#E06C75">select</span><span style="color:#ABB2BF">&gt;</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<h2 id="3-2-resultMap"><a class="header-anchor" href="#3-2-resultMap"></a>3.2 resultMap</h2>
+<h2 id="4-2-resultMap"><a class="header-anchor" href="#4-2-resultMap"></a>4.2 resultMap</h2>
 <p><strong>这个标签用于数据库字段名与自定义的 JavaBean 属性名不同的场合</strong> ，比如：</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">public</span><span style="color:#E5C07B"> User</span><span style="color:#61AFEF"> findUserById</span><span style="color:#E06C75"> (</span><span style="color:#E5C07B">Integer</span><span style="color:#E06C75"> id)</span><span style="color:#ABB2BF">;</span></span></code></pre></td></tr></tbody></table>
@@ -650,7 +650,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#ABB2BF">    select * from user where id = #{id}</span></span>
 <span class="line"><span style="color:#ABB2BF">&lt;/</span><span style="color:#E06C75">select</span><span style="color:#ABB2BF">&gt;</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<h2 id="3-3-关联查询"><a class="header-anchor" href="#3-3-关联查询"></a>3.3 关联查询</h2>
+<h2 id="4-3-关联查询"><a class="header-anchor" href="#4-3-关联查询"></a>4.3 关联查询</h2>
 <blockquote>
 <p>场景一</p>
 </blockquote>
@@ -676,7 +676,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#ABB2BF">    WHERE u.id = d.id AND u.id = #{id}</span></span>
 <span class="line"><span style="color:#ABB2BF">&lt;/</span><span style="color:#E06C75">select</span><span style="color:#ABB2BF">&gt;</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<p>除了上述的写法外，<code>&lt;resultMap&gt;</code> 标签内还有另一种写法， 可以使用 <code>&lt;association&gt;</code> 标签定义关联的单个对象的封装规则</p>
+<p>除了上述的写法外，<code>&lt;resultMap&gt;</code> 标签内还有另一种写法，可以使用 <code>&lt;association&gt;</code> 标签定义关联的单个对象的封装规则</p>
 <figure class="highlight xml line-numbers" data-language="XML">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#ABB2BF">&lt;</span><span style="color:#E06C75">resultMap</span><span style="color:#D19A66"> type</span><span style="color:#ABB2BF"> = </span><span style="color:#98C379">"com.yang.pojo.User"</span><span style="color:#D19A66"> id</span><span style="color:#ABB2BF"> = </span><span style="color:#98C379">"MyDifUser_2"</span><span style="color:#ABB2BF">&gt;</span></span>
 <span class="line"><span style="color:#ABB2BF">    &lt;</span><span style="color:#E06C75">id</span><span style="color:#D19A66"> column</span><span style="color:#ABB2BF"> = </span><span style="color:#98C379">"id"</span><span style="color:#D19A66"> property</span><span style="color:#ABB2BF"> = </span><span style="color:#98C379">"id"</span><span style="color:#ABB2BF"> /&gt;</span></span>
@@ -701,7 +701,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <li>再根据查询出的用户信息中的 did 值去部门表查出部门信息</li>
 <li>最后将部门信息设置到员工信息中</li>
 </ul>
-<p>创建一个新的 Mapper 接口，取名为 <code>DepartmentMapper</code> ，其中有一个方法：</p>
+<p>创建一个新的 Mapper 接口，取名为 <code>DepartmentMapper</code>，其中有一个方法：</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">public</span><span style="color:#C678DD"> interface</span><span style="color:#E5C07B"> DepartmentMapper</span><span style="color:#ABB2BF">{</span></span>
 <span class="line"><span style="color:#7F848E;font-style:italic">    //根据部门id查询部门</span></span>
@@ -756,7 +756,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>场景二</p>
 </blockquote>
 <p><strong>在查询部门时，将部门对应的所有员工信息也查询出来（一对多）</strong></p>
-<p>前提，在Department类中添加属性：</p>
+<p>前提，在 Department 类中添加属性：</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">public</span><span style="color:#C678DD"> class</span><span style="color:#E5C07B"> Department</span><span style="color:#ABB2BF">{</span></span>
 <span class="line"><span style="color:#C678DD">    private</span><span style="color:#E5C07B"> Integer</span><span style="color:#E06C75"> id</span><span style="color:#ABB2BF">;</span></span>
@@ -838,7 +838,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#ABB2BF">&lt;/</span><span style="color:#E06C75">select</span><span style="color:#ABB2BF">&gt;</span></span>
 <span class="line"></span></code></pre></td></tr></tbody></table>
       </figure>
-<h2 id="3-4-模糊查询"><a class="header-anchor" href="#3-4-模糊查询"></a>3.4 模糊查询</h2>
+<h2 id="4-4-模糊查询"><a class="header-anchor" href="#4-4-模糊查询"></a>4.4 模糊查询</h2>
 <p>在 <code>DepartmentMapper</code> 接口中新增一个抽象方法：</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#7F848E;font-style:italic">/**</span></span>
@@ -854,7 +854,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#ABB2BF">    select * from user where username like "%"#{username}"%"</span></span>
 <span class="line"><span style="color:#ABB2BF">&lt;/</span><span style="color:#E06C75">select</span><span style="color:#ABB2BF">&gt;</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<h2 id="3-5-拓展"><a class="header-anchor" href="#3-5-拓展"></a>3.5 拓展</h2>
+<h2 id="4-5-拓展"><a class="header-anchor" href="#4-5-拓展"></a>4.5 拓展</h2>
 <p><code>&lt;collection&gt;</code> 标签中的 column 属性需要传递多列的值时，可以将多列的值封装换成 Map 进行传递，那么 column 可以这么写：</p>
 <figure class="highlight plaintext line-numbers" data-language="PLAINTEXT">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span>column= "{key1 = column1, key2 = column2}"</span></span></code></pre></td></tr></tbody></table>
@@ -863,7 +863,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <figure class="highlight plaintext line-numbers" data-language="PLAINTEXT">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span>column= "{deptId = id}"</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<p>在 <code>&lt;collection&gt;</code> 标签中还有一个名为 <code>fetchType</code> 的属性，这个属性<strong>默认值</strong>是 <code>lazy</code>，表示使用<strong>延迟加载</strong> 。就算在全局配置文件中开启了<strong>延迟加载</strong> ，我们也可以在某个 <code>&lt;collection&gt;</code>  标签内将 <code>fetchType</code> 属性设置为 <code>eager</code> ，这样就可以将这条语句设置为<strong>立即加载</strong> （全局配置的延迟加载并没失效）。</p>
+<p>在 <code>&lt;collection&gt;</code> 标签中还有一个名为 <code>fetchType</code> 的属性，这个属性 <strong>默认值</strong> 是 <code>lazy</code>，表示使用 <strong>延迟加载</strong> 。就算在全局配置文件中开启了 <strong>延迟加载</strong> ，我们也可以在某个 <code>&lt;collection&gt;</code>  标签内将 <code>fetchType</code> 属性设置为 <code>eager</code>，这样就可以将这条语句设置为 <strong>立即加载</strong> （全局配置的延迟加载并没失效）。</p>
 <blockquote>
 <p>鉴别器</p>
 </blockquote>
@@ -905,8 +905,8 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#ABB2BF">    SELECT * FROM user WHERE id = #{id}</span></span>
 <span class="line"><span style="color:#ABB2BF">&lt;/</span><span style="color:#E06C75">select</span><span style="color:#ABB2BF">&gt;</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<h1 id="4-动态SQL"><a class="header-anchor" href="#4-动态SQL"></a>4. 动态SQL</h1>
-<h2 id="4-1-动态-SQL-简介"><a class="header-anchor" href="#4-1-动态-SQL-简介"></a>4.1 动态 SQL 简介</h2>
+<h1 id="5-动态-SQL"><a class="header-anchor" href="#5-动态-SQL"></a>5. 动态 SQL</h1>
+<h2 id="5-1-动态-SQL-简介"><a class="header-anchor" href="#5-1-动态-SQL-简介"></a>5.1 动态 SQL 简介</h2>
 <p>动态 SQL 是 MyBatis 强大的特性之一，极大的简化了我们拼接 SQL 的操作。如果条件很多，使用原生的方式拼接 SQL 简直就是煎熬！😡</p>
 <p>动态 SQL 元素和使用 JSTL 或其他类似基于 XML 的文本处理器相似。</p>
 <p>MyBatis 采用功能强大的基于 OGNL 表达式来简化操作：</p>
@@ -919,8 +919,8 @@ btf.addGlobalFn('pjaxSend', () => {
 <blockquote>
 <p>涉及的文件</p>
 </blockquote>
-<p>在本节中，Mapper 接口名为 <code>UserMapperDynamicSQL</code> ，对应的 SQL 映射文件名为 <code>UserMapperDynamicSQL</code> ，这两个文件都位于 <code>com.yang.dao.UserMapper</code> 包下。</p>
-<h2 id="4-2-条件判断"><a class="header-anchor" href="#4-2-条件判断"></a>4.2 条件判断</h2>
+<p>在本节中，Mapper 接口名为 <code>UserMapperDynamicSQL</code>，对应的 SQL 映射文件名为 <code>UserMapperDynamicSQL</code>，这两个文件都位于 <code>com.yang.dao.UserMapper</code> 包下。</p>
+<h2 id="5-2-条件判断"><a class="header-anchor" href="#5-2-条件判断"></a>5.2 条件判断</h2>
 <p>现在有一个需求：根据传递的信息查询对应的用户，这些信息可能是多个或没有，如果没有时，就查询出全部用户。</p>
 <p>Mapper 接口的抽象方法如下：</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
@@ -957,18 +957,18 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#ABB2BF">&lt;/</span><span style="color:#E06C75">select</span><span style="color:#ABB2BF">&gt;</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <p><code>&lt;if&gt;</code> 标签中的 test 属性的值支持 OGNL 表达式，表达式中的字段（如：id、username…）是从抽象方法的参数中获取的，而非数据库字段。</p>
-<p>OGNL 表达式还可以进行字符串和数字的判断，比如我需要判断 gender 是否等于 0 ，那么就可以直接写成：</p>
+<p>OGNL 表达式还可以进行字符串和数字的判断，比如我需要判断 gender 是否等于 0，那么就可以直接写成：</p>
 <p><code>gender == 0</code></p>
 <p>这似乎像一个字符串，但是它就会对其进行判断！🐮</p>
 <blockquote>
 <p><code>&lt;where&gt;</code> 标签</p>
 </blockquote>
 <p>像上面那样编写好 SQL 映射文件后似乎就完成了我们的需求？</p>
-<p>其实并没有，查询的时候如果某些条件没带sql可能拼装会出现问题。比如：传入的参数中 id 为空，但是 username 不为空，这个时候使用上述方法拼接 SQL 就会出现问题。</p>
+<p>其实并没有，查询的时候如果某些条件没带 sql 可能拼装会出现问题。比如：传入的参数中 id 为空，但是 username 不为空，这个时候使用上述方法拼接 SQL 就会出现问题。</p>
 <p>为了解决这个问题，我们可以采用以下两种方式（说实话，推荐第一种，简单粗暴）：</p>
 <ul>
-<li>给 where 后面加一个 1=1 或 true ，以后的条件都是 and xxxx 的格式</li>
-<li>MyBatis 推荐使用 <code>&lt;where&gt;</code> 标签来将所有的查询条件包括在内，然后MyBatis 就会将 <code>&lt;where&gt;</code> 标签中拼装的 SQL 中多出来的 <code>and</code> 或者 <code>or</code> 去掉</li>
+<li>给 where 后面加一个 1=1 或 true，以后的条件都是 and xxxx 的格式</li>
+<li>MyBatis 推荐使用 <code>&lt;where&gt;</code> 标签来将所有的查询条件包括在内，然后 MyBatis 就会将 <code>&lt;where&gt;</code> 标签中拼装的 SQL 中多出来的 <code>and</code> 或者 <code>or</code> 去掉</li>
 </ul>
 <p><code>&lt;where&gt;</code> 标签的使用：</p>
 <figure class="highlight xml line-numbers" data-language="XML">
@@ -991,16 +991,16 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#ABB2BF">    &lt;/</span><span style="color:#E06C75">where</span><span style="color:#ABB2BF">&gt;</span></span>
 <span class="line"><span style="color:#ABB2BF">&lt;/</span><span style="color:#E06C75">select</span><span style="color:#ABB2BF">&gt;</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<p><mark>但需要注意的是：</mark> <code>&lt;where&gt;</code>标签只会去掉首位多出来的 and 或者 or ，不会去掉末尾的 and 或 or。</p>
+<p><mark>但需要注意的是：</mark> <code>&lt;where&gt;</code> 标签只会去掉首位多出来的 and 或者 or，不会去掉末尾的 and 或 or。</p>
 <p>但是有些小机灵鬼就喜欢将 and 或者 or 写在末尾，那应该怎么办呢？</p>
-<h2 id="4-3-字符串截取"><a class="header-anchor" href="#4-3-字符串截取"></a>4.3 字符串截取</h2>
-<p>如果只使用 <code>&lt;where&gt;</code> 标签是无法解决拼接 SQL 末尾多余的 and 或 or ，在 MyBatis 中，可以使用 <code>&lt;trim&gt;</code> 标签来解决这个问题。</p>
+<h2 id="5-3-字符串截取"><a class="header-anchor" href="#5-3-字符串截取"></a>5.3 字符串截取</h2>
+<p>如果只使用 <code>&lt;where&gt;</code> 标签是无法解决拼接 SQL 末尾多余的 and 或 or，在 MyBatis 中，可以使用 <code>&lt;trim&gt;</code> 标签来解决这个问题。</p>
 <p>使用 <code>&lt;trim&gt;</code> 标签后得到的 SQL 语句是 <code>&lt;trim&gt;</code> 标签体中整个字符串拼串后的结果。</p>
 <p><code>&lt;trim&gt;</code> 标签提供了 4 个属性用于规范拼串得到的 SQL 语句：</p>
-<p>1、 prefix：前缀。使用这个属性后，会为拼串得到的 SQL 添加一个 <strong>前缀</strong> 。</p>
+<p>1、prefix：前缀。使用这个属性后，会为拼串得到的 SQL 添加一个 <strong>前缀</strong> 。</p>
 <p>2、suffix：后缀。使用这个属性后，会为拼串得到的 SQL 添加一个 <strong>后缀</strong> 。</p>
-<p>3、prefixOverrides：前缀覆盖。使用这个属性后，会<mark>去除</mark>拼串得到的 SQL <mark>前</mark>多余的字符串。</p>
-<p>3、suffixOverrides：后缀覆盖。使用这个属性后，会<mark>去除</mark>拼串得到的 SQL <mark>后</mark>多余的字符串。</p>
+<p>3、prefixOverrides：前缀覆盖。使用这个属性后，会 <mark>去除</mark> 拼串得到的 SQL <mark>前</mark> 多余的字符串。</p>
+<p>3、suffixOverrides：后缀覆盖。使用这个属性后，会 <mark>去除</mark> 拼串得到的 SQL <mark>后</mark> 多余的字符串。</p>
 <p>如果将 and 或 or 写在了末尾，那么就可以这样书写 SQL 映射文件：</p>
 <figure class="highlight xml line-numbers" data-language="XML">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#ABB2BF">&lt;</span><span style="color:#E06C75">select</span><span style="color:#D19A66"> id</span><span style="color:#ABB2BF">=</span><span style="color:#98C379">"getUsersByConditionTrim"</span><span style="color:#D19A66"> resultType</span><span style="color:#ABB2BF">=</span><span style="color:#98C379">"com.yang.pojo.User"</span><span style="color:#ABB2BF">&gt;</span></span>
@@ -1026,8 +1026,8 @@ btf.addGlobalFn('pjaxSend', () => {
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">public</span><span style="color:#E5C07B"> List</span><span style="color:#56B6C2">&lt;</span><span style="color:#E06C75">User</span><span style="color:#56B6C2">&gt;</span><span style="color:#61AFEF"> getUsersByConditionTrim</span><span style="color:#E06C75">(</span><span style="color:#E5C07B">User</span><span style="color:#E06C75"> user)</span><span style="color:#ABB2BF">;</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<h2 id="4-4-分支选择"><a class="header-anchor" href="#4-4-分支选择"></a>4.4 分支选择</h2>
-<p>在 Java 语言中，用于条件判断的关键字是 <code>if</code> ，还有一些用于分支选择的关键字<code>switch</code> 、<code>case</code> 和 <code>default</code>，在 MyBatis 的动态 SQL 中，也提供了分支选择的标签：<code>&lt;choose&gt;</code> 、<code>&lt;when&gt;</code> 和 <code>&lt;otherwise&gt;</code> 。</p>
+<h2 id="5-4-分支选择"><a class="header-anchor" href="#5-4-分支选择"></a>5.4 分支选择</h2>
+<p>在 Java 语言中，用于条件判断的关键字是 <code>if</code>，还有一些用于分支选择的关键字 <code>switch</code>、<code>case</code> 和 <code>default</code>，在 MyBatis 的动态 SQL 中，也提供了分支选择的标签：<code>&lt;choose&gt;</code>、<code>&lt;when&gt;</code> 和 <code>&lt;otherwise&gt;</code>。</p>
 <p>假设现在有一个需求：根据携带的条件（id、username、email）在用户表中查询用户信息，携带的条件只能使用一个。如果没有携带任何条件，就查询性别为女（gender = 0）的用户。</p>
 <p>Mapper 接口的抽象方法如下：</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
@@ -1060,10 +1060,10 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>题外话</p>
 </blockquote>
 <p>在 Java 中，使用 <code>switch</code> 关键词时并不强制要求使用 <code>default</code> 关键词。</p>
-<p><code>switch</code> 和 <code>case</code> 组成一个条件选择语句，找到相同的 <code>case</code> 值做为入口，执行后面的程序；若所有的 <code>case</code> 都不满足，则找 <code>default</code> 入口；若未找到则退出整个 <code>switch </code> 。 所以 <code>default</code> 只是一个备用的入口，有没有都无所谓。</p>
-<p>不写 <code>default</code> 是建立在自己书写的条件已经包含了所有情况下，为了程序逻辑的完整性，建议写上 <code>default</code> 。</p>
-<p>PS：在阿里巴巴的代码规范中，<code>switch</code> 和 <code>case</code> 后强制要求书写 <code>default</code> 。</p>
-<h2 id="4-5-封装修改条件"><a class="header-anchor" href="#4-5-封装修改条件"></a>4.5 封装修改条件</h2>
+<p><code>switch</code> 和 <code>case</code> 组成一个条件选择语句，找到相同的 <code>case</code> 值做为入口，执行后面的程序；若所有的 <code>case</code> 都不满足，则找 <code>default</code> 入口；若未找到则退出整个 <code>switch </code>。所以 <code>default</code> 只是一个备用的入口，有没有都无所谓。</p>
+<p>不写 <code>default</code> 是建立在自己书写的条件已经包含了所有情况下，为了程序逻辑的完整性，建议写上 <code>default</code>。</p>
+<p>PS：在阿里巴巴的代码规范中，<code>switch</code> 和 <code>case</code> 后强制要求书写 <code>default</code>。</p>
+<h2 id="5-5-封装修改条件"><a class="header-anchor" href="#5-5-封装修改条件"></a>5.5 封装修改条件</h2>
 <p><code>&lt;where&gt;</code> 标签用于封装查询条件，而 <code>&lt;set&gt;</code> 标签可用于封装修改条件。</p>
 <p>在查询数据时，可能会存在多出的 and 或 or，我们可以使用 <code>&lt;where&gt;</code> 或 <code>&lt;trim&gt;</code> 来解决。</p>
 <p>在更新数据时，可能会存在多出的逗号，那么可以使用 <code>&lt;set&gt;</code> 或 <code>&lt;where&gt;</code> 来解决。</p>
@@ -1090,7 +1090,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#ABB2BF">&lt;/</span><span style="color:#E06C75">update</span><span style="color:#ABB2BF">&gt;</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <p>除了使用 <code>&lt;set&gt;</code> 标签来解决多余的逗号外，还可以使用 <code>&lt;trim&gt;</code> 标签，使用该标签中的 <code>suffixOverrides</code> 属性，将其值指定为 <code>,</code> 即可。</p>
-<h2 id="4-6-遍历"><a class="header-anchor" href="#4-6-遍历"></a>4.6 遍历</h2>
+<h2 id="5-6-遍历"><a class="header-anchor" href="#5-6-遍历"></a>5.6 遍历</h2>
 <p>现在有一个需求：接口的抽象方法接收到一个包含了多个 id 的 List 集合，需要从数据库中查询这些这些 id 对应的用户信息。</p>
 <p>我们可以将每个 id 一一取出来，然后进行查询，这个时候就需要用到 MyBatis 中的遍历了，需要用到 <code>&lt;foreach&gt;</code> 标签。</p>
 <blockquote>
@@ -1119,7 +1119,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>3、separator：每个元素之间的分隔符</p>
 <p>4、open：遍历出所有结果拼接一个开始的字符</p>
 <p>5、close：遍历出所有结果拼接一个结束的字符</p>
-<p>6、 index：索引。遍历 list 或数组时，index 是索引，item 是当前值；遍历map时，index是 map 的 key，item 是 map 的值</p>
+<p>6、index：索引。遍历 list 或数组时，index 是索引，item 是当前值；遍历 map 时，index 是 map 的 key，item 是 map 的值</p>
 <p>最后使用 <code>#{item}</code> 就能取出每个遍历的值，如果该元素是一个对象，可以使用 <code>#{item.xx}</code> 的方式取出这个对象对应的成员变量的值。</p>
 <blockquote>
 <p>collection 属性</p>
@@ -1127,8 +1127,8 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>参考链接：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/fnlingnzb-learner/p/10566452.html">mybatis之foreach用法</a></p>
 <p>在 <code>&lt;foreach&gt;</code> 标签中，collection 属性是必选的，表示需要进行遍历的对象。该属性的属性值一般是接口抽象方法中的需要被遍历的参数。</p>
 <p>如果这个参数是 List 对象，默认用 “list” 代替作为键；如果这个参数是数组，默认用 “array” 代替作为键。这两个默认值相当于 MyBatis 内置的别名。</p>
-<p>在作为入参时还可以使用 <code>@Param("keyName")</code> 来设置键，设置 keyName 后，两个默认值 list 和 array将会失效。</p>
-<h2 id="4-7-MySQL-批量保存"><a class="header-anchor" href="#4-7-MySQL-批量保存"></a>4.7 MySQL 批量保存</h2>
+<p>在作为入参时还可以使用 <code>@Param("keyName")</code> 来设置键，设置 keyName 后，两个默认值 list 和 array 将会失效。</p>
+<h2 id="5-7-MySQL-批量保存"><a class="header-anchor" href="#5-7-MySQL-批量保存"></a>5.7 MySQL 批量保存</h2>
 <p>在 MySQL 环境下，使用 MyBatis 实现批量保存可以使用 <code>&lt;foreach&gt;</code> 进行遍历，MySQL 支持以下语法：</p>
 <figure class="highlight sql line-numbers" data-language="SQL">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">values</span><span style="color:#ABB2BF">(), (), () </span></span></code></pre></td></tr></tbody></table>
@@ -1150,17 +1150,17 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#ABB2BF">&lt;/</span><span style="color:#E06C75">insert</span><span style="color:#ABB2BF">&gt;</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <p>除此之外，还可以执行多条 SQL 语句，这些 SQL 语句使用分号进行隔开。</p>
-<p>MySQL 下允许在一条语句中使用<strong>分号</strong>来分割多条查询，但这个功能默认是关闭的，开启这个功能需要在 jdbc.url（数据库连接属性） 中添加设置 <code>allowMultQueries = true</code> 。</p>
-<h2 id="4-8-其他"><a class="header-anchor" href="#4-8-其他"></a>4.8 其他</h2>
+<p>MySQL 下允许在一条语句中使用 <strong>分号</strong> 来分割多条查询，但这个功能默认是关闭的，开启这个功能需要在 jdbc.url（数据库连接属性） 中添加设置 <code>allowMultQueries = true</code>。</p>
+<h2 id="5-8-其他"><a class="header-anchor" href="#5-8-其他"></a>5.8 其他</h2>
 <blockquote>
 <p>MyBatis 默认内置参数</p>
 </blockquote>
-<p>1、 _parameter：代表整个参数体</p>
+<p>1、_parameter：代表整个参数体</p>
 <ul>
 <li>单个参数：_parameter 就是这个参数</li>
 <li>多个参数：参数会被封装成一个 map，_parameter 就是代表这个 map</li>
 </ul>
-<p>2、 _databaseId：如果配置了 <code>&lt;databaseIdProvider&gt;</code> 标签，_databaseId 就是代表当前数据库的别名</p>
+<p>2、_databaseId：如果配置了 <code>&lt;databaseIdProvider&gt;</code> 标签，_databaseId 就是代表当前数据库的别名</p>
 <blockquote>
 <p><code>&lt;bind&gt;</code> 标签</p>
 </blockquote>
@@ -1179,7 +1179,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#ABB2BF">&lt;/</span><span style="color:#E06C75">sql</span><span style="color:#ABB2BF">&gt;</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <p><code>&lt;sql&gt;</code> 标签内部也可以进行动态判断，比如使用标签 <code>&lt;if&gt;</code> 进行判断。</p>
-<p>在 IDEA 中使用 <code>&lt;sql&gt;</code> 标签时， IDEA 可能会出现这样的错误提示：</p>
+<p>在 IDEA 中使用 <code>&lt;sql&gt;</code> 标签时，IDEA 可能会出现这样的错误提示：</p>
 <figure class="highlight plaintext line-numbers" data-language="PLAINTEXT">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span>&lt;statement&gt; or DELIMITER expected, got 'xxxxx'</span></span></code></pre></td></tr></tbody></table>
       </figure>
@@ -1188,13 +1188,13 @@ btf.addGlobalFn('pjaxSend', () => {
 <p><code>&lt;include&gt;</code> 标签</p>
 </blockquote>
 <p>这个标签可以用来引用外部定义的 <code>&lt;sql&gt;</code> 标签内的内容。</p>
-<p>1、 <code>&lt;include refid="insertColumn"/&gt;</code></p>
-<p>2、还可以在 <code>&lt;include&gt;</code> 标签中定义一个<code>&lt;property&gt;</code>标签，用于自定义属性。</p>
-<p>3、include-property 取值的正确方式是 <code>${prop}</code> ，不能使用<code>#{ }</code> 取值。</p>
-<h1 id="5-缓存"><a class="header-anchor" href="#5-缓存"></a>5. 缓存</h1>
+<p>1、<code>&lt;include refid="insertColumn"/&gt;</code></p>
+<p>2、还可以在 <code>&lt;include&gt;</code> 标签中定义一个 <code>&lt;property&gt;</code> 标签，用于自定义属性。</p>
+<p>3、include-property 取值的正确方式是 <code>${prop}</code>，不能使用 <code>#{ }</code> 取值。</p>
+<h1 id="6-缓存"><a class="header-anchor" href="#6-缓存"></a>6. 缓存</h1>
 <p>MyBatis 包含一个非常强大的查询缓存特性，它可以非常方便地进行配置和定制。缓存可以极大的提升查询效率。</p>
-<h2 id="5-1-一级缓存"><a class="header-anchor" href="#5-1-一级缓存"></a>5.1 一级缓存</h2>
-<p>一级缓存又被称为本地缓存，属于 SqlSession 级别的缓存，一级缓存是<strong>一直开启，不可被关闭的</strong> 。与数据库同一次会话期间查询到的数据会被放到本地缓存中， 以后如果需要获取相同的数据，直接从缓存中拿，不会再去查询数据库。通常只有在单机的情况下才有效，集群情况下会有数据不一致的问题。</p>
+<h2 id="6-1-一级缓存"><a class="header-anchor" href="#6-1-一级缓存"></a>6.1 一级缓存</h2>
+<p>一级缓存又被称为本地缓存，属于 SqlSession 级别的缓存，一级缓存是 <strong>一直开启，不可被关闭的</strong> 。与数据库同一次会话期间查询到的数据会被放到本地缓存中，以后如果需要获取相同的数据，直接从缓存中拿，不会再去查询数据库。通常只有在单机的情况下才有效，集群情况下会有数据不一致的问题。</p>
 <blockquote>
 <p>一级缓存失效的情况</p>
 </blockquote>
@@ -1230,14 +1230,14 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>控制台打印结果：</p>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SSMImages/%E6%89%8B%E5%8A%A8%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%80%E7%BA%A7%E7%BC%93%E5%AD%98%E4%B8%8D%E5%A4%B1%E6%95%88.png" alt="手动修改数据库一级缓存不失效"></p>
 <p>可以看到整个过程只执行了一条 SQL，两次查询得到的对象也是同一个，证明手动修改数据库不会令一级缓存失效。</p>
-<h2 id="5-2-二级缓存"><a class="header-anchor" href="#5-2-二级缓存"></a>5.2 二级缓存</h2>
+<h2 id="6-2-二级缓存"><a class="header-anchor" href="#6-2-二级缓存"></a>6.2 二级缓存</h2>
 <p>二级缓存又称为全局缓存，基于 namespace 级别的缓存，一个 namespace 对应一个二级缓存，同时一个 namespace 也对应了一个 SQL 映射文件。</p>
 <blockquote>
 <p>工作机制</p>
 </blockquote>
-<p>1、一个会话：查询一条数据，这个数据就会被放到当前会话的<strong>一级缓存</strong>中</p>
+<p>1、一个会话：查询一条数据，这个数据就会被放到当前会话的 <strong>一级缓存</strong> 中</p>
 <p>2、如果会话关闭，一级缓存中的数据就会被保存到二级缓存，新的会话查询信息就可以参照二级缓存中的内容</p>
-<p>3、 <strong>不同的namespace查询出的数据会被放在自己对应的缓存中</strong>（map）</p>
+<p>3、<strong>不同的 namespace 查询出的数据会被放在自己对应的缓存中</strong>（map）</p>
 <blockquote>
 <p>使用</p>
 </blockquote>
@@ -1247,13 +1247,13 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#ABB2BF">    &lt;</span><span style="color:#E06C75">setting</span><span style="color:#D19A66"> name</span><span style="color:#ABB2BF"> = </span><span style="color:#98C379">"cacheEnabled"</span><span style="color:#D19A66"> value</span><span style="color:#ABB2BF"> = </span><span style="color:#98C379">"true"</span><span style="color:#ABB2BF">/&gt; </span></span>
 <span class="line"><span style="color:#ABB2BF">&lt;/</span><span style="color:#E06C75">settings</span><span style="color:#ABB2BF">&gt;</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<p>再去相关的 SQL 映射文件中配置使用二级缓存：<code>&lt;cache&gt;&lt;/cache&gt;</code> ，加上这个标签就行。当然也可以对这个标签的一些属性进行设置。</p>
+<p>再去相关的 SQL 映射文件中配置使用二级缓存：<code>&lt;cache&gt;&lt;/cache&gt;</code>，加上这个标签就行。当然也可以对这个标签的一些属性进行设置。</p>
 <p>最后实体类需要 <strong>实现序列化接口 <code>Serializable</code></strong>。二级缓存必须在 <code>SqlSession</code> 关闭或提交之后有效。</p>
 <p><strong>两次查询之间执行了任意的增删改，会使一级和二级缓存同时失效</strong>。</p>
 <hr>
-<p>启用二级缓存后，数据会从二级缓存中获取。首次查询出的数据会被默认放到一级缓存中，只有对话关闭 <code>sqlSession.close()</code> 或提交后，一级缓存中的数据<mark>才会</mark>转移到二级缓存中。</p>
+<p>启用二级缓存后，数据会从二级缓存中获取。首次查询出的数据会被默认放到一级缓存中，只有对话关闭 <code>sqlSession.close()</code> 或提交后，一级缓存中的数据 <mark>才会</mark> 转移到二级缓存中。</p>
 <blockquote>
-<p>SQL 映射文件中<code>&lt;cache&gt;</code>标签属性</p>
+<p>SQL 映射文件中 <code>&lt;cache&gt;</code> 标签属性</p>
 </blockquote>
 <p>1、eviction：缓存的回收机制</p>
 <ul>
@@ -1274,32 +1274,32 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>3、readOnly：是否只读。</p>
 <ul>
 <li>
-<p>true：只读。MyBatis 认为从所有缓存中获取数据的操作都是只读的，不会修改数据。MyBatis 为了加快获取速度，直接就将数据在缓存中的应用交给用户。不安全，速度快。</p>
+<p>true：只读。MyBatis 认为从所有缓存中获取数据的操作都是只读的，不会修改数据。MyBatis 为了加快获取速度，直接就将数据在缓存中的应用交给用户。不安全，速度快</p>
 </li>
 <li>
-<p>false：非只读。MyBatis认为获取的数据可能会被修改。MyBatis 会利用序列化和反序化的技术克隆一份数据。安全，速度慢。 <strong>默认值。</strong></p>
+<p>false：非只读。MyBatis 认为获取的数据可能会被修改。MyBatis 会利用序列化和反序化的技术克隆一份数据。安全，速度慢。 <strong>默认值。</strong></p>
 </li>
 </ul>
-<p>4、size：缓存存放多少元素。可被设置为任意正整数，缓存的对象数目等于运行环境的可用内存资源数目。默认是1024。</p>
+<p>4、size：缓存存放多少元素。可被设置为任意正整数，缓存的对象数目等于运行环境的可用内存资源数目。默认是 1024。</p>
 <p>5、type：指定自定义缓存的类名。需要实现 <code>Cache</code> 接口。</p>
 <ul>
-<li>注意：查出的数据都会默认先放到一级缓存中，只有会话提交或关闭后，一级缓存中的数据才会转移到二级缓存。</li>
+<li>注意：查出的数据都会默认先放到一级缓存中，只有会话提交或关闭后，一级缓存中的数据才会转移到二级缓存</li>
 </ul>
-<h2 id="5-3-相关设置与属性"><a class="header-anchor" href="#5-3-相关设置与属性"></a>5.3 相关设置与属性</h2>
-<p>全局配置文件中 <code>&lt;setting&gt;</code> 标签中的 cacheEnabled：设置为false时，关闭二级缓存，一级缓存一直可用且不可被关闭。</p>
-<p>每个<code>&lt;select&gt;</code>标签默认都有一个 <code>useCache="true"</code> 属性。这个属性设置为 false 时，不使用二级缓存，但一级缓存依然可用。</p>
+<h2 id="6-3-相关设置与属性"><a class="header-anchor" href="#6-3-相关设置与属性"></a>6.3 相关设置与属性</h2>
+<p>全局配置文件中 <code>&lt;setting&gt;</code> 标签中的 cacheEnabled：设置为 false 时，关闭二级缓存，一级缓存一直可用且不可被关闭。</p>
+<p>每个 <code>&lt;select&gt;</code> 标签默认都有一个 <code>useCache="true"</code> 属性。这个属性设置为 false 时，不使用二级缓存，但一级缓存依然可用。</p>
 <p>每个增删改标签中 <strong>默认</strong> 都有 flushCache=“true”，表示执行增删改后 <strong>一、二级缓存都被清空</strong> 。</p>
 <p><code>&lt;select&gt;</code> 标签中 <strong>默认</strong> 有 flushCache=“false”，若设置为 true，每次查询后都会清空所有缓存。</p>
 <p><code>sqlSession.clearCache()</code> 表示只清空当前 sqlSession 的一级缓存，但关闭后二级缓存也无法使用，因为一级缓存已被清空了。</p>
 <p>在全局配置文件中 <code>&lt;setting&gt;</code> 标签有一个属性 <code>localCacheScope</code>，表示本地缓存作用域。</p>
 <ul>
-<li>SESSION：使用一级缓存，当前会话所有数据保存在会话缓存中。</li>
-<li>STATEMENT：相当于禁用一级缓存。</li>
+<li>SESSION：使用一级缓存，当前会话所有数据保存在会话缓存中</li>
+<li>STATEMENT：相当于禁用一级缓存</li>
 </ul>
 <p>缓存的顺序：二级缓存 --&gt; 一级缓存 --&gt; 数据库</p>
-<p><strong>SqlSession关闭之后，一级缓存中数据会写入二级缓存</strong>。</p>
-<h2 id="5-4-整合-EhCache"><a class="header-anchor" href="#5-4-整合-EhCache"></a>5.4 整合 EhCache</h2>
-<p>PS：了解即可，这年头谁还用这玩意啊，都用 Redis了  😏</p>
+<p><strong>SqlSession 关闭之后，一级缓存中数据会写入二级缓存</strong>。</p>
+<h2 id="6-4-整合-EhCache"><a class="header-anchor" href="#6-4-整合-EhCache"></a>6.4 整合 EhCache</h2>
+<p>PS：了解即可，这年头谁还用这玩意啊，都用 Redis 了  😏</p>
 <p>首先需要在 pom.xml 中导入相关依赖：</p>
 <figure class="highlight xml line-numbers" data-language="XML">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#7F848E;font-style:italic">&lt;!-- https://mvnrepository.com/artifact/org.mybatis.caches/mybatis-ehcache --&gt;</span></span>
@@ -1346,16 +1346,16 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#ABB2BF">&lt;/</span><span style="color:#E06C75">ehcache</span><span style="color:#ABB2BF">&gt;</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <hr>
-<p>如果每个 SQL 映射文件都要使用 EhCache ，那岂不是每次都要写一遍 <code>&lt;cache&gt;&lt;/cache&gt;</code> ，这里还有一个标签：</p>
+<p>如果每个 SQL 映射文件都要使用 EhCache，那岂不是每次都要写一遍 <code>&lt;cache&gt;&lt;/cache&gt;</code>，这里还有一个标签：</p>
 <figure class="highlight xml line-numbers" data-language="XML">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#ABB2BF">&lt;</span><span style="color:#E06C75">cache-ref</span><span style="color:#D19A66"> namespace</span><span style="color:#ABB2BF">=</span><span style="color:#98C379">"com.yang.dao.IUserDao"</span><span style="color:#ABB2BF">/&gt;</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <p>这个标签表示引用缓存，它有一个名为 <code>namespace</code> 的属性，可以通过这个属性指定当前 SQL 映射文件使用的缓存和哪个名称空间下的缓存一样。</p>
-<h1 id="6-运行原理"><a class="header-anchor" href="#6-运行原理"></a>6. 运行原理</h1>
+<h1 id="7-运行原理"><a class="header-anchor" href="#7-运行原理"></a>7. 运行原理</h1>
 <blockquote>
-<p>以“根据员工ID查询员工信息”为例：</p>
+<p>以「根据员工 ID 查询员工信息」为例：</p>
 </blockquote>
-<h2 id="6-1-执行流程"><a class="header-anchor" href="#6-1-执行流程"></a>6.1 执行流程</h2>
+<h2 id="7-1-执行流程"><a class="header-anchor" href="#7-1-执行流程"></a>7.1 执行流程</h2>
 <p>1、读取配置文件</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#E5C07B">InputStream</span><span style="color:#E06C75"> in </span><span style="color:#56B6C2">=</span><span style="color:#E5C07B"> Resources</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">getResourceAsStream</span><span style="color:#ABB2BF">(</span><span style="color:#98C379">"SqlMapConfig.xml"</span><span style="color:#ABB2BF">);</span></span></code></pre></td></tr></tbody></table>
@@ -1381,28 +1381,28 @@ btf.addGlobalFn('pjaxSend', () => {
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#E5C07B">sqlSession</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">close</span><span style="color:#ABB2BF">();</span></span>
 <span class="line"><span style="color:#E5C07B">in</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">close</span><span style="color:#ABB2BF">();</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<h2 id="6-2-SqlSessionFactory-初始化"><a class="header-anchor" href="#6-2-SqlSessionFactory-初始化"></a>6.2 SqlSessionFactory 初始化</h2>
+<h2 id="7-2-SqlSessionFactory-初始化"><a class="header-anchor" href="#7-2-SqlSessionFactory-初始化"></a>7.2 SqlSessionFactory 初始化</h2>
 <blockquote>
 <p>执行流程</p>
 </blockquote>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SSMImages/initializeSqlSessionFactory.png" alt="initializeSqlSessionFactory"></p>
-<p><code>MappedStatement</code> ：一个 MappedStatement 就代表 SQL 映射文件中一个增删改查的详细信息。</p>
+<p><code>MappedStatement</code>：一个 MappedStatement 就代表 SQL 映射文件中一个增删改查的详细信息。</p>
 <p>Configuration 对象封装了所有配置文件的详细信息。</p>
 <p><strong>总结：</strong> 把配置文件的信息解析并保存在 Configuration 对象中，返回包含了 Configuration 的 DefaultSqlSessionFactory 对象。</p>
-<h2 id="6-3-openSession-获取-SqlSession-对象"><a class="header-anchor" href="#6-3-openSession-获取-SqlSession-对象"></a>6.3 openSession 获取 SqlSession 对象</h2>
+<h2 id="7-3-openSession-获取-SqlSession-对象"><a class="header-anchor" href="#7-3-openSession-获取-SqlSession-对象"></a>7.3 openSession 获取 SqlSession 对象</h2>
 <blockquote>
 <p>执行流程</p>
 </blockquote>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SSMImages/getSqlSession.png" alt="getSqlSession"></p>
 <p><strong>总结：</strong> 返回 SqlSession 的实现类 DefaultSqlSession 对象，它里面包含了 Executor 和 Configuration，四大对象中的 <strong>Executor</strong> 会在这一步被创建。</p>
-<p>SqlSession 和 JDBC 中的 Connection 一样，是<strong>非线程安全</strong>的，不能将 SqlSession 写成一个成员变量，SqlSession 代表和数据库的一次对话，每次使用都应该去重新获取，用完后必须关闭。</p>
-<h2 id="6-4-getMapper-获取接口代理对象"><a class="header-anchor" href="#6-4-getMapper-获取接口代理对象"></a>6.4 getMapper 获取接口代理对象</h2>
+<p>SqlSession 和 JDBC 中的 Connection 一样，是 <strong>非线程安全</strong> 的，不能将 SqlSession 写成一个成员变量，SqlSession 代表和数据库的一次对话，每次使用都应该去重新获取，用完后必须关闭。</p>
+<h2 id="7-4-getMapper-获取接口代理对象"><a class="header-anchor" href="#7-4-getMapper-获取接口代理对象"></a>7.4 getMapper 获取接口代理对象</h2>
 <blockquote>
 <p>执行流程：</p>
 </blockquote>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SSMImages/getObject.png" alt="getObject"></p>
 <p><strong>总结：</strong> getMapper 使用 MapperProxyFactory 创建一个 MapperProxy 的代理对象，这个代理对象包含了 DefaultSqlSession（Executor）对象。</p>
-<h2 id="6-5-查询实现"><a class="header-anchor" href="#6-5-查询实现"></a>6.5 查询实现</h2>
+<h2 id="7-5-查询实现"><a class="header-anchor" href="#7-5-查询实现"></a>7.5 查询实现</h2>
 <blockquote>
 <p>执行流程</p>
 </blockquote>
@@ -1411,7 +1411,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>查询流程总结</p>
 </blockquote>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SSMImages/processSummary.png" alt="processSummary"></p>
-<h2 id="6-6-原理总结"><a class="header-anchor" href="#6-6-原理总结"></a>6.6 原理总结</h2>
+<h2 id="7-6-原理总结"><a class="header-anchor" href="#7-6-原理总结"></a>7.6 原理总结</h2>
 <p>1、根据配置文件（全局配置文件、SQL 映射文件）初始化 Configuration 对象</p>
 <p>2、创建一个 DefaultSqlSession 对象，里面包含 Configuration 以及 Executor（根据全局配置文件中的 defaultExecutorType 创建出对应的 Executor）</p>
 <p>3、DefaultSqlSession.getMapper()：拿到 Mapper 接口对应的 MapperProxy</p>
@@ -1435,14 +1435,14 @@ btf.addGlobalFn('pjaxSend', () => {
 </li>
 </ul>
 <p>6、注意：每个四大对象创建的时候都有一个 <code>interceptorChain.pluginAll(parameterHandler)</code></p>
-<h1 id="7-插件"><a class="header-anchor" href="#7-插件"></a>7. 插件</h1>
-<h2 id="7-1-插件原理"><a class="header-anchor" href="#7-1-插件原理"></a>7.1 插件原理</h2>
+<h1 id="8-插件"><a class="header-anchor" href="#8-插件"></a>8. 插件</h1>
+<h2 id="8-1-插件原理"><a class="header-anchor" href="#8-1-插件原理"></a>8.1 插件原理</h2>
 <p>MyBatis 四大对象创建的时候：</p>
 <p>1、每个创建出来的对象不是直接返回的，而是调用 <code>interceptorChain.pluginAll(parameterHandler)</code> 后返回的</p>
 <p>2、pluginAll() 可以获取所有的 interceptor（拦截器）（插件需要实现的接口），调用 <code>interceptor.plugin(target);</code> 返回 target 包装后的对象</p>
-<p>插件机制：我们可以使用插件为目标对象创建一个代理对象（类似AOP）。</p>
+<p>插件机制：我们可以使用插件为目标对象创建一个代理对象（类似 AOP）。</p>
 <p>我们的插件可以为四大对象创建出代理对象，代理对象可以拦截到四大对象的每一个执行。</p>
-<h2 id="7-2-插件编写"><a class="header-anchor" href="#7-2-插件编写"></a>7.2 插件编写</h2>
+<h2 id="8-2-插件编写"><a class="header-anchor" href="#8-2-插件编写"></a>8.2 插件编写</h2>
 <blockquote>
 <p>编写流程</p>
 </blockquote>
@@ -1534,12 +1534,12 @@ btf.addGlobalFn('pjaxSend', () => {
 </blockquote>
 <p>如果有多个插件就会产生多层代理：</p>
 <ul>
-<li>创建动态代理对象的时候，是按照<strong>插件的配置顺序</strong>创建层层代理对象。</li>
-<li>执行目标方法后，按照<strong>逆向顺序</strong>执行。（感觉和栈有点像？😳）</li>
+<li>创建动态代理对象的时候，是按照 <strong>插件的配置顺序</strong> 创建层层代理对象</li>
+<li>执行目标方法后，按照 <strong>逆向顺序</strong> 执行。（感觉和栈有点像？😳）</li>
 </ul>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SSMImages/%E5%A4%9A%E4%B8%AA%E6%8F%92%E4%BB%B6%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F.png" alt="多个插件执行顺序"></p>
-<h1 id="8-其他"><a class="header-anchor" href="#8-其他"></a>8. 其他</h1>
-<h2 id="8-1-日志"><a class="header-anchor" href="#8-1-日志"></a>8.1 日志</h2>
+<h1 id="9-其他"><a class="header-anchor" href="#9-其他"></a>9. 其他</h1>
+<h2 id="9-1-日志"><a class="header-anchor" href="#9-1-日志"></a>9.1 日志</h2>
 <p>使用日志：</p>
 <p>在全局配置文件中添加（以使用 <code>STDOUT_LOGGING</code> 为例）：</p>
 <figure class="highlight xml line-numbers" data-language="XML">
@@ -1555,7 +1555,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <figure class="highlight plaintext line-numbers" data-language="PLAINTEXT">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span>SLF4J | LOG4J | LOG4J2 | JDK_LOGGING | COMMONS_LOGGING | STDOUT_LOGGING | NO_LOGGING</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<p>Java代码中使用（以 log4j 为例）：</p>
+<p>Java 代码中使用（以 log4j 为例）：</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">static</span><span style="color:#E5C07B"> Logger</span><span style="color:#E06C75"> logger </span><span style="color:#56B6C2">=</span><span style="color:#E5C07B"> logger</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">getLogger</span><span style="color:#ABB2BF">(</span><span style="color:#98C379">"xxxxxx.class"</span><span style="color:#ABB2BF">);</span><span style="color:#7F848E;font-style:italic">    //当前类的class</span></span>
 <span class="line"><span style="color:#E5C07B">logger</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">info</span><span style="color:#ABB2BF">(</span><span style="color:#98C379">"xxxx"</span><span style="color:#ABB2BF">);</span></span>
@@ -1563,8 +1563,8 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#E5C07B">logger</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">error</span><span style="color:#ABB2BF">(</span><span style="color:#98C379">"xxxx"</span><span style="color:#ABB2BF">);</span></span>
 <span class="line"><span style="color:#ABB2BF">...</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<h2 id="8-2-分页"><a class="header-anchor" href="#8-2-分页"></a>8.2 分页</h2>
-<p><strong>方法一：</strong> SQL 语句使用limit子句：</p>
+<h2 id="9-2-分页"><a class="header-anchor" href="#9-2-分页"></a>9.2 分页</h2>
+<p><strong>方法一：</strong> SQL 语句使用 limit 子句：</p>
 <figure class="highlight sql line-numbers" data-language="SQL">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">select</span><span style="color:#ABB2BF"> * </span><span style="color:#C678DD">from</span><span style="color:#ABB2BF"> tableName </span><span style="color:#C678DD">limit</span><span style="color:#ABB2BF"> i,n</span></span>
 <span class="line"><span style="color:#ABB2BF"># tableName：表名</span></span>
@@ -1575,12 +1575,12 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#C678DD">limit</span><span style="color:#ABB2BF"> n 等同于 </span><span style="color:#C678DD">limit</span><span style="color:#D19A66"> 0</span><span style="color:#ABB2BF">,n</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <p><strong>方法二：</strong> 使用 PageHelper 插件进行分页（项目中需要先导入相关依赖）：<a target="_blank" rel="noopener" href="https://pagehelper.github.io/">PageHelper官网</a></p>
-<h2 id="8-3-批量"><a class="header-anchor" href="#8-3-批量"></a>8.3 批量</h2>
+<h2 id="9-3-批量"><a class="header-anchor" href="#9-3-批量"></a>9.3 批量</h2>
 <p>为什么要批量执行？数据库无法接收太长的拼接 SQL 语句，因此需要批量执行。</p>
-<p>批量与非批量的比较（假设插入1w条数据）：</p>
+<p>批量与非批量的比较（假设插入 1w 条数据）：</p>
 <ul>
-<li>非批量：（预编译sql次数 = 设置参数次数 = 执行次数） ==&gt; 10000次</li>
-<li>批量：预编译一次 ==&gt; 设置参数10000次 ==&gt; 执行1次</li>
+<li>非批量：（预编译 sql 次数 = 设置参数次数 = 执行次数） ==&gt; 10000 次</li>
+<li>批量：预编译一次 ==&gt; 设置参数 10000 次 ==&gt; 执行 1 次</li>
 </ul>
 <p>实现方式：</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
@@ -1589,9 +1589,9 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#E5C07B">SqlSession</span><span style="color:#E06C75"> sqlSession </span><span style="color:#56B6C2">=</span><span style="color:#E5C07B"> factory</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">openSession</span><span style="color:#ABB2BF">(</span><span style="color:#E5C07B">ExecutorType</span><span style="color:#ABB2BF">.</span><span style="color:#E5C07B">BATCH</span><span style="color:#ABB2BF">, </span><span style="color:#D19A66">true</span><span style="color:#ABB2BF">);</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <p>与 Spring 整合时参考视频：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1bb411A7bD?p=84">尚硅谷 MyBatis 3.x P84</a></p>
-<h2 id="8-4-存储过程"><a class="header-anchor" href="#8-4-存储过程"></a>8.4 存储过程</h2>
+<h2 id="9-4-存储过程"><a class="header-anchor" href="#9-4-存储过程"></a>9.4 存储过程</h2>
 <p>参考视频：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1bb411A7bD?p=85">尚硅谷 MyBatis 3.x P85</a></p>
-<h2 id="8-5-处理枚举类型"><a class="header-anchor" href="#8-5-处理枚举类型"></a>8.5 处理枚举类型</h2>
+<h2 id="9-5-处理枚举类型"><a class="header-anchor" href="#9-5-处理枚举类型"></a>9.5 处理枚举类型</h2>
 <blockquote>
 <p>准备</p>
 </blockquote>
@@ -1625,10 +1625,10 @@ btf.addGlobalFn('pjaxSend', () => {
 <blockquote>
 <p>总结</p>
 </blockquote>
-<p>进行测试后发现，MyBatis默认使用的是 <code>EnumTypeHandler</code>，保存到数据库的是枚举名。</p>
-<p>按照 <strong>1.4 typeHandlers</strong> 更改使用的类后，保存到数据库的枚举的索引（索引从0开始）。</p>
-<h2 id="8-6-自定义类型处理器"><a class="header-anchor" href="#8-6-自定义类型处理器"></a>8.6 自定义类型处理器</h2>
-<p>在<strong>8.5 处理枚举类型</strong>的基础上进行修改，使数据库保存的是我们自定义的状态码，最后返回的是枚举名：</p>
+<p>进行测试后发现，MyBatis 默认使用的是 <code>EnumTypeHandler</code>，保存到数据库的是枚举名。</p>
+<p>按照 <strong>1.4 typeHandlers</strong> 更改使用的类后，保存到数据库的枚举的索引（索引从 0 开始）。</p>
+<h2 id="9-6-自定义类型处理器"><a class="header-anchor" href="#9-6-自定义类型处理器"></a>9.6 自定义类型处理器</h2>
+<p>在 <strong>8.5 处理枚举类型</strong> 的基础上进行修改，使数据库保存的是我们自定义的状态码，最后返回的是枚举名：</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">package</span><span style="color:#C678DD"> com.yang.domain</span><span style="color:#ABB2BF">;</span></span>
 <span class="line"><span style="color:#7F848E;font-style:italic">/**</span></span>
@@ -1730,7 +1730,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#ABB2BF">&lt;/</span><span style="color:#E06C75">typeHandlers</span><span style="color:#ABB2BF">&gt;</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <p>经过上面的编写后，可以让枚举保存到数据库的数据是自定义的状态码，而不是枚举从 0 开始的索引。</p>
-</body></html></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/Learning-MyBatis-From-0/">https://mofan212.github.io/posts/Learning-MyBatis-From-0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/MyBatis/">MyBatis</a></div><div class="post-share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/15.jpg" data-sites="wechat,qq,weibo,facebook,x"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/SpringIoC/" title="Spring IoC 巩固理解"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/14.jpg" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Spring IoC 巩固理解</div></div><div class="info-2"><div class="info-item-1">到底什么是 Ioc？</div></div></div></a><a class="pagination-related" href="/posts/Learning-SpringMVC-From-0/" title="从 0 开始的 SpringMVC 学习"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/12.jpg" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">从 0 开始的 SpringMVC 学习</div></div><div class="info-2"><div class="info-item-1">本文对 SpringMVC 的一些基本使用进行了介绍。</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/Mybatis-Plus/" title="MyBatis 的“好基友”——MyBatisPlus"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/30.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-06-16</div><div class="info-item-2">MyBatis 的“好基友”——MyBatisPlus</div></div><div class="info-2"><div class="info-item-1">MyBatis-Plus 可以很好地帮我们简化操作，对于一些简单的 CRUD 操作，不再需要我们编写。</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">默烦</div><div class="author-info-description">彩笔的打怪升级之路...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">175</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mofan212"><i class="fab fa-github"></i><span>follow me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解。<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a href="./mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载。😊</br><strong><font style="color:red">严禁未遵循规范的转载。</font></strong>😡</br><strong>死去的评论系统复活啦！欢迎到留言板畅所欲言！</strong>当然也可以使用更高效的<a target="_blank" href="https://space.bilibili.com/23658864/dynamic" style="color:#49B1F5;text-decoration:underline"> 哔哩哔哩私信 </a>或<a href="mailto:cy.mofan@foxmail.com" style="color:#49B1F5;text-decoration:underline" target="_blank">邮箱</a>。 😉</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0-MyBatis-%E7%9A%84%E5%88%9D%E6%AD%A5%E4%BD%BF%E7%94%A8"><span class="toc-text">0. MyBatis 的初步使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0-1-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BD%BF%E7%94%A8-MyBatis%EF%BC%9F"><span class="toc-text">0.1 为什么要使用 MyBatis？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0-2-%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="toc-text">0.2 简单使用步骤</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E5%85%A8%E5%B1%80%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E6%A0%87%E7%AD%BE"><span class="toc-text">1. 全局配置文件标签</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-properties"><span class="toc-text">1.1 properties</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-settings"><span class="toc-text">1.2 settings</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-typeAliases"><span class="toc-text">1.3 typeAliases</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-typeHandlers"><span class="toc-text">1.4 typeHandlers</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-5-plugins"><span class="toc-text">1.5 plugins</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-6-environments"><span class="toc-text">1.6 environments</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-7-environment"><span class="toc-text">1.7 environment</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-8-transactionManager"><span class="toc-text">1.8 transactionManager</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-9-dataSource"><span class="toc-text">1.9 dataSource</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-10-databaseIdProvider"><span class="toc-text">1.10 databaseIdProvider</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-11-mappers"><span class="toc-text">1.11 mappers</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-12-%E6%A0%87%E7%AD%BE%E4%B9%A6%E5%86%99%E9%A1%BA%E5%BA%8F"><span class="toc-text">1.12 标签书写顺序</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E8%8E%B7%E5%8F%96%E4%B8%BB%E9%94%AE%E5%80%BC%E4%B8%8E%E5%8F%82%E6%95%B0%E5%A4%84%E7%90%86"><span class="toc-text">2. 获取主键值与参数处理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-SQL-%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6%E7%BA%A6%E6%9D%9F"><span class="toc-text">2.1 SQL 映射文件约束</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E7%AE%80%E5%8D%95-CRUD"><span class="toc-text">2.2 简单 CRUD</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E6%8F%92%E5%85%A5%E8%8E%B7%E5%8F%96%E4%B8%BB%E9%94%AE%E5%80%BC"><span class="toc-text">2.3 插入获取主键值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-%E5%8F%82%E6%95%B0%E5%A4%84%E7%90%86"><span class="toc-text">2.4 参数处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-5-%E5%8F%82%E6%95%B0%E5%A4%84%E7%90%86%E6%80%9D%E8%80%83"><span class="toc-text">2.5 参数处理思考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-6-%E5%92%8C-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">2.6 #{ } 和 ${ } 的区别</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-select-%E6%A0%87%E7%AD%BE"><span class="toc-text">3. select 标签</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-resultType"><span class="toc-text">3.1 resultType</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-resultMap"><span class="toc-text">3.2 resultMap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-%E5%85%B3%E8%81%94%E6%9F%A5%E8%AF%A2"><span class="toc-text">3.3 关联查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-%E6%A8%A1%E7%B3%8A%E6%9F%A5%E8%AF%A2"><span class="toc-text">3.4 模糊查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-5-%E6%8B%93%E5%B1%95"><span class="toc-text">3.5 拓展</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E5%8A%A8%E6%80%81SQL"><span class="toc-text">4. 动态SQL</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E5%8A%A8%E6%80%81-SQL-%E7%AE%80%E4%BB%8B"><span class="toc-text">4.1 动态 SQL 简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E6%9D%A1%E4%BB%B6%E5%88%A4%E6%96%AD"><span class="toc-text">4.2 条件判断</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%88%AA%E5%8F%96"><span class="toc-text">4.3 字符串截取</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-4-%E5%88%86%E6%94%AF%E9%80%89%E6%8B%A9"><span class="toc-text">4.4 分支选择</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-5-%E5%B0%81%E8%A3%85%E4%BF%AE%E6%94%B9%E6%9D%A1%E4%BB%B6"><span class="toc-text">4.5 封装修改条件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-6-%E9%81%8D%E5%8E%86"><span class="toc-text">4.6 遍历</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-7-MySQL-%E6%89%B9%E9%87%8F%E4%BF%9D%E5%AD%98"><span class="toc-text">4.7 MySQL 批量保存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-8-%E5%85%B6%E4%BB%96"><span class="toc-text">4.8 其他</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-%E7%BC%93%E5%AD%98"><span class="toc-text">5. 缓存</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-%E4%B8%80%E7%BA%A7%E7%BC%93%E5%AD%98"><span class="toc-text">5.1 一级缓存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98"><span class="toc-text">5.2 二级缓存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-%E7%9B%B8%E5%85%B3%E8%AE%BE%E7%BD%AE%E4%B8%8E%E5%B1%9E%E6%80%A7"><span class="toc-text">5.3 相关设置与属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-4-%E6%95%B4%E5%90%88-EhCache"><span class="toc-text">5.4 整合 EhCache</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-%E8%BF%90%E8%A1%8C%E5%8E%9F%E7%90%86"><span class="toc-text">6. 运行原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#6-1-%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="toc-text">6.1 执行流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-2-SqlSessionFactory-%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-text">6.2 SqlSessionFactory 初始化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-3-openSession-%E8%8E%B7%E5%8F%96-SqlSession-%E5%AF%B9%E8%B1%A1"><span class="toc-text">6.3 openSession 获取 SqlSession 对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-4-getMapper-%E8%8E%B7%E5%8F%96%E6%8E%A5%E5%8F%A3%E4%BB%A3%E7%90%86%E5%AF%B9%E8%B1%A1"><span class="toc-text">6.4 getMapper 获取接口代理对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-5-%E6%9F%A5%E8%AF%A2%E5%AE%9E%E7%8E%B0"><span class="toc-text">6.5 查询实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-6-%E5%8E%9F%E7%90%86%E6%80%BB%E7%BB%93"><span class="toc-text">6.6 原理总结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-%E6%8F%92%E4%BB%B6"><span class="toc-text">7. 插件</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#7-1-%E6%8F%92%E4%BB%B6%E5%8E%9F%E7%90%86"><span class="toc-text">7.1 插件原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-2-%E6%8F%92%E4%BB%B6%E7%BC%96%E5%86%99"><span class="toc-text">7.2 插件编写</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-%E5%85%B6%E4%BB%96"><span class="toc-text">8. 其他</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#8-1-%E6%97%A5%E5%BF%97"><span class="toc-text">8.1 日志</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-2-%E5%88%86%E9%A1%B5"><span class="toc-text">8.2 分页</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-3-%E6%89%B9%E9%87%8F"><span class="toc-text">8.3 批量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-4-%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B"><span class="toc-text">8.4 存储过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-5-%E5%A4%84%E7%90%86%E6%9E%9A%E4%B8%BE%E7%B1%BB%E5%9E%8B"><span class="toc-text">8.5 处理枚举类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-6-%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%9E%8B%E5%A4%84%E7%90%86%E5%99%A8"><span class="toc-text">8.6 自定义类型处理器</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/The-Art-of-Loving/" title="爱的艺术"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/175.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="爱的艺术"/></a><div class="content"><a class="title" href="/posts/The-Art-of-Loving/" title="爱的艺术">爱的艺术</a><time datetime="2026-04-28T16:00:00.000Z" title="更新于 2026-04-29 00:00:00">2026-04-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Git/" title="Git理论与使用"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/3.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Git理论与使用"/></a><div class="content"><a class="title" href="/posts/Git/" title="Git理论与使用">Git理论与使用</a><time datetime="2026-01-26T16:00:00.000Z" title="更新于 2026-01-27 00:00:00">2026-01-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Something-About-Blog/" title="博客搭建与维护"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="博客搭建与维护"/></a><div class="content"><a class="title" href="/posts/Something-About-Blog/" title="博客搭建与维护">博客搭建与维护</a><time datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"/></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="更新于 2026-01-03 00:00:00">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"/></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/103.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 的类资源加载"/></a><div class="content"><a class="title" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载">Java 的类资源加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.5</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+</body></html></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/Learning-MyBatis-From-0/">https://mofan212.github.io/posts/Learning-MyBatis-From-0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/MyBatis/">MyBatis</a></div><div class="post-share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/15.jpg" data-sites="wechat,qq,weibo,facebook,x"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/Advanced-HBase/" title="HBase原理"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/7.jpg" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">HBase原理</div></div><div class="info-2"><div class="info-item-1">本文简单介绍了 HBase 的原理包括架构原理、读写流程、读写拓展、数据删除时间等内容。</div></div></div></a><a class="pagination-related" href="/posts/SpringIoC/" title="Spring IoC 巩固理解"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/14.jpg" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Spring IoC 巩固理解</div></div><div class="info-2"><div class="info-item-1">到底什么是 Ioc？</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/Mybatis-Plus/" title="MyBatis 的“好基友”——MyBatisPlus"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/30.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-06-16</div><div class="info-item-2">MyBatis 的“好基友”——MyBatisPlus</div></div><div class="info-2"><div class="info-item-1">MyBatis-Plus 可以很好地帮我们简化操作，对于一些简单的 CRUD 操作，不再需要我们编写。</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">默烦</div><div class="author-info-description">彩笔的打怪升级之路...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">175</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mofan212"><i class="fab fa-github"></i><span>follow me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解。<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a href="./mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载。😊</br><strong><font style="color:red">严禁未遵循规范的转载。</font></strong>😡</br><strong>死去的评论系统复活啦！欢迎到留言板畅所欲言！</strong>当然也可以使用更高效的<a target="_blank" href="https://space.bilibili.com/23658864/dynamic" style="color:#49B1F5;text-decoration:underline"> 哔哩哔哩私信 </a>或<a href="mailto:cy.mofan@foxmail.com" style="color:#49B1F5;text-decoration:underline" target="_blank">邮箱</a>。 😉</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-MyBatis-%E7%9A%84%E5%88%9D%E6%AD%A5%E4%BD%BF%E7%94%A8"><span class="toc-text">1. MyBatis 的初步使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BD%BF%E7%94%A8-MyBatis%EF%BC%9F"><span class="toc-text">1.1 为什么要使用 MyBatis？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="toc-text">1.2 简单使用步骤</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E5%85%A8%E5%B1%80%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E6%A0%87%E7%AD%BE"><span class="toc-text">2. 全局配置文件标签</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-properties"><span class="toc-text">2.1 properties</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-settings"><span class="toc-text">2.2 settings</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-typeAliases"><span class="toc-text">2.3 typeAliases</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-typeHandlers"><span class="toc-text">2.4 typeHandlers</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-5-plugins"><span class="toc-text">2.5 plugins</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-6-environments"><span class="toc-text">2.6 environments</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-7-environment"><span class="toc-text">2.7 environment</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-8-transactionManager"><span class="toc-text">2.8 transactionManager</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-9-dataSource"><span class="toc-text">2.9 dataSource</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-10-databaseIdProvider"><span class="toc-text">2.10 databaseIdProvider</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-11-mappers"><span class="toc-text">2.11 mappers</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-12-%E6%A0%87%E7%AD%BE%E4%B9%A6%E5%86%99%E9%A1%BA%E5%BA%8F"><span class="toc-text">2.12 标签书写顺序</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E8%8E%B7%E5%8F%96%E4%B8%BB%E9%94%AE%E5%80%BC%E4%B8%8E%E5%8F%82%E6%95%B0%E5%A4%84%E7%90%86"><span class="toc-text">3. 获取主键值与参数处理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-SQL-%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6%E7%BA%A6%E6%9D%9F"><span class="toc-text">3.1 SQL 映射文件约束</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E7%AE%80%E5%8D%95-CRUD"><span class="toc-text">3.2 简单 CRUD</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-%E6%8F%92%E5%85%A5%E8%8E%B7%E5%8F%96%E4%B8%BB%E9%94%AE%E5%80%BC"><span class="toc-text">3.3 插入获取主键值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-%E5%8F%82%E6%95%B0%E5%A4%84%E7%90%86"><span class="toc-text">3.4 参数处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-5-%E5%8F%82%E6%95%B0%E5%A4%84%E7%90%86%E6%80%9D%E8%80%83"><span class="toc-text">3.5 参数处理思考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-6-%E5%92%8C-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">3.6 #{ } 和 ${ } 的区别</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-select-%E6%A0%87%E7%AD%BE"><span class="toc-text">4. select 标签</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-resultType"><span class="toc-text">4.1 resultType</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-resultMap"><span class="toc-text">4.2 resultMap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-%E5%85%B3%E8%81%94%E6%9F%A5%E8%AF%A2"><span class="toc-text">4.3 关联查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-4-%E6%A8%A1%E7%B3%8A%E6%9F%A5%E8%AF%A2"><span class="toc-text">4.4 模糊查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-5-%E6%8B%93%E5%B1%95"><span class="toc-text">4.5 拓展</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-%E5%8A%A8%E6%80%81-SQL"><span class="toc-text">5. 动态 SQL</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-%E5%8A%A8%E6%80%81-SQL-%E7%AE%80%E4%BB%8B"><span class="toc-text">5.1 动态 SQL 简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-%E6%9D%A1%E4%BB%B6%E5%88%A4%E6%96%AD"><span class="toc-text">5.2 条件判断</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%88%AA%E5%8F%96"><span class="toc-text">5.3 字符串截取</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-4-%E5%88%86%E6%94%AF%E9%80%89%E6%8B%A9"><span class="toc-text">5.4 分支选择</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-5-%E5%B0%81%E8%A3%85%E4%BF%AE%E6%94%B9%E6%9D%A1%E4%BB%B6"><span class="toc-text">5.5 封装修改条件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-6-%E9%81%8D%E5%8E%86"><span class="toc-text">5.6 遍历</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-7-MySQL-%E6%89%B9%E9%87%8F%E4%BF%9D%E5%AD%98"><span class="toc-text">5.7 MySQL 批量保存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-8-%E5%85%B6%E4%BB%96"><span class="toc-text">5.8 其他</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-%E7%BC%93%E5%AD%98"><span class="toc-text">6. 缓存</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#6-1-%E4%B8%80%E7%BA%A7%E7%BC%93%E5%AD%98"><span class="toc-text">6.1 一级缓存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-2-%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98"><span class="toc-text">6.2 二级缓存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-3-%E7%9B%B8%E5%85%B3%E8%AE%BE%E7%BD%AE%E4%B8%8E%E5%B1%9E%E6%80%A7"><span class="toc-text">6.3 相关设置与属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-4-%E6%95%B4%E5%90%88-EhCache"><span class="toc-text">6.4 整合 EhCache</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-%E8%BF%90%E8%A1%8C%E5%8E%9F%E7%90%86"><span class="toc-text">7. 运行原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#7-1-%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="toc-text">7.1 执行流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-2-SqlSessionFactory-%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-text">7.2 SqlSessionFactory 初始化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-3-openSession-%E8%8E%B7%E5%8F%96-SqlSession-%E5%AF%B9%E8%B1%A1"><span class="toc-text">7.3 openSession 获取 SqlSession 对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-4-getMapper-%E8%8E%B7%E5%8F%96%E6%8E%A5%E5%8F%A3%E4%BB%A3%E7%90%86%E5%AF%B9%E8%B1%A1"><span class="toc-text">7.4 getMapper 获取接口代理对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-5-%E6%9F%A5%E8%AF%A2%E5%AE%9E%E7%8E%B0"><span class="toc-text">7.5 查询实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-6-%E5%8E%9F%E7%90%86%E6%80%BB%E7%BB%93"><span class="toc-text">7.6 原理总结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-%E6%8F%92%E4%BB%B6"><span class="toc-text">8. 插件</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#8-1-%E6%8F%92%E4%BB%B6%E5%8E%9F%E7%90%86"><span class="toc-text">8.1 插件原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-2-%E6%8F%92%E4%BB%B6%E7%BC%96%E5%86%99"><span class="toc-text">8.2 插件编写</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#9-%E5%85%B6%E4%BB%96"><span class="toc-text">9. 其他</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#9-1-%E6%97%A5%E5%BF%97"><span class="toc-text">9.1 日志</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-2-%E5%88%86%E9%A1%B5"><span class="toc-text">9.2 分页</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-3-%E6%89%B9%E9%87%8F"><span class="toc-text">9.3 批量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-4-%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B"><span class="toc-text">9.4 存储过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-5-%E5%A4%84%E7%90%86%E6%9E%9A%E4%B8%BE%E7%B1%BB%E5%9E%8B"><span class="toc-text">9.5 处理枚举类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-6-%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%9E%8B%E5%A4%84%E7%90%86%E5%99%A8"><span class="toc-text">9.6 自定义类型处理器</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/The-Art-of-Loving/" title="爱的艺术"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/175.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="爱的艺术"/></a><div class="content"><a class="title" href="/posts/The-Art-of-Loving/" title="爱的艺术">爱的艺术</a><time datetime="2026-04-28T16:00:00.000Z" title="更新于 2026-04-29 00:00:00">2026-04-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Git/" title="Git理论与使用"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/3.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Git理论与使用"/></a><div class="content"><a class="title" href="/posts/Git/" title="Git理论与使用">Git理论与使用</a><time datetime="2026-01-26T16:00:00.000Z" title="更新于 2026-01-27 00:00:00">2026-01-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Something-About-Blog/" title="博客搭建与维护"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="博客搭建与维护"/></a><div class="content"><a class="title" href="/posts/Something-About-Blog/" title="博客搭建与维护">博客搭建与维护</a><time datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"/></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="更新于 2026-01-03 00:00:00">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"/></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/20.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="注解、类的加载、反射"/></a><div class="content"><a class="title" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射">注解、类的加载、反射</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.5</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
   const parseViewBox = viewBox => {
     if (!viewBox) return null
     const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))

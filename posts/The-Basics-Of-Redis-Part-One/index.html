@@ -193,7 +193,7 @@ btf.addGlobalFn('pjaxSend', () => {
         background: #262931 !important;
       }
     </style>
-    <html><head></head><body><p>封面来源：碧蓝航线 永夜幻光 活动CG</p>
+    <html><head></head><body><p>封面来源：碧蓝航线 永夜幻光 活动 CG</p>
 <p>Redis 命令参考：<a target="_blank" rel="noopener" href="http://doc.redisfans.com/">Redis 命令参考</a></p>
 <p>本文参考：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1oW411u75R">尚硅谷超经典Redis教程,redis实战,阳哥版从入门到精通</a></p>
 <h1 id="1-NoSQL-入门与概述（上）"><a class="header-anchor" href="#1-NoSQL-入门与概述（上）"></a>1. NoSQL 入门与概述（上）</h1>
@@ -216,18 +216,18 @@ btf.addGlobalFn('pjaxSend', () => {
 <blockquote>
 <p>MySQL 主从读写分离</p>
 </blockquote>
-<p>由于数据库的写入压力增加， Memcached 只能缓解数据库的读取压力。读写集中在一个数据库上让数据库不堪重负，大部分网站开始使用主从复制技术来达到读写分离，以提高读写性能和读库的可扩展性。MySQL 的 master-slave 模式成为这个时候的网站标配了。</p>
+<p>由于数据库的写入压力增加，Memcached 只能缓解数据库的读取压力。读写集中在一个数据库上让数据库不堪重负，大部分网站开始使用主从复制技术来达到读写分离，以提高读写性能和读库的可扩展性。MySQL 的 master-slave 模式成为这个时候的网站标配了。</p>
 <img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/主从读写分离架构.png" alt="主从读写分离架构" style="zoom:67%;">
 <blockquote>
 <p>分库分表 + 水平拆分 + MySQL 集群</p>
 </blockquote>
-<p>在 Memcached 的高速缓存，MySQL 的主从复制， 读写分离的基础之上，这时 MySQL 主库的写压力开始出现瓶颈，而数据量的持续猛增，由于 MyISAM 使用表锁， 在高并发下会出现严重的锁问题，大量的高并发 MySQL 应用开始使用 InnoDB 引擎代替 MyISAM。</p>
-<p>同时，开始流行使用分表分库来缓解写压力和数据增长的扩展问题。这个时候，分表分库成了一个热门技术，是面试的热门问题也是业界讨论的热门技术问题。也就在这个时候，MySQL推出了还不太稳定的表分区，这也给技术实力一般的公司带来了希望。虽然 MySQL 推出了 MySQL Cluster 集群， 但性能也不能很好满足互联网的要求，只是在高可靠性上提供了非常大的保证。</p>
+<p>在 Memcached 的高速缓存，MySQL 的主从复制，读写分离的基础之上，这时 MySQL 主库的写压力开始出现瓶颈，而数据量的持续猛增，由于 MyISAM 使用表锁，在高并发下会出现严重的锁问题，大量的高并发 MySQL 应用开始使用 InnoDB 引擎代替 MyISAM。</p>
+<p>同时，开始流行使用分表分库来缓解写压力和数据增长的扩展问题。这个时候，分表分库成了一个热门技术，是面试的热门问题也是业界讨论的热门技术问题。也就在这个时候，MySQL 推出了还不太稳定的表分区，这也给技术实力一般的公司带来了希望。虽然 MySQL 推出了 MySQL Cluster 集群，但性能也不能很好满足互联网的要求，只是在高可靠性上提供了非常大的保证。</p>
 <img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/分库分表架构.png" alt="分库分表架构" style="zoom:67%;">
 <blockquote>
 <p>MySQL 的扩展性瓶颈</p>
 </blockquote>
-<p>MySQL 数据库也经常存储一些大文本字段，导致数据库表非常的大，在做数据库恢复的时候就导致非常的慢，不容易快速恢复数据库。比如 1000 万 4KB 大小的文本就接近40GB的大小，如果能把这些数据从 MySQL 省去，MySQL 将变得非常的小。关系数据库很强大，但是它并不能很好的应付所有的应用场景。MySQL 的扩展性差（需要复杂的技术来实现），大数据下 IO 压力大，表结构更改困难，正是当前使用 MySQL 的开发人员面临的问题。</p>
+<p>MySQL 数据库也经常存储一些大文本字段，导致数据库表非常的大，在做数据库恢复的时候就导致非常的慢，不容易快速恢复数据库。比如 1000 万 4 KB 大小的文本就接近 40 GB 的大小，如果能把这些数据从 MySQL 省去，MySQL 将变得非常的小。关系数据库很强大，但是它并不能很好的应付所有的应用场景。MySQL 的扩展性差（需要复杂的技术来实现），大数据下 IO 压力大，表结构更改困难，正是当前使用 MySQL 的开发人员面临的问题。</p>
 <blockquote>
 <p>现在是什么样子？</p>
 </blockquote>
@@ -235,11 +235,11 @@ btf.addGlobalFn('pjaxSend', () => {
 <blockquote>
 <p>为什么要使用 NoSQL</p>
 </blockquote>
-<p>今天我们可以通过第三方平台（如：Google，Facebook等）可以很容易获取数据。用户的个人信息，社交网络，地理位置，用户生成的数据和用户操作日志已经成倍的增加。我们如果要对这些用户数据进行挖掘，那 SQL 数据库已经不适合这些应用了，NoSQL 数据库的发展也却能很好的处理这些大的数据。</p>
+<p>今天我们可以通过第三方平台（如：Google，Facebook 等）可以很容易获取数据。用户的个人信息，社交网络，地理位置，用户生成的数据和用户操作日志已经成倍的增加。我们如果要对这些用户数据进行挖掘，那 SQL 数据库已经不适合这些应用了，NoSQL 数据库的发展也却能很好的处理这些大的数据。</p>
 <img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/Web-Applications-Driving-Data-Growth.png" alt="Web-Applications-Driving-Data-Growth" style="zoom:67%;">
 <h2 id="1-2-什么是-NoSQL"><a class="header-anchor" href="#1-2-什么是-NoSQL"></a>1.2 什么是 NoSQL</h2>
-<p>NoSQL（NoSQL = Not Only SQL），意即“不仅仅是SQL”，<mark>泛指非关系型的数据库</mark>。随着互联网web 2.0 网站的兴起，传统的关系数据库在应付 web 2.0 网站，特别是超大规模和高并发的 SNS 类型的 web 2.0 纯动态网站已经显得力不从心，暴露了很多难以克服的问题，而非关系型的数据库则由于其本身的特点得到了非常迅速的发展。NoSQL 数据库的产生就是为了解决大规模数据集合多重数据种类带来的挑战，尤其是大数据应用难题，包括超大规模数据的存储。</p>
-<p>例如谷歌或 Facebook 每天为他们的用户收集万亿比特的数据。 <mark>这些类型的数据存储不需要固定的模式，无需多余操作就可以横向扩展。</mark></p>
+<p>NoSQL（NoSQL = Not Only SQL），意即「不仅仅是 SQL」，<mark>泛指非关系型的数据库</mark>。随着互联网 web 2.0 网站的兴起，传统的关系数据库在应付 web 2.0 网站，特别是超大规模和高并发的 SNS 类型的 web 2.0 纯动态网站已经显得力不从心，暴露了很多难以克服的问题，而非关系型的数据库则由于其本身的特点得到了非常迅速的发展。NoSQL 数据库的产生就是为了解决大规模数据集合多重数据种类带来的挑战，尤其是大数据应用难题，包括超大规模数据的存储。</p>
+<p>例如谷歌或 Facebook 每天为他们的用户收集万亿比特的数据。<mark>这些类型的数据存储不需要固定的模式，无需多余操作就可以横向扩展。</mark></p>
 <h2 id="1-3-NoSQL-特性"><a class="header-anchor" href="#1-3-NoSQL-特性"></a>1.3 NoSQL 特性</h2>
 <blockquote>
 <p>易扩展</p>
@@ -274,7 +274,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <li>没有预定义的模式</li>
 <li>键值对存储，列存储，文档存储，图形数据库</li>
 <li>最终一致性，而非 ACID 属性</li>
-<li>非结构化和不可预知的数据:</li>
+<li>非结构化和不可预知的数据：</li>
 <li>CAP 定理</li>
 <li>高性能，高可用性和可伸缩性</li>
 </ul>
@@ -356,7 +356,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>1、商品基本信息</p>
 <ul>
 <li>名称、价格，出厂日期，生产厂商等</li>
-<li>关系型数据库，MySQL / Oracle 目前淘宝在去 O 化（也即拿掉 Oracle），注意，淘宝内部用的 MySQL 是里面的大牛自己改造过的。为什么去 IOE（在IT建设过程中，去除 IBM 小型机、Oracle 数据库及 EMC 存储设备） 简而意之，可不用穿脚链跳舞。</li>
+<li>关系型数据库，MySQL / Oracle 目前淘宝在去 O 化（也即拿掉 Oracle），注意，淘宝内部用的 MySQL 是里面的大牛自己改造过的。为什么去 IOE（在 IT 建设过程中，去除 IBM 小型机、Oracle 数据库及 EMC 存储设备） 简而意之，可不用穿脚链跳舞</li>
 </ul>
 <p>2、商品描述、详情、评价信息（多文字类）</p>
 <ul>
@@ -438,14 +438,14 @@ btf.addGlobalFn('pjaxSend', () => {
 <ul>
 <li>K-V 键值对</li>
 <li>BSON</li>
-<li>列族：顾名思义，是按列存储数据的。最大的特点是方便存储结构化和半结构化数据，方便做数据压缩，对针对某一 列或者某几列的查询有非常大的 IO 优势。比如：</li>
+<li>列族：顾名思义，是按列存储数据的。最大的特点是方便存储结构化和半结构化数据，方便做数据压缩，对针对某一 列或者某几列的查询有非常大的 IO 优势。比如</li>
 </ul>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/%E5%88%97%E6%97%8F%E7%A4%BA%E4%BE%8B.png" alt="列族示例"></p>
 <ul>
-<li>图形：比如现实的人际关系图中是很复杂的，仅仅试试二维的行列关系图也是很难表示的，这个时候就需要使用到图。比如：</li>
+<li>图形：比如现实的人际关系图中是很复杂的，仅仅试试二维的行列关系图也是很难表示的，这个时候就需要使用到图。比如</li>
 </ul>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/%E5%9B%BE%E5%BD%A2%E7%A4%BA%E4%BE%8B.png" alt="图形示例"></p>
-<h2 id="3-3-NoSQL-数据库的四大分类"><a class="header-anchor" href="#3-3-NoSQL-数据库的四大分类"></a>3.3 NoSQL 数据库的四大分类</h2>
+<h2 id="2-4-NoSQL-数据库的四大分类"><a class="header-anchor" href="#2-4-NoSQL-数据库的四大分类"></a>2.4 NoSQL 数据库的四大分类</h2>
 <blockquote>
 <p>K-V 键值对 NoSQL 数据库</p>
 </blockquote>
@@ -485,7 +485,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>四者的对比</p>
 </blockquote>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/%E5%9B%9B%E5%A4%A7NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AF%B9%E6%AF%94.png" alt="四大NoSQL数据库对比"></p>
-<h2 id="3-4-分布式数据库中-CAP-原理"><a class="header-anchor" href="#3-4-分布式数据库中-CAP-原理"></a>3.4 分布式数据库中 CAP 原理</h2>
+<h2 id="2-5-分布式数据库中-CAP-原理"><a class="header-anchor" href="#2-5-分布式数据库中-CAP-原理"></a>2.5 分布式数据库中 CAP 原理</h2>
 <blockquote>
 <p>回顾 ACID</p>
 </blockquote>
@@ -511,10 +511,10 @@ btf.addGlobalFn('pjaxSend', () => {
 <li>AP：满足可用性、分区容错性的系统，通常可能对一致性要求低一点</li>
 </ul>
 <img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/CAP-Theorem.png" alt="CAP-Theorem" style="zoom:50%;">
-<p>而由于当前的网络硬件肯定会出现延迟丢包等问题，所以 <strong>分区容错性</strong> 是我们必须需要实现的。所以我们只能在 <strong>一致性</strong> 和 <strong>可用性</strong> 之间进行权衡，<strong>没有</strong> NoSQL系统能同时保证这三点。</p>
+<p>而由于当前的网络硬件肯定会出现延迟丢包等问题，所以 <strong>分区容错性</strong> 是我们必须需要实现的。所以我们只能在 <strong>一致性</strong> 和 <strong>可用性</strong> 之间进行权衡，<strong>没有</strong> NoSQL 系统能同时保证这三点。</p>
 <p>特点的选择：</p>
 <ul>
-<li>CA：传统Oracle数据库</li>
+<li>CA：传统 Oracle 数据库</li>
 <li>AP：大多数网站架构的选择</li>
 <li>CP：Redis、MongoDB</li>
 </ul>
@@ -528,7 +528,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>很多 WEB 实时系统并不要求严格的数据库事务，对读一致性的要求很低，有些场合对写一致性要求并不高，允许实现最终一致性。</p>
 <p><strong>数据库的写实时性和读实时性需求</strong></p>
 <p>对关系数据库来说，插入一条数据之后立刻查询，是肯定可以读出来这条数据的，但是对于很多 WEB 应用来说，并不要求这么高的实时性。比方说在微博发一条消息之后，过几秒乃至十几秒之后，我的订阅者才看到这条动态是完全可以接受的。</p>
-<p><strong>对复杂的SQL查询，特别是多表关联查询的需求</strong></p>
+<p><strong>对复杂的 SQL 查询，特别是多表关联查询的需求</strong></p>
 <p>任何大数据量的 WEB 系统，都非常忌讳多个大表的关联查询，以及复杂的数据分析类型的报表查询，特别是 SNS 类型的网站，从需求以及产品设计角度，就避免了这种情况的产生。往往更多的只是单表的主键查询，以及单表的简单条件分页查询，SQL 的功能被极大的弱化了。</p>
 <blockquote>
 <p>什么是 BASE</p>
@@ -546,8 +546,8 @@ btf.addGlobalFn('pjaxSend', () => {
 </blockquote>
 <p>分布式系统（Distributed System）由多台计算机和通信的软件组件通过计算机网络连接（本地网络或广域网）组成。分布式系统是建立在网络之上的软件系统。正是因为软件的特性，所以分布式系统具有高度的内聚性和透明性。因此，网络和分布式系统之间的区别更多的在于高层软件（特别是操作系统），而不是硬件。分布式系统可以应用在在不同的平台上如：PC、工作站、局域网和广域网上等。</p>
 <p>简单来讲：</p>
-<p>1、分布式：不同的多台服务器上面部署<strong>不同</strong>的服务模块（工程），他们之间通过 RPC / RMI 之间通信和调用，对外提供服务和组内协作。</p>
-<p>2、集群：不同的多台服务器上面部署<strong>相同</strong>的服务模块，通过分布式调度软件进行统一的调度，对外提供服务和连接。</p>
+<p>1、分布式：不同的多台服务器上面部署 <strong>不同</strong> 的服务模块（工程），他们之间通过 RPC / RMI 之间通信和调用，对外提供服务和组内协作。</p>
+<p>2、集群：不同的多台服务器上面部署 <strong>相同</strong> 的服务模块，通过分布式调度软件进行统一的调度，对外提供服务和连接。</p>
 <h1 id="3-Redis-入门概述"><a class="header-anchor" href="#3-Redis-入门概述"></a>3. Redis 入门概述</h1>
 <h2 id="3-1-入门概述"><a class="header-anchor" href="#3-1-入门概述"></a>3.1 入门概述</h2>
 <blockquote>
@@ -652,7 +652,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <figure class="highlight bash line-numbers" data-language="BASH">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#61AFEF">yum</span><span style="color:#98C379"> install</span><span style="color:#98C379"> gcc-c++</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<p>由于我们使用的是 Redis 6.0，它需要 gcc 5及其以上的版本，因此还需要升级 gcc，否则是无法安装成功的。依次执行：</p>
+<p>由于我们使用的是 Redis 6.0，它需要 gcc 5 及其以上的版本，因此还需要升级 gcc，否则是无法安装成功的。依次执行：</p>
 <figure class="highlight bash line-numbers" data-language="BASH">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#61AFEF">yum</span><span style="color:#98C379"> install</span><span style="color:#98C379"> centos-release-scl</span></span>
 <span class="line"><span style="color:#61AFEF">yum</span><span style="color:#98C379"> install</span><span style="color:#98C379"> devtoolset-7-gcc</span><span style="color:#E5C07B">*</span></span>
@@ -676,12 +676,12 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>没有联网安装 gcc</p>
 </blockquote>
 <p>没有联网的安装就是使用光驱安装 gcc。</p>
-<p>但这种安装方式只支持安装 Redis 6 以下的版本，因为 Redis 6 以上的版本需要 gcc 5及其以上的版本，而光驱内的 gcc 一般是 4.8 的。</p>
+<p>但这种安装方式只支持安装 Redis 6 以下的版本，因为 Redis 6 以上的版本需要 gcc 5 及其以上的版本，而光驱内的 gcc 一般是 4.8 的。</p>
 <p>打开虚拟机后，右击虚拟机，打开虚拟机设置：</p>
 <img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/虚拟机设置.png" alt="虚拟机设置" style="zoom:50%;">
-<p>指定 ISO 映像文件的位置，并将设备状态一栏都勾上。这时候，我们 CentOS 桌面上会出现一个“光盘”：</p>
+<p>指定 ISO 映像文件的位置，并将设备状态一栏都勾上。这时候，我们 CentOS 桌面上会出现一个「光盘」：</p>
 <img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/桌面上的光驱文件.png" alt="桌面上的光驱文件" style="zoom: 67%;">
-<p>双击这个“光盘”，找到一个名为 <code>Packages</code> 的目录（可能目录名会不一样），进入这个目录，这个目录里有很多的 rpm 文件，这些文件就是光驱给我们提供的，这里面也有 gcc 相关的 rpm 文件。</p>
+<p>双击这个「光盘」，找到一个名为 <code>Packages</code> 的目录（可能目录名会不一样），进入这个目录，这个目录里有很多的 rpm 文件，这些文件就是光驱给我们提供的，这里面也有 gcc 相关的 rpm 文件。</p>
 <p>在这个目录内用鼠标右击，点击 <strong>在终端打开</strong>，在终端打开这个目录，然后执行一下命令进行安装：</p>
 <figure class="highlight bash line-numbers" data-language="BASH">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#61AFEF">rpm</span><span style="color:#D19A66"> -ivh</span><span style="color:#98C379"> cpp-4.8.5-36.el7.x86_64.rpm</span></span>
@@ -882,13 +882,13 @@ btf.addGlobalFn('pjaxSend', () => {
 <tr>
 <td style="text-align:center">13</td>
 <td style="text-align:center"><strong>-t</strong></td>
-<td style="text-align:center">仅运行以逗号分隔的测试命令列表。</td>
+<td style="text-align:center">仅运行以逗号分隔的测试命令列表</td>
 <td style="text-align:center"></td>
 </tr>
 <tr>
 <td style="text-align:center">14</td>
 <td style="text-align:center"><strong>-I</strong></td>
-<td style="text-align:center">Idle 模式。仅打开 N 个 idle 连接并等待。</td>
+<td style="text-align:center">Idle 模式。仅打开 N 个 idle 连接并等待</td>
 <td style="text-align:center"></td>
 </tr>
 </tbody>
@@ -902,14 +902,14 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>其他杂项知识</p>
 </blockquote>
 <p>Redis 是单进程的。单进程模型来处理客户端的请求。对读写等事件的响应是通过对 epoll 函数的包装来做到的。Redis 的实际处理速度完全依靠主进程的执行效率</p>
-<p>Epoll 是 Linux 内核为处理大批量文件描述符而作了改进的 epoll，是 Linux 下多路复用 IO 接口 select / poll 的增强版本， 它能显著提高程序在大量并发连接中只有少量活跃的情况下的系统 CPU 利用率。</p>
+<p>Epoll 是 Linux 内核为处理大批量文件描述符而作了改进的 epoll，是 Linux 下多路复用 IO 接口 select / poll 的增强版本，它能显著提高程序在大量并发连接中只有少量活跃的情况下的系统 CPU 利用率。</p>
 <p>Redis 默认 16 个数据库，类似数组下表从零开始，初始默认使用零号库，可在配置文件配置。可以通过以下命令对 Redis 数据库进行操作：</p>
 <p><code>select</code>：命令切换数据库</p>
-<p><code>dbsize</code>查看当前数据库的 key的数量</p>
+<p><code>dbsize</code> 查看当前数据库的 key 的数量</p>
 <p><code>flushdb</code>：清空当前库</p>
 <p><code>flushall</code>：通杀全部库</p>
 <p><code>keys</code>：查找所有符合给定模式 pattern 的 key。比如：<code>keys *</code> 或者 <code>keys k*</code>，第一种会查找到当前库下所有的 key，第二种则会查找到当前库下以 k 开头的所有 key。</p>
-<p>Redis 拥有统一密码管理，16个库都是同样密码，要么都连上要么一个也连接不上。</p>
+<p>Redis 拥有统一密码管理，16 个库都是同样密码，要么都连上要么一个也连接不上。</p>
 <p>Redis 索引都是从零开始。</p>
 <p>Redis 的默认端口是 6379，至于为啥可以自行了解。</p>
 <h2 id="3-5-Windows-下安装-Redis"><a class="header-anchor" href="#3-5-Windows-下安装-Redis"></a>3.5 Windows 下安装 Redis</h2>
@@ -1025,7 +1025,7 @@ btf.addGlobalFn('pjaxSend', () => {
 </tr>
 <tr>
 <td style="text-align:center">EXPIREAT key timestamp</td>
-<td style="text-align:center">EXPIREAT 的作用和 EXPIRE 类似，都用于为 key 设置过期时间。 不同在于 EXPIREAT 命令接受的时间参数是 UNIX 时间戳（unix timestamp）</td>
+<td style="text-align:center">EXPIREAT 的作用和 EXPIRE 类似，都用于为 key 设置过期时间。不同在于 EXPIREAT 命令接受的时间参数是 UNIX 时间戳（unix timestamp）</td>
 </tr>
 <tr>
 <td style="text-align:center">PEXPIRE key milliseconds</td>
@@ -1154,7 +1154,7 @@ string
 </tr>
 <tr>
 <td style="text-align:center">GETSET key value</td>
-<td style="text-align:center">将给定 key 的值设为 value ，并返回 key 的旧值（old value）</td>
+<td style="text-align:center">将给定 key 的值设为 value，并返回 key 的旧值（old value）</td>
 </tr>
 <tr>
 <td style="text-align:center">GETBIT key offset</td>
@@ -1170,7 +1170,7 @@ string
 </tr>
 <tr>
 <td style="text-align:center">SETEX key seconds value</td>
-<td style="text-align:center">将值 value 关联到 key ，并将 key 的过期时间设为 seconds（以秒为单位）</td>
+<td style="text-align:center">将值 value 关联到 key，并将 key 的过期时间设为 seconds（以秒为单位）</td>
 </tr>
 <tr>
 <td style="text-align:center">SETNX key value</td>
@@ -1218,7 +1218,7 @@ string
 </tr>
 <tr>
 <td style="text-align:center">APPEND key value</td>
-<td style="text-align:center">如果 key 已经存在并且是一个字符串， APPEND 命令将指定的 value 追加到该 key 原来值（value）的末尾</td>
+<td style="text-align:center">如果 key 已经存在并且是一个字符串，APPEND 命令将指定的 value 追加到该 key 原来值（value）的末尾</td>
 </tr>
 </tbody>
 </table>
@@ -1264,13 +1264,13 @@ OK
 127.0.0.1:6379&gt; INCRBY k2 10
 (integer) 7
 </pre>
-<p><strong>3、getrange 获取指定区间范围内的值， 类似 between…and 的关系，从零到负一表示全部，比如：</strong></p>
+<p><strong>3、getrange 获取指定区间范围内的值，类似 between…and 的关系，从零到负一表示全部，比如：</strong></p>
 <pre>127.0.0.1:6379&gt; GETRANGE k3 0 -1
 "mofanqwer"
 127.0.0.1:6379&gt; GETRANGE k3 0 5
 "mofanq"
 </pre>
-<p><strong>4、setrange 设置指定区间范围内的值， 格式是 <code>setrange key 值 具体值</code>，比如：</strong></p>
+<p><strong>4、setrange 设置指定区间范围内的值，格式是 <code>setrange key 值 具体值</code>，比如：</strong></p>
 <pre>127.0.0.1:6379&gt; SETRANGE k3 0 cheny
 (integer) 9
 127.0.0.1:6379&gt; get k3
@@ -1292,7 +1292,7 @@ OK
 127.0.0.1:6379&gt; get k4
 (nil)
 </pre>
-<p><strong>6、setnx(set if not exist)， 格式是 <code>setnx key value</code>，意思是当前库中如果不存在 key，就添加 key 和 value，否则不添加，而不会覆写。比如：</strong></p>
+<p><strong>6、setnx(set if not exist)，格式是 <code>setnx key value</code>，意思是当前库中如果不存在 key，就添加 key 和 value，否则不添加，而不会覆写。比如：</strong></p>
 <pre>127.0.0.1:6379&gt; SETNX k3 v333333
 (integer) 0
 127.0.0.1:6379&gt; get k3
@@ -1329,7 +1329,7 @@ OK
 6) "k5"
 </pre>
 <p>使用 <code>mset</code> 批量添加时，如果添加的 key 在库中已经存在，那么新添加的 value 会覆盖原来的 value。使用 <code>msetnx</code> 批量添加时，如果添加的 key 在库中已经存在，那么所有的数据都不会添加成功。</p>
-<p><strong>8、getset(先get再set)</strong></p>
+<p><strong>8、getset(先 get 再 set)</strong></p>
 <h2 id="4-4-List-列表"><a class="header-anchor" href="#4-4-List-列表"></a>4.4 List 列表</h2>
 <blockquote>
 <p>常用的一些命令</p>
@@ -1344,15 +1344,15 @@ OK
 <tbody>
 <tr>
 <td style="text-align:center">BLPOP key1 [key2 ] timeout</td>
-<td style="text-align:center">移出并获取列表的第一个元素， 如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止</td>
+<td style="text-align:center">移出并获取列表的第一个元素，如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止</td>
 </tr>
 <tr>
 <td style="text-align:center">BRPOP key1 [key2 ] timeout</td>
-<td style="text-align:center">移出并获取列表的最后一个元素， 如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止</td>
+<td style="text-align:center">移出并获取列表的最后一个元素，如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止</td>
 </tr>
 <tr>
 <td style="text-align:center">BRPOPLPUSH source destination timeout</td>
-<td style="text-align:center">从列表中弹出一个值，将弹出的元素插入到另外一个列表中并返回它； 如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止</td>
+<td style="text-align:center">从列表中弹出一个值，将弹出的元素插入到另外一个列表中并返回它；如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止</td>
 </tr>
 <tr>
 <td style="text-align:center">LINDEX key index</td>
@@ -1716,7 +1716,7 @@ OK
 5) "7"
 6) "8"
 </pre>
-<p><strong>6、<code>smove key1 key2 在key1里某个值</code> ，作用是将 key1 里的某个值赋给 key2</strong></p>
+<p><strong>6、<code>smove key1 key2 在key1里某个值</code>，作用是将 key1 里的某个值赋给 key2</strong></p>
 <pre>127.0.0.1:6379&gt; DEL set01
 (integer) 1
 127.0.0.1:6379&gt; DEL set02
@@ -2004,7 +2004,7 @@ OK
 <blockquote>
 <p>命令示例</p>
 </blockquote>
-<p>Zset 是在 Set 基础上，加一个 score 值。 之前 Set 是<code>k1 v1 v2 v3</code>， 现在 Zset 是<code>k1 score1 v1 score2 v2</code>。</p>
+<p>Zset 是在 Set 基础上，加一个 score 值。之前 Set 是 <code>k1 v1 v2 v3</code>，现在 Zset 是 <code>k1 score1 v1 score2 v2</code>。</p>
 <p><strong>1、zadd / zrange(withscores)</strong></p>
 <pre>127.0.0.1:6379&gt; ZADD zset01 60 v1 70 v2 80 v3 90 v4 100 v5
 (integer) 5
@@ -2161,7 +2161,7 @@ OK
 </tr>
 <tr>
 <td style="text-align:center"><code>timeout 300</code></td>
-<td style="text-align:center">当客户端闲置多长秒后关闭连接，如果指定为 0 ，表示关闭该功能</td>
+<td style="text-align:center">当客户端闲置多长秒后关闭连接，如果指定为 0，表示关闭该功能</td>
 </tr>
 <tr>
 <td style="text-align:center"><code>loglevel notice</code></td>
@@ -2241,11 +2241,11 @@ OK
 </tr>
 <tr>
 <td style="text-align:center"><code>vm-pages 134217728</code></td>
-<td style="text-align:center">设置 swap 文件中的 page 数量，由于页表（一种表示页面空闲或使用的 bitmap）是在放在内存中的，，在磁盘上每 8 个 pages 将消耗 1byte 的内存。</td>
+<td style="text-align:center">设置 swap 文件中的 page 数量，由于页表（一种表示页面空闲或使用的 bitmap）是在放在内存中的，，在磁盘上每 8 个 pages 将消耗 1byte 的内存</td>
 </tr>
 <tr>
 <td style="text-align:center"><code>vm-max-threads 4</code></td>
-<td style="text-align:center">设置连接swap文件的线程数,最好不要超过机器的核数,如果设置为0,那么所有对swap文件的操作都是串行的，可能会造成比较长时间的延迟。默认值为4</td>
+<td style="text-align:center">设置连接 swap 文件的线程数，最好不要超过机器的核数，如果设置为 0，那么所有对 swap 文件的操作都是串行的，可能会造成比较长时间的延迟。默认值为 4</td>
 </tr>
 <tr>
 <td style="text-align:center"><code>glueoutputbuf yes</code></td>
@@ -2261,7 +2261,7 @@ OK
 </tr>
 <tr>
 <td style="text-align:center"><code>include /path/to/local.conf</code></td>
-<td style="text-align:center">指定包含其它的配置文件，可以在同一主机上多个Redis实例之间使用同一份配置文件，而同时各个实例又拥有自己的特定配置文件</td>
+<td style="text-align:center">指定包含其它的配置文件，可以在同一主机上多个 Redis 实例之间使用同一份配置文件，而同时各个实例又拥有自己的特定配置文件</td>
 </tr>
 </tbody>
 </table>
@@ -2301,7 +2301,7 @@ OK
 <p>系统日志默认是关闭的，配置项为 <code>syslog-enabled</code>，表示是否把日志输出到 syslog 中</p>
 <p>如果将系统日志打开，那么日志将会以 redis 开头，配置项为 <code>syslog-ident</code>，表示指定 syslog 里的日志标志</p>
 <p>还可以指定 syslog 设置，值可以是 USER 或 LOCAL0 - LOCAL7，配置项是 <code>syslog-facility</code></p>
-<h2 id="5-6-SNAPSHOTTING-快照"><a class="header-anchor" href="#5-6-SNAPSHOTTING-快照"></a>5.6 SNAPSHOTTING 快照</h2>
+<h2 id="12-1-SNAPSHOTTING-快照"><a class="header-anchor" href="#12-1-SNAPSHOTTING-快照"></a>12.1 SNAPSHOTTING 快照</h2>
 <p>这个配置通常与持久化 RDB 配合使用。</p>
 <p>RDB 是整个内存的压缩过的 Snapshot，由于 RDB 的数据结构，可以配置符合的快照触发条件。</p>
 <p>配置方式是：<code>save 秒数 写操作次数</code>，Redis 的配置文件中提供了默认的配置：</p>
@@ -2316,17 +2316,17 @@ OK
 <p>其他相关配置</p>
 </blockquote>
 <p>在这一栏中还有一些配置项，比如：</p>
-<p>1、<code>stop-writes-on-bgsave-error</code>，这个配置项默认值是 yes。如果配置成no，表示你不在乎数据不一致或者有其他的手段发现和控制。</p>
+<p>1、<code>stop-writes-on-bgsave-error</code>，这个配置项默认值是 yes。如果配置成 no，表示你不在乎数据不一致或者有其他的手段发现和控制。</p>
 <p>2、<code>rdbcompression</code>，这个配置项默认值是 yes。它表示对于存储到磁盘中的快照，可以设置是否进行压缩存储。如果设置为 yes，Redis 会采用 LZF 算法进行压缩。如果你不想消耗 CPU 来进行压缩的话，可以设置为 no 关闭此功能。</p>
 <p>3、<code>rdbchecksum</code>，这个配置项默认值是 yes。它表示在存储快照后，还可以让 Redis 使用 CRC64 算法来进行数据校验，但是这样做会增加大约 10% 的性能消耗，如果希望获取到最大的性能提升，可以设置为 no 关闭此功能。</p>
 <p>4、<code>dbfilename</code>，这个配置项默认值是 dump.rdb。它指定了本地数据库文件名，默认值为 dump.rdb，也就是我们用来进行数据恢复的文件名。</p>
 <p>5、<code>dir</code>，这个配置项的默认值是 <code>./</code>。它指定本地数据库文件的存放目录，也就是 dump.rdb 的存放位置，默认是存放在 Redis 启动位置的。如果在默认值的情况下，我现在 <code>/usr/local/bin</code> 目录下启动了 Redis，然后添加了一些数据，最后关闭 Redis，并在目录下生成 dump.rdb 文件。之后我在 <code>/</code> 目录下启动 Redis，执行 <code>keys *</code> 是获取不到上次添加的数据的，因为当前目录下没有上次生成 的 dump.rdb 文件。可以对这个配置项进行配置，指定存放目录，这样就不会出现这种情况了。</p>
-<h2 id="5-7-REPLICATION-复制"><a class="header-anchor" href="#5-7-REPLICATION-复制"></a>5.7 REPLICATION 复制</h2>
+<h2 id="12-2-REPLICATION-复制"><a class="header-anchor" href="#12-2-REPLICATION-复制"></a>12.2 REPLICATION 复制</h2>
 <p>与主从复制相关，参考【Redis 基础 下篇】一文。</p>
-<h2 id="5-8-SECURITY-安全"><a class="header-anchor" href="#5-8-SECURITY-安全"></a>5.8 SECURITY 安全</h2>
+<h2 id="12-3-SECURITY-安全"><a class="header-anchor" href="#12-3-SECURITY-安全"></a>12.3 SECURITY 安全</h2>
 <p>在这一栏可以进行访问密码的查看、设置和取消。</p>
 <p>当我们启动了 Redis 并连接 Redis 时，只需要输入两个命令就可以了，而不用输入密码，但是根据 MySQL 的使用经验，MySQL 连接是需要输入密码的，当然也可以通过设置而不输入密码。</p>
-<p>Redis连接动默认是不需要输入密码的，当然也可以设置输入密码。</p>
+<p>Redis 连接动默认是不需要输入密码的，当然也可以设置输入密码。</p>
 <p>我们连接 Redis 使用命令 <code>config get requirepass</code> 来看看 Redis 的连接密码：</p>
 <pre>127.0.0.1:6379&gt; config get requirepass
 1) "requirepass"
@@ -2341,7 +2341,7 @@ OK
 </pre>
 <p>然后重启 Redis，如果我们再次 ping，就无法显示 PONG，需要在输入命令前执行 <code>auth 设置的密码</code>。</p>
 <p>如果需要恢复原来的设置，需要执行 <code>config set requirepass ''</code></p>
-<h2 id="5-9-LIMITS-限制"><a class="header-anchor" href="#5-9-LIMITS-限制"></a>5.9 LIMITS 限制</h2>
+<h2 id="12-4-LIMITS-限制"><a class="header-anchor" href="#12-4-LIMITS-限制"></a>12.4 LIMITS 限制</h2>
 <p>在 Redis 6.0.8 版本中该栏已经被删除，其配置项分布在其他栏中。</p>
 <p>maxclients 配置项分布在 <code>CLIENTS</code> 栏中，表示 Redis 客户端最大连接数。</p>
 <p>maxmemory 配置项分布在 <code>MEMORY MANAGEMENT</code> 栏中，表示 Redis 的最大占用内存，默认是没被设置的。</p>
@@ -2364,9 +2364,9 @@ OK
 <p>配置文件中说明的缓存过期策略（<code>maxmemory-policy</code>）：</p>
 <img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/Redis缓存过期策略.png" alt="Redis缓存过期策略" style="zoom:67%;">
 <p>默认是永不过期（noeviction）的。对上述内容翻译一下：</p>
-<p>volatile-lru：只对设置了过期时间的键使用 LRU 算法移除key。</p>
+<p>volatile-lru：只对设置了过期时间的键使用 LRU 算法移除 key。</p>
 <p>allkeys-lru：使用 LRU 算法移除 key。</p>
-<p>volatile-lfu：只对设置了过期时间的键使用 LFU 算法移除key。</p>
+<p>volatile-lfu：只对设置了过期时间的键使用 LFU 算法移除 key。</p>
 <p>allkeys-lfu：使用 LFU 算法移除 key。</p>
 <p>volatile-random：只对设置了过期时间的键在过期集合中移除随机的 key</p>
 <p>allkeys-random：移除随机的 key。</p>
@@ -2385,7 +2385,7 @@ OK
 </li>
 </ul>
 <p><code>maxmemory-samples</code> 表示设置样本数量，LRU 算法和最小 TTL 算法都并非是精确的算法，而是估算值，所以你可以设置样本的大小，Redis 默认会检查这么多个 key 并选择其中 LRU 的那个</p>
-<h2 id="5-10-APPEND-ONLY-MODE-追加"><a class="header-anchor" href="#5-10-APPEND-ONLY-MODE-追加"></a>5.10 APPEND ONLY MODE 追加</h2>
+<h2 id="12-5-APPEND-ONLY-MODE-追加"><a class="header-anchor" href="#12-5-APPEND-ONLY-MODE-追加"></a>12.5 APPEND ONLY MODE 追加</h2>
 <p>这个配置通常与持久化 AOF 配合使用。</p>
 <p>在配置文件 redis.conf 中可以看到，append only 默认是关闭的：</p>
 <img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/append-only配置.png" alt="append-only配置" style="zoom:67%;">
@@ -2394,7 +2394,7 @@ OK
 <blockquote>
 <p>AOF 与 RDB</p>
 </blockquote>
-<p>接下里前往 <code>/usr/local/bin</code> 目录删除生成的 rdb 文件： <code>rm -f dump.rdb</code></p>
+<p>接下里前往 <code>/usr/local/bin</code> 目录删除生成的 rdb 文件：<code>rm -f dump.rdb</code></p>
 <p>然后在此目录下启动 Redis，就像：</p>
 <pre>[root@cheny bin]# redis-server /Redis/redis_aof.conf
 [root@cheny bin]# redis-cli -p 6379
@@ -2449,38 +2449,38 @@ Could not connect to Redis at 127.0.0.1:6379: Connection refused
 </blockquote>
 <p>1、<code>appendfsync</code> 表示追加同步，Redis 给定了三种方式：</p>
 <ul>
-<li>always：同步持久化。每次发生数据变更都会被立即记录到磁盘，性能较差但数据完整性比较好。</li>
-<li>everysec：出厂 <strong>默认</strong> 推荐，异步操作，每秒记录，如果一秒内宕机，会有数据丢失。</li>
+<li>always：同步持久化。每次发生数据变更都会被立即记录到磁盘，性能较差但数据完整性比较好</li>
+<li>everysec：出厂 <strong>默认</strong> 推荐，异步操作，每秒记录，如果一秒内宕机，会有数据丢失</li>
 <li>no：从不同步</li>
 </ul>
 <p>2、<code>no-appendfsync-on-rewrite</code>：默认值是 no，表示重写时是否可以运用 appendfsync，用默认即可，保证数据安全性。</p>
 <p>3、<code>auto-aof-rewrite-min-size</code>：默认是 64 mb，用于设置重写的基准值</p>
 <p>4、<code>auto-aof-rewrite-percentage</code>：默认是 100，用于设置重写的基准值</p>
-<h1 id="6-持久化之-RDB"><a class="header-anchor" href="#6-持久化之-RDB"></a>6. 持久化之 RDB</h1>
-<h2 id="6-1-什么是-RDB"><a class="header-anchor" href="#6-1-什么是-RDB"></a>6.1 什么是 RDB</h2>
+<h1 id="13-持久化之-RDB"><a class="header-anchor" href="#13-持久化之-RDB"></a>13. 持久化之 RDB</h1>
+<h2 id="13-1-什么是-RDB"><a class="header-anchor" href="#13-1-什么是-RDB"></a>13.1 什么是 RDB</h2>
 <p>RDB 全称是 Redis DataBase。</p>
 <p>它就是在指定的时间间隔内将内存中的数据集快照写入磁盘，也就是行话讲的 Snapshot 快照，它恢复时是将快照文件直接读到内存里。</p>
-<p>Redis 会单独创建（fork）一个子进程来进行持久化，会先将数据写入到 一个临时文件中，待持久化过程都结束了，再用这个临时文件替换上次持久化好的文件。 整个过程中，主进程是不进行任何 IO 操作的，这就确保了极高的性能。</p>
+<p>Redis 会单独创建（fork）一个子进程来进行持久化，会先将数据写入到 一个临时文件中，待持久化过程都结束了，再用这个临时文件替换上次持久化好的文件。整个过程中，主进程是不进行任何 IO 操作的，这就确保了极高的性能。</p>
 <p>如果需要进行大规模数据的恢复，且对于数据恢复的完整性不是非常敏感，那 RDB 方式要比 AOF 方式更加的高效。</p>
 <p>RDB 的缺点是最后一次持久化后的数据可能丢失。</p>
 <p>Fork 的作用是复制一个与当前进程一样的进程。新进程的所有数据（变量、环境变量、程序计数器等） 数值都和原进程一致，但是是一个全新的进程，并作为原进程的子进程。</p>
 <p>RDB 保存的是 dump.rdb 文件。</p>
 <p>那在哪里进行配置呢？在 Redis 的配置文件 redis.conf 搜索 <code>SNAPSHOTTING</code>，参考本文 5.6。</p>
 <p>RDB 产生的快照文件是临时文件，当 Redis 关闭后，快照文件也会一并删除。因此常常需要将快照文件修改名称后并备份，等 Redis 重新启动后，再把名称改为 dump.rdb，此时备份数据会直接加载。</p>
-<h2 id="6-2-如何触发-RDB-快照"><a class="header-anchor" href="#6-2-如何触发-RDB-快照"></a>6.2 如何触发 RDB 快照</h2>
+<h2 id="13-2-如何触发-RDB-快照"><a class="header-anchor" href="#13-2-如何触发-RDB-快照"></a>13.2 如何触发 RDB 快照</h2>
 <p>触发 RDB 快照有以下几种方式：</p>
 <p>1、配置文件中 <code>SNAPSHOTTING </code> 一栏的默认的快照配置。<code>dbfilename dump.rdb</code> 指定了数据库文件名，一般会冷拷贝后重新使用，可以使用 <code>cp dump.rdb dump_new.rdb</code> 进行拷贝。</p>
 <p>2、执行命令 save 或者是 bgsave 后：</p>
 <ul>
 <li>SAVE：save 时只管保存，其它不管，全部阻塞</li>
-<li>BGSAVE：Redis 会在后台异步进行快照操作， 快照同时还可以响应客户端请求。可以通过lastsave 命令获取最后一次成功执行快照的时间</li>
+<li>BGSAVE：Redis 会在后台异步进行快照操作，快照同时还可以响应客户端请求。可以通过 lastsave 命令获取最后一次成功执行快照的时间</li>
 </ul>
 <p>3、执行 flushall 命令，也会产生 dump.rdb 文件，但里面是空的，无意义。</p>
 <p>4、SHUTDOWN（正常关闭）时，如果没有开启 AOF，会触发 RDB。<code>kill -9</code> 意外宕机不会触发 RDB 持久化。</p>
 <p>第一点属于自动触发，后面三点属于手动触发。</p>
-<h2 id="6-3-如何恢复数据"><a class="header-anchor" href="#6-3-如何恢复数据"></a>6.3 如何恢复数据</h2>
+<h2 id="13-3-如何恢复数据"><a class="header-anchor" href="#13-3-如何恢复数据"></a>13.3 如何恢复数据</h2>
 <p>将备份文件（dump.rdb）移动到 Redis 安装目录并启动服务即可，可以使用 <code>CONFIG GET dir</code> 命令获取目录。</p>
-<h2 id="6-4-优势与劣势"><a class="header-anchor" href="#6-4-优势与劣势"></a>6.4 优势与劣势</h2>
+<h2 id="13-4-优势与劣势"><a class="header-anchor" href="#13-4-优势与劣势"></a>13.4 优势与劣势</h2>
 <blockquote>
 <p>优势</p>
 </blockquote>
@@ -2498,27 +2498,27 @@ Could not connect to Redis at 127.0.0.1:6379: Connection refused
 <li>fork 的时候，内存中的数据被克隆了一份，大致 2 倍的膨胀性需要考虑</li>
 <li>虽然 Redis 在 fork 时使用了写时拷贝技术，但如果数据过于庞大时还是比较消耗性能</li>
 </ul>
-<h2 id="6-5-如何停止"><a class="header-anchor" href="#6-5-如何停止"></a>6.5 如何停止</h2>
+<h2 id="13-5-如何停止"><a class="header-anchor" href="#13-5-如何停止"></a>13.5 如何停止</h2>
 <p>动态所有停止 RDB 保存规则的方法：<code>redis-cli config set save ""</code></p>
-<h2 id="6-6-小结"><a class="header-anchor" href="#6-6-小结"></a>6.6 小结</h2>
+<h2 id="13-6-小结"><a class="header-anchor" href="#13-6-小结"></a>13.6 小结</h2>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/RDB%E6%8C%81%E4%B9%85%E5%8C%96%E5%B0%8F%E7%BB%93.png" alt="RDB持久化小结"></p>
 <ul>
-<li>RDB 是一个非常紧凑的文件。</li>
-<li>RDB 在保存 RDB 文件时父进程唯一需要做的就是 fork 出一个子进程，接下来的工作全部由子进程来做，父进程不需要再做其他 IO 操作，所以 RDB 持久化方式可以最大化 Redis 的性能。</li>
-<li>与 AOF 相比，在恢复大的数据集的时候，RDB 方式会更快一一些。</li>
-<li>数据丢失风险大。</li>
-<li>RDB 需要经常 fork 子进程来保存数据集到硬盘上，当数据集比较大的时候 fork 的过程是非常耗时的吗，可能会导致 Redis 在一些毫秒级不能回应客户端请求。</li>
+<li>RDB 是一个非常紧凑的文件</li>
+<li>RDB 在保存 RDB 文件时父进程唯一需要做的就是 fork 出一个子进程，接下来的工作全部由子进程来做，父进程不需要再做其他 IO 操作，所以 RDB 持久化方式可以最大化 Redis 的性能</li>
+<li>与 AOF 相比，在恢复大的数据集的时候，RDB 方式会更快一一些</li>
+<li>数据丢失风险大</li>
+<li>RDB 需要经常 fork 子进程来保存数据集到硬盘上，当数据集比较大的时候 fork 的过程是非常耗时的吗，可能会导致 Redis 在一些毫秒级不能回应客户端请求</li>
 </ul>
-<h1 id="7-持久化之-AOF"><a class="header-anchor" href="#7-持久化之-AOF"></a>7. 持久化之 AOF</h1>
-<h2 id="7-1-什么是-AOF"><a class="header-anchor" href="#7-1-什么是-AOF"></a>7.1 什么是 AOF</h2>
+<h1 id="14-持久化之-AOF"><a class="header-anchor" href="#14-持久化之-AOF"></a>14. 持久化之 AOF</h1>
+<h2 id="14-1-什么是-AOF"><a class="header-anchor" href="#14-1-什么是-AOF"></a>14.1 什么是 AOF</h2>
 <p>既然有了 RDB 为什么还要有 AOF 呢？AOF 作为新技术解决了 RDB 不能解决的什么问题？如果同时存在 RDB 和 AOF，它们会发生冲突，还是进行协作？</p>
 <p>AOF 全称是 Append Only File。</p>
-<p>它是以日志的形式来记录每个写操作，将 Redis 执行过的所有写指令记录下来（读操作不记录）， 只许追加文件但不可以改写文件，Redis 启动之初会读取该文件重新构建数据，换言之，Redis 重启的话就根据日志文件的内容将写指令从前到后执行一次以完成数据的恢复工作。</p>
+<p>它是以日志的形式来记录每个写操作，将 Redis 执行过的所有写指令记录下来（读操作不记录），只许追加文件但不可以改写文件，Redis 启动之初会读取该文件重新构建数据，换言之，Redis 重启的话就根据日志文件的内容将写指令从前到后执行一次以完成数据的恢复工作。</p>
 <p>AOF 保存的是 appendonly.aof 文件（可以在配置文件可修改文件名，就像 RDB 一样）</p>
-<p>那在哪里进行配置呢？ 在 Redis 的配置文件 redis.conf 搜索 <code>APPEND ONLY MODE</code>，参考本文 5.10。</p>
+<p>那在哪里进行配置呢？在 Redis 的配置文件 redis.conf 搜索 <code>APPEND ONLY MODE</code>，参考本文 5.10。</p>
 <p>默认 AOF 是关闭的，只需修改 <code>appendonly</code>  配置项为 yes 就行。</p>
 <p>AOF 的备份并恢复操作和 RDB 是一样的，都是拷贝备份文件，进行数据恢复时拷贝到 Redis 工作目录下，系统启动时自动加载。</p>
-<h2 id="7-2-启动、修复和恢复"><a class="header-anchor" href="#7-2-启动、修复和恢复"></a>7.2 启动、修复和恢复</h2>
+<h2 id="14-2-启动、修复和恢复"><a class="header-anchor" href="#14-2-启动、修复和恢复"></a>14.2 启动、修复和恢复</h2>
 <blockquote>
 <p>正常恢复</p>
 </blockquote>
@@ -2531,15 +2531,15 @@ Could not connect to Redis at 127.0.0.1:6379: Connection refused
 <p>启动：与正常恢复一样，设置 yes。修改默认的 <code>appendonly no</code>，改为 yes 即可。</p>
 <p>先备份被写坏的 aof 文件，然后执行 <code>Redis-check-aof --fix aof文件</code> 进行修复。</p>
 <p>恢复：重启 Redis 然后重新加载。</p>
-<h2 id="7-3-Rewrite"><a class="header-anchor" href="#7-3-Rewrite"></a>7.3 Rewrite</h2>
+<h2 id="14-3-Rewrite"><a class="header-anchor" href="#14-3-Rewrite"></a>14.3 Rewrite</h2>
 <blockquote>
 <p>什么是 rewrite</p>
 </blockquote>
-<p>AOF 采用文件追加方式，文件会越来越大。为避免出现此种情况，新增了重写机制， 当 AOF 文件的大小超过所设定的阈值时，Redis 就会启动 AOF 文件的内容压缩， 只保留可以恢复数据的最小指令集。可以使用命令 <code>bgrewriteaof</code>。</p>
+<p>AOF 采用文件追加方式，文件会越来越大。为避免出现此种情况，新增了重写机制，当 AOF 文件的大小超过所设定的阈值时，Redis 就会启动 AOF 文件的内容压缩，只保留可以恢复数据的最小指令集。可以使用命令 <code>bgrewriteaof</code>。</p>
 <blockquote>
 <p>重写原理</p>
 </blockquote>
-<p>AOF 文件持续增长而过大时，会 fork 出一条新进程来将文件重写（也是先写临时文件最后再 rename）， 遍历新进程的内存中数据，每条记录有一条的 set 语句。重写 aof 文件的操作，并没有读取旧的 aof 文件， 而是将整个内存中的数据库内容用命令的方式重写了一个新的 aof 文件，这点和快照有点类似。</p>
+<p>AOF 文件持续增长而过大时，会 fork 出一条新进程来将文件重写（也是先写临时文件最后再 rename），遍历新进程的内存中数据，每条记录有一条的 set 语句。重写 aof 文件的操作，并没有读取旧的 aof 文件，而是将整个内存中的数据库内容用命令的方式重写了一个新的 aof 文件，这点和快照有点类似。</p>
 <blockquote>
 <p>触发机制</p>
 </blockquote>
@@ -2547,7 +2547,7 @@ Could not connect to Redis at 127.0.0.1:6379: Connection refused
 <p>配置文件 APPEND ONLY MODE 一栏中的配置项：</p>
 <p><code>auto-aof-rewrite-min-size</code>：默认是 64 mb，rewrite 触发时 aof 文件的最小值</p>
 <p><code>auto-aof-rewrite-percentage</code>：默认是 100，表示 100%，即一倍</p>
-<h2 id="7-4-优势与劣势"><a class="header-anchor" href="#7-4-优势与劣势"></a>7.4 优势与劣势</h2>
+<h2 id="14-4-优势与劣势"><a class="header-anchor" href="#14-4-优势与劣势"></a>14.4 优势与劣势</h2>
 <blockquote>
 <p>优势</p>
 </blockquote>
@@ -2563,7 +2563,7 @@ Could not connect to Redis at 127.0.0.1:6379: Connection refused
 <li>相同数据集的数据而言 aof 文件要远大于 rdb 文件，恢复速度慢于 rdb</li>
 <li>AOF 运行效率要慢于 RDB，每秒同步策略效率较好，不同步效率和 RDB 相同</li>
 </ul>
-<h2 id="7-5-小结"><a class="header-anchor" href="#7-5-小结"></a>7.5 小结</h2>
+<h2 id="14-5-小结"><a class="header-anchor" href="#14-5-小结"></a>14.5 小结</h2>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/AOF%E6%8C%81%E4%B9%85%E5%8C%96%E5%B0%8F%E7%BB%93.png" alt="AOF持久化小结"></p>
 <ul>
 <li>aof 文件是一个只进行追加的日志文件</li>
@@ -2572,7 +2572,7 @@ Could not connect to Redis at 127.0.0.1:6379: Connection refused
 <li>对于相同的数据集来说，aof 文件的体积通常要大于 rdb 文件的体积</li>
 <li>根据所使用的 fsync 策略，AOF 的速度可能会慢于 RDB</li>
 </ul>
-<h2 id="7-6-持久化总结"><a class="header-anchor" href="#7-6-持久化总结"></a>7.6 持久化总结</h2>
+<h2 id="14-6-持久化总结"><a class="header-anchor" href="#14-6-持久化总结"></a>14.6 持久化总结</h2>
 <p>两种持久化策略到底该选哪一种呢？</p>
 <p>RDB 持久化方式能够在指定的时间间隔能对数据进行快照存储</p>
 <p>AOF 持久化方式记录每次对服务器写的操作，当服务器重启的时候会重新执行这些命令来恢复原始的数据，AOF 命令以 Redis 协议追加保存每次写的操作到文件末尾</p>
@@ -2584,14 +2584,14 @@ Could not connect to Redis at 127.0.0.1:6379: Connection refused
 <p>这样会先加载 aof 文件。</p>
 <p>在这种情况下，当 Redis 重启的时候会优先载入 aof 文件来恢复原始的数据，因为在通常情况下 aof 文件保存的数据集要比 rdb 文件保存的数据集更完整。</p>
 <p>RDB 的数据不实时，同时使用两者时服务器重启也只会找 aof 文件。那要不要只使用 AOF 呢？</p>
-<p>Redis 作者建议不要，因为 RDB 更适合用于备份数据库（ AOF 在不断变化不好备份），快速重启，而且不会有 AOF 可能潜在的 bug， 留着作为一个万一的手段。</p>
+<p>Redis 作者建议不要，因为 RDB 更适合用于备份数据库（ AOF 在不断变化不好备份），快速重启，而且不会有 AOF 可能潜在的 bug，留着作为一个万一的手段。</p>
 <blockquote>
 <p>性能建议</p>
 </blockquote>
-<p>因为 rdb 文件只用作后备用途，建议只在 slave 上持久化 rdb 文件，而且只要 15 分钟备份一次就够了，只保留 <code>save 900 1</code>这条规则。</p>
+<p>因为 rdb 文件只用作后备用途，建议只在 slave 上持久化 rdb 文件，而且只要 15 分钟备份一次就够了，只保留 <code>save 900 1</code> 这条规则。</p>
 <p>如果使用 AOF，好处是在最恶劣情况下也只会丢失不超过两秒数据，启动脚本较简单只加载自己的 aof 文件就可以了。代价一是带来了持续的 IO，二是 AOF rewrite 的最后将 rewrite 过程中产生的新数据写到新文件造成的阻塞几乎是不可避免的。只要硬盘许可，应该尽量减少 AOF rewrite 的频率，AOF 重写的基础大小默认值 64M 太小了，可以设到 5G 以上。默认是超过原文件大小 100% 时进行重写可以修改到适当的数值。</p>
 <p>如果不使用 AOF，仅靠 Master-Slave Replication （主从复制）实现高可用性也可以。能省掉一大笔 IO 也减少了 rewrite 时带来的系统波 动。代价是如果 Master / Slave 同时倒掉，会丢失十几分钟的数据，启动脚本也要比较两个 Master / Slave 中的 rdb 文件，并载入较新的那个。新浪微博就选用了这种架构。</p>
-</body></html></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/The-Basics-Of-Redis-Part-One/">https://mofan212.github.io/posts/The-Basics-Of-Redis-Part-One/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Middleware/">Middleware</a><a class="post-meta__tags" href="/tags/Redis/">Redis</a></div><div class="post-share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/72.png" data-sites="wechat,qq,weibo,facebook,x"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/Record-A-Test/" title="【随笔】记一次入职测试"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/71.jpg" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【随笔】记一次入职测试</div></div><div class="info-2"><div class="info-item-1">虚心学习，加油努力。自己要走的路还有很远，要学习的知识还有很多。</div></div></div></a><a class="pagination-related" href="/posts/The-Basics-Of-Redis-Part-Two/" title="【下篇】Redis 基础篇"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/73.png" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【下篇】Redis 基础篇</div></div><div class="info-2"><div class="info-item-1">本文主要介绍了 Redis 事务、发布订阅、Redis 的复制以及如何整合 SpringBoot。</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/The-Basics-Of-Redis-Part-Two/" title="【下篇】Redis 基础篇"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/73.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-12-08</div><div class="info-item-2">【下篇】Redis 基础篇</div></div><div class="info-2"><div class="info-item-1">本文主要介绍了 Redis 事务、发布订阅、Redis 的复制以及如何整合 SpringBoot。</div></div></div></a><a class="pagination-related" href="/posts/Redis-Cluster-And-Distributed-Locks/" title="Redis 集群与分布式锁"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/102.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-28</div><div class="info-item-2">Redis 集群与分布式锁</div></div><div class="info-2"><div class="info-item-1">本文介绍了 Redis 集群的模拟搭建、故障恢复、利用 Redis 实现简单的分布式锁和 Redis 6 中的新特性。</div></div></div></a><a class="pagination-related" href="/posts/Distributed-Message-Queue-RocketMQ-Part-One/" title="【上篇】分布式消息队列 RocketMQ"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/90.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-08-04</div><div class="info-item-2">【上篇】分布式消息队列 RocketMQ</div></div><div class="info-2"><div class="info-item-1">本文介绍了 RocketMQ 的安装与启动以及围绕它们进行拓展的相关知识点。</div></div></div></a><a class="pagination-related" href="/posts/Install-HBase/" title="HBase的安装"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/9.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-05-29</div><div class="info-item-2">HBase的安装</div></div><div class="info-2"><div class="info-item-1">本文基于Hadoop 3.2.1 对虚拟机上HBase的安装与安装过程中可能出现的问题进行了讲解。</div></div></div></a><a class="pagination-related" href="/posts/Advanced-HBase/" title="HBase原理"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/7.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-05-29</div><div class="info-item-2">HBase原理</div></div><div class="info-2"><div class="info-item-1">本文简单介绍了 HBase 的原理包括架构原理、读写流程、读写拓展、数据删除时间等内容。</div></div></div></a><a class="pagination-related" href="/posts/The-Basis-Of-ElasticSearch/" title="Elasticsearch 入门"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/67.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-11-18</div><div class="info-item-2">Elasticsearch 入门</div></div><div class="info-2"><div class="info-item-1">本文介绍了 ES 的安装与相关基础知识，在文末实现了一个京东搜索的小 Demo。</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">默烦</div><div class="author-info-description">彩笔的打怪升级之路...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">175</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mofan212"><i class="fab fa-github"></i><span>follow me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解。<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a href="./mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载。😊</br><strong><font style="color:red">严禁未遵循规范的转载。</font></strong>😡</br><strong>死去的评论系统复活啦！欢迎到留言板畅所欲言！</strong>当然也可以使用更高效的<a target="_blank" href="https://space.bilibili.com/23658864/dynamic" style="color:#49B1F5;text-decoration:underline"> 哔哩哔哩私信 </a>或<a href="mailto:cy.mofan@foxmail.com" style="color:#49B1F5;text-decoration:underline" target="_blank">邮箱</a>。 😉</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-NoSQL-%E5%85%A5%E9%97%A8%E4%B8%8E%E6%A6%82%E8%BF%B0%EF%BC%88%E4%B8%8A%EF%BC%89"><span class="toc-text">1. NoSQL 入门与概述（上）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%9C%89-NoSQL"><span class="toc-text">1.1 为什么要有 NoSQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E4%BB%80%E4%B9%88%E6%98%AF-NoSQL"><span class="toc-text">1.2 什么是 NoSQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-NoSQL-%E7%89%B9%E6%80%A7"><span class="toc-text">1.3 NoSQL 特性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-%E6%9C%89%E5%93%AA%E4%BA%9B-NoSQL-%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-text">1.4 有哪些 NoSQL 数据库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-5-%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8"><span class="toc-text">1.5 有什么用</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-NoSQL-%E5%85%A5%E9%97%A8%E4%B8%8E%E6%A6%82%E8%BF%B0%EF%BC%88%E4%B8%8B%EF%BC%89"><span class="toc-text">2. NoSQL 入门与概述（下）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-3V-3-%E9%AB%98"><span class="toc-text">2.1 3V + 3 高</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E5%BD%93%E4%B8%8B%E7%9A%84-NoSQL-%E7%BB%8F%E5%85%B8%E5%BA%94%E7%94%A8"><span class="toc-text">2.2 当下的 NoSQL 经典应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-NoSQL-%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B%E7%AE%80%E4%BB%8B"><span class="toc-text">2.3 NoSQL 数据模型简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-NoSQL-%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%9B%9B%E5%A4%A7%E5%88%86%E7%B1%BB"><span class="toc-text">3.3 NoSQL 数据库的四大分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD-CAP-%E5%8E%9F%E7%90%86"><span class="toc-text">3.4 分布式数据库中 CAP 原理</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-Redis-%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0"><span class="toc-text">3. Redis 入门概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0"><span class="toc-text">3.1 入门概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-Redis-%E7%9A%84%E5%AE%89%E8%A3%85"><span class="toc-text">3.2 Redis 的安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-Hello-World"><span class="toc-text">3.3 Hello World</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-%E5%90%AF%E5%8A%A8%E5%90%8E%E7%9A%84%E6%9D%82%E9%A1%B9%E7%9F%A5%E8%AF%86"><span class="toc-text">3.4 启动后的杂项知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-5-Windows-%E4%B8%8B%E5%AE%89%E8%A3%85-Redis"><span class="toc-text">3.5 Windows 下安装 Redis</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-Redis-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text">4. Redis 数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-Redis-%E7%9A%84%E4%BA%94%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text">4.1 Redis 的五大数据类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-Key-%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-text">4.2 Key 关键字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-String-%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-text">4.3 String 字符串</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-4-List-%E5%88%97%E8%A1%A8"><span class="toc-text">4.4 List 列表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-5-Set-%E9%9B%86%E5%90%88"><span class="toc-text">4.5 Set 集合</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-6-Hash-%E5%93%88%E5%B8%8C"><span class="toc-text">4.6 Hash 哈希</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-7-ZSet-%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88"><span class="toc-text">4.7 ZSet 有序集合</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90"><span class="toc-text">5. 配置文件解析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%9C%A8%E5%93%AA"><span class="toc-text">5.1 配置文件在哪</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-Redis-%E5%B8%B8%E8%A7%81%E9%85%8D%E7%BD%AE%E9%A1%B9"><span class="toc-text">5.2 Redis 常见配置项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-Units-%E5%8D%95%E4%BD%8D"><span class="toc-text">5.3 Units 单位</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-4-INCLUDES-%E5%8C%85%E5%90%AB"><span class="toc-text">5.4 INCLUDES 包含</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-5-GENERAL-%E9%80%9A%E7%94%A8"><span class="toc-text">5.5 GENERAL 通用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-6-SNAPSHOTTING-%E5%BF%AB%E7%85%A7"><span class="toc-text">5.6 SNAPSHOTTING 快照</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-7-REPLICATION-%E5%A4%8D%E5%88%B6"><span class="toc-text">5.7 REPLICATION 复制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-8-SECURITY-%E5%AE%89%E5%85%A8"><span class="toc-text">5.8 SECURITY 安全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-9-LIMITS-%E9%99%90%E5%88%B6"><span class="toc-text">5.9 LIMITS 限制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-10-APPEND-ONLY-MODE-%E8%BF%BD%E5%8A%A0"><span class="toc-text">5.10 APPEND ONLY MODE 追加</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-%E6%8C%81%E4%B9%85%E5%8C%96%E4%B9%8B-RDB"><span class="toc-text">6. 持久化之 RDB</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#6-1-%E4%BB%80%E4%B9%88%E6%98%AF-RDB"><span class="toc-text">6.1 什么是 RDB</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-2-%E5%A6%82%E4%BD%95%E8%A7%A6%E5%8F%91-RDB-%E5%BF%AB%E7%85%A7"><span class="toc-text">6.2 如何触发 RDB 快照</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-3-%E5%A6%82%E4%BD%95%E6%81%A2%E5%A4%8D%E6%95%B0%E6%8D%AE"><span class="toc-text">6.3 如何恢复数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-4-%E4%BC%98%E5%8A%BF%E4%B8%8E%E5%8A%A3%E5%8A%BF"><span class="toc-text">6.4 优势与劣势</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-5-%E5%A6%82%E4%BD%95%E5%81%9C%E6%AD%A2"><span class="toc-text">6.5 如何停止</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-6-%E5%B0%8F%E7%BB%93"><span class="toc-text">6.6 小结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-%E6%8C%81%E4%B9%85%E5%8C%96%E4%B9%8B-AOF"><span class="toc-text">7. 持久化之 AOF</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#7-1-%E4%BB%80%E4%B9%88%E6%98%AF-AOF"><span class="toc-text">7.1 什么是 AOF</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-2-%E5%90%AF%E5%8A%A8%E3%80%81%E4%BF%AE%E5%A4%8D%E5%92%8C%E6%81%A2%E5%A4%8D"><span class="toc-text">7.2 启动、修复和恢复</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-3-Rewrite"><span class="toc-text">7.3 Rewrite</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-4-%E4%BC%98%E5%8A%BF%E4%B8%8E%E5%8A%A3%E5%8A%BF"><span class="toc-text">7.4 优势与劣势</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-5-%E5%B0%8F%E7%BB%93"><span class="toc-text">7.5 小结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-6-%E6%8C%81%E4%B9%85%E5%8C%96%E6%80%BB%E7%BB%93"><span class="toc-text">7.6 持久化总结</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/The-Art-of-Loving/" title="爱的艺术"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/175.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="爱的艺术"/></a><div class="content"><a class="title" href="/posts/The-Art-of-Loving/" title="爱的艺术">爱的艺术</a><time datetime="2026-04-28T16:00:00.000Z" title="更新于 2026-04-29 00:00:00">2026-04-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Git/" title="Git理论与使用"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/3.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Git理论与使用"/></a><div class="content"><a class="title" href="/posts/Git/" title="Git理论与使用">Git理论与使用</a><time datetime="2026-01-26T16:00:00.000Z" title="更新于 2026-01-27 00:00:00">2026-01-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Something-About-Blog/" title="博客搭建与维护"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="博客搭建与维护"/></a><div class="content"><a class="title" href="/posts/Something-About-Blog/" title="博客搭建与维护">博客搭建与维护</a><time datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"/></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="更新于 2026-01-03 00:00:00">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"/></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/103.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 的类资源加载"/></a><div class="content"><a class="title" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载">Java 的类资源加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.5</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+</body></html></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/The-Basics-Of-Redis-Part-One/">https://mofan212.github.io/posts/The-Basics-Of-Redis-Part-One/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Middleware/">Middleware</a><a class="post-meta__tags" href="/tags/Redis/">Redis</a></div><div class="post-share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/72.png" data-sites="wechat,qq,weibo,facebook,x"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/Record-A-Test/" title="【随笔】记一次入职测试"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/71.jpg" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【随笔】记一次入职测试</div></div><div class="info-2"><div class="info-item-1">虚心学习，加油努力。自己要走的路还有很远，要学习的知识还有很多。</div></div></div></a><a class="pagination-related" href="/posts/The-Basics-Of-Redis-Part-Two/" title="【下篇】Redis 基础篇"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/73.png" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【下篇】Redis 基础篇</div></div><div class="info-2"><div class="info-item-1">本文主要介绍了 Redis 事务、发布订阅、Redis 的复制以及如何整合 SpringBoot。</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/The-Basics-Of-Redis-Part-Two/" title="【下篇】Redis 基础篇"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/73.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-12-08</div><div class="info-item-2">【下篇】Redis 基础篇</div></div><div class="info-2"><div class="info-item-1">本文主要介绍了 Redis 事务、发布订阅、Redis 的复制以及如何整合 SpringBoot。</div></div></div></a><a class="pagination-related" href="/posts/Redis-Cluster-And-Distributed-Locks/" title="Redis 集群与分布式锁"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/102.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-28</div><div class="info-item-2">Redis 集群与分布式锁</div></div><div class="info-2"><div class="info-item-1">本文介绍了 Redis 集群的模拟搭建、故障恢复、利用 Redis 实现简单的分布式锁和 Redis 6 中的新特性。</div></div></div></a><a class="pagination-related" href="/posts/Distributed-Message-Queue-RocketMQ-Part-Two/" title="【下篇】分布式消息队列 RocketMQ"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/95.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-09-19</div><div class="info-item-2">【下篇】分布式消息队列 RocketMQ</div></div><div class="info-2"><div class="info-item-1">本文介绍了 RocketMQ 的工作原理与应用。</div></div></div></a><a class="pagination-related" href="/posts/Distributed-Message-Queue-RocketMQ-Part-One/" title="【上篇】分布式消息队列 RocketMQ"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/90.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-08-04</div><div class="info-item-2">【上篇】分布式消息队列 RocketMQ</div></div><div class="info-2"><div class="info-item-1">本文介绍了 RocketMQ 的安装与启动以及围绕它们进行拓展的相关知识点。</div></div></div></a><a class="pagination-related" href="/posts/HBase-Shell/" title="HBase Shell操作"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/10.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-05-29</div><div class="info-item-2">HBase Shell操作</div></div><div class="info-2"><div class="info-item-1">本文基于Hadoop 3.2.1 对虚拟机上HBase的Shell操作进行了简单的介绍，但没有涉及过滤器的使用。</div></div></div></a><a class="pagination-related" href="/posts/Install-HBase/" title="HBase的安装"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/9.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-05-29</div><div class="info-item-2">HBase的安装</div></div><div class="info-2"><div class="info-item-1">本文基于Hadoop 3.2.1 对虚拟机上HBase的安装与安装过程中可能出现的问题进行了讲解。</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">默烦</div><div class="author-info-description">彩笔的打怪升级之路...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">175</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mofan212"><i class="fab fa-github"></i><span>follow me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解。<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a href="./mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载。😊</br><strong><font style="color:red">严禁未遵循规范的转载。</font></strong>😡</br><strong>死去的评论系统复活啦！欢迎到留言板畅所欲言！</strong>当然也可以使用更高效的<a target="_blank" href="https://space.bilibili.com/23658864/dynamic" style="color:#49B1F5;text-decoration:underline"> 哔哩哔哩私信 </a>或<a href="mailto:cy.mofan@foxmail.com" style="color:#49B1F5;text-decoration:underline" target="_blank">邮箱</a>。 😉</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-NoSQL-%E5%85%A5%E9%97%A8%E4%B8%8E%E6%A6%82%E8%BF%B0%EF%BC%88%E4%B8%8A%EF%BC%89"><span class="toc-text">1. NoSQL 入门与概述（上）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%9C%89-NoSQL"><span class="toc-text">1.1 为什么要有 NoSQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E4%BB%80%E4%B9%88%E6%98%AF-NoSQL"><span class="toc-text">1.2 什么是 NoSQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-NoSQL-%E7%89%B9%E6%80%A7"><span class="toc-text">1.3 NoSQL 特性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-%E6%9C%89%E5%93%AA%E4%BA%9B-NoSQL-%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-text">1.4 有哪些 NoSQL 数据库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-5-%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8"><span class="toc-text">1.5 有什么用</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-NoSQL-%E5%85%A5%E9%97%A8%E4%B8%8E%E6%A6%82%E8%BF%B0%EF%BC%88%E4%B8%8B%EF%BC%89"><span class="toc-text">2. NoSQL 入门与概述（下）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-3V-3-%E9%AB%98"><span class="toc-text">2.1 3V + 3 高</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E5%BD%93%E4%B8%8B%E7%9A%84-NoSQL-%E7%BB%8F%E5%85%B8%E5%BA%94%E7%94%A8"><span class="toc-text">2.2 当下的 NoSQL 经典应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-NoSQL-%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B%E7%AE%80%E4%BB%8B"><span class="toc-text">2.3 NoSQL 数据模型简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-NoSQL-%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%9B%9B%E5%A4%A7%E5%88%86%E7%B1%BB"><span class="toc-text">2.4 NoSQL 数据库的四大分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-5-%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD-CAP-%E5%8E%9F%E7%90%86"><span class="toc-text">2.5 分布式数据库中 CAP 原理</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-Redis-%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0"><span class="toc-text">3. Redis 入门概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0"><span class="toc-text">3.1 入门概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-Redis-%E7%9A%84%E5%AE%89%E8%A3%85"><span class="toc-text">3.2 Redis 的安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-Hello-World"><span class="toc-text">3.3 Hello World</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-%E5%90%AF%E5%8A%A8%E5%90%8E%E7%9A%84%E6%9D%82%E9%A1%B9%E7%9F%A5%E8%AF%86"><span class="toc-text">3.4 启动后的杂项知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-5-Windows-%E4%B8%8B%E5%AE%89%E8%A3%85-Redis"><span class="toc-text">3.5 Windows 下安装 Redis</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-Redis-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text">4. Redis 数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-Redis-%E7%9A%84%E4%BA%94%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text">4.1 Redis 的五大数据类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-Key-%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-text">4.2 Key 关键字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-String-%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-text">4.3 String 字符串</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-4-List-%E5%88%97%E8%A1%A8"><span class="toc-text">4.4 List 列表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-5-Set-%E9%9B%86%E5%90%88"><span class="toc-text">4.5 Set 集合</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-6-Hash-%E5%93%88%E5%B8%8C"><span class="toc-text">4.6 Hash 哈希</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-7-ZSet-%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88"><span class="toc-text">4.7 ZSet 有序集合</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90"><span class="toc-text">5. 配置文件解析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%9C%A8%E5%93%AA"><span class="toc-text">5.1 配置文件在哪</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-Redis-%E5%B8%B8%E8%A7%81%E9%85%8D%E7%BD%AE%E9%A1%B9"><span class="toc-text">5.2 Redis 常见配置项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-Units-%E5%8D%95%E4%BD%8D"><span class="toc-text">5.3 Units 单位</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-4-INCLUDES-%E5%8C%85%E5%90%AB"><span class="toc-text">5.4 INCLUDES 包含</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-5-GENERAL-%E9%80%9A%E7%94%A8"><span class="toc-text">5.5 GENERAL 通用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-1-SNAPSHOTTING-%E5%BF%AB%E7%85%A7"><span class="toc-text">12.1 SNAPSHOTTING 快照</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-2-REPLICATION-%E5%A4%8D%E5%88%B6"><span class="toc-text">12.2 REPLICATION 复制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-3-SECURITY-%E5%AE%89%E5%85%A8"><span class="toc-text">12.3 SECURITY 安全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-4-LIMITS-%E9%99%90%E5%88%B6"><span class="toc-text">12.4 LIMITS 限制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-5-APPEND-ONLY-MODE-%E8%BF%BD%E5%8A%A0"><span class="toc-text">12.5 APPEND ONLY MODE 追加</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#13-%E6%8C%81%E4%B9%85%E5%8C%96%E4%B9%8B-RDB"><span class="toc-text">13. 持久化之 RDB</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#13-1-%E4%BB%80%E4%B9%88%E6%98%AF-RDB"><span class="toc-text">13.1 什么是 RDB</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-2-%E5%A6%82%E4%BD%95%E8%A7%A6%E5%8F%91-RDB-%E5%BF%AB%E7%85%A7"><span class="toc-text">13.2 如何触发 RDB 快照</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-3-%E5%A6%82%E4%BD%95%E6%81%A2%E5%A4%8D%E6%95%B0%E6%8D%AE"><span class="toc-text">13.3 如何恢复数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-4-%E4%BC%98%E5%8A%BF%E4%B8%8E%E5%8A%A3%E5%8A%BF"><span class="toc-text">13.4 优势与劣势</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-5-%E5%A6%82%E4%BD%95%E5%81%9C%E6%AD%A2"><span class="toc-text">13.5 如何停止</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-6-%E5%B0%8F%E7%BB%93"><span class="toc-text">13.6 小结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#14-%E6%8C%81%E4%B9%85%E5%8C%96%E4%B9%8B-AOF"><span class="toc-text">14. 持久化之 AOF</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#14-1-%E4%BB%80%E4%B9%88%E6%98%AF-AOF"><span class="toc-text">14.1 什么是 AOF</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#14-2-%E5%90%AF%E5%8A%A8%E3%80%81%E4%BF%AE%E5%A4%8D%E5%92%8C%E6%81%A2%E5%A4%8D"><span class="toc-text">14.2 启动、修复和恢复</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#14-3-Rewrite"><span class="toc-text">14.3 Rewrite</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#14-4-%E4%BC%98%E5%8A%BF%E4%B8%8E%E5%8A%A3%E5%8A%BF"><span class="toc-text">14.4 优势与劣势</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#14-5-%E5%B0%8F%E7%BB%93"><span class="toc-text">14.5 小结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#14-6-%E6%8C%81%E4%B9%85%E5%8C%96%E6%80%BB%E7%BB%93"><span class="toc-text">14.6 持久化总结</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/The-Art-of-Loving/" title="爱的艺术"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/175.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="爱的艺术"/></a><div class="content"><a class="title" href="/posts/The-Art-of-Loving/" title="爱的艺术">爱的艺术</a><time datetime="2026-04-28T16:00:00.000Z" title="更新于 2026-04-29 00:00:00">2026-04-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Git/" title="Git理论与使用"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/3.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Git理论与使用"/></a><div class="content"><a class="title" href="/posts/Git/" title="Git理论与使用">Git理论与使用</a><time datetime="2026-01-26T16:00:00.000Z" title="更新于 2026-01-27 00:00:00">2026-01-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Something-About-Blog/" title="博客搭建与维护"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="博客搭建与维护"/></a><div class="content"><a class="title" href="/posts/Something-About-Blog/" title="博客搭建与维护">博客搭建与维护</a><time datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"/></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="更新于 2026-01-03 00:00:00">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"/></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/20.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="注解、类的加载、反射"/></a><div class="content"><a class="title" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射">注解、类的加载、反射</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.5</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
   const parseViewBox = viewBox => {
     if (!viewBox) return null
     const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))

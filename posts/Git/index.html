@@ -246,23 +246,23 @@ btf.addGlobalFn('pjaxSend', () => {
 </blockquote>
 <ul>
 <li>
-<p>SVN 是集中化的版本控制系统，必须联网使用，Git 是分布式版本控制系统，支持离线操作；</p>
+<p>SVN 是集中化的版本控制系统，必须联网使用，Git 是分布式版本控制系统，支持离线操作</p>
 </li>
 <li>
-<p>SVN 是按照原始文件存储的，体积较大，Git 是按照元数据方式存储的，体积很小；</p>
+<p>SVN 是按照原始文件存储的，体积较大，Git 是按照元数据方式存储的，体积很小</p>
 </li>
 <li>
-<p>SVN 的分支操作成本较大，会影响到其他开发人员，Git 的分支操作成本更小，不会影响到其他人；</p>
+<p>SVN 的分支操作成本较大，会影响到其他开发人员，Git 的分支操作成本更小，不会影响到其他人</p>
 </li>
 <li>
-<p>SVN 常用于维护文档，Git 常用于维护代码。</p>
+<p>SVN 常用于维护文档，Git 常用于维护代码</p>
 </li>
 </ul>
 <h1 id="2-Git-的历史"><a class="header-anchor" href="#2-Git-的历史"></a>2. Git 的历史</h1>
 <p>2002 年，Linux 内核开源社区开始启用分布式版本控制系统 BitKeeper 来管理和维护代码。</p>
 <p>2005 年，开发 BitKeeper 的 BitMover  公司结束与 Linux 内核开源社区的合作关系，并收回 Linux 内核开源社区的免费使用权。而后，Linux 的缔造者 Linus Torvalds 使用两周开发出自己的版本系统，也就是如今的 Git！</p>
 <img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/李纳斯·托沃兹.png" alt="李纳斯·托沃兹" style="zoom:50%;">
-<p><span style="text-align: center;display:block;">Linux 和 Git 之父李纳斯·托沃兹（Linus Benedic Torvalds）1969、芬兰</span></p>
+<p><span style="text-align: center;display:block;">Linux 和 Git 之父李纳斯·托沃兹（Linus Benedic Torvalds）1969、芬兰 </span></p>
 <h1 id="3-Git-环境配置"><a class="header-anchor" href="#3-Git-环境配置"></a>3. Git 环境配置</h1>
 <h2 id="3-1-安装与卸载-Git"><a class="header-anchor" href="#3-1-安装与卸载-Git"></a>3.1 安装与卸载 Git</h2>
 <p>打开 <a target="_blank" rel="noopener" href="https://git-scm.com/">git官网</a>，下载 git 对应操作系统的版本。</p>
@@ -271,7 +271,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>进入镜像后，拖至最下方，进入稳定版的下载，然后根据自己操作系统的情况下载并进行安装。</p>
 <img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/Git镜像下载_1.png" alt="Git镜像下载_1" style="zoom:50%;">
 <img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/Git镜像下载_2.png" alt="Git镜像下载_2" style="zoom:50%;">
-<p>安装时使用“傻瓜式”安装，无脑下一步即可。<mark>PS：注意按自己需求修改安装路径！</mark>😏</p>
+<p>安装时使用「傻瓜式」安装，无脑下一步即可。<mark>PS：注意按自己需求修改安装路径！</mark>😏</p>
 <p>安装时还可以修改默认编辑器，默认是 Vim 编辑器。比如将默认编辑器修改为 NotePad3，找到 NotePad3 的 exe 文件并选择即可。</p>
 <p>如果在安装完成后想要修改默认编辑器，可以使用命令：</p>
 <figure class="highlight shell line-numbers" data-language="SHELL">
@@ -285,18 +285,18 @@ btf.addGlobalFn('pjaxSend', () => {
 </blockquote>
 <p>使用国内各种管家软件或打开控制面板进行卸载即可，最后记得删除与 Git 相关的、在 path 下的环境变量！</p>
 <blockquote>
-<p>启动Git</p>
+<p>启动 Git</p>
 </blockquote>
 <p>安装成功后在开始菜单中会有如下信息：</p>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/%E5%BC%80%E5%A7%8B%E8%8F%9C%E5%8D%95Git%E9%A1%B9.png" alt="开始菜单Git项"></p>
 <p><strong>Git Bash：</strong> Unix 与 Linux 风格的命令行（使用最多，推荐使用）</p>
 <p><strong>Git CMD：</strong> Windows 风格的命令行</p>
 <p><strong>Git GUI：</strong> 图形界面的 Git，不建议初学者使用，尽量先熟悉常用命令</p>
-<p>可以在某一目录中点击右键，点击“Git Bash Here”就可以再当前目录下打开 Git Bash。</p>
+<p>可以在某一目录中点击右键，点击「Git Bash Here」就可以再当前目录下打开 Git Bash。</p>
 <h2 id="3-2-Linux-常用命令"><a class="header-anchor" href="#3-2-Linux-常用命令"></a>3.2 Linux 常用命令</h2>
 <p>在 Git 的命令行界面也可以使用 Linux 的操作命令，常用的有以下命令：</p>
 <p>1、cd：切换目录</p>
-<p>2、cd . . ：回退到上一个目录，直接 cd 进入默认目录</p>
+<p>2、cd . .：回退到上一个目录，直接 cd 进入默认目录</p>
 <p>3、pwd：显示当前所在的目录路径</p>
 <p>4、ls（ll）：都是列出当前目录中的所有文件，只不过 ll（两个 ll）列出的内容更为详细</p>
 <p>5、touch：新建一个文件。如 <code>touch index.js</code> 就会在当前目录下新建一个 index.js 文件</p>
@@ -333,10 +333,10 @@ btf.addGlobalFn('pjaxSend', () => {
 <img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/当前用户配置文件信息.png" alt="当前用户配置文件信息" style="zoom:50%;">
 <p>可以直接在这里编辑配置文件，通过命令设置后也会响应到这里。</p>
 <blockquote>
-<p><strong>设置用户名与邮箱</strong>   这很重要！ 这很重要！ 这很重要！</p>
+<p><strong>设置用户名与邮箱</strong>   这很重要！这很重要！这很重要！</p>
 </blockquote>
-<p>安装完 Git 后首先要做的事情是设置用户名和 email 地址。这 <mark>非常重要</mark>，因为每次 Git 提交都会使用该信息，它被永远的嵌入到了提交中。<mark>所以！必须进行设置！！</mark>  <mark>这很重要 * 3</mark></p>
-<p>如果刚安装 Git 后没有设置用户名和邮箱，执行 <code>git config --global  --list</code> 就会出现下图中的第一种情况，此时需要按照第二个与第三个类似命令来设置用户名🏃和邮箱📧（我在此处设置的是我自己的用户名 mofan 与我的邮箱，你需要设置属于你自己的用户名和邮箱）。</p>
+<p>安装完 Git 后首先要做的事情是设置用户名和 email 地址。这 <mark>非常重要</mark>，因为每次 Git 提交都会使用该信息，它被永远的嵌入到了提交中。<mark>所以！必须进行设置！</mark>  <mark>这很重要 * 3</mark></p>
+<p>如果刚安装 Git 后没有设置用户名和邮箱，执行 <code>git config --global  --list</code> 就会出现下图中的第一种情况，此时需要按照第二个与第三个类似命令来设置用户名 🏃 和邮箱 📧（我在此处设置的是我自己的用户名 mofan 与我的邮箱，你需要设置属于你自己的用户名和邮箱）。</p>
 <img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/配置文件编写.png" alt="配置文件编写" style="zoom:50%;">
 <p>如果使用了 <code>--global</code> 选项，表示设置了全局的用户名和邮箱。如果希望在一个特定的项目中使用不同的用户名和邮箱，可以在该项目中运行该命令而不添加 <code>--global</code> 选项。总之 <code>--global</code> 为全局配置，不加为某个项目的特定配置。</p>
 <p>设置好用户名和邮箱后，再运行 <code>git config --global  --list</code>，就会显示设置的用户名和邮箱了，也可以在 <code>C:\Users\你的用户名\.gitconfig </code> 文件中看到设置的信息。</p>
@@ -348,10 +348,10 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>文件在这四个区域之间的转换关系如下：</p>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/Git%E4%B8%89%E5%A4%A7%E5%8C%BA%E5%9F%9F.png" alt="Git三大区域"></p>
 <ul>
-<li>Working Directory：工作区，平时存放项目代码的地方。</li>
-<li>Stage（Index）：暂存区，用于临时存放改动，事实上它只是一个文件，保存即将提交到文件列表信息。</li>
-<li>History：历史记录区，安全存放数据的位置，里面有项目所有版本的数据。</li>
-<li>Remote Directory：远程仓库，托管代码的服务器，可以简单的认为是项目组中用于远程数据交换的一台电脑。</li>
+<li>Working Directory：工作区，平时存放项目代码的地方</li>
+<li>Stage（Index）：暂存区，用于临时存放改动，事实上它只是一个文件，保存即将提交到文件列表信息</li>
+<li>History：历史记录区，安全存放数据的位置，里面有项目所有版本的数据</li>
+<li>Remote Directory：远程仓库，托管代码的服务器，可以简单的认为是项目组中用于远程数据交换的一台电脑</li>
 </ul>
 <blockquote>
 <p>三大区域的另一种图示</p>
@@ -359,12 +359,12 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>本地的三个区域确切的说应该是 Git 仓库中 HEAD 指向的版本：</p>
 <img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/图解三大区域.png" alt="图解三大区域" style="zoom: 67%;">
 <ul>
-<li>Directory：使用 Git 管理的一个目录，也就是一个仓库，包含我们的工作空间和 Git 的管理空间。</li>
-<li>WorkSpace：需要通过 Git 进行版本控制的目录和文件，这些目录和文件组成了工作空间。</li>
+<li>Directory：使用 Git 管理的一个目录，也就是一个仓库，包含我们的工作空间和 Git 的管理空间</li>
+<li>WorkSpace：需要通过 Git 进行版本控制的目录和文件，这些目录和文件组成了工作空间</li>
 <li>.git：存放 Git 管理信息的目录，初始化仓库的时候自动创建。（<strong>一个隐藏文件夹</strong>）</li>
-<li>Index/Stage：暂存区，或者叫待提交更新区，在提交进入 repo 之前，可以把所有的更新放在暂存区。</li>
-<li>Local Repo：本地仓库，一个存放在本地的版本库；HEAD 会只是当前的开发分支（branch）。</li>
-<li>Stash：隐藏，是一个工作状态保存栈，用于保存/恢复 WorkSpace 中的临时状态。</li>
+<li>Index/Stage：暂存区，或者叫待提交更新区，在提交进入 repo 之前，可以把所有的更新放在暂存区</li>
+<li>Local Repo：本地仓库，一个存放在本地的版本库；HEAD 会只是当前的开发分支（branch）</li>
+<li>Stash：隐藏，是一个工作状态保存栈，用于保存/恢复 WorkSpace 中的临时状态</li>
 </ul>
 <blockquote>
 <p>工作流程</p>
@@ -378,7 +378,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>什么是工作目录？</p>
 </blockquote>
 <p>工作目录（WorkSpace）一般就是希望 Git 进行管理的文件夹，可以是项目的目录，也可以是一个空目录。</p>
-<p><s>建议</s><mark>要求</mark>不能有中文。</p>
+<p><s>建议</s><mark>要求</mark> 不能有中文。</p>
 <blockquote>
 <p>创建全新的仓库</p>
 </blockquote>
@@ -404,9 +404,9 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>删除远程仓库</p>
 </blockquote>
 <p><strong>GitHub 中的操作：</strong></p>
-<p>进入 GitHub 中需要删除的仓库，点击“Settings”，下拉网页至最后“Danger Zone”，选中并点击“Delete this Repository”，然后根据界面提示进行操作即可。</p>
+<p>进入 GitHub 中需要删除的仓库，点击「Settings」，下拉网页至最后「Danger Zone」，选中并点击「Delete this Repository」，然后根据界面提示进行操作即可。</p>
 <p><strong>Gitee 中的操作：</strong></p>
-<p>进入 Gitee 中需要删除的仓库，点击“管理” — 仓库设置 — 删除仓库，根据界面提示进行操作即可。</p>
+<p>进入 Gitee 中需要删除的仓库，点击「管理」 — 仓库设置 — 删除仓库，根据界面提示进行操作即可。</p>
 <h1 id="6-Git-文件操作"><a class="header-anchor" href="#6-Git-文件操作"></a>6. Git 文件操作</h1>
 <blockquote>
 <p>文件的四种状态</p>
@@ -414,8 +414,8 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>版本控制就是对文件的版本控制，要对文件进行修改、提交等操作，首先要知道文件当前是什么状态。</p>
 <p>1、Untracked：未跟踪，此文件在文件夹中，但没有加入到 Git 库，不参与版本控制。可以通过 <code>git add</code> 状态变为 Staged。</p>
 <p>2、Unmodify：文件已经入库，且未修改，即版本库中的文件快照内容与文件夹中完全一致。这种类型的文件有两种去处，如果它被修改，变为 Modified；如果使用 <code>git rm</code> 移出版本库，则变为 Untracked。</p>
-<p>3、Modified：文件已修改， 仅仅是修改，并没有进行其他的操作。这个文件也有两个去处，通过 <code>git add</code> 变为暂存 Staged 状态；使用 <code>git checkout</code>  丢弃修改， 返回到 Unmodify 状态。<code>git checkout</code> 表示从库中取出文件，覆盖当前修改，即丢弃当前修改。</p>
-<p>4、Staged：暂存状态。通过 <code>git commit</code> 将修改提交到本地仓库， 文件变为 Unmodify 状态。执行 <code>git reset HEAD filename</code> 取消暂存， 变为 Modified 状态。</p>
+<p>3、Modified：文件已修改，仅仅是修改，并没有进行其他的操作。这个文件也有两个去处，通过 <code>git add</code> 变为暂存 Staged 状态；使用 <code>git checkout</code>  丢弃修改，返回到 Unmodify 状态。<code>git checkout</code> 表示从库中取出文件，覆盖当前修改，即丢弃当前修改。</p>
+<p>4、Staged：暂存状态。通过 <code>git commit</code> 将修改提交到本地仓库，文件变为 Unmodify 状态。执行 <code>git reset HEAD filename</code> 取消暂存，变为 Modified 状态。</p>
 <blockquote>
 <p>查看文件状态</p>
 </blockquote>
@@ -495,10 +495,10 @@ btf.addGlobalFn('pjaxSend', () => {
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/GitHub.png" alt="GitHub"></p>
 <ul>
 <li>
-<p>首先需要注册 GitHub；</p>
+<p>首先需要注册 GitHub</p>
 </li>
 <li>
-<p>为了方便使用，<strong>强烈建议</strong> 设置本机绑定 SSH 公钥（gōng yuè），实现免密码登录；</p>
+<p>为了方便使用，<strong>强烈建议</strong> 设置本机绑定 SSH 公钥（gōng yuè），实现免密码登录</p>
 </li>
 </ul>
 <p>冷知识：公钥、私钥、密钥中，钥都读 <code>yuè</code>。😱</p>
@@ -538,23 +538,23 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>当看到上面这些信息时就说明 SSH key 已经创建成功，接下来将其添加到 GitHub 的 SSH key 上就可以了。</p>
 <ul>
 <li>
-<p>打开 GitHub 并进行登录，点击右上角头像，选择 Settings，进入设置页面后，点击 Access 下的 SSH and GPG keys，之后点击 New SSH key；</p>
+<p>打开 GitHub 并进行登录，点击右上角头像，选择 Settings，进入设置页面后，点击 Access 下的 SSH and GPG keys，之后点击 New SSH key</p>
 </li>
 <li>
-<p>打开目录 <code>C:\Users(用户)\你的用户名\.ssh</code>，将 id_rsa.pub 文件内的内容复制到公钥填写处，点击“确定”，输入 GitHub 的密码即可添加成功！</p>
+<p>打开目录 <code>C:\Users(用户)\你的用户名\.ssh</code>，将 id_rsa.pub 文件内的内容复制到公钥填写处，点击「确定」，输入 GitHub 的密码即可添加成功！</p>
 </li>
 </ul>
 <img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/公钥复制.png" alt="公钥复制" style="zoom: 50%;">
 <p>PS：id_rsa 存放的是私钥，id_rsa.pub 存放的是公钥，需要复制的是公钥 id_rsa.pub 的内容。</p>
 <ul>
 <li>
-<p>运行 Git Bash，输入命令 <code>ssh -T git@github.com</code>（如果使用 Gitee，输入 <code>ssh -T git@gitee.com</code>），然后输入 yes。</p>
+<p>运行 Git Bash，输入命令 <code>ssh -T git@github.com</code>（如果使用 Gitee，输入 <code>ssh -T git@gitee.com</code>），然后输入 yes</p>
 </li>
 <li>
-<p>到此，完成 SSH 免密登录的配置。</p>
+<p>到此，完成 SSH 免密登录的配置</p>
 </li>
 <li>
-<p>如果需要新建仓库，点击主界面右上方头像旁的“+”然后选择“New repository”即可：</p>
+<p>如果需要新建仓库，点击主界面右上方头像旁的「+」然后选择「New repository」即可</p>
 </li>
 </ul>
 <img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/GitHub创建仓库.png" alt="GitHub创建仓库" style="zoom:50%;">
@@ -564,16 +564,16 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>IDEA 配置 Git</p>
 </blockquote>
 <p>首先需要在 IDEA 中配置 Git，打开 IDEA，settings — Version Control — Git — Path to Git executable，在此处配置 Git 安装目录下的 exe 文件。例如：D:\environment\Git\cmd\git.exe，其中 D:\environment\Git 是安装目录。（最新版不需要进行配置，IDEA 已经帮我们配置好，以防万一可以查看一下 😁）</p>
-<p>然后可以点击“test”，查看配置是否正确。</p>
+<p>然后可以点击「test」，查看配置是否正确。</p>
 <p>还可以选择 settings — Version Control — GitHub，添加 GitHub 账号到 IDEA 中。</p>
 <blockquote>
 <p>IDEA 项目绑定 Git</p>
 </blockquote>
 <p>1、新建项目，绑定 Git。</p>
-<p><span name="binding">在此给出两种绑定方式（<strong>推荐第二种</strong>）：</span></p>
+<p><span name="binding"> 在此给出两种绑定方式（<strong>推荐第二种</strong>）：</span></p>
 <ul>
-<li>在克隆下来的空项目中使用 IDEA 创建项目。</li>
-<li>使用 IDEA 新建一个项目，将 clone 下来的项目中的全部内容（包括隐藏文件夹 <code>.git</code>）复制到新建的项目中（提示同名文件时，替换即可）。</li>
+<li>在克隆下来的空项目中使用 IDEA 创建项目</li>
+<li>使用 IDEA 新建一个项目，将 clone 下来的项目中的全部内容（包括隐藏文件夹 <code>.git</code>）复制到新建的项目中（提示同名文件时，替换即可）</li>
 </ul>
 <p>为什么这么做？因为 clone 的远程仓库文件中的 .git 文件夹已经绑定了远程仓库，需要新建的项目中也有 .git 文件夹。</p>
 <p>IDEA 绑定 Git 后可以在 IDEA 观察到 <strong>文件颜色的变化</strong>：</p>
@@ -589,7 +589,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>可以使用右上角 IDEA 集成的 Git 按钮进行操作，也可以在 IDEA 中的 Terminal 执行 Git 命令完成修改的提交。</p>
 <p>在此推荐使用 IDEA 2020.3 及以上的版本，这些版本中的 Git 操作得到了优化。</p>
 <blockquote>
-<p><span name="ignore">忽略文件创建</span></p>
+<p><span name="ignore"> 忽略文件创建 </span></p>
 </blockquote>
 <p>不希望将 IDEA 的配置文件（.idea）push 到远程仓库，在 .gitignore 文件中添加 <code>.idea/</code> 即可。如果当前项目中没有 .gitignore 文件，就需要创建 .gitignore 文件。</p>
 <p>在 IDEA 中可以右键点击项目，Git — add to .gitignore — 选择 Add to .gitignore 或者 .git/info/exclude。如果选择 Add to .gitignore，后续还需要提交 .gitignore 文件；如果选择 .git/info/exclude，就不用提交 .gitignore 文件，因此推荐使用第二种方式。两种忽略文件的书写方式是一样的。</p>
@@ -599,7 +599,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <p><strong>图形化界面操作：</strong></p>
 <p>1、右击项目 — Git — Show History（或者直接点击 IDEA 工具栏集成的 Git 操作图标，这个图标像一个钟表）</p>
 <p>2、在 IDEA 下方的 Version Control 窗口中选中需要切换的版本，右键点击 — Copy Revision Number （建议将当前版本和想切换的版本的 commit id 都进行复制）</p>
-<p>3、右击项目 — Git — Repository — Reset HAND… ，Reset Type 选择 Hard，To commit 粘贴你想切换版本的 commit id，最后点击 Reset 即可。如果从版本 3 切换到版本 1 后，还想回到版本 1，这个时候就只能用命令行的方式了。这也是为什么建议在复制版本号时复制当前和切换的两个版本号。</p>
+<p>3、右击项目 — Git — Repository — Reset HAND…，Reset Type 选择 Hard，To commit 粘贴你想切换版本的 commit id，最后点击 Reset 即可。如果从版本 3 切换到版本 1 后，还想回到版本 1，这个时候就只能用命令行的方式了。这也是为什么建议在复制版本号时复制当前和切换的两个版本号。</p>
 <p><strong>命令行操作：</strong></p>
 <p>1、前两步不变。</p>
 <p>2、打开 IDEA 的 Terminal，输入以下命令：</p>
@@ -620,8 +620,8 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>4、Clone 完毕后，IDEA 会提示是否创建一个项目，根据需要选择</p>
 <p>5、然后 IDEA 又会提示在当前窗口还是新窗口打开，根据需要选择</p>
 <p>6、完成后，需要对工程进行设置。菜单栏点击 File — Project Settings，在 Project 中选择 JDK 版本，在 Modules 选择 Clone 的项目。</p>
-<p>7、在 Clone 的项目中进行编码，push 到远程仓库时可能需要设置文件忽略。文件忽略方式点击查看：<a href="#ignore">忽略文件创建</a></p>
-<p>Clone 远程仓库文件建议使用这种方式：<a href="#binding">项目绑定Git</a></p>
+<p>7、在 Clone 的项目中进行编码，push 到远程仓库时可能需要设置文件忽略。文件忽略方式点击查看：<a href="#ignore"> 忽略文件创建 </a></p>
+<p>Clone 远程仓库文件建议使用这种方式：<a href="#binding"> 项目绑定 Git</a></p>
 <h1 id="9-Git-分支"><a class="header-anchor" href="#9-Git-分支"></a>9. Git 分支</h1>
 <p>切换分支的本质就是移动 HEAD 指针。</p>
 <p>为什么要有分支？在 Git 中一定会有一个 master 主分支，也可以创建其他名字的分支。一般将 master 分支作为产品正式上线的分支，除此之外可以创建一个 dev 分支作为开发分支，平时编写的代码都提交到 dev 分支中，等产品上线时合并分支就可以了。如果不使用 dev 分支，平时编写的代码都提交到 master 主分支，万一新编写的代码出现了 BUG，产品又等着上线，那么上线的时间就只能延期了，而且也不方便进行排查修改。</p>
@@ -629,7 +629,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>master 主分支应该非常稳定，用来发布新版本，不允许直接在 master 上进行修改。</p>
 <p>一个项目通常有多个开发者向一个远程仓库提交代码，为了保证 master  分支的稳定性，一般每人都拉取一个个人分支并分别在自己的个人分支上进行修改，工作完成后，将个人分支合并到 dev 分支上（对应 dev 环境，用于自测），构建代码，进行简单的自测。自测没问题后，将个人分支合并到 master 分支上（对应 test 环境，用于测试），构建代码，交由测试人员进行测试。</p>
 <p>当然在实际开发过程中肯定不止这两个分支的，一般还有 test（测试分支）、feature（特性分支）、release（预生产分支）等等。</p>
-<p>分支之间的关系类似各个平行宇宙，如果两个平行宇宙互不干扰，那没啥影响，但如果平行宇宙之间相互“入侵”就可能产生一些问题，相当于 Git 中分支的合并。</p>
+<p>分支之间的关系类似各个平行宇宙，如果两个平行宇宙互不干扰，那没啥影响，但如果平行宇宙之间相互「入侵」就可能产生一些问题，相当于 Git 中分支的合并。</p>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/%E5%88%86%E6%94%AF%E7%9A%84%E8%BF%90%E7%94%A8.png" alt="分支的运用"></p>
 <p>多个分支如果并行存在，相当于同时存在多个版本，不会导致代码冲突。</p>
 <p>如果同一个文件中的同一行在不同的分支都进行了修改，在合并分支时就会产生 <strong>冲突</strong>，要想解决冲突，需要手动调整要保留的内容。</p>
@@ -685,9 +685,9 @@ btf.addGlobalFn('pjaxSend', () => {
 <p><strong>创建分支：</strong></p>
 <p>右击项目 — Git — Repository — Branches — New Branch</p>
 <p><strong>如何判断当前在哪个分支：</strong></p>
-<p>右击项目 — Git — Repository — Branches ，Local Branches 下最上方的就是当前分支。</p>
+<p>右击项目 — Git — Repository — Branches，Local Branches 下最上方的就是当前分支。</p>
 <p><strong>切换分支：</strong></p>
-<p>右击项目 — Git — Repository — Branches ，选中需要切换的分支，单击 Checkout。</p>
+<p>右击项目 — Git — Repository — Branches，选中需要切换的分支，单击 Checkout。</p>
 <p><strong>合并分支：</strong></p>
 <p>右击项目 — Git — Repository — Branches — Merge Changes…</p>
 <p><strong>push 到远程仓库：</strong></p>
@@ -696,7 +696,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>IDEA Git 更新本地库</p>
 </blockquote>
 <p>如果有人在我们 push 代码之前已经将他的代码 push 到远程仓库了，这时再 push 代码到远程仓库时，要保证本地库是最新的。</p>
-<p>如何更新本地库？依然可以直接 push 代码到远程仓库，但这时 IDEA 会弹出“Push Rejected”的对话框，点击“Merge”或“Rebase”即可更新本地仓库，<strong>建议选择 Merge。</strong></p>
+<p>如何更新本地库？依然可以直接 push 代码到远程仓库，但这时 IDEA 会弹出「Push Rejected」的对话框，点击「Merge」或「Rebase」即可更新本地仓库，<strong>建议选择 Merge。</strong></p>
 <p><strong>建议每次提交之前先 pull 拉取最新的代码。</strong></p>
 <p>pull 命令行：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_36903985/article/details/75529904">Git命令之Pull从库拉取</a></p>
 <h1 id="10-团队协作"><a class="header-anchor" href="#10-团队协作"></a>10. 团队协作</h1>
@@ -759,7 +759,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <td style="text-align:center">为最新提交创建轻量标签</td>
 </tr>
 <tr>
-<td style="text-align:center">git tag 标签名 版本号(7位)</td>
+<td style="text-align:center">git tag 标签名 版本号(7 位)</td>
 <td style="text-align:center">为对应版本号提交创建轻量标签（在后期打标签）</td>
 </tr>
 <tr>
@@ -919,7 +919,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>缺点</p>
 </blockquote>
 <p><strong>1、产生冲突。</strong> 假设在 master 分支上在某一文件的某一行新增了内容并进行提交，然后又在 master 分支上对这行内容进行了删除并提交，此时切换为 dev 分支后，先 cherry pick 第二次提交再 cherry pick 第一次提交将会产生冲突，而不是回到最开始未对这行进行修改的样子。</p>
-<p><strong>2、诡异的 commit 记录导致上下游分支相同的提交难以追溯。</strong> 假设现在有两个分支分别是 master 和 dev，针对文件 A 进行修改，此刻这两个分支中文件 A 的内容完全相同。先在 dev 分支上对 A 的 <strong>最后一行</strong> 添加内容“abc”，然后把“abc”修改为“abcd”，最后在 <strong>第二行</strong> 新增“123”。接下来切到 master 分支，先 cherry pick 第三次提交，一切顺利，然后在 cherry pick 第二次提交，此时会产生冲突，解决冲突后 cherry pick 第一次提交。最终两个分支的 A 文件内容相同的，但是 commit 记录呢？</p>
+<p><strong>2、诡异的 commit 记录导致上下游分支相同的提交难以追溯。</strong> 假设现在有两个分支分别是 master 和 dev，针对文件 A 进行修改，此刻这两个分支中文件 A 的内容完全相同。先在 dev 分支上对 A 的 <strong>最后一行</strong> 添加内容「abc」，然后把「abc」修改为「abcd」，最后在 <strong>第二行</strong> 新增「123」。接下来切到 master 分支，先 cherry pick 第三次提交，一切顺利，然后在 cherry pick 第二次提交，此时会产生冲突，解决冲突后 cherry pick 第一次提交。最终两个分支的 A 文件内容相同的，但是 commit 记录呢？</p>
 <p><strong>dev 分支：</strong></p>
 <figure class="highlight plaintext line-numbers" data-language="PLAINTEXT">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span>123</span></span>
@@ -979,8 +979,8 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>PS：amend，读音：<code>[əˈmend]</code>，意为修正、修订。</p>
 <p><strong>细节：</strong></p>
 <ul>
-<li>如果当前无已暂存的修改，执行命令后，不改变最后一次提交的内容，可以修改最后一次提交的信息；</li>
-<li>如果当前已存在暂存的修改，执行命令后，将暂存的修改追加到最后一次提交的内容中，当然也可以修改最后一次提交的信息。</li>
+<li>如果当前无已暂存的修改，执行命令后，不改变最后一次提交的内容，可以修改最后一次提交的信息</li>
+<li>如果当前已存在暂存的修改，执行命令后，将暂存的修改追加到最后一次提交的内容中，当然也可以修改最后一次提交的信息</li>
 </ul>
 <blockquote>
 <p>修改最后一次 <strong>未推送到远程仓库的</strong> 提交信息</p>
@@ -990,7 +990,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <figure class="highlight shell line-numbers" data-language="SHELL">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#61AFEF">git</span><span style="color:#98C379"> commit</span><span style="color:#D19A66"> --amend</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<p>该命令会将最后一次的提交信息载入到编辑器中进行修改， 当保存并关闭编辑器后，编辑器会将更新后的提交信息写入新提交中， <strong>成为新的最后一次提交。</strong></p>
+<p>该命令会将最后一次的提交信息载入到编辑器中进行修改，当保存并关闭编辑器后，编辑器会将更新后的提交信息写入新提交中， <strong>成为新的最后一次提交。</strong></p>
 <blockquote>
 <p>修改最后一次 <strong>未推送到远程仓库的</strong> 提交内容与提交信息</p>
 </blockquote>
@@ -1016,8 +1016,8 @@ btf.addGlobalFn('pjaxSend', () => {
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/%E6%89%A7%E8%A1%8C--amend%E8%AE%A9%E4%BB%96%E4%BA%BA%E9%81%87%E5%88%B0%E5%86%B2%E7%AA%81.png" alt="执行git commit --amend让他人遇到冲突"></p>
 <p><strong><code>git commit --amend</code> 的最佳适用场景：</strong></p>
 <ul>
-<li>修改尚未推送到远程仓库的提交；</li>
-<li>在非多人协作或自己的特性分支上修改最后一次提交，此时进行强制推送不会有影响。</li>
+<li>修改尚未推送到远程仓库的提交</li>
+<li>在非多人协作或自己的特性分支上修改最后一次提交，此时进行强制推送不会有影响</li>
 </ul>
 <blockquote>
 <p>其他相关参数</p>
@@ -1331,8 +1331,8 @@ In other words, <code>--merge</code> does something like a <code>git read-tree -
 <p>假设某分支上有 100 个提交信息，使用 <code>rebase</code> 改了第 50 个提交，那从第 50 到 第 100 之间的所有 commit id 都会发生改变。如果又有其他分支合并到当前分支，将产生 51 个冲突，解决完冲突之后，一共产生 51 * 2 个相同的提交记录。</p>
 <p>因此建议：</p>
 <ul>
-<li>在多人协作下不使用 <code>rebase</code>；</li>
-<li>可以对尚未推送至远端的提交或有且仅有自己开发的工程下使用 <code>rebase</code>。</li>
+<li>在多人协作下不使用 <code>rebase</code></li>
+<li>可以对尚未推送至远端的提交或有且仅有自己开发的工程下使用 <code>rebase</code></li>
 </ul>
 <h2 id="11-11-指定当前工作分支与远程分支的链接关系"><a class="header-anchor" href="#11-11-指定当前工作分支与远程分支的链接关系"></a>11.11 指定当前工作分支与远程分支的链接关系</h2>
 <p>如果没有指定当前工作目录工作分支跟远程的仓库、分支之间的链接关系，将无法直接使用 <code>git pull</code> 或 <code>git push</code> 命令来拉取或推送，而是需要：</p>
@@ -1360,13 +1360,13 @@ If you wish to set tracking information for this branch you can do so with:
       </figure>
 <p>链接成功后就可以愉快地直接使用 <code>git pull</code> 和 <code>git push</code> 了。</p>
 <h2 id="11-12-更安全的强制推送"><a class="header-anchor" href="#11-12-更安全的强制推送"></a>11.12 更安全的强制推送</h2>
-<p>使用 <code>git push -f</code> 进行强制推送时，如果他人在当前分支推送了新的提交，那么这一命令将会“删除”他的提交。就算在推送前同步了远程仓库也是不安全的，从同步完成到真正强制推送成功之间仍存在时间差，在这个时间差之间可能又会产生新的提交。</p>
-<p>为避免“删除”在这个时间差之间产生的新的提交，可以使用命令：</p>
+<p>使用 <code>git push -f</code> 进行强制推送时，如果他人在当前分支推送了新的提交，那么这一命令将会「删除」他的提交。就算在推送前同步了远程仓库也是不安全的，从同步完成到真正强制推送成功之间仍存在时间差，在这个时间差之间可能又会产生新的提交。</p>
+<p>为避免「删除」在这个时间差之间产生的新的提交，可以使用命令：</p>
 <figure class="highlight shell line-numbers" data-language="SHELL">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#61AFEF">git</span><span style="color:#98C379"> push</span><span style="color:#D19A66"> --force-with-lease</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <p>如果在这个时间差之间远程仓库增加了新的提交，使用上述命令后，推送会被拒绝，此时可以使用 <code>git fetch</code> 获取远程仓库后再合并远程仓库，最后使用上述命令进行强制推送。</p>
-<p><mark>注意：</mark> <code>--force-with-lease</code> 并未解决强制推送“删除”他人代码的问题，它解决的是当本地仓库不够新时的强制推送覆盖远程仓库的问题，因此当执行了 <code>git fetch</code> 获取远程仓库且尚未同步远程仓库时仍执意使用此命令进行强制推送，远程仓库仍会被覆盖。</p>
+<p><mark>注意：</mark> <code>--force-with-lease</code> 并未解决强制推送「删除」他人代码的问题，它解决的是当本地仓库不够新时的强制推送覆盖远程仓库的问题，因此当执行了 <code>git fetch</code> 获取远程仓库且尚未同步远程仓库时仍执意使用此命令进行强制推送，远程仓库仍会被覆盖。</p>
 <h1 id="12-其他操作流程"><a class="header-anchor" href="#12-其他操作流程"></a>12. 其他操作流程</h1>
 <h2 id="12-1-推送到远程仓库"><a class="header-anchor" href="#12-1-推送到远程仓库"></a>12.1 推送到远程仓库</h2>
 <p>有时我们需要将本地未被 Git 管理的代码交由 Git 管理并推送到远程仓库，但在进行这个流程时出现了以下错误导致无法推送到远程仓库：</p>
@@ -1450,8 +1450,8 @@ If you wish to set tracking information for this branch you can do so with:
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/GitHub%E5%88%9B%E5%BB%BA%E4%BB%93%E5%BA%93%E6%97%B6%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E5%88%86%E6%94%AF%E5%90%8D.png" alt="GitHub创建仓库时修改默认分支名"></p>
 <p>事后稍加思索，愈发疑惑：为什么好端端的要把默认分支名改为 main 呢？Git 的默认分支就是 master，你 GitHub 的默认分支改成了 main，这不是给用户造成了不便？</p>
 <p>在好奇心的驱使下，对这个问题进行了简单的搜索。</p>
-<p>这是不查不知道，原来在 20 年的 10 月 1 日就实行了，看样子是我“火星”了。那具体原因是什么呢？</p>
-<p>回想 20 年除了疫情外还有什么呢？当年 5 月 25 日，美国街头发生一起警察暴力执法事件，致使一黑人男性乔治·弗洛伊德死亡，之后又相继爆发 BLM（Black Lives Matter）运动，简称“黑命贵”。</p>
+<p>这是不查不知道，原来在 20 年的 10 月 1 日就实行了，看样子是我「火星」了。那具体原因是什么呢？</p>
+<p>回想 20 年除了疫情外还有什么呢？当年 5 月 25 日，美国街头发生一起警察暴力执法事件，致使一黑人男性乔治·弗洛伊德死亡，之后又相继爆发 BLM（Black Lives Matter）运动，简称「黑命贵」。</p>
 <p>为了安抚愈演愈烈的民众情绪，同年 6 月，GitHub 宣布替换掉 master 等术语，避免以此联想到奴隶制。后续 MySQL 也宣布将 master、slave、blacklist（黑名单）和 whitelist（白名单）等术语分别替换为 source、replica、blocklist 和 allowlist。</p>
 <p>对于这件事我不做评价，只不过习惯性的 <code>git checkout master</code>，在后续要变成 <code>git checkout main</code> 了。</p>
 <p>在使用 GitHub 时，除了可以将 GitHub 默认分支又改回 master 外，也可以继续使用 main 作为默认分支。针对已经存在的仓库，如何将其主分支名修改为 main 呢？</p>
@@ -1613,7 +1613,7 @@ Date:   xxxx
 <blockquote>
 <p>使用 rebase 修改多个 commit 的用户名和邮箱</p>
 </blockquote>
-<p>假设有一 commit 历史为 A - B - C - D - E - F， F 为 HEAD， 现在需要修改 C 和 D 的用户名和邮箱：</p>
+<p>假设有一 commit 历史为 A - B - C - D - E - F，F 为 HEAD，现在需要修改 C 和 D 的用户名和邮箱：</p>
 <ol>
 <li>先执行 <code>git rebase -i B</code>，如果想要修改 A，可以执行 <code>git rebase -i -root</code>；</li>
 <li>把 C 和 D 两个 commit 前的 pick 改为 edit，然后保存并退出；</li>
@@ -1760,7 +1760,7 @@ pick dddddd xxxxxx
 <p>出现这种情况主要是因为不同的操作系统采用的行分隔符的方式不同。</p>
 <p>在 Windows 下采用的是 CRLF 方式，即回车并换行。CR 是老版本 MAC 的做法，即回车，后来 MAC 系统统一成了 LF，LF 也是 Linux 下的做法，即回车。</p>
 <p>关于这三者的关系，有兴趣的朋友可以参考这篇文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/ArsenalfanInECNU/p/6086665.html">趣谈、浅析CRLF和LF</a></p>
-<p>一般操作系统上的运行库会自动决定文本文件的换行格式。 如一个程序在 Windows 上运行就生成 CRLF 换行格式的文本文件，而在 Linux 上运行就生成 LF 格式换行的文本文件。</p>
+<p>一般操作系统上的运行库会自动决定文本文件的换行格式。如一个程序在 Windows 上运行就生成 CRLF 换行格式的文本文件，而在 Linux 上运行就生成 LF 格式换行的文本文件。</p>
 <p>需要注意的是 <strong>在一个平台上使用另一种换行符的文件文件可能会带来意想不到的问题。</strong></p>
 <p>那怎么搞？🤪</p>
 <p>通常来说，IDE 或文本编辑器都带有换行符转换功能，使用这个功能可以将文本文件中的换行符在不同格式单互换。</p>
@@ -1945,7 +1945,7 @@ To add an exception for this directory, call:<br>
 </ul>
 <h2 id="14-2-管理多个用户信息"><a class="header-anchor" href="#14-2-管理多个用户信息"></a>14.2 管理多个用户信息</h2>
 <p>参考链接：<a target="_blank" rel="noopener" href="https://garrit.xyz/posts/2023-10-13-organizing-multiple-git-identities"> Organizing multiple Git identities</a></p>
-<p>某些情况下，一台电脑可能会有多个 Git 用户，就像“工作一个号，生活一个号”，需要使用与默认用户名与邮箱不同的身份来提交代码。尽管可以每次都在特定的项目中使用以下命令对默认用户信息进行修改，但如果不小心忘记了，就可能遇到不必要的麻烦：</p>
+<p>某些情况下，一台电脑可能会有多个 Git 用户，就像「工作一个号，生活一个号」，需要使用与默认用户名与邮箱不同的身份来提交代码。尽管可以每次都在特定的项目中使用以下命令对默认用户信息进行修改，但如果不小心忘记了，就可能遇到不必要的麻烦：</p>
 <figure class="highlight shell line-numbers" data-language="SHELL">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#61AFEF">git</span><span style="color:#98C379"> config</span><span style="color:#98C379"> user.name</span><span style="color:#98C379"> "xxx"</span></span>
 <span class="line"><span style="color:#61AFEF">git</span><span style="color:#98C379"> config</span><span style="color:#98C379"> user.email</span><span style="color:#98C379"> "qwe@123.com"</span></span></code></pre></td></tr></tbody></table>
@@ -1966,8 +1966,8 @@ To add an exception for this directory, call:<br>
 <span class="line"><span style="color:#C678DD">    name</span><span style="color:#ABB2BF"> =</span><span style="color:#98C379"> 默烦</span></span>
 <span class="line"><span style="color:#C678DD">    email</span><span style="color:#ABB2BF"> =</span><span style="color:#98C379"> example@work.com</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<h1 id="100-可能有用的小工具"><a class="header-anchor" href="#100-可能有用的小工具"></a>100. 可能有用的小工具</h1>
-<h2 id="100-1-push-sh"><a class="header-anchor" href="#100-1-push-sh"></a>100.1 push.sh</h2>
+<h1 id="15-可能有用的小工具"><a class="header-anchor" href="#15-可能有用的小工具"></a>15. 可能有用的小工具</h1>
+<h2 id="15-1-push-sh"><a class="header-anchor" href="#15-1-push-sh"></a>15.1 push.sh</h2>
 <p>日常工作中提交代码时常常会频繁切换分支，具体操作步骤是：</p>
 <ol>
 <li>暂存当前分支上的变更</li>
@@ -1983,7 +1983,7 @@ To add an exception for this directory, call:<br>
 <li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/5167957/is-there-a-better-way-to-find-out-if-a-local-git-branch-exists#">Is there a better way to find out if a local git branch exists?</a></li>
 </ul>
 <p>脚本地址：<a target="_blank" rel="noopener" href="https://github.com/mofan212/my-tools/blob/master/git/push.sh">my-tools/git/push.sh</a></p>
-<h2 id="100-2-pull-sh"><a class="header-anchor" href="#100-2-pull-sh"></a>100.2 pull.sh</h2>
+<h2 id="15-2-pull-sh"><a class="header-anchor" href="#15-2-pull-sh"></a>15.2 pull.sh</h2>
 <p>通过完整的项目地址或者项目名称依次在 GitHub、Gitee 上拉取代码，适用场景较为局限，拉取代码时需要两种信息：</p>
 <ol>
 <li>项目所属用户名</li>
@@ -1991,7 +1991,7 @@ To add an exception for this directory, call:<br>
 </ol>
 <p>在知道项目名的情况下，一般并不知道项目所属用户名，常用于拉取某一特定用户名下的项目。</p>
 <p>脚本地址：<a target="_blank" rel="noopener" href="https://github.com/mofan212/my-tools/blob/master/git/pull.sh">my-tools/git/pull.sh</a></p>
-</body></html></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/Git/">https://mofan212.github.io/posts/Git/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Git/">Git</a></div><div class="post-share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/3.jpg" data-sites="wechat,qq,weibo,facebook,x"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/Principles-Of-SpringBoot/" title="SpringBoot原理"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/23.jpg" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">SpringBoot原理</div></div><div class="info-2"><div class="info-item-1">误人子弟系列，不要看，后续找个时间重写。😶</div></div></div></a><a class="pagination-related" href="/posts/How-to-use-Typora/" title="一款简洁、高自定义化的 Markdown 编辑器——Typora"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/2.jpg" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">一款简洁、高自定义化的 Markdown 编辑器——Typora</div></div><div class="info-2"><div class="info-item-1">我宣布：Typora 是最好的 Markdown 编辑器，没有之一！</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">默烦</div><div class="author-info-description">彩笔的打怪升级之路...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">175</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mofan212"><i class="fab fa-github"></i><span>follow me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解。<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a href="./mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载。😊</br><strong><font style="color:red">严禁未遵循规范的转载。</font></strong>😡</br><strong>死去的评论系统复活啦！欢迎到留言板畅所欲言！</strong>当然也可以使用更高效的<a target="_blank" href="https://space.bilibili.com/23658864/dynamic" style="color:#49B1F5;text-decoration:underline"> 哔哩哔哩私信 </a>或<a href="mailto:cy.mofan@foxmail.com" style="color:#49B1F5;text-decoration:underline" target="_blank">邮箱</a>。 😉</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6"><span class="toc-text">1. 版本控制</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-Git-%E7%9A%84%E5%8E%86%E5%8F%B2"><span class="toc-text">2. Git 的历史</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-Git-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="toc-text">3. Git 环境配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E5%AE%89%E8%A3%85%E4%B8%8E%E5%8D%B8%E8%BD%BD-Git"><span class="toc-text">3.1 安装与卸载 Git</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-Linux-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">3.2 Linux 常用命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-Git-%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="toc-text">3.3 Git 的配置</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-Git-%E5%9F%BA%E6%9C%AC%E7%90%86%E8%AE%BA"><span class="toc-text">4. Git 基本理论</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-Git-%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA"><span class="toc-text">5. Git 项目搭建</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-Git-%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C"><span class="toc-text">6. Git 文件操作</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-GitHub-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">7. GitHub 的使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-IDEA-%E4%B8%AD%E9%9B%86%E6%88%90-Git"><span class="toc-text">8. IDEA 中集成 Git</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#9-Git-%E5%88%86%E6%94%AF"><span class="toc-text">9. Git 分支</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#10-%E5%9B%A2%E9%98%9F%E5%8D%8F%E4%BD%9C"><span class="toc-text">10. 团队协作</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#10-1-%E5%9B%A2%E9%98%9F%E5%86%85%E5%8D%8F%E4%BD%9C"><span class="toc-text">10.1 团队内协作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-2-%E8%B7%A8%E5%9B%A2%E9%98%9F%E5%8D%8F%E4%BD%9C"><span class="toc-text">10.2 跨团队协作</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#11-%E5%85%B6%E4%BB%96%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">11. 其他常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#11-1-%E5%85%B6%E4%BB%96%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E4%B8%80%E8%A7%88"><span class="toc-text">11.1 其他常用命令一览</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-2-log-%E4%B8%8E-reflog-%E5%8C%BA%E5%88%AB"><span class="toc-text">11.2 log 与 reflog 区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-3-git-stash"><span class="toc-text">11.3 git stash</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-4-cherry-pick"><span class="toc-text">11.4 cherry-pick</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-5-git-diff"><span class="toc-text">11.5 git diff</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-6-%E9%87%8D%E5%86%99%E5%8E%86%E5%8F%B2"><span class="toc-text">11.6 重写历史</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-7-%E5%9B%9E%E6%BB%9A%E4%B8%8E%E6%92%A4%E9%94%80"><span class="toc-text">11.7 回滚与撤销</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-8-%E5%85%B6%E4%BB%96%E5%90%8E%E6%82%94%E8%8D%AF"><span class="toc-text">11.8 其他后悔药</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-9-abort-%E7%BB%88%E6%AD%A2"><span class="toc-text">11.9 abort 终止</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-10-%E5%90%88%E5%B9%B6-commit"><span class="toc-text">11.10 合并 commit</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-11-%E6%8C%87%E5%AE%9A%E5%BD%93%E5%89%8D%E5%B7%A5%E4%BD%9C%E5%88%86%E6%94%AF%E4%B8%8E%E8%BF%9C%E7%A8%8B%E5%88%86%E6%94%AF%E7%9A%84%E9%93%BE%E6%8E%A5%E5%85%B3%E7%B3%BB"><span class="toc-text">11.11 指定当前工作分支与远程分支的链接关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-12-%E6%9B%B4%E5%AE%89%E5%85%A8%E7%9A%84%E5%BC%BA%E5%88%B6%E6%8E%A8%E9%80%81"><span class="toc-text">11.12 更安全的强制推送</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#12-%E5%85%B6%E4%BB%96%E6%93%8D%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-text">12. 其他操作流程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#12-1-%E6%8E%A8%E9%80%81%E5%88%B0%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93"><span class="toc-text">12.1 推送到远程仓库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-2-%E6%8B%89%E5%8F%96%E8%BF%9C%E7%A8%8B%E5%88%86%E6%94%AF%E5%88%B0%E6%9C%AC%E5%9C%B0"><span class="toc-text">12.2 拉取远程分支到本地</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-3-GitHub-%E7%9A%84%E9%BB%98%E8%AE%A4%E5%88%86%E6%94%AF"><span class="toc-text">12.3 GitHub 的默认分支</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-4-%E4%BF%AE%E6%94%B9%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E5%9C%B0%E5%9D%80"><span class="toc-text">12.4 修改远程仓库地址</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-5-%E4%BF%AE%E6%94%B9%E5%8E%86%E5%8F%B2-commit-%E7%94%A8%E6%88%B7%E5%90%8D%E5%92%8C%E9%82%AE%E7%AE%B1"><span class="toc-text">12.5 修改历史 commit 用户名和邮箱</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-6-%E5%88%A0%E9%99%A4%E6%9F%90%E6%AC%A1%E6%8F%90%E4%BA%A4"><span class="toc-text">12.6 删除某次提交</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-7-%E4%BF%AE%E6%94%B9%E5%8E%86%E5%8F%B2%E6%8F%90%E4%BA%A4%E5%86%85%E5%AE%B9"><span class="toc-text">12.7 修改历史提交内容</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-8-merge-%E7%9A%84%E5%9B%9E%E9%80%80"><span class="toc-text">12.8 merge 的回退</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-9-%E4%BF%AE%E6%94%B9%E6%9C%80%E8%BF%91%E4%B8%80%E6%AC%A1%E7%9A%84-commit-%E6%97%B6%E9%97%B4"><span class="toc-text">12.9 修改最近一次的 commit 时间</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-10-%E5%B0%86%E5%85%B6%E4%BB%96%E5%88%86%E6%94%AF%E5%AE%8C%E5%85%A8%E8%A6%86%E7%9B%96%E5%88%B0%E5%BD%93%E5%89%8D%E5%88%86%E6%94%AF"><span class="toc-text">12.10 将其他分支完全覆盖到当前分支</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#13-%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">13. 遇到的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#13-1-IDEA-Git-%E5%87%BA%E7%8E%B0-Line-Separators-Warning"><span class="toc-text">13.1 IDEA Git 出现 Line Separators Warning</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-2-LF-will-be-replaced-by-CRLF"><span class="toc-text">13.2 LF will be replaced by CRLF</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-3-git-reset-hard-HEAD-%E5%90%8E%E6%98%BE%E7%A4%BA-more"><span class="toc-text">13.3 git reset --hard HEAD^ 后显示 more?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-4-git-pull-%E6%8F%90%E7%A4%BA-warning-ignoring-broken-ref-refs-remotes-origin-HEAD"><span class="toc-text">13.4 git pull 提示 warning: ignoring broken ref refs&#x2F;remotes&#x2F;origin&#x2F;HEAD</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-5-unable-to-get-local-issuer-certificate"><span class="toc-text">13.5 unable to get local issuer certificate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-6-git-status-%E4%B8%AD%E6%96%87%E6%96%87%E4%BB%B6%E5%90%8D%E4%B9%B1%E7%A0%81"><span class="toc-text">13.6 git status 中文文件名乱码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-7-%E5%8F%B3%E9%94%AE%E8%8F%9C%E5%8D%95%E6%B2%A1%E6%9C%89-Git-Bash-here"><span class="toc-text">13.7 右键菜单没有 Git Bash here</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-8-fatal-detected-dubious-ownership-in-repository-at"><span class="toc-text">13.8 fatal: detected dubious ownership in repository at</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-9-%E8%83%BD%E8%AE%BF%E9%97%AE-GitHub-%E4%BD%86%E4%B8%8D%E8%83%BD%E8%BF%9B%E8%A1%8C-Git-%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C"><span class="toc-text">13.9 能访问 GitHub 但不能进行 Git 相关操作</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#14-%E5%85%B6%E4%BB%96%E8%A1%A5%E5%85%85%E4%BF%A1%E6%81%AF"><span class="toc-text">14. 其他补充信息</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#14-1-Commit-Type-%E7%B1%BB%E5%88%AB"><span class="toc-text">14.1 Commit Type 类别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#14-2-%E7%AE%A1%E7%90%86%E5%A4%9A%E4%B8%AA%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF"><span class="toc-text">14.2 管理多个用户信息</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#100-%E5%8F%AF%E8%83%BD%E6%9C%89%E7%94%A8%E7%9A%84%E5%B0%8F%E5%B7%A5%E5%85%B7"><span class="toc-text">100. 可能有用的小工具</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#100-1-push-sh"><span class="toc-text">100.1 push.sh</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#100-2-pull-sh"><span class="toc-text">100.2 pull.sh</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/The-Art-of-Loving/" title="爱的艺术"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/175.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="爱的艺术"/></a><div class="content"><a class="title" href="/posts/The-Art-of-Loving/" title="爱的艺术">爱的艺术</a><time datetime="2026-04-28T16:00:00.000Z" title="更新于 2026-04-29 00:00:00">2026-04-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Git/" title="Git理论与使用"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/3.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Git理论与使用"/></a><div class="content"><a class="title" href="/posts/Git/" title="Git理论与使用">Git理论与使用</a><time datetime="2026-01-26T16:00:00.000Z" title="更新于 2026-01-27 00:00:00">2026-01-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Something-About-Blog/" title="博客搭建与维护"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="博客搭建与维护"/></a><div class="content"><a class="title" href="/posts/Something-About-Blog/" title="博客搭建与维护">博客搭建与维护</a><time datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"/></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="更新于 2026-01-03 00:00:00">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"/></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/103.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 的类资源加载"/></a><div class="content"><a class="title" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载">Java 的类资源加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.5</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+</body></html></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/Git/">https://mofan212.github.io/posts/Git/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Git/">Git</a></div><div class="post-share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/3.jpg" data-sites="wechat,qq,weibo,facebook,x"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/How-to-use-Typora/" title="一款简洁、高自定义化的 Markdown 编辑器——Typora"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/2.jpg" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">一款简洁、高自定义化的 Markdown 编辑器——Typora</div></div><div class="info-2"><div class="info-item-1">我宣布：Typora 是最好的 Markdown 编辑器，没有之一！</div></div></div></a><a class="pagination-related" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/20.jpg" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">注解、类的加载、反射</div></div><div class="info-2"><div class="info-item-1">本文从 Java 注解出发，介绍了类的加载、类初始化、类加载器以及反射的简单使用。</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">默烦</div><div class="author-info-description">彩笔的打怪升级之路...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">175</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mofan212"><i class="fab fa-github"></i><span>follow me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解。<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a href="./mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载。😊</br><strong><font style="color:red">严禁未遵循规范的转载。</font></strong>😡</br><strong>死去的评论系统复活啦！欢迎到留言板畅所欲言！</strong>当然也可以使用更高效的<a target="_blank" href="https://space.bilibili.com/23658864/dynamic" style="color:#49B1F5;text-decoration:underline"> 哔哩哔哩私信 </a>或<a href="mailto:cy.mofan@foxmail.com" style="color:#49B1F5;text-decoration:underline" target="_blank">邮箱</a>。 😉</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6"><span class="toc-text">1. 版本控制</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-Git-%E7%9A%84%E5%8E%86%E5%8F%B2"><span class="toc-text">2. Git 的历史</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-Git-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="toc-text">3. Git 环境配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E5%AE%89%E8%A3%85%E4%B8%8E%E5%8D%B8%E8%BD%BD-Git"><span class="toc-text">3.1 安装与卸载 Git</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-Linux-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">3.2 Linux 常用命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-Git-%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="toc-text">3.3 Git 的配置</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-Git-%E5%9F%BA%E6%9C%AC%E7%90%86%E8%AE%BA"><span class="toc-text">4. Git 基本理论</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-Git-%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA"><span class="toc-text">5. Git 项目搭建</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-Git-%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C"><span class="toc-text">6. Git 文件操作</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-GitHub-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">7. GitHub 的使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-IDEA-%E4%B8%AD%E9%9B%86%E6%88%90-Git"><span class="toc-text">8. IDEA 中集成 Git</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#9-Git-%E5%88%86%E6%94%AF"><span class="toc-text">9. Git 分支</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#10-%E5%9B%A2%E9%98%9F%E5%8D%8F%E4%BD%9C"><span class="toc-text">10. 团队协作</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#10-1-%E5%9B%A2%E9%98%9F%E5%86%85%E5%8D%8F%E4%BD%9C"><span class="toc-text">10.1 团队内协作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-2-%E8%B7%A8%E5%9B%A2%E9%98%9F%E5%8D%8F%E4%BD%9C"><span class="toc-text">10.2 跨团队协作</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#11-%E5%85%B6%E4%BB%96%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">11. 其他常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#11-1-%E5%85%B6%E4%BB%96%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E4%B8%80%E8%A7%88"><span class="toc-text">11.1 其他常用命令一览</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-2-log-%E4%B8%8E-reflog-%E5%8C%BA%E5%88%AB"><span class="toc-text">11.2 log 与 reflog 区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-3-git-stash"><span class="toc-text">11.3 git stash</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-4-cherry-pick"><span class="toc-text">11.4 cherry-pick</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-5-git-diff"><span class="toc-text">11.5 git diff</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-6-%E9%87%8D%E5%86%99%E5%8E%86%E5%8F%B2"><span class="toc-text">11.6 重写历史</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-7-%E5%9B%9E%E6%BB%9A%E4%B8%8E%E6%92%A4%E9%94%80"><span class="toc-text">11.7 回滚与撤销</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-8-%E5%85%B6%E4%BB%96%E5%90%8E%E6%82%94%E8%8D%AF"><span class="toc-text">11.8 其他后悔药</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-9-abort-%E7%BB%88%E6%AD%A2"><span class="toc-text">11.9 abort 终止</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-10-%E5%90%88%E5%B9%B6-commit"><span class="toc-text">11.10 合并 commit</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-11-%E6%8C%87%E5%AE%9A%E5%BD%93%E5%89%8D%E5%B7%A5%E4%BD%9C%E5%88%86%E6%94%AF%E4%B8%8E%E8%BF%9C%E7%A8%8B%E5%88%86%E6%94%AF%E7%9A%84%E9%93%BE%E6%8E%A5%E5%85%B3%E7%B3%BB"><span class="toc-text">11.11 指定当前工作分支与远程分支的链接关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-12-%E6%9B%B4%E5%AE%89%E5%85%A8%E7%9A%84%E5%BC%BA%E5%88%B6%E6%8E%A8%E9%80%81"><span class="toc-text">11.12 更安全的强制推送</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#12-%E5%85%B6%E4%BB%96%E6%93%8D%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-text">12. 其他操作流程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#12-1-%E6%8E%A8%E9%80%81%E5%88%B0%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93"><span class="toc-text">12.1 推送到远程仓库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-2-%E6%8B%89%E5%8F%96%E8%BF%9C%E7%A8%8B%E5%88%86%E6%94%AF%E5%88%B0%E6%9C%AC%E5%9C%B0"><span class="toc-text">12.2 拉取远程分支到本地</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-3-GitHub-%E7%9A%84%E9%BB%98%E8%AE%A4%E5%88%86%E6%94%AF"><span class="toc-text">12.3 GitHub 的默认分支</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-4-%E4%BF%AE%E6%94%B9%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E5%9C%B0%E5%9D%80"><span class="toc-text">12.4 修改远程仓库地址</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-5-%E4%BF%AE%E6%94%B9%E5%8E%86%E5%8F%B2-commit-%E7%94%A8%E6%88%B7%E5%90%8D%E5%92%8C%E9%82%AE%E7%AE%B1"><span class="toc-text">12.5 修改历史 commit 用户名和邮箱</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-6-%E5%88%A0%E9%99%A4%E6%9F%90%E6%AC%A1%E6%8F%90%E4%BA%A4"><span class="toc-text">12.6 删除某次提交</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-7-%E4%BF%AE%E6%94%B9%E5%8E%86%E5%8F%B2%E6%8F%90%E4%BA%A4%E5%86%85%E5%AE%B9"><span class="toc-text">12.7 修改历史提交内容</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-8-merge-%E7%9A%84%E5%9B%9E%E9%80%80"><span class="toc-text">12.8 merge 的回退</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-9-%E4%BF%AE%E6%94%B9%E6%9C%80%E8%BF%91%E4%B8%80%E6%AC%A1%E7%9A%84-commit-%E6%97%B6%E9%97%B4"><span class="toc-text">12.9 修改最近一次的 commit 时间</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-10-%E5%B0%86%E5%85%B6%E4%BB%96%E5%88%86%E6%94%AF%E5%AE%8C%E5%85%A8%E8%A6%86%E7%9B%96%E5%88%B0%E5%BD%93%E5%89%8D%E5%88%86%E6%94%AF"><span class="toc-text">12.10 将其他分支完全覆盖到当前分支</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#13-%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">13. 遇到的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#13-1-IDEA-Git-%E5%87%BA%E7%8E%B0-Line-Separators-Warning"><span class="toc-text">13.1 IDEA Git 出现 Line Separators Warning</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-2-LF-will-be-replaced-by-CRLF"><span class="toc-text">13.2 LF will be replaced by CRLF</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-3-git-reset-hard-HEAD-%E5%90%8E%E6%98%BE%E7%A4%BA-more"><span class="toc-text">13.3 git reset --hard HEAD^ 后显示 more?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-4-git-pull-%E6%8F%90%E7%A4%BA-warning-ignoring-broken-ref-refs-remotes-origin-HEAD"><span class="toc-text">13.4 git pull 提示 warning: ignoring broken ref refs&#x2F;remotes&#x2F;origin&#x2F;HEAD</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-5-unable-to-get-local-issuer-certificate"><span class="toc-text">13.5 unable to get local issuer certificate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-6-git-status-%E4%B8%AD%E6%96%87%E6%96%87%E4%BB%B6%E5%90%8D%E4%B9%B1%E7%A0%81"><span class="toc-text">13.6 git status 中文文件名乱码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-7-%E5%8F%B3%E9%94%AE%E8%8F%9C%E5%8D%95%E6%B2%A1%E6%9C%89-Git-Bash-here"><span class="toc-text">13.7 右键菜单没有 Git Bash here</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-8-fatal-detected-dubious-ownership-in-repository-at"><span class="toc-text">13.8 fatal: detected dubious ownership in repository at</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-9-%E8%83%BD%E8%AE%BF%E9%97%AE-GitHub-%E4%BD%86%E4%B8%8D%E8%83%BD%E8%BF%9B%E8%A1%8C-Git-%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C"><span class="toc-text">13.9 能访问 GitHub 但不能进行 Git 相关操作</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#14-%E5%85%B6%E4%BB%96%E8%A1%A5%E5%85%85%E4%BF%A1%E6%81%AF"><span class="toc-text">14. 其他补充信息</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#14-1-Commit-Type-%E7%B1%BB%E5%88%AB"><span class="toc-text">14.1 Commit Type 类别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#14-2-%E7%AE%A1%E7%90%86%E5%A4%9A%E4%B8%AA%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF"><span class="toc-text">14.2 管理多个用户信息</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#15-%E5%8F%AF%E8%83%BD%E6%9C%89%E7%94%A8%E7%9A%84%E5%B0%8F%E5%B7%A5%E5%85%B7"><span class="toc-text">15. 可能有用的小工具</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#15-1-push-sh"><span class="toc-text">15.1 push.sh</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#15-2-pull-sh"><span class="toc-text">15.2 pull.sh</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/The-Art-of-Loving/" title="爱的艺术"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/175.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="爱的艺术"/></a><div class="content"><a class="title" href="/posts/The-Art-of-Loving/" title="爱的艺术">爱的艺术</a><time datetime="2026-04-28T16:00:00.000Z" title="更新于 2026-04-29 00:00:00">2026-04-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Git/" title="Git理论与使用"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/3.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Git理论与使用"/></a><div class="content"><a class="title" href="/posts/Git/" title="Git理论与使用">Git理论与使用</a><time datetime="2026-01-26T16:00:00.000Z" title="更新于 2026-01-27 00:00:00">2026-01-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Something-About-Blog/" title="博客搭建与维护"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="博客搭建与维护"/></a><div class="content"><a class="title" href="/posts/Something-About-Blog/" title="博客搭建与维护">博客搭建与维护</a><time datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"/></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="更新于 2026-01-03 00:00:00">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"/></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/20.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="注解、类的加载、反射"/></a><div class="content"><a class="title" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射">注解、类的加载、反射</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.5</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
   const parseViewBox = viewBox => {
     if (!viewBox) return null
     const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))

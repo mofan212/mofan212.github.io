@@ -193,36 +193,36 @@ btf.addGlobalFn('pjaxSend', () => {
       }
     </style>
     <html><head></head><body><p>封面画师：adsuger     封面ID：77171064</p>
-<h1 id="SpringBoot原理"><a class="header-anchor" href="#SpringBoot原理"></a>SpringBoot原理</h1>
+<h1 id="1-SpringBoot-原理"><a class="header-anchor" href="#1-SpringBoot-原理"></a>1. SpringBoot 原理</h1>
 <p>参考链接：<a target="_blank" rel="noopener" href="https://www.springcloud.cc/spring-boot.html#boot-features-json">Spring Boot参考指南</a></p>
-<h2 id="1-Hello-World"><a class="header-anchor" href="#1-Hello-World"></a>1. Hello World</h2>
+<h2 id="1-1-Hello-World"><a class="header-anchor" href="#1-1-Hello-World"></a>1.1 Hello World</h2>
 <ul>
 <li>
-<p>使用IDEA创建SpringBoot项目：</p>
+<p>使用 IDEA 创建 SpringBoot 项目：</p>
 <ul>
-<li>选择<strong>spring initalizr</strong>，可以看到默认就是去官网的快速构建工具实现的；</li>
-<li>填写项目信息；</li>
-<li>选择初始化组件（初学选择Web即可）；</li>
-<li>填写项目路径，等待项目构建完成。</li>
+<li>选择 <strong>spring initalizr</strong>，可以看到默认就是去官网的快速构建工具实现的</li>
+<li>填写项目信息</li>
+<li>选择初始化组件（初学选择 Web 即可）</li>
+<li>填写项目路径，等待项目构建完成</li>
 </ul>
 </li>
 <li>
 <p>项目结构分析：</p>
 <ul>
-<li>程序的主启动类<code>xxxxxxxApplication.java</code></li>
+<li>程序的主启动类 <code>xxxxxxxApplication.java</code></li>
 <li>一个 application.properties 配置文件</li>
 <li>一个 测试类</li>
 <li>一个 pom.xml</li>
 </ul>
 </li>
 <li>
-<p>编写一个http接口</p>
+<p>编写一个 http 接口</p>
 <ul>
 <li>
-<p>在主程序的同级目录下，新建一个controller包。注意：<strong>一定要在同级目录下，否则会识别不到</strong></p>
+<p>在主程序的同级目录下，新建一个 controller 包。注意：<strong>一定要在同级目录下，否则会识别不到</strong></p>
 </li>
 <li>
-<p>在创建的controller包下新建一个HelloController类：</p>
+<p>在创建的 controller 包下新建一个 HelloController 类：</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#ABB2BF">@</span><span style="color:#E5C07B">RestController</span></span>
 <span class="line"><span style="color:#C678DD">public</span><span style="color:#C678DD"> class</span><span style="color:#E5C07B"> HelloController</span><span style="color:#ABB2BF"> {</span></span>
@@ -239,14 +239,14 @@ btf.addGlobalFn('pjaxSend', () => {
 </ul>
 </li>
 <li>
-<p>彩蛋：自定义banner图案</p>
+<p>彩蛋：自定义 banner 图案</p>
 <ul>
-<li>到项目下的 resources 目录下新建一个banner.txt 文件。</li>
-<li>将图案拷贝到文件中即可。</li>
+<li>到项目下的 resources 目录下新建一个 banner.txt 文件</li>
+<li>将图案拷贝到文件中即可</li>
 </ul>
 </li>
 </ul>
-<h2 id="2-运行原理初探"><a class="header-anchor" href="#2-运行原理初探"></a>2. 运行原理初探</h2>
+<h2 id="1-2-运行原理初探"><a class="header-anchor" href="#1-2-运行原理初探"></a>1.2 运行原理初探</h2>
 <h3 id="2-1-启动器"><a class="header-anchor" href="#2-1-启动器"></a>2.1 启动器</h3>
 <figure class="highlight xml line-numbers" data-language="XML">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#ABB2BF">&lt;</span><span style="color:#E06C75">dependency</span><span style="color:#ABB2BF">&gt;</span></span>
@@ -255,9 +255,9 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#ABB2BF">&lt;/</span><span style="color:#E06C75">dependency</span><span style="color:#ABB2BF">&gt;</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <ul>
-<li><strong>spring-boot-starter-xxx</strong>：就是Springboot的场景启动器</li>
-<li><strong>spring-boot-starter-web</strong>：帮助我们导入web模块正常运行所依赖的组件</li>
-<li>作用：Springboot将所有的场景抽取出来，做成了一个个启动器（starter），只需要在项目中引入启动器即可，所有的依赖都会导入进来。我们只需要选择我们自己需要的启动器，同时我们还可以自定义启动器。</li>
+<li><strong>spring-boot-starter-xxx</strong>：就是 Springboot 的场景启动器</li>
+<li><strong>spring-boot-starter-web</strong>：帮助我们导入 web 模块正常运行所依赖的组件</li>
+<li>作用：Springboot 将所有的场景抽取出来，做成了一个个启动器（starter），只需要在项目中引入启动器即可，所有的依赖都会导入进来。我们只需要选择我们自己需要的启动器，同时我们还可以自定义启动器</li>
 </ul>
 <h3 id="2-2-主启动类"><a class="header-anchor" href="#2-2-主启动类"></a>2.2 主启动类</h3>
 <figure class="highlight java line-numbers" data-language="JAVA">
@@ -275,7 +275,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <h4 id="2-3-1-SpringBootApplication"><a class="header-anchor" href="#2-3-1-SpringBootApplication"></a>2.3.1 @SpringBootApplication</h4>
 <ul>
 <li>
-<p><strong>作用：</strong> 标注在某个类上说明这个类是SpringBoot的主配置类 ， SpringBoot就应该运行这个类的main方法来启动SpringBoot应用；启动类下的所有资源被导入。</p>
+<p><strong>作用：</strong> 标注在某个类上说明这个类是 SpringBoot 的主配置类，SpringBoot 就应该运行这个类的 main 方法来启动 SpringBoot 应用；启动类下的所有资源被导入</p>
 </li>
 <li>
 <p>点击进入这个注解，可以查看到其他很多注解：</p>
@@ -304,13 +304,13 @@ btf.addGlobalFn('pjaxSend', () => {
       </figure>
 <h4 id="2-3-2-ComponentScan"><a class="header-anchor" href="#2-3-2-ComponentScan"></a>2.3.2 @ComponentScan</h4>
 <ul>
-<li>Spring内主要注解，它对应XML配置中的<code>&lt;context:component-scan base-package="xxx" /&gt;</code>元素。</li>
-<li><strong>作用：</strong> 自动扫描并加载符合条件的组件或者bean ， 将这个bean定义加载到IOC容器中</li>
+<li>Spring 内主要注解，它对应 XML 配置中的 <code>&lt;context:component-scan base-package="xxx" /&gt;</code> 元素</li>
+<li><strong>作用：</strong> 自动扫描并加载符合条件的组件或者 bean，将这个 bean 定义加载到 IOC 容器中</li>
 </ul>
 <h4 id="2-3-3-SpringBootConfiguration"><a class="header-anchor" href="#2-3-3-SpringBootConfiguration"></a>2.3.3 @SpringBootConfiguration</h4>
 <ul>
 <li>
-<p><strong>作用：</strong> SpringBoot的配置类 。标注在某个类上 ， 表示这是一个SpringBoot的配置类。</p>
+<p><strong>作用：</strong> SpringBoot 的配置类。标注在某个类上，表示这是一个 SpringBoot 的配置类</p>
 </li>
 <li>
 <p>继续点击进入这个注解：</p>
@@ -327,20 +327,20 @@ btf.addGlobalFn('pjaxSend', () => {
 <ul>
 <li>分析：
 <ul>
-<li>@Configuration表明这是配置类，配置类就是对应Spring的xml配置文件。</li>
-<li>@Component说明启动类本身也是Spring中的一个组件而已，负责启动应用。</li>
+<li>@Configuration 表明这是配置类，配置类就是对应 Spring 的 xml 配置文件</li>
+<li>@Component 说明启动类本身也是 Spring 中的一个组件而已，负责启动应用</li>
 </ul>
 </li>
 </ul>
 <blockquote>
-<p>回到@SpringBootApplication注解中，查看@EnableAutoConfiguration注解</p>
+<p>回到@SpringBootApplication 注解中，查看@EnableAutoConfiguration 注解</p>
 </blockquote>
 <h4 id="2-3-4-EnableAutoConfiguration"><a class="header-anchor" href="#2-3-4-EnableAutoConfiguration"></a>2.3.4 @EnableAutoConfiguration</h4>
 <ul>
-<li><strong>作用：</strong> 开启自动配置功能。以前的一些框架的配置需要我们手动配置，现在SpringBoot可以自动帮我们配置。而@SpringBootApplication可以开启SpringBoot的自动配置功能，这样自动配置才可以生效 。</li>
+<li><strong>作用：</strong> 开启自动配置功能。以前的一些框架的配置需要我们手动配置，现在 SpringBoot 可以自动帮我们配置。而@SpringBootApplication 可以开启 SpringBoot 的自动配置功能，这样自动配置才可以生效</li>
 </ul>
 <blockquote>
-<p>点击进入@EnableAutoConfiguration注解：</p>
+<p>点击进入@EnableAutoConfiguration 注解：</p>
 </blockquote>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#ABB2BF">@</span><span style="color:#E5C07B">AutoConfigurationPackage</span></span>
@@ -352,22 +352,22 @@ btf.addGlobalFn('pjaxSend', () => {
 <li><strong>@AutoConfigurationPackage：自动配置包</strong></li>
 </ul>
 <blockquote>
-<p>点击进入@AutoConfigurationPackage注解：</p>
+<p>点击进入@AutoConfigurationPackage 注解：</p>
 </blockquote>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#ABB2BF">@</span><span style="color:#E5C07B">Import</span><span style="color:#E06C75">(</span><span style="color:#E5C07B">AutoConfigurationPackages</span><span style="color:#ABB2BF">.</span><span style="color:#E5C07B">Registrar</span><span style="color:#ABB2BF">.</span><span style="color:#E5C07B">class</span><span style="color:#E06C75">)</span></span>
 <span class="line"><span style="color:#C678DD">public</span><span style="color:#ABB2BF"> @</span><span style="color:#C678DD">interface</span><span style="color:#E5C07B"> AutoConfigurationPackage</span><span style="color:#E06C75"> {</span></span>
 <span class="line"><span style="color:#E06C75">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<p><strong>@import</strong> ：Spring底层注解@import ， 给容器中导入一个组件。</p>
-<p>Registrar.class作用：将主启动类的所在包及包下面所有子包里面的所有组件扫描到Spring容器 。</p>
+<p><strong>@import</strong> ：Spring 底层注解@import，给容器中导入一个组件。</p>
+<p>Registrar.class 作用：将主启动类的所在包及包下面所有子包里面的所有组件扫描到 Spring 容器。</p>
 <hr>
 <ul>
 <li><strong>@Import(AutoConfigurationImportSelector.class)：给容器导入组件</strong></li>
 </ul>
 <p>AutoConfigurationImportSelector：自动配置导入选择器。那么它会导入哪些组件的选择器呢？</p>
 <blockquote>
-<p>点击进入AutoConfigurationImportSelector类：</p>
+<p>点击进入 AutoConfigurationImportSelector 类：</p>
 </blockquote>
 <ol>
 <li>这个类中有这样的一个方法：</li>
@@ -392,7 +392,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#E06C75">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <ol start="2">
-<li>这个方法又调用了<strong>SpringFactoriesLoader</strong>类的静态方法，进入SpringFactoriesLoader类中 <strong>loadFactoryNames()</strong> 方法：</li>
+<li>这个方法又调用了 <strong>SpringFactoriesLoader</strong> 类的静态方法，进入 SpringFactoriesLoader 类中 <strong>loadFactoryNames()</strong> 方法：</li>
 </ol>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">public</span><span style="color:#C678DD"> static</span><span style="color:#E5C07B"> List</span><span style="color:#56B6C2">&lt;</span><span style="color:#E06C75">String</span><span style="color:#56B6C2">&gt;</span><span style="color:#61AFEF"> loadFactoryNames</span><span style="color:#E06C75">(</span><span style="color:#E5C07B">Class</span><span style="color:#56B6C2">&lt;</span><span style="color:#C678DD">?</span><span style="color:#56B6C2">&gt;</span><span style="color:#E06C75"> factoryType</span><span style="color:#ABB2BF">,</span><span style="color:#E06C75"> </span></span>
@@ -404,7 +404,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#E06C75">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <ol start="3">
-<li>点击<strong>loadSpringFactories()</strong> 方法进行查看：</li>
+<li>点击 <strong>loadSpringFactories()</strong> 方法进行查看：</li>
 </ol>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#C678DD">private</span><span style="color:#C678DD"> static</span><span style="color:#E5C07B"> Map</span><span style="color:#56B6C2">&lt;</span><span style="color:#E06C75">String</span><span style="color:#ABB2BF">,</span><span style="color:#E5C07B"> List</span><span style="color:#56B6C2">&lt;</span><span style="color:#E06C75">String</span><span style="color:#56B6C2">&gt;&gt;</span><span style="color:#61AFEF"> loadSpringFactories</span><span style="color:#E06C75">(</span></span>
@@ -446,55 +446,55 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#E06C75">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <ol start="4">
-<li>在这个类中我们发现了多次出现的文件：spring.factories，进行全局搜索：</li>
+<li>在这个类中我们发现了多次出现的文件：spring.factories，进行全局搜索</li>
 </ol>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SpringBootImages/spring.factories.png" alt="spring.factories"></p>
 <ol start="5">
-<li>打开这个文件我们可以看到很多自动配置的文件，而这就是自动配置根源的所在：</li>
+<li>打开这个文件我们可以看到很多自动配置的文件，而这就是自动配置根源的所在</li>
 </ol>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SpringBootImages/WebMvcAutoConfiguration.png" alt="WebMvcAutoConfiguration"></p>
 <ol start="6">
 <li>在这些配置文件中我们选取一个我们熟悉的配置类打开，比如：<strong>WebMvcAutoConfiguration</strong></li>
 </ol>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SpringBootImages/WebMvcAutoConfiguration_class.png" alt="WebMvcAutoConfiguration_class"></p>
-<p>我们可以看到这些都是一个个的JavaConfig配置类，同时注入了一些Bean。</p>
-<p>所以，自动配置真正实现是从classpath中搜寻所有的META-INF/spring.factories配置文件 ，并将其中对应的 org.springframework.boot.autoconfigure. 包下的配置项，通过反射实例化为对应标注了 @Configuration的JavaConfig形式的IoC容器配置类 ， 然后将这些都汇总成为一个实例并加载到IoC容器中。</p>
-<p><strong>自动装配的核心：</strong> 可以用JavaConfig类取代xml配置，并可以用yaml文件对JavaConfig（标记@ConfigProperties）类的属性进行修改。</p>
+<p>我们可以看到这些都是一个个的 JavaConfig 配置类，同时注入了一些 Bean。</p>
+<p>所以，自动配置真正实现是从 classpath 中搜寻所有的 META-INF/spring.factories 配置文件，并将其中对应的 org.springframework.boot.autoconfigure. 包下的配置项，通过反射实例化为对应标注了 @Configuration 的 JavaConfig 形式的 IoC 容器配置类，然后将这些都汇总成为一个实例并加载到 IoC 容器中。</p>
+<p><strong>自动装配的核心：</strong> 可以用 JavaConfig 类取代 xml 配置，并可以用 yaml 文件对 JavaConfig（标记@ConfigProperties）类的属性进行修改。</p>
 <hr>
 <ul>
-<li><strong>思考：</strong> 这么多的自动配置为什么有些没有生效而需要导入对应的starter才有作用？</li>
+<li><strong>思考：</strong> 这么多的自动配置为什么有些没有生效而需要导入对应的 starter 才有作用？</li>
 </ul>
-<p>我们没有导入AOP的相关依赖，所以我们找到AOP的自动配置并打开：</p>
+<p>我们没有导入 AOP 的相关依赖，所以我们找到 AOP 的自动配置并打开：</p>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SpringBootImages/autoConfiguration.png" alt="autoConfiguration"></p>
 <p>打开后我们会发现有这样一个注解：</p>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SpringBootImages/ConditionalOnClass.png" alt="ConditionalOnClass"></p>
-<p>我们可以看到，@ConditionalOnClass注解爆红！这是为什么？</p>
-<p>答案很简单，因为我们没有导入AOP相关的依赖，我们需要导入依赖（对应的starter）后这个注解才不会爆红，而只有这个注解不爆红，SpringBoot的AOP自动配置才会生效。</p>
+<p>我们可以看到，@ConditionalOnClass 注解爆红！这是为什么？</p>
+<p>答案很简单，因为我们没有导入 AOP 相关的依赖，我们需要导入依赖（对应的 starter）后这个注解才不会爆红，而只有这个注解不爆红，SpringBoot 的 AOP 自动配置才会生效。</p>
 <blockquote>
 <p>@ConditionalOnxxxx：只有里面的条件都满足，自动配置才会生效。</p>
 </blockquote>
 <ul>
 <li><strong>结论：</strong>
 <ul>
-<li>SpringBoot在启动的时候从类路径下的META-INF/<code>spring.factories</code>中获取EnableAutoConfiguration指定的值，将这些值作为自动配置类导入容器 ， 自动配置类就会生效 ， 帮我们进行自动配置的工作。</li>
-<li>整个J2EE的整体解决方案和自动配置都在springboot-autoconfigure的jar包中，它将所有需要导入的组件以全类名的方式返回，这些组件就会被添加到容器中。</li>
-<li>它会给容器中导入非常多的自动配置类 （xxxAutoConfiguration）, 就是给容器中导入了某一场景需要的所有组件 ， 并配置好这些组件 。我们有了自动配置类 ， 免去了我们手动编写配置注入功能组件等的工作；</li>
+<li>SpringBoot 在启动的时候从类路径下的 META-INF/<code>spring.factories</code> 中获取 EnableAutoConfiguration 指定的值，将这些值作为自动配置类导入容器，自动配置类就会生效，帮我们进行自动配置的工作</li>
+<li>整个 J2EE 的整体解决方案和自动配置都在 springboot-autoconfigure 的 jar 包中，它将所有需要导入的组件以全类名的方式返回，这些组件就会被添加到容器中</li>
+<li>它会给容器中导入非常多的自动配置类 （xxxAutoConfiguration）, 就是给容器中导入了某一场景需要的所有组件，并配置好这些组件。我们有了自动配置类，免去了我们手动编写配置注入功能组件等的工作</li>
 </ul>
 </li>
 </ul>
 <p>理一下注解：</p>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SpringBootImages/SpringBoot%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E6%B3%A8%E8%A7%A3.png" alt="SpringBoot中常用的注解"></p>
-<p>到此，我们就大概的了解了SpringBoot的运行原理！</p>
+<p>到此，我们就大概的了解了 SpringBoot 的运行原理！</p>
 <hr>
 <h3 id="2-4-SpringApplication-run"><a class="header-anchor" href="#2-4-SpringApplication-run"></a>2.4 SpringApplication.run</h3>
 <ul>
-<li>该方法主要有两部分，一部分是SpringApplication的实例化，二是run方法的执行。</li>
-<li>SpringApplication类主要做了一下四件事：
+<li>该方法主要有两部分，一部分是 SpringApplication 的实例化，二是 run 方法的执行</li>
+<li>SpringApplication 类主要做了一下四件事：
 <ul>
-<li>推断应用的类型是普通的项目还是Web项目</li>
-<li>查找并加载所有可用初始化器 ， 设置到initializers属性中</li>
-<li>找出所有的应用程序监听器，设置到listeners属性中</li>
-<li><strong>推断并设置main方法的定义类，找到运行的主类</strong></li>
+<li>推断应用的类型是普通的项目还是 Web 项目</li>
+<li>查找并加载所有可用初始化器，设置到 initializers 属性中</li>
+<li>找出所有的应用程序监听器，设置到 listeners 属性中</li>
+<li><strong>推断并设置 main 方法的定义类，找到运行的主类</strong></li>
 </ul>
 </li>
 </ul>
@@ -508,7 +508,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#E5C07B">    this</span><span style="color:#ABB2BF">.</span><span style="color:#E5C07B">mainApplicationClass</span><span style="color:#56B6C2"> =</span><span style="color:#E5C07B"> this</span><span style="color:#ABB2BF">.</span><span style="color:#61AFEF">deduceMainApplicationClass</span><span style="color:#ABB2BF">();</span></span>
 <span class="line"><span style="color:#ABB2BF">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<h2 id="3-yaml配置注入"><a class="header-anchor" href="#3-yaml配置注入"></a>3. yaml配置注入</h2>
+<h2 id="1-3-yaml-配置注入"><a class="header-anchor" href="#1-3-yaml-配置注入"></a>1.3 yaml 配置注入</h2>
 <h3 id="3-1-基本语法"><a class="header-anchor" href="#3-1-基本语法"></a>3.1 基本语法</h3>
 <ul>
 <li>application.yml
@@ -525,20 +525,20 @@ btf.addGlobalFn('pjaxSend', () => {
 <li>
 <p>说明：语法要严格要求！</p>
 <ul>
-<li>空格不能省略。</li>
-<li>以缩进控制层级关系。</li>
-<li>属性和值的大小写都是十分敏感的。</li>
+<li>空格不能省略</li>
+<li>以缩进控制层级关系</li>
+<li>属性和值的大小写都是十分敏感的</li>
 </ul>
 </li>
 <li>
 <p><strong>引号的使用：</strong></p>
 <ul>
 <li>
-<p>“ ” 双引号，不会转义字符串里面的特殊字符 ， 特殊字符会作为本身想表示的意思；</p>
+<p>「 」 双引号，不会转义字符串里面的特殊字符，特殊字符会作为本身想表示的意思</p>
 <p>比如：name: “mo \n fan”	输出：mo 换行 fan</p>
 </li>
 <li>
-<p>‘’ 单引号，会转义特殊字符 ， 特殊字符最终会变成和普通字符一样输出。</p>
+<p>‘’ 单引号，会转义特殊字符，特殊字符最终会变成和普通字符一样输出</p>
 <p>比如：name: ‘mo \n fan’	输出：mo \n fan</p>
 </li>
 </ul>
@@ -546,7 +546,7 @@ btf.addGlobalFn('pjaxSend', () => {
 </ul>
 <h3 id="3-2-其他语法"><a class="header-anchor" href="#3-2-其他语法"></a>3.2 其他语法</h3>
 <ul>
-<li>对象、Map键值对</li>
+<li>对象、Map 键值对</li>
 </ul>
 <figure class="highlight yaml line-numbers" data-language="YAML">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#E06C75">k</span><span style="color:#ABB2BF">:</span></span>
@@ -573,10 +573,10 @@ btf.addGlobalFn('pjaxSend', () => {
       </figure>
 <h3 id="3-3-配置文件注入"><a class="header-anchor" href="#3-3-配置文件注入"></a>3.3 配置文件注入</h3>
 <blockquote>
-<p>​		当我们需要给实体类注入匹配值时，根据Spring的学习，我们可以：使用@Component将bean注册到容器中，然后使用@Value注解给bean的每个属性注入值。现在我们还可以用yaml配置的方式进行注入：</p>
+<p>​		当我们需要给实体类注入匹配值时，根据 Spring 的学习，我们可以：使用@Component 将 bean 注册到容器中，然后使用@Value 注解给 bean 的每个属性注入值。现在我们还可以用 yaml 配置的方式进行注入：</p>
 </blockquote>
 <ol>
-<li>首先编写一个实体类，Person类</li>
+<li>首先编写一个实体类，Person 类</li>
 </ol>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#7F848E;font-style:italic">/*</span></span>
@@ -600,7 +600,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#ABB2BF">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <ol start="2">
-<li>编写一个yaml配置：</li>
+<li>编写一个 yaml 配置：</li>
 </ol>
 <figure class="highlight yaml line-numbers" data-language="YAML">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#E06C75">person</span><span style="color:#ABB2BF">:</span></span>
@@ -616,7 +616,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#E06C75">    name</span><span style="color:#ABB2BF">: </span><span style="color:#98C379">小黑</span></span>
 <span class="line"><span style="color:#E06C75">    age</span><span style="color:#ABB2BF">: </span><span style="color:#D19A66">3</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<p>然后我们在SpringBoot的测试类中编写测试即可。</p>
+<p>然后我们在 SpringBoot 的测试类中编写测试即可。</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#ABB2BF">@</span><span style="color:#E5C07B">Autowired</span></span>
 <span class="line"><span style="color:#C678DD">private</span><span style="color:#E5C07B"> Person</span><span style="color:#E06C75"> person</span><span style="color:#ABB2BF">;</span></span>
@@ -627,7 +627,7 @@ btf.addGlobalFn('pjaxSend', () => {
       </figure>
 <hr>
 <ul>
-<li><mark>如果IDEA提示：SpringBoot配置注解处理器没有找到，那么需要我们添加一个依赖。</mark></li>
+<li><mark>如果 IDEA 提示：SpringBoot 配置注解处理器没有找到，那么需要我们添加一个依赖。</mark></li>
 </ul>
 <figure class="highlight xml line-numbers" data-language="XML">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#7F848E;font-style:italic">&lt;!--导入依赖后需要重启--&gt;</span></span>
@@ -642,40 +642,40 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>注意：</p>
 <blockquote>
 <ul>
-<li>如果配置文件的key值和属性值设置不一样，则输出结果会为null，表示注入失败。</li>
-<li>注意注解@ConfigurationProperties的使用。<strong>@configurationProperties</strong>：默认从全局配置文件中获取值。</li>
+<li>如果配置文件的 key 值和属性值设置不一样，则输出结果会为 null，表示注入失败。</li>
+<li>注意注解@ConfigurationProperties 的使用。<strong>@configurationProperties</strong>：默认从全局配置文件中获取值。</li>
 <li>如果存在多个配置文件（比如还存在一个 <strong>person.properties</strong> 文件），这时我们进行注入并想要绑定这个配置文件时，可以使用 <strong>@PropertySource</strong> 注解来加载指定的配置文件。</li>
 </ul>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#ABB2BF">@</span><span style="color:#E5C07B">PropertySource</span><span style="color:#E06C75">(</span><span style="color:#D19A66">value</span><span style="color:#56B6C2"> =</span><span style="color:#98C379"> "classpath:person.properties"</span><span style="color:#E06C75">)</span></span>
-<span class="line"><span style="color:#ABB2BF">@</span><span style="color:#E5C07B">Component</span><span style="color:#E06C75"> </span></span>
+<span class="line"><span style="color:#ABB2BF">@</span><span style="color:#E5C07B">Component</span></span>
 <span class="line"><span style="color:#C678DD">public</span><span style="color:#C678DD"> class</span><span style="color:#E5C07B"> Person</span><span style="color:#ABB2BF"> {</span></span>
 <span class="line"><span style="color:#ABB2BF">    @</span><span style="color:#E5C07B">Value</span><span style="color:#E06C75">(</span><span style="color:#98C379">"${name}"</span><span style="color:#E06C75">)</span></span>
 <span class="line"><span style="color:#C678DD">    private</span><span style="color:#E5C07B"> String</span><span style="color:#E06C75"> name</span><span style="color:#ABB2BF">;</span></span>
-<span class="line"><span style="color:#ABB2BF">    ......</span><span style="color:#E06C75">  </span></span>
+<span class="line"><span style="color:#ABB2BF">    ......</span></span>
 <span class="line"><span style="color:#ABB2BF">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <ul>
-<li>使用yaml配置文件还可以编写占位符。如：</li>
+<li>使用 yaml 配置文件还可以编写占位符。如：</li>
 </ul>
 <figure class="highlight yaml line-numbers" data-language="YAML">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#E06C75">person</span><span style="color:#ABB2BF">:</span></span>
-<span class="line"><span style="color:#E06C75">    name</span><span style="color:#ABB2BF">: </span><span style="color:#98C379">mofan${random.uuid}</span><span style="color:#7F848E;font-style:italic"> # 随机uuid</span></span>
-<span class="line"><span style="color:#E06C75">    age</span><span style="color:#ABB2BF">: </span><span style="color:#98C379">${random.int}</span><span style="color:#7F848E;font-style:italic">  # 随机int</span></span>
+<span class="line"><span style="color:#E06C75">    name</span><span style="color:#ABB2BF">: </span><span style="color:#98C379">mofan${random.uuid}</span><span style="color:#7F848E;font-style:italic"> # 随机 uuid</span></span>
+<span class="line"><span style="color:#E06C75">    age</span><span style="color:#ABB2BF">: </span><span style="color:#98C379">${random.int}</span><span style="color:#7F848E;font-style:italic">  # 随机 int</span></span>
 <span class="line"><span style="color:#D19A66">    ...</span></span>
 <span class="line"><span style="color:#E06C75">    dog</span><span style="color:#ABB2BF">:</span></span>
 <span class="line"><span style="color:#E06C75">      name</span><span style="color:#ABB2BF">: </span><span style="color:#98C379">${person.hello:other}_小黑</span></span>
 <span class="line"><span style="color:#E06C75">      age</span><span style="color:#ABB2BF">: </span><span style="color:#D19A66">3</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <ul>
-<li>如果我们需要使用properties配置，在配置文件中书写中文时，IDEA会出现乱码，需要我们进行设置。settings–&gt;FileEncodings --&gt;设置编码格式为UTF-8（把旁边的勾打上）。</li>
+<li>如果我们需要使用 properties 配置，在配置文件中书写中文时，IDEA 会出现乱码，需要我们进行设置。settings–&gt;FileEncodings --&gt;设置编码格式为 UTF-8（把旁边的勾打上）。</li>
 </ul>
 </blockquote>
 </li>
 </ul>
 <h3 id="3-4-yaml总结"><a class="header-anchor" href="#3-4-yaml总结"></a>3.4 yaml总结</h3>
 <ul>
-<li>@ConfigurationProperties和@Value对比：</li>
+<li>@ConfigurationProperties 和@Value 对比：</li>
 </ul>
 <table>
 <thead>
@@ -702,7 +702,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <td style="text-align:center">支持</td>
 </tr>
 <tr>
-<td style="text-align:center">JSR303校验</td>
+<td style="text-align:center">JSR303 校验</td>
 <td style="text-align:center">支持</td>
 <td style="text-align:center">不支持</td>
 </tr>
@@ -714,20 +714,20 @@ btf.addGlobalFn('pjaxSend', () => {
 </tbody>
 </table>
 <ul>
-<li>松散绑定：比如我的yml中写的last-name，这个和lastName是一样的， - 后面跟着的字母默认是大写的。</li>
-<li>JSR303数据校验 ， 这个就是我们可以在字段是增加一层过滤器验证 ， 可以保证数据的合法性。</li>
-<li>yaml可以封装对象，而value不行。</li>
+<li>松散绑定：比如我的 yml 中写的 last-name，这个和 lastName 是一样的，- 后面跟着的字母默认是大写的</li>
+<li>JSR303 数据校验，这个就是我们可以在字段是增加一层过滤器验证，可以保证数据的合法性</li>
+<li>yaml 可以封装对象，而 value 不行</li>
 <li>总结：
 <ul>
-<li>如果配置yaml和配置properties都可以获取到值 ， 推荐 使用yaml；</li>
-<li>如果我们在某个业务中，只需要获取配置文件中的某个值，可以使用一下 @value；</li>
-<li>如果我们专门编写了一个JavaBean来和配置文件进行一一映射，直接使用@ConfigurationProperties。</li>
+<li>如果配置 yaml 和配置 properties 都可以获取到值，推荐 使用 yaml</li>
+<li>如果我们在某个业务中，只需要获取配置文件中的某个值，可以使用一下 @value</li>
+<li>如果我们专门编写了一个 JavaBean 来和配置文件进行一一映射，直接使用@ConfigurationProperties</li>
 </ul>
 </li>
 </ul>
-<h2 id="4-JSR303数据校验"><a class="header-anchor" href="#4-JSR303数据校验"></a>4. JSR303数据校验</h2>
+<h2 id="1-4-JSR303-数据校验"><a class="header-anchor" href="#1-4-JSR303-数据校验"></a>1.4 JSR303 数据校验</h2>
 <ul>
-<li>使用：在SpringBoot中使用@Validated注解来校验数据，如果数据处在异常，则会抛出异常，方便统一处理。比如，我们可以写一个注解使我们的name属性不能为空：</li>
+<li>使用：在 SpringBoot 中使用@Validated 注解来校验数据，如果数据处在异常，则会抛出异常，方便统一处理。比如，我们可以写一个注解使我们的 name 属性不能为空：</li>
 </ul>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#ABB2BF">@</span><span style="color:#E5C07B">Component</span><span style="color:#7F848E;font-style:italic"> //注册bean</span></span>
@@ -739,7 +739,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#C678DD">    private</span><span style="color:#E5C07B"> String</span><span style="color:#E06C75"> name</span><span style="color:#ABB2BF">;</span></span>
 <span class="line"><span style="color:#ABB2BF">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<p>如果这时name为空，则会抛出异常，并显示设置的default message。</p>
+<p>如果这时 name 为空，则会抛出异常，并显示设置的 default message。</p>
 <ul>
 <li>常见参数：</li>
 </ul>
@@ -773,15 +773,15 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#E06C75">等等</span><span style="color:#ABB2BF">...</span></span>
 <span class="line"><span style="color:#E06C75">我们也可以自定义一些校验规则</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<h2 id="5-多环境切换"><a class="header-anchor" href="#5-多环境切换"></a>5. 多环境切换</h2>
+<h2 id="1-5-多环境切换"><a class="header-anchor" href="#1-5-多环境切换"></a>1.5 多环境切换</h2>
 <h3 id="5-1-多配置文件"><a class="header-anchor" href="#5-1-多配置文件"></a>5.1 多配置文件</h3>
 <ul>
-<li>我们在主配置文件编写的时候，文件名可以是 application-{profile}.properties/yml , 用来指定多个环境版本。</li>
+<li>我们在主配置文件编写的时候，文件名可以是 application-{profile}.properties/yml , 用来指定多个环境版本</li>
 </ul>
 <p><strong>例如：</strong></p>
-<p>application-test.properties ：测试环境配置</p>
-<p>application-dev.properties ：开发环境配置</p>
-<p>但是Springboot并不会直接启动这些配置文件，它<strong>默认使用application.properties主配置文件</strong>，我们需要通过一个配置来选择需要激活的环境：</p>
+<p>application-test.properties：测试环境配置</p>
+<p>application-dev.properties：开发环境配置</p>
+<p>但是 Springboot 并不会直接启动这些配置文件，它 <strong>默认使用 application.properties 主配置文件</strong>，我们需要通过一个配置来选择需要激活的环境：</p>
 <figure class="highlight properties line-numbers" data-language="PROPERTIES">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#7F848E;font-style:italic">#比如在配置文件中指定使用dev环境，我们可以通过设置不同的端口号进行测试；</span></span>
 <span class="line"><span style="color:#7F848E;font-style:italic">#我们启动SpringBoot，就可以看到已经切换到dev下的配置了；</span></span>
@@ -789,7 +789,7 @@ btf.addGlobalFn('pjaxSend', () => {
       </figure>
 <h3 id="5-2-yaml多文档块"><a class="header-anchor" href="#5-2-yaml多文档块"></a>5.2 yaml多文档块</h3>
 <ul>
-<li>同样可以使用yaml配置文件实现多环境切换，但是使用yaml可以不需要创建多个配置文件，比如：</li>
+<li>同样可以使用 yaml 配置文件实现多环境切换，但是使用 yaml 可以不需要创建多个配置文件，比如：</li>
 </ul>
 <figure class="highlight yaml line-numbers" data-language="YAML">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#E06C75">server</span><span style="color:#ABB2BF">:</span></span>
@@ -816,14 +816,14 @@ btf.addGlobalFn('pjaxSend', () => {
 <ul>
 <li>注意：
 <ul>
-<li>使用yaml的多文档块时，需要指明环境名称，文档快之间用“—”隔开。</li>
-<li><strong>如果yml和properties同时都配置了端口，并且没有激活其他环境 ， 默认会使用properties配置文件的！</strong></li>
+<li>使用 yaml 的多文档块时，需要指明环境名称，文档快之间用「—」隔开</li>
+<li><strong>如果 yml 和 properties 同时都配置了端口，并且没有激活其他环境，默认会使用 properties 配置文件的！</strong></li>
 </ul>
 </li>
 </ul>
 <h3 id="5-3-配置文件加载顺序"><a class="header-anchor" href="#5-3-配置文件加载顺序"></a>5.3 配置文件加载顺序</h3>
 <ul>
-<li>SpringBoot启动会扫描一下位置的application.properties或者application.yml文件作为Spring boot的默认配置文件：</li>
+<li>SpringBoot 启动会扫描一下位置的 application.properties 或者 application.yml 文件作为 Spring boot 的默认配置文件：</li>
 </ul>
 <figure class="highlight plaintext line-numbers" data-language="PLAINTEXT">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span>优先级1：file:./config/                项目路径下的config文件夹配置文件</span></span>
@@ -831,15 +831,15 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span>优先级3：classpath:/config/            资源路径下的config文件夹配置文件</span></span>
 <span class="line"><span>优先级4：classpath:/                资源路径下配置文件</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<p>优先级由高到低，高优先级的配置会覆盖低优先级的配置。<strong>SpringBoot会从这四个位置全部加载主配置文件，互补配置。</strong></p>
-<h2 id="6-自动装配原理"><a class="header-anchor" href="#6-自动装配原理"></a>6. 自动装配原理</h2>
+<p>优先级由高到低，高优先级的配置会覆盖低优先级的配置。<strong>SpringBoot 会从这四个位置全部加载主配置文件，互补配置。</strong></p>
+<h2 id="1-6-自动装配原理"><a class="header-anchor" href="#1-6-自动装配原理"></a>1.6 自动装配原理</h2>
 <ul>
-<li><strong>思考：</strong> 经过编写yaml配置文件的学习，我们认识到可以使用yaml配置文件设置相关配置，但是配置文件到底该怎么写？又能写些什么？</li>
+<li><strong>思考：</strong> 经过编写 yaml 配置文件的学习，我们认识到可以使用 yaml 配置文件设置相关配置，但是配置文件到底该怎么写？又能写些什么？</li>
 </ul>
 <hr>
 <h3 id="6-1-原理分析"><a class="header-anchor" href="#6-1-原理分析"></a>6.1 原理分析</h3>
-<p>我们在 <strong>2. 运行原理初探</strong>中已经找到了文件<code>spring.factories</code>所处的位置，</p>
-<p>这时我们可以选取 <strong>HttpEncodingAutoConfiguration（Http编码自动配置）</strong> 为例解释自动配置原理：</p>
+<p>我们在 <strong>2. 运行原理初探</strong> 中已经找到了文件 <code>spring.factories</code> 所处的位置，</p>
+<p>这时我们可以选取 <strong>HttpEncodingAutoConfiguration（Http 编码自动配置）</strong> 为例解释自动配置原理：</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#7F848E;font-style:italic">//表示这是一个配置类，和以前编写的配置文件一样，也可以给容器中添加组件</span></span>
 <span class="line"><span style="color:#ABB2BF">@</span><span style="color:#E5C07B">Configuration</span><span style="color:#E06C75"> </span></span>
@@ -889,14 +889,14 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#7F848E;font-style:italic">    //......</span></span>
 <span class="line"><span style="color:#ABB2BF">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<p><strong>简单总结：SpringBoot根据当前不同的条件判断，决定这个配置文件是否生效。</strong></p>
+<p><strong>简单总结：SpringBoot 根据当前不同的条件判断，决定这个配置文件是否生效。</strong></p>
 <ul>
-<li>一但这个配置类生效，这个配置类就会给容器中添加各种组件；</li>
-<li>这些组件的属性是从对应的properties类中获取的，这些类里面的每一个属性又是和配置文件绑定的；</li>
-<li>所有在配置文件中能配置的属性都是在xxxxProperties类中封装着；</li>
-<li>配置文件能配置什么就可以参照某个功能对应的这个属性类。</li>
+<li>一但这个配置类生效，这个配置类就会给容器中添加各种组件</li>
+<li>这些组件的属性是从对应的 properties 类中获取的，这些类里面的每一个属性又是和配置文件绑定的</li>
+<li>所有在配置文件中能配置的属性都是在 xxxxProperties 类中封装着</li>
+<li>配置文件能配置什么就可以参照某个功能对应的这个属性类</li>
 </ul>
-<p>点击进入<strong>HttpProperties.class</strong>：</p>
+<p>点击进入 <strong>HttpProperties.class</strong>：</p>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#7F848E;font-style:italic">//从配置文件中获取指定的值和bean的属性进行绑定</span></span>
 <span class="line"><span style="color:#ABB2BF">@</span><span style="color:#E5C07B">ConfigurationProperties</span><span style="color:#E06C75">(</span><span style="color:#D19A66">prefix</span><span style="color:#56B6C2"> =</span><span style="color:#98C379"> "spring.http"</span><span style="color:#E06C75">)</span></span>
@@ -904,22 +904,22 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#7F848E;font-style:italic">    //....</span></span>
 <span class="line"><span style="color:#ABB2BF">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
-<p>然后我们可以在配置文件中进行httpencoding的相关配置，并进行对比：</p>
+<p>然后我们可以在配置文件中进行 httpencoding 的相关配置，并进行对比：</p>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SpringBootImages/HttpProperties.png" alt="HttpProperties"></p>
 <p>到此，我们就明白了自动装配的核心！</p>
 <h3 id="6-2-原理总结"><a class="header-anchor" href="#6-2-原理总结"></a>6.2 原理总结</h3>
 <ol>
 <li>
-<p>SpringBoot启动会加载大量的自动配置类</p>
+<p>SpringBoot 启动会加载大量的自动配置类</p>
 </li>
 <li>
-<p>我们判断我们需要的功能有没有在SpringBoot默认写好的自动配置类当中；</p>
+<p>我们判断我们需要的功能有没有在 SpringBoot 默认写好的自动配置类当中；</p>
 </li>
 <li>
 <p>我们再来看这个自动配置类中到底配置了哪些组件（只要我们要用的组件存在在其中，我们就不需要再手动配置了）；</p>
 </li>
 <li>
-<p>给容器中自动配置类添加组件的时候，会从properties类中获取某些属性，我们只需要在配置文件中指定这些属性的值即可。</p>
+<p>给容器中自动配置类添加组件的时候，会从 properties 类中获取某些属性，我们只需要在配置文件中指定这些属性的值即可。</p>
 </li>
 </ol>
 <ul>
@@ -930,39 +930,39 @@ btf.addGlobalFn('pjaxSend', () => {
 <p><strong>xxxxAutoConfigurartion：自动配置类，给容器中添加组件</strong></p>
 </li>
 <li>
-<p><strong>xxxxProperties:封装配置文件中相关属性；</strong></p>
+<p><strong>xxxxProperties：封装配置文件中相关属性；</strong></p>
 </li>
 </ul>
 </li>
 </ul>
 <h3 id="6-3-Conditional"><a class="header-anchor" href="#6-3-Conditional"></a>6.3 @Conditional</h3>
 <ul>
-<li>SpringBoot的自动装配类必须在一定的条件下才能生效，SpringBoot用到了 <strong>@Conditional派生注解</strong> 。</li>
-<li><strong>作用：必须是@Conditional指定的条件成立，才给容器中添加组件，配置配里面的所有内容才生效。</strong></li>
+<li>SpringBoot 的自动装配类必须在一定的条件下才能生效，SpringBoot 用到了 <strong>@Conditional 派生注解</strong></li>
+<li><strong>作用：必须是@Conditional 指定的条件成立，才给容器中添加组件，配置配里面的所有内容才生效。</strong></li>
 </ul>
 <table>
 <thead>
 <tr>
-<th style="text-align:center">@Conditional拓展注解</th>
+<th style="text-align:center">@Conditional 拓展注解</th>
 <th style="text-align:center">作用（判断是否满足当前指定条件）</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align:center">@ConditionalOnJava</td>
-<td style="text-align:center">系统的Java版本是否符合要求</td>
+<td style="text-align:center">系统的 Java 版本是否符合要求</td>
 </tr>
 <tr>
 <td style="text-align:center">@ConditionalOnBean</td>
-<td style="text-align:center">容器中存在指定的Bean</td>
+<td style="text-align:center">容器中存在指定的 Bean</td>
 </tr>
 <tr>
 <td style="text-align:center">@ConditionalOnMissingBean</td>
-<td style="text-align:center">容器中不存在指定的Bean</td>
+<td style="text-align:center">容器中不存在指定的 Bean</td>
 </tr>
 <tr>
 <td style="text-align:center">@ConditionalOnExpression</td>
-<td style="text-align:center">满足SpEL表达式的指定</td>
+<td style="text-align:center">满足 SpEL 表达式的指定</td>
 </tr>
 <tr>
 <td style="text-align:center">@ConditionalOnClass</td>
@@ -974,7 +974,7 @@ btf.addGlobalFn('pjaxSend', () => {
 </tr>
 <tr>
 <td style="text-align:center">@ConditionalOnSingleCandidate</td>
-<td style="text-align:center">容器中只有一个指定的Bean，或者这个Bean是首选Bean</td>
+<td style="text-align:center">容器中只有一个指定的 Bean，或者这个 Bean 是首选 Bean</td>
 </tr>
 <tr>
 <td style="text-align:center">@ConditionalOnProperty</td>
@@ -986,22 +986,22 @@ btf.addGlobalFn('pjaxSend', () => {
 </tr>
 <tr>
 <td style="text-align:center">@ConditionalOnWebApplication</td>
-<td style="text-align:center">当前是Web环境</td>
+<td style="text-align:center">当前是 Web 环境</td>
 </tr>
 <tr>
 <td style="text-align:center">@ConditionalOnNotWebApplication</td>
-<td style="text-align:center">当前不是Web环境</td>
+<td style="text-align:center">当前不是 Web 环境</td>
 </tr>
 <tr>
 <td style="text-align:center">@ConditionalOnJndi</td>
-<td style="text-align:center">JNDI存在指定项</td>
+<td style="text-align:center">JNDI 存在指定项</td>
 </tr>
 </tbody>
 </table>
 <ul>
 <li>如此多的自动配置类必须在满足了指定条件下才会生效，那么我们怎么知道哪些自动配置生效了呢？</li>
 </ul>
-<p><strong>我们可以通过启用 debug=true属性；来让控制台打印自动配置报告，这样我们就可以很方便的知道哪些自动配置类生效；</strong></p>
+<p><strong>我们可以通过启用 debug=true 属性；来让控制台打印自动配置报告，这样我们就可以很方便的知道哪些自动配置类生效；</strong></p>
 <figure class="highlight properties line-numbers" data-language="PROPERTIES">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#7F848E;font-style:italic">#开启springboot的调试类</span></span>
 <span class="line"><span style="color:#C678DD">debug</span><span style="color:#ABB2BF">=</span><span style="color:#98C379">true</span></span></code></pre></td></tr></tbody></table>
@@ -1010,11 +1010,11 @@ btf.addGlobalFn('pjaxSend', () => {
 <p><strong>Positive matches:（自动配置类启用的：正匹配）</strong></p>
 <p><strong>Negative matches:（没有启动，没有匹配成功的自动配置类：负匹配）</strong></p>
 <p><strong>Unconditional classes: （没有条件的类）</strong></p>
-<h2 id="7-自定义Starter"><a class="header-anchor" href="#7-自定义Starter"></a>7. 自定义Starter</h2>
-<p>我们先明白Starter的一些基础知识：</p>
+<h2 id="1-7-自定义-Starter"><a class="header-anchor" href="#1-7-自定义-Starter"></a>1.7 自定义 Starter</h2>
+<p>我们先明白 Starter 的一些基础知识：</p>
 <ul>
 <li>
-<p>启动器模块是一个 空 jar 文件，仅提供辅助性依赖管理，这些依赖可能用于自动装配或者其他类库；</p>
+<p>启动器模块是一个 空 jar 文件，仅提供辅助性依赖管理，这些依赖可能用于自动装配或者其他类库</p>
 </li>
 <li>
 <p><strong>命名规约：</strong></p>
@@ -1035,16 +1035,16 @@ btf.addGlobalFn('pjaxSend', () => {
 <p>明白命名规约有助于帮助我们命名自定义启动器。</p>
 <h3 id="7-1-编写启动器"><a class="header-anchor" href="#7-1-编写启动器"></a>7.1 编写启动器</h3>
 <ol>
-<li>在IDEA中新建一个空项目spring-boot-starter-diy；</li>
-<li>完成第一步后，新建一个普通Maven模块：yang-spring-boot-starter：</li>
+<li>在 IDEA 中新建一个空项目 spring-boot-starter-diy；</li>
+<li>完成第一步后，新建一个普通 Maven 模块：yang-spring-boot-starter</li>
 </ol>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SpringBootImages/yang-spring-boot-starter.png" alt="yang-spring-boot-starter"></p>
 <ol start="3">
-<li>新建一个Springboot模块：yang-spring-boot-starter-autoconfigure</li>
+<li>新建一个 Springboot 模块：yang-spring-boot-starter-autoconfigure</li>
 </ol>
 <img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SpringBootImages/yang-spring-boot-starter-autoconfigure.png" alt="yang-spring-boot-starter-autoconfigure" style="zoom:50%;">
 <ol start="4">
-<li>新建好两个Module后，基本结构为：</li>
+<li>新建好两个 Module 后，基本结构为</li>
 </ol>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SpringBootImages/projectConstruction.png" alt="projectConstruction"></p>
 <ol start="5">
@@ -1063,8 +1063,8 @@ btf.addGlobalFn('pjaxSend', () => {
       </figure>
 <ol start="6">
 <li>
-<p>将 autoconfigure 项目下多余的文件都删掉，Pom中只留下一个 starter，这是所有的启动器基本配置：</p>
-<p>注意：<strong>记得将test目录也删除，否则会安装到maven仓库时会失败！！！</strong></p>
+<p>将 autoconfigure 项目下多余的文件都删掉，Pom 中只留下一个 starter，这是所有的启动器基本配置</p>
+<p>注意：<strong>记得将 test 目录也删除，否则会安装到 maven 仓库时会失败！</strong></p>
 </li>
 </ol>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SpringBootImages/delectFile.png" alt="delectFile"></p>
@@ -1092,7 +1092,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#ABB2BF">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <ol start="8">
-<li>编写HelloProperties 配置类：</li>
+<li>编写 HelloProperties 配置类：</li>
 </ol>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#7F848E;font-style:italic">/**</span></span>
@@ -1123,7 +1123,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#ABB2BF">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <ol start="9">
-<li>编写自动配置类并注入bean：</li>
+<li>编写自动配置类并注入 bean：</li>
 </ol>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#7F848E;font-style:italic">/**</span></span>
@@ -1146,7 +1146,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#ABB2BF">}</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <ol start="10">
-<li>在resources编写一个自己的 META-INF\spring.factories</li>
+<li>在 resources 编写一个自己的 META-INF\spring.factories</li>
 </ol>
 <figure class="highlight properties line-numbers" data-language="PROPERTIES">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#7F848E;font-style:italic"># Auto Configure</span></span>
@@ -1154,13 +1154,13 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#98C379">com.yang.HelloServiceAutoConfiguration</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <ol start="11">
-<li>编写完成后，安装到Maven仓库：</li>
+<li>编写完成后，安装到 Maven 仓库</li>
 </ol>
 <img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SpringBootImages/installToMaven.png" alt="installToMaven" style="zoom: 50%;">
 <p><mark>注意：</mark> 代码只在 <code>yang-spring-boot-starter-autoconfigure</code> 中编写，启动器 Starter 中没有任何代码。</p>
 <h3 id="7-2-测试Starter"><a class="header-anchor" href="#7-2-测试Starter"></a>7.2 测试Starter</h3>
 <ol>
-<li>新建一个SpringBoot项目；</li>
+<li>新建一个 SpringBoot 项目；</li>
 <li>导入我们自定义的启动器：</li>
 </ol>
 <figure class="highlight xml line-numbers" data-language="XML">
@@ -1171,7 +1171,7 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#ABB2BF">&lt;/</span><span style="color:#E06C75">dependency</span><span style="color:#ABB2BF">&gt;</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <ol start="3">
-<li>编写一个HelloController控制器，测试自定义的启动器：</li>
+<li>编写一个 HelloController 控制器，测试自定义的启动器：</li>
 </ol>
 <figure class="highlight java line-numbers" data-language="JAVA">
         <table style="background-color: #282c34"><tbody><tr><td class="gutter" style="background-color: #282c34"><pre style="background-color: #282c34"><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code" style="background-color: #282c34"><pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code><span class="line"><span style="color:#ABB2BF">@</span><span style="color:#E5C07B">RestController</span></span>
@@ -1196,11 +1196,11 @@ btf.addGlobalFn('pjaxSend', () => {
 <span class="line"><span style="color:#E06C75">    suffix</span><span style="color:#ABB2BF">: </span><span style="color:#98C379">"我是后缀 "</span></span></code></pre></td></tr></tbody></table>
       </figure>
 <ol start="5">
-<li>启动项目测试，查看结果：</li>
+<li>启动项目测试，查看结果</li>
 </ol>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SpringBootImages/testStarter.png" alt="testStarter"></p>
-<p><strong>自定义启动器编写成功！！</strong></p>
-</body></html></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/Principles-Of-SpringBoot/">https://mofan212.github.io/posts/Principles-Of-SpringBoot/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Spring-Boot/">Spring-Boot</a></div><div class="post-share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/23.jpg" data-sites="wechat,qq,weibo,facebook,x"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/Annotation-Of-Spring/" title="Spring 注解"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/13.jpg" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Spring 注解</div></div><div class="info-2"><div class="info-item-1">本节介绍了 Spring、SpringBoot 中一些注解的使用方式。</div></div></div></a><a class="pagination-related" href="/posts/Git/" title="Git理论与使用"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/3.jpg" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Git理论与使用</div></div><div class="info-2"><div class="info-item-1">Git 是啥？是饭桶、是蠢货！不想当饭桶？来看下这篇文章吧。</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/SpringBoot-Data/" title="SpringBoot与数据库"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/27.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-06-10</div><div class="info-item-2">SpringBoot与数据库</div></div><div class="info-2"><div class="info-item-1">本文基于 SpringBoot 2.2.4 ，介绍了 SpringBoot 如何整合数据库。</div></div></div></a><a class="pagination-related" href="/posts/Spring-Forty-Nine-Lectures-Container-And-Bean/" title="【Spring 四十九讲】容器与 Bean"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/122.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-01-08</div><div class="info-item-2">【Spring 四十九讲】容器与 Bean</div></div><div class="info-2"><div class="info-item-1">Spring 四十九讲中第一讲到第八讲，容器与 Bean。</div></div></div></a><a class="pagination-related" href="/posts/Spring-BeanDefinition/" title="BeanDefinition"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/153.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-11</div><div class="info-item-2">BeanDefinition</div></div><div class="info-2"><div class="info-item-1">Spring 中绕不开的一个类 —— BeanDefinition。</div></div></div></a><a class="pagination-related" href="/posts/Common-Extension-Points-In-Spring-Boot/" title="SpringBoot 常用拓展点"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/140.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-10-03</div><div class="info-item-2">SpringBoot 常用拓展点</div></div><div class="info-2"><div class="info-item-1">2023 年国庆巨献：从源码层面剖析 SpringBoot 常用拓展点</div></div></div></a><a class="pagination-related" href="/posts/SpringBoot-SecurityFramework/" title="SpringBoot与安全框架"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/28.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-06-12</div><div class="info-item-2">SpringBoot与安全框架</div></div><div class="info-2"><div class="info-item-1">本文基于 SpringBoot 2.2.4 ，介绍了 SpringBoot 与市面上常见安全框架的整合。</div></div></div></a><a class="pagination-related" href="/posts/SpringBoot-Shutdown-Hook/" title="SpringBoot Shutdown Hook"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/141.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-10-15</div><div class="info-item-2">SpringBoot Shutdown Hook</div></div><div class="info-2"><div class="info-item-1">介绍了 System.exit() 方法的源码、SpringBoot 优雅停机等内容。</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">默烦</div><div class="author-info-description">彩笔的打怪升级之路...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">175</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mofan212"><i class="fab fa-github"></i><span>follow me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解。<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a href="./mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载。😊</br><strong><font style="color:red">严禁未遵循规范的转载。</font></strong>😡</br><strong>死去的评论系统复活啦！欢迎到留言板畅所欲言！</strong>当然也可以使用更高效的<a target="_blank" href="https://space.bilibili.com/23658864/dynamic" style="color:#49B1F5;text-decoration:underline"> 哔哩哔哩私信 </a>或<a href="mailto:cy.mofan@foxmail.com" style="color:#49B1F5;text-decoration:underline" target="_blank">邮箱</a>。 😉</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#SpringBoot%E5%8E%9F%E7%90%86"><span class="toc-text">SpringBoot原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Hello-World"><span class="toc-text">1. Hello World</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E8%BF%90%E8%A1%8C%E5%8E%9F%E7%90%86%E5%88%9D%E6%8E%A2"><span class="toc-text">2. 运行原理初探</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%90%AF%E5%8A%A8%E5%99%A8"><span class="toc-text">2.1 启动器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E4%B8%BB%E5%90%AF%E5%8A%A8%E7%B1%BB"><span class="toc-text">2.2 主启动类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E6%B3%A8%E8%A7%A3%E5%88%86%E6%9E%90"><span class="toc-text">2.3 注解分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-1-SpringBootApplication"><span class="toc-text">2.3.1 @SpringBootApplication</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-2-ComponentScan"><span class="toc-text">2.3.2 @ComponentScan</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-3-SpringBootConfiguration"><span class="toc-text">2.3.3 @SpringBootConfiguration</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-4-EnableAutoConfiguration"><span class="toc-text">2.3.4 @EnableAutoConfiguration</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-SpringApplication-run"><span class="toc-text">2.4 SpringApplication.run</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-yaml%E9%85%8D%E7%BD%AE%E6%B3%A8%E5%85%A5"><span class="toc-text">3. yaml配置注入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95"><span class="toc-text">3.1 基本语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E5%85%B6%E4%BB%96%E8%AF%AD%E6%B3%95"><span class="toc-text">3.2 其他语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E6%B3%A8%E5%85%A5"><span class="toc-text">3.3 配置文件注入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-yaml%E6%80%BB%E7%BB%93"><span class="toc-text">3.4 yaml总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-JSR303%E6%95%B0%E6%8D%AE%E6%A0%A1%E9%AA%8C"><span class="toc-text">4. JSR303数据校验</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%A4%9A%E7%8E%AF%E5%A2%83%E5%88%87%E6%8D%A2"><span class="toc-text">5. 多环境切换</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E5%A4%9A%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">5.1 多配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-yaml%E5%A4%9A%E6%96%87%E6%A1%A3%E5%9D%97"><span class="toc-text">5.2 yaml多文档块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%8A%A0%E8%BD%BD%E9%A1%BA%E5%BA%8F"><span class="toc-text">5.3 配置文件加载顺序</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D%E5%8E%9F%E7%90%86"><span class="toc-text">6. 自动装配原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90"><span class="toc-text">6.1 原理分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-%E5%8E%9F%E7%90%86%E6%80%BB%E7%BB%93"><span class="toc-text">6.2 原理总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-Conditional"><span class="toc-text">6.3 @Conditional</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E8%87%AA%E5%AE%9A%E4%B9%89Starter"><span class="toc-text">7. 自定义Starter</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1-%E7%BC%96%E5%86%99%E5%90%AF%E5%8A%A8%E5%99%A8"><span class="toc-text">7.1 编写启动器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-%E6%B5%8B%E8%AF%95Starter"><span class="toc-text">7.2 测试Starter</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/The-Art-of-Loving/" title="爱的艺术"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/175.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="爱的艺术"/></a><div class="content"><a class="title" href="/posts/The-Art-of-Loving/" title="爱的艺术">爱的艺术</a><time datetime="2026-04-28T16:00:00.000Z" title="更新于 2026-04-29 00:00:00">2026-04-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Git/" title="Git理论与使用"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/3.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Git理论与使用"/></a><div class="content"><a class="title" href="/posts/Git/" title="Git理论与使用">Git理论与使用</a><time datetime="2026-01-26T16:00:00.000Z" title="更新于 2026-01-27 00:00:00">2026-01-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Something-About-Blog/" title="博客搭建与维护"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="博客搭建与维护"/></a><div class="content"><a class="title" href="/posts/Something-About-Blog/" title="博客搭建与维护">博客搭建与维护</a><time datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"/></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="更新于 2026-01-03 00:00:00">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"/></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/103.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 的类资源加载"/></a><div class="content"><a class="title" href="/posts/Class-Resource-Loading-In-Java/" title="Java 的类资源加载">Java 的类资源加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.5</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+<p><strong>自定义启动器编写成功！</strong></p>
+</body></html></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://mofan212.github.io">默烦</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://mofan212.github.io/posts/Principles-Of-SpringBoot/">https://mofan212.github.io/posts/Principles-Of-SpringBoot/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://mofan212.github.io" target="_blank">Mofan</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Spring-Boot/">Spring-Boot</a></div><div class="post-share"><div class="social-share" data-image="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/23.jpg" data-sites="wechat,qq,weibo,facebook,x"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/AliPay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li><li class="reward-item"><a href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" target="_blank"><img class="post-qr-code-img" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/WeChatPay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/Annotation-Of-Spring/" title="Spring 注解"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/13.jpg" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Spring 注解</div></div><div class="info-2"><div class="info-item-1">本节介绍了 Spring、SpringBoot 中一些注解的使用方式。</div></div></div></a><a class="pagination-related" href="/posts/How-to-use-Typora/" title="一款简洁、高自定义化的 Markdown 编辑器——Typora"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/2.jpg" onerror="onerror=null;src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">一款简洁、高自定义化的 Markdown 编辑器——Typora</div></div><div class="info-2"><div class="info-item-1">我宣布：Typora 是最好的 Markdown 编辑器，没有之一！</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/Common-Extension-Points-In-Spring-Boot/" title="SpringBoot 常用拓展点"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/140.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-10-03</div><div class="info-item-2">SpringBoot 常用拓展点</div></div><div class="info-2"><div class="info-item-1">2023 年国庆巨献：从源码层面剖析 SpringBoot 常用拓展点</div></div></div></a><a class="pagination-related" href="/posts/From-Callback-To-LambdaSafe/" title="从回调到 LambdaSafe"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/131.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-12</div><div class="info-item-2">从回调到 LambdaSafe</div></div><div class="info-2"><div class="info-item-1">什么是回调？Spring 提供的 LambdaSafe 工具类如何使用？</div></div></div></a><a class="pagination-related" href="/posts/SpringBoot-Advanced-Use/" title="SpringBoot进阶应用"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/29.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-06-13</div><div class="info-item-2">SpringBoot进阶应用</div></div><div class="info-2"><div class="info-item-1">本文介绍了如何使用 Swagger，如何实现异步任务、邮件发送、定时任务，如何整合Dubbo和ZooKeeper。</div></div></div></a><a class="pagination-related" href="/posts/SpringBoot-Shutdown-Hook/" title="SpringBoot Shutdown Hook"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/141.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-10-15</div><div class="info-item-2">SpringBoot Shutdown Hook</div></div><div class="info-2"><div class="info-item-1">介绍了 System.exit() 方法的源码、SpringBoot 优雅停机等内容。</div></div></div></a><a class="pagination-related" href="/posts/Configuration-Annotation/" title="@Configuration 注解的那些事"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/25.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-23</div><div class="info-item-2">@Configuration 注解的那些事</div></div><div class="info-2"><div class="info-item-1">从源码层面介绍 @Configuration 注解的 Full 模式与 Lite 模式。</div></div></div></a><a class="pagination-related" href="/posts/Get-ApplicationContext/" title="获取 ApplicationContext"><img class="cover" src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/139.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-20</div><div class="info-item-2">获取 ApplicationContext</div></div><div class="info-2"><div class="info-item-1">获取 ApplicationContext 有哪些方式、又有哪些区别呢？</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">默烦</div><div class="author-info-description">彩笔的打怪升级之路...</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">175</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mofan212"><i class="fab fa-github"></i><span>follow me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:cy.mofan@foxmail.com" target="_blank" title="邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fa fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站所有博文均是博主的学习笔记与个人理解。<strong><font style="color:red">除特别注明外，</font>如需转载，请在文章头部醒目处附带原文链接并<a href="./mine/" style="color:#49B1F5;text-decoration:underline">告知我</a></strong>你将转载。😊</br><strong><font style="color:red">严禁未遵循规范的转载。</font></strong>😡</br><strong>死去的评论系统复活啦！欢迎到留言板畅所欲言！</strong>当然也可以使用更高效的<a target="_blank" href="https://space.bilibili.com/23658864/dynamic" style="color:#49B1F5;text-decoration:underline"> 哔哩哔哩私信 </a>或<a href="mailto:cy.mofan@foxmail.com" style="color:#49B1F5;text-decoration:underline" target="_blank">邮箱</a>。 😉</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-SpringBoot-%E5%8E%9F%E7%90%86"><span class="toc-text">1. SpringBoot 原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-Hello-World"><span class="toc-text">1.1 Hello World</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E8%BF%90%E8%A1%8C%E5%8E%9F%E7%90%86%E5%88%9D%E6%8E%A2"><span class="toc-text">1.2 运行原理初探</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%90%AF%E5%8A%A8%E5%99%A8"><span class="toc-text">2.1 启动器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E4%B8%BB%E5%90%AF%E5%8A%A8%E7%B1%BB"><span class="toc-text">2.2 主启动类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E6%B3%A8%E8%A7%A3%E5%88%86%E6%9E%90"><span class="toc-text">2.3 注解分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-1-SpringBootApplication"><span class="toc-text">2.3.1 @SpringBootApplication</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-2-ComponentScan"><span class="toc-text">2.3.2 @ComponentScan</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-3-SpringBootConfiguration"><span class="toc-text">2.3.3 @SpringBootConfiguration</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-4-EnableAutoConfiguration"><span class="toc-text">2.3.4 @EnableAutoConfiguration</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-SpringApplication-run"><span class="toc-text">2.4 SpringApplication.run</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-yaml-%E9%85%8D%E7%BD%AE%E6%B3%A8%E5%85%A5"><span class="toc-text">1.3 yaml 配置注入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95"><span class="toc-text">3.1 基本语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E5%85%B6%E4%BB%96%E8%AF%AD%E6%B3%95"><span class="toc-text">3.2 其他语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E6%B3%A8%E5%85%A5"><span class="toc-text">3.3 配置文件注入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-yaml%E6%80%BB%E7%BB%93"><span class="toc-text">3.4 yaml总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-JSR303-%E6%95%B0%E6%8D%AE%E6%A0%A1%E9%AA%8C"><span class="toc-text">1.4 JSR303 数据校验</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-5-%E5%A4%9A%E7%8E%AF%E5%A2%83%E5%88%87%E6%8D%A2"><span class="toc-text">1.5 多环境切换</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E5%A4%9A%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">5.1 多配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-yaml%E5%A4%9A%E6%96%87%E6%A1%A3%E5%9D%97"><span class="toc-text">5.2 yaml多文档块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%8A%A0%E8%BD%BD%E9%A1%BA%E5%BA%8F"><span class="toc-text">5.3 配置文件加载顺序</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-6-%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D%E5%8E%9F%E7%90%86"><span class="toc-text">1.6 自动装配原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90"><span class="toc-text">6.1 原理分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-%E5%8E%9F%E7%90%86%E6%80%BB%E7%BB%93"><span class="toc-text">6.2 原理总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-Conditional"><span class="toc-text">6.3 @Conditional</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-7-%E8%87%AA%E5%AE%9A%E4%B9%89-Starter"><span class="toc-text">1.7 自定义 Starter</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1-%E7%BC%96%E5%86%99%E5%90%AF%E5%8A%A8%E5%99%A8"><span class="toc-text">7.1 编写启动器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-%E6%B5%8B%E8%AF%95Starter"><span class="toc-text">7.2 测试Starter</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/The-Art-of-Loving/" title="爱的艺术"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/175.webp" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="爱的艺术"/></a><div class="content"><a class="title" href="/posts/The-Art-of-Loving/" title="爱的艺术">爱的艺术</a><time datetime="2026-04-28T16:00:00.000Z" title="更新于 2026-04-29 00:00:00">2026-04-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Git/" title="Git理论与使用"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/3.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Git理论与使用"/></a><div class="content"><a class="title" href="/posts/Git/" title="Git理论与使用">Git理论与使用</a><time datetime="2026-01-26T16:00:00.000Z" title="更新于 2026-01-27 00:00:00">2026-01-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Something-About-Blog/" title="博客搭建与维护"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/42.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="博客搭建与维护"/></a><div class="content"><a class="title" href="/posts/Something-About-Blog/" title="博客搭建与维护">博客搭建与维护</a><time datetime="2026-01-24T16:00:00.000Z" title="更新于 2026-01-25 00:00:00">2026-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Memory-Model/" title="Java 内存模型"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/174.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="Java 内存模型"/></a><div class="content"><a class="title" href="/posts/Java-Memory-Model/" title="Java 内存模型">Java 内存模型</a><time datetime="2026-01-02T16:00:00.000Z" title="更新于 2026-01-03 00:00:00">2026-01-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/173.png" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="字节码与类加载"/></a><div class="content"><a class="title" href="/posts/Java-Bytecode-And-Class-Loading/" title="字节码与类加载">字节码与类加载</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/20.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'" alt="注解、类的加载、反射"/></a><div class="content"><a class="title" href="/posts/Annotation-And-Reflection/" title="注解、类的加载、反射">注解、类的加载、反射</a><time datetime="2026-01-01T16:00:00.000Z" title="更新于 2026-01-02 00:00:00">2026-01-02</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.5</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
   const parseViewBox = viewBox => {
     if (!viewBox) return null
     const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
