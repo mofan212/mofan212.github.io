@@ -1,600 +1,93 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>标签: 依赖注入 | Mofan</title><meta name="author" content="默烦,cy.mofan@foxmail.com"><meta name="copyright" content="默烦"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="彩笔的打怪升级之路...">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Mofan">
-<meta property="og:url" content="https://mofan212.github.io/tags/Dependency-Injection/">
-<meta property="og:site_name" content="Mofan">
-<meta property="og:description" content="彩笔的打怪升级之路...">
-<meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg">
-<meta property="article:author" content="默烦">
-<meta property="article:tag" content="默烦,mofan,Mofan,mofan212,Mofan212">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg"><script type="application/ld+json"></script><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/tags/Dependency-Injection/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.7.0"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
-    (() => {
-      
-    const saveToLocal = {
-      set: (key, value, ttl) => {
-        const data = { value }
-
-        if (ttl != null) {
-          data.expiry = Date.now() + ttl * 86400000
-        }
-
-        localStorage.setItem(key, JSON.stringify(data))
-      },
-      get: key => {
-        const itemStr = localStorage.getItem(key)
-        if (!itemStr) return
-
-        try {
-          const data = JSON.parse(itemStr)
-
-          if (data.expiry && Date.now() > data.expiry) {
-            localStorage.removeItem(key)
-            return
-          }
-
-          return data.value
-        } catch {
-          localStorage.removeItem(key)
-        }
-      }
-    }
-
-    const scriptCache = new Map()
-    const cssCache = new Map()
-    window.btf = {
-      saveToLocal,
-      getScript: (url, attr = {}) => {
-        if (scriptCache.has(url)) {
-          return scriptCache.get(url)
-        }
-
-        const promise = new Promise((resolve, reject) => {
-          const script = document.createElement('script')
-
-          script.src = url
-          script.async = true
-
-          for (const key in attr) {
-            script.setAttribute(key, attr[key])
-          }
-
-          script.onload = resolve
-          script.onerror = reject
-
-          document.head.appendChild(script)
-        })
-
-        scriptCache.set(url, promise)
-
-        return promise
-      },
-      getCSS: (url, id) => {
-        if (cssCache.has(url)) {
-          return cssCache.get(url)
-        }
-
-        const promise = new Promise((resolve, reject) => {
-          const link = document.createElement('link')
-
-          link.rel = 'stylesheet'
-          link.href = url
-
-          if (id) {
-            link.id = id
-          }
-
-          link.onload = resolve
-          link.onerror = reject
-
-          document.head.appendChild(link)
-        })
-
-        cssCache.set(url, promise)
-
-        return promise
-      },
-      addGlobalFn: (key, fn, name = false, parent = window) => {
-        if (!false && key.startsWith('pjax')) return
-        const globalFn = parent.globalFn || {}
-        globalFn[key] = globalFn[key] || {}
-        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
-        parent.globalFn = globalFn
-      }
-    }
-  
-      
-      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
-      const activateDarkMode = () => {
-        document.documentElement.dataset.theme = 'dark'
-        if (metaThemeColor !== null) {
-          metaThemeColor.setAttribute('content', '#0d0d0d')
-        }
-      }
-      const activateLightMode = () => {
-        document.documentElement.dataset.theme = 'light'
-        if (metaThemeColor !== null) {
-          metaThemeColor.setAttribute('content', '#ffffff')
-        }
-      }
-
-      btf.activateDarkMode = activateDarkMode
-      btf.activateLightMode = activateLightMode
-
-      const theme = saveToLocal.get('theme')
-    
-          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
-          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
-
-          if (theme === undefined) {
-            if (mediaQueryLight.matches) activateLightMode()
-            else if (mediaQueryDark.matches) activateDarkMode()
-            else {
-              const hour = new Date().getHours()
-              const start = 6
-              const end = 18
-              const isNight =
-                start < end
-                    ? hour < start || hour >= end
-                    : hour >= start || hour < end
-              isNight ? activateDarkMode() : activateLightMode()
-            }
-            mediaQueryDark.addEventListener('change', e => {
-              if (saveToLocal.get('theme') === undefined) {
-                e.matches ? activateDarkMode() : activateLightMode()
-              }
-            })
-          } else {
-            theme === 'light' ? activateLightMode() : activateDarkMode()
-          }
-        
-      
-      const asideStatus = saveToLocal.get('aside-status')
-      if (asideStatus !== undefined) {
-        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
-      }
-    
-      
-    const detectApple = () => {
-      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
-        document.documentElement.classList.add('apple')
-      }
-    }
-    detectApple()
-  
-    })()
-  </script><script>const GLOBAL_CONFIG = {
-  root: '/',
-  algolia: undefined,
-  localSearch: undefined,
-  translate: undefined,
-  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":true,"highlightMacStyle":true},
-  copy: {
-    success: '复制成功',
-    error: '复制失败',
-    noSupport: '浏览器不支持'
-  },
-  relativeDate: {
-    homepage: false,
-    post: false
-  },
-  runtime: '天',
-  dateSuffix: {
-    just: '刚刚',
-    min: '分钟前',
-    hour: '小时前',
-    day: '天前',
-    month: '个月前'
-  },
-  copyright: {"limitCount":150,"languages":{"author":"作者: 默烦","link":"链接: ","source":"来源: Mofan","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
-  lightbox: 'fancybox',
-  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
-  infinitegrid: {
-    js: 'https://testingcf.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
-    buttonText: '加载更多'
-  },
-  isPhotoFigcaption: false,
-  islazyloadPlugin: true,
-  isAnchor: false,
-  percent: {
-    toc: true,
-    rightside: true,
-  },
-  autoDarkmode: true
-}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
-  title: '标签: 依赖注入',
-  isHighlightShrink: false,
-  isToc: false,
-  pageType: 'tag'
-}</script><meta name="referrer" content="no-referrer-when-downgrade" /><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/css/myStyle.min.css"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css" /><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css" /><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Mofan" type="application/atom+xml">
-</head><body><script>window.paceOptions = {
-  restartOnPushState: false
-}
-
-btf.addGlobalFn('pjaxSend', () => {
-  Pace.restart()
-}, 'pace_restart')
-
-</script><link rel="stylesheet" href="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources/css/minimal.min.css"/><script src="https://testingcf.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/avatar.jpg" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">179</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">69</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-home-page" id="page-header" style="background-image: url(https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/siteCover.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Mofan</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-book-reader"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/schedule/"><i class="fa-fw fas fa-list-alt"></i><span> 计划</span></a></div><div class="menus_item"><a class="site-page" href="/update/"><i class="fa-fw fas fa-tools"></i><span> 维护</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-heart"></i><span> 关于</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-sitemap"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/mine/"><i class="fa-fw fa fa-id-card"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/reward/"><i class="fa-fw fa-solid fa-coins"></i><span> 赞助</span></a></li><li><a class="site-page child" href="/milestones/"><i class="fa-fw fa-solid fa-monument"></i><span> 里程碑</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://www.travellings.cn/go.html"><i class="fa-fw fas fa-subway"></i><span> 开往</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="page-site-info"><h1 id="site-title">依赖注入</h1></div></header><main class="layout hide-aside" id="content-inner"><div id="tag"><div class="article-sort-title">标签 - 依赖注入</div><div class="article-sort"><div class="article-sort-item year">2023</div><div class="article-sort-item"><a class="article-sort-item-img" href="/posts/Get-ApplicationContext/" title="获取 ApplicationContext"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/139.png" alt="获取 ApplicationContext" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'"></a><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2023-09-19T16:00:00.000Z" title="发表于 2023-09-20 00:00:00">2023-09-20</time></div><a class="article-sort-item-title" href="/posts/Get-ApplicationContext/" title="获取 ApplicationContext">获取 ApplicationContext</a></div></div><div class="article-sort-item year">2020</div><div class="article-sort-item"><a class="article-sort-item-img" href="/posts/SpringIoC/" title="Spring IoC 巩固理解"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/loading.gif" data-lazy-src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ArticleCover/14.jpg" alt="Spring IoC 巩固理解" onerror="this.onerror=null;this.src='https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/404.jpg'"></a><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2020-05-28T16:00:00.000Z" title="发表于 2020-05-29 00:00:00">2020-05-29</time></div><a class="article-sort-item-title" href="/posts/SpringIoC/" title="Spring IoC 巩固理解">Spring IoC 巩固理解</a></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By 默烦</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.7.0</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.7.0"></script><script src="/js/main.js?v=5.7.0"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.iife.min.js"></script><script src="https://testingcf.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
-  const parseViewBox = viewBox => {
-    if (!viewBox) return null
-    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
-    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
-    return parts
-  }
-
-  const getSvgViewBox = svg => {
-    const attr = parseViewBox(svg.getAttribute('viewBox'))
-    if (attr) return attr
-
-    // Fallback: use bbox to build a viewBox
-    try {
-      const bbox = svg.getBBox()
-      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
-    } catch (e) {
-      // getBBox may fail on some edge cases; ignore
-    }
-
-    const w = Number(svg.getAttribute('width')) || 0
-    const h = Number(svg.getAttribute('height')) || 0
-    if (w > 0 && h > 0) return [0, 0, w, h]
-    return [0, 0, 100, 100]
-  }
-
-  const setSvgViewBox = (svg, vb) => {
-    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
-  }
-
-  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
-
-  const openSvgInNewTab = ({ source, initViewBox }) => {
-    const getClonedSvg = () => {
-      if (typeof source === 'string') {
-        const template = document.createElement('template')
-        template.innerHTML = source.trim()
-        const svg = template.content.querySelector('svg')
-        return svg ? svg.cloneNode(true) : null
-      }
-      if (source && typeof source.cloneNode === 'function') {
-        return source.cloneNode(true)
-      }
-      return null
-    }
-
-    const clone = getClonedSvg()
-    if (!clone) return
-    if (initViewBox && initViewBox.length === 4) {
-      clone.setAttribute('viewBox', initViewBox.join(' '))
-    }
-    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
-    if (!clone.getAttribute('xmlns:xlink') && clone.innerHTML.includes('xlink:')) {
-      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
-    }
-    // inject background to match current theme
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
-    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
-    if (!clone.style.background) clone.style.background = bg
-
-    const serializer = new XMLSerializer()
-    const svgSource = serializer.serializeToString(clone)
-    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
-      <style>
-        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
-        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
-      </style>
-      </head><body>${svgSource}</body></html>`
-    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
-    const url = URL.createObjectURL(blob)
-    window.open(url, '_blank', 'noopener')
-
-    setTimeout(() => URL.revokeObjectURL(url), 5000)
-  }
-
-  const attachMermaidViewerButton = wrap => {
-    let btn = wrap.querySelector('.mermaid-open-btn')
-    if (!btn) {
-      btn = document.createElement('button')
-      btn.type = 'button'
-      btn.className = 'mermaid-open-btn'
-      wrap.appendChild(btn)
-    }
-
-    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
-
-    if (!btn.__mermaidViewerBound) {
-      btn.addEventListener('click', e => {
-        e.preventDefault()
-        e.stopPropagation()
-        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
-        if (!svg) return
-        const initViewBox = wrap.__mermaidInitViewBox
-        openSvgInNewTab({ source: svg, initViewBox })
-      })
-      btn.__mermaidViewerBound = true
-    }
-  }
-
-  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
-  const zoomAtPoint = (vb, factor, px, py) => {
-    const w = vb[2] * factor
-    const h = vb[3] * factor
-    const nx = px - (px - vb[0]) * factor
-    const ny = py - (py - vb[1]) * factor
-    return [nx, ny, w, h]
-  }
-
-  const initMermaidGestures = wrap => {
-    // Clean up previous event listeners and pending frames
-    if (wrap.__mermaidAbortController) {
-      wrap.__mermaidAbortController.abort()
-      if (wrap.__mermaidRafId) cancelAnimationFrame(wrap.__mermaidRafId)
-    }
-    const ac = new AbortController()
-    wrap.__mermaidAbortController = ac
-    const svg = wrap.querySelector('svg')
-    if (!svg) return
-
-    // Ensure viewBox exists so gestures always work
-    const initVb = getSvgViewBox(svg)
-    wrap.__mermaidInitViewBox = initVb
-    wrap.__mermaidCurViewBox = initVb.slice()
-    setSvgViewBox(svg, initVb)
-    // Disable default gestures to prevent scroll chaining and pinch-zoom penetration in Chrome
-    svg.style.touchAction = 'none'
-
-    // Cache BoundingClientRect, throttled on scroll to reduce reflow
-    let cachedRect = svg.getBoundingClientRect()
-    let rectDirty = false
-    const markRectDirty = () => { rectDirty = true }
-    window.addEventListener('resize', markRectDirty, { signal: ac.signal })
-    window.addEventListener('scroll', markRectDirty, { signal: ac.signal, capture: true })
-    const getRect = () => {
-      if (rectDirty) {
-        cachedRect = svg.getBoundingClientRect()
-        rectDirty = false
-      }
-      return cachedRect
-    }
-
-    // Precompute clamp bounds from initial viewBox
-    const minW = initVb[2] * 0.1
-    const maxW = initVb[2] * 10
-    const minH = initVb[3] * 0.1
-    const maxH = initVb[3] * 10
-    const clampVb = vb => {
-      const out = vb.slice()
-      out[2] = clamp(out[2], minW, maxW)
-      out[3] = clamp(out[3], minH, maxH)
-      return out
-    }
-
-    // Throttle DOM updates using requestAnimationFrame
-    let pendingVb = null
-    let rafId = null
-    const applyVb = () => {
-      if (pendingVb) {
-        wrap.__mermaidCurViewBox = pendingVb
-        setSvgViewBox(svg, pendingVb)
-        pendingVb = null
-      }
-      rafId = null
-      wrap.__mermaidRafId = null
-    }
-    const setCurVb = vb => {
-      pendingVb = clampVb(vb)
-      if (!rafId) {
-        rafId = requestAnimationFrame(applyVb)
-        wrap.__mermaidRafId = rafId
-      }
-    }
-
-    const state = {
-      pointers: new Map(),
-      startVb: null,
-      startDist: 0,
-      lastPointerX: 0,
-      lastPointerY: 0
-    }
-
-    const onPointerDown = e => {
-      if (e.pointerType === 'mouse' && e.button !== 0) return
-      svg.setPointerCapture(e.pointerId)
-      const curVb = wrap.__mermaidCurViewBox
-      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
-      if (state.pointers.size === 1) {
-        state.startVb = curVb.slice()
-        state.lastPointerX = e.clientX
-        state.lastPointerY = e.clientY
-      } else if (state.pointers.size === 2) {
-        const pts = [...state.pointers.values()]
-        const dx = pts[0].x - pts[1].x
-        const dy = pts[0].y - pts[1].y
-        state.startDist = Math.hypot(dx, dy)
-        state.startVb = curVb.slice()
-      }
-    }
-
-    const onPointerMove = e => {
-      if (!state.pointers.has(e.pointerId)) return
-      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
-      const curVb = wrap.__mermaidCurViewBox
-      const rect = getRect()
-      if (state.pointers.size === 1 && state.startVb) {
-        const p = state.pointers.values().next().value
-        const dxClient = p.x - state.lastPointerX
-        const dyClient = p.y - state.lastPointerY
-        state.lastPointerX = p.x
-        state.lastPointerY = p.y
-        const dx = dxClient * (curVb[2] / rect.width)
-        const dy = dyClient * (curVb[3] / rect.height)
-        setCurVb([curVb[0] - dx, curVb[1] - dy, curVb[2], curVb[3]])
-        return
-      }
-      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
-        const pts = [...state.pointers.values()]
-        const dx = pts[0].x - pts[1].x
-        const dy = pts[0].y - pts[1].y
-        const dist = Math.hypot(dx, dy)
-        if (!dist) return
-        const factor = state.startDist / dist
-        const cx = (pts[0].x + pts[1].x) / 2
-        const cy = (pts[0].y + pts[1].y) / 2
-        const px = curVb[0] + (cx - rect.left) * (curVb[2] / rect.width)
-        const py = curVb[1] + (cy - rect.top) * (curVb[3] / rect.height)
-        setCurVb(zoomAtPoint(state.startVb, factor, px, py))
-      }
-    }
-
-    const onPointerUpOrCancel = e => {
-      // Release PointerCapture to avoid event capture anomalies
-      if (svg.hasPointerCapture && svg.hasPointerCapture(e.pointerId)) {
-        svg.releasePointerCapture(e.pointerId)
-      }
-      state.pointers.delete(e.pointerId)
-      if (state.pointers.size === 0) {
-        state.startVb = null
-        state.startDist = 0
-      } else if (state.pointers.size === 1) {
-        const p = state.pointers.values().next().value
-        state.lastPointerX = p.x
-        state.lastPointerY = p.y
-      }
-    }
-
-    const onWheel = e => {
-      // Prevent event bubbling from triggering external scroll
-      e.preventDefault()
-      e.stopPropagation()
-      // Normalize deltaY across deltaMode (Chrome uses pixels, Safari uses lines)
-      let delta = e.deltaY
-      if (e.deltaMode === 1) delta *= 16
-      else if (e.deltaMode === 2) delta *= 400
-
-      // Continuous zoom factor: smoother than fixed 1.1/0.9 steps
-      const zoomFactor = Math.pow(1.001, delta)
-
-      const curVb = wrap.__mermaidCurViewBox
-      const rect = getRect()
-      const px = curVb[0] + (e.clientX - rect.left) * (curVb[2] / rect.width)
-      const py = curVb[1] + (e.clientY - rect.top) * (curVb[3] / rect.height)
-      setCurVb(zoomAtPoint(curVb, zoomFactor, px, py))
-    }
-
-    const onDblClick = () => {
-      const init = wrap.__mermaidInitViewBox
-      if (init) setCurVb(init)
-    }
-
-    svg.addEventListener('pointerdown', onPointerDown, { signal: ac.signal })
-    svg.addEventListener('pointermove', onPointerMove, { signal: ac.signal })
-    svg.addEventListener('pointerup', onPointerUpOrCancel, { signal: ac.signal })
-    svg.addEventListener('pointercancel', onPointerUpOrCancel, { signal: ac.signal })
-    svg.addEventListener('wheel', onWheel, { passive: false, signal: ac.signal })
-    svg.addEventListener('dblclick', onDblClick, { signal: ac.signal })
-  }
-
-  const runMermaid = ele => {
-    window.loadMermaid = true
-    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
-    ele.forEach((item, index) => {
-      const mermaidSrc = item.firstElementChild
-      // Clean up event listeners before removing old SVG
-      if (item.__mermaidAbortController) {
-        item.__mermaidAbortController.abort()
-      }
-      const oldSvg = item.querySelector('svg')
-      if (oldSvg) oldSvg.remove()
-      let config = {}
-      try {
-        config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
-      } catch (e) {
-        console.warn('[mermaid] failed to parse dataset.config:', e)
-      }
-      if (!config.theme) {
-        config.theme = theme
-      }
-      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
-      const mermaidID = `mermaid-${index}`
-      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
-
-      const renderMermaid = svg => {
-        mermaidSrc.insertAdjacentHTML('afterend', svg)
-        if (true) initMermaidGestures(item)
-        item.__mermaidOriginalSvg = svg
-        if (true) attachMermaidViewerButton(item)
-      }
-
-      const handleError = err => {
-        console.error(`[mermaid] render failed for block #${index}:`, err)
-        const errorEl = document.createElement('div')
-        errorEl.className = 'mermaid-error'
-        errorEl.textContent = `Mermaid render error: ${err.message || err}`
-        mermaidSrc.insertAdjacentElement('afterend', errorEl)
-      }
-
-      try {
-        const renderFn = mermaid.render(mermaidID, mermaidDefinition)
-        // mermaid v9 and v10 compatibility
-        if (typeof renderFn === 'string') {
-          renderMermaid(renderFn)
-        } else {
-          renderFn.then(({ svg }) => renderMermaid(svg)).catch(handleError)
-        }
-      } catch (err) {
-        handleError(err)
-      }
-    })
-  }
-
-  const codeToMermaid = $article => {
-    const codeMermaidEle = $article.querySelectorAll('pre > code.mermaid')
-    if (codeMermaidEle.length === 0) return
-
-    codeMermaidEle.forEach(ele => {
-      const preEle = document.createElement('pre')
-      preEle.className = 'mermaid-src'
-      preEle.hidden = true
-      preEle.textContent = ele.textContent
-      const newEle = document.createElement('div')
-      newEle.className = 'mermaid-wrap'
-      newEle.appendChild(preEle)
-      ele.parentNode.replaceWith(newEle)
-    })
-  }
-
-  const loadMermaid = () => {
-    const $article = document.getElementById('article-container')
-    if (!$article) return
-
-    if (true) codeToMermaid($article)
-    const $mermaid = $article.querySelectorAll('.mermaid-wrap')
-    if ($mermaid.length === 0) return
-
-    const runMermaidFn = () => runMermaid($mermaid)
-    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
-    window.loadMermaid ? runMermaidFn() : btf.getScript('https://gcore.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaidFn)
-  }
-
-  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
-  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
-})()</script></div><script src="https://testingcf.jsdelivr.net/gh/mofan212/blog-static-resources@master/js/mine.min.js"></script><script src="/js/tip_portal.js"></script><script defer="defer" id="ribbon" src="https://testingcf.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div class="docsearch-wrap"><div id="docsearch" style="display:none"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@docsearch/css@3.9.0/dist/style.css"/><script src="https://testingcf.jsdelivr.net/npm/@docsearch/js@3.9.0/dist/umd/index.js"></script><script>(() => {
-  docsearch(Object.assign({
-    appId: 'BAFEL7A6K1',
-    apiKey: '89fcb5961984c5c054bf04149f345f38',
-    indexName: 'mofan212io',
-    container: '#docsearch',
-    placeholder: '输入关键字进行搜索',
-  }, null))
-
-  const handleClick = () => {
-    document.querySelector('.DocSearch-Button').click()
-  }
-
-  const searchClickFn = () => {
-    btf.addEventListenerPjax(document.querySelector('#search-button > .search'), 'click', handleClick)
-  }
-
-  searchClickFn()
-  window.addEventListener('pjax:complete', searchClickFn)
-})()</script></div></div></body></html>
+<!DOCTYPE html><html dir="ltr" lang="zh-CN" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/tags/Dependency-Injection/"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css"><meta name="generator" content="Astro v6.4.2"><!-- Primary meta --><title>标签: 依赖注入 | Mofan</title><meta name="title" content="标签: 依赖注入 | Mofan"><meta name="description" content="彩笔的打怪升级之路..."><meta name="author" content="默烦"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Mofan"><meta property="og:title" content="标签: 依赖注入 | Mofan"><meta property="og:description" content="彩笔的打怪升级之路..."><meta property="og:url" content="https://mofan212.github.io/tags/Dependency-Injection/"><meta property="og:image" content="https://mofan212.github.io/default-og.jpg"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://mofan212.github.io/tags/Dependency-Injection/"><meta property="twitter:title" content="标签: 依赖注入 | Mofan"><meta property="twitter:description" content="彩笔的打怪升级之路..."><meta property="twitter:image" content="https://mofan212.github.io/default-og.jpg"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Mofan" href="https://mofan212.github.io/rss.xml/"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) --><!--
+      Inline FOUC-prevention script: sets data-theme on <html> before
+      the browser paints. Runs synchronously, no defer/async.
+    --><script>
+      (function () {
+        const stored = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+        const theme = stored ?? (prefersDark ? "dark" : "light");
+        const root = document.firstElementChild;
+        root?.setAttribute("data-theme", theme);
+        root?.classList.toggle("dark", theme === "dark");
+        // Expose value so theme.ts can skip re-detection.
+        window.__theme = { value: theme };
+      })();
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.BK68bF3i.css">
+<style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
+</style><style>[data-astro-transition-scope="astro-2jhrfvd3-1"] { view-transition-name: u0083b7u0053d6-application-context; }@layer astro { ::view-transition-old(u0083b7u0053d6-application-context) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(u0083b7u0053d6-application-context) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(u0083b7u0053d6-application-context) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(u0083b7u0053d6-application-context) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-2jhrfvd3-1"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-2jhrfvd3-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-2jhrfvd3-1"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-2jhrfvd3-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-2jhrfvd3-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-2jhrfvd3-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-2jhrfvd3-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-2jhrfvd3-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-2jhrfvd3-2"] { view-transition-name: spring-io-c-u005de9u0056fau007406u0089e3; }@layer astro { ::view-transition-old(spring-io-c-u005de9u0056fau007406u0089e3) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(spring-io-c-u005de9u0056fau007406u0089e3) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(spring-io-c-u005de9u0056fau007406u0089e3) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(spring-io-c-u005de9u0056fau007406u0089e3) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-2jhrfvd3-2"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-2jhrfvd3-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-2jhrfvd3-2"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-2jhrfvd3-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-2jhrfvd3-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-2jhrfvd3-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-2jhrfvd3-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-2jhrfvd3-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style></head> <body class="bg-background font-app text-foreground selection:bg-accent/75 selection:text-accent-foreground flex min-h-svh flex-col">  <a id="skip-to-content" href="#main-content" class="bg-background text-accent absolute inset-s-16 -top-full z-50 px-3 py-2 backdrop-blur-lg transition-all focus:top-4"> 跳到正文 </a> <header class="app-layout flex flex-col items-center justify-between sm:flex-row"> <div class="border-border bg-background relative flex w-full items-baseline justify-between border-b py-4 sm:items-center sm:py-6"> <a href="/" class="absolute py-1 text-xl leading-8 font-semibold whitespace-nowrap sm:static sm:my-auto sm:text-2xl sm:leading-none"> Mofan </a> <nav id="nav-menu" class="flex w-full flex-col items-center sm:ms-2 sm:flex-row sm:justify-end sm:space-x-4 sm:py-0"> <button id="menu-btn" class="focus-outline self-end p-2 sm:hidden" aria-label="打开菜单" aria-expanded="false" aria-controls="menu-items" data-label-open="打开菜单" data-label-close="关闭菜单"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="hidden" viewBox="0 0 24 24" id="close-icon"><path stroke="none" d="M0 0h24v24H0z" /><path d="M18 6 6 18M6 6l12 12" /></svg> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="icon icon-tabler icons-tabler-outline icon-tabler-menu-deep" viewBox="0 0 24 24" id="menu-icon"><path stroke="none" d="M0 0h24v24H0z" /><path d="M4 6h16M7 12h13M10 18h10" /></svg> </button> <ul id="menu-items" class="[&>li>a]:hover:text-accent mt-4 hidden w-44 grid-cols-3 place-content-center gap-2 sm:mt-0 sm:flex sm:w-auto sm:gap-x-3 sm:gap-y-0 sm:[&>li]:h-8 [&>li>a]:block [&>li>a]:px-4 [&>li>a]:py-3 [&>li>a]:text-center [&>li>a]:font-medium sm:[&>li>a]:px-2 sm:[&>li>a]:py-1"> <li class="col-span-3"> <a href="/archives/"> 归档 </a> </li> <li class="col-span-3"> <a href="/categories/"> 分类 </a> </li> <li class="col-span-3"> <a href="/tags/" class="active-nav"> 标签 </a> </li> <li class="col-span-3"> <a href="/messageboard/"> 留言板 </a> </li> <li class="col-span-3"> <details id="more-menu" class="group relative w-full sm:w-auto"> <summary class="focus-outline hover:text-accent flex cursor-pointer list-none items-center justify-center gap-1 px-4 py-3 font-medium select-none sm:px-2 sm:py-1 [&amp;::-webkit-details-marker]:hidden"> 更多 <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="size-4 -rotate-90 transition-transform group-open:rotate-90" viewBox="0 0 24 24" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 6-6 6 6 6" /></svg> </summary> <ul class="border-border bg-background z-20 mt-1 rounded-md border p-1 sm:absolute sm:top-full sm:right-0 sm:mt-2 sm:w-28 sm:shadow-md sm:before:absolute sm:before:-top-2 sm:before:left-0 sm:before:h-5 sm:before:w-full sm:before:content-['']"> <li> <a href="/reward/" class="hover:bg-muted hover:text-accent block rounded px-3 py-2 text-center font-medium sm:text-start"> 赞助 </a> </li> </ul> </details> </li> <li class="col-span-1 flex items-center justify-center"> <button id="docsearch-button" class="focus-outline hover:[&>svg]:stroke-accent relative size-12 p-4 sm:size-8" type="button" title="搜索" aria-label="搜索" aria-controls="docsearch"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-1/2 left-1/2 size-6 -translate-x-1/2 -translate-y-1/2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 10a7 7 0 1 0 14 0 7 7 0 1 0-14 0M21 21l-6-6" /></svg> </button> <div id="docsearch" class="hidden" data-app-id="BAFEL7A6K1" data-api-key="89fcb5961984c5c054bf04149f345f38" data-indices="[&quot;mofan212io&quot;]" data-label="搜索" data-placeholder="输入关键字进行搜索"></div> <script type="module" src="/_astro/DocSearch.astro_astro_type_script_index_0_lang.BgJYFKPD.js"></script> </li> <li class="col-span-1 flex items-center justify-center"> <a href="https://www.travellings.cn/go.html" target="_blank" rel="noopener noreferrer" title="开往" aria-label="开往" class="group inline-flex items-center gap-1 hover:text-accent focus-outline relative size-12 p-4 sm:size-8">  <svg width="24" height="24" fill="currentColor" class="absolute top-1/2 left-1/2 size-5 -translate-x-1/2 -translate-y-1/2" viewBox="0 0 448 512" aria-hidden="true"><path d="M96 0C43 0 0 43 0 96v256c0 48 35.2 87.7 81.1 94.9l-46 46c-7 7-2 19.1 7.9 19.1h39.7c8.5 0 16.6-3.4 22.6-9.4L160 448h128l54.6 54.6c6 6 14.1 9.4 22.6 9.4h39.7c10 0 15-12.1 7.9-19.1l-46-46c46-7.1 81.1-46.9 81.1-94.9V96c0-53-43-96-96-96zM64 128c0-17.7 14.3-32 32-32h80c17.7 0 32 14.3 32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32zm208-32h80c17.7 0 32 14.3 32 32v96c0 17.7-14.3 32-32 32h-80c-17.7 0-32-14.3-32-32v-96c0-17.7 14.3-32 32-32M64 352a32 32 0 1 1 64 0 32 32 0 1 1-64 0m288-32a32 32 0 1 1 0 64 32 32 0 1 1 0-64" /></svg> <span class="sr-only">开往</span>  </a> </li> <li class="col-span-1 flex items-center justify-center"> <button id="theme-btn" class="focus-outline hover:[&>svg]:stroke-accent relative size-12 p-4 sm:size-8" title="切换主题" aria-label="auto" aria-live="polite"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-[50%] left-[50%] translate-[-50%] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M12 3h.393a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 12 2.992z" /></svg> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-[50%] left-[50%] translate-[-50%] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M14.828 14.828a4 4 0 1 0-5.656-5.656 4 4 0 0 0 5.656 5.656M6.343 17.657l-1.414 1.414M6.343 6.343 4.929 4.929M17.657 6.343l1.414-1.414M17.657 17.657l1.414 1.414M4 12H2M12 4V2M20 12h2M12 20v2" /></svg> </button> </li> </ul> </nav> </div> </header> <script type="module">function u(){const e=document.querySelector("#menu-btn"),t=document.querySelector("#menu-items"),n=document.querySelector("#menu-icon"),o=document.querySelector("#close-icon");if(!e||!t||!n||!o)return;const a=e.dataset.labelOpen??"Open menu",i=e.dataset.labelClose??"Close menu";e.addEventListener("click",()=>{const s=e.getAttribute("aria-expanded")==="true";e.setAttribute("aria-expanded",s?"false":"true"),e.setAttribute("aria-label",s?a:i),t.classList.toggle("hidden"),t.classList.toggle("grid"),n.classList.toggle("hidden"),o.classList.toggle("hidden")})}function r(e=!1){const t=document.querySelector("#more-menu");t?.open&&(t.open=!1,e&&t.querySelector("summary")?.focus())}function c(){const e=document.querySelector("#more-menu");if(!e||e.dataset.hoverBound==="true")return;e.dataset.hoverBound="true";const t=window.matchMedia("(min-width: 640px) and (hover: hover) and (pointer: fine)");let n;const o=()=>{n!==void 0&&(window.clearTimeout(n),n=void 0)};e.addEventListener("mouseenter",()=>{t.matches&&(o(),e.open=!0)}),e.addEventListener("mouseleave",()=>{t.matches&&(o(),n=window.setTimeout(()=>{e.open=!1,n=void 0},150))})}u();c();document.addEventListener("click",e=>{const t=document.querySelector("#more-menu");t?.open&&!t.contains(e.target)&&r()});document.addEventListener("keydown",e=>{e.key==="Escape"&&r(!0)});document.addEventListener("astro:after-swap",()=>{u(),c()});document.addEventListener("astro:before-swap",()=>r());</script> <nav class="app-layout mt-8 mb-1" aria-label="breadcrumb"> <ul class="font-light [&>li]:inline [&>li:not(:last-child)>a]:hover:opacity-100"> <li> <a href="/" class="opacity-80"> 首页 </a> <span aria-hidden="true" class="opacity-80">&raquo;</span> </li> <li> <a href="/tags/" class="opacity-70 capitalize"> 标签 </a> <span aria-hidden="true" class="opacity-70">
+&raquo;
+</span> </li><li> <span class="opacity-75 capitalize lowercase" aria-current="page">  Dependency-Injection </span> </li> </ul> </nav> <main data-backUrl="/tags/Dependency-Injection/" id="main-content" class="app-layout pb-4"> <h1 class="mb-6 text-2xl font-semibold sm:text-3xl">标签: 依赖注入</h1>  <ul> <li class="my-6"> <a href="/posts/Get-ApplicationContext/" class="text-accent inline-block text-lg font-medium decoration-dashed underline-offset-4 hover:underline focus-visible:no-underline focus-visible:underline-offset-0"> <h2 data-astro-transition-scope="astro-2jhrfvd3-1">获取 ApplicationContext</h2> </a> <div class="text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1"> <span class="flex items-center gap-x-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 min-w-5.5 scale-90" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM16 3v4M8 3v4M4 11h16M7 14h.013M10.01 14h.005M13.01 14h.005M16.015 14h.005M13.015 17h.005M7.01 17h.005M10.01 17h.005" /></svg> <span class="text-sm"> 发表于 </span> <time class="text-sm" datetime="2023-09-20T00:00:00.000Z"> 2023-09-20 </time> </span>  </div> <p>获取 ApplicationContext 有哪些方式、又有哪些区别呢？</p> </li><li class="my-6"> <a href="/posts/SpringIoC/" class="text-accent inline-block text-lg font-medium decoration-dashed underline-offset-4 hover:underline focus-visible:no-underline focus-visible:underline-offset-0"> <h2 data-astro-transition-scope="astro-2jhrfvd3-2">Spring IoC 巩固理解</h2> </a> <div class="text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1"> <span class="flex items-center gap-x-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 min-w-5.5 scale-90" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM16 3v4M8 3v4M4 11h16M7 14h.013M10.01 14h.005M13.01 14h.005M16.015 14h.005M13.015 17h.005M7.01 17h.005M10.01 17h.005" /></svg> <span class="text-sm"> 发表于 </span> <time class="text-sm" datetime="2020-05-29T00:00:00.000Z"> 2020-05-29 </time> </span>  </div> <p>到底什么是 Ioc？</p> </li> </ul>  </main> <script type="module">document.addEventListener("astro:page-load",()=>{const t=document.querySelector("#main-content")?.dataset?.backurl;t&&sessionStorage.setItem("backUrl",t)});</script>  <footer class="app-layout mt-auto"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row sm:py-4"> <div class="my-2 flex flex-col items-center whitespace-nowrap sm:flex-row"> <span>版权所有 &#169; 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer>  <script type="module" src="/_astro/Layout.astro_astro_type_script_index_0_lang.Bq37d5S9.js"></script> </body> </html>
