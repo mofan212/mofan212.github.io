@@ -1,0 +1,1026 @@
+<!DOCTYPE html><html dir="ltr" lang="zh-CN" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/nodejs-setup-and-hexo-upgrade/"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css"><link rel="preconnect" href="https://busuanzi.ibruce.info"><meta name="generator" content="Astro v6.4.2"><!-- Primary meta --><title>Node.js 的安装与 Hexo 的升级 | Mofan</title><meta name="title" content="Node.js 的安装与 Hexo 的升级 | Mofan"><meta name="description" content="本文介绍了如何安装与卸载 Node.js、安装 Yarn 以及如何升级 Hexo 版本。"><meta name="author" content="默烦"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Mofan"><meta property="og:title" content="Node.js 的安装与 Hexo 的升级 | Mofan"><meta property="og:description" content="本文介绍了如何安装与卸载 Node.js、安装 Yarn 以及如何升级 Hexo 版本。"><meta property="og:url" content="https://mofan212.github.io/posts/nodejs-setup-and-hexo-upgrade/"><meta property="og:image" content="https://mofan212.github.io/default-og.jpg"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://mofan212.github.io/posts/nodejs-setup-and-hexo-upgrade/"><meta property="twitter:title" content="Node.js 的安装与 Hexo 的升级 | Mofan"><meta property="twitter:description" content="本文介绍了如何安装与卸载 Node.js、安装 Yarn 以及如何升级 Hexo 版本。"><meta property="twitter:image" content="https://mofan212.github.io/default-og.jpg"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Mofan" href="https://mofan212.github.io/rss.xml/"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2020-11-06T00:00:00.000Z"><meta property="article:modified_time" content="2023-11-18T00:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Node.js 的安装与 Hexo 的升级 | Mofan","url":"https://mofan212.github.io/posts/nodejs-setup-and-hexo-upgrade/","mainEntityOfPage":"https://mofan212.github.io/posts/nodejs-setup-and-hexo-upgrade/","datePublished":"2020-11-06T00:00:00.000Z","dateModified":"2023-11-18T00:00:00.000Z","author":[{"@type":"Person","name":"默烦","url":"https://github.com/mofan212"}]}</script> <!--
+      Inline FOUC-prevention script: sets data-theme on <html> before
+      the browser paints. Runs synchronously, no defer/async.
+    --><script>
+      (function () {
+        const stored = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+        const theme = stored ?? (prefersDark ? "dark" : "light");
+        const root = document.firstElementChild;
+        root?.setAttribute("data-theme", theme);
+        root?.classList.toggle("dark", theme === "dark");
+        // Expose value so theme.ts can skip re-detection.
+        window.__theme = { value: theme };
+      })();
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.BglkCy-o.css">
+<style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
+.toc-toggle[data-astro-cid-po2ckxzl][aria-expanded=true] .toc-toggle-icon[data-astro-cid-po2ckxzl]{rotate:-90deg}.post-toc-desktop[data-astro-cid-taqt6xe3]{inset-inline-start:calc(50% + var(--app-max-width) / 2 + 2rem);width:min(14rem,calc(50vw - var(--app-max-width) / 2 - 3rem))}.toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-width:thin}.toc-scroll[data-astro-cid-taqt6xe3]:after{display:block;block-size:20dvh;content:""}.toc-link[data-astro-cid-taqt6xe3][data-active]{border-inline-start-color:var(--accent);color:var(--accent);font-weight:600}[data-astro-cid-4wxclohh][data-post-series]{interpolate-size:allow-keywords}[data-astro-cid-4wxclohh][data-post-series]::details-content{block-size:0;overflow:hidden;opacity:0;transition:block-size .2s ease-out,opacity .15s ease-out,content-visibility .2s allow-discrete}[data-astro-cid-4wxclohh][data-post-series][open]::details-content{block-size:auto;opacity:1}@media(prefers-reduced-motion:reduce){[data-astro-cid-4wxclohh][data-post-series]::details-content{transition:none}}[data-astro-cid-3e4etqql][data-post-reward-panel]{position:absolute;z-index:30;bottom:calc(100% + 1rem);left:50%;opacity:0;visibility:hidden;pointer-events:none;transform:translate(-50%,.25rem);transition:opacity .15s ease-out,transform .15s ease-out,visibility 0s linear .15s}[data-astro-cid-3e4etqql][data-post-reward-panel]:before{position:absolute;bottom:-1.25rem;left:0;width:100%;height:1.5rem;content:""}[data-astro-cid-3e4etqql][data-post-reward-panel]:after{position:absolute;bottom:-.4375rem;left:50%;width:.875rem;height:.875rem;border-bottom:1px solid var(--border);border-left:1px solid var(--border);background:var(--background);content:"";transform:translate(-50%) rotate(-45deg)}[data-astro-cid-3e4etqql][data-post-reward-trigger][data-open=true] [data-astro-cid-3e4etqql][data-post-reward-panel]{opacity:1;visibility:visible;pointer-events:auto;transform:translate(-50%);transition-delay:0s}@media(hover:hover)and (pointer:fine){[data-astro-cid-3e4etqql][data-post-reward-trigger]:hover [data-astro-cid-3e4etqql][data-post-reward-panel],[data-astro-cid-3e4etqql][data-post-reward-trigger]:focus-within [data-astro-cid-3e4etqql][data-post-reward-panel]{opacity:1;visibility:visible;pointer-events:auto;transform:translate(-50%);transition-delay:0s}}@media(prefers-reduced-motion:reduce){[data-astro-cid-3e4etqql][data-post-reward-panel]{transition:none}}
+</style><style>[data-astro-transition-scope="astro-36ssibgs-1"] { view-transition-name: Hexo; }@layer astro { ::view-transition-old(Hexo) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(Hexo) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(Hexo) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(Hexo) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-36ssibgs-2"] { view-transition-name: Node-js; }@layer astro { ::view-transition-old(Node-js) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(Node-js) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(Node-js) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(Node-js) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style></head> <body class="bg-background font-app text-foreground selection:bg-accent/75 selection:text-accent-foreground flex min-h-svh flex-col">    <a id="skip-to-content" href="#main-content" class="bg-background text-accent absolute inset-s-16 -top-full z-50 px-3 py-2 backdrop-blur-lg transition-all focus:top-4"> 跳到正文 </a> <header class="app-layout flex flex-col items-center justify-between sm:flex-row"> <div class="border-border bg-background relative flex w-full items-baseline justify-between border-b py-4 sm:items-center sm:py-6"> <a href="/" class="absolute py-1 text-xl leading-8 font-semibold whitespace-nowrap sm:static sm:my-auto sm:text-2xl sm:leading-none"> Mofan </a> <nav id="nav-menu" class="flex w-full flex-col items-center sm:ms-2 sm:flex-row sm:justify-end sm:space-x-4 sm:py-0"> <button id="menu-btn" class="focus-outline self-end p-2 sm:hidden" aria-label="打开菜单" aria-expanded="false" aria-controls="menu-items" data-label-open="打开菜单" data-label-close="关闭菜单"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="hidden" viewBox="0 0 24 24" id="close-icon"><path stroke="none" d="M0 0h24v24H0z" /><path d="M18 6 6 18M6 6l12 12" /></svg> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="icon icon-tabler icons-tabler-outline icon-tabler-menu-deep" viewBox="0 0 24 24" id="menu-icon"><path stroke="none" d="M0 0h24v24H0z" /><path d="M4 6h16M7 12h13M10 18h10" /></svg> </button> <ul id="menu-items" class="[&>li>a]:hover:text-accent mt-4 hidden w-44 grid-cols-3 place-content-center gap-2 sm:mt-0 sm:flex sm:w-auto sm:gap-x-3 sm:gap-y-0 sm:[&>li]:h-8 [&>li>a]:block [&>li>a]:px-4 [&>li>a]:py-3 [&>li>a]:text-center [&>li>a]:font-medium sm:[&>li>a]:px-2 sm:[&>li>a]:py-1"> <li class="col-span-3"> <a href="/archives/"> 归档 </a> </li> <li class="col-span-3"> <a href="/categories/"> 分类 </a> </li> <li class="col-span-3"> <a href="/tags/"> 标签 </a> </li> <li class="col-span-3"> <a href="/messageboard/"> 留言板 </a> </li> <li class="col-span-3"> <details id="site-menu" class="group relative w-full sm:w-auto"> <summary class="focus-outline hover:text-accent flex cursor-pointer list-none items-center justify-center gap-1 px-4 py-3 font-medium select-none sm:px-2 sm:py-1 [&amp;::-webkit-details-marker]:hidden"> 站点 <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="size-4 -rotate-90 transition-transform group-open:rotate-90" viewBox="0 0 24 24" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 6-6 6 6 6" /></svg> </summary> <ul class="border-border bg-background z-20 mt-1 rounded-md border p-2 text-start sm:absolute sm:top-full sm:right-0 sm:mt-2 sm:w-36 sm:shadow-md sm:before:absolute sm:before:-top-2 sm:before:left-0 sm:before:h-5 sm:before:w-full sm:before:content-['']"> <li> <p class="text-muted-foreground px-3 pt-1 pb-1 text-xs font-semibold tracking-wider"> 内容 </p> <ul> <li> <a href="/schedule/" class="hover:bg-muted hover:text-accent block rounded px-3 py-2 font-medium"> 计划 </a> </li> <li> <a href="/update/" class="hover:bg-muted hover:text-accent block rounded px-3 py-2 font-medium"> 维护 </a> </li> <li> <a href="/link/" class="hover:bg-muted hover:text-accent block rounded px-3 py-2 font-medium"> 友链 </a> </li> </ul> </li> <li class="border-border mt-2 border-t pt-2"> <p class="text-muted-foreground px-3 pt-1 pb-1 text-xs font-semibold tracking-wider"> 关于 </p> <ul> <li> <a href="/mine/" class="hover:bg-muted hover:text-accent block rounded px-3 py-2 font-medium"> 我 </a> </li> <li> <a href="/about/" class="hover:bg-muted hover:text-accent block rounded px-3 py-2 font-medium"> 本站 </a> </li> <li> <a href="/reward/" class="hover:bg-muted hover:text-accent block rounded px-3 py-2 font-medium"> 赞助 </a> </li> <li> <a href="/milestones/" class="hover:bg-muted hover:text-accent block rounded px-3 py-2 font-medium"> 里程碑 </a> </li> </ul> </li> </ul> </details> </li> <li class="col-span-1 flex items-center justify-center"> <button id="docsearch-button" class="focus-outline hover:[&>svg]:stroke-accent relative size-12 p-4 sm:size-8" type="button" title="搜索" aria-label="搜索" aria-controls="docsearch"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-1/2 left-1/2 size-6 -translate-x-1/2 -translate-y-1/2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 10a7 7 0 1 0 14 0 7 7 0 1 0-14 0M21 21l-6-6" /></svg> </button> <div id="docsearch" class="hidden" data-app-id="BAFEL7A6K1" data-api-key="89fcb5961984c5c054bf04149f345f38" data-indices="[&quot;mofan212io&quot;]" data-label="搜索" data-placeholder="输入关键字进行搜索"></div> <script type="module" src="/_astro/DocSearch.astro_astro_type_script_index_0_lang.BgJYFKPD.js"></script> </li> <li class="col-span-1 flex items-center justify-center"> <a href="https://www.travellings.cn/go.html" target="_blank" rel="noopener noreferrer" title="开往" aria-label="开往" class="group inline-flex items-center gap-1 hover:text-accent focus-outline relative size-12 p-4 sm:size-8">  <svg width="24" height="24" fill="currentColor" class="absolute top-1/2 left-1/2 size-5 -translate-x-1/2 -translate-y-1/2" viewBox="0 0 448 512" aria-hidden="true"><path d="M96 0C43 0 0 43 0 96v256c0 48 35.2 87.7 81.1 94.9l-46 46c-7 7-2 19.1 7.9 19.1h39.7c8.5 0 16.6-3.4 22.6-9.4L160 448h128l54.6 54.6c6 6 14.1 9.4 22.6 9.4h39.7c10 0 15-12.1 7.9-19.1l-46-46c46-7.1 81.1-46.9 81.1-94.9V96c0-53-43-96-96-96zM64 128c0-17.7 14.3-32 32-32h80c17.7 0 32 14.3 32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32zm208-32h80c17.7 0 32 14.3 32 32v96c0 17.7-14.3 32-32 32h-80c-17.7 0-32-14.3-32-32v-96c0-17.7 14.3-32 32-32M64 352a32 32 0 1 1 64 0 32 32 0 1 1-64 0m288-32a32 32 0 1 1 0 64 32 32 0 1 1 0-64" /></svg> <span class="sr-only">开往</span>  </a> </li> <li class="col-span-1 flex items-center justify-center"> <button id="theme-btn" class="focus-outline hover:[&>svg]:stroke-accent relative size-12 p-4 sm:size-8" title="切换主题" aria-label="auto" aria-live="polite"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-[50%] left-[50%] translate-[-50%] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M12 3h.393a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 12 2.992z" /></svg> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-[50%] left-[50%] translate-[-50%] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M14.828 14.828a4 4 0 1 0-5.656-5.656 4 4 0 0 0 5.656 5.656M6.343 17.657l-1.414 1.414M6.343 6.343 4.929 4.929M17.657 6.343l1.414-1.414M17.657 17.657l1.414 1.414M4 12H2M12 4V2M20 12h2M12 20v2" /></svg> </button> </li> </ul> </nav> </div> </header> <script type="module">function r(){const e=document.querySelector("#menu-btn"),t=document.querySelector("#menu-items"),n=document.querySelector("#menu-icon"),o=document.querySelector("#close-icon");if(!e||!t||!n||!o)return;const c=e.dataset.labelOpen??"Open menu",a=e.dataset.labelClose??"Close menu";e.addEventListener("click",()=>{const i=e.getAttribute("aria-expanded")==="true";e.setAttribute("aria-expanded",i?"false":"true"),e.setAttribute("aria-label",i?c:a),t.classList.toggle("hidden"),t.classList.toggle("grid"),n.classList.toggle("hidden"),o.classList.toggle("hidden")})}function s(e=!1){const t=document.querySelector("#site-menu");t?.open&&(t.open=!1,e&&t.querySelector("summary")?.focus())}function u(){const e=document.querySelector("#site-menu");if(!e||e.dataset.hoverBound==="true")return;e.dataset.hoverBound="true";const t=window.matchMedia("(min-width: 640px) and (hover: hover) and (pointer: fine)");let n;const o=()=>{n!==void 0&&(window.clearTimeout(n),n=void 0)};e.addEventListener("mouseenter",()=>{t.matches&&(o(),e.open=!0)}),e.addEventListener("mouseleave",()=>{t.matches&&(o(),n=window.setTimeout(()=>{e.open=!1,n=void 0},150))})}r();u();document.addEventListener("click",e=>{const t=document.querySelector("#site-menu");t?.open&&!t.contains(e.target)&&s()});document.addEventListener("keydown",e=>{e.key==="Escape"&&s(!0)});document.addEventListener("astro:after-swap",()=>{r(),u()});document.addEventListener("astro:before-swap",()=>s());</script> <div class="app-layout flex items-center justify-start"><a id="back-button" href="/" class="group inline-flex items-center gap-1 hover:text-accent focus-outline hover:text-foreground/75 -ms-2 mt-8 mb-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 rtl:rotate-180" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 6-6 6 6 6" /></svg><span>返回</span> </a></div><script type="module">function o(){const t=document.querySelector("#back-button"),e=sessionStorage.getItem("backUrl");e&&t&&(t.href=e)}document.addEventListener("astro:page-load",o);o();</script> <main id="main-content" class="app-layout" data-pagefind-body> <h1 style="view-transition-name:node-js-u007684u005b89u0088c5u004e0e-hexo-u007684u005347u007ea7" class="text-accent inline-block text-2xl font-bold sm:text-3xl"> Node.js 的安装与 Hexo 的升级 </h1> <div class="my-2 flex flex-wrap items-center gap-2"> <div class="text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1"> <span class="flex items-center gap-x-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 min-w-5.5" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM16 3v4M8 3v4M4 11h16M7 14h.013M10.01 14h.005M13.01 14h.005M16.015 14h.005M13.015 17h.005M7.01 17h.005M10.01 17h.005" /></svg> <span class="text-sm sm:text-base"> 发表于 </span> <time class="text-sm sm:text-base" datetime="2020-11-06T00:00:00.000Z"> 2020-11-06 </time> </span> <span class="flex items-center gap-x-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 min-w-5.5" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M12 8v4l2 2" /><path d="M3.05 11a9 9 0 1 1 .5 4m-.5 5v-5h5" /></svg> <span class="text-sm sm:text-base"> 更新于 </span> <time class="text-sm sm:text-base" datetime="2023-11-18T00:00:00.000Z"> 2023-11-18 </time> </span> </div> <span aria-hidden="true" class="text-muted-foreground">|</span> <span class="text-muted-foreground flex items-center gap-x-2" data-busuanzi-page data-busuanzi-legacy-path="/posts/How-to-install-Node.js-and-update-Hexo/"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 min-w-5.5" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M10 12a2 2 0 1 0 4 0 2 2 0 0 0-4 0" /><path d="M21 12q-3.6 6-9 6c-5.4 0-6.6-2-9-6q3.6-6 9-6c5.4 0 6.6 2 9 6" /></svg> <span class="text-sm sm:text-base">浏览量：</span> <span id="busuanzi_value_page_pv" class="inline-block min-w-[6ch] text-end text-sm tabular-nums sm:text-base">
+--
+</span> </span>  <span aria-hidden="true" class="text-muted-foreground">
+|
+</span> <nav aria-label="分类"> <ol class="flex flex-wrap items-center gap-1"> <li> <a href="/categories/Blog/" class="text-muted-foreground flex items-center gap-1 transition-colors hover:text-accent focus-visible:text-accent text-sm sm:text-base"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="shrink-0 size-6" viewBox="0 0 24 24" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v0a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8M10 12h4" /></svg> Blog </a> </li>  </ol> </nav>  <span aria-hidden="true" class="text-muted-foreground max-sm:hidden hidden">
+|
+</span>  </div>  <div data-post-toc data-astro-cid-taqt6xe3> <aside class="post-toc-desktop fixed top-24 hidden h-[calc(100dvh-8rem)] flex-col xl:flex" aria-label="文章目录" data-astro-cid-taqt6xe3> <div class="mb-3 flex items-center justify-between gap-3 px-3" data-astro-cid-taqt6xe3> <h2 class="text-sm font-semibold" data-astro-cid-taqt6xe3>文章目录</h2> <span class="text-muted-foreground text-sm tabular-nums" data-reading-progress data-astro-cid-taqt6xe3>
+0%
+</span> </div> <nav class="toc-scroll min-h-0 flex-1 overflow-y-auto overscroll-contain pe-1" data-toc-scroll data-astro-cid-taqt6xe3> <ul class="space-y-0.5" data-astro-cid-po2ckxzl> <li data-toc-node="0-前言" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#0-前言" data-toc-slug="0-前言" data-astro-cid-po2ckxzl> 0. 前言 </a> </div>  </li><li data-toc-node="1-nodejs-的安装" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <button type="button" class="toc-toggle text-muted-foreground hover:text-accent mt-0.5 flex size-7 shrink-0 items-center justify-center rounded" aria-label="展开或收起目录章节: 1. Node.js 的安装" aria-controls="post-toc-desktop-1-nodejs-的安装" aria-expanded="false" data-toc-toggle="1-nodejs-的安装" data-astro-cid-po2ckxzl> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="toc-toggle-icon size-4 -rotate-180 transition-transform" viewBox="0 0 24 24" aria-hidden="true" data-astro-cid-po2ckxzl="true"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 6-6 6 6 6" /></svg> </button> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#1-nodejs-的安装" data-toc-slug="1-nodejs-的安装" data-astro-cid-po2ckxzl> 1. Node.js 的安装 </a> </div> <div id="post-toc-desktop-1-nodejs-的安装" hidden data-toc-branch="1-nodejs-的安装" data-astro-cid-po2ckxzl> <ul class="space-y-0.5 border-border ms-3 border-s ps-1" data-astro-cid-po2ckxzl> <li data-toc-node="11-安装-nodejs" data-toc-parent="1-nodejs-的安装" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#11-安装-nodejs" data-toc-slug="11-安装-nodejs" data-astro-cid-po2ckxzl> 1.1 安装 Node.js </a> </div>  </li><li data-toc-node="12-安装-cnpm" data-toc-parent="1-nodejs-的安装" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#12-安装-cnpm" data-toc-slug="12-安装-cnpm" data-astro-cid-po2ckxzl> 1.2 安装 cnpm </a> </div>  </li><li data-toc-node="13-配置-npm-镜像源" data-toc-parent="1-nodejs-的安装" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#13-配置-npm-镜像源" data-toc-slug="13-配置-npm-镜像源" data-astro-cid-po2ckxzl> 1.3 配置 npm 镜像源 </a> </div>  </li><li data-toc-node="14-配置多个镜像源" data-toc-parent="1-nodejs-的安装" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#14-配置多个镜像源" data-toc-slug="14-配置多个镜像源" data-astro-cid-po2ckxzl> 1.4 配置多个镜像源 </a> </div>  </li> </ul> </div> </li><li data-toc-node="2-nodejs-的卸载" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#2-nodejs-的卸载" data-toc-slug="2-nodejs-的卸载" data-astro-cid-po2ckxzl> 2. Node.js 的卸载 </a> </div>  </li><li data-toc-node="3-nodejs-的升级" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#3-nodejs-的升级" data-toc-slug="3-nodejs-的升级" data-astro-cid-po2ckxzl> 3. Node.js 的升级 </a> </div>  </li><li data-toc-node="4-安装-yarn" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <button type="button" class="toc-toggle text-muted-foreground hover:text-accent mt-0.5 flex size-7 shrink-0 items-center justify-center rounded" aria-label="展开或收起目录章节: 4. 安装 Yarn" aria-controls="post-toc-desktop-4-安装-yarn" aria-expanded="false" data-toc-toggle="4-安装-yarn" data-astro-cid-po2ckxzl> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="toc-toggle-icon size-4 -rotate-180 transition-transform" viewBox="0 0 24 24" aria-hidden="true" data-astro-cid-po2ckxzl="true"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 6-6 6 6 6" /></svg> </button> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#4-安装-yarn" data-toc-slug="4-安装-yarn" data-astro-cid-po2ckxzl> 4. 安装 Yarn </a> </div> <div id="post-toc-desktop-4-安装-yarn" hidden data-toc-branch="4-安装-yarn" data-astro-cid-po2ckxzl> <ul class="space-y-0.5 border-border ms-3 border-s ps-1" data-astro-cid-po2ckxzl> <li data-toc-node="41-基本安装" data-toc-parent="4-安装-yarn" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#41-基本安装" data-toc-slug="41-基本安装" data-astro-cid-po2ckxzl> 4.1 基本安装 </a> </div>  </li><li data-toc-node="42-路径设置" data-toc-parent="4-安装-yarn" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#42-路径设置" data-toc-slug="42-路径设置" data-astro-cid-po2ckxzl> 4.2 路径设置 </a> </div>  </li><li data-toc-node="43-配置环境变量" data-toc-parent="4-安装-yarn" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#43-配置环境变量" data-toc-slug="43-配置环境变量" data-astro-cid-po2ckxzl> 4.3 配置环境变量 </a> </div>  </li><li data-toc-node="44-配置镜像源" data-toc-parent="4-安装-yarn" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#44-配置镜像源" data-toc-slug="44-配置镜像源" data-astro-cid-po2ckxzl> 4.4 配置镜像源 </a> </div>  </li> </ul> </div> </li><li data-toc-node="5-hexo-版本升级" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#5-hexo-版本升级" data-toc-slug="5-hexo-版本升级" data-astro-cid-po2ckxzl> 5. Hexo 版本升级 </a> </div>  </li> </ul> </nav> </aside> <button type="button" class="bg-background border-border text-foreground fixed end-4 bottom-20 z-40 flex size-12 items-center justify-center rounded-full border shadow-xl xl:hidden" aria-label="打开文章目录" aria-controls="post-toc-dialog" aria-expanded="false" data-toc-open data-astro-cid-taqt6xe3> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="size-6" viewBox="0 0 24 24" aria-hidden="true" data-astro-cid-taqt6xe3="true"><path stroke="none" d="M0 0h24v24H0z" /><path d="M4 6h16M7 12h13M10 18h10" /></svg> </button> <dialog id="post-toc-dialog" class="bg-background text-foreground border-border m-0 ms-auto h-dvh max-h-dvh w-[min(24rem,90vw)] max-w-none border-s p-0 shadow-2xl backdrop:bg-black/50" aria-labelledby="post-toc-dialog-title" data-toc-dialog data-astro-cid-taqt6xe3> <div class="flex h-full min-h-0 flex-col" data-astro-cid-taqt6xe3> <div class="border-border flex items-center justify-between gap-4 border-b px-4 py-3" data-astro-cid-taqt6xe3> <div class="flex items-baseline gap-3" data-astro-cid-taqt6xe3> <h2 id="post-toc-dialog-title" class="font-semibold" data-astro-cid-taqt6xe3> 文章目录 </h2> <span class="text-muted-foreground text-sm tabular-nums" data-reading-progress data-astro-cid-taqt6xe3>
+0%
+</span> </div> <button type="button" class="hover:text-accent rounded p-2" aria-label="关闭文章目录" data-toc-close data-astro-cid-taqt6xe3> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="size-5" viewBox="0 0 24 24" aria-hidden="true" data-astro-cid-taqt6xe3="true"><path stroke="none" d="M0 0h24v24H0z" /><path d="M18 6 6 18M6 6l12 12" /></svg> </button> </div> <nav class="toc-scroll min-h-0 flex-1 overflow-y-auto p-3" data-toc-scroll data-astro-cid-taqt6xe3> <ul class="space-y-0.5" data-astro-cid-po2ckxzl> <li data-toc-node="0-前言" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#0-前言" data-toc-slug="0-前言" data-astro-cid-po2ckxzl> 0. 前言 </a> </div>  </li><li data-toc-node="1-nodejs-的安装" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <button type="button" class="toc-toggle text-muted-foreground hover:text-accent mt-0.5 flex size-7 shrink-0 items-center justify-center rounded" aria-label="展开或收起目录章节: 1. Node.js 的安装" aria-controls="post-toc-mobile-1-nodejs-的安装" aria-expanded="false" data-toc-toggle="1-nodejs-的安装" data-astro-cid-po2ckxzl> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="toc-toggle-icon size-4 -rotate-180 transition-transform" viewBox="0 0 24 24" aria-hidden="true" data-astro-cid-po2ckxzl="true"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 6-6 6 6 6" /></svg> </button> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#1-nodejs-的安装" data-toc-slug="1-nodejs-的安装" data-astro-cid-po2ckxzl> 1. Node.js 的安装 </a> </div> <div id="post-toc-mobile-1-nodejs-的安装" hidden data-toc-branch="1-nodejs-的安装" data-astro-cid-po2ckxzl> <ul class="space-y-0.5 border-border ms-3 border-s ps-1" data-astro-cid-po2ckxzl> <li data-toc-node="11-安装-nodejs" data-toc-parent="1-nodejs-的安装" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#11-安装-nodejs" data-toc-slug="11-安装-nodejs" data-astro-cid-po2ckxzl> 1.1 安装 Node.js </a> </div>  </li><li data-toc-node="12-安装-cnpm" data-toc-parent="1-nodejs-的安装" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#12-安装-cnpm" data-toc-slug="12-安装-cnpm" data-astro-cid-po2ckxzl> 1.2 安装 cnpm </a> </div>  </li><li data-toc-node="13-配置-npm-镜像源" data-toc-parent="1-nodejs-的安装" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#13-配置-npm-镜像源" data-toc-slug="13-配置-npm-镜像源" data-astro-cid-po2ckxzl> 1.3 配置 npm 镜像源 </a> </div>  </li><li data-toc-node="14-配置多个镜像源" data-toc-parent="1-nodejs-的安装" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#14-配置多个镜像源" data-toc-slug="14-配置多个镜像源" data-astro-cid-po2ckxzl> 1.4 配置多个镜像源 </a> </div>  </li> </ul> </div> </li><li data-toc-node="2-nodejs-的卸载" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#2-nodejs-的卸载" data-toc-slug="2-nodejs-的卸载" data-astro-cid-po2ckxzl> 2. Node.js 的卸载 </a> </div>  </li><li data-toc-node="3-nodejs-的升级" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#3-nodejs-的升级" data-toc-slug="3-nodejs-的升级" data-astro-cid-po2ckxzl> 3. Node.js 的升级 </a> </div>  </li><li data-toc-node="4-安装-yarn" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <button type="button" class="toc-toggle text-muted-foreground hover:text-accent mt-0.5 flex size-7 shrink-0 items-center justify-center rounded" aria-label="展开或收起目录章节: 4. 安装 Yarn" aria-controls="post-toc-mobile-4-安装-yarn" aria-expanded="false" data-toc-toggle="4-安装-yarn" data-astro-cid-po2ckxzl> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="toc-toggle-icon size-4 -rotate-180 transition-transform" viewBox="0 0 24 24" aria-hidden="true" data-astro-cid-po2ckxzl="true"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 6-6 6 6 6" /></svg> </button> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#4-安装-yarn" data-toc-slug="4-安装-yarn" data-astro-cid-po2ckxzl> 4. 安装 Yarn </a> </div> <div id="post-toc-mobile-4-安装-yarn" hidden data-toc-branch="4-安装-yarn" data-astro-cid-po2ckxzl> <ul class="space-y-0.5 border-border ms-3 border-s ps-1" data-astro-cid-po2ckxzl> <li data-toc-node="41-基本安装" data-toc-parent="4-安装-yarn" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#41-基本安装" data-toc-slug="41-基本安装" data-astro-cid-po2ckxzl> 4.1 基本安装 </a> </div>  </li><li data-toc-node="42-路径设置" data-toc-parent="4-安装-yarn" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#42-路径设置" data-toc-slug="42-路径设置" data-astro-cid-po2ckxzl> 4.2 路径设置 </a> </div>  </li><li data-toc-node="43-配置环境变量" data-toc-parent="4-安装-yarn" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#43-配置环境变量" data-toc-slug="43-配置环境变量" data-astro-cid-po2ckxzl> 4.3 配置环境变量 </a> </div>  </li><li data-toc-node="44-配置镜像源" data-toc-parent="4-安装-yarn" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#44-配置镜像源" data-toc-slug="44-配置镜像源" data-astro-cid-po2ckxzl> 4.4 配置镜像源 </a> </div>  </li> </ul> </div> </li><li data-toc-node="5-hexo-版本升级" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#5-hexo-版本升级" data-toc-slug="5-hexo-版本升级" data-astro-cid-po2ckxzl> 5. Hexo 版本升级 </a> </div>  </li> </ul> </nav> </div> </dialog> </div> <script data-astro-rerun>
+  (() => {
+    function initPostToc() {
+      window.__postTocCleanup?.();
+
+      const tocRoot = document.querySelector("[data-post-toc]");
+
+      if (tocRoot) {
+        const controller = new AbortController();
+        const { signal } = controller;
+        const openButton = tocRoot.querySelector("[data-toc-open]");
+        const closeButton = tocRoot.querySelector("[data-toc-close]");
+        const dialog = tocRoot.querySelector("[data-toc-dialog]");
+        const links = Array.from(tocRoot.querySelectorAll("[data-toc-slug]"));
+        const toggleButtons = Array.from(
+          tocRoot.querySelectorAll("[data-toc-toggle]")
+        );
+        const branches = Array.from(
+          tocRoot.querySelectorAll("[data-toc-branch]")
+        );
+        const nodes = Array.from(tocRoot.querySelectorAll("[data-toc-node]"));
+        const readingProgressElements = Array.from(
+          tocRoot.querySelectorAll("[data-reading-progress]")
+        );
+        const slugs = [...new Set(links.map(link => link.dataset.tocSlug))];
+        const branchSlugs = [
+          ...new Set(toggleButtons.map(button => button.dataset.tocToggle)),
+        ];
+        const parentBySlug = new Map(
+          nodes.map(node => [
+            node.dataset.tocNode,
+            node.dataset.tocParent || "",
+          ])
+        );
+        const headingElements = slugs
+          .map(slug => document.getElementById(slug))
+          .filter(Boolean);
+        let activeSlug = "";
+        let previousBodyOverflow = "";
+        let readingProgressFrame = 0;
+        let previousReadingProgress = -1;
+
+        function updateReadingProgress() {
+          readingProgressFrame = 0;
+          const article = document.getElementById("article");
+          if (!article) return;
+
+          const articleRect = article.getBoundingClientRect();
+          const readingDistance = articleRect.height - window.innerHeight;
+          const progress =
+            readingDistance <= 0
+              ? articleRect.top <= 0
+                ? 100
+                : 0
+              : Math.min(
+                  100,
+                  Math.max(
+                    0,
+                    Math.floor((-articleRect.top / readingDistance) * 100)
+                  )
+                );
+
+          if (progress === previousReadingProgress) return;
+          previousReadingProgress = progress;
+          for (const element of readingProgressElements) {
+            element.textContent = `${progress}%`;
+          }
+        }
+
+        function requestReadingProgressUpdate() {
+          if (readingProgressFrame) return;
+          readingProgressFrame = requestAnimationFrame(updateReadingProgress);
+        }
+
+        function setBranchExpanded(slug, expanded) {
+          for (const button of toggleButtons) {
+            if (button.dataset.tocToggle === slug) {
+              button.setAttribute("aria-expanded", String(expanded));
+            }
+          }
+          for (const branch of branches) {
+            if (branch.dataset.tocBranch === slug) branch.hidden = !expanded;
+          }
+        }
+
+        function expandActivePath(slug) {
+          const requiredBranches = new Set();
+          let current = slug;
+
+          while (current) {
+            const parent = parentBySlug.get(current);
+            if (!parent) break;
+            requiredBranches.add(parent);
+            current = parent;
+          }
+          if (branchSlugs.includes(slug)) requiredBranches.add(slug);
+
+          for (const branchSlug of branchSlugs) {
+            setBranchExpanded(branchSlug, requiredBranches.has(branchSlug));
+          }
+        }
+
+        function revealLink(link) {
+          const scrollContainer = link.closest("[data-toc-scroll]");
+          if (!scrollContainer || scrollContainer.getClientRects().length === 0)
+            return;
+
+          const containerRect = scrollContainer.getBoundingClientRect();
+          const linkRect = link.getBoundingClientRect();
+          const safeTop = containerRect.top + containerRect.height * 0.2;
+          const safeBottom = containerRect.bottom - containerRect.height * 0.2;
+          let scrollDelta = 0;
+
+          if (linkRect.top < safeTop) {
+            scrollDelta = linkRect.top - safeTop;
+          } else if (linkRect.bottom > safeBottom) {
+            scrollDelta = linkRect.bottom - safeBottom;
+          }
+          if (!scrollDelta) return;
+
+          scrollContainer.scrollTo({
+            top: scrollContainer.scrollTop + scrollDelta,
+            behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
+              .matches
+              ? "auto"
+              : "smooth",
+          });
+        }
+
+        function applyActiveHeading(slug, reveal = true) {
+          if (!slug || slug === activeSlug) return;
+          activeSlug = slug;
+          expandActivePath(slug);
+
+          const activeLinks = [];
+          for (const link of links) {
+            const isActive = link.dataset.tocSlug === slug;
+            link.toggleAttribute("data-active", isActive);
+            if (isActive) {
+              link.setAttribute("aria-current", "location");
+              activeLinks.push(link);
+            } else {
+              link.removeAttribute("aria-current");
+            }
+          }
+
+          if (reveal) activeLinks.forEach(revealLink);
+        }
+
+        function findCurrentHeading() {
+          if (headingElements.length === 0) return "";
+          const activationOffset = 112;
+          let current = headingElements[0];
+
+          for (const heading of headingElements) {
+            if (heading.getBoundingClientRect().top <= activationOffset) {
+              current = heading;
+            } else {
+              break;
+            }
+          }
+
+          const reachedBottom =
+            window.innerHeight + window.scrollY >=
+            document.documentElement.scrollHeight - 2;
+          return reachedBottom ? headingElements.at(-1)?.id : current.id;
+        }
+
+        function updateActiveHeading() {
+          applyActiveHeading(findCurrentHeading());
+        }
+
+        function openDialog() {
+          if (!dialog || typeof dialog.showModal !== "function" || dialog.open)
+            return;
+          previousBodyOverflow = document.body.style.overflow;
+          document.body.style.overflow = "hidden";
+          dialog.showModal();
+          openButton?.setAttribute("aria-expanded", "true");
+          const activeLink = links.find(
+            link => link.dataset.tocSlug === activeSlug && dialog.contains(link)
+          );
+          if (activeLink) requestAnimationFrame(() => revealLink(activeLink));
+        }
+
+        function closeDialog() {
+          if (dialog?.open) dialog.close();
+        }
+
+        openButton?.addEventListener("click", openDialog, { signal });
+        closeButton?.addEventListener("click", closeDialog, { signal });
+        for (const button of toggleButtons) {
+          button.addEventListener(
+            "click",
+            () => {
+              const slug = button.dataset.tocToggle;
+              const expanded = button.getAttribute("aria-expanded") === "true";
+              setBranchExpanded(slug, !expanded);
+            },
+            { signal }
+          );
+        }
+        dialog?.addEventListener(
+          "click",
+          event => {
+            if (event.target === dialog) closeDialog();
+          },
+          { signal }
+        );
+        dialog?.addEventListener(
+          "close",
+          () => {
+            document.body.style.overflow = previousBodyOverflow;
+            openButton?.setAttribute("aria-expanded", "false");
+          },
+          { signal }
+        );
+
+        for (const link of links) {
+          link.addEventListener(
+            "click",
+            event => {
+              event.preventDefault();
+              const slug = link.dataset.tocSlug;
+              const target = document.getElementById(slug);
+              if (!target) return;
+
+              if (dialog?.contains(link)) closeDialog();
+
+              const targetTop =
+                target.getBoundingClientRect().top + window.scrollY - 16;
+              requestAnimationFrame(() => {
+                window.scrollTo({
+                  top: targetTop,
+                  behavior: window.matchMedia(
+                    "(prefers-reduced-motion: reduce)"
+                  ).matches
+                    ? "auto"
+                    : "smooth",
+                });
+              });
+            },
+            { signal }
+          );
+        }
+
+        const observer = new IntersectionObserver(updateActiveHeading, {
+          rootMargin: "-112px 0px -70% 0px",
+        });
+        headingElements.forEach(heading => observer.observe(heading));
+        window.addEventListener("hashchange", updateActiveHeading, { signal });
+        document.addEventListener("scroll", requestReadingProgressUpdate, {
+          passive: true,
+          signal,
+        });
+        window.addEventListener("resize", requestReadingProgressUpdate, {
+          signal,
+        });
+        updateActiveHeading();
+        requestReadingProgressUpdate();
+
+        window.__postTocCleanup = () => {
+          observer.disconnect();
+          controller.abort();
+          if (readingProgressFrame) cancelAnimationFrame(readingProgressFrame);
+          if (dialog?.open) dialog.close();
+          document.body.style.overflow = previousBodyOverflow;
+          window.__postTocCleanup = undefined;
+        };
+
+        document.addEventListener(
+          "astro:before-swap",
+          () => window.__postTocCleanup?.(),
+          { once: true, signal }
+        );
+      }
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initPostToc, {
+        once: true,
+      });
+    } else {
+      initPostToc();
+    }
+  })();
+</script> <article id="article" class="mt-8 w-full app-prose max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)"> <p>封面来源：碧蓝航线 北境序曲 活动 CG</p>
+<h1 id="0-前言">0. 前言</h1>
+<p>静态博客框架 Hexo 的 Butterfly 主题在 3.3.0 版本之后只支持 Hexo 5.0.0 及其以上版本，在此记录下 Node.js、Hexo 的安装、配置与升级，方便后续学习与交流。</p>
+<p>本文不包括搭建 Hexo 博客的内容，只在原基础上对 Hexo 框架进行升级，要想知道如何搭建基于 Hexo 的静态博客，可以查看 <a href="/posts/something-about-blog/">博客的搭建与维护</a> 一文，或直接查看本站顶置文章！</p>
+<h1 id="1-nodejs-的安装">1. Node.js 的安装</h1>
+<p>参考链接：<a href="https://blog.csdn.net/wjnf012/article/details/80422313">npm和cnpm（windows）安装步骤</a></p>
+<h2 id="11-安装-nodejs">1.1 安装 Node.js</h2>
+<p><mark class="flexible-marker flexible-marker-default">Node.js 依赖 Python，因此在安装 Node.js 前需要先安装好 Python 环境。</mark></p>
+<p>首先前往 Node.js 的官网下载 Node.js 的安装包，不建议下载版本等级过高的 Node.js，指不定会出什么问题。但是官网首页的推荐的长期支持版本等级也过高，那该怎么办？</p>
+<p>首次进入官网时，可将网站语言切换至简体中文：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/Node.js官网.png" alt="Node.js 官网" style="zoom: 50%;">
+<p>点击 <a href="https://nodejs.org/zh-cn/">本链接</a> 直接进入简体中文的 Node.js 官网。</p>
+<p>此时长期支持的版本是 14.15.0，如果不需要这么高的版本，可以点击上方的「下载」或「DOWNLOAD」：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/进入Node.js下载页.png" alt="进入 Node.js 下载页" style="zoom: 67%;">
+<p>进入下载页后，页面向下拉，点击「以往的版本」，即可进入对应页面下载以往的版本：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/进入Node.js以往的版本下载页面.png" alt="进入 Node.js 以往的版本下载页面" style="zoom: 50%;">
+<p>进入页面后，选择需要下载的版本，并点击下载：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/进入Node.js12.18.2下载页面.png" alt="进入 Node.js12.18.2 下载页面" style="zoom: 50%;">
+<p>选择与自己电脑系统相符的版本进行下载：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/下载64位Node.js安装包.png" alt="下载 64 位 Node.js 安装包" style="zoom: 67%;">
+<p>比如 64 位 Windows 系统选择如图所示的安装包进行下载。</p>
+<p>下载完安装包后，双击安装包，等待安装包的准备，然后同意协议，设置安装目录：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/设置Node.js安装目录.png" alt="设置 Node.js 安装目录" style="zoom:67%;">
+<p>设置好安装目录后，无脑下一步即可，安装完毕后点击 Finish 即可完成安装。</p>
+<p>安装完毕后，需要对 Node.js 做一些配置。</p>
+<p>使用快捷键 <code>Win + r</code> 打开 CMD，输入 <code>node -v</code> 查看 Node.js 的版本，输入 <code>npm -v</code> 查看 npm 的版本：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/%E6%9F%A5%E7%9C%8BNode.js%E4%B8%8Enpm%E7%9A%84%E7%89%88%E6%9C%AC.png" alt="查看Node.js与npm的版本"></p>
+<p>如果可以成功显示，证明安装完成。</p>
+<p>PS：安装好 Node.js 后，会在环境变量 PATH 下自动增加一个值，其值为 Node.js 的安装目录。</p>
+<p>在 CMD 中输入命令，查看 npm 的设置，共有以下三种命令可选：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">npm</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> ls</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> –g</span><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic"> # 查看所有全局安装的模块</span></span>
+<span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">npm</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> config</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> ls</span><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic"> # 查看部分npm默认设置</span></span>
+<span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">npm</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> config</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> ls</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> –l</span><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic"> # 查看全部npm默认设置</span></span></code></pre>
+<p>其实使用第二条命令即可，查看部分 npm 的默认配置。一般来说，此时 npm 的全局模块的存放路径、cache 的路径都在 C 盘，C 盘寸土寸金，拿来放这些有些阔绰，可以尝试修改。</p>
+<p>依次输入以下命令修改全局模块、cache 的存放路径：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span></span><code><span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic"># 将全局模块的存放路径和 cache 的存放路径与 Node.js 放在一起</span></span>
+<span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">npm</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> config</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> set</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> prefix</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> "D:\environment\Nodejs\node_global"</span></span>
+<span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">npm</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> config</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> set</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> cache</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> "D:\environment\Nodejs\node_cache"</span></span></code></pre>
+<p>第一条命令用于设置全局模块的存放路径，以后下载的全局模块都会放在这个路径下，第二条命令用于设置 cache 的存放路径。</p>
+<p>执行完这两条命令后，可以前往对应的文件夹下查看：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/全局模块与cache存放路径.png" alt="全局模块与 cache 存放路径" style="zoom: 67%;">
+<p>可以发现多出了一个名为 <code>node_global</code> 的文件夹，以后的全局模块都会放到这个文件夹下，节约 C 盘空间。</p>
+<p>也可能不会像上述的图示一样出现名为 <code>node_cache</code> 的文件夹，不要慌，这是因为没有缓存，因此没有创建这个文件夹。</p>
+<p>再次执行 <code>npm config ls</code> 命令，查看 npm 的设置：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/查看npm的设置.png" alt="查看 npm 的设置" style="zoom: 80%;">
+<p>由于修改了全局模块的存放路径，因此需要添加一个环境变量。</p>
+<p>使用快捷键 <code>Win + r</code>，输入 <code>sysdm.cpl</code> 进入系统属性页面：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/系统属性页面.png" alt="系统属性页面" style="zoom:67%;">
+<p>点击高级，点击环境变量进入环境变量页面。新增一个名为 <code>NODE_PATH</code> 的环境变量，其值为：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span>D:\environment\Nodejs\node_global\node_modules</span></span></code></pre>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/%E6%96%B0%E5%A2%9ENODE_PATH%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F.png" alt="新增NODE_PATH环境变量"></p>
+<p><mark class="flexible-marker flexible-marker-default">注意：</mark> 值是全局模块存放路径 <code>node_global</code> 下的 <code>node_modules</code>，不要设置错了！</p>
+<p><strong>最好将该路径信息也添加到环境变量 Path 中。</strong></p>
+<p>设置好环境变量后，在 CMD 中输入以下命令：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">npm</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> install</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> express</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -g</span></span></code></pre>
+<p>如果命令执行失败，提示没有权限创建某些文件夹，尝试以管理员身份运行 CMD 后再执行上述命令。</p>
+<p><code>-g</code> 选项表示将 express 安装在全局模块目录下。安装之后，进入目录查看一下：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/进入目录查看express.png" alt="进入目录查看 express" style="zoom:67%;">
+<p>在 CMD 中输入 <code>node</code> 进入编辑模式，输入以下命令检测是否能正常加载模块：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span>require('express')</span></span></code></pre>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/检测是否正常加载模块.png" alt="检测是否正常加载模块" style="zoom: 50%;">
+<p>如果出现上图所示的信息，且没有出现异常信息，则证明配置正确。如果出现错误，检查环境变量等配置是否存在错误。</p>
+<h2 id="12-安装-cnpm"><del>1.2 安装 cnpm</del></h2>
+<p><mark class="flexible-marker flexible-marker-default">配置 npm 镜像源即可，不要使用 cnpm，这玩意有 BUG。</mark></p>
+<p>npm 的全称是 node package manager，字面意思就是 Nodejs 的包管理器，用于管理 Node 插件（进行下载，卸载等操作）。</p>
+<p>但是 npm 是从国外服务器下载的，下载速度令人着急，还可能会出现各种异常。要想解决这个问题可以尝试配置一个镜像，即：安装 cnpm，使用淘宝镜像代替 npm。</p>
+<p>在 CMD 中输入以下命令安装 cnpm：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">npm</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> install</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -g</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> cnpm</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> --registry=https://registry.npmmirror.com/</span></span></code></pre>
+<p>安装完毕后，在 CMD 中执行 <code>cnpm -v</code> 命令检查是否安装成功。</p>
+<p>一般来说，都会出问题，因为还需要配置一个环境变量。</p>
+<p>按照前面说的方法进行环境变量配置界面，选择系统变量 <code>PATH</code>，再点击编辑，增加如下的值：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span>D:\environment\Nodejs\node_global</span></span></code></pre>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/修改系统变量PATH值.png" alt="修改系统变量 PATH 值" style="zoom:67%;">
+<p>配置好环境变量后，再在 CMD 中输入 <code>cnpm -v</code>：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/%E6%A3%80%E6%9F%A5cnpm%E6%98%AF%E5%90%A6%E5%AE%89%E8%A3%85%E6%88%90%E5%8A%9F.png" alt="检查cnpm是否安装成功"></p>
+<p>如果出现上图所示的信息，证明 <code>cnpm</code> 安装成功。</p>
+<h2 id="13-配置-npm-镜像源">1.3 配置 npm 镜像源</h2>
+<p>查看当前 NPM 源：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">npm</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> config</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> get</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> registry</span></span></code></pre>
+<p>使用淘宝源：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">npm</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> config</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> set</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> registry</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> https://registry.npmmirror.com/</span></span></code></pre>
+<p>也可以前往 C 盘的用户目录中直接修改 <code>.npmrc</code> 文件完成设置，添加以下内容：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span>registry = https://registry.npmmirror.com/</span></span></code></pre>
+<p>还原 NPM 源：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">npm</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> config</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> set</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> registry</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> https://registry.npmjs.org</span></span></code></pre>
+<h2 id="14-配置多个镜像源">1.4 配置多个镜像源</h2>
+<p>在公司时，可能会需要使用公司自己的镜像源，但是公司的镜像源的使用需要在公司内网的环境下，在非内网环境下需要使用公司提供的 VPN，十分不方便，如果可以配置多个镜像源然后进行切换不爽歪歪了？ 😂</p>
+<p>下载 nrm 进行管理：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">npm</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> install</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -g</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> nrm</span></span></code></pre>
+<p>添加多个镜像源，比如添加原镜像源和淘宝镜像源：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">nrm</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> add</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> npm</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> http://registry.npmjs.org</span></span>
+<span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">nrm</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> add</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> taobao</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> https://registry.npmmirror.com/</span></span></code></pre>
+<p>查看可选的源：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">nrm</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> ls</span></span></code></pre>
+<p>当需要切换镜像源时，可以使用以下命令：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">nrm</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> use</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> taobao</span></span>
+<span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">nrm</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> use</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> npm</span></span></code></pre>
+<p>切换后可以使用以下命令看看是否切换成功：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">npm</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> config</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> get</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> registry</span></span></code></pre>
+<p>其他操作：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span></span><code><span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic"># 测试镜像源的速度</span></span>
+<span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">nrm</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> test</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> 镜像源名称</span></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic"># 查看当前源</span></span>
+<span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">nrm</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> current</span></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic"># 删除源</span></span>
+<span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">nrm</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> del</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> 镜像源名称</span></span></code></pre>
+<h1 id="2-nodejs-的卸载">2. Node.js 的卸载</h1>
+<p>会安装也要会卸载，简单介绍一下 Node.js 的卸载。</p>
+<p>首先，使用某某软件管家或者使用 Windows 自带的控制面板进行卸载。</p>
+<p>然后重启电脑。</p>
+<p>接着寻找这些文件，并删除它们（当然也有可能不存在，都是正常现象）：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span></span><code><span class="line"><span>C:\Program Files (x86)\Nodejs</span></span>
+<span class="line"><span>C:\Program Files\Nodejs</span></span>
+<span class="line"><span>C:\Users\{User}\AppData\Roaming\npm (或%appdata%\npm)</span></span>
+<span class="line"><span>C:\Users\{User}\AppData\Roaming\npm-cache (或%appdata%\npm-cache)</span></span></code></pre>
+<p>最后两个路径表示全局模块的存放路径和 cache 的默认存放路径，如果更改了默认存放路径，前往对应的路径进行删除。</p>
+<p>检查环境变量中是否有与 Node.js 相关的环境变量，如果存在，一并删除。</p>
+<p>如果还没有完全卸载，在 CMD 中输入 <code>where node</code> 指令，找到所在位置删除目录。</p>
+<p>最后，重启一手！卸载完事！ 🎉</p>
+<p>在此推荐一个软件 —— <a href="https://uninstalr.com/">Uninstalr</a>，号称 Windows 下最好的卸载器，可以试试。</p>
+<h1 id="3-nodejs-的升级">3. Node.js 的升级</h1>
+<p>【无脑升级法】使用国内各大厂商的 xxx 软件管家对 Node.js 进行升级。</p>
+<p>【普通升级法】前往 Node.js 官网，下载最新的长期支持版本安装包，然后双击安装包覆盖安装即可对当前的 Node.js 版本进行升级。</p>
+<h1 id="4-安装-yarn">4. 安装 Yarn</h1>
+<p>Yarn 是 Facebook 贡献的 Javascript 包管理器，其作用和 NPM 类似，NPM 是随同 Node.js 一起安装的包管理工具。在某些情况下，可能会使用到 Yarn，在此介绍一下 Yarn 的安装。</p>
+<p>Yarn 官网：<a href="https://yarnpkg.com/">Yarn</a></p>
+<p>Yarn 中文网：<a href="https://yarn.bootcss.com/">Yarn zh</a></p>
+<p>Yarn 安装介绍：<a href="https://yarnpkg.com/getting-started/install">Getting Start</a></p>
+<h2 id="41-基本安装">4.1 基本安装</h2>
+<p>本文介绍安装 Yarn 时，建立在本机存在 Node.js 的环境下。执行以下命令完成安装：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">npm</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> install</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -g</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> yarn</span></span></code></pre>
+<p>安装完成后，执行以下命令检查是否安装成功：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">yarn</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> --version</span></span></code></pre>
+<p>到此基本安装就完成了，但还需要完成一些配置以便能够更好地使用它。</p>
+<h2 id="42-路径设置">4.2 路径设置</h2>
+<p>参考链接：<a href="https://www.jianshu.com/p/0d69cb838ae5">Vue开发环境npm和Yarn的环境变量配置（Windows 10 版）</a></p>
+<blockquote><p>设置 Yarn 的全局安装路径</p></blockquote>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">yarn</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> config</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> set</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> global-folder</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> "你的磁盘路径"</span></span></code></pre>
+<p>比如：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">yarn</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> config</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> set</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> global-folder</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> "D:\environment\Yarn\yarn_global"</span></span></code></pre>
+<p>设置完成后，可以使用以下命令查看 Yarn 的全局安装目录：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">yarn</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> global</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> dir</span></span></code></pre>
+<blockquote><p>设置 Yarn 缓存位置</p></blockquote>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">yarn</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> config</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> set</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> cache-folder</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> "你的磁盘路径"</span></span></code></pre>
+<p>比如：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">yarn</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> config</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> set</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> cache-folder</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> "D:\environment\Yarn\yarn_cache"</span></span></code></pre>
+<p>也可以前往 C 盘的用户目录中直接修改 <code>.yarnrc</code> 文件完成设置。</p>
+<h2 id="43-配置环境变量">4.3 配置环境变量</h2>
+<p>为了在 Windows 上更好地使用，需要配置一下 Yarn 的环境变量。</p>
+<p>给系统环境变量 <code>Path</code> 添加以下值：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span>%NODE_PATH%\yarn\bin</span></span></code></pre>
+<p><code>%NODE_PATH%</code> 在前文中已经配置过了，是 Node.js 的全局安装目录，这里指向 Node.js 全局安装目录下 Yarn 的 bin 目录。</p>
+<p>由于 Java 中也有 Yarn，因此尽量将这个值放在 Java 的环境变量之前，或者粗暴点，直接把这个值放在第一个。</p>
+<p>配置完成后，执行下述命令检查下：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">yarn</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> global</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> bin</span></span></code></pre>
+<h2 id="44-配置镜像源">4.4 配置镜像源</h2>
+<p>查看当前源：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">yarn</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> config</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> get</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> registry</span></span></code></pre>
+<p>切换为淘宝源：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">yarn</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> config</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> set</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> registry</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> https://registry.npmmirror.com/</span></span></code></pre>
+<p>还原 Yarn 源：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">yarn</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> config</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> set</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> registry</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> https://registry.yarnpkg.com</span></span></code></pre>
+<p>完成上述配置后，可以执行以下命令查看所有配置：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">yarn</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> config</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> list</span></span></code></pre>
+<blockquote><p>NPM 与 Yarn 配置镜像源可参考链接</p></blockquote>
+<p><a href="https://www.cnblogs.com/fanbi/p/13671583.html">npm/yarn查看当前使用源与设置其它源</a></p>
+<h1 id="5-hexo-版本升级">5. Hexo 版本升级</h1>
+<p>本节内容将介绍如何将 Hexo 升级至 5.x 版本（也适用于其他 Hexo 版本的升级）。</p>
+<p>既然是升级，那么肯定安装了 Hexo，进入 CMD，执行 <code>hexo v</code> 命令：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/查看hexo信息.png" alt="查看 hexo 信息" style="zoom: 80%;">
+<p>如果出现上图所示的信息，证明当前 Hexo 的安装无误。</p>
+<p>需要注意，<code>hexo-cli</code> 并不表示 Hexo 的版本。</p>
+<p>如果想要知道 Hexo 的版本，需要前往博客对应的文件夹，在博客文件夹使用 Git 的命令行（git bash），然后输入 <code>hexo v</code> 查看 Hexo 的版本。</p>
+<p>将 Hexo 升级至 5.x 也很简单，可以根据官网的操作来：<a href="https://hexo.io/news/2020/07/29/hexo-5-released/">Hexo 5.0.0 Released</a></p>
+<p>首先前往博客文件夹，找到名为 <code>package.json</code> 的文件，使用记事本打开：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/修改package.json文件.png" alt="修改 package.json 文件" style="zoom:67%;">
+<p>将 dependencies 项中的 hexo 项的值修改为 5.2.0 后保存并退出。</p>
+<p>接着在博客文件夹下使用 git bash 执行 <code>npm update</code> 命令，等待更新完成。</p>
+<p>更新完成后，在 git bash 下执行 <code>hexo -v</code>：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/ToolsImages/检查hexo是否更新成功.png" alt="检查 hexo 是否更新成功" style="zoom: 67%;">
+<p>可以看到，hexo 版本已经更新至 5.2.0 了。</p> </article> <div class="text-muted-foreground max-w-app mt-20 w-full space-y-3 text-center text-sm"> <aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full leading-6"> <p class="m-0"> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a> 许可协议，转载时请署名并注明<a href="https://mofan212.github.io/posts/nodejs-setup-and-hexo-upgrade/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a> 🔗 </p> </aside> <section data-post-reward data-pagefind-ignore class="relative w-full sm:static" aria-label="赞赏" data-astro-cid-3e4etqql> <div class="flex flex-wrap items-center justify-center gap-x-1.5 gap-y-2" data-astro-cid-3e4etqql> <span class="whitespace-nowrap" data-astro-cid-3e4etqql>如果这篇文章对你有帮助，可以通过</span> <div data-post-reward-trigger class="inline-block sm:relative" data-astro-cid-3e4etqql> <button type="button" data-post-reward-button class="focus-outline border-accent text-accent hover:bg-accent/10 rounded-md border px-3 py-1 font-medium transition-colors" aria-expanded="false" aria-controls="post-reward-panel" data-astro-cid-3e4etqql> 赞赏 </button> <div id="post-reward-panel" data-post-reward-panel class="border-border bg-background text-foreground grid w-[min(22rem,calc(100vw-1.5rem))] grid-cols-2 gap-4 rounded-lg border p-4 shadow-xl sm:gap-6 sm:p-5" role="group" aria-label="赞赏" data-astro-cid-3e4etqql> <figure class="m-0 text-center" data-astro-cid-3e4etqql> <img src="/images/reward/alipay.png" alt="支付宝" loading="lazy" decoding="async" class="mx-auto w-32 rounded-md sm:w-36" data-astro-cid-3e4etqql> <figcaption class="mt-2 text-sm font-medium" data-astro-cid-3e4etqql> 支付宝 </figcaption> </figure> <figure class="m-0 text-center" data-astro-cid-3e4etqql> <img src="/images/reward/wechat-pay.png" alt="微信" loading="lazy" decoding="async" class="mx-auto w-32 rounded-md sm:w-36" data-astro-cid-3e4etqql> <figcaption class="mt-2 text-sm font-medium" data-astro-cid-3e4etqql> 微信 </figcaption> </figure> </div> </div> <span class="whitespace-nowrap" data-astro-cid-3e4etqql>请我喝杯 Coffee ☕</span> </div> </section>  <script data-astro-rerun>
+  (() => {
+    const trigger = document.querySelector("[data-post-reward-trigger]");
+    const button = trigger?.querySelector("[data-post-reward-button]");
+
+    if (!trigger || !button || trigger.dataset.initialized === "true") return;
+
+    trigger.dataset.initialized = "true";
+    const controller = new AbortController();
+    const { signal } = controller;
+    const touchLayout = window.matchMedia("(hover: none)");
+
+    const setOpen = open => {
+      trigger.dataset.open = String(open);
+      button.setAttribute("aria-expanded", String(open));
+    };
+
+    button.addEventListener(
+      "click",
+      () => {
+        if (!touchLayout.matches) return;
+        setOpen(trigger.dataset.open !== "true");
+      },
+      { signal }
+    );
+
+    document.addEventListener(
+      "click",
+      event => {
+        if (
+          trigger.dataset.open === "true" &&
+          !trigger.contains(event.target)
+        ) {
+          setOpen(false);
+        }
+      },
+      { signal }
+    );
+
+    document.addEventListener(
+      "keydown",
+      event => {
+        if (event.key !== "Escape" || trigger.dataset.open !== "true") return;
+        setOpen(false);
+        button.focus();
+      },
+      { signal }
+    );
+
+    document.addEventListener("astro:before-swap", () => controller.abort(), {
+      once: true,
+      signal,
+    });
+  })();
+</script> </div> <hr class="my-8 border-dashed">  <div id="btt-btn-container" class="fixed inset-e-4 bottom-4 z-50 xl:sticky xl:inset-e-auto xl:float-end xl:me-1 translate-y-14 opacity-0 transition duration-500"> <button data-button="back-to-top" class="group bg-background relative px-2 py-1 size-12 rounded-full shadow-xl xl:h-8 xl:w-fit xl:rounded-md xl:shadow-none xl:focus-visible:rounded-none xl:bg-background/35 xl:bg-clip-padding xl:backdrop-blur-lg"> <span id="progress-indicator" class="absolute inset-0 -z-10 block size-12 scale-110 rounded-full bg-transparent xl:hidden xl:h-8 xl:rounded-md"></span> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block rotate-90 xl:hidden" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 12h14M5 12l6 6M5 12l6-6" /></svg> <span class="group-hover:text-accent sr-only text-sm xl:not-sr-only"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M12 5v14M16 9l-4-4M8 9l4-4" /></svg> 返回顶部 </span> </button> </div> <script data-astro-rerun>
+  function backToTop() {
+    const rootElement = document.documentElement;
+    const btnContainer = document.querySelector("#btt-btn-container");
+    const backToTopBtn = document.querySelector("[data-button='back-to-top']");
+    const progressIndicator = document.querySelector("#progress-indicator");
+
+    if (!rootElement || !btnContainer || !backToTopBtn || !progressIndicator)
+      return;
+
+    backToTopBtn.addEventListener("click", () => {
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    });
+
+    let lastVisible = null;
+    function handleScroll() {
+      const scrollTotal = rootElement.scrollHeight - rootElement.clientHeight;
+      const scrollTop = rootElement.scrollTop;
+      const scrollPercent = Math.floor((scrollTop / scrollTotal) * 100);
+
+      progressIndicator.style.setProperty(
+        "background-image",
+        `conic-gradient(var(--accent), var(--accent) ${scrollPercent}%, transparent ${scrollPercent}%)`
+      );
+
+      const isVisible = scrollTop > 400;
+
+      if (isVisible !== lastVisible) {
+        btnContainer.classList.toggle("opacity-100", isVisible);
+        btnContainer.classList.toggle("translate-y-0", isVisible);
+        btnContainer.classList.toggle("opacity-0", !isVisible);
+        btnContainer.classList.toggle("translate-y-14", !isVisible);
+        lastVisible = isVisible;
+      }
+    }
+
+    let ticking = false;
+    document.addEventListener("scroll", () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+  }
+  backToTop();
+</script> <ul id="post-tags" class="mt-4 mb-8 flex flex-wrap gap-4 sm:mb-8"> <li> <a href="/tags/Hexo/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> Hexo </a> </li><li> <a href="/tags/Node-js/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> Node.js </a> </li> </ul>  <hr class="my-8 border-dashed"> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/the-basis-of-elasticsearch/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block flex-none rtl:rotate-180" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 12h14M5 12l6 6M5 12l6-6" /></svg> <div> <span>上一篇</span> <div class="text-accent/85 text-sm">Elasticsearch 入门</div> </div> </a> <a href="/posts/commonly-used-classes-in-java/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>下一篇</span> <div class="text-accent/85 text-sm">Java 常用类</div> </div> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block flex-none rtl:rotate-180" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 12h14M13 18l6-6M13 6l6 6" /></svg> </a> </div> </main> <footer class="app-layout mt-auto"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="text-muted-foreground my-2 flex w-full flex-col items-center text-center text-sm whitespace-nowrap sm:w-auto sm:items-end"> <div class="flex items-center gap-1.5"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="size-4" viewBox="0 0 24 24" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" /><path d="M7 18a4.6 4.4 0 0 1 0-9 5 4.5 0 0 1 9.7 2.2A4 3.8 0 0 1 17 19" /><path d="m9 15 3-3 3 3M12 12v9" /></svg> <span>最近更新：</span> <time class="tabular-nums" datetime="2026-08-31T17:00:14.000Z" data-deployed-at="2026-08-31T17:00:14.000Z" data-just-now="刚刚" data-locale="zh-CN"> 2026-09-01 01:00 </time> </div> <div class="mt-1 flex items-center gap-3 text-xs"> <span class="flex items-center gap-1" title="本站总浏览量"> <svg fill="currentColor" viewBox="0 0 576 512" aria-hidden="true" class="size-3.5"><path d="M572.52 241.4C518.29 135.59 410.93 64 288 64S57.68 135.61 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.61 284.52-177.41a32.35 32.35 0 0 0 0-29.19M288 400a112 112 0 1 1 112-112 112 112 0 0 1-112 112m0-176a64 64 0 1 0 64 64 64 64 0 0 0-64-64" /></svg> <span class="sr-only">本站总浏览量：</span> <span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-end tabular-nums">
+--
+</span> </span> <span aria-hidden="true">|</span> <span class="flex items-center gap-1" title="本站访客数"> <svg fill="currentColor" viewBox="0 0 448 512" aria-hidden="true" class="size-3"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4" /></svg> <span class="sr-only">本站访客数：</span> <span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-end tabular-nums">
+--
+</span> </span> </div> </div> <div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"> <span>版权所有 &#169; 2020 – 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer> <script>
+  (() => {
+    const updateDeploymentTimes = () => {
+      document.querySelectorAll("[data-deployed-at]").forEach(element => {
+        const deployedAt = Date.parse(element.dataset.deployedAt ?? "");
+        if (Number.isNaN(deployedAt)) return;
+
+        const elapsed = Math.max(0, Date.now() - deployedAt);
+        if (elapsed < 60_000) {
+          element.textContent = element.dataset.justNow ?? "";
+          return;
+        }
+
+        let value;
+        let unit;
+        if (elapsed < 3_600_000) {
+          value = Math.floor(elapsed / 60_000);
+          unit = "minute";
+        } else if (elapsed < 86_400_000) {
+          value = Math.floor(elapsed / 3_600_000);
+          unit = "hour";
+        } else if (elapsed < 2_592_000_000) {
+          value = Math.floor(elapsed / 86_400_000);
+          unit = "day";
+        } else if (elapsed < 31_536_000_000) {
+          value = Math.floor(elapsed / 2_592_000_000);
+          unit = "month";
+        } else {
+          value = Math.floor(elapsed / 31_536_000_000);
+          unit = "year";
+        }
+
+        const formatter = new Intl.RelativeTimeFormat(
+          element.dataset.locale ?? document.documentElement.lang,
+          { numeric: "always" }
+        );
+        element.textContent = formatter.format(-value, unit);
+      });
+    };
+
+    updateDeploymentTimes();
+
+    const initializedKey = "__astroBlogDeploymentTimeUpdaterInitialized";
+    if (window[initializedKey]) return;
+
+    window[initializedKey] = true;
+    document.addEventListener("astro:page-load", updateDeploymentTimes);
+    window.setInterval(updateDeploymentTimes, 60_000);
+  })();
+</script>   <script type="module" src="/_astro/Layout.astro_astro_type_script_index_0_lang.DGs0Jsao.js"></script> </body> </html> <script data-astro-rerun>
+  function createProgressBar() {
+    const progressContainer = document.createElement("div");
+    progressContainer.className =
+      "progress-container fixed top-0 z-10 h-1 w-full bg-background";
+
+    const progressBar = document.createElement("div");
+    progressBar.className = "progress-bar h-1 w-0 bg-accent";
+    progressBar.id = "myBar";
+
+    progressContainer.appendChild(progressBar);
+    document.body.appendChild(progressContainer);
+  }
+  createProgressBar();
+
+  function updateScrollProgress() {
+    document.addEventListener("scroll", () => {
+      const winScroll =
+        document.body.scrollTop || document.documentElement.scrollTop;
+      const height =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      if (document) {
+        const myBar = document.getElementById("myBar");
+        if (myBar) {
+          myBar.style.width = scrolled + "%";
+        }
+      }
+    });
+  }
+  updateScrollProgress();
+
+  /** Accessible image lightbox for article images. */
+  function initLightbox() {
+    const article = document.getElementById("article");
+    if (!article) return;
+
+    const prefersReducedMotion = () =>
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    let overlay = null;
+    let lastFocused = null;
+
+    // Defer attribute mutations so they don't push the LCP timestamp.
+    // Event listeners below use delegation and don't need the attributes to exist yet.
+    requestAnimationFrame(() => {
+      const images = Array.from(article.querySelectorAll("img"));
+      for (const image of images) {
+        if (image.closest("a")) continue;
+        image.setAttribute("role", "button");
+        image.setAttribute("tabindex", "0");
+        image.setAttribute("aria-haspopup", "dialog");
+        image.setAttribute(
+          "aria-label",
+          image.alt ? `Zoom image: ${image.alt}` : "Zoom image"
+        );
+      }
+    });
+
+    function open(src, alt, trigger) {
+      if (overlay) return;
+      lastFocused = trigger ?? document.activeElement;
+
+      overlay = document.createElement("div");
+      overlay.setAttribute("role", "dialog");
+      overlay.setAttribute("aria-modal", "true");
+      overlay.setAttribute(
+        "aria-label",
+        alt ? `Image preview: ${alt}` : "Image preview"
+      );
+      overlay.className =
+        "fixed inset-0 z-50 flex cursor-zoom-out items-center justify-center bg-black/70 backdrop-blur-sm opacity-0 transition-opacity duration-200 motion-reduce:transition-none";
+
+      const closeButton = document.createElement("button");
+      closeButton.type = "button";
+      closeButton.setAttribute("aria-label", "Close image preview");
+      closeButton.className =
+        "absolute end-4 top-4 rounded p-2 text-3xl leading-none text-white";
+      closeButton.innerHTML = "&#10005;";
+      closeButton.addEventListener("click", close);
+
+      const image = document.createElement("img");
+      image.src = src;
+      image.alt = "";
+      image.className =
+        "max-h-[90dvh] max-w-[90dvw] cursor-default object-contain";
+
+      overlay.append(closeButton, image);
+      overlay.addEventListener("click", e => {
+        if (e.target === overlay && currentScale <= 1) close();
+      });
+
+      let currentScale = 1;
+      let translateX = 0;
+      let translateY = 0;
+      let initialDist = 0;
+      let initialScale = 1;
+      let panStartX = 0;
+      let panStartY = 0;
+      let panStartTranslateX = 0;
+      let panStartTranslateY = 0;
+      let lastTapTime = 0;
+
+      function applyTransform() {
+        image.style.transform = `scale(${currentScale}) translate(${translateX}px, ${translateY}px)`;
+      }
+
+      function resetTransform() {
+        currentScale = 1;
+        translateX = 0;
+        translateY = 0;
+        image.style.transform = "";
+      }
+
+      overlay.addEventListener(
+        "touchstart",
+        e => {
+          const t = e.touches;
+          if (t.length === 2) {
+            initialDist = Math.hypot(
+              t[1].clientX - t[0].clientX,
+              t[1].clientY - t[0].clientY
+            );
+            initialScale = currentScale;
+          } else if (t.length === 1) {
+            const now = Date.now();
+            if (now - lastTapTime < 300) {
+              e.preventDefault();
+              if (currentScale > 1) {
+                resetTransform();
+              } else {
+                currentScale = 2;
+                translateX = 0;
+                translateY = 0;
+                applyTransform();
+              }
+              lastTapTime = 0;
+              panStartX = t[0].clientX;
+              panStartY = t[0].clientY;
+              panStartTranslateX = translateX;
+              panStartTranslateY = translateY;
+            } else {
+              lastTapTime = now;
+              if (currentScale > 1) {
+                panStartX = t[0].clientX;
+                panStartY = t[0].clientY;
+                panStartTranslateX = translateX;
+                panStartTranslateY = translateY;
+              }
+            }
+          }
+        },
+        { passive: false }
+      );
+
+      overlay.addEventListener(
+        "touchmove",
+        e => {
+          const t = e.touches;
+          if (t.length === 2) {
+            e.preventDefault();
+            const dist = Math.hypot(
+              t[1].clientX - t[0].clientX,
+              t[1].clientY - t[0].clientY
+            );
+            currentScale = Math.min(
+              4,
+              Math.max(1, initialScale * (dist / initialDist))
+            );
+            applyTransform();
+          } else if (t.length === 1) {
+            if (currentScale > 1) {
+              e.preventDefault();
+              translateX =
+                panStartTranslateX + (t[0].clientX - panStartX) / currentScale;
+              translateY =
+                panStartTranslateY + (t[0].clientY - panStartY) / currentScale;
+              const maxX = Math.max(
+                0,
+                (image.clientWidth - overlay.clientWidth / currentScale) / 2
+              );
+              const maxY = Math.max(
+                0,
+                (image.clientHeight - overlay.clientHeight / currentScale) / 2
+              );
+              translateX = Math.min(maxX, Math.max(-maxX, translateX));
+              translateY = Math.min(maxY, Math.max(-maxY, translateY));
+              applyTransform();
+            } else {
+              e.preventDefault();
+            }
+          }
+        },
+        { passive: false }
+      );
+
+      overlay.addEventListener("touchend", e => {
+        if (e.touches.length === 0 && currentScale <= 1.05) {
+          resetTransform();
+        }
+      });
+
+      overlay.addEventListener("touchcancel", e => {
+        if (e.touches.length === 0 && currentScale <= 1.05) {
+          resetTransform();
+        }
+      });
+
+      document.body.appendChild(overlay);
+      document.body.style.overflow = "hidden";
+      document.addEventListener("keydown", onKeyDown);
+      window.__closeLightbox = close;
+
+      requestAnimationFrame(() => overlay?.classList.add("opacity-100"));
+      closeButton.focus();
+    }
+
+    function close() {
+      if (!overlay) return;
+      const el = overlay;
+      overlay = null;
+      window.__closeLightbox = null;
+
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = "";
+      lastFocused?.focus();
+      lastFocused = null;
+
+      if (prefersReducedMotion()) {
+        el.remove();
+        return;
+      }
+      const remove = () => el.remove();
+      el.addEventListener("transitionend", remove, { once: true });
+      setTimeout(remove, 250); // fallback in case transitionend never fires
+      el.classList.remove("opacity-100");
+    }
+
+    function onKeyDown(e) {
+      if (e.key === "Escape") {
+        close();
+      } else if (e.key === "Tab") {
+        trapFocus(e);
+      }
+    }
+
+    // Keep keyboard focus inside the open dialog.
+    function trapFocus(e) {
+      if (!overlay) return;
+      const focusables = overlay.querySelectorAll(
+        'a[href], button, [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+
+    function triggerFromEvent(e) {
+      const image = e.target.closest("img");
+      if (!image || !article.contains(image) || image.closest("a")) return null;
+      return image;
+    }
+
+    function activate(image) {
+      open(image.currentSrc || image.src, image.alt, image);
+    }
+
+    article.addEventListener("click", e => {
+      const image = triggerFromEvent(e);
+      if (!image) return;
+      e.preventDefault();
+      activate(image);
+    });
+
+    article.addEventListener("keydown", e => {
+      if (e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") return;
+      const image = triggerFromEvent(e);
+      if (!image) return;
+      e.preventDefault();
+      activate(image);
+    });
+  }
+  initLightbox();
+
+  if (!window.__lightboxSwapBound) {
+    window.__lightboxSwapBound = true;
+    document.addEventListener("astro:before-swap", () =>
+      window.__closeLightbox?.()
+    );
+  }
+
+  document.addEventListener("astro:after-swap", () =>
+    window.scrollTo({ left: 0, top: 0, behavior: "instant" })
+  );
+</script>

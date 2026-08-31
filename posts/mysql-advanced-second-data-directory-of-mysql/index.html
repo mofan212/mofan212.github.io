@@ -1,0 +1,1056 @@
+<!DOCTYPE html><html dir="ltr" lang="zh-CN" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/mysql-advanced-second-data-directory-of-mysql/"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css"><link rel="preconnect" href="https://busuanzi.ibruce.info"><meta name="generator" content="Astro v6.4.2"><!-- Primary meta --><title>【MySQL 高级篇二】MySQL 的数据目录 | Mofan</title><meta name="title" content="【MySQL 高级篇二】MySQL 的数据目录 | Mofan"><meta name="description" content="本文介绍了 MySQL 8.0 的主要目录结构、数据库和文件系统的关系。"><meta name="author" content="默烦"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Mofan"><meta property="og:title" content="【MySQL 高级篇二】MySQL 的数据目录 | Mofan"><meta property="og:description" content="本文介绍了 MySQL 8.0 的主要目录结构、数据库和文件系统的关系。"><meta property="og:url" content="https://mofan212.github.io/posts/mysql-advanced-second-data-directory-of-mysql/"><meta property="og:image" content="https://mofan212.github.io/default-og.jpg"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://mofan212.github.io/posts/mysql-advanced-second-data-directory-of-mysql/"><meta property="twitter:title" content="【MySQL 高级篇二】MySQL 的数据目录 | Mofan"><meta property="twitter:description" content="本文介绍了 MySQL 8.0 的主要目录结构、数据库和文件系统的关系。"><meta property="twitter:image" content="https://mofan212.github.io/default-og.jpg"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Mofan" href="https://mofan212.github.io/rss.xml/"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2023-03-05T00:00:00.000Z"><meta property="article:modified_time" content="2023-03-05T00:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"【MySQL 高级篇二】MySQL 的数据目录 | Mofan","url":"https://mofan212.github.io/posts/mysql-advanced-second-data-directory-of-mysql/","mainEntityOfPage":"https://mofan212.github.io/posts/mysql-advanced-second-data-directory-of-mysql/","datePublished":"2023-03-05T00:00:00.000Z","dateModified":"2023-03-05T00:00:00.000Z","author":[{"@type":"Person","name":"默烦","url":"https://github.com/mofan212"}]}</script> <!--
+      Inline FOUC-prevention script: sets data-theme on <html> before
+      the browser paints. Runs synchronously, no defer/async.
+    --><script>
+      (function () {
+        const stored = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+        const theme = stored ?? (prefersDark ? "dark" : "light");
+        const root = document.firstElementChild;
+        root?.setAttribute("data-theme", theme);
+        root?.classList.toggle("dark", theme === "dark");
+        // Expose value so theme.ts can skip re-detection.
+        window.__theme = { value: theme };
+      })();
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.BglkCy-o.css">
+<style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
+.toc-toggle[data-astro-cid-po2ckxzl][aria-expanded=true] .toc-toggle-icon[data-astro-cid-po2ckxzl]{rotate:-90deg}.post-toc-desktop[data-astro-cid-taqt6xe3]{inset-inline-start:calc(50% + var(--app-max-width) / 2 + 2rem);width:min(14rem,calc(50vw - var(--app-max-width) / 2 - 3rem))}.toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-width:thin}.toc-scroll[data-astro-cid-taqt6xe3]:after{display:block;block-size:20dvh;content:""}.toc-link[data-astro-cid-taqt6xe3][data-active]{border-inline-start-color:var(--accent);color:var(--accent);font-weight:600}[data-astro-cid-4wxclohh][data-post-series]{interpolate-size:allow-keywords}[data-astro-cid-4wxclohh][data-post-series]::details-content{block-size:0;overflow:hidden;opacity:0;transition:block-size .2s ease-out,opacity .15s ease-out,content-visibility .2s allow-discrete}[data-astro-cid-4wxclohh][data-post-series][open]::details-content{block-size:auto;opacity:1}@media(prefers-reduced-motion:reduce){[data-astro-cid-4wxclohh][data-post-series]::details-content{transition:none}}[data-astro-cid-3e4etqql][data-post-reward-panel]{position:absolute;z-index:30;bottom:calc(100% + 1rem);left:50%;opacity:0;visibility:hidden;pointer-events:none;transform:translate(-50%,.25rem);transition:opacity .15s ease-out,transform .15s ease-out,visibility 0s linear .15s}[data-astro-cid-3e4etqql][data-post-reward-panel]:before{position:absolute;bottom:-1.25rem;left:0;width:100%;height:1.5rem;content:""}[data-astro-cid-3e4etqql][data-post-reward-panel]:after{position:absolute;bottom:-.4375rem;left:50%;width:.875rem;height:.875rem;border-bottom:1px solid var(--border);border-left:1px solid var(--border);background:var(--background);content:"";transform:translate(-50%) rotate(-45deg)}[data-astro-cid-3e4etqql][data-post-reward-trigger][data-open=true] [data-astro-cid-3e4etqql][data-post-reward-panel]{opacity:1;visibility:visible;pointer-events:auto;transform:translate(-50%);transition-delay:0s}@media(hover:hover)and (pointer:fine){[data-astro-cid-3e4etqql][data-post-reward-trigger]:hover [data-astro-cid-3e4etqql][data-post-reward-panel],[data-astro-cid-3e4etqql][data-post-reward-trigger]:focus-within [data-astro-cid-3e4etqql][data-post-reward-panel]{opacity:1;visibility:visible;pointer-events:auto;transform:translate(-50%);transition-delay:0s}}@media(prefers-reduced-motion:reduce){[data-astro-cid-3e4etqql][data-post-reward-panel]{transition:none}}
+</style><style>[data-astro-transition-scope="astro-36ssibgs-1"] { view-transition-name: MySQL; }@layer astro { ::view-transition-old(MySQL) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(MySQL) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(MySQL) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(MySQL) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style></head> <body class="bg-background font-app text-foreground selection:bg-accent/75 selection:text-accent-foreground flex min-h-svh flex-col">    <a id="skip-to-content" href="#main-content" class="bg-background text-accent absolute inset-s-16 -top-full z-50 px-3 py-2 backdrop-blur-lg transition-all focus:top-4"> 跳到正文 </a> <header class="app-layout flex flex-col items-center justify-between sm:flex-row"> <div class="border-border bg-background relative flex w-full items-baseline justify-between border-b py-4 sm:items-center sm:py-6"> <a href="/" class="absolute py-1 text-xl leading-8 font-semibold whitespace-nowrap sm:static sm:my-auto sm:text-2xl sm:leading-none"> Mofan </a> <nav id="nav-menu" class="flex w-full flex-col items-center sm:ms-2 sm:flex-row sm:justify-end sm:space-x-4 sm:py-0"> <button id="menu-btn" class="focus-outline self-end p-2 sm:hidden" aria-label="打开菜单" aria-expanded="false" aria-controls="menu-items" data-label-open="打开菜单" data-label-close="关闭菜单"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="hidden" viewBox="0 0 24 24" id="close-icon"><path stroke="none" d="M0 0h24v24H0z" /><path d="M18 6 6 18M6 6l12 12" /></svg> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="icon icon-tabler icons-tabler-outline icon-tabler-menu-deep" viewBox="0 0 24 24" id="menu-icon"><path stroke="none" d="M0 0h24v24H0z" /><path d="M4 6h16M7 12h13M10 18h10" /></svg> </button> <ul id="menu-items" class="[&>li>a]:hover:text-accent mt-4 hidden w-44 grid-cols-3 place-content-center gap-2 sm:mt-0 sm:flex sm:w-auto sm:gap-x-3 sm:gap-y-0 sm:[&>li]:h-8 [&>li>a]:block [&>li>a]:px-4 [&>li>a]:py-3 [&>li>a]:text-center [&>li>a]:font-medium sm:[&>li>a]:px-2 sm:[&>li>a]:py-1"> <li class="col-span-3"> <a href="/archives/"> 归档 </a> </li> <li class="col-span-3"> <a href="/categories/"> 分类 </a> </li> <li class="col-span-3"> <a href="/tags/"> 标签 </a> </li> <li class="col-span-3"> <a href="/messageboard/"> 留言板 </a> </li> <li class="col-span-3"> <details id="site-menu" class="group relative w-full sm:w-auto"> <summary class="focus-outline hover:text-accent flex cursor-pointer list-none items-center justify-center gap-1 px-4 py-3 font-medium select-none sm:px-2 sm:py-1 [&amp;::-webkit-details-marker]:hidden"> 站点 <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="size-4 -rotate-90 transition-transform group-open:rotate-90" viewBox="0 0 24 24" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 6-6 6 6 6" /></svg> </summary> <ul class="border-border bg-background z-20 mt-1 rounded-md border p-2 text-start sm:absolute sm:top-full sm:right-0 sm:mt-2 sm:w-36 sm:shadow-md sm:before:absolute sm:before:-top-2 sm:before:left-0 sm:before:h-5 sm:before:w-full sm:before:content-['']"> <li> <p class="text-muted-foreground px-3 pt-1 pb-1 text-xs font-semibold tracking-wider"> 内容 </p> <ul> <li> <a href="/schedule/" class="hover:bg-muted hover:text-accent block rounded px-3 py-2 font-medium"> 计划 </a> </li> <li> <a href="/update/" class="hover:bg-muted hover:text-accent block rounded px-3 py-2 font-medium"> 维护 </a> </li> <li> <a href="/link/" class="hover:bg-muted hover:text-accent block rounded px-3 py-2 font-medium"> 友链 </a> </li> </ul> </li> <li class="border-border mt-2 border-t pt-2"> <p class="text-muted-foreground px-3 pt-1 pb-1 text-xs font-semibold tracking-wider"> 关于 </p> <ul> <li> <a href="/mine/" class="hover:bg-muted hover:text-accent block rounded px-3 py-2 font-medium"> 我 </a> </li> <li> <a href="/about/" class="hover:bg-muted hover:text-accent block rounded px-3 py-2 font-medium"> 本站 </a> </li> <li> <a href="/reward/" class="hover:bg-muted hover:text-accent block rounded px-3 py-2 font-medium"> 赞助 </a> </li> <li> <a href="/milestones/" class="hover:bg-muted hover:text-accent block rounded px-3 py-2 font-medium"> 里程碑 </a> </li> </ul> </li> </ul> </details> </li> <li class="col-span-1 flex items-center justify-center"> <button id="docsearch-button" class="focus-outline hover:[&>svg]:stroke-accent relative size-12 p-4 sm:size-8" type="button" title="搜索" aria-label="搜索" aria-controls="docsearch"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-1/2 left-1/2 size-6 -translate-x-1/2 -translate-y-1/2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 10a7 7 0 1 0 14 0 7 7 0 1 0-14 0M21 21l-6-6" /></svg> </button> <div id="docsearch" class="hidden" data-app-id="BAFEL7A6K1" data-api-key="89fcb5961984c5c054bf04149f345f38" data-indices="[&quot;mofan212io&quot;]" data-label="搜索" data-placeholder="输入关键字进行搜索"></div> <script type="module" src="/_astro/DocSearch.astro_astro_type_script_index_0_lang.BgJYFKPD.js"></script> </li> <li class="col-span-1 flex items-center justify-center"> <a href="https://www.travellings.cn/go.html" target="_blank" rel="noopener noreferrer" title="开往" aria-label="开往" class="group inline-flex items-center gap-1 hover:text-accent focus-outline relative size-12 p-4 sm:size-8">  <svg width="24" height="24" fill="currentColor" class="absolute top-1/2 left-1/2 size-5 -translate-x-1/2 -translate-y-1/2" viewBox="0 0 448 512" aria-hidden="true"><path d="M96 0C43 0 0 43 0 96v256c0 48 35.2 87.7 81.1 94.9l-46 46c-7 7-2 19.1 7.9 19.1h39.7c8.5 0 16.6-3.4 22.6-9.4L160 448h128l54.6 54.6c6 6 14.1 9.4 22.6 9.4h39.7c10 0 15-12.1 7.9-19.1l-46-46c46-7.1 81.1-46.9 81.1-94.9V96c0-53-43-96-96-96zM64 128c0-17.7 14.3-32 32-32h80c17.7 0 32 14.3 32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32zm208-32h80c17.7 0 32 14.3 32 32v96c0 17.7-14.3 32-32 32h-80c-17.7 0-32-14.3-32-32v-96c0-17.7 14.3-32 32-32M64 352a32 32 0 1 1 64 0 32 32 0 1 1-64 0m288-32a32 32 0 1 1 0 64 32 32 0 1 1 0-64" /></svg> <span class="sr-only">开往</span>  </a> </li> <li class="col-span-1 flex items-center justify-center"> <button id="theme-btn" class="focus-outline hover:[&>svg]:stroke-accent relative size-12 p-4 sm:size-8" title="切换主题" aria-label="auto" aria-live="polite"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-[50%] left-[50%] translate-[-50%] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M12 3h.393a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 12 2.992z" /></svg> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-[50%] left-[50%] translate-[-50%] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M14.828 14.828a4 4 0 1 0-5.656-5.656 4 4 0 0 0 5.656 5.656M6.343 17.657l-1.414 1.414M6.343 6.343 4.929 4.929M17.657 6.343l1.414-1.414M17.657 17.657l1.414 1.414M4 12H2M12 4V2M20 12h2M12 20v2" /></svg> </button> </li> </ul> </nav> </div> </header> <script type="module">function r(){const e=document.querySelector("#menu-btn"),t=document.querySelector("#menu-items"),n=document.querySelector("#menu-icon"),o=document.querySelector("#close-icon");if(!e||!t||!n||!o)return;const c=e.dataset.labelOpen??"Open menu",a=e.dataset.labelClose??"Close menu";e.addEventListener("click",()=>{const i=e.getAttribute("aria-expanded")==="true";e.setAttribute("aria-expanded",i?"false":"true"),e.setAttribute("aria-label",i?c:a),t.classList.toggle("hidden"),t.classList.toggle("grid"),n.classList.toggle("hidden"),o.classList.toggle("hidden")})}function s(e=!1){const t=document.querySelector("#site-menu");t?.open&&(t.open=!1,e&&t.querySelector("summary")?.focus())}function u(){const e=document.querySelector("#site-menu");if(!e||e.dataset.hoverBound==="true")return;e.dataset.hoverBound="true";const t=window.matchMedia("(min-width: 640px) and (hover: hover) and (pointer: fine)");let n;const o=()=>{n!==void 0&&(window.clearTimeout(n),n=void 0)};e.addEventListener("mouseenter",()=>{t.matches&&(o(),e.open=!0)}),e.addEventListener("mouseleave",()=>{t.matches&&(o(),n=window.setTimeout(()=>{e.open=!1,n=void 0},150))})}r();u();document.addEventListener("click",e=>{const t=document.querySelector("#site-menu");t?.open&&!t.contains(e.target)&&s()});document.addEventListener("keydown",e=>{e.key==="Escape"&&s(!0)});document.addEventListener("astro:after-swap",()=>{r(),u()});document.addEventListener("astro:before-swap",()=>s());</script> <div class="app-layout flex items-center justify-start"><a id="back-button" href="/" class="group inline-flex items-center gap-1 hover:text-accent focus-outline hover:text-foreground/75 -ms-2 mt-8 mb-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 rtl:rotate-180" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 6-6 6 6 6" /></svg><span>返回</span> </a></div><script type="module">function o(){const t=document.querySelector("#back-button"),e=sessionStorage.getItem("backUrl");e&&t&&(t.href=e)}document.addEventListener("astro:page-load",o);o();</script> <main id="main-content" class="app-layout" data-pagefind-body> <h1 style="view-transition-name:u003010-my-sql-u009ad8u007ea7u007bc7u004e8cu003011-my-sql-u007684u006570u00636eu0076eeu005f55" class="text-accent inline-block text-2xl font-bold sm:text-3xl"> 【MySQL 高级篇二】MySQL 的数据目录 </h1> <div class="my-2 flex flex-wrap items-center gap-2"> <div class="text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1"> <span class="flex items-center gap-x-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 min-w-5.5" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM16 3v4M8 3v4M4 11h16M7 14h.013M10.01 14h.005M13.01 14h.005M16.015 14h.005M13.015 17h.005M7.01 17h.005M10.01 17h.005" /></svg> <span class="text-sm sm:text-base"> 发表于 </span> <time class="text-sm sm:text-base" datetime="2023-03-05T00:00:00.000Z"> 2023-03-05 </time> </span> <span class="flex items-center gap-x-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 min-w-5.5" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M12 8v4l2 2" /><path d="M3.05 11a9 9 0 1 1 .5 4m-.5 5v-5h5" /></svg> <span class="text-sm sm:text-base"> 更新于 </span> <time class="text-sm sm:text-base" datetime="2023-03-05T00:00:00.000Z"> 2023-03-05 </time> </span> </div> <span aria-hidden="true" class="text-muted-foreground">|</span> <span class="text-muted-foreground flex items-center gap-x-2" data-busuanzi-page data-busuanzi-legacy-path="/posts/MySQL-Advanced-Second-Data-Directory-Of-MySQL/"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 min-w-5.5" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M10 12a2 2 0 1 0 4 0 2 2 0 0 0-4 0" /><path d="M21 12q-3.6 6-9 6c-5.4 0-6.6-2-9-6q3.6-6 9-6c5.4 0 6.6 2 9 6" /></svg> <span class="text-sm sm:text-base">浏览量：</span> <span id="busuanzi_value_page_pv" class="inline-block min-w-[6ch] text-end text-sm tabular-nums sm:text-base">
+--
+</span> </span>  <span aria-hidden="true" class="text-muted-foreground">
+|
+</span> <nav aria-label="分类"> <ol class="flex flex-wrap items-center gap-1"> <li> <a href="/categories/MySQL/" class="text-muted-foreground flex items-center gap-1 transition-colors hover:text-accent focus-visible:text-accent text-sm sm:text-base"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="shrink-0 size-6" viewBox="0 0 24 24" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v0a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8M10 12h4" /></svg> MySQL </a> </li>  </ol> </nav>  <span aria-hidden="true" class="text-muted-foreground max-sm:hidden hidden">
+|
+</span>  </div>  <div data-post-toc data-astro-cid-taqt6xe3> <aside class="post-toc-desktop fixed top-24 hidden h-[calc(100dvh-8rem)] flex-col xl:flex" aria-label="文章目录" data-astro-cid-taqt6xe3> <div class="mb-3 flex items-center justify-between gap-3 px-3" data-astro-cid-taqt6xe3> <h2 class="text-sm font-semibold" data-astro-cid-taqt6xe3>文章目录</h2> <span class="text-muted-foreground text-sm tabular-nums" data-reading-progress data-astro-cid-taqt6xe3>
+0%
+</span> </div> <nav class="toc-scroll min-h-0 flex-1 overflow-y-auto overscroll-contain pe-1" data-toc-scroll data-astro-cid-taqt6xe3> <ul class="space-y-0.5" data-astro-cid-po2ckxzl> <li data-toc-node="1-mysql-80-的主要目录结构" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <button type="button" class="toc-toggle text-muted-foreground hover:text-accent mt-0.5 flex size-7 shrink-0 items-center justify-center rounded" aria-label="展开或收起目录章节: 1. MySQL 8.0 的主要目录结构" aria-controls="post-toc-desktop-1-mysql-80-的主要目录结构" aria-expanded="false" data-toc-toggle="1-mysql-80-的主要目录结构" data-astro-cid-po2ckxzl> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="toc-toggle-icon size-4 -rotate-180 transition-transform" viewBox="0 0 24 24" aria-hidden="true" data-astro-cid-po2ckxzl="true"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 6-6 6 6 6" /></svg> </button> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#1-mysql-80-的主要目录结构" data-toc-slug="1-mysql-80-的主要目录结构" data-astro-cid-po2ckxzl> 1. MySQL 8.0 的主要目录结构 </a> </div> <div id="post-toc-desktop-1-mysql-80-的主要目录结构" hidden data-toc-branch="1-mysql-80-的主要目录结构" data-astro-cid-po2ckxzl> <ul class="space-y-0.5 border-border ms-3 border-s ps-1" data-astro-cid-po2ckxzl> <li data-toc-node="11-数据库文件的存放路径" data-toc-parent="1-mysql-80-的主要目录结构" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#11-数据库文件的存放路径" data-toc-slug="11-数据库文件的存放路径" data-astro-cid-po2ckxzl> 1.1 数据库文件的存放路径 </a> </div>  </li><li data-toc-node="12-相关指令目录" data-toc-parent="1-mysql-80-的主要目录结构" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#12-相关指令目录" data-toc-slug="12-相关指令目录" data-astro-cid-po2ckxzl> 1.2 相关指令目录 </a> </div>  </li><li data-toc-node="13-配置文件目录" data-toc-parent="1-mysql-80-的主要目录结构" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#13-配置文件目录" data-toc-slug="13-配置文件目录" data-astro-cid-po2ckxzl> 1.3 配置文件目录 </a> </div>  </li> </ul> </div> </li><li data-toc-node="2-数据库和文件系统的关系" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <button type="button" class="toc-toggle text-muted-foreground hover:text-accent mt-0.5 flex size-7 shrink-0 items-center justify-center rounded" aria-label="展开或收起目录章节: 2. 数据库和文件系统的关系" aria-controls="post-toc-desktop-2-数据库和文件系统的关系" aria-expanded="false" data-toc-toggle="2-数据库和文件系统的关系" data-astro-cid-po2ckxzl> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="toc-toggle-icon size-4 -rotate-180 transition-transform" viewBox="0 0 24 24" aria-hidden="true" data-astro-cid-po2ckxzl="true"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 6-6 6 6 6" /></svg> </button> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#2-数据库和文件系统的关系" data-toc-slug="2-数据库和文件系统的关系" data-astro-cid-po2ckxzl> 2. 数据库和文件系统的关系 </a> </div> <div id="post-toc-desktop-2-数据库和文件系统的关系" hidden data-toc-branch="2-数据库和文件系统的关系" data-astro-cid-po2ckxzl> <ul class="space-y-0.5 border-border ms-3 border-s ps-1" data-astro-cid-po2ckxzl> <li data-toc-node="21-查看默认数据库" data-toc-parent="2-数据库和文件系统的关系" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#21-查看默认数据库" data-toc-slug="21-查看默认数据库" data-astro-cid-po2ckxzl> 2.1 查看默认数据库 </a> </div>  </li><li data-toc-node="22-数据库在文件系统中的表示" data-toc-parent="2-数据库和文件系统的关系" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#22-数据库在文件系统中的表示" data-toc-slug="22-数据库在文件系统中的表示" data-astro-cid-po2ckxzl> 2.2 数据库在文件系统中的表示 </a> </div>  </li><li data-toc-node="23-innodb-存储引擎模式" data-toc-parent="2-数据库和文件系统的关系" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#23-innodb-存储引擎模式" data-toc-slug="23-innodb-存储引擎模式" data-astro-cid-po2ckxzl> 2.3 InnoDB 存储引擎模式 </a> </div>  </li><li data-toc-node="24-myisam-存储引擎模式" data-toc-parent="2-数据库和文件系统的关系" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#24-myisam-存储引擎模式" data-toc-slug="24-myisam-存储引擎模式" data-astro-cid-po2ckxzl> 2.4 MyISAM 存储引擎模式 </a> </div>  </li><li data-toc-node="25-小结" data-toc-parent="2-数据库和文件系统的关系" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#25-小结" data-toc-slug="25-小结" data-astro-cid-po2ckxzl> 2.5 小结 </a> </div>  </li><li data-toc-node="26-视图在文件系统中的表示" data-toc-parent="2-数据库和文件系统的关系" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#26-视图在文件系统中的表示" data-toc-slug="26-视图在文件系统中的表示" data-astro-cid-po2ckxzl> 2.6 视图在文件系统中的表示 </a> </div>  </li><li data-toc-node="27-其他的文件" data-toc-parent="2-数据库和文件系统的关系" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#27-其他的文件" data-toc-slug="27-其他的文件" data-astro-cid-po2ckxzl> 2.7 其他的文件 </a> </div>  </li> </ul> </div> </li> </ul> </nav> </aside> <button type="button" class="bg-background border-border text-foreground fixed end-4 bottom-20 z-40 flex size-12 items-center justify-center rounded-full border shadow-xl xl:hidden" aria-label="打开文章目录" aria-controls="post-toc-dialog" aria-expanded="false" data-toc-open data-astro-cid-taqt6xe3> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="size-6" viewBox="0 0 24 24" aria-hidden="true" data-astro-cid-taqt6xe3="true"><path stroke="none" d="M0 0h24v24H0z" /><path d="M4 6h16M7 12h13M10 18h10" /></svg> </button> <dialog id="post-toc-dialog" class="bg-background text-foreground border-border m-0 ms-auto h-dvh max-h-dvh w-[min(24rem,90vw)] max-w-none border-s p-0 shadow-2xl backdrop:bg-black/50" aria-labelledby="post-toc-dialog-title" data-toc-dialog data-astro-cid-taqt6xe3> <div class="flex h-full min-h-0 flex-col" data-astro-cid-taqt6xe3> <div class="border-border flex items-center justify-between gap-4 border-b px-4 py-3" data-astro-cid-taqt6xe3> <div class="flex items-baseline gap-3" data-astro-cid-taqt6xe3> <h2 id="post-toc-dialog-title" class="font-semibold" data-astro-cid-taqt6xe3> 文章目录 </h2> <span class="text-muted-foreground text-sm tabular-nums" data-reading-progress data-astro-cid-taqt6xe3>
+0%
+</span> </div> <button type="button" class="hover:text-accent rounded p-2" aria-label="关闭文章目录" data-toc-close data-astro-cid-taqt6xe3> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="size-5" viewBox="0 0 24 24" aria-hidden="true" data-astro-cid-taqt6xe3="true"><path stroke="none" d="M0 0h24v24H0z" /><path d="M18 6 6 18M6 6l12 12" /></svg> </button> </div> <nav class="toc-scroll min-h-0 flex-1 overflow-y-auto p-3" data-toc-scroll data-astro-cid-taqt6xe3> <ul class="space-y-0.5" data-astro-cid-po2ckxzl> <li data-toc-node="1-mysql-80-的主要目录结构" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <button type="button" class="toc-toggle text-muted-foreground hover:text-accent mt-0.5 flex size-7 shrink-0 items-center justify-center rounded" aria-label="展开或收起目录章节: 1. MySQL 8.0 的主要目录结构" aria-controls="post-toc-mobile-1-mysql-80-的主要目录结构" aria-expanded="false" data-toc-toggle="1-mysql-80-的主要目录结构" data-astro-cid-po2ckxzl> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="toc-toggle-icon size-4 -rotate-180 transition-transform" viewBox="0 0 24 24" aria-hidden="true" data-astro-cid-po2ckxzl="true"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 6-6 6 6 6" /></svg> </button> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#1-mysql-80-的主要目录结构" data-toc-slug="1-mysql-80-的主要目录结构" data-astro-cid-po2ckxzl> 1. MySQL 8.0 的主要目录结构 </a> </div> <div id="post-toc-mobile-1-mysql-80-的主要目录结构" hidden data-toc-branch="1-mysql-80-的主要目录结构" data-astro-cid-po2ckxzl> <ul class="space-y-0.5 border-border ms-3 border-s ps-1" data-astro-cid-po2ckxzl> <li data-toc-node="11-数据库文件的存放路径" data-toc-parent="1-mysql-80-的主要目录结构" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#11-数据库文件的存放路径" data-toc-slug="11-数据库文件的存放路径" data-astro-cid-po2ckxzl> 1.1 数据库文件的存放路径 </a> </div>  </li><li data-toc-node="12-相关指令目录" data-toc-parent="1-mysql-80-的主要目录结构" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#12-相关指令目录" data-toc-slug="12-相关指令目录" data-astro-cid-po2ckxzl> 1.2 相关指令目录 </a> </div>  </li><li data-toc-node="13-配置文件目录" data-toc-parent="1-mysql-80-的主要目录结构" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#13-配置文件目录" data-toc-slug="13-配置文件目录" data-astro-cid-po2ckxzl> 1.3 配置文件目录 </a> </div>  </li> </ul> </div> </li><li data-toc-node="2-数据库和文件系统的关系" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <button type="button" class="toc-toggle text-muted-foreground hover:text-accent mt-0.5 flex size-7 shrink-0 items-center justify-center rounded" aria-label="展开或收起目录章节: 2. 数据库和文件系统的关系" aria-controls="post-toc-mobile-2-数据库和文件系统的关系" aria-expanded="false" data-toc-toggle="2-数据库和文件系统的关系" data-astro-cid-po2ckxzl> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="toc-toggle-icon size-4 -rotate-180 transition-transform" viewBox="0 0 24 24" aria-hidden="true" data-astro-cid-po2ckxzl="true"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 6-6 6 6 6" /></svg> </button> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#2-数据库和文件系统的关系" data-toc-slug="2-数据库和文件系统的关系" data-astro-cid-po2ckxzl> 2. 数据库和文件系统的关系 </a> </div> <div id="post-toc-mobile-2-数据库和文件系统的关系" hidden data-toc-branch="2-数据库和文件系统的关系" data-astro-cid-po2ckxzl> <ul class="space-y-0.5 border-border ms-3 border-s ps-1" data-astro-cid-po2ckxzl> <li data-toc-node="21-查看默认数据库" data-toc-parent="2-数据库和文件系统的关系" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#21-查看默认数据库" data-toc-slug="21-查看默认数据库" data-astro-cid-po2ckxzl> 2.1 查看默认数据库 </a> </div>  </li><li data-toc-node="22-数据库在文件系统中的表示" data-toc-parent="2-数据库和文件系统的关系" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#22-数据库在文件系统中的表示" data-toc-slug="22-数据库在文件系统中的表示" data-astro-cid-po2ckxzl> 2.2 数据库在文件系统中的表示 </a> </div>  </li><li data-toc-node="23-innodb-存储引擎模式" data-toc-parent="2-数据库和文件系统的关系" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#23-innodb-存储引擎模式" data-toc-slug="23-innodb-存储引擎模式" data-astro-cid-po2ckxzl> 2.3 InnoDB 存储引擎模式 </a> </div>  </li><li data-toc-node="24-myisam-存储引擎模式" data-toc-parent="2-数据库和文件系统的关系" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#24-myisam-存储引擎模式" data-toc-slug="24-myisam-存储引擎模式" data-astro-cid-po2ckxzl> 2.4 MyISAM 存储引擎模式 </a> </div>  </li><li data-toc-node="25-小结" data-toc-parent="2-数据库和文件系统的关系" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#25-小结" data-toc-slug="25-小结" data-astro-cid-po2ckxzl> 2.5 小结 </a> </div>  </li><li data-toc-node="26-视图在文件系统中的表示" data-toc-parent="2-数据库和文件系统的关系" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#26-视图在文件系统中的表示" data-toc-slug="26-视图在文件系统中的表示" data-astro-cid-po2ckxzl> 2.6 视图在文件系统中的表示 </a> </div>  </li><li data-toc-node="27-其他的文件" data-toc-parent="2-数据库和文件系统的关系" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#27-其他的文件" data-toc-slug="27-其他的文件" data-astro-cid-po2ckxzl> 2.7 其他的文件 </a> </div>  </li> </ul> </div> </li> </ul> </nav> </div> </dialog> </div> <script data-astro-rerun>
+  (() => {
+    function initPostToc() {
+      window.__postTocCleanup?.();
+
+      const tocRoot = document.querySelector("[data-post-toc]");
+
+      if (tocRoot) {
+        const controller = new AbortController();
+        const { signal } = controller;
+        const openButton = tocRoot.querySelector("[data-toc-open]");
+        const closeButton = tocRoot.querySelector("[data-toc-close]");
+        const dialog = tocRoot.querySelector("[data-toc-dialog]");
+        const links = Array.from(tocRoot.querySelectorAll("[data-toc-slug]"));
+        const toggleButtons = Array.from(
+          tocRoot.querySelectorAll("[data-toc-toggle]")
+        );
+        const branches = Array.from(
+          tocRoot.querySelectorAll("[data-toc-branch]")
+        );
+        const nodes = Array.from(tocRoot.querySelectorAll("[data-toc-node]"));
+        const readingProgressElements = Array.from(
+          tocRoot.querySelectorAll("[data-reading-progress]")
+        );
+        const slugs = [...new Set(links.map(link => link.dataset.tocSlug))];
+        const branchSlugs = [
+          ...new Set(toggleButtons.map(button => button.dataset.tocToggle)),
+        ];
+        const parentBySlug = new Map(
+          nodes.map(node => [
+            node.dataset.tocNode,
+            node.dataset.tocParent || "",
+          ])
+        );
+        const headingElements = slugs
+          .map(slug => document.getElementById(slug))
+          .filter(Boolean);
+        let activeSlug = "";
+        let previousBodyOverflow = "";
+        let readingProgressFrame = 0;
+        let previousReadingProgress = -1;
+
+        function updateReadingProgress() {
+          readingProgressFrame = 0;
+          const article = document.getElementById("article");
+          if (!article) return;
+
+          const articleRect = article.getBoundingClientRect();
+          const readingDistance = articleRect.height - window.innerHeight;
+          const progress =
+            readingDistance <= 0
+              ? articleRect.top <= 0
+                ? 100
+                : 0
+              : Math.min(
+                  100,
+                  Math.max(
+                    0,
+                    Math.floor((-articleRect.top / readingDistance) * 100)
+                  )
+                );
+
+          if (progress === previousReadingProgress) return;
+          previousReadingProgress = progress;
+          for (const element of readingProgressElements) {
+            element.textContent = `${progress}%`;
+          }
+        }
+
+        function requestReadingProgressUpdate() {
+          if (readingProgressFrame) return;
+          readingProgressFrame = requestAnimationFrame(updateReadingProgress);
+        }
+
+        function setBranchExpanded(slug, expanded) {
+          for (const button of toggleButtons) {
+            if (button.dataset.tocToggle === slug) {
+              button.setAttribute("aria-expanded", String(expanded));
+            }
+          }
+          for (const branch of branches) {
+            if (branch.dataset.tocBranch === slug) branch.hidden = !expanded;
+          }
+        }
+
+        function expandActivePath(slug) {
+          const requiredBranches = new Set();
+          let current = slug;
+
+          while (current) {
+            const parent = parentBySlug.get(current);
+            if (!parent) break;
+            requiredBranches.add(parent);
+            current = parent;
+          }
+          if (branchSlugs.includes(slug)) requiredBranches.add(slug);
+
+          for (const branchSlug of branchSlugs) {
+            setBranchExpanded(branchSlug, requiredBranches.has(branchSlug));
+          }
+        }
+
+        function revealLink(link) {
+          const scrollContainer = link.closest("[data-toc-scroll]");
+          if (!scrollContainer || scrollContainer.getClientRects().length === 0)
+            return;
+
+          const containerRect = scrollContainer.getBoundingClientRect();
+          const linkRect = link.getBoundingClientRect();
+          const safeTop = containerRect.top + containerRect.height * 0.2;
+          const safeBottom = containerRect.bottom - containerRect.height * 0.2;
+          let scrollDelta = 0;
+
+          if (linkRect.top < safeTop) {
+            scrollDelta = linkRect.top - safeTop;
+          } else if (linkRect.bottom > safeBottom) {
+            scrollDelta = linkRect.bottom - safeBottom;
+          }
+          if (!scrollDelta) return;
+
+          scrollContainer.scrollTo({
+            top: scrollContainer.scrollTop + scrollDelta,
+            behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
+              .matches
+              ? "auto"
+              : "smooth",
+          });
+        }
+
+        function applyActiveHeading(slug, reveal = true) {
+          if (!slug || slug === activeSlug) return;
+          activeSlug = slug;
+          expandActivePath(slug);
+
+          const activeLinks = [];
+          for (const link of links) {
+            const isActive = link.dataset.tocSlug === slug;
+            link.toggleAttribute("data-active", isActive);
+            if (isActive) {
+              link.setAttribute("aria-current", "location");
+              activeLinks.push(link);
+            } else {
+              link.removeAttribute("aria-current");
+            }
+          }
+
+          if (reveal) activeLinks.forEach(revealLink);
+        }
+
+        function findCurrentHeading() {
+          if (headingElements.length === 0) return "";
+          const activationOffset = 112;
+          let current = headingElements[0];
+
+          for (const heading of headingElements) {
+            if (heading.getBoundingClientRect().top <= activationOffset) {
+              current = heading;
+            } else {
+              break;
+            }
+          }
+
+          const reachedBottom =
+            window.innerHeight + window.scrollY >=
+            document.documentElement.scrollHeight - 2;
+          return reachedBottom ? headingElements.at(-1)?.id : current.id;
+        }
+
+        function updateActiveHeading() {
+          applyActiveHeading(findCurrentHeading());
+        }
+
+        function openDialog() {
+          if (!dialog || typeof dialog.showModal !== "function" || dialog.open)
+            return;
+          previousBodyOverflow = document.body.style.overflow;
+          document.body.style.overflow = "hidden";
+          dialog.showModal();
+          openButton?.setAttribute("aria-expanded", "true");
+          const activeLink = links.find(
+            link => link.dataset.tocSlug === activeSlug && dialog.contains(link)
+          );
+          if (activeLink) requestAnimationFrame(() => revealLink(activeLink));
+        }
+
+        function closeDialog() {
+          if (dialog?.open) dialog.close();
+        }
+
+        openButton?.addEventListener("click", openDialog, { signal });
+        closeButton?.addEventListener("click", closeDialog, { signal });
+        for (const button of toggleButtons) {
+          button.addEventListener(
+            "click",
+            () => {
+              const slug = button.dataset.tocToggle;
+              const expanded = button.getAttribute("aria-expanded") === "true";
+              setBranchExpanded(slug, !expanded);
+            },
+            { signal }
+          );
+        }
+        dialog?.addEventListener(
+          "click",
+          event => {
+            if (event.target === dialog) closeDialog();
+          },
+          { signal }
+        );
+        dialog?.addEventListener(
+          "close",
+          () => {
+            document.body.style.overflow = previousBodyOverflow;
+            openButton?.setAttribute("aria-expanded", "false");
+          },
+          { signal }
+        );
+
+        for (const link of links) {
+          link.addEventListener(
+            "click",
+            event => {
+              event.preventDefault();
+              const slug = link.dataset.tocSlug;
+              const target = document.getElementById(slug);
+              if (!target) return;
+
+              if (dialog?.contains(link)) closeDialog();
+
+              const targetTop =
+                target.getBoundingClientRect().top + window.scrollY - 16;
+              requestAnimationFrame(() => {
+                window.scrollTo({
+                  top: targetTop,
+                  behavior: window.matchMedia(
+                    "(prefers-reduced-motion: reduce)"
+                  ).matches
+                    ? "auto"
+                    : "smooth",
+                });
+              });
+            },
+            { signal }
+          );
+        }
+
+        const observer = new IntersectionObserver(updateActiveHeading, {
+          rootMargin: "-112px 0px -70% 0px",
+        });
+        headingElements.forEach(heading => observer.observe(heading));
+        window.addEventListener("hashchange", updateActiveHeading, { signal });
+        document.addEventListener("scroll", requestReadingProgressUpdate, {
+          passive: true,
+          signal,
+        });
+        window.addEventListener("resize", requestReadingProgressUpdate, {
+          signal,
+        });
+        updateActiveHeading();
+        requestReadingProgressUpdate();
+
+        window.__postTocCleanup = () => {
+          observer.disconnect();
+          controller.abort();
+          if (readingProgressFrame) cancelAnimationFrame(readingProgressFrame);
+          if (dialog?.open) dialog.close();
+          document.body.style.overflow = previousBodyOverflow;
+          window.__postTocCleanup = undefined;
+        };
+
+        document.addEventListener(
+          "astro:before-swap",
+          () => window.__postTocCleanup?.(),
+          { once: true, signal }
+        );
+      }
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initPostToc, {
+        once: true,
+      });
+    } else {
+      initPostToc();
+    }
+  })();
+</script> <article id="article" class="mt-8 w-full app-prose max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)"> <p>封面来源：由博主个人绘制，如需使用请联系博主。</p>
+<p>本文参考：<a href="https://www.bilibili.com/video/BV1iq4y1u7vj?p=104">MySQL数据库教程天花板，mysql安装到mysql高级，强！硬！</a></p>
+<h1 id="1-mysql-80-的主要目录结构">1. MySQL 8.0 的主要目录结构</h1>
+<p>在 Linux 环境下执行以下命令，查询系统中与 MySQL 相关的文件：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">find</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> /</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -name</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> mysql</span></span></code></pre>
+<pre>[root@mofan ~]# find / -name mysql
+/var/lib/mysql
+/var/lib/mysql/mysql
+/usr/lib64/mysql
+/usr/bin/mysql
+/opt/mysql
+/etc/logrotate.d/mysql
+</pre>
+<h2 id="11-数据库文件的存放路径">1.1 数据库文件的存放路径</h2>
+<p>MySQL 数据库文件的存放路径：<code>/var/lib/mysql</code>。</p>
+<p>MySQL 服务器程序在启动时会到文件系统的某个目录下加载一些文件，之后在运行过程中产生的数据也会存储到这个目录下的某些文件中，这个目录被称为 <strong>数据目录</strong>。</p>
+<p>MySQL 把数据都存到哪个路径下呢？<strong>数据目录</strong> 对应着一个系统变量 <code>datadir</code>，在客户端与服务器建立连接后查看这个系统变量：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="sql"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">show variables </span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">like</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> 'datadir'</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span></code></pre>
+<pre>+---------------+-----------------+
+| Variable_name | Value           |
++---------------+-----------------+
+| datadir       | /var/lib/mysql/ |
++---------------+-----------------+
+</pre>
+<h2 id="12-相关指令目录">1.2 相关指令目录</h2>
+<p>MySQL 相关指令存放的目录有两个：</p>
+<ul>
+<li><code>/usr/bin</code>：存放 <code>mysqladmin</code>、<code>mysqlbinlog</code>、<code>mysqldump</code> 等命令</li>
+<li><code>/usr/sbin</code></li>
+</ul>
+<pre>[root@mofan ~]# cd /usr/bin
+[root@mofan bin]# find . -name "mysqladmin"
+./mysqladmin
+[root@mofan bin]# find . -name "mysqldump"
+./mysqldump
+</pre>
+<p><code>bin</code>  目录下存放了很多关于控制客户端程序和服务器程序的命令（许多可执行文件，比如 <code>mysql</code>、<code>mysqld</code>、<code>mysqld_safe</code> 等），而前文介绍的 <strong>数据目录</strong> 是用来存储 MySQL 在运行过程中产生的数据，注意区分二者。</p>
+<h2 id="13-配置文件目录">1.3 配置文件目录</h2>
+<p>MySQL 配置文件的存放目录也有两个：</p>
+<ul>
+<li><code>/usr/share/mysql-8.0</code>：存放相关命令及配置文件</li>
+<li><code>/etc</code>：配置文件 <code>my.cnf</code> 的存放位置</li>
+</ul>
+<h1 id="2-数据库和文件系统的关系">2. 数据库和文件系统的关系</h1>
+<p>像 <code>InnoDB</code>、<code>MyISAM</code> 这样的存储引擎都是把表存储在磁盘上的，操作系统用来管理磁盘的结构被称为 <strong>文件系统</strong>，所以用专业一点的话来表述就是：像 <code>InnoDB</code>、<code>MyISAM</code> 这样的存储引擎都是把表存储在文件系统上的。当需要读取数据的时候，这些存储引擎会从文件系统中把数据读出来并返回；当需要写入数据的时候，这些存储引擎会把这些数据又写回文件系统。</p>
+<h2 id="21-查看默认数据库">2.1 查看默认数据库</h2>
+<p>MySQL 在安装完毕后会自带几个系统数据库，执行以下语句查看 MySQL 有几个自带的系统数据库：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="sql"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">SHOW DATABASES;</span></span></code></pre>
+<pre>+--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+</pre>
+<blockquote><p><code>mysql</code></p></blockquote>
+<p>MySQL 系统自带的核心数据库，它存储了 MySQL 的用户账户和权限信息，一些存储过程、事件的定义信息，一些运行过程中产生的日志信息，一些帮助信息以及时区信息等。</p>
+<blockquote><p><code>information_schema</code></p></blockquote>
+<p>MySQL 系统自带的数据库，这个数据库保存着 MySQL 服务器维护的所有其他数据库的信息，比如有哪些表、哪些视图、哪些触发器、哪些列、哪些索引。这些信息并不是真实的用户数据，而是一些描述性信息，有时候也称之为元数据。在系统数据库 <code>information_schema</code> 中提供了一些以 <code>innodb_sys</code> 开头的表，用于表示内部系统表。</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="sql"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">USE</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> information_schema;</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">SHOW TABLES </span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">LIKE</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> 'innodb_sys%'</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span></code></pre>
+<blockquote><p><code>performance_schema</code></p></blockquote>
+<p>MySQL 系统自带的数据库，这个数据库里主要保存 MySQL 服务器运行过程中的一些状态信息，可以用来监控 MySQL 服务的各类性能指标。包括统计最近执行了哪些语句，在执行过程的每个阶段都花费了多长时间，内存的使用情况等信息。</p>
+<blockquote><p><code>sys</code></p></blockquote>
+<p>MySQL 系统自带的数据库，这个数据库主要是通过视图的形式把 information_schema 和 performance_schema 结合起来，帮助系统管理员和开发人员监控 MySQL 的技术性能。</p>
+<h2 id="22-数据库在文件系统中的表示">2.2 数据库在文件系统中的表示</h2>
+<p>使用 <code>CREATE DATABASE 数据库名;</code> 语句创建一个数据库时，在文件系统上发生了什么呢？其实很简单，每个数据库都对应了数据目录下的一个子目录，或者说对应一个文件夹，每当新建一个数据库时，MySQL 会做两件事：</p>
+<ol>
+<li>在 <strong>数据目录</strong> 下创建一个和数据库同名的子目录；</li>
+<li>在与该数据库同名的子目录下创建一个名为 <code>db.opt</code> 的文件（仅限 MySQL 5.7 及之前的版本），这个文件中包含了 <strong>该数据库的各种属性信息</strong>，比如该数据库使用的字符集和比较规则。</li>
+</ol>
+<p>进入 MySQL 8.0 的 <strong>数据目录</strong> 并查看目录中的文件信息：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="sql"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">cd /var/lib/mysql</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">ll</span></span></code></pre>
+<pre>[root@mofan /]# cd /var/lib/mysql
+[root@mofan mysql]# ll
+total 90584
+-rw-r----- 1 mysql mysql       56 Feb 13 18:18 auto.cnf
+-rw-r----- 1 mysql mysql      502 Feb 13 18:52 binlog.000001
+-rw-r----- 1 mysql mysql     6604 Feb 26 19:22 binlog.000002
+-rw-r----- 1 mysql mysql       32 Feb 13 18:52 binlog.index
+-rw------- 1 mysql mysql     1676 Feb 13 18:18 ca-key.pem
+-rw-r--r-- 1 mysql mysql     1112 Feb 13 18:18 ca.pem
+-rw-r--r-- 1 mysql mysql     1112 Feb 13 18:18 client-cert.pem
+-rw------- 1 mysql mysql     1676 Feb 13 18:18 client-key.pem
+drwxr-x--- 2 mysql mysql     4096 Feb 26 19:17 dbtest1
+-rw-r----- 1 mysql mysql   196608 Feb 26 19:22 #ib_16384_0.dblwr
+-rw-r----- 1 mysql mysql  8585216 Feb 13 18:18 #ib_16384_1.dblwr
+-rw-r----- 1 mysql mysql     3525 Feb 13 18:52 ib_buffer_pool
+-rw-r----- 1 mysql mysql 12582912 Feb 26 19:22 ibdata1
+-rw-r----- 1 mysql mysql 12582912 Feb 13 18:52 ibtmp1
+drwxr-x--- 2 mysql mysql     4096 Feb 13 18:52 #innodb_redo
+drwxr-x--- 2 mysql mysql     4096 Feb 13 18:52 #innodb_temp
+drwxr-x--- 2 mysql mysql     4096 Feb 13 18:18 mysql
+-rw-r----- 1 mysql mysql 25165824 Feb 26 19:17 mysql.ibd
+srwxrwxrwx 1 mysql mysql        0 Feb 13 18:52 mysql.sock
+-rw------- 1 mysql mysql        5 Feb 13 18:52 mysql.sock.lock
+drwxr-x--- 2 mysql mysql     4096 Feb 13 18:18 performance_schema
+-rw------- 1 mysql mysql     1676 Feb 13 18:18 private_key.pem
+-rw-r--r-- 1 mysql mysql      452 Feb 13 18:18 public_key.pem
+-rw-r--r-- 1 mysql mysql     1112 Feb 13 18:18 server-cert.pem
+-rw------- 1 mysql mysql     1680 Feb 13 18:18 server-key.pem
+drwxr-x--- 2 mysql mysql     4096 Feb 13 18:18 sys
+-rw-r----- 1 mysql mysql 16777216 Feb 26 19:18 undo_001
+-rw-r----- 1 mysql mysql 16777216 Feb 26 19:22 undo_002
+</pre>
+<p>这个数据目录下的文件和子目录比较多，除 information_schema 这个系统数据库外，其他的数据库在数据目录下都有对应的子目录。</p>
+<p>以 <code>dbtest1</code> 数据库为例：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span></span><code><span class="line"><span style="--shiki-light:#0184BC;--shiki-dark:#56B6C2">cd</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> dbtest1/</span></span>
+<span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">ll</span></span></code></pre>
+<pre>[root@mofan mysql]# cd dbtest1/
+[root@mofan dbtest1]# ll
+total 224
+-rw-r----- 1 mysql mysql 114688 Feb 19 17:27 emp1.ibd
+-rw-r----- 1 mysql mysql 114688 Feb 26 19:22 mytbl2.ibd
+</pre>
+<h2 id="23-innodb-存储引擎模式">2.3 InnoDB 存储引擎模式</h2>
+<p>用户的数据都是以 <strong>记录的形式</strong> 插入到表中的，每个表的信息可以分为两种：</p>
+<ol>
+<li>表结构的定义</li>
+<li>表中的数据</li>
+</ol>
+<p><strong>表结构</strong> 就是该表的名称，表中有多少列，每个列的数据类型、约束条件和索引，使用的字符集和比较规则等各种信息，这些信息都会体现在建表语句中。</p>
+<blockquote><p>表结构</p></blockquote>
+<p>为了保存表结构，InnoDB 在数据目录下对应的数据库子目录下创建了一个专门用于描述表结构的文件，文件名类似于 <code>表名.frm</code>。</p>
+<p>比方说在 dbtest1 数据库下创建一个名为 test 的表：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="sql"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">CREATE</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> TABLE</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> test</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(c1 </span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">INT</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span></span></code></pre>
+<p>那在数据库 dbtest1 对应的子目录下就会创建一个名为 <code>test.frm</code> 的用于描述表结构的文件。<code>.frm</code> 文件的格式在不同的平台上都是相同的，该文件内容以二进制格式存储的，直接打开看到的内容乱码。</p>
+<blockquote><p>表中数据和索引</p></blockquote>
+<p>InnoDB 使用 <strong>页</strong> 为基本单位来管理存储空间的， <strong>页</strong> 的默认大小为 16 KB。</p>
+<p>对于 InnoDB 存储引擎来说，每个索引都对应着一颗 B+ 树，B+ 树的每个节点都是一个数据页，数据页之间不需要是物理连续的，因为数据页之间有 <strong>双向链表</strong> 来维护着这些页的顺序。</p>
+<p>InnoDB 的聚簇索引的叶子节点存储了完整的用户记录，也就是所谓的「索引即数据，数据即索引」。</p>
+<p>为了更好地管理这些页，InnoDB 提出了一个 <strong>表空间（table space）</strong> 或 <strong>文件空间（file space）</strong> 的概念，表空间是一个抽象的概念，它可以对应文件系统上一个或多个真实文件（不同表空间对应的文件数量可能不同）。每一个 <strong>表空间</strong> 可以被划分为多个页，数据表中的数据就存放在某个 <strong>表空间</strong> 下的某些页里。</p>
+<p>表空间有几种不同的类型：</p>
+<ol>
+<li>系统表空间（system tablespace）</li>
+<li>独立表空间（file-per-table tablespace）</li>
+<li>其他类型的表空间</li>
+</ol>
+<p><strong>① 系统表空间</strong></p>
+<p>默认情况下，InnoDB 会在数据目录下创建一个名为 <code>ibdata1</code>、大小为 12M 的文件，这个文件就是对应的系统表空间在文件系统上的表示。</p>
+<p>怎么才 12M？这个文件是自扩展文件，当不够用的时候它会自己增加文件大小。</p>
+<p>如果想让系统表空间对应文件系统上多个实际文件，或者仅仅觉得默认的 <code>ibdata1</code> 文件名难听，那么在 MySQL 启动时可以配置对应的文件路径以及它们的大小，比如这样修改 <code>my.cnf</code> 配置文件：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="properties"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">[server]</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#C678DD">innodb_data_file_path</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">=</span><span style="--shiki-light:#383A42;--shiki-dark:#98C379">data1:512M</span><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">;data2:512M:autoextend</span></span></code></pre>
+<p>这样在 MySQL 启动之后就会创建两个 512M 大小的文件作为系统表空间，其中的 <code>autoextend</code> 属性表示当这两个文件大小不够用时就会自动拓展 <code>data2</code> 文件的大小。</p>
+<p>需要注意的是，在一个 MySQL 服务器中，系统表空间只有一份。从 MySQL 5.5.7 到 MySQL 5.6.6 之间的各个版本中，表中的数据都会被默认地存储到这个系统表空间中。</p>
+<p><strong>② 独立表空间</strong></p>
+<p>在 MySQL 5.6.6 以及之后的版本中，InnoDB 并不会默认的把各个表的数据存储到系统表空间中，而是为每一个表建立一个独立表空间，即创建了多少个表，就有多少个独立表空间。使用独立表空间来存储表数据的话，会在该表所属数据库对应的子目录下创建一个表示该独立表空间的文件，文件名和表名相同，扩展名为 <code>.ibd</code>，类似于 <code>表名.ibd</code>。</p>
+<p>比如使用了独立表空间去存储 dbtest1 数据库下的 test 表的话，那么在该表所在数据库对应的 dbtest1 目录下会为 test 表创建 <code>test.frm</code> 和 <code>test.ibd</code> 两个文件。其中 <code>test.ibd</code> 文件用来存储 test 表中的数据和索引。</p>
+<p><strong>③ 系统表空间与独立表空间的设置</strong></p>
+<p>可以指定使用系统表空间还是独立表空间来存储数据，这个功能由启动参数 <code>innodb_file_per_table</code> 控制，比如想刻意地将表数据都存储到系统表空间时，可以这样修改 <code>my.cnf</code> 配置文件：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="properties"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">[server]</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#C678DD">innodb_file_per_table</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">=</span><span style="--shiki-light:#383A42;--shiki-dark:#98C379">0  </span><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic"># 0 代表使用系统表空间; 1 代表使用独立表空间</span></span></code></pre>
+<p>执行以下语句查看默认情况下的配置：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="sql"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">show variables </span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">like</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> 'innodb_file_per_table'</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span></code></pre>
+<pre>+-----------------------+-------+
+| Variable_name         | Value |
++-----------------------+-------+
+| innodb_file_per_table | ON    |
++-----------------------+-------+
+</pre>
+<p>其中的 <code>ON</code> 表示默认情况下使用独立表空间存放表数据。</p>
+<p><code>innodb_file_per_table</code> 参数的修改只对新建的表起作用，对于已经分配了表空间的表并不起作用。</p>
+<p>如果想把已经存在系统表空间中的表转移到独立表空间中，可以执行以下语句：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="sql"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">ALTER</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> TABLE</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> 表名 TABLESPACE </span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">[=]</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> innodb_file_per_table;</span></span></code></pre>
+<p>或者把已经存在独立表空间的表转移到系统表空间中，可以执行以下语句：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="sql"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">ALTER</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> TABLE</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> 表名 TABLESPACE </span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">[=]</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> innodb_system;</span></span></code></pre>
+<p>其中中括号括起来的 <code>=</code> 可以省略。</p>
+<p><strong>④ 其他类型的表空间</strong></p>
+<p>随着 MySQL 的发展，除了上述两种老牌表空间之外，现在还新提出了一些不同类型的表空间，比如通用表空间（general tablespace）、临时表空间（temporary tablespace）等。</p>
+<blockquote><p>疑问</p></blockquote>
+<p><code>frm</code> 文件在 MySQL 8.0 中不存在了，那去哪里了呢？</p>
+<p>这就需要解析 <code>ibd</code> 文件了，Oracle 官方将 <code>frm</code> 文件的信息及更多的信息移动到序列化字典信息（Serialized Dictionary Information）中，SDI 被写在 <code>ibd</code> 文件内部，MySQL 8.0 也属于 Oracle 旗下，因此同理。</p>
+<p>为了从 <code>ibd</code> 文件中提取 SDI 信息，Oracle 提供了一个应用程序 <code>ibd2sdi</code>。这个工具不需要下载，MySQL 8.0 自带就有。</p>
+<p>① 查看表结构：到存储 <code>ibd</code> 文件的目录下，执行以下语句：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span>ibd2sdi --dump-file=emp1.txt emp1.ibd</span></span></code></pre>
+<pre>[root@mofan dbtest1]# ibd2sdi --dump-file=emp1.txt emp1.ibd
+[root@mofan dbtest1]# ls
+emp1.ibd  emp1.txt  mytbl2.ibd
+</pre>
+<p>执行完毕后，可以看到多出 <code>emp1.txt</code> 文件。查看该文件内容，就能看到 <code>emp1</code> 表的表结构。</p>
+<h2 id="24-myisam-存储引擎模式">2.4 MyISAM 存储引擎模式</h2>
+<blockquote><p>表结构</p></blockquote>
+<p>在存储表结构方面，MyISAM 和 InnoDB 一样，也是在数据目录下对应的数据库子目录中创建了一个专门用于描述表结构的文件 <code>表名.frm</code>。</p>
+<blockquote><p>表中的数据和索引</p></blockquote>
+<p>在 MyISAM 中的索引全部都是二级索引，该存储引擎的数据和索引是分开存放的。所以在文件系统中也是使用不同的文件来存储数据文件和索引文件，同时表数据都存放在对应的数据库子目录下。假如 test 表使用 MyISAM 存储引擎的话，那么在它所在数据库对应的 dbtest1 目录下会为 test 表创建这三个文件：</p>
+<ul>
+<li><code>test.frm</code>：存储表结构</li>
+<li><code>test.MYD</code>：存储数据（MYData），采用独立表存储模式，每个表对应一个 MYD 文件</li>
+<li><code>test.MYI</code>：存储索引（MYIndex）</li>
+</ul>
+<p>比如，创建一个使用 MyISAM 作为存储引擎的表，使用 <code>ENGINE</code> 选项显式指定引擎，因为默认引擎是 InnoDB：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="sql"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">CREATE</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> TABLE</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> `</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">student_myisam</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">` (</span></span>
+<span class="line"><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">    `id`</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> bigint</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> NOT NULL</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> AUTO_INCREMENT,</span></span>
+<span class="line"><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">    `name`</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> varchar</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">64</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">) </span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">DEFAULT</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> NULL</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span></span>
+<span class="line"><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">    `age`</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> int</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> DEFAULT</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> NULL</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span></span>
+<span class="line"><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">    `sex`</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> varchar</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">2</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">) </span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">DEFAULT</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> NULL</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    PRIMARY KEY</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> (</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">`id`</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)ENGINE</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">MYISAM AUTO_INCREMENT</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">0</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> DEFAULT</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> CHARSET</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">utf8mb3;</span></span></code></pre>
+<p>在 MySQL 8.0 下，成功新建 <code>student_myisam</code> 表后，在数据目录下新增三个文件：</p>
+<ul>
+<li>
+<p>student_myisam_367.sdi：存储元数据</p>
+</li>
+<li>
+<p>student_myisam.MYD：存储数据</p>
+</li>
+<li>
+<p>student_myisam.MYI：存储索引</p>
+</li>
+</ul>
+<p>对于采用 InnoDB 存储引擎的表，SDI 与独立表空间下的用户数据一起存储；对于采用 MyISAM 存储引擎的表，它被写入 <code>sdi</code> 文件中。</p>
+<p>在 MySQL 8.0 中，MyISAM 存储引擎不提供分区支持。在以前版本的 MySQL 中创建的分区 MyISAM 表不能在 MySQL 8.0 中使用。</p>
+<h2 id="25-小结">2.5 小结</h2>
+<p>以数据库 <code>a</code> 中的数据表 <code>b</code> 为例。</p>
+<blockquote><p>如果表 <code>b</code> 采用 InnoDB</p></blockquote>
+<p><code>data\a</code> 中会产生 1 个或者 2 个文件：</p>
+<ul>
+<li><code>b.frm</code>：描述表结构文件，字段长度等</li>
+<li>如果采用 <strong>系统表空间</strong> 模式，数据信息和索引信息都存储在 <code>ibdata1</code> 中</li>
+<li>如果采用 <strong>独立表空间</strong> 存储模式，<code>data\a</code> 中还会产生 <code>b.ibd</code> 文件（存储数据信息和索引信息）</li>
+</ul>
+<p>不同的 MySQL 版本下也有区别：</p>
+<ul>
+<li>MySQL 5.7 中会在 <code>data/a</code> 目录下生成 <code>db.opt</code> 文件用于保存数据库的相关配置，比如字符集、比较规则等信息，而 MySQL 8.0 不再提供 <code>db.opt</code> 文件</li>
+<li>MySQL 8.0 中不再单独提供 <code>b.frm</code>，而是合并在 <code>b.ibd</code> 文件中</li>
+</ul>
+<blockquote><p>如果表 <code>b</code> 采用 MyISAM</p></blockquote>
+<p><code>data\a</code> 中会产生 3 个文件：</p>
+<ul>
+<li>MySQL 5.7 下生成 <code>b.frm</code>，用于描述表结构文件，字段长度等；MySQL 8.0 下生成 <code>b.xxx.sdi</code>，描述表结构文件，字段长度等</li>
+<li><code>b.MYD</code>（MYData）：数据信息文件，存储数据信息（如果采用独立表存储模式）</li>
+<li><code>b.MYI</code>（MYIndex）：存放索引信息文件</li>
+</ul>
+<h2 id="26-视图在文件系统中的表示">2.6 视图在文件系统中的表示</h2>
+<p>MySQL 中的视图其实是虚拟的表，也就是某个查询语句的一个别名而已，所以在存储视图的时候不需要存储真实的数据，只需要把它的结构存储起来就行了。</p>
+<p>和表一样，描述视图结构的文件也会被存储到所属数据库对应的子目录下边，只会存储一个 <code>视图名.frm</code> 的文件。</p>
+<h2 id="27-其他的文件">2.7 其他的文件</h2>
+<p>除了前文说的那些用户自己存储的数据以外，数据目录下还包括为了更好地运行程序的一些额外文件，主要包括这几类文件：</p>
+<ul>
+<li>服务器进程文件：每运行一个 MySQL 服务器程序，都意味着启动一个进程。MySQL 服务器会把自己的进程 ID 写入到一个文件中</li>
+<li>服务器日志文件：在服务器运行过程中，会产生各种各样的日志，比如常规的查询日志、错误日志、二进制日志、redo 日志等</li>
+<li>默认/自动生成的 SSL 和 RSA 证书和密钥文件：主要是为了客户端和服务器安全通信而创建的一些文件</li>
+</ul> </article> <div class="text-muted-foreground max-w-app mt-20 w-full space-y-3 text-center text-sm"> <aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full leading-6"> <p class="m-0"> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a> 许可协议，转载时请署名并注明<a href="https://mofan212.github.io/posts/mysql-advanced-second-data-directory-of-mysql/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a> 🔗 </p> </aside> <section data-post-reward data-pagefind-ignore class="relative w-full sm:static" aria-label="赞赏" data-astro-cid-3e4etqql> <div class="flex flex-wrap items-center justify-center gap-x-1.5 gap-y-2" data-astro-cid-3e4etqql> <span class="whitespace-nowrap" data-astro-cid-3e4etqql>如果这篇文章对你有帮助，可以通过</span> <div data-post-reward-trigger class="inline-block sm:relative" data-astro-cid-3e4etqql> <button type="button" data-post-reward-button class="focus-outline border-accent text-accent hover:bg-accent/10 rounded-md border px-3 py-1 font-medium transition-colors" aria-expanded="false" aria-controls="post-reward-panel" data-astro-cid-3e4etqql> 赞赏 </button> <div id="post-reward-panel" data-post-reward-panel class="border-border bg-background text-foreground grid w-[min(22rem,calc(100vw-1.5rem))] grid-cols-2 gap-4 rounded-lg border p-4 shadow-xl sm:gap-6 sm:p-5" role="group" aria-label="赞赏" data-astro-cid-3e4etqql> <figure class="m-0 text-center" data-astro-cid-3e4etqql> <img src="/images/reward/alipay.png" alt="支付宝" loading="lazy" decoding="async" class="mx-auto w-32 rounded-md sm:w-36" data-astro-cid-3e4etqql> <figcaption class="mt-2 text-sm font-medium" data-astro-cid-3e4etqql> 支付宝 </figcaption> </figure> <figure class="m-0 text-center" data-astro-cid-3e4etqql> <img src="/images/reward/wechat-pay.png" alt="微信" loading="lazy" decoding="async" class="mx-auto w-32 rounded-md sm:w-36" data-astro-cid-3e4etqql> <figcaption class="mt-2 text-sm font-medium" data-astro-cid-3e4etqql> 微信 </figcaption> </figure> </div> </div> <span class="whitespace-nowrap" data-astro-cid-3e4etqql>请我喝杯 Coffee ☕</span> </div> </section>  <script data-astro-rerun>
+  (() => {
+    const trigger = document.querySelector("[data-post-reward-trigger]");
+    const button = trigger?.querySelector("[data-post-reward-button]");
+
+    if (!trigger || !button || trigger.dataset.initialized === "true") return;
+
+    trigger.dataset.initialized = "true";
+    const controller = new AbortController();
+    const { signal } = controller;
+    const touchLayout = window.matchMedia("(hover: none)");
+
+    const setOpen = open => {
+      trigger.dataset.open = String(open);
+      button.setAttribute("aria-expanded", String(open));
+    };
+
+    button.addEventListener(
+      "click",
+      () => {
+        if (!touchLayout.matches) return;
+        setOpen(trigger.dataset.open !== "true");
+      },
+      { signal }
+    );
+
+    document.addEventListener(
+      "click",
+      event => {
+        if (
+          trigger.dataset.open === "true" &&
+          !trigger.contains(event.target)
+        ) {
+          setOpen(false);
+        }
+      },
+      { signal }
+    );
+
+    document.addEventListener(
+      "keydown",
+      event => {
+        if (event.key !== "Escape" || trigger.dataset.open !== "true") return;
+        setOpen(false);
+        button.focus();
+      },
+      { signal }
+    );
+
+    document.addEventListener("astro:before-swap", () => controller.abort(), {
+      once: true,
+      signal,
+    });
+  })();
+</script> </div> <hr class="my-8 border-dashed">  <div id="btt-btn-container" class="fixed inset-e-4 bottom-4 z-50 xl:sticky xl:inset-e-auto xl:float-end xl:me-1 translate-y-14 opacity-0 transition duration-500"> <button data-button="back-to-top" class="group bg-background relative px-2 py-1 size-12 rounded-full shadow-xl xl:h-8 xl:w-fit xl:rounded-md xl:shadow-none xl:focus-visible:rounded-none xl:bg-background/35 xl:bg-clip-padding xl:backdrop-blur-lg"> <span id="progress-indicator" class="absolute inset-0 -z-10 block size-12 scale-110 rounded-full bg-transparent xl:hidden xl:h-8 xl:rounded-md"></span> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block rotate-90 xl:hidden" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 12h14M5 12l6 6M5 12l6-6" /></svg> <span class="group-hover:text-accent sr-only text-sm xl:not-sr-only"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M12 5v14M16 9l-4-4M8 9l4-4" /></svg> 返回顶部 </span> </button> </div> <script data-astro-rerun>
+  function backToTop() {
+    const rootElement = document.documentElement;
+    const btnContainer = document.querySelector("#btt-btn-container");
+    const backToTopBtn = document.querySelector("[data-button='back-to-top']");
+    const progressIndicator = document.querySelector("#progress-indicator");
+
+    if (!rootElement || !btnContainer || !backToTopBtn || !progressIndicator)
+      return;
+
+    backToTopBtn.addEventListener("click", () => {
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    });
+
+    let lastVisible = null;
+    function handleScroll() {
+      const scrollTotal = rootElement.scrollHeight - rootElement.clientHeight;
+      const scrollTop = rootElement.scrollTop;
+      const scrollPercent = Math.floor((scrollTop / scrollTotal) * 100);
+
+      progressIndicator.style.setProperty(
+        "background-image",
+        `conic-gradient(var(--accent), var(--accent) ${scrollPercent}%, transparent ${scrollPercent}%)`
+      );
+
+      const isVisible = scrollTop > 400;
+
+      if (isVisible !== lastVisible) {
+        btnContainer.classList.toggle("opacity-100", isVisible);
+        btnContainer.classList.toggle("translate-y-0", isVisible);
+        btnContainer.classList.toggle("opacity-0", !isVisible);
+        btnContainer.classList.toggle("translate-y-14", !isVisible);
+        lastVisible = isVisible;
+      }
+    }
+
+    let ticking = false;
+    document.addEventListener("scroll", () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+  }
+  backToTop();
+</script> <ul id="post-tags" class="mt-4 mb-8 flex flex-wrap gap-4 sm:mb-8"> <li> <a href="/tags/MySQL/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> MySQL </a> </li> </ul>  <hr class="my-8 border-dashed"> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/quick-start-to-jsonpath/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block flex-none rtl:rotate-180" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 12h14M5 12l6 6M5 12l6-6" /></svg> <div> <span>上一篇</span> <div class="text-accent/85 text-sm">JSONPath 快速入门</div> </div> </a> <a href="/posts/mysql-advanced-first-use-of-mysql-under-linux/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>下一篇</span> <div class="text-accent/85 text-sm">【MySQL 高级篇一】Linux 下 MySQL 的使用</div> </div> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block flex-none rtl:rotate-180" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 12h14M13 18l6-6M13 6l6 6" /></svg> </a> </div> </main> <footer class="app-layout mt-auto"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="text-muted-foreground my-2 flex w-full flex-col items-center text-center text-sm whitespace-nowrap sm:w-auto sm:items-end"> <div class="flex items-center gap-1.5"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="size-4" viewBox="0 0 24 24" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" /><path d="M7 18a4.6 4.4 0 0 1 0-9 5 4.5 0 0 1 9.7 2.2A4 3.8 0 0 1 17 19" /><path d="m9 15 3-3 3 3M12 12v9" /></svg> <span>最近更新：</span> <time class="tabular-nums" datetime="2026-08-31T17:00:14.000Z" data-deployed-at="2026-08-31T17:00:14.000Z" data-just-now="刚刚" data-locale="zh-CN"> 2026-09-01 01:00 </time> </div> <div class="mt-1 flex items-center gap-3 text-xs"> <span class="flex items-center gap-1" title="本站总浏览量"> <svg fill="currentColor" viewBox="0 0 576 512" aria-hidden="true" class="size-3.5"><path d="M572.52 241.4C518.29 135.59 410.93 64 288 64S57.68 135.61 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.61 284.52-177.41a32.35 32.35 0 0 0 0-29.19M288 400a112 112 0 1 1 112-112 112 112 0 0 1-112 112m0-176a64 64 0 1 0 64 64 64 64 0 0 0-64-64" /></svg> <span class="sr-only">本站总浏览量：</span> <span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-end tabular-nums">
+--
+</span> </span> <span aria-hidden="true">|</span> <span class="flex items-center gap-1" title="本站访客数"> <svg fill="currentColor" viewBox="0 0 448 512" aria-hidden="true" class="size-3"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4" /></svg> <span class="sr-only">本站访客数：</span> <span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-end tabular-nums">
+--
+</span> </span> </div> </div> <div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"> <span>版权所有 &#169; 2020 – 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer> <script>
+  (() => {
+    const updateDeploymentTimes = () => {
+      document.querySelectorAll("[data-deployed-at]").forEach(element => {
+        const deployedAt = Date.parse(element.dataset.deployedAt ?? "");
+        if (Number.isNaN(deployedAt)) return;
+
+        const elapsed = Math.max(0, Date.now() - deployedAt);
+        if (elapsed < 60_000) {
+          element.textContent = element.dataset.justNow ?? "";
+          return;
+        }
+
+        let value;
+        let unit;
+        if (elapsed < 3_600_000) {
+          value = Math.floor(elapsed / 60_000);
+          unit = "minute";
+        } else if (elapsed < 86_400_000) {
+          value = Math.floor(elapsed / 3_600_000);
+          unit = "hour";
+        } else if (elapsed < 2_592_000_000) {
+          value = Math.floor(elapsed / 86_400_000);
+          unit = "day";
+        } else if (elapsed < 31_536_000_000) {
+          value = Math.floor(elapsed / 2_592_000_000);
+          unit = "month";
+        } else {
+          value = Math.floor(elapsed / 31_536_000_000);
+          unit = "year";
+        }
+
+        const formatter = new Intl.RelativeTimeFormat(
+          element.dataset.locale ?? document.documentElement.lang,
+          { numeric: "always" }
+        );
+        element.textContent = formatter.format(-value, unit);
+      });
+    };
+
+    updateDeploymentTimes();
+
+    const initializedKey = "__astroBlogDeploymentTimeUpdaterInitialized";
+    if (window[initializedKey]) return;
+
+    window[initializedKey] = true;
+    document.addEventListener("astro:page-load", updateDeploymentTimes);
+    window.setInterval(updateDeploymentTimes, 60_000);
+  })();
+</script>   <script type="module" src="/_astro/Layout.astro_astro_type_script_index_0_lang.DGs0Jsao.js"></script> </body> </html> <script data-astro-rerun>
+  function createProgressBar() {
+    const progressContainer = document.createElement("div");
+    progressContainer.className =
+      "progress-container fixed top-0 z-10 h-1 w-full bg-background";
+
+    const progressBar = document.createElement("div");
+    progressBar.className = "progress-bar h-1 w-0 bg-accent";
+    progressBar.id = "myBar";
+
+    progressContainer.appendChild(progressBar);
+    document.body.appendChild(progressContainer);
+  }
+  createProgressBar();
+
+  function updateScrollProgress() {
+    document.addEventListener("scroll", () => {
+      const winScroll =
+        document.body.scrollTop || document.documentElement.scrollTop;
+      const height =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      if (document) {
+        const myBar = document.getElementById("myBar");
+        if (myBar) {
+          myBar.style.width = scrolled + "%";
+        }
+      }
+    });
+  }
+  updateScrollProgress();
+
+  /** Accessible image lightbox for article images. */
+  function initLightbox() {
+    const article = document.getElementById("article");
+    if (!article) return;
+
+    const prefersReducedMotion = () =>
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    let overlay = null;
+    let lastFocused = null;
+
+    // Defer attribute mutations so they don't push the LCP timestamp.
+    // Event listeners below use delegation and don't need the attributes to exist yet.
+    requestAnimationFrame(() => {
+      const images = Array.from(article.querySelectorAll("img"));
+      for (const image of images) {
+        if (image.closest("a")) continue;
+        image.setAttribute("role", "button");
+        image.setAttribute("tabindex", "0");
+        image.setAttribute("aria-haspopup", "dialog");
+        image.setAttribute(
+          "aria-label",
+          image.alt ? `Zoom image: ${image.alt}` : "Zoom image"
+        );
+      }
+    });
+
+    function open(src, alt, trigger) {
+      if (overlay) return;
+      lastFocused = trigger ?? document.activeElement;
+
+      overlay = document.createElement("div");
+      overlay.setAttribute("role", "dialog");
+      overlay.setAttribute("aria-modal", "true");
+      overlay.setAttribute(
+        "aria-label",
+        alt ? `Image preview: ${alt}` : "Image preview"
+      );
+      overlay.className =
+        "fixed inset-0 z-50 flex cursor-zoom-out items-center justify-center bg-black/70 backdrop-blur-sm opacity-0 transition-opacity duration-200 motion-reduce:transition-none";
+
+      const closeButton = document.createElement("button");
+      closeButton.type = "button";
+      closeButton.setAttribute("aria-label", "Close image preview");
+      closeButton.className =
+        "absolute end-4 top-4 rounded p-2 text-3xl leading-none text-white";
+      closeButton.innerHTML = "&#10005;";
+      closeButton.addEventListener("click", close);
+
+      const image = document.createElement("img");
+      image.src = src;
+      image.alt = "";
+      image.className =
+        "max-h-[90dvh] max-w-[90dvw] cursor-default object-contain";
+
+      overlay.append(closeButton, image);
+      overlay.addEventListener("click", e => {
+        if (e.target === overlay && currentScale <= 1) close();
+      });
+
+      let currentScale = 1;
+      let translateX = 0;
+      let translateY = 0;
+      let initialDist = 0;
+      let initialScale = 1;
+      let panStartX = 0;
+      let panStartY = 0;
+      let panStartTranslateX = 0;
+      let panStartTranslateY = 0;
+      let lastTapTime = 0;
+
+      function applyTransform() {
+        image.style.transform = `scale(${currentScale}) translate(${translateX}px, ${translateY}px)`;
+      }
+
+      function resetTransform() {
+        currentScale = 1;
+        translateX = 0;
+        translateY = 0;
+        image.style.transform = "";
+      }
+
+      overlay.addEventListener(
+        "touchstart",
+        e => {
+          const t = e.touches;
+          if (t.length === 2) {
+            initialDist = Math.hypot(
+              t[1].clientX - t[0].clientX,
+              t[1].clientY - t[0].clientY
+            );
+            initialScale = currentScale;
+          } else if (t.length === 1) {
+            const now = Date.now();
+            if (now - lastTapTime < 300) {
+              e.preventDefault();
+              if (currentScale > 1) {
+                resetTransform();
+              } else {
+                currentScale = 2;
+                translateX = 0;
+                translateY = 0;
+                applyTransform();
+              }
+              lastTapTime = 0;
+              panStartX = t[0].clientX;
+              panStartY = t[0].clientY;
+              panStartTranslateX = translateX;
+              panStartTranslateY = translateY;
+            } else {
+              lastTapTime = now;
+              if (currentScale > 1) {
+                panStartX = t[0].clientX;
+                panStartY = t[0].clientY;
+                panStartTranslateX = translateX;
+                panStartTranslateY = translateY;
+              }
+            }
+          }
+        },
+        { passive: false }
+      );
+
+      overlay.addEventListener(
+        "touchmove",
+        e => {
+          const t = e.touches;
+          if (t.length === 2) {
+            e.preventDefault();
+            const dist = Math.hypot(
+              t[1].clientX - t[0].clientX,
+              t[1].clientY - t[0].clientY
+            );
+            currentScale = Math.min(
+              4,
+              Math.max(1, initialScale * (dist / initialDist))
+            );
+            applyTransform();
+          } else if (t.length === 1) {
+            if (currentScale > 1) {
+              e.preventDefault();
+              translateX =
+                panStartTranslateX + (t[0].clientX - panStartX) / currentScale;
+              translateY =
+                panStartTranslateY + (t[0].clientY - panStartY) / currentScale;
+              const maxX = Math.max(
+                0,
+                (image.clientWidth - overlay.clientWidth / currentScale) / 2
+              );
+              const maxY = Math.max(
+                0,
+                (image.clientHeight - overlay.clientHeight / currentScale) / 2
+              );
+              translateX = Math.min(maxX, Math.max(-maxX, translateX));
+              translateY = Math.min(maxY, Math.max(-maxY, translateY));
+              applyTransform();
+            } else {
+              e.preventDefault();
+            }
+          }
+        },
+        { passive: false }
+      );
+
+      overlay.addEventListener("touchend", e => {
+        if (e.touches.length === 0 && currentScale <= 1.05) {
+          resetTransform();
+        }
+      });
+
+      overlay.addEventListener("touchcancel", e => {
+        if (e.touches.length === 0 && currentScale <= 1.05) {
+          resetTransform();
+        }
+      });
+
+      document.body.appendChild(overlay);
+      document.body.style.overflow = "hidden";
+      document.addEventListener("keydown", onKeyDown);
+      window.__closeLightbox = close;
+
+      requestAnimationFrame(() => overlay?.classList.add("opacity-100"));
+      closeButton.focus();
+    }
+
+    function close() {
+      if (!overlay) return;
+      const el = overlay;
+      overlay = null;
+      window.__closeLightbox = null;
+
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = "";
+      lastFocused?.focus();
+      lastFocused = null;
+
+      if (prefersReducedMotion()) {
+        el.remove();
+        return;
+      }
+      const remove = () => el.remove();
+      el.addEventListener("transitionend", remove, { once: true });
+      setTimeout(remove, 250); // fallback in case transitionend never fires
+      el.classList.remove("opacity-100");
+    }
+
+    function onKeyDown(e) {
+      if (e.key === "Escape") {
+        close();
+      } else if (e.key === "Tab") {
+        trapFocus(e);
+      }
+    }
+
+    // Keep keyboard focus inside the open dialog.
+    function trapFocus(e) {
+      if (!overlay) return;
+      const focusables = overlay.querySelectorAll(
+        'a[href], button, [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+
+    function triggerFromEvent(e) {
+      const image = e.target.closest("img");
+      if (!image || !article.contains(image) || image.closest("a")) return null;
+      return image;
+    }
+
+    function activate(image) {
+      open(image.currentSrc || image.src, image.alt, image);
+    }
+
+    article.addEventListener("click", e => {
+      const image = triggerFromEvent(e);
+      if (!image) return;
+      e.preventDefault();
+      activate(image);
+    });
+
+    article.addEventListener("keydown", e => {
+      if (e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") return;
+      const image = triggerFromEvent(e);
+      if (!image) return;
+      e.preventDefault();
+      activate(image);
+    });
+  }
+  initLightbox();
+
+  if (!window.__lightboxSwapBound) {
+    window.__lightboxSwapBound = true;
+    document.addEventListener("astro:before-swap", () =>
+      window.__closeLightbox?.()
+    );
+  }
+
+  document.addEventListener("astro:after-swap", () =>
+    window.scrollTo({ left: 0, top: 0, behavior: "instant" })
+  );
+</script>

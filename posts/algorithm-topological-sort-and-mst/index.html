@@ -1,0 +1,1124 @@
+<!DOCTYPE html><html dir="ltr" lang="zh-CN" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/algorithm-topological-sort-and-mst/"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css"><link rel="preconnect" href="https://busuanzi.ibruce.info"><meta name="generator" content="Astro v6.4.2"><!-- Primary meta --><title>【算法】拓扑排序与最小生成树 | Mofan</title><meta name="title" content="【算法】拓扑排序与最小生成树 | Mofan"><meta name="description" content="本文基于数据结构——图，介绍了适用于有向无环图的拓扑排序和有权无向连通图中最小生成树的求法。"><meta name="author" content="默烦"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Mofan"><meta property="og:title" content="【算法】拓扑排序与最小生成树 | Mofan"><meta property="og:description" content="本文基于数据结构——图，介绍了适用于有向无环图的拓扑排序和有权无向连通图中最小生成树的求法。"><meta property="og:url" content="https://mofan212.github.io/posts/algorithm-topological-sort-and-mst/"><meta property="og:image" content="https://mofan212.github.io/default-og.jpg"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://mofan212.github.io/posts/algorithm-topological-sort-and-mst/"><meta property="twitter:title" content="【算法】拓扑排序与最小生成树 | Mofan"><meta property="twitter:description" content="本文基于数据结构——图，介绍了适用于有向无环图的拓扑排序和有权无向连通图中最小生成树的求法。"><meta property="twitter:image" content="https://mofan212.github.io/default-og.jpg"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Mofan" href="https://mofan212.github.io/rss.xml/"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2020-08-27T00:00:00.000Z"><meta property="article:modified_time" content="2020-08-28T00:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"【算法】拓扑排序与最小生成树 | Mofan","url":"https://mofan212.github.io/posts/algorithm-topological-sort-and-mst/","mainEntityOfPage":"https://mofan212.github.io/posts/algorithm-topological-sort-and-mst/","datePublished":"2020-08-27T00:00:00.000Z","dateModified":"2020-08-28T00:00:00.000Z","author":[{"@type":"Person","name":"默烦","url":"https://github.com/mofan212"}]}</script> <!--
+      Inline FOUC-prevention script: sets data-theme on <html> before
+      the browser paints. Runs synchronously, no defer/async.
+    --><script>
+      (function () {
+        const stored = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+        const theme = stored ?? (prefersDark ? "dark" : "light");
+        const root = document.firstElementChild;
+        root?.setAttribute("data-theme", theme);
+        root?.classList.toggle("dark", theme === "dark");
+        // Expose value so theme.ts can skip re-detection.
+        window.__theme = { value: theme };
+      })();
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.BglkCy-o.css">
+<style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
+.toc-toggle[data-astro-cid-po2ckxzl][aria-expanded=true] .toc-toggle-icon[data-astro-cid-po2ckxzl]{rotate:-90deg}.post-toc-desktop[data-astro-cid-taqt6xe3]{inset-inline-start:calc(50% + var(--app-max-width) / 2 + 2rem);width:min(14rem,calc(50vw - var(--app-max-width) / 2 - 3rem))}.toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-width:thin}.toc-scroll[data-astro-cid-taqt6xe3]:after{display:block;block-size:20dvh;content:""}.toc-link[data-astro-cid-taqt6xe3][data-active]{border-inline-start-color:var(--accent);color:var(--accent);font-weight:600}[data-astro-cid-4wxclohh][data-post-series]{interpolate-size:allow-keywords}[data-astro-cid-4wxclohh][data-post-series]::details-content{block-size:0;overflow:hidden;opacity:0;transition:block-size .2s ease-out,opacity .15s ease-out,content-visibility .2s allow-discrete}[data-astro-cid-4wxclohh][data-post-series][open]::details-content{block-size:auto;opacity:1}@media(prefers-reduced-motion:reduce){[data-astro-cid-4wxclohh][data-post-series]::details-content{transition:none}}[data-astro-cid-3e4etqql][data-post-reward-panel]{position:absolute;z-index:30;bottom:calc(100% + 1rem);left:50%;opacity:0;visibility:hidden;pointer-events:none;transform:translate(-50%,.25rem);transition:opacity .15s ease-out,transform .15s ease-out,visibility 0s linear .15s}[data-astro-cid-3e4etqql][data-post-reward-panel]:before{position:absolute;bottom:-1.25rem;left:0;width:100%;height:1.5rem;content:""}[data-astro-cid-3e4etqql][data-post-reward-panel]:after{position:absolute;bottom:-.4375rem;left:50%;width:.875rem;height:.875rem;border-bottom:1px solid var(--border);border-left:1px solid var(--border);background:var(--background);content:"";transform:translate(-50%) rotate(-45deg)}[data-astro-cid-3e4etqql][data-post-reward-trigger][data-open=true] [data-astro-cid-3e4etqql][data-post-reward-panel]{opacity:1;visibility:visible;pointer-events:auto;transform:translate(-50%);transition-delay:0s}@media(hover:hover)and (pointer:fine){[data-astro-cid-3e4etqql][data-post-reward-trigger]:hover [data-astro-cid-3e4etqql][data-post-reward-panel],[data-astro-cid-3e4etqql][data-post-reward-trigger]:focus-within [data-astro-cid-3e4etqql][data-post-reward-panel]{opacity:1;visibility:visible;pointer-events:auto;transform:translate(-50%);transition-delay:0s}}@media(prefers-reduced-motion:reduce){[data-astro-cid-3e4etqql][data-post-reward-panel]{transition:none}}
+</style><style>[data-astro-transition-scope="astro-36ssibgs-1"] { view-transition-name: Algorithm; }@layer astro { ::view-transition-old(Algorithm) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(Algorithm) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(Algorithm) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(Algorithm) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-36ssibgs-2"] { view-transition-name: Graph-Theory; }@layer astro { ::view-transition-old(Graph-Theory) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(Graph-Theory) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(Graph-Theory) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(Graph-Theory) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style></head> <body class="bg-background font-app text-foreground selection:bg-accent/75 selection:text-accent-foreground flex min-h-svh flex-col">    <a id="skip-to-content" href="#main-content" class="bg-background text-accent absolute inset-s-16 -top-full z-50 px-3 py-2 backdrop-blur-lg transition-all focus:top-4"> 跳到正文 </a> <header class="app-layout flex flex-col items-center justify-between sm:flex-row"> <div class="border-border bg-background relative flex w-full items-baseline justify-between border-b py-4 sm:items-center sm:py-6"> <a href="/" class="absolute py-1 text-xl leading-8 font-semibold whitespace-nowrap sm:static sm:my-auto sm:text-2xl sm:leading-none"> Mofan </a> <nav id="nav-menu" class="flex w-full flex-col items-center sm:ms-2 sm:flex-row sm:justify-end sm:space-x-4 sm:py-0"> <button id="menu-btn" class="focus-outline self-end p-2 sm:hidden" aria-label="打开菜单" aria-expanded="false" aria-controls="menu-items" data-label-open="打开菜单" data-label-close="关闭菜单"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="hidden" viewBox="0 0 24 24" id="close-icon"><path stroke="none" d="M0 0h24v24H0z" /><path d="M18 6 6 18M6 6l12 12" /></svg> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="icon icon-tabler icons-tabler-outline icon-tabler-menu-deep" viewBox="0 0 24 24" id="menu-icon"><path stroke="none" d="M0 0h24v24H0z" /><path d="M4 6h16M7 12h13M10 18h10" /></svg> </button> <ul id="menu-items" class="[&>li>a]:hover:text-accent mt-4 hidden w-44 grid-cols-3 place-content-center gap-2 sm:mt-0 sm:flex sm:w-auto sm:gap-x-3 sm:gap-y-0 sm:[&>li]:h-8 [&>li>a]:block [&>li>a]:px-4 [&>li>a]:py-3 [&>li>a]:text-center [&>li>a]:font-medium sm:[&>li>a]:px-2 sm:[&>li>a]:py-1"> <li class="col-span-3"> <a href="/archives/"> 归档 </a> </li> <li class="col-span-3"> <a href="/categories/"> 分类 </a> </li> <li class="col-span-3"> <a href="/tags/"> 标签 </a> </li> <li class="col-span-3"> <a href="/messageboard/"> 留言板 </a> </li> <li class="col-span-3"> <details id="site-menu" class="group relative w-full sm:w-auto"> <summary class="focus-outline hover:text-accent flex cursor-pointer list-none items-center justify-center gap-1 px-4 py-3 font-medium select-none sm:px-2 sm:py-1 [&amp;::-webkit-details-marker]:hidden"> 站点 <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="size-4 -rotate-90 transition-transform group-open:rotate-90" viewBox="0 0 24 24" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 6-6 6 6 6" /></svg> </summary> <ul class="border-border bg-background z-20 mt-1 rounded-md border p-2 text-start sm:absolute sm:top-full sm:right-0 sm:mt-2 sm:w-36 sm:shadow-md sm:before:absolute sm:before:-top-2 sm:before:left-0 sm:before:h-5 sm:before:w-full sm:before:content-['']"> <li> <p class="text-muted-foreground px-3 pt-1 pb-1 text-xs font-semibold tracking-wider"> 内容 </p> <ul> <li> <a href="/schedule/" class="hover:bg-muted hover:text-accent block rounded px-3 py-2 font-medium"> 计划 </a> </li> <li> <a href="/update/" class="hover:bg-muted hover:text-accent block rounded px-3 py-2 font-medium"> 维护 </a> </li> <li> <a href="/link/" class="hover:bg-muted hover:text-accent block rounded px-3 py-2 font-medium"> 友链 </a> </li> </ul> </li> <li class="border-border mt-2 border-t pt-2"> <p class="text-muted-foreground px-3 pt-1 pb-1 text-xs font-semibold tracking-wider"> 关于 </p> <ul> <li> <a href="/mine/" class="hover:bg-muted hover:text-accent block rounded px-3 py-2 font-medium"> 我 </a> </li> <li> <a href="/about/" class="hover:bg-muted hover:text-accent block rounded px-3 py-2 font-medium"> 本站 </a> </li> <li> <a href="/reward/" class="hover:bg-muted hover:text-accent block rounded px-3 py-2 font-medium"> 赞助 </a> </li> <li> <a href="/milestones/" class="hover:bg-muted hover:text-accent block rounded px-3 py-2 font-medium"> 里程碑 </a> </li> </ul> </li> </ul> </details> </li> <li class="col-span-1 flex items-center justify-center"> <button id="docsearch-button" class="focus-outline hover:[&>svg]:stroke-accent relative size-12 p-4 sm:size-8" type="button" title="搜索" aria-label="搜索" aria-controls="docsearch"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-1/2 left-1/2 size-6 -translate-x-1/2 -translate-y-1/2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 10a7 7 0 1 0 14 0 7 7 0 1 0-14 0M21 21l-6-6" /></svg> </button> <div id="docsearch" class="hidden" data-app-id="BAFEL7A6K1" data-api-key="89fcb5961984c5c054bf04149f345f38" data-indices="[&quot;mofan212io&quot;]" data-label="搜索" data-placeholder="输入关键字进行搜索"></div> <script type="module" src="/_astro/DocSearch.astro_astro_type_script_index_0_lang.BgJYFKPD.js"></script> </li> <li class="col-span-1 flex items-center justify-center"> <a href="https://www.travellings.cn/go.html" target="_blank" rel="noopener noreferrer" title="开往" aria-label="开往" class="group inline-flex items-center gap-1 hover:text-accent focus-outline relative size-12 p-4 sm:size-8">  <svg width="24" height="24" fill="currentColor" class="absolute top-1/2 left-1/2 size-5 -translate-x-1/2 -translate-y-1/2" viewBox="0 0 448 512" aria-hidden="true"><path d="M96 0C43 0 0 43 0 96v256c0 48 35.2 87.7 81.1 94.9l-46 46c-7 7-2 19.1 7.9 19.1h39.7c8.5 0 16.6-3.4 22.6-9.4L160 448h128l54.6 54.6c6 6 14.1 9.4 22.6 9.4h39.7c10 0 15-12.1 7.9-19.1l-46-46c46-7.1 81.1-46.9 81.1-94.9V96c0-53-43-96-96-96zM64 128c0-17.7 14.3-32 32-32h80c17.7 0 32 14.3 32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32zm208-32h80c17.7 0 32 14.3 32 32v96c0 17.7-14.3 32-32 32h-80c-17.7 0-32-14.3-32-32v-96c0-17.7 14.3-32 32-32M64 352a32 32 0 1 1 64 0 32 32 0 1 1-64 0m288-32a32 32 0 1 1 0 64 32 32 0 1 1 0-64" /></svg> <span class="sr-only">开往</span>  </a> </li> <li class="col-span-1 flex items-center justify-center"> <button id="theme-btn" class="focus-outline hover:[&>svg]:stroke-accent relative size-12 p-4 sm:size-8" title="切换主题" aria-label="auto" aria-live="polite"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-[50%] left-[50%] translate-[-50%] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M12 3h.393a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 12 2.992z" /></svg> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-[50%] left-[50%] translate-[-50%] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M14.828 14.828a4 4 0 1 0-5.656-5.656 4 4 0 0 0 5.656 5.656M6.343 17.657l-1.414 1.414M6.343 6.343 4.929 4.929M17.657 6.343l1.414-1.414M17.657 17.657l1.414 1.414M4 12H2M12 4V2M20 12h2M12 20v2" /></svg> </button> </li> </ul> </nav> </div> </header> <script type="module">function r(){const e=document.querySelector("#menu-btn"),t=document.querySelector("#menu-items"),n=document.querySelector("#menu-icon"),o=document.querySelector("#close-icon");if(!e||!t||!n||!o)return;const c=e.dataset.labelOpen??"Open menu",a=e.dataset.labelClose??"Close menu";e.addEventListener("click",()=>{const i=e.getAttribute("aria-expanded")==="true";e.setAttribute("aria-expanded",i?"false":"true"),e.setAttribute("aria-label",i?c:a),t.classList.toggle("hidden"),t.classList.toggle("grid"),n.classList.toggle("hidden"),o.classList.toggle("hidden")})}function s(e=!1){const t=document.querySelector("#site-menu");t?.open&&(t.open=!1,e&&t.querySelector("summary")?.focus())}function u(){const e=document.querySelector("#site-menu");if(!e||e.dataset.hoverBound==="true")return;e.dataset.hoverBound="true";const t=window.matchMedia("(min-width: 640px) and (hover: hover) and (pointer: fine)");let n;const o=()=>{n!==void 0&&(window.clearTimeout(n),n=void 0)};e.addEventListener("mouseenter",()=>{t.matches&&(o(),e.open=!0)}),e.addEventListener("mouseleave",()=>{t.matches&&(o(),n=window.setTimeout(()=>{e.open=!1,n=void 0},150))})}r();u();document.addEventListener("click",e=>{const t=document.querySelector("#site-menu");t?.open&&!t.contains(e.target)&&s()});document.addEventListener("keydown",e=>{e.key==="Escape"&&s(!0)});document.addEventListener("astro:after-swap",()=>{r(),u()});document.addEventListener("astro:before-swap",()=>s());</script> <div class="app-layout flex items-center justify-start"><a id="back-button" href="/" class="group inline-flex items-center gap-1 hover:text-accent focus-outline hover:text-foreground/75 -ms-2 mt-8 mb-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 rtl:rotate-180" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 6-6 6 6 6" /></svg><span>返回</span> </a></div><script type="module">function o(){const t=document.querySelector("#back-button"),e=sessionStorage.getItem("backUrl");e&&t&&(t.href=e)}document.addEventListener("astro:page-load",o);o();</script> <main id="main-content" class="app-layout" data-pagefind-body> <h1 style="view-transition-name:u003010u007b97u006cd5u003011u0062d3u006251u006392u005e8fu004e0eu006700u005c0fu00751fu006210u006811" class="text-accent inline-block text-2xl font-bold sm:text-3xl"> 【算法】拓扑排序与最小生成树 </h1> <div class="my-2 flex flex-wrap items-center gap-2"> <div class="text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1"> <span class="flex items-center gap-x-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 min-w-5.5" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM16 3v4M8 3v4M4 11h16M7 14h.013M10.01 14h.005M13.01 14h.005M16.015 14h.005M13.015 17h.005M7.01 17h.005M10.01 17h.005" /></svg> <span class="text-sm sm:text-base"> 发表于 </span> <time class="text-sm sm:text-base" datetime="2020-08-27T00:00:00.000Z"> 2020-08-27 </time> </span> <span class="flex items-center gap-x-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 min-w-5.5" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M12 8v4l2 2" /><path d="M3.05 11a9 9 0 1 1 .5 4m-.5 5v-5h5" /></svg> <span class="text-sm sm:text-base"> 更新于 </span> <time class="text-sm sm:text-base" datetime="2020-08-28T00:00:00.000Z"> 2020-08-28 </time> </span> </div> <span aria-hidden="true" class="text-muted-foreground">|</span> <span class="text-muted-foreground flex items-center gap-x-2" data-busuanzi-page data-busuanzi-legacy-path="/posts/Algorithm-Topological-Sort-And-MST/"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 min-w-5.5" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M10 12a2 2 0 1 0 4 0 2 2 0 0 0-4 0" /><path d="M21 12q-3.6 6-9 6c-5.4 0-6.6-2-9-6q3.6-6 9-6c5.4 0 6.6 2 9 6" /></svg> <span class="text-sm sm:text-base">浏览量：</span> <span id="busuanzi_value_page_pv" class="inline-block min-w-[6ch] text-end text-sm tabular-nums sm:text-base">
+--
+</span> </span>  <span aria-hidden="true" class="text-muted-foreground">
+|
+</span> <nav aria-label="分类"> <ol class="flex flex-wrap items-center gap-1"> <li> <a href="/categories/Algorithm/" class="text-muted-foreground flex items-center gap-1 transition-colors hover:text-accent focus-visible:text-accent text-sm sm:text-base"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="shrink-0 size-6" viewBox="0 0 24 24" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v0a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8M10 12h4" /></svg> Algorithm </a> </li>  </ol> </nav>  <span aria-hidden="true" class="text-muted-foreground max-sm:hidden hidden">
+|
+</span>  </div>  <div data-post-toc data-astro-cid-taqt6xe3> <aside class="post-toc-desktop fixed top-24 hidden h-[calc(100dvh-8rem)] flex-col xl:flex" aria-label="文章目录" data-astro-cid-taqt6xe3> <div class="mb-3 flex items-center justify-between gap-3 px-3" data-astro-cid-taqt6xe3> <h2 class="text-sm font-semibold" data-astro-cid-taqt6xe3>文章目录</h2> <span class="text-muted-foreground text-sm tabular-nums" data-reading-progress data-astro-cid-taqt6xe3>
+0%
+</span> </div> <nav class="toc-scroll min-h-0 flex-1 overflow-y-auto overscroll-contain pe-1" data-toc-scroll data-astro-cid-taqt6xe3> <ul class="space-y-0.5" data-astro-cid-po2ckxzl> <li data-toc-node="0-前言" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#0-前言" data-toc-slug="0-前言" data-astro-cid-po2ckxzl> 0. 前言 </a> </div>  </li><li data-toc-node="1-aov-网" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#1-aov-网" data-toc-slug="1-aov-网" data-astro-cid-po2ckxzl> 1. AOV 网 </a> </div>  </li><li data-toc-node="2-拓扑排序" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <button type="button" class="toc-toggle text-muted-foreground hover:text-accent mt-0.5 flex size-7 shrink-0 items-center justify-center rounded" aria-label="展开或收起目录章节: 2. 拓扑排序" aria-controls="post-toc-desktop-2-拓扑排序" aria-expanded="false" data-toc-toggle="2-拓扑排序" data-astro-cid-po2ckxzl> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="toc-toggle-icon size-4 -rotate-180 transition-transform" viewBox="0 0 24 24" aria-hidden="true" data-astro-cid-po2ckxzl="true"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 6-6 6 6 6" /></svg> </button> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#2-拓扑排序" data-toc-slug="2-拓扑排序" data-astro-cid-po2ckxzl> 2. 拓扑排序 </a> </div> <div id="post-toc-desktop-2-拓扑排序" hidden data-toc-branch="2-拓扑排序" data-astro-cid-po2ckxzl> <ul class="space-y-0.5 border-border ms-3 border-s ps-1" data-astro-cid-po2ckxzl> <li data-toc-node="21-基本概念" data-toc-parent="2-拓扑排序" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#21-基本概念" data-toc-slug="21-基本概念" data-astro-cid-po2ckxzl> 2.1 基本概念 </a> </div>  </li><li data-toc-node="22-实现思路" data-toc-parent="2-拓扑排序" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#22-实现思路" data-toc-slug="22-实现思路" data-astro-cid-po2ckxzl> 2.2 实现思路 </a> </div>  </li><li data-toc-node="23-编码实现" data-toc-parent="2-拓扑排序" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#23-编码实现" data-toc-slug="23-编码实现" data-astro-cid-po2ckxzl> 2.3 编码实现 </a> </div>  </li> </ul> </div> </li><li data-toc-node="3-生成树" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <button type="button" class="toc-toggle text-muted-foreground hover:text-accent mt-0.5 flex size-7 shrink-0 items-center justify-center rounded" aria-label="展开或收起目录章节: 3. 生成树" aria-controls="post-toc-desktop-3-生成树" aria-expanded="false" data-toc-toggle="3-生成树" data-astro-cid-po2ckxzl> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="toc-toggle-icon size-4 -rotate-180 transition-transform" viewBox="0 0 24 24" aria-hidden="true" data-astro-cid-po2ckxzl="true"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 6-6 6 6 6" /></svg> </button> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#3-生成树" data-toc-slug="3-生成树" data-astro-cid-po2ckxzl> 3. 生成树 </a> </div> <div id="post-toc-desktop-3-生成树" hidden data-toc-branch="3-生成树" data-astro-cid-po2ckxzl> <ul class="space-y-0.5 border-border ms-3 border-s ps-1" data-astro-cid-po2ckxzl> <li data-toc-node="31-基本概念" data-toc-parent="3-生成树" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#31-基本概念" data-toc-slug="31-基本概念" data-astro-cid-po2ckxzl> 3.1 基本概念 </a> </div>  </li><li data-toc-node="32-最小生成树" data-toc-parent="3-生成树" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#32-最小生成树" data-toc-slug="32-最小生成树" data-astro-cid-po2ckxzl> 3.2 最小生成树 </a> </div>  </li><li data-toc-node="33-prim-算法" data-toc-parent="3-生成树" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#33-prim-算法" data-toc-slug="33-prim-算法" data-astro-cid-po2ckxzl> 3.3 Prim 算法 </a> </div>  </li><li data-toc-node="34-prim-的实现" data-toc-parent="3-生成树" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#34-prim-的实现" data-toc-slug="34-prim-的实现" data-astro-cid-po2ckxzl> 3.4 Prim 的实现 </a> </div>  </li><li data-toc-node="35-kruskal-算法" data-toc-parent="3-生成树" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#35-kruskal-算法" data-toc-slug="35-kruskal-算法" data-astro-cid-po2ckxzl> 3.5 Kruskal 算法 </a> </div>  </li><li data-toc-node="37-kruskal-的实现" data-toc-parent="3-生成树" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#37-kruskal-的实现" data-toc-slug="37-kruskal-的实现" data-astro-cid-po2ckxzl> 3.7 Kruskal 的实现 </a> </div>  </li><li data-toc-node="38-复杂度对比" data-toc-parent="3-生成树" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#38-复杂度对比" data-toc-slug="38-复杂度对比" data-astro-cid-po2ckxzl> 3.8 复杂度对比 </a> </div>  </li> </ul> </div> </li> </ul> </nav> </aside> <button type="button" class="bg-background border-border text-foreground fixed end-4 bottom-20 z-40 flex size-12 items-center justify-center rounded-full border shadow-xl xl:hidden" aria-label="打开文章目录" aria-controls="post-toc-dialog" aria-expanded="false" data-toc-open data-astro-cid-taqt6xe3> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="size-6" viewBox="0 0 24 24" aria-hidden="true" data-astro-cid-taqt6xe3="true"><path stroke="none" d="M0 0h24v24H0z" /><path d="M4 6h16M7 12h13M10 18h10" /></svg> </button> <dialog id="post-toc-dialog" class="bg-background text-foreground border-border m-0 ms-auto h-dvh max-h-dvh w-[min(24rem,90vw)] max-w-none border-s p-0 shadow-2xl backdrop:bg-black/50" aria-labelledby="post-toc-dialog-title" data-toc-dialog data-astro-cid-taqt6xe3> <div class="flex h-full min-h-0 flex-col" data-astro-cid-taqt6xe3> <div class="border-border flex items-center justify-between gap-4 border-b px-4 py-3" data-astro-cid-taqt6xe3> <div class="flex items-baseline gap-3" data-astro-cid-taqt6xe3> <h2 id="post-toc-dialog-title" class="font-semibold" data-astro-cid-taqt6xe3> 文章目录 </h2> <span class="text-muted-foreground text-sm tabular-nums" data-reading-progress data-astro-cid-taqt6xe3>
+0%
+</span> </div> <button type="button" class="hover:text-accent rounded p-2" aria-label="关闭文章目录" data-toc-close data-astro-cid-taqt6xe3> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="size-5" viewBox="0 0 24 24" aria-hidden="true" data-astro-cid-taqt6xe3="true"><path stroke="none" d="M0 0h24v24H0z" /><path d="M18 6 6 18M6 6l12 12" /></svg> </button> </div> <nav class="toc-scroll min-h-0 flex-1 overflow-y-auto p-3" data-toc-scroll data-astro-cid-taqt6xe3> <ul class="space-y-0.5" data-astro-cid-po2ckxzl> <li data-toc-node="0-前言" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#0-前言" data-toc-slug="0-前言" data-astro-cid-po2ckxzl> 0. 前言 </a> </div>  </li><li data-toc-node="1-aov-网" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#1-aov-网" data-toc-slug="1-aov-网" data-astro-cid-po2ckxzl> 1. AOV 网 </a> </div>  </li><li data-toc-node="2-拓扑排序" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <button type="button" class="toc-toggle text-muted-foreground hover:text-accent mt-0.5 flex size-7 shrink-0 items-center justify-center rounded" aria-label="展开或收起目录章节: 2. 拓扑排序" aria-controls="post-toc-mobile-2-拓扑排序" aria-expanded="false" data-toc-toggle="2-拓扑排序" data-astro-cid-po2ckxzl> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="toc-toggle-icon size-4 -rotate-180 transition-transform" viewBox="0 0 24 24" aria-hidden="true" data-astro-cid-po2ckxzl="true"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 6-6 6 6 6" /></svg> </button> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#2-拓扑排序" data-toc-slug="2-拓扑排序" data-astro-cid-po2ckxzl> 2. 拓扑排序 </a> </div> <div id="post-toc-mobile-2-拓扑排序" hidden data-toc-branch="2-拓扑排序" data-astro-cid-po2ckxzl> <ul class="space-y-0.5 border-border ms-3 border-s ps-1" data-astro-cid-po2ckxzl> <li data-toc-node="21-基本概念" data-toc-parent="2-拓扑排序" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#21-基本概念" data-toc-slug="21-基本概念" data-astro-cid-po2ckxzl> 2.1 基本概念 </a> </div>  </li><li data-toc-node="22-实现思路" data-toc-parent="2-拓扑排序" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#22-实现思路" data-toc-slug="22-实现思路" data-astro-cid-po2ckxzl> 2.2 实现思路 </a> </div>  </li><li data-toc-node="23-编码实现" data-toc-parent="2-拓扑排序" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#23-编码实现" data-toc-slug="23-编码实现" data-astro-cid-po2ckxzl> 2.3 编码实现 </a> </div>  </li> </ul> </div> </li><li data-toc-node="3-生成树" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <button type="button" class="toc-toggle text-muted-foreground hover:text-accent mt-0.5 flex size-7 shrink-0 items-center justify-center rounded" aria-label="展开或收起目录章节: 3. 生成树" aria-controls="post-toc-mobile-3-生成树" aria-expanded="false" data-toc-toggle="3-生成树" data-astro-cid-po2ckxzl> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="toc-toggle-icon size-4 -rotate-180 transition-transform" viewBox="0 0 24 24" aria-hidden="true" data-astro-cid-po2ckxzl="true"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 6-6 6 6 6" /></svg> </button> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#3-生成树" data-toc-slug="3-生成树" data-astro-cid-po2ckxzl> 3. 生成树 </a> </div> <div id="post-toc-mobile-3-生成树" hidden data-toc-branch="3-生成树" data-astro-cid-po2ckxzl> <ul class="space-y-0.5 border-border ms-3 border-s ps-1" data-astro-cid-po2ckxzl> <li data-toc-node="31-基本概念" data-toc-parent="3-生成树" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#31-基本概念" data-toc-slug="31-基本概念" data-astro-cid-po2ckxzl> 3.1 基本概念 </a> </div>  </li><li data-toc-node="32-最小生成树" data-toc-parent="3-生成树" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#32-最小生成树" data-toc-slug="32-最小生成树" data-astro-cid-po2ckxzl> 3.2 最小生成树 </a> </div>  </li><li data-toc-node="33-prim-算法" data-toc-parent="3-生成树" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#33-prim-算法" data-toc-slug="33-prim-算法" data-astro-cid-po2ckxzl> 3.3 Prim 算法 </a> </div>  </li><li data-toc-node="34-prim-的实现" data-toc-parent="3-生成树" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#34-prim-的实现" data-toc-slug="34-prim-的实现" data-astro-cid-po2ckxzl> 3.4 Prim 的实现 </a> </div>  </li><li data-toc-node="35-kruskal-算法" data-toc-parent="3-生成树" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#35-kruskal-算法" data-toc-slug="35-kruskal-算法" data-astro-cid-po2ckxzl> 3.5 Kruskal 算法 </a> </div>  </li><li data-toc-node="37-kruskal-的实现" data-toc-parent="3-生成树" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#37-kruskal-的实现" data-toc-slug="37-kruskal-的实现" data-astro-cid-po2ckxzl> 3.7 Kruskal 的实现 </a> </div>  </li><li data-toc-node="38-复杂度对比" data-toc-parent="3-生成树" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#38-复杂度对比" data-toc-slug="38-复杂度对比" data-astro-cid-po2ckxzl> 3.8 复杂度对比 </a> </div>  </li> </ul> </div> </li> </ul> </nav> </div> </dialog> </div> <script data-astro-rerun>
+  (() => {
+    function initPostToc() {
+      window.__postTocCleanup?.();
+
+      const tocRoot = document.querySelector("[data-post-toc]");
+
+      if (tocRoot) {
+        const controller = new AbortController();
+        const { signal } = controller;
+        const openButton = tocRoot.querySelector("[data-toc-open]");
+        const closeButton = tocRoot.querySelector("[data-toc-close]");
+        const dialog = tocRoot.querySelector("[data-toc-dialog]");
+        const links = Array.from(tocRoot.querySelectorAll("[data-toc-slug]"));
+        const toggleButtons = Array.from(
+          tocRoot.querySelectorAll("[data-toc-toggle]")
+        );
+        const branches = Array.from(
+          tocRoot.querySelectorAll("[data-toc-branch]")
+        );
+        const nodes = Array.from(tocRoot.querySelectorAll("[data-toc-node]"));
+        const readingProgressElements = Array.from(
+          tocRoot.querySelectorAll("[data-reading-progress]")
+        );
+        const slugs = [...new Set(links.map(link => link.dataset.tocSlug))];
+        const branchSlugs = [
+          ...new Set(toggleButtons.map(button => button.dataset.tocToggle)),
+        ];
+        const parentBySlug = new Map(
+          nodes.map(node => [
+            node.dataset.tocNode,
+            node.dataset.tocParent || "",
+          ])
+        );
+        const headingElements = slugs
+          .map(slug => document.getElementById(slug))
+          .filter(Boolean);
+        let activeSlug = "";
+        let previousBodyOverflow = "";
+        let readingProgressFrame = 0;
+        let previousReadingProgress = -1;
+
+        function updateReadingProgress() {
+          readingProgressFrame = 0;
+          const article = document.getElementById("article");
+          if (!article) return;
+
+          const articleRect = article.getBoundingClientRect();
+          const readingDistance = articleRect.height - window.innerHeight;
+          const progress =
+            readingDistance <= 0
+              ? articleRect.top <= 0
+                ? 100
+                : 0
+              : Math.min(
+                  100,
+                  Math.max(
+                    0,
+                    Math.floor((-articleRect.top / readingDistance) * 100)
+                  )
+                );
+
+          if (progress === previousReadingProgress) return;
+          previousReadingProgress = progress;
+          for (const element of readingProgressElements) {
+            element.textContent = `${progress}%`;
+          }
+        }
+
+        function requestReadingProgressUpdate() {
+          if (readingProgressFrame) return;
+          readingProgressFrame = requestAnimationFrame(updateReadingProgress);
+        }
+
+        function setBranchExpanded(slug, expanded) {
+          for (const button of toggleButtons) {
+            if (button.dataset.tocToggle === slug) {
+              button.setAttribute("aria-expanded", String(expanded));
+            }
+          }
+          for (const branch of branches) {
+            if (branch.dataset.tocBranch === slug) branch.hidden = !expanded;
+          }
+        }
+
+        function expandActivePath(slug) {
+          const requiredBranches = new Set();
+          let current = slug;
+
+          while (current) {
+            const parent = parentBySlug.get(current);
+            if (!parent) break;
+            requiredBranches.add(parent);
+            current = parent;
+          }
+          if (branchSlugs.includes(slug)) requiredBranches.add(slug);
+
+          for (const branchSlug of branchSlugs) {
+            setBranchExpanded(branchSlug, requiredBranches.has(branchSlug));
+          }
+        }
+
+        function revealLink(link) {
+          const scrollContainer = link.closest("[data-toc-scroll]");
+          if (!scrollContainer || scrollContainer.getClientRects().length === 0)
+            return;
+
+          const containerRect = scrollContainer.getBoundingClientRect();
+          const linkRect = link.getBoundingClientRect();
+          const safeTop = containerRect.top + containerRect.height * 0.2;
+          const safeBottom = containerRect.bottom - containerRect.height * 0.2;
+          let scrollDelta = 0;
+
+          if (linkRect.top < safeTop) {
+            scrollDelta = linkRect.top - safeTop;
+          } else if (linkRect.bottom > safeBottom) {
+            scrollDelta = linkRect.bottom - safeBottom;
+          }
+          if (!scrollDelta) return;
+
+          scrollContainer.scrollTo({
+            top: scrollContainer.scrollTop + scrollDelta,
+            behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
+              .matches
+              ? "auto"
+              : "smooth",
+          });
+        }
+
+        function applyActiveHeading(slug, reveal = true) {
+          if (!slug || slug === activeSlug) return;
+          activeSlug = slug;
+          expandActivePath(slug);
+
+          const activeLinks = [];
+          for (const link of links) {
+            const isActive = link.dataset.tocSlug === slug;
+            link.toggleAttribute("data-active", isActive);
+            if (isActive) {
+              link.setAttribute("aria-current", "location");
+              activeLinks.push(link);
+            } else {
+              link.removeAttribute("aria-current");
+            }
+          }
+
+          if (reveal) activeLinks.forEach(revealLink);
+        }
+
+        function findCurrentHeading() {
+          if (headingElements.length === 0) return "";
+          const activationOffset = 112;
+          let current = headingElements[0];
+
+          for (const heading of headingElements) {
+            if (heading.getBoundingClientRect().top <= activationOffset) {
+              current = heading;
+            } else {
+              break;
+            }
+          }
+
+          const reachedBottom =
+            window.innerHeight + window.scrollY >=
+            document.documentElement.scrollHeight - 2;
+          return reachedBottom ? headingElements.at(-1)?.id : current.id;
+        }
+
+        function updateActiveHeading() {
+          applyActiveHeading(findCurrentHeading());
+        }
+
+        function openDialog() {
+          if (!dialog || typeof dialog.showModal !== "function" || dialog.open)
+            return;
+          previousBodyOverflow = document.body.style.overflow;
+          document.body.style.overflow = "hidden";
+          dialog.showModal();
+          openButton?.setAttribute("aria-expanded", "true");
+          const activeLink = links.find(
+            link => link.dataset.tocSlug === activeSlug && dialog.contains(link)
+          );
+          if (activeLink) requestAnimationFrame(() => revealLink(activeLink));
+        }
+
+        function closeDialog() {
+          if (dialog?.open) dialog.close();
+        }
+
+        openButton?.addEventListener("click", openDialog, { signal });
+        closeButton?.addEventListener("click", closeDialog, { signal });
+        for (const button of toggleButtons) {
+          button.addEventListener(
+            "click",
+            () => {
+              const slug = button.dataset.tocToggle;
+              const expanded = button.getAttribute("aria-expanded") === "true";
+              setBranchExpanded(slug, !expanded);
+            },
+            { signal }
+          );
+        }
+        dialog?.addEventListener(
+          "click",
+          event => {
+            if (event.target === dialog) closeDialog();
+          },
+          { signal }
+        );
+        dialog?.addEventListener(
+          "close",
+          () => {
+            document.body.style.overflow = previousBodyOverflow;
+            openButton?.setAttribute("aria-expanded", "false");
+          },
+          { signal }
+        );
+
+        for (const link of links) {
+          link.addEventListener(
+            "click",
+            event => {
+              event.preventDefault();
+              const slug = link.dataset.tocSlug;
+              const target = document.getElementById(slug);
+              if (!target) return;
+
+              if (dialog?.contains(link)) closeDialog();
+
+              const targetTop =
+                target.getBoundingClientRect().top + window.scrollY - 16;
+              requestAnimationFrame(() => {
+                window.scrollTo({
+                  top: targetTop,
+                  behavior: window.matchMedia(
+                    "(prefers-reduced-motion: reduce)"
+                  ).matches
+                    ? "auto"
+                    : "smooth",
+                });
+              });
+            },
+            { signal }
+          );
+        }
+
+        const observer = new IntersectionObserver(updateActiveHeading, {
+          rootMargin: "-112px 0px -70% 0px",
+        });
+        headingElements.forEach(heading => observer.observe(heading));
+        window.addEventListener("hashchange", updateActiveHeading, { signal });
+        document.addEventListener("scroll", requestReadingProgressUpdate, {
+          passive: true,
+          signal,
+        });
+        window.addEventListener("resize", requestReadingProgressUpdate, {
+          signal,
+        });
+        updateActiveHeading();
+        requestReadingProgressUpdate();
+
+        window.__postTocCleanup = () => {
+          observer.disconnect();
+          controller.abort();
+          if (readingProgressFrame) cancelAnimationFrame(readingProgressFrame);
+          if (dialog?.open) dialog.close();
+          document.body.style.overflow = previousBodyOverflow;
+          window.__postTocCleanup = undefined;
+        };
+
+        document.addEventListener(
+          "astro:before-swap",
+          () => window.__postTocCleanup?.(),
+          { once: true, signal }
+        );
+      }
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initPostToc, {
+        once: true,
+      });
+    } else {
+      initPostToc();
+    }
+  })();
+</script> <article id="article" class="mt-8 w-full app-prose max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)"> <p>封面画师：Nengoro(ネんごろぅ)     封面ID：68986081</p>
+<p>本文参考视频：小马哥教育(SEEMYGO) 2019 年 恋上数据结构与算法（第二季）</p>
+<p>源码仓库：<a href="https://github.com/mofan212/data-structure-and-algorithm">mofan212/data-structure-and-algorithm (github.com)</a></p>
+<p>辅助学习网址：<a href="https://visualgo.net/zh">数据结构和算法动态可视化</a>     <a href="https://www.cs.usfca.edu/~galles/visualization/Algorithms.html">Data Structure Visualizations</a></p>
+<h1 id="0-前言">0. 前言</h1>
+<p><mark class="flexible-marker flexible-marker-default">本文紧接 【高级数据结构之图】一文</mark></p>
+<p><mark class="flexible-marker flexible-marker-default">本文紧接 【高级数据结构之图】一文</mark></p>
+<p>本文涉及的代码均在 【高级数据结构之图】一文中编写的代码基础上进行编写。</p>
+<h1 id="1-aov-网">1. AOV 网</h1>
+<p>AOV 网 —— Activity On Vertex Network</p>
+<p>一项大的工程常被分为多个小的子工程：</p>
+<ul>
+<li>子工程之间可能存在一定的先后顺序，即某些子工程必须在其他子工程完成后才能开始</li>
+</ul>
+<p>在现代化管理中，人们常用有向图描述和分析一项工程的计划和实施过程，子工程被称为活动（Activity）：</p>
+<ul>
+<li>以顶点表示活动、有向边表示活动之间的先后关系，这样的图简称为 <span style="color:darkorange ">AOV 网</span></li>
+</ul>
+<hr>
+<p>标准的 AOV 网必须是一个 <span style="color:red">有向无环图</span>（Directed Graph，简称 DAG）：</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/AOV网.png" alt="AOV 网" style="zoom:80%;">
+<h1 id="2-拓扑排序">2. 拓扑排序</h1>
+<h2 id="21-基本概念">2.1 基本概念</h2>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/AOV网.png" alt="AOV 网" style="zoom:80%;">
+<p><strong>前驱活动：</strong> 有向边起点的活动成为终点的前驱活动。只有当一个活动的前驱全部都完成后，这个活动才能进行。</p>
+<p><strong>后继活动：</strong> 有向边终点的活动成为起点的后继活动。</p>
+<hr>
+<p>那什么是拓扑排序（Topological Sort）？</p>
+<p><strong>拓扑排序</strong> 就是将 AOV 网中所有活动排成一个序列，使得每个活动的前驱活动都排在该活动前面。</p>
+<p>比如上图的拓扑排序结果为： A、B、C、D、E、F 或者 A、B、D、C、E、F （结果不一定是唯一的）</p>
+<h2 id="22-实现思路">2.2 实现思路</h2>
+<p>可以使用 <mark class="flexible-marker flexible-marker-default">卡恩算法</mark> （Kahn 于 1962 年提出）完成拓扑排序。</p>
+<p>假设 L 是存放拓扑排序结果的列表：</p>
+<p>①、把所有入度为 0 的顶点放入 L 中，然后把这些顶点从图中 <strong>去掉</strong></p>
+<p>②、重复操作 ①，直到找不到入度为 0 的顶点</p>
+<p>如果此时 L 中的元素个数和顶点总数相同，说明拓扑排序完成。</p>
+<p>如果此时 L 中的元素个数少于顶点总数，说明原图中存在环，无法进行拓扑排序。</p>
+<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/拓扑排序示意图.png" alt="拓扑排序示意图" style="zoom:45%;">
+<p><mark class="flexible-marker flexible-marker-default">注意：</mark> 进行拓扑排序的图都是有向无环图，即是一个标准的 AOV 网。</p>
+<p>还有一点也需要注意，卡恩算法会将图中的顶点溢出，但实际情况是不允许删除的，因此还需要想另外的方式。</p>
+<h2 id="23-编码实现">2.3 编码实现</h2>
+<p>在 <code>Graph</code> 接口中添加一个方法 <code>List&#x3C;V> topologicalSort();</code>，表示拓扑排序的方法，然后需要在 <code>ListGraph</code> 类中实现这个方法。</p>
+<p>我们实现拓扑排序时不能像卡恩算法一样直接删除图中的顶点，需要想个办法进行代替。</p>
+<p>需要创建一个动态数组，用于存储拓扑排序后的顶点，最后返回这个动态数组。</p>
+<p>然后可以创建一个队列和映射，初始化时，将入度为 0 的顶点加入队列中，将入度不为 0 的顶点作为映射的 Key，入度作为 Value 存入映射中。</p>
+<p>初始化完毕后，从队列中移除一个顶点，将其放入动态数组中，然后遍历这个顶点出去的边，并计算这些边达到的顶点的入度减一后是否为 0。如果为 0，将这些顶点加入队列中；如果不为 0，这些顶点的入度减一，存入映射中。重复这个操作，直到队列为空。</p>
+<p>最终拓扑排序的代码如下：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span><span class="code-line-number">13</span><span class="code-line-number">14</span><span class="code-line-number">15</span><span class="code-line-number">16</span><span class="code-line-number">17</span><span class="code-line-number">18</span><span class="code-line-number">19</span><span class="code-line-number">20</span><span class="code-line-number">21</span><span class="code-line-number">22</span><span class="code-line-number">23</span><span class="code-line-number">24</span><span class="code-line-number">25</span><span class="code-line-number">26</span><span class="code-line-number">27</span><span class="code-line-number">28</span><span class="code-line-number">29</span><span class="code-line-number">30</span><span class="code-line-number">31</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">Override</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> List</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">&#x3C;</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">V</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">></span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> topologicalSort</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">() {</span></span>
+<span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">    List</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">V</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">></span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> list </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> new</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> ArrayList</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;></span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">()</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">    Queue</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">Vertex</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">V</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> E</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">>></span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> queue </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> new</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> LinkedList</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;></span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">()</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">    Map</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">Vertex</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">V</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> E</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">>,</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> Integer</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">></span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> ins </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> new</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> HashMap</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;></span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">()</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">    // 初始化（将度为 0 的节点放入队列）</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">    vertices</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">forEach</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">((</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">V</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> v, </span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">Vertex</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">&#x3C;</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">V, E</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">></span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> vertex) </span><span style="--shiki-light:#C18401;--shiki-dark:#C678DD">-></span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">        int</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> in</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> =</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B"> vertex</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">inEdges</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">size</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">();</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">        if</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> (in </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">==</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 0</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">) {</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">            queue</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">offer</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(vertex);</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">        } </span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">else</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">            ins</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">put</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(vertex, in);</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">        }</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    });</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    while</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> (</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">!</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">queue</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">isEmpty</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">()</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">) {</span></span>
+<span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">        Vertex</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">V</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> E</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">></span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> vertex </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B"> queue</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">poll</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">();</span></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">        // 放入返回结果中</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">        list</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">add</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">vertex</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">value</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">        for</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> (</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">Edge</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">V</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> E</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">></span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> edge </span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">:</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B"> vertex</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">outEdges</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">) {</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">            int</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> toIn </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B"> ins</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">get</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">edge</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">to</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> -</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 1</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">            if</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> (toIn </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">==</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 0</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">){</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">                queue</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">offer</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">edge</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">to</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">            } </span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">else</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> {</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">                ins</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">put</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">edge</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">to</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, toIn);</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">            }</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">        }</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">    }</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    return</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> list</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span></code></pre>
+<p>以上就是拓扑排序的代码，以经过初步测试，可放心 「食用」！😋</p>
+<h1 id="3-生成树">3. 生成树</h1>
+<h2 id="31-基本概念">3.1 基本概念</h2>
+<p>生成树（Spanning Tree），也称为支撑树。</p>
+<p>连通图的极小连通子图，它含有图中全部的 n 个顶点，恰好只有 <code>n - 1</code> 条边。如：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/%E6%9E%81%E5%B0%8F%E8%BF%9E%E9%80%9A%E5%AD%90%E5%9B%BE.png" alt="极小连通子图"></p>
+<h2 id="32-最小生成树">3.2 最小生成树</h2>
+<blockquote><p>基本概念</p></blockquote>
+<p>最小生成树（Minimum Spanning Tree，简称 MST），也称为最小权重生成树（Minimum Weight Spanning Tree）、最小支撑树，是所有生成树中权值最小的那棵。</p>
+<p>最小生成树的概念适用于<span style="color:DodgerBlue">有权</span>的<span style="color:red">连通</span>图（无向）。</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91.png" alt="最小生成树"></p>
+<blockquote><p>实际应用</p></blockquote>
+<p>最小生成树在许多领域都有重要的作用，例如：</p>
+<p>要在 n 个城市之间铺设光缆，使它们都可以通信。铺设光缆的费用很高，且各个城市之间因为距离不同等因素，铺设光缆的费用也不同，如何使铺设光缆的总费用最低？这里就可以用到最小生成树。</p>
+<p>如果图的每一条边的权值都互不相同，那么最小生成树将只有一个，否则可能会有多个最小生成树。</p>
+<p>求最小生成树有两个经典的算法：</p>
+<ul>
+<li>Prim （普里姆算法）</li>
+<li>Kruskal （克鲁斯克尔算法）</li>
+</ul>
+<h2 id="33-prim-算法">3.3 Prim 算法</h2>
+<blockquote><p>切分定理</p></blockquote>
+<p>切分（Cut）：把图中的节点分成两部分，称为一个切分。</p>
+<p>比如下图中就有个切分 C = (S, T)，S = {A, B, D}，T = {C, E}</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/%E4%B8%80%E4%B8%AA%E5%88%87%E5%88%86.png" alt="一个切分"></p>
+<p>横切边（Crossing Edge）：如果一个边的两个顶点，分别属于切分的两部分，这个边成为横切边。</p>
+<p>比如上图的边 BC、BE、DE 就是横切边。</p>
+<p><mark class="flexible-marker flexible-marker-default">切分定理：</mark> <strong>给定任意切分，横切边中权值最小的边必然属于最小生成树。</strong></p>
+<blockquote><p>Prim 算法执行流程</p></blockquote>
+<p>假设 G = (V, E) 是有权的连通图（无向）， A 是 G 中最小生成树的边集</p>
+<p>算法从 S = { u<del>0</del> } (u<del>0</del> ∈ V)，A = { } 开始，重复执行以下操作，到 S = V 为止</p>
+<p>找到切分 C = (S, V - S) 的最小横切边 (u<del>0</del> , v<del>0</del> ) 并入集合 A，同时将 v<del>0</del> 并入集合 S</p>
+<p><strong>执行过程图示：</strong></p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/Prim%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B1.png" alt="Prim执行流程1"></p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/Prim%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B2.png" alt="Prim执行流程2"></p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/Prim%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B3.png" alt="Prim执行流程3"></p>
+<h2 id="34-prim-的实现">3.4 Prim 的实现</h2>
+<blockquote><p>父类的修改</p></blockquote>
+<p>在实现 Prim 算法之前，需要先在接口 <code>Graph</code> 中添加方法，假设命名为 <code>mst()</code>，表示生成最小生成树。</p>
+<p>然后一个问题就出来了，返回值是什么？</p>
+<p>因为生成了最小生成树，返回值得是边信息（起点、终点和权值），那使用 Set 集合，比如 <code>Set&#x3C;Vertex&#x3C;V, E>></code> 这样吗？</p>
+<p>这样确实可以，但是这么做会暴露我们实现类的细节，不建议这么搞。</p>
+<p>其实只需要在接口中创建一个表示边信息的内部类 <code>EdgeInfo</code> 就解决问题了。</p>
+<p>除此之外，在求得最小生成树的时候还涉及到权值的比较，而在以后求 <strong>最短路径</strong> 的时候还会涉及到权值的相加，为了统一管理这两个地方，可以在将原本的接口修改为抽象类，然后添加一个接口 <code>WeightManager</code>，用于管理那两个方法。</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span><span class="code-line-number">13</span><span class="code-line-number">14</span><span class="code-line-number">15</span><span class="code-line-number">16</span><span class="code-line-number">17</span><span class="code-line-number">18</span><span class="code-line-number">19</span><span class="code-line-number">20</span><span class="code-line-number">21</span><span class="code-line-number">22</span><span class="code-line-number">23</span><span class="code-line-number">24</span><span class="code-line-number">25</span><span class="code-line-number">26</span><span class="code-line-number">27</span><span class="code-line-number">28</span><span class="code-line-number">29</span><span class="code-line-number">30</span><span class="code-line-number">31</span><span class="code-line-number">32</span><span class="code-line-number">33</span><span class="code-line-number">34</span><span class="code-line-number">35</span><span class="code-line-number">36</span><span class="code-line-number">37</span><span class="code-line-number">38</span><span class="code-line-number">39</span><span class="code-line-number">40</span><span class="code-line-number">41</span><span class="code-line-number">42</span><span class="code-line-number">43</span><span class="code-line-number">44</span><span class="code-line-number">45</span><span class="code-line-number">46</span><span class="code-line-number">47</span><span class="code-line-number">48</span><span class="code-line-number">49</span><span class="code-line-number">50</span><span class="code-line-number">51</span><span class="code-line-number">52</span><span class="code-line-number">53</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> abstract</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> class</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> Graph</span><span style="--shiki-light:#C18401;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">V</span><span style="--shiki-light:#C18401;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> E</span><span style="--shiki-light:#C18401;--shiki-dark:#ABB2BF">></span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    protected</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> WeightManager</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">E</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">></span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> weightManager</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    public</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> Graph</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">()</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> { }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    public</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> Graph</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">WeightManager</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">E</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">> </span><span style="--shiki-light:#383A42;--shiki-light-font-style:inherit;--shiki-dark:#E06C75;--shiki-dark-font-style:italic">weightManager</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">        this</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">weightManager</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> =</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> weightManager;</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">	// 省略其他抽象方法</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    ...</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">    </span></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">    // 最小生成树</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> abstract</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> Set</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">EdgeInfo</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">V</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> E</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">>></span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> mst</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">();</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">        </span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> interface</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> WeightManager</span><span style="--shiki-light:#C18401;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">E</span><span style="--shiki-light:#C18401;--shiki-dark:#ABB2BF">></span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">        int</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> compare</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">E</span><span style="--shiki-light:#383A42;--shiki-light-font-style:inherit;--shiki-dark:#E06C75;--shiki-dark-font-style:italic"> w1</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">E</span><span style="--shiki-light:#383A42;--shiki-light-font-style:inherit;--shiki-dark:#E06C75;--shiki-dark-font-style:italic"> w2</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span></span>
+<span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">        E</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> add</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">E</span><span style="--shiki-light:#383A42;--shiki-light-font-style:inherit;--shiki-dark:#E06C75;--shiki-dark-font-style:italic"> w1</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">E</span><span style="--shiki-light:#383A42;--shiki-light-font-style:inherit;--shiki-dark:#E06C75;--shiki-dark-font-style:italic"> w2</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> static</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> class</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> EdgeInfo</span><span style="--shiki-light:#C18401;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">V</span><span style="--shiki-light:#C18401;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> E</span><span style="--shiki-light:#C18401;--shiki-dark:#ABB2BF">></span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">        private</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> V</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> from</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">        private</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> V</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> to</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">        private</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> E</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> weight</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">        protected</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> EdgeInfo</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">V</span><span style="--shiki-light:#383A42;--shiki-light-font-style:inherit;--shiki-dark:#E06C75;--shiki-dark-font-style:italic"> from</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">V</span><span style="--shiki-light:#383A42;--shiki-light-font-style:inherit;--shiki-dark:#E06C75;--shiki-dark-font-style:italic"> to</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">E</span><span style="--shiki-light:#383A42;--shiki-light-font-style:inherit;--shiki-dark:#E06C75;--shiki-dark-font-style:italic"> weight</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">            this</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">from</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> =</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> from;</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">            this</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">to</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> =</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> to;</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">            this</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">weight</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> =</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> weight;</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">        public</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> V</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> getFrom</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">()</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">return</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> from;}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">        public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> void</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> setFrom</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">V</span><span style="--shiki-light:#383A42;--shiki-light-font-style:inherit;--shiki-dark:#E06C75;--shiki-dark-font-style:italic"> from</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">this</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">from</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> =</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> from;}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">        public</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> V</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> getTo</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">()</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">return</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> to;}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">        public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> void</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> setTo</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">V</span><span style="--shiki-light:#383A42;--shiki-light-font-style:inherit;--shiki-dark:#E06C75;--shiki-dark-font-style:italic"> to</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">this</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">to</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> =</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> to;}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">        public</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> E</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> getWeight</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">()</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">return</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> weight;}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">        public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> void</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> setWeight</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">E</span><span style="--shiki-light:#383A42;--shiki-light-font-style:inherit;--shiki-dark:#E06C75;--shiki-dark-font-style:italic"> weight</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">this</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">weight</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> =</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> weight;}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">        @</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">Override</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">        public</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> String</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> toString</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">()</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">            return</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> "EdgeInfo{"</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> +</span></span>
+<span class="line"><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">                    "from="</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> +</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> from </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">+</span></span>
+<span class="line"><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">                    ", to="</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> +</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> to </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">+</span></span>
+<span class="line"><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">                    ", weight="</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> +</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> weight </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">+</span></span>
+<span class="line"><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">                    '}'</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">        }</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
+<blockquote><p>其他修改</p></blockquote>
+<p>为了能够更好地实现 Prim 算法，修改 <code>ListGraph</code> 中的 <code>Edge</code> 内部类，给这个内部类添加一个方法，以便可以简单地获取到边信息：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span></span><code><span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">EdgeInfo</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">&#x3C;</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">V</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> E</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">></span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> info</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">() {</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    return</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> new</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> EdgeInfo</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;></span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">from</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">value</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B"> to</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">value</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> weight)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span></code></pre>
+<p>除此之外，在获取最小生成树时，需要比较权值，我们选择添加比较器，因此 <code>ListGraph</code> 类需要增加一个成员变量和构造方法：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">private</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> Comparator</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">Edge</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">V</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> E</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">>></span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> edgeComparator </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> (</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">Edge</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">&#x3C;</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">V</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> E</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">></span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> e1</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> Edge</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">&#x3C;</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">V</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> E</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">></span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> e2) </span><span style="--shiki-light:#C18401;--shiki-dark:#C678DD">-></span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> {</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    return</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B"> weightManager</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">compare</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">e1</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">weight</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">e2</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">weight</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> ListGraph</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">() { }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> ListGraph</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">WeightManager</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">&#x3C;</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">E</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">></span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> weightManager) {</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">    super</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(weightManager)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span></code></pre>
+<p>这些都是为 Prim 算法的准备，接下来就是重头戏了。 👇</p>
+<blockquote><p>Prim 实现</p></blockquote>
+<p>先说说思路：</p>
+<p>1、先获取图中的一个顶点（注意图不存在顶点的情况）</p>
+<p>2、创建两个 HashSet，<code>edgeInfos</code> 用于存储边信息，最后返回；<code>addedVertices</code> 用于存储已经 「经过」 的顶点</p>
+<p>3、将最开始获取的顶点加入到集合 <code>addedVertices</code> 中</p>
+<p>4、获取选择顶点的 outEdges 集合 <code>heap</code>，并删除权值最小的那条边</p>
+<p>5、将这条边存储到集合 <code>edgeInfos</code> 中，这条边到达的顶点存储到 <code>addedVertices</code> 中</p>
+<p>6、获取上一步得到的边的所有 outEdges，存入集合 <code>heap</code> 中，重复执行 456 三步，直到集合为空或 <code>edgeInfos</code> 的长度等于图顶点数减一（<code>addedVertices</code> 的长度等于图中的顶点数）。</p>
+<hr>
+<p>在思路分析中需要获取集合中权值最小的边，可以使用二叉堆来实现。在 JDK 中提供了优先级队列，优先级队列默认就是用最小堆实现的，也恰好满足我们的需要，但是不能同时根据集合和比较器创建一个优先级队列，当然也可以将集合中的元素一个一个添加到优先级队列中，但是为了效率，我们可以自己编写一个符合要求的最小堆（代码省略）。</p>
+<p>最终 Prim 算法代码如下：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span><span class="code-line-number">13</span><span class="code-line-number">14</span><span class="code-line-number">15</span><span class="code-line-number">16</span><span class="code-line-number">17</span><span class="code-line-number">18</span><span class="code-line-number">19</span><span class="code-line-number">20</span><span class="code-line-number">21</span><span class="code-line-number">22</span><span class="code-line-number">23</span><span class="code-line-number">24</span><span class="code-line-number">25</span><span class="code-line-number">26</span><span class="code-line-number">27</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">Override</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> Set</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">EdgeInfo</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">&#x3C;</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">V</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> E</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">>></span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> mst</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">() {</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    return</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> prim</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">()</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">private</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> Set</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">EdgeInfo</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">&#x3C;</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">V</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> E</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">>></span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> prim</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">() {</span></span>
+<span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">    Iterator</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">Vertex</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">V</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> E</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">>></span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> it </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B"> vertices</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">values</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">().</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">iterator</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">();</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    if</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> (</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">!</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">it</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">hasNext</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">()</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">) </span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">return</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> null</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">    Set</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">EdgeInfo</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">V</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> E</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">>></span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> edgeInfos </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> new</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> HashSet</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;></span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">()</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">    Set</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">Vertex</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">V</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> E</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">>></span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> addedVertices </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> new</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> HashSet</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;></span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">()</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">    Vertex</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">V</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> E</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">></span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> vertex </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B"> it</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">next</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">();</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">    addedVertices</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">add</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(vertex);</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">    // 自己编写一个最小堆</span></span>
+<span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">    MinHeap</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">Edge</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">V</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> E</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">>></span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> heap </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> new</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> MinHeap</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;></span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">vertex</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">outEdges</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> edgeComparator)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">    // int edgeSize = vertices.size() - 1;</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    int</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> verticesSize </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B"> vertices</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">size</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">();</span><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic"> // 少一个减一操作</span></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">    // 这里的循环着重理解</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    while</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> (</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">!</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">heap</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">isEmpty</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">()</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> &#x26;&#x26;</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B"> addedVertices</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">size</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">()</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> &#x3C;</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> verticesSize) {</span></span>
+<span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">        Edge</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">V</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> E</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">></span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> edge </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B"> heap</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">remove</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">();</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">        if</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> (</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">addedVertices</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">contains</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">edge</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">to</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">) </span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">continue</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">        edgeInfos</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">add</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">edge</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">info</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">());</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">        addedVertices</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">add</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">edge</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">to</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">        heap</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">addAll</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">edge</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">to</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">outEdges</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">    }</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    return</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> edgeInfos</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span></code></pre>
+<p>以上就是 Prim 算法的代码，以经过初步测试，可放心 「食用」！😉</p>
+<h2 id="35-kruskal-算法">3.5 Kruskal 算法</h2>
+<p><strong>执行过程：</strong> 按照边的权重顺序（从小到大）将边加入生成树中，直到生成树中含有 V - 1 条边（V 是顶点数量）。</p>
+<p><mark class="flexible-marker flexible-marker-default">需要注意的是：</mark> 若加入该边会与生成树形成环，则不加入该边。从 <strong>第三条</strong> 边开始，可能会与生成树形成环。</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/Kruskal%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B1.png" alt="Kruskal执行流程1"></p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/Kruskal%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B2.png" alt="Kruskal执行流程2"></p>
+<h2 id="37-kruskal-的实现">3.7 Kruskal 的实现</h2>
+<p>在实现 Kruskal 算法时，首选得判断图中没有顶点的情况。</p>
+<p>然后将从所有边中依次选出权重最低的边，这里同样可以用到 <strong>最小堆</strong> 来实现，我们就采用实现 Prim 算法中的最小堆实现。</p>
+<p>但是在依次选权重最低的边时需要注意会不会形成闭环的情况。如果是链表，判断有没有环可以使用快慢指针，而在这可以使用 <strong>并查集</strong> 。</p>
+<p>并查集？并查集不是用来查找某个元素在哪个集合中的数据结构吗？怎么还能用来判断是否存在闭环呢？ 😕</p>
+<p>其实很简单。求最小生成树时，最终需要返回边信息，在边信息中也隐藏了顶点信息。每一条边就隐藏了两个顶点（起始与终点），我们将最小生成树中边的顶点信息存入并查集中的一个集合里（在并查集中 union 这两个顶点），每次选择权值最小的边时，判断这条边的顶点信息是否存在同一个集合中。如果存在，表示会产生闭环，则放弃这条边，寻找下一条权值最小的边；如果不存在，就表示这条边是最小生成树中的边。</p>
+<hr>
+<p>最终 Kruskal 算法代码如下：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span><span class="code-line-number">13</span><span class="code-line-number">14</span><span class="code-line-number">15</span><span class="code-line-number">16</span><span class="code-line-number">17</span><span class="code-line-number">18</span><span class="code-line-number">19</span><span class="code-line-number">20</span><span class="code-line-number">21</span><span class="code-line-number">22</span><span class="code-line-number">23</span><span class="code-line-number">24</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">Override</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> Set</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">EdgeInfo</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">&#x3C;</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">V</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> E</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">>></span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> mst</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">() {</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    return</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> kruskal</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">()</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">private</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> Set</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">EdgeInfo</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">&#x3C;</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">V</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> E</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">>></span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> kruskal</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">() {</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    int</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> edgeSize </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B"> vertices</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">size</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">()</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> -</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 1</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">    // 图中没有顶点的时候</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    if</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> (edgeSize </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">==</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> -</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">1</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">) </span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">return</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> null</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">    Set</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">EdgeInfo</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">V</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> E</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">>></span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> edgeInfos </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> new</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> HashSet</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;></span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">()</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">    MinHeap</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">Edge</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">V</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> E</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">>></span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> heap </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> new</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> MinHeap</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;></span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(edges</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> edgeComparator)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">    UnionFind</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">Vertex</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">V</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> E</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">>></span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> uf </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> new</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> UnionFind</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;></span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">()</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">    vertices</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">forEach</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">((</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">V</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> v, </span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">Vertex</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">&#x3C;</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">V, E</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">></span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> vertex) </span><span style="--shiki-light:#C18401;--shiki-dark:#C678DD">-></span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">        uf</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">makeSet</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(vertex);</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    });</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    while</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> (</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">!</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">heap</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">isEmpty</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">()</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> &#x26;&#x26;</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B"> edgeInfos</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">size</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">()</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> &#x3C;</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> edgeSize) {</span></span>
+<span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">        Edge</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">V</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> E</span><span style="--shiki-light:#E45649;--shiki-dark:#ABB2BF">></span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> edge </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B"> heap</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">remove</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">();</span></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">        // 判断选择的边是否构成环 可以使用并查集解决</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">        if</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> (</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">uf</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">isSame</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">edge</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">from</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">edge</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">to</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">) </span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">continue</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">        edgeInfos</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">add</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">edge</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">info</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">());</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">        uf</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">union</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">edge</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">from</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">edge</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">to</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">    }</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    return</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> edgeInfos</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span></code></pre>
+<p>以上就是 Kruskal 算法的代码，以经过初步测试，可放心 「食用」！😄</p>
+<h2 id="38-复杂度对比">3.8 复杂度对比</h2>
+<p>Kruskal 算法复杂度分析：</p>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AlgorithmImages/Kruskal%E5%A4%8D%E6%9D%82%E5%BA%A6.png" alt="Kruskal复杂度"></p>
+<hr>
+<p>Prim 算法的复杂度会根据实现方式发生改变，如果没有选择最小堆实现，选择斐波那契堆实现，复杂度还可以再小一点。</p>
+<p>我们实现的 Prim 算法采用了最小堆，但是最小堆的数据规模是变化的，数据规模逐渐增大，最坏情况下堆的规模是 E （边的数量）。这样的话，最坏情况下 Prim 算法的复杂度为 <code>O(ElogE)</code>。</p>
+<p>但我认为， Prim 算法相比于 Kruskal 算法会更优一点，因为 Prim 算法中堆的规模是逐渐增大的，而 Kruskal 算法中堆的规模一开始就是 E。</p>
+<hr>
+<p>在求得最小生成树的时候，Prim 算法采用了集合 HashSet 来存储最小生成树中的顶点，而 Kruskal 算法采用了并查集存储最小生成树的顶点，这两个算法为什么会有这个区别呢？</p>
+<p>在 Prim 算法中放入集合 HashSet 中的顶点都是 <strong>彼此相连</strong> 的，可以存在于一个集合中。</p>
+<p>Kruskal 算法中最小生成树的顶点 <strong>往往不是连在一起</strong> 的，而是分布于多个集合（这里的集合指数的聚集，并不是指集合 Set）中。如果使用集合 Set 来存储这些顶点，就需要多个集合 Set 来存储，而且 Kruskal 算法在运行过程中，还会将这些集合彼此合并或者判断是否有闭环生成，因此选择集合 Set 来存储这些数据就会变得异常麻烦，选择并查集来存储这些顶点就会完美地处理前面提到的问题。</p> </article> <div class="text-muted-foreground max-w-app mt-20 w-full space-y-3 text-center text-sm"> <aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full leading-6"> <p class="m-0"> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a> 许可协议，转载时请署名并注明<a href="https://mofan212.github.io/posts/algorithm-topological-sort-and-mst/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a> 🔗 </p> </aside> <section data-post-reward data-pagefind-ignore class="relative w-full sm:static" aria-label="赞赏" data-astro-cid-3e4etqql> <div class="flex flex-wrap items-center justify-center gap-x-1.5 gap-y-2" data-astro-cid-3e4etqql> <span class="whitespace-nowrap" data-astro-cid-3e4etqql>如果这篇文章对你有帮助，可以通过</span> <div data-post-reward-trigger class="inline-block sm:relative" data-astro-cid-3e4etqql> <button type="button" data-post-reward-button class="focus-outline border-accent text-accent hover:bg-accent/10 rounded-md border px-3 py-1 font-medium transition-colors" aria-expanded="false" aria-controls="post-reward-panel" data-astro-cid-3e4etqql> 赞赏 </button> <div id="post-reward-panel" data-post-reward-panel class="border-border bg-background text-foreground grid w-[min(22rem,calc(100vw-1.5rem))] grid-cols-2 gap-4 rounded-lg border p-4 shadow-xl sm:gap-6 sm:p-5" role="group" aria-label="赞赏" data-astro-cid-3e4etqql> <figure class="m-0 text-center" data-astro-cid-3e4etqql> <img src="/images/reward/alipay.png" alt="支付宝" loading="lazy" decoding="async" class="mx-auto w-32 rounded-md sm:w-36" data-astro-cid-3e4etqql> <figcaption class="mt-2 text-sm font-medium" data-astro-cid-3e4etqql> 支付宝 </figcaption> </figure> <figure class="m-0 text-center" data-astro-cid-3e4etqql> <img src="/images/reward/wechat-pay.png" alt="微信" loading="lazy" decoding="async" class="mx-auto w-32 rounded-md sm:w-36" data-astro-cid-3e4etqql> <figcaption class="mt-2 text-sm font-medium" data-astro-cid-3e4etqql> 微信 </figcaption> </figure> </div> </div> <span class="whitespace-nowrap" data-astro-cid-3e4etqql>请我喝杯 Coffee ☕</span> </div> </section>  <script data-astro-rerun>
+  (() => {
+    const trigger = document.querySelector("[data-post-reward-trigger]");
+    const button = trigger?.querySelector("[data-post-reward-button]");
+
+    if (!trigger || !button || trigger.dataset.initialized === "true") return;
+
+    trigger.dataset.initialized = "true";
+    const controller = new AbortController();
+    const { signal } = controller;
+    const touchLayout = window.matchMedia("(hover: none)");
+
+    const setOpen = open => {
+      trigger.dataset.open = String(open);
+      button.setAttribute("aria-expanded", String(open));
+    };
+
+    button.addEventListener(
+      "click",
+      () => {
+        if (!touchLayout.matches) return;
+        setOpen(trigger.dataset.open !== "true");
+      },
+      { signal }
+    );
+
+    document.addEventListener(
+      "click",
+      event => {
+        if (
+          trigger.dataset.open === "true" &&
+          !trigger.contains(event.target)
+        ) {
+          setOpen(false);
+        }
+      },
+      { signal }
+    );
+
+    document.addEventListener(
+      "keydown",
+      event => {
+        if (event.key !== "Escape" || trigger.dataset.open !== "true") return;
+        setOpen(false);
+        button.focus();
+      },
+      { signal }
+    );
+
+    document.addEventListener("astro:before-swap", () => controller.abort(), {
+      once: true,
+      signal,
+    });
+  })();
+</script> </div> <hr class="my-8 border-dashed">  <div id="btt-btn-container" class="fixed inset-e-4 bottom-4 z-50 xl:sticky xl:inset-e-auto xl:float-end xl:me-1 translate-y-14 opacity-0 transition duration-500"> <button data-button="back-to-top" class="group bg-background relative px-2 py-1 size-12 rounded-full shadow-xl xl:h-8 xl:w-fit xl:rounded-md xl:shadow-none xl:focus-visible:rounded-none xl:bg-background/35 xl:bg-clip-padding xl:backdrop-blur-lg"> <span id="progress-indicator" class="absolute inset-0 -z-10 block size-12 scale-110 rounded-full bg-transparent xl:hidden xl:h-8 xl:rounded-md"></span> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block rotate-90 xl:hidden" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 12h14M5 12l6 6M5 12l6-6" /></svg> <span class="group-hover:text-accent sr-only text-sm xl:not-sr-only"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M12 5v14M16 9l-4-4M8 9l4-4" /></svg> 返回顶部 </span> </button> </div> <script data-astro-rerun>
+  function backToTop() {
+    const rootElement = document.documentElement;
+    const btnContainer = document.querySelector("#btt-btn-container");
+    const backToTopBtn = document.querySelector("[data-button='back-to-top']");
+    const progressIndicator = document.querySelector("#progress-indicator");
+
+    if (!rootElement || !btnContainer || !backToTopBtn || !progressIndicator)
+      return;
+
+    backToTopBtn.addEventListener("click", () => {
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    });
+
+    let lastVisible = null;
+    function handleScroll() {
+      const scrollTotal = rootElement.scrollHeight - rootElement.clientHeight;
+      const scrollTop = rootElement.scrollTop;
+      const scrollPercent = Math.floor((scrollTop / scrollTotal) * 100);
+
+      progressIndicator.style.setProperty(
+        "background-image",
+        `conic-gradient(var(--accent), var(--accent) ${scrollPercent}%, transparent ${scrollPercent}%)`
+      );
+
+      const isVisible = scrollTop > 400;
+
+      if (isVisible !== lastVisible) {
+        btnContainer.classList.toggle("opacity-100", isVisible);
+        btnContainer.classList.toggle("translate-y-0", isVisible);
+        btnContainer.classList.toggle("opacity-0", !isVisible);
+        btnContainer.classList.toggle("translate-y-14", !isVisible);
+        lastVisible = isVisible;
+      }
+    }
+
+    let ticking = false;
+    document.addEventListener("scroll", () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+  }
+  backToTop();
+</script> <ul id="post-tags" class="mt-4 mb-8 flex flex-wrap gap-4 sm:mb-8"> <li> <a href="/tags/Algorithm/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> 算法 </a> </li><li> <a href="/tags/Graph-Theory/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> 图论 </a> </li> </ul>  <hr class="my-8 border-dashed"> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/algorithm-shortest-path/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block flex-none rtl:rotate-180" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 12h14M5 12l6 6M5 12l6-6" /></svg> <div> <span>上一篇</span> <div class="text-accent/85 text-sm">【算法】图的最短路径</div> </div> </a> <a href="/posts/datastructure-basic-knowledge-of-graphs/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>下一篇</span> <div class="text-accent/85 text-sm">高级数据结构之图</div> </div> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block flex-none rtl:rotate-180" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 12h14M13 18l6-6M13 6l6 6" /></svg> </a> </div> </main> <footer class="app-layout mt-auto"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="text-muted-foreground my-2 flex w-full flex-col items-center text-center text-sm whitespace-nowrap sm:w-auto sm:items-end"> <div class="flex items-center gap-1.5"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="size-4" viewBox="0 0 24 24" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" /><path d="M7 18a4.6 4.4 0 0 1 0-9 5 4.5 0 0 1 9.7 2.2A4 3.8 0 0 1 17 19" /><path d="m9 15 3-3 3 3M12 12v9" /></svg> <span>最近更新：</span> <time class="tabular-nums" datetime="2026-08-31T17:00:14.000Z" data-deployed-at="2026-08-31T17:00:14.000Z" data-just-now="刚刚" data-locale="zh-CN"> 2026-09-01 01:00 </time> </div> <div class="mt-1 flex items-center gap-3 text-xs"> <span class="flex items-center gap-1" title="本站总浏览量"> <svg fill="currentColor" viewBox="0 0 576 512" aria-hidden="true" class="size-3.5"><path d="M572.52 241.4C518.29 135.59 410.93 64 288 64S57.68 135.61 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.61 284.52-177.41a32.35 32.35 0 0 0 0-29.19M288 400a112 112 0 1 1 112-112 112 112 0 0 1-112 112m0-176a64 64 0 1 0 64 64 64 64 0 0 0-64-64" /></svg> <span class="sr-only">本站总浏览量：</span> <span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-end tabular-nums">
+--
+</span> </span> <span aria-hidden="true">|</span> <span class="flex items-center gap-1" title="本站访客数"> <svg fill="currentColor" viewBox="0 0 448 512" aria-hidden="true" class="size-3"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4" /></svg> <span class="sr-only">本站访客数：</span> <span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-end tabular-nums">
+--
+</span> </span> </div> </div> <div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"> <span>版权所有 &#169; 2020 – 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer> <script>
+  (() => {
+    const updateDeploymentTimes = () => {
+      document.querySelectorAll("[data-deployed-at]").forEach(element => {
+        const deployedAt = Date.parse(element.dataset.deployedAt ?? "");
+        if (Number.isNaN(deployedAt)) return;
+
+        const elapsed = Math.max(0, Date.now() - deployedAt);
+        if (elapsed < 60_000) {
+          element.textContent = element.dataset.justNow ?? "";
+          return;
+        }
+
+        let value;
+        let unit;
+        if (elapsed < 3_600_000) {
+          value = Math.floor(elapsed / 60_000);
+          unit = "minute";
+        } else if (elapsed < 86_400_000) {
+          value = Math.floor(elapsed / 3_600_000);
+          unit = "hour";
+        } else if (elapsed < 2_592_000_000) {
+          value = Math.floor(elapsed / 86_400_000);
+          unit = "day";
+        } else if (elapsed < 31_536_000_000) {
+          value = Math.floor(elapsed / 2_592_000_000);
+          unit = "month";
+        } else {
+          value = Math.floor(elapsed / 31_536_000_000);
+          unit = "year";
+        }
+
+        const formatter = new Intl.RelativeTimeFormat(
+          element.dataset.locale ?? document.documentElement.lang,
+          { numeric: "always" }
+        );
+        element.textContent = formatter.format(-value, unit);
+      });
+    };
+
+    updateDeploymentTimes();
+
+    const initializedKey = "__astroBlogDeploymentTimeUpdaterInitialized";
+    if (window[initializedKey]) return;
+
+    window[initializedKey] = true;
+    document.addEventListener("astro:page-load", updateDeploymentTimes);
+    window.setInterval(updateDeploymentTimes, 60_000);
+  })();
+</script>   <script type="module" src="/_astro/Layout.astro_astro_type_script_index_0_lang.DGs0Jsao.js"></script> </body> </html> <script data-astro-rerun>
+  function createProgressBar() {
+    const progressContainer = document.createElement("div");
+    progressContainer.className =
+      "progress-container fixed top-0 z-10 h-1 w-full bg-background";
+
+    const progressBar = document.createElement("div");
+    progressBar.className = "progress-bar h-1 w-0 bg-accent";
+    progressBar.id = "myBar";
+
+    progressContainer.appendChild(progressBar);
+    document.body.appendChild(progressContainer);
+  }
+  createProgressBar();
+
+  function updateScrollProgress() {
+    document.addEventListener("scroll", () => {
+      const winScroll =
+        document.body.scrollTop || document.documentElement.scrollTop;
+      const height =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      if (document) {
+        const myBar = document.getElementById("myBar");
+        if (myBar) {
+          myBar.style.width = scrolled + "%";
+        }
+      }
+    });
+  }
+  updateScrollProgress();
+
+  /** Accessible image lightbox for article images. */
+  function initLightbox() {
+    const article = document.getElementById("article");
+    if (!article) return;
+
+    const prefersReducedMotion = () =>
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    let overlay = null;
+    let lastFocused = null;
+
+    // Defer attribute mutations so they don't push the LCP timestamp.
+    // Event listeners below use delegation and don't need the attributes to exist yet.
+    requestAnimationFrame(() => {
+      const images = Array.from(article.querySelectorAll("img"));
+      for (const image of images) {
+        if (image.closest("a")) continue;
+        image.setAttribute("role", "button");
+        image.setAttribute("tabindex", "0");
+        image.setAttribute("aria-haspopup", "dialog");
+        image.setAttribute(
+          "aria-label",
+          image.alt ? `Zoom image: ${image.alt}` : "Zoom image"
+        );
+      }
+    });
+
+    function open(src, alt, trigger) {
+      if (overlay) return;
+      lastFocused = trigger ?? document.activeElement;
+
+      overlay = document.createElement("div");
+      overlay.setAttribute("role", "dialog");
+      overlay.setAttribute("aria-modal", "true");
+      overlay.setAttribute(
+        "aria-label",
+        alt ? `Image preview: ${alt}` : "Image preview"
+      );
+      overlay.className =
+        "fixed inset-0 z-50 flex cursor-zoom-out items-center justify-center bg-black/70 backdrop-blur-sm opacity-0 transition-opacity duration-200 motion-reduce:transition-none";
+
+      const closeButton = document.createElement("button");
+      closeButton.type = "button";
+      closeButton.setAttribute("aria-label", "Close image preview");
+      closeButton.className =
+        "absolute end-4 top-4 rounded p-2 text-3xl leading-none text-white";
+      closeButton.innerHTML = "&#10005;";
+      closeButton.addEventListener("click", close);
+
+      const image = document.createElement("img");
+      image.src = src;
+      image.alt = "";
+      image.className =
+        "max-h-[90dvh] max-w-[90dvw] cursor-default object-contain";
+
+      overlay.append(closeButton, image);
+      overlay.addEventListener("click", e => {
+        if (e.target === overlay && currentScale <= 1) close();
+      });
+
+      let currentScale = 1;
+      let translateX = 0;
+      let translateY = 0;
+      let initialDist = 0;
+      let initialScale = 1;
+      let panStartX = 0;
+      let panStartY = 0;
+      let panStartTranslateX = 0;
+      let panStartTranslateY = 0;
+      let lastTapTime = 0;
+
+      function applyTransform() {
+        image.style.transform = `scale(${currentScale}) translate(${translateX}px, ${translateY}px)`;
+      }
+
+      function resetTransform() {
+        currentScale = 1;
+        translateX = 0;
+        translateY = 0;
+        image.style.transform = "";
+      }
+
+      overlay.addEventListener(
+        "touchstart",
+        e => {
+          const t = e.touches;
+          if (t.length === 2) {
+            initialDist = Math.hypot(
+              t[1].clientX - t[0].clientX,
+              t[1].clientY - t[0].clientY
+            );
+            initialScale = currentScale;
+          } else if (t.length === 1) {
+            const now = Date.now();
+            if (now - lastTapTime < 300) {
+              e.preventDefault();
+              if (currentScale > 1) {
+                resetTransform();
+              } else {
+                currentScale = 2;
+                translateX = 0;
+                translateY = 0;
+                applyTransform();
+              }
+              lastTapTime = 0;
+              panStartX = t[0].clientX;
+              panStartY = t[0].clientY;
+              panStartTranslateX = translateX;
+              panStartTranslateY = translateY;
+            } else {
+              lastTapTime = now;
+              if (currentScale > 1) {
+                panStartX = t[0].clientX;
+                panStartY = t[0].clientY;
+                panStartTranslateX = translateX;
+                panStartTranslateY = translateY;
+              }
+            }
+          }
+        },
+        { passive: false }
+      );
+
+      overlay.addEventListener(
+        "touchmove",
+        e => {
+          const t = e.touches;
+          if (t.length === 2) {
+            e.preventDefault();
+            const dist = Math.hypot(
+              t[1].clientX - t[0].clientX,
+              t[1].clientY - t[0].clientY
+            );
+            currentScale = Math.min(
+              4,
+              Math.max(1, initialScale * (dist / initialDist))
+            );
+            applyTransform();
+          } else if (t.length === 1) {
+            if (currentScale > 1) {
+              e.preventDefault();
+              translateX =
+                panStartTranslateX + (t[0].clientX - panStartX) / currentScale;
+              translateY =
+                panStartTranslateY + (t[0].clientY - panStartY) / currentScale;
+              const maxX = Math.max(
+                0,
+                (image.clientWidth - overlay.clientWidth / currentScale) / 2
+              );
+              const maxY = Math.max(
+                0,
+                (image.clientHeight - overlay.clientHeight / currentScale) / 2
+              );
+              translateX = Math.min(maxX, Math.max(-maxX, translateX));
+              translateY = Math.min(maxY, Math.max(-maxY, translateY));
+              applyTransform();
+            } else {
+              e.preventDefault();
+            }
+          }
+        },
+        { passive: false }
+      );
+
+      overlay.addEventListener("touchend", e => {
+        if (e.touches.length === 0 && currentScale <= 1.05) {
+          resetTransform();
+        }
+      });
+
+      overlay.addEventListener("touchcancel", e => {
+        if (e.touches.length === 0 && currentScale <= 1.05) {
+          resetTransform();
+        }
+      });
+
+      document.body.appendChild(overlay);
+      document.body.style.overflow = "hidden";
+      document.addEventListener("keydown", onKeyDown);
+      window.__closeLightbox = close;
+
+      requestAnimationFrame(() => overlay?.classList.add("opacity-100"));
+      closeButton.focus();
+    }
+
+    function close() {
+      if (!overlay) return;
+      const el = overlay;
+      overlay = null;
+      window.__closeLightbox = null;
+
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = "";
+      lastFocused?.focus();
+      lastFocused = null;
+
+      if (prefersReducedMotion()) {
+        el.remove();
+        return;
+      }
+      const remove = () => el.remove();
+      el.addEventListener("transitionend", remove, { once: true });
+      setTimeout(remove, 250); // fallback in case transitionend never fires
+      el.classList.remove("opacity-100");
+    }
+
+    function onKeyDown(e) {
+      if (e.key === "Escape") {
+        close();
+      } else if (e.key === "Tab") {
+        trapFocus(e);
+      }
+    }
+
+    // Keep keyboard focus inside the open dialog.
+    function trapFocus(e) {
+      if (!overlay) return;
+      const focusables = overlay.querySelectorAll(
+        'a[href], button, [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+
+    function triggerFromEvent(e) {
+      const image = e.target.closest("img");
+      if (!image || !article.contains(image) || image.closest("a")) return null;
+      return image;
+    }
+
+    function activate(image) {
+      open(image.currentSrc || image.src, image.alt, image);
+    }
+
+    article.addEventListener("click", e => {
+      const image = triggerFromEvent(e);
+      if (!image) return;
+      e.preventDefault();
+      activate(image);
+    });
+
+    article.addEventListener("keydown", e => {
+      if (e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") return;
+      const image = triggerFromEvent(e);
+      if (!image) return;
+      e.preventDefault();
+      activate(image);
+    });
+  }
+  initLightbox();
+
+  if (!window.__lightboxSwapBound) {
+    window.__lightboxSwapBound = true;
+    document.addEventListener("astro:before-swap", () =>
+      window.__closeLightbox?.()
+    );
+  }
+
+  document.addEventListener("astro:after-swap", () =>
+    window.scrollTo({ left: 0, top: 0, behavior: "instant" })
+  );
+</script>
