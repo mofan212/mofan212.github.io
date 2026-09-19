@@ -1,0 +1,985 @@
+<!DOCTYPE html><html dir="ltr" lang="zh-CN" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/migrating-to-astro-paper/"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css"><link rel="preconnect" href="https://busuanzi.ibruce.info"><meta name="generator" content="Astro v6.4.2"><!-- Primary meta --><title>迁移至 AstroPaper | Mofan</title><meta name="title" content="迁移至 AstroPaper | Mofan"><meta name="description" content="我只负责规划，实现全交给 AI：用三个阶段把博客迁到 AstroPaper。"><meta name="author" content="默烦"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Mofan"><meta property="og:title" content="迁移至 AstroPaper | Mofan"><meta property="og:description" content="我只负责规划，实现全交给 AI：用三个阶段把博客迁到 AstroPaper。"><meta property="og:url" content="https://mofan212.github.io/posts/migrating-to-astro-paper/"><meta property="og:image" content="https://mofan212.github.io/default-og.jpg"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://mofan212.github.io/posts/migrating-to-astro-paper/"><meta property="twitter:title" content="迁移至 AstroPaper | Mofan"><meta property="twitter:description" content="我只负责规划，实现全交给 AI：用三个阶段把博客迁到 AstroPaper。"><meta property="twitter:image" content="https://mofan212.github.io/default-og.jpg"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Mofan" href="https://mofan212.github.io/rss.xml/"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2026-09-19T00:00:00.000Z"><meta property="article:modified_time" content="2026-09-19T00:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"迁移至 AstroPaper | Mofan","url":"https://mofan212.github.io/posts/migrating-to-astro-paper/","mainEntityOfPage":"https://mofan212.github.io/posts/migrating-to-astro-paper/","datePublished":"2026-09-19T00:00:00.000Z","dateModified":"2026-09-19T00:00:00.000Z","author":[{"@type":"Person","name":"默烦","url":"https://github.com/mofan212"}]}</script> <!--
+      Inline FOUC-prevention script: sets data-theme on <html> before
+      the browser paints. Runs synchronously, no defer/async.
+    --><script>
+      (function () {
+        const stored = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+        const theme = stored ?? (prefersDark ? "dark" : "light");
+        const root = document.firstElementChild;
+        root?.setAttribute("data-theme", theme);
+        root?.classList.toggle("dark", theme === "dark");
+        // Expose value so theme.ts can skip re-detection.
+        window.__theme = { value: theme };
+      })();
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.B68CXZkt.css">
+<style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
+.toc-link[data-astro-cid-po2ckxzl][data-active]{border-inline-start-color:var(--accent);color:var(--accent);font-weight:600}.toc-toggle[data-astro-cid-po2ckxzl][aria-expanded=true] .toc-toggle-icon[data-astro-cid-po2ckxzl]{rotate:-90deg}.toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-width:thin}.post-toc-desktop[data-astro-cid-taqt6xe3] .toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-gutter:stable}.toc-scroll[data-astro-cid-taqt6xe3]:after{display:block;block-size:20dvh;content:""}[data-astro-cid-taqt6xe3][data-toc-dialog]{opacity:0;transform:translate(1.25rem);transition:opacity .16s ease-out,transform .22s cubic-bezier(.22,1,.36,1);will-change:opacity,transform}[data-astro-cid-taqt6xe3][data-toc-dialog][data-toc-visible]{opacity:1;transform:translate(0)}[data-astro-cid-taqt6xe3][data-toc-dialog]::backdrop{background-color:#0000;transition:background-color .18s ease-out}[data-astro-cid-taqt6xe3][data-toc-dialog][data-toc-visible]::backdrop{background-color:#0000007f}@media(prefers-reduced-motion:reduce){[data-astro-cid-taqt6xe3][data-toc-dialog]{transform:none;transition:none}[data-astro-cid-taqt6xe3][data-toc-dialog]::backdrop{transition:none}}[data-astro-cid-4wxclohh][data-post-series]{interpolate-size:allow-keywords}[data-astro-cid-4wxclohh][data-post-series]::details-content{block-size:0;overflow:hidden;opacity:0;transition:block-size .2s ease-out,opacity .15s ease-out,content-visibility .2s allow-discrete}[data-astro-cid-4wxclohh][data-post-series][open]::details-content{block-size:auto;opacity:1}@media(prefers-reduced-motion:reduce){[data-astro-cid-4wxclohh][data-post-series]::details-content{transition:none}}.post-sidebar[data-astro-cid-7ap3hmvm]{display:contents}@media(min-width:90rem){.post-sidebar[data-astro-cid-7ap3hmvm]{position:fixed;inset-block-start:9rem;inset-inline-start:calc(50% + var(--app-max-width) / 2 + 2rem);display:flex;width:min(18rem,calc(50vw - var(--app-max-width) / 2 - 3rem));height:calc(100dvh - 11rem);min-height:0;flex-direction:column}}
+</style><style>[data-astro-transition-scope="astro-36ssibgs-1"] { view-transition-name: AstroPaper; }@layer astro { ::view-transition-old(AstroPaper) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(AstroPaper) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(AstroPaper) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(AstroPaper) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style></head> <body class="bg-background font-app text-foreground selection:bg-accent/75 selection:text-accent-foreground flex min-h-svh flex-col">    <div class="progress-container bg-background pointer-events-none fixed inset-x-0 top-0 z-50 h-1 w-full" aria-hidden="true" data-astro-cid-7ap3hmvm> <div id="myBar" class="progress-bar bg-accent h-1 w-0" data-astro-cid-7ap3hmvm></div> </div> <a id="skip-to-content" href="#main-content" class="bg-background text-accent absolute inset-s-16 -top-full z-50 px-3 py-2 backdrop-blur-lg transition-all focus:top-4" data-astro-cid-3ef6ksr2> 跳到正文 </a> <header id="page-header" data-scroll-header data-scroll-state="visible" class="bg-background sticky top-0 z-40 w-full transition-transform duration-200 ease-in-out motion-reduce:transition-none" data-astro-cid-3ef6ksr2> <div class="app-layout relative flex w-full items-center justify-between py-4 sm:py-6" data-astro-cid-3ef6ksr2> <a href="/" class="py-1 text-xl leading-8 font-semibold whitespace-nowrap sm:my-auto sm:text-2xl sm:leading-none" data-astro-cid-3ef6ksr2> Mofan </a> <nav id="nav-menu" class="flex items-center sm:ms-2 sm:space-x-4" data-astro-cid-3ef6ksr2> <button id="menu-btn" class="focus-outline p-2 sm:hidden" aria-label="打开菜单" aria-expanded="false" aria-controls="menu-items" data-label-open="打开菜单" data-label-close="关闭菜单" data-astro-cid-3ef6ksr2> <svg width="24" height="24" fill="currentColor" class="hidden" viewBox="-13.714 -18.286 411.429 548.571" id="close-icon" data-astro-cid-3ef6ksr2="true"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3l105.4 105.3c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256z" /></svg> <svg width="24" height="24" fill="currentColor" class="icon icon-font-awesome icon-bars" viewBox="-37.333 -42.667 522.667 597.333" id="menu-icon" data-astro-cid-3ef6ksr2="true"><path d="M0 96c0-17.7 14.3-32 32-32h384c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32m0 160c0-17.7 14.3-32 32-32h384c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32m448 160c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h384c17.7 0 32 14.3 32 32" /></svg> </button> <ul id="menu-items" class="border-border bg-background absolute inset-x-0 top-full z-40 flex hidden max-h-[calc(100dvh-4.5rem)] w-full flex-col items-center gap-3 overflow-y-auto overscroll-contain border-b px-4 py-6 shadow-lg sm:static sm:inset-x-auto sm:top-auto sm:z-auto sm:flex sm:max-h-none sm:w-auto sm:flex-row sm:items-center sm:gap-x-3 sm:gap-y-0 sm:overflow-visible sm:overscroll-auto sm:border-0 sm:p-0 sm:shadow-none sm:[&>li]:flex sm:[&>li]:h-8 sm:[&>li]:items-center" data-astro-cid-3ef6ksr2> <li data-astro-cid-3ef6ksr2> <a href="/archives/" class="hover:text-accent block w-32 py-1.5 text-center text-base font-medium whitespace-nowrap sm:w-auto sm:px-2 sm:py-1 sm:text-sm" data-astro-cid-3ef6ksr2> 归档 </a> </li> <li data-astro-cid-3ef6ksr2> <a href="/categories/" class="hover:text-accent block w-32 py-1.5 text-center text-base font-medium whitespace-nowrap sm:w-auto sm:px-2 sm:py-1 sm:text-sm" data-astro-cid-3ef6ksr2> 分类 </a> </li> <li data-astro-cid-3ef6ksr2> <a href="/tags/" class="hover:text-accent block w-32 py-1.5 text-center text-base font-medium whitespace-nowrap sm:w-auto sm:px-2 sm:py-1 sm:text-sm" data-astro-cid-3ef6ksr2> 标签 </a> </li> <li data-astro-cid-3ef6ksr2> <a href="/messageboard/" class="hover:text-accent block w-32 py-1.5 text-center text-base font-medium whitespace-nowrap sm:w-auto sm:px-2 sm:py-1 sm:text-sm" data-astro-cid-3ef6ksr2> 留言板 </a> </li> <li data-astro-cid-3ef6ksr2> <details id="site-menu" class="group relative w-full sm:w-auto" data-astro-cid-3ef6ksr2> <summary class="focus-outline hover:text-accent relative flex w-32 cursor-pointer list-none items-center justify-center py-1.5 text-base font-medium whitespace-nowrap select-none sm:w-auto sm:gap-1 sm:px-2 sm:py-1 sm:text-sm [&amp;::-webkit-details-marker]:hidden" data-astro-cid-3ef6ksr2> <span class="block w-full text-center sm:w-auto" data-astro-cid-3ef6ksr2>站点</span> <svg width="24" height="24" fill="currentColor" class="site-menu-chevron text-muted-foreground absolute start-[calc(50%+1.25rem)] size-4 sm:static" viewBox="-80 -128 480 768" aria-hidden="true" data-astro-cid-3ef6ksr2="true"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z" /></svg> </summary> <div class="mobile-site-submenu sm:hidden" data-astro-cid-3ef6ksr2> <div class="mobile-site-submenu-inner mx-auto flex w-full max-w-xs flex-col items-center gap-3.5 py-2" data-astro-cid-3ef6ksr2> <div class="flex w-full flex-col items-center gap-1.5" data-astro-cid-3ef6ksr2> <p class="text-muted-foreground/75 text-xs font-medium tracking-widest uppercase" data-astro-cid-3ef6ksr2> 动态 </p> <div class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 text-sm" data-astro-cid-3ef6ksr2> <a href="/schedule/" class="hover:text-accent py-0.5 transition-colors" data-astro-cid-3ef6ksr2> 计划 </a> <span class="text-muted-foreground/40 text-xs select-none" data-astro-cid-3ef6ksr2>
+·
+</span><a href="/changelog/" class="hover:text-accent py-0.5 transition-colors" data-astro-cid-3ef6ksr2> 维护 </a>  </div> </div><div class="flex w-full flex-col items-center gap-1.5 border-border/40 border-t pt-2" data-astro-cid-3ef6ksr2> <p class="text-muted-foreground/75 text-xs font-medium tracking-widest uppercase" data-astro-cid-3ef6ksr2> 关于 </p> <div class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 text-sm" data-astro-cid-3ef6ksr2> <a href="/mine/" class="hover:text-accent py-0.5 transition-colors" data-astro-cid-3ef6ksr2> 我 </a> <span class="text-muted-foreground/40 text-xs select-none" data-astro-cid-3ef6ksr2>
+·
+</span><a href="/about/" class="hover:text-accent py-0.5 transition-colors" data-astro-cid-3ef6ksr2> 本站 </a> <span class="text-muted-foreground/40 text-xs select-none" data-astro-cid-3ef6ksr2>
+·
+</span><a href="/link/" class="hover:text-accent py-0.5 transition-colors" data-astro-cid-3ef6ksr2> 友链 </a> <span class="text-muted-foreground/40 text-xs select-none" data-astro-cid-3ef6ksr2>
+·
+</span><a href="/reward/" class="hover:text-accent py-0.5 transition-colors" data-astro-cid-3ef6ksr2> 赞助 </a>  </div> </div> </div> </div> <ul class="sm:border-border sm:bg-background hidden sm:absolute sm:top-full sm:left-1/2 sm:mt-2 sm:w-32 sm:-translate-x-1/2 sm:rounded-md sm:border sm:p-2 sm:text-start sm:shadow-md sm:before:absolute sm:before:-top-2 sm:before:left-0 sm:before:h-5 sm:before:w-full sm:before:content-['']" data-astro-cid-3ef6ksr2> <li data-astro-cid-3ef6ksr2> <p class="text-muted-foreground px-3 pt-0.5 pb-1 text-xs font-semibold tracking-wider" data-astro-cid-3ef6ksr2> 动态 </p> <ul data-astro-cid-3ef6ksr2> <li data-astro-cid-3ef6ksr2> <a href="/schedule/" class="hover:bg-muted hover:text-accent block rounded px-3 py-1.5 font-medium" data-astro-cid-3ef6ksr2> 计划 </a> </li><li data-astro-cid-3ef6ksr2> <a href="/changelog/" class="hover:bg-muted hover:text-accent block rounded px-3 py-1.5 font-medium" data-astro-cid-3ef6ksr2> 维护 </a> </li> </ul> </li><li class="border-border mt-1.5 border-t pt-1.5" data-astro-cid-3ef6ksr2> <p class="text-muted-foreground px-3 pt-0.5 pb-1 text-xs font-semibold tracking-wider" data-astro-cid-3ef6ksr2> 关于 </p> <ul data-astro-cid-3ef6ksr2> <li data-astro-cid-3ef6ksr2> <a href="/mine/" class="hover:bg-muted hover:text-accent block rounded px-3 py-1.5 font-medium" data-astro-cid-3ef6ksr2> 我 </a> </li><li data-astro-cid-3ef6ksr2> <a href="/about/" class="hover:bg-muted hover:text-accent block rounded px-3 py-1.5 font-medium" data-astro-cid-3ef6ksr2> 本站 </a> </li><li data-astro-cid-3ef6ksr2> <a href="/link/" class="hover:bg-muted hover:text-accent block rounded px-3 py-1.5 font-medium" data-astro-cid-3ef6ksr2> 友链 </a> </li><li data-astro-cid-3ef6ksr2> <a href="/reward/" class="hover:bg-muted hover:text-accent block rounded px-3 py-1.5 font-medium" data-astro-cid-3ef6ksr2> 赞助 </a> </li> </ul> </li> </ul> </details> </li> <li class="border-border/50 mt-2 flex w-full max-w-xs items-center justify-center gap-6 border-t pt-4 sm:mt-0 sm:w-auto sm:gap-x-2 sm:border-t-0 sm:pt-0" data-astro-cid-3ef6ksr2> <div class="flex items-center justify-center" data-astro-cid-3ef6ksr2> <button id="docsearch-button" class="focus-outline hover:text-accent relative size-12 p-4 sm:size-8" type="button" title="搜索" aria-label="搜索" aria-controls="docsearch"> <svg width="24" height="24" fill="currentColor" class="absolute top-1/2 left-1/2 size-[22px] -translate-x-1/2 -translate-y-1/2" viewBox="0 0 512 512"><path d="M416 208c0 45.9-14.9 88.3-40 122.7l126.6 126.7c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0s208 93.1 208 208M208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288" /></svg> </button> <div id="docsearch" class="hidden" data-app-id="BAFEL7A6K1" data-api-key="89fcb5961984c5c054bf04149f345f38" data-indices="[&quot;mofan212io&quot;]" data-label="搜索" data-placeholder="输入关键字进行搜索"></div> <script type="module" src="/_astro/DocSearch.astro_astro_type_script_index_0_lang.BgJYFKPD.js"></script> </div> <a href="https://www.travellings.cn/go.html" target="_blank" rel="noopener noreferrer" title="开往" aria-label="开往" data-astro-cid-3ef6ksr2="true" class="group inline-flex items-center gap-1 hover:text-accent focus-outline hover:text-accent relative flex size-10 items-center justify-center p-2.5 transition-colors sm:size-8 sm:p-4">  <svg width="24" height="24" fill="currentColor" class="absolute top-1/2 left-1/2 size-[22px] -translate-x-1/2 -translate-y-1/2" viewBox="0 0 448 512" aria-hidden="true" data-astro-cid-3ef6ksr2="true"><path d="M96 0C43 0 0 43 0 96v256c0 48 35.2 87.7 81.1 94.9l-46 46c-7 7-2 19.1 7.9 19.1h39.7c8.5 0 16.6-3.4 22.6-9.4L160 448h128l54.6 54.6c6 6 14.1 9.4 22.6 9.4h39.7c10 0 15-12.1 7.9-19.1l-46-46c46-7.1 81.1-46.9 81.1-94.9V96c0-53-43-96-96-96zM64 128c0-17.7 14.3-32 32-32h80c17.7 0 32 14.3 32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32zm208-32h80c17.7 0 32 14.3 32 32v96c0 17.7-14.3 32-32 32h-80c-17.7 0-32-14.3-32-32v-96c0-17.7 14.3-32 32-32M64 352a32 32 0 1 1 64 0 32 32 0 1 1-64 0m288-32a32 32 0 1 1 0 64 32 32 0 1 1 0-64" /></svg> <span class="sr-only" data-astro-cid-3ef6ksr2>开往</span>  </a> <button id="theme-btn" class="focus-outline hover:text-accent relative flex size-10 items-center justify-center p-2.5 sm:size-8 sm:p-4" title="切换主题" aria-label="auto" aria-live="polite" data-astro-cid-3ef6ksr2> <svg width="24" height="24" fill="currentColor" class="absolute top-[50%] left-[50%] size-[22px] translate-[-50%] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" viewBox="0 0 384 512" data-astro-cid-3ef6ksr2="true"><path d="M223.5 32C100 32 0 132.3 0 256s100 224 223.5 224c60.6 0 115.5-24.2 155.8-63.4 5-4.9 6.3-12.5 3.1-18.7s-10.1-9.7-17-8.5c-9.8 1.7-19.8 2.6-30.1 2.6-96.9 0-175.5-78.8-175.5-176 0-65.8 36-123.1 89.3-153.3 6.1-3.5 9.2-10.5 7.7-17.3s-7.3-11.9-14.3-12.5c-6.3-.5-12.6-.8-19-.8z" /></svg> <svg width="24" height="24" fill="currentColor" class="absolute top-[50%] left-[50%] size-[22px] translate-[-50%] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" viewBox="0 0 512 512" data-astro-cid-3ef6ksr2="true"><path d="M361.5 1.2c5 2.1 8.6 6.6 9.6 11.9L391 121l107.9 19.8c5.3 1 9.8 4.6 11.9 9.6s1.5 10.7-1.6 15.2L446.9 256l62.3 90.3c3.1 4.5 3.7 10.2 1.6 15.2s-6.6 8.6-11.9 9.6L391 391l-19.9 107.9c-1 5.3-4.6 9.8-9.6 11.9s-10.7 1.5-15.2-1.6L256 446.9l-90.3 62.3c-4.5 3.1-10.2 3.7-15.2 1.6s-8.6-6.6-9.6-11.9L121 391 13.1 371.1c-5.3-1-9.8-4.6-11.9-9.6s-1.5-10.7 1.6-15.2L65.1 256 2.8 165.7c-3.1-4.5-3.7-10.2-1.6-15.2s6.6-8.6 11.9-9.6L121 121l19.9-107.9c1-5.3 4.6-9.8 9.6-11.9s10.7-1.5 15.2 1.6L256 65.1l90.3-62.3c4.5-3.1 10.2-3.7 15.2-1.6M160 256a96 96 0 1 1 192 0 96 96 0 1 1-192 0m224 0a128 128 0 1 0-256 0 128 128 0 1 0 256 0" /></svg> </button> </li> </ul> </nav> </div> </header> <div id="nav-backdrop" class="pointer-events-none fixed inset-0 z-30 bg-black/30 opacity-0 backdrop-blur-xs transition-opacity duration-200 sm:hidden" aria-hidden="true" data-astro-cid-3ef6ksr2></div> <script type="module" src="/_astro/Header.astro_astro_type_script_index_0_lang.DmzJzmec.js"></script> <div class="app-layout flex items-center justify-start"><a id="back-button" href="/" class="group inline-flex items-center gap-1 hover:text-accent focus-outline hover:text-foreground/75 -ms-2 mt-8 mb-2"> <svg width="24" height="24" fill="currentColor" class="inline-block size-4 rtl:rotate-180" viewBox="-80 -128 480 768"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z" /></svg><span>返回</span> </a></div><script type="module">function o(){const t=document.querySelector("#back-button"),e=sessionStorage.getItem("backUrl");e&&t&&(t.href=e)}document.addEventListener("astro:page-load",o);o();</script> <main id="main-content" class="app-layout" data-pagefind-body data-astro-cid-7ap3hmvm> <h1 style="view-transition-name:u008fc1u0079fbu0081f3-astro-paper" class="text-accent inline-block text-2xl font-bold sm:text-3xl" data-astro-cid-7ap3hmvm> 迁移至 AstroPaper </h1> <div class="my-2 flex flex-wrap items-center gap-2" data-astro-cid-7ap3hmvm> <div class="text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 [&amp;_svg]:size-4 [&amp;_svg]:min-w-4 [&amp;_svg]:scale-100"> <span class="flex items-center gap-x-2"> <svg width="24" height="24" fill="currentColor" class="inline-block size-6 min-w-5.5 scale-90" viewBox="-43.463 -49.672 534.925 611.343"><path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24v40H64C28.7 64 0 92.7 0 128v320c0 35.3 28.7 64 64 64h320c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64h-40V24c0-13.3-10.7-24-24-24s-24 10.7-24 24v40H152zM48 192h80v56H48zm0 104h80v64H48zm128 0h96v64h-96zm144 0h80v64h-80zm80-48h-80v-56h80zm0 160v40c0 8.8-7.2 16-16 16h-64v-56zm-128 0v56h-96v-56zm-144 0v56H64c-8.8 0-16-7.2-16-16v-40zm144-160h-96v-56h96z" /></svg> <span class="text-sm"> 发表于 </span> <time class="text-sm" datetime="2026-09-19T00:00:00.000Z"> 2026-09-19 </time> </span> <span class="flex items-center gap-x-2"> <svg width="24" height="24" fill="currentColor" class="inline-block size-6 min-w-5.5 scale-90" viewBox="-49.672 -49.672 611.343 611.343"><path d="M75 75 41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24h110.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75m181 53c-13.3 0-24 10.7-24 24v104c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z" /></svg> <span class="text-sm"> 更新于 </span> <time class="text-sm" datetime="2026-09-19T00:00:00.000Z"> 2026-09-19 </time> </span> </div>  <span aria-hidden="true" class="text-muted-foreground" data-astro-cid-7ap3hmvm>
+|
+</span> <nav aria-label="分类" data-astro-cid-7ap3hmvm> <ol class="flex flex-wrap items-center gap-1" data-astro-cid-7ap3hmvm> <li> <a href="/categories/Blog/" class="text-muted-foreground flex items-center gap-1 transition-colors hover:text-accent focus-visible:text-accent text-sm"> <svg width="24" height="24" fill="currentColor" class="shrink-0 size-4" viewBox="-51.2 -51.2 614.4 614.4" aria-hidden="true"><path d="M32 32h448c17.7 0 32 14.3 32 32v32c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V64c0-17.7 14.3-32 32-32m0 128h448v256c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64zm128 80c0 8.8 7.2 16 16 16h160c8.8 0 16-7.2 16-16s-7.2-16-16-16H176c-8.8 0-16 7.2-16 16" /></svg> Blog </a> </li>  </ol> </nav>  <span aria-hidden="true" class="text-muted-foreground max-sm:hidden hidden" data-astro-cid-7ap3hmvm>
+|
+</span>  <span aria-hidden="true" class="text-muted-foreground" data-astro-cid-7ap3hmvm>|</span> <span class="text-muted-foreground flex items-center gap-x-2" data-busuanzi-page data-astro-cid-7ap3hmvm> <svg width="24" height="24" fill="currentColor" class="inline-block size-4 min-w-4" viewBox="-57.6 -51.2 691.2 614.4" data-astro-cid-7ap3hmvm="true"><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4 142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1 3.3-7.9 3.3-16.7 0-24.6-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32M144 256a144 144 0 1 1 288 0 144 144 0 1 1-288 0m144-64c0 35.3-28.7 64-64 64-7.1 0-13.9-1.2-20.3-3.3-5.5-1.8-11.9 1.6-11.7 7.4.3 6.9 1.3 13.8 3.2 20.7 13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1-5.8-.2-9.2 6.1-7.4 11.7 2.1 6.4 3.3 13.2 3.3 20.3" /></svg> <span class="flex items-baseline text-sm" data-astro-cid-7ap3hmvm> <span data-astro-cid-7ap3hmvm>浏览量：</span> <span id="busuanzi_value_page_pv" class="tabular-nums" data-astro-cid-7ap3hmvm>--</span> </span> </span> </div>  <div class="post-sidebar" data-astro-cid-7ap3hmvm> <div class="contents min-[90rem]:flex min-[90rem]:min-h-0 min-[90rem]:flex-1 min-[90rem]:flex-col" data-post-toc data-astro-cid-taqt6xe3> <aside class="post-toc-desktop hidden min-h-0 flex-1 flex-col min-[90rem]:flex" aria-label="文章目录" data-astro-cid-taqt6xe3> <div class="mb-3 flex items-center justify-between gap-3 px-3" data-astro-cid-taqt6xe3> <h2 class="text-sm font-semibold" data-astro-cid-taqt6xe3>文章目录</h2> <span class="text-muted-foreground text-sm tabular-nums" data-reading-progress data-astro-cid-taqt6xe3>
+0%
+</span> </div> <nav class="toc-scroll min-h-0 flex-1 overflow-y-auto overscroll-auto pe-1" data-toc-scroll data-astro-cid-taqt6xe3> <ul class="space-y-0.5" data-astro-cid-po2ckxzl> <li data-toc-node="1-想法的来源" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#1-想法的来源" data-toc-slug="1-想法的来源" data-astro-cid-po2ckxzl> 1. 想法的来源 </a> </div>  </li><li data-toc-node="2-三阶段迁移" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <button type="button" class="toc-toggle text-muted-foreground hover:text-accent mt-0.5 flex size-7 shrink-0 items-center justify-center rounded" aria-label="展开或收起目录章节: 2. 三阶段迁移" aria-controls="post-toc-desktop-2-三阶段迁移" aria-expanded="false" data-toc-toggle="2-三阶段迁移" data-astro-cid-po2ckxzl> <svg width="24" height="24" fill="currentColor" class="toc-toggle-icon size-4 -rotate-180 transition-transform" viewBox="-80 -128 480 768" aria-hidden="true" data-astro-cid-po2ckxzl="true"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z" /></svg> </button> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#2-三阶段迁移" data-toc-slug="2-三阶段迁移" data-astro-cid-po2ckxzl> 2. 三阶段迁移 </a> </div> <div id="post-toc-desktop-2-三阶段迁移" hidden data-toc-branch="2-三阶段迁移" data-astro-cid-po2ckxzl> <ul class="space-y-0.5 border-border ms-3 border-s ps-1" data-astro-cid-po2ckxzl> <li data-toc-node="21-迁移思路" data-toc-parent="2-三阶段迁移" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#21-迁移思路" data-toc-slug="21-迁移思路" data-astro-cid-po2ckxzl> 2.1 迁移思路 </a> </div>  </li><li data-toc-node="22-第一阶段计划" data-toc-parent="2-三阶段迁移" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#22-第一阶段计划" data-toc-slug="22-第一阶段计划" data-astro-cid-po2ckxzl> 2.2 第一阶段计划 </a> </div>  </li><li data-toc-node="23-第二阶段计划" data-toc-parent="2-三阶段迁移" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#23-第二阶段计划" data-toc-slug="23-第二阶段计划" data-astro-cid-po2ckxzl> 2.3 第二阶段计划 </a> </div>  </li><li data-toc-node="24-第三阶段计划" data-toc-parent="2-三阶段迁移" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#24-第三阶段计划" data-toc-slug="24-第三阶段计划" data-astro-cid-po2ckxzl> 2.4 第三阶段计划 </a> </div>  </li> </ul> </div> </li><li data-toc-node="3-遇到的问题" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <button type="button" class="toc-toggle text-muted-foreground hover:text-accent mt-0.5 flex size-7 shrink-0 items-center justify-center rounded" aria-label="展开或收起目录章节: 3. 遇到的问题" aria-controls="post-toc-desktop-3-遇到的问题" aria-expanded="false" data-toc-toggle="3-遇到的问题" data-astro-cid-po2ckxzl> <svg width="24" height="24" fill="currentColor" class="toc-toggle-icon size-4 -rotate-180 transition-transform" viewBox="-80 -128 480 768" aria-hidden="true" data-astro-cid-po2ckxzl="true"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z" /></svg> </button> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#3-遇到的问题" data-toc-slug="3-遇到的问题" data-astro-cid-po2ckxzl> 3. 遇到的问题 </a> </div> <div id="post-toc-desktop-3-遇到的问题" hidden data-toc-branch="3-遇到的问题" data-astro-cid-po2ckxzl> <ul class="space-y-0.5 border-border ms-3 border-s ps-1" data-astro-cid-po2ckxzl> <li data-toc-node="31-docsearch-认证" data-toc-parent="3-遇到的问题" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#31-docsearch-认证" data-toc-slug="31-docsearch-认证" data-astro-cid-po2ckxzl> 3.1 DocSearch 认证 </a> </div>  </li><li data-toc-node="32-规范文章-url" data-toc-parent="3-遇到的问题" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#32-规范文章-url" data-toc-slug="32-规范文章-url" data-astro-cid-po2ckxzl> 3.2 规范文章 URL </a> </div>  </li> </ul> </div> </li><li data-toc-node="4-参考过的站点设计" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#4-参考过的站点设计" data-toc-slug="4-参考过的站点设计" data-astro-cid-po2ckxzl> 4. 参考过的站点设计 </a> </div>  </li><li data-toc-node="附录-1-优化-codex-的规则" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#附录-1-优化-codex-的规则" data-toc-slug="附录-1-优化-codex-的规则" data-astro-cid-po2ckxzl> 附录 1. 优化 Codex 的规则 </a> </div>  </li> </ul> </nav> </aside> <button type="button" class="bg-background border-border text-foreground ring-background fixed end-2 bottom-[4.5rem] z-40 flex size-10 items-center justify-center rounded-full border shadow-lg ring-4 min-[90rem]:hidden" aria-label="打开文章目录" aria-controls="post-toc-dialog" aria-expanded="false" data-toc-open data-astro-cid-taqt6xe3> <svg width="24" height="24" fill="currentColor" class="size-[1.125rem]" viewBox="-37.333 -42.667 522.667 597.333" aria-hidden="true" data-astro-cid-taqt6xe3="true"><path d="M0 96c0-17.7 14.3-32 32-32h384c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32m0 160c0-17.7 14.3-32 32-32h384c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32m448 160c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h384c17.7 0 32 14.3 32 32" /></svg> </button> <dialog id="post-toc-dialog" class="bg-background text-foreground border-border m-0 ms-auto h-dvh max-h-dvh w-[min(20rem,84vw)] max-w-none border-s p-0 shadow-2xl backdrop:bg-black/50" aria-labelledby="post-toc-dialog-title" data-toc-dialog data-astro-cid-taqt6xe3> <div class="flex h-full min-h-0 flex-col" data-astro-cid-taqt6xe3> <div class="border-border flex items-center justify-between gap-4 border-b px-4 py-3" data-astro-cid-taqt6xe3> <div class="flex items-baseline gap-3" data-astro-cid-taqt6xe3> <h2 id="post-toc-dialog-title" class="font-semibold" data-astro-cid-taqt6xe3> 文章目录 </h2> <span class="text-muted-foreground text-sm tabular-nums" data-reading-progress data-astro-cid-taqt6xe3>
+0%
+</span> </div> <button type="button" class="hover:text-accent rounded p-2" aria-label="关闭文章目录" data-toc-close data-astro-cid-taqt6xe3> <svg width="24" height="24" fill="currentColor" class="size-5" viewBox="-13.714 -18.286 411.429 548.571" aria-hidden="true" data-astro-cid-taqt6xe3="true"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3l105.4 105.3c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256z" /></svg> </button> </div> <nav class="toc-scroll min-h-0 flex-1 overflow-y-auto p-3" data-toc-scroll data-astro-cid-taqt6xe3> <ul class="space-y-0.5" data-astro-cid-po2ckxzl> <li data-toc-node="1-想法的来源" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#1-想法的来源" data-toc-slug="1-想法的来源" data-astro-cid-po2ckxzl> 1. 想法的来源 </a> </div>  </li><li data-toc-node="2-三阶段迁移" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <button type="button" class="toc-toggle text-muted-foreground hover:text-accent mt-0.5 flex size-7 shrink-0 items-center justify-center rounded" aria-label="展开或收起目录章节: 2. 三阶段迁移" aria-controls="post-toc-mobile-2-三阶段迁移" aria-expanded="false" data-toc-toggle="2-三阶段迁移" data-astro-cid-po2ckxzl> <svg width="24" height="24" fill="currentColor" class="toc-toggle-icon size-4 -rotate-180 transition-transform" viewBox="-80 -128 480 768" aria-hidden="true" data-astro-cid-po2ckxzl="true"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z" /></svg> </button> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#2-三阶段迁移" data-toc-slug="2-三阶段迁移" data-astro-cid-po2ckxzl> 2. 三阶段迁移 </a> </div> <div id="post-toc-mobile-2-三阶段迁移" hidden data-toc-branch="2-三阶段迁移" data-astro-cid-po2ckxzl> <ul class="space-y-0.5 border-border ms-3 border-s ps-1" data-astro-cid-po2ckxzl> <li data-toc-node="21-迁移思路" data-toc-parent="2-三阶段迁移" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#21-迁移思路" data-toc-slug="21-迁移思路" data-astro-cid-po2ckxzl> 2.1 迁移思路 </a> </div>  </li><li data-toc-node="22-第一阶段计划" data-toc-parent="2-三阶段迁移" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#22-第一阶段计划" data-toc-slug="22-第一阶段计划" data-astro-cid-po2ckxzl> 2.2 第一阶段计划 </a> </div>  </li><li data-toc-node="23-第二阶段计划" data-toc-parent="2-三阶段迁移" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#23-第二阶段计划" data-toc-slug="23-第二阶段计划" data-astro-cid-po2ckxzl> 2.3 第二阶段计划 </a> </div>  </li><li data-toc-node="24-第三阶段计划" data-toc-parent="2-三阶段迁移" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#24-第三阶段计划" data-toc-slug="24-第三阶段计划" data-astro-cid-po2ckxzl> 2.4 第三阶段计划 </a> </div>  </li> </ul> </div> </li><li data-toc-node="3-遇到的问题" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <button type="button" class="toc-toggle text-muted-foreground hover:text-accent mt-0.5 flex size-7 shrink-0 items-center justify-center rounded" aria-label="展开或收起目录章节: 3. 遇到的问题" aria-controls="post-toc-mobile-3-遇到的问题" aria-expanded="false" data-toc-toggle="3-遇到的问题" data-astro-cid-po2ckxzl> <svg width="24" height="24" fill="currentColor" class="toc-toggle-icon size-4 -rotate-180 transition-transform" viewBox="-80 -128 480 768" aria-hidden="true" data-astro-cid-po2ckxzl="true"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z" /></svg> </button> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#3-遇到的问题" data-toc-slug="3-遇到的问题" data-astro-cid-po2ckxzl> 3. 遇到的问题 </a> </div> <div id="post-toc-mobile-3-遇到的问题" hidden data-toc-branch="3-遇到的问题" data-astro-cid-po2ckxzl> <ul class="space-y-0.5 border-border ms-3 border-s ps-1" data-astro-cid-po2ckxzl> <li data-toc-node="31-docsearch-认证" data-toc-parent="3-遇到的问题" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#31-docsearch-认证" data-toc-slug="31-docsearch-认证" data-astro-cid-po2ckxzl> 3.1 DocSearch 认证 </a> </div>  </li><li data-toc-node="32-规范文章-url" data-toc-parent="3-遇到的问题" data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#32-规范文章-url" data-toc-slug="32-规范文章-url" data-astro-cid-po2ckxzl> 3.2 规范文章 URL </a> </div>  </li> </ul> </div> </li><li data-toc-node="4-参考过的站点设计" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#4-参考过的站点设计" data-toc-slug="4-参考过的站点设计" data-astro-cid-po2ckxzl> 4. 参考过的站点设计 </a> </div>  </li><li data-toc-node="附录-1-优化-codex-的规则" data-toc-parent data-astro-cid-po2ckxzl> <div class="flex min-w-0 items-start" data-astro-cid-po2ckxzl> <span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-po2ckxzl></span> <a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#附录-1-优化-codex-的规则" data-toc-slug="附录-1-优化-codex-的规则" data-astro-cid-po2ckxzl> 附录 1. 优化 Codex 的规则 </a> </div>  </li> </ul> </nav> </div> </dialog> </div> <script data-astro-rerun>
+  (() => {
+    function initPostToc() {
+      window.__postTocCleanup?.();
+
+      const tocRoot = document.querySelector("[data-post-toc]");
+
+      if (tocRoot) {
+        const controller = new AbortController();
+        const { signal } = controller;
+        const openButton = tocRoot.querySelector("[data-toc-open]");
+        const closeButton = tocRoot.querySelector("[data-toc-close]");
+        const dialog = tocRoot.querySelector("[data-toc-dialog]");
+        const links = Array.from(tocRoot.querySelectorAll("[data-toc-slug]"));
+        const toggleButtons = Array.from(
+          tocRoot.querySelectorAll("[data-toc-toggle]")
+        );
+        const branches = Array.from(
+          tocRoot.querySelectorAll("[data-toc-branch]")
+        );
+        const nodes = Array.from(tocRoot.querySelectorAll("[data-toc-node]"));
+        const readingProgressElements = Array.from(
+          tocRoot.querySelectorAll("[data-reading-progress]")
+        );
+        const slugs = [...new Set(links.map(link => link.dataset.tocSlug))];
+        const branchSlugs = [
+          ...new Set(toggleButtons.map(button => button.dataset.tocToggle)),
+        ];
+        const parentBySlug = new Map(
+          nodes.map(node => [
+            node.dataset.tocNode,
+            node.dataset.tocParent || "",
+          ])
+        );
+        const headingElements = slugs
+          .map(slug => document.getElementById(slug))
+          .filter(Boolean);
+        let activeSlug = "";
+        let activeHeadingFrame = 0;
+        let readingProgressFrame = 0;
+        let previousReadingProgress = -1;
+        let closeDialogTimer = 0;
+        let pendingNavigationTimer = 0;
+
+        function updateReadingProgress() {
+          readingProgressFrame = 0;
+          const article = document.getElementById("article");
+          if (!article) return;
+
+          const articleRect = article.getBoundingClientRect();
+          const readingDistance = articleRect.height - window.innerHeight;
+          const progress =
+            readingDistance <= 0
+              ? articleRect.top <= 0
+                ? 100
+                : 0
+              : Math.min(
+                  100,
+                  Math.max(
+                    0,
+                    Math.floor((-articleRect.top / readingDistance) * 100)
+                  )
+                );
+
+          if (progress === previousReadingProgress) return;
+          previousReadingProgress = progress;
+          for (const element of readingProgressElements) {
+            element.textContent = `${progress}%`;
+          }
+        }
+
+        function requestReadingProgressUpdate() {
+          if (readingProgressFrame) return;
+          readingProgressFrame = requestAnimationFrame(updateReadingProgress);
+        }
+
+        function finishPendingNavigation() {
+          window.clearTimeout(pendingNavigationTimer);
+          pendingNavigationTimer = 0;
+          requestActiveHeadingUpdate();
+        }
+
+        function beginPendingNavigation() {
+          window.clearTimeout(pendingNavigationTimer);
+          pendingNavigationTimer = window.setTimeout(
+            finishPendingNavigation,
+            10000
+          );
+        }
+
+        function handleDocumentScroll() {
+          requestReadingProgressUpdate();
+          requestActiveHeadingUpdate();
+        }
+
+        function setBranchExpanded(slug, expanded) {
+          for (const button of toggleButtons) {
+            if (button.dataset.tocToggle === slug) {
+              button.setAttribute("aria-expanded", String(expanded));
+            }
+          }
+          for (const branch of branches) {
+            if (branch.dataset.tocBranch === slug) branch.hidden = !expanded;
+          }
+        }
+
+        function expandActivePath(slug) {
+          const requiredBranches = new Set();
+          let current = slug;
+
+          while (current) {
+            const parent = parentBySlug.get(current);
+            if (!parent) break;
+            requiredBranches.add(parent);
+            current = parent;
+          }
+          if (branchSlugs.includes(slug)) requiredBranches.add(slug);
+
+          for (const branchSlug of branchSlugs) {
+            setBranchExpanded(branchSlug, requiredBranches.has(branchSlug));
+          }
+        }
+
+        function revealLink(link) {
+          const scrollContainer = link.closest("[data-toc-scroll]");
+          if (!scrollContainer || scrollContainer.getClientRects().length === 0)
+            return;
+
+          const containerRect = scrollContainer.getBoundingClientRect();
+          const linkRect = link.getBoundingClientRect();
+          const safeTop = containerRect.top + containerRect.height * 0.2;
+          const safeBottom = containerRect.bottom - containerRect.height * 0.2;
+          let scrollDelta = 0;
+
+          if (linkRect.top < safeTop) {
+            scrollDelta = linkRect.top - safeTop;
+          } else if (linkRect.bottom > safeBottom) {
+            scrollDelta = linkRect.bottom - safeBottom;
+          }
+          if (!scrollDelta) return;
+
+          scrollContainer.scrollTo({
+            top: scrollContainer.scrollTop + scrollDelta,
+            behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
+              .matches
+              ? "auto"
+              : "smooth",
+          });
+        }
+
+        function applyActiveHeading(slug, reveal = true) {
+          if (!slug || slug === activeSlug) return;
+          activeSlug = slug;
+          expandActivePath(slug);
+
+          const activeLinks = [];
+          for (const link of links) {
+            const isActive = link.dataset.tocSlug === slug;
+            link.toggleAttribute("data-active", isActive);
+            if (isActive) {
+              link.setAttribute("aria-current", "location");
+              activeLinks.push(link);
+            } else {
+              link.removeAttribute("aria-current");
+            }
+          }
+
+          if (reveal) activeLinks.forEach(revealLink);
+        }
+
+        function findCurrentHeading() {
+          if (headingElements.length === 0) return "";
+          const activationOffset = 112;
+          let current = headingElements[0];
+
+          for (const heading of headingElements) {
+            if (heading.getBoundingClientRect().top <= activationOffset) {
+              current = heading;
+            } else {
+              break;
+            }
+          }
+
+          const reachedBottom =
+            window.innerHeight + window.scrollY >=
+            document.documentElement.scrollHeight - 2;
+          return reachedBottom ? headingElements.at(-1)?.id : current.id;
+        }
+
+        function updateActiveHeading() {
+          activeHeadingFrame = 0;
+          if (pendingNavigationTimer) return;
+          applyActiveHeading(findCurrentHeading());
+        }
+
+        function requestActiveHeadingUpdate() {
+          if (activeHeadingFrame) return;
+          activeHeadingFrame = requestAnimationFrame(updateActiveHeading);
+        }
+
+        function openDialog() {
+          if (!dialog || typeof dialog.showModal !== "function" || dialog.open)
+            return;
+          if (closeDialogTimer) {
+            window.clearTimeout(closeDialogTimer);
+            closeDialogTimer = 0;
+          }
+          dialog.showModal();
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              if (dialog.open && !closeDialogTimer) {
+                dialog.setAttribute("data-toc-visible", "");
+              }
+            });
+          });
+          openButton?.setAttribute("aria-expanded", "true");
+          const activeLink = links.find(
+            link => link.dataset.tocSlug === activeSlug && dialog.contains(link)
+          );
+          if (activeLink) requestAnimationFrame(() => revealLink(activeLink));
+        }
+
+        function finishDialogClose() {
+          if (closeDialogTimer) {
+            window.clearTimeout(closeDialogTimer);
+            closeDialogTimer = 0;
+          }
+          if (dialog?.open) dialog.close();
+        }
+
+        function closeDialog() {
+          if (!dialog?.open) return;
+          dialog.removeAttribute("data-toc-visible");
+          if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            finishDialogClose();
+            return;
+          }
+          closeDialogTimer = window.setTimeout(finishDialogClose, 260);
+        }
+
+        openButton?.addEventListener("click", openDialog, { signal });
+        closeButton?.addEventListener("click", closeDialog, { signal });
+        for (const button of toggleButtons) {
+          button.addEventListener(
+            "click",
+            () => {
+              const slug = button.dataset.tocToggle;
+              const expanded = button.getAttribute("aria-expanded") === "true";
+              setBranchExpanded(slug, !expanded);
+            },
+            { signal }
+          );
+        }
+        dialog?.addEventListener(
+          "click",
+          event => {
+            if (event.target === dialog) closeDialog();
+          },
+          { signal }
+        );
+        dialog?.addEventListener(
+          "cancel",
+          event => {
+            event.preventDefault();
+            closeDialog();
+          },
+          { signal }
+        );
+        dialog?.addEventListener(
+          "transitionend",
+          event => {
+            if (
+              event.target === dialog &&
+              event.propertyName === "transform" &&
+              !dialog.hasAttribute("data-toc-visible")
+            ) {
+              finishDialogClose();
+            }
+          },
+          { signal }
+        );
+        dialog?.addEventListener(
+          "close",
+          () => {
+            dialog.removeAttribute("data-toc-visible");
+            if (closeDialogTimer) {
+              window.clearTimeout(closeDialogTimer);
+              closeDialogTimer = 0;
+            }
+            openButton?.setAttribute("aria-expanded", "false");
+          },
+          { signal }
+        );
+
+        for (const link of links) {
+          link.addEventListener(
+            "click",
+            event => {
+              event.preventDefault();
+              const slug = link.dataset.tocSlug;
+              const target = document.getElementById(slug);
+              if (!target) return;
+
+              beginPendingNavigation();
+              applyActiveHeading(slug);
+
+              if (dialog?.contains(link)) closeDialog();
+
+              const targetDocumentTop =
+                target.getBoundingClientRect().top + window.scrollY;
+              const headerOffset =
+                window.scrollY > targetDocumentTop
+                  ? (document.querySelector<HTMLElement>("[data-scroll-header]")
+                      ?.offsetHeight ?? 0)
+                  : 0;
+              const targetTop = targetDocumentTop - headerOffset - 16;
+              requestAnimationFrame(() => {
+                window.scrollTo({
+                  top: targetTop,
+                  behavior: window.matchMedia(
+                    "(prefers-reduced-motion: reduce)"
+                  ).matches
+                    ? "auto"
+                    : "smooth",
+                });
+              });
+            },
+            { signal }
+          );
+        }
+
+        const observer = new IntersectionObserver(requestActiveHeadingUpdate, {
+          rootMargin: "-112px 0px -70% 0px",
+        });
+        headingElements.forEach(heading => observer.observe(heading));
+        window.addEventListener("hashchange", requestActiveHeadingUpdate, {
+          signal,
+        });
+        document.addEventListener("scroll", handleDocumentScroll, {
+          passive: true,
+          signal,
+        });
+        document.addEventListener("scrollend", finishPendingNavigation, {
+          signal,
+        });
+        window.addEventListener("resize", requestReadingProgressUpdate, {
+          signal,
+        });
+        updateActiveHeading();
+        requestReadingProgressUpdate();
+
+        window.__postTocCleanup = () => {
+          observer.disconnect();
+          controller.abort();
+          if (activeHeadingFrame) cancelAnimationFrame(activeHeadingFrame);
+          if (readingProgressFrame) cancelAnimationFrame(readingProgressFrame);
+          if (closeDialogTimer) window.clearTimeout(closeDialogTimer);
+          if (pendingNavigationTimer) {
+            window.clearTimeout(pendingNavigationTimer);
+          }
+          if (dialog?.open) dialog.close();
+          window.__postTocCleanup = undefined;
+        };
+
+        document.addEventListener(
+          "astro:before-swap",
+          () => window.__postTocCleanup?.(),
+          { once: true, signal }
+        );
+      }
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initPostToc, {
+        once: true,
+      });
+    } else {
+      initPostToc();
+    }
+  })();
+</script> <div id="btt-btn-container" data-desktop-placement="sidebar" class="pointer-events-none fixed inset-e-2 bottom-4 z-50 translate-y-14 opacity-0 transition duration-500 motion-reduce:transition-none min-[90rem]:static min-[90rem]:ms-3 min-[90rem]:mt-auto" aria-hidden="true" inert data-astro-cid-flxk2qng> <button type="button" data-button="back-to-top" class="group bg-background relative flex items-center justify-center px-2 py-1 border-border ring-background size-10 rounded-full border shadow-lg ring-4 min-[90rem]:h-8 min-[90rem]:w-fit min-[90rem]:rounded-md min-[90rem]:border-transparent min-[90rem]:shadow-none min-[90rem]:focus-visible:rounded-none min-[90rem]:ring-0 min-[90rem]:bg-background/35 min-[90rem]:bg-clip-padding min-[90rem]:backdrop-blur-lg" disabled data-astro-cid-flxk2qng> <span id="progress-indicator" class="pointer-events-none absolute inset-0 z-0 block rounded-full bg-transparent min-[90rem]:hidden" data-astro-cid-flxk2qng></span> <svg width="24" height="24" fill="currentColor" class="relative z-10 inline-block size-5 shrink-0 rotate-90 min-[90rem]:hidden" viewBox="-70 -80 588 672" data-astro-cid-flxk2qng="true"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.3l105.3-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg> <span class="group-hover:text-accent sr-only text-sm min-[90rem]:not-sr-only min-[90rem]:inline-flex min-[90rem]:items-center min-[90rem]:gap-1" data-astro-cid-flxk2qng> <svg width="24" height="24" fill="currentColor" class="inline-block size-4" viewBox="-60 -80 504 672" data-astro-cid-flxk2qng="true"><path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.3l105.4 105.3c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z" /></svg> 返回顶部 </span> </button> </div> <script data-astro-rerun>
+  (() => {
+    window.__backToTopCleanup?.();
+
+    const btnContainer = document.querySelector("#btt-btn-container");
+    const backToTopBtn = document.querySelector("[data-button='back-to-top']");
+    const progressIndicator = document.querySelector("#progress-indicator");
+
+    if (!btnContainer || !backToTopBtn || !progressIndicator) return;
+
+    const controller = new AbortController();
+    const { signal } = controller;
+    let updateFrame = 0;
+    let lastVisible = null;
+
+    function getScrollRoot() {
+      return document.scrollingElement || document.documentElement;
+    }
+
+    function updateProgress(progress) {
+      if (progress >= 100) {
+        progressIndicator.style.backgroundImage = "none";
+        progressIndicator.style.backgroundColor = "var(--accent)";
+        return;
+      }
+
+      progressIndicator.style.backgroundColor = "transparent";
+      progressIndicator.style.backgroundImage =
+        progress <= 0
+          ? "none"
+          : `conic-gradient(var(--accent), var(--accent) ${progress}%, transparent ${progress}%)`;
+    }
+
+    function updateVisibility(isVisible) {
+      if (isVisible === lastVisible) return;
+
+      btnContainer.classList.toggle("pointer-events-none", !isVisible);
+      btnContainer.classList.toggle("opacity-100", isVisible);
+      btnContainer.classList.toggle("translate-y-0", isVisible);
+      btnContainer.classList.toggle("opacity-0", !isVisible);
+      btnContainer.classList.toggle("translate-y-14", !isVisible);
+      btnContainer.toggleAttribute("inert", !isVisible);
+      if (isVisible) {
+        btnContainer.removeAttribute("aria-hidden");
+      } else {
+        btnContainer.setAttribute("aria-hidden", "true");
+      }
+      backToTopBtn.disabled = !isVisible;
+
+      if (!isVisible && document.activeElement === backToTopBtn) {
+        backToTopBtn.blur();
+      }
+
+      lastVisible = isVisible;
+    }
+
+    function update() {
+      updateFrame = 0;
+
+      const rootElement = getScrollRoot();
+      const clientHeight = rootElement.clientHeight;
+      const scrollDistance = Math.max(
+        0,
+        rootElement.scrollHeight - clientHeight
+      );
+      const scrollTop = Math.min(
+        scrollDistance,
+        Math.max(0, rootElement.scrollTop)
+      );
+      const distanceToBottom = scrollDistance - scrollTop;
+      const progress =
+        scrollDistance <= 0
+          ? 0
+          : distanceToBottom <= 2
+            ? 100
+            : Math.min(100, Math.max(0, (scrollTop / scrollDistance) * 100));
+      const isLongEnough = scrollDistance >= 1.5 * clientHeight;
+
+      updateProgress(progress);
+      updateVisibility(isLongEnough && scrollTop > 400);
+    }
+
+    function requestUpdate() {
+      if (updateFrame) return;
+      updateFrame = requestAnimationFrame(update);
+    }
+
+    backToTopBtn.addEventListener(
+      "click",
+      () => {
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          window.scrollTo({ left: 0, top: 0, behavior: "instant" });
+          return;
+        }
+
+        const rootElement = getScrollRoot();
+        rootElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+      },
+      { signal }
+    );
+    document.addEventListener("scroll", requestUpdate, {
+      passive: true,
+      signal,
+    });
+    window.addEventListener("resize", requestUpdate, { signal });
+    window.visualViewport?.addEventListener("resize", requestUpdate, {
+      signal,
+    });
+
+    const resizeObserver = new ResizeObserver(requestUpdate);
+    resizeObserver.observe(document.documentElement);
+    resizeObserver.observe(document.body);
+
+    window.__backToTopCleanup = () => {
+      resizeObserver.disconnect();
+      controller.abort();
+      if (updateFrame) cancelAnimationFrame(updateFrame);
+      window.__backToTopCleanup = undefined;
+    };
+
+    document.addEventListener(
+      "astro:before-swap",
+      () => window.__backToTopCleanup?.(),
+      { once: true, signal }
+    );
+
+    update();
+  })();
+</script> </div> <article id="article" class="mt-8 w-full app-prose max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)" data-astro-cid-7ap3hmvm> <h1 id="1-想法的来源">1. 想法的来源</h1>
+<p>8 月底逛知乎时看到了一篇帖子，主题是「有什么极简的个人博客推荐？」，这个 <a href="https://www.zhihu.com/question/521123854/answer/1968114110429388882">回答</a> 推荐了 Astro 平台下的 AstroPaper 主题。</p>
+<p>AstroPaper 简洁但不简陋，国外许多技术大佬的博客也都是类似的风格。当然了，也还有一些古典派，只用 HTML 来实现，这种已经不属于大佬行列，属于大神了。</p>
+<p>我原先使用的是 Hexo + Butterfly，圆角卡片风格，文档和功能十分完善，中文互联网上的十个静态博客有九个半都是这个主题。我又想到了知乎上另一个问题 <a href="https://www.zhihu.com/question/29755481">你见过的最棒的个人博客界面是什么样的？</a> 下的 <a href="https://www.zhihu.com/question/29755481/answer/1897997924782302748">回答</a>，总结得可谓是一针见血。🤣</p>
+<p>我在使用 Butterfly 过程中遇到的最大问题是对图片的需求，每篇博文都需要一张封面，有时候很难找到符合博文主题的图片，就算自己绘制，找素材也很费时间。这时有人可能会说了，现在的 AI 这么强大，直接用 AI 画一张不就完事了吗？可以是可以，但我不想那么做。虽然我博客的第一读者是我自己，但偶尔也会有一些网友来到这里，我不希望他们一进来就看到 AI 制作的粗制内容（不过我的那些文章也不是什么「珍馐」），包括文章封面。</p>
+<p>这时我内心已经萌发了要更改博客主题的想法，但还没有敲定使用 AstroPaper，看看 AI 有什么推荐吧：</p>
+<ul>
+<li>保持 Hexo 平台不变，把主题换成 Cactus：风格和 AstroPaper 很类似，感觉也还不错</li>
+<li>更换到 Hugo 平台，使用 PaperMod 或 Hugo Bear：风格也很简洁，同时 Hugo 相比于 Hexo 有更快的构建速度</li>
+</ul>
+<p>这些主题都很简洁，但我大概率还是要进行二开：</p>
+<ul>
+<li>Hexo 的构建速度比较慢，同时页面会积累臃肿的 JS 资源</li>
+<li>Hugo 构建速度极快，适用于有大量文章的场景，但我全站的文章数量不到两百篇，不需要极致的构建速度。Hugo 也有 Hexo 一样的问题，会积累臃肿的 JS 资源，除此之外，它使用的 Go 模板语言比较反直觉，要修改底层布局比较麻烦</li>
+</ul>
+<p>综合上述对比，我还是决定使用 Astro + AstroPaper 作为底座来迁移我的博客，二开相对容易，构建速度也不慢。</p>
+<h1 id="2-三阶段迁移">2. 三阶段迁移</h1>
+<h2 id="21-迁移思路">2.1 迁移思路</h2>
+<p>我对前端的所有理解就是对 Node.js 的安装，好在现在 AI 的能力非常强，我只需要进行规划，实现全交给 AI 就行。</p>
+<p>博客最重要的是内容，因此迁移的首要目标是保证内容的正常显示，比如永久链接、Mermaid 和 Katex 的渲染、代码块的高亮等。</p>
+<p>在内容之外还有一些自定义页面和辅助功能，比如搜索、评论、访问统计等。</p>
+<p>如果直接一次性迁移所有内容，不仅需要验证许多功能，而且当多个功能有关联时，某个出问题后也不好定位。</p>
+<p>因此我决定将整个迁移过程分成三个阶段，首先保证内容和链接相比于原博客不发生改变，然后再按重要性、使用频率对剩下功能进行调整或优化。</p>
+<h2 id="22-第一阶段计划">2.2 第一阶段计划</h2>
+<p>第一阶段的重点是文章，而不是页面的外观：</p>
+<ul>
+<li><strong>保持文章链接不变</strong></li>
+<li>Markdown 内容正常渲染，重点注意 Mermaid、Katex 和代码块的渲染</li>
+<li>实现分类、标签页，且链接不变</li>
+</ul>
+<blockquote><p>更多细节优化清单</p></blockquote>
+<ul class="contains-task-list">
+<li class="task-list-item"><input type="checkbox" checked disabled> 首页文章列表的日期显示
+<ul>
+<li>非中文显示</li>
+<li>样式不统一，有时候有「更新于」</li>
+<li>首页显示发表于，内容页显示发表于和更新于</li>
+</ul>
+</li>
+<li class="task-list-item"><input type="checkbox" checked disabled> 引用块样式不够美观
+<ul>
+<li>太窄</li>
+<li>最好圆角展示，直接参考 Butterfly</li>
+</ul>
+</li>
+<li class="task-list-item"><input type="checkbox" checked disabled> Markdown 渲染器
+<ul>
+<li>Emoji 表情使用 <code>::</code> 书写时没有渲染：扫描博客内容，更换写法，不增加渲染逻辑</li>
+<li>不支持 <code>====</code> 高亮语法渲染</li>
+<li>Markdown 渲染验证可以看这篇文章的效果：<a href="/posts/how-to-use-typora/">一款简洁、高自定义化的 Markdown 编辑器——Typora</a></li>
+</ul>
+</li>
+<li class="task-list-item"><input type="checkbox" checked disabled> 中文字体使用 <a href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css">霞鹜文楷</a>，代码字体使用 <a href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css">JetBrains Mono</a></li>
+<li class="task-list-item"><input type="checkbox" checked disabled> 代码块优化
+<ul>
+<li>显示语言名称</li>
+<li>区分 Markdown 代码围栏渲染出的代码块和直接使用 <code>&#x3C;pre></code> 标签的代码块</li>
+</ul>
+</li>
+<li class="task-list-item"><input type="checkbox" checked disabled> 移除标题锚点，也就是标题后面的井号</li>
+</ul>
+<h2 id="23-第二阶段计划">2.3 第二阶段计划</h2>
+<p>这一阶段的重点是阅读体验，需要为网站添加必要的辅助功能来提高阅读体验：</p>
+<ul>
+<li>建立 GitHub Actions 部署流程</li>
+<li>实现 DocSearch 搜索，更新 DocSearch Crawler 爬取规则</li>
+<li>实现系列文章</li>
+<li>文章页添加目录，要求可折叠、显示阅读进度、支持响应式</li>
+<li>分类支持子分类，并且要在文章页体现</li>
+<li>接入 Twikoo 评论</li>
+<li>接入开往</li>
+</ul>
+<blockquote><p>更多细节优化清单</p></blockquote>
+<ul class="contains-task-list">
+<li class="task-list-item">
+<p><input type="checkbox" checked disabled> <strong>建立一套低成本的自定义页面维护体系，日常内容只改 Markdown，而不是 Astro 代码</strong></p>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" checked disabled> 增加赞赏页</p>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" checked disabled> 代码块显示优化</p>
+<ul>
+<li>显示行号（参考 Butterfly）</li>
+<li>浅色主题使用 <code>One Light</code>，深色主题使用 <code>One Dark Pro</code></li>
+</ul>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" checked disabled> 完善网站信息</p>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" checked disabled> 移动端下，文章页里的 Markdown 表格</p>
+<ul>
+<li>撑宽整个页面</li>
+<li>内容未按要求居中</li>
+</ul>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" checked disabled> 阅读了 20% 多的内容后，才会出现「回到顶部」选项（AstroPaper 本身的问题，见 <a href="https://github.com/satnaing/astro-paper/commit/4d01654471f744962b73c68fe97e3f096a50a1dc">feat: improve back-to-top button behavior (#520)</a>）</p>
+</li>
+</ul>
+<h2 id="24-第三阶段计划">2.4 第三阶段计划</h2>
+<p>经过前面两个阶段的迁移，新站已经具备上线条件。</p>
+<p>我打算先让新站上线，一边使用一边收集可优化点，同时盘点原 Butterfly 旧站中哪些功能仍有价值，并考虑将它们迁移到新站上：</p>
+<ul>
+<li>
+<p>文章版权</p>
+</li>
+<li>
+<p>增加友链页：</p>
+<ul>
+<li>借鉴 Butterfly 的实现方式，<code>data.yaml</code> 中存放站点链接，<code>link.md</code> 中存放站点信息后面的自定义信息</li>
+<li>接入评论</li>
+</ul>
+</li>
+<li>
+<p>文章页也添加赞赏信息</p>
+</li>
+<li>
+<p>接入不蒜子</p>
+<ul>
+<li>全站 URL 小写，旧链自动重定向到新链</li>
+<li>文章阅读量不清零，将旧链的浏览量累加到新链上</li>
+<li>优化待加载样式</li>
+<li>优化全站浏览量样式</li>
+</ul>
+</li>
+</ul>
+<blockquote><p>更多细节优化清单</p></blockquote>
+<ul class="contains-task-list">
+<li class="task-list-item">
+<p><input type="checkbox" checked disabled> Markdown 渲染优化</p>
+<ul>
+<li>Checkbox 样式</li>
+<li>脚注样式</li>
+<li>评论中的 Markdown 语法渲染失败</li>
+</ul>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" checked disabled> 回到顶部优化</p>
+<ul>
+<li>移动端图标缩小</li>
+<li>统一全站的回到顶部逻辑与显示位置</li>
+<li>PC 的位置放在目录下</li>
+</ul>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" checked disabled> 归档页优化</p>
+<ul>
+<li>内容精简：移除每篇文章的描述信息</li>
+<li>支持翻页</li>
+</ul>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" checked disabled> 滚动感知的吸顶导航，参考 Butterfly</p>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" checked disabled> 优化深色模式下的数学公式显示效果</p>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" checked disabled> 移动端导航栏显示优化</p>
+<ul>
+<li>样式优化</li>
+<li>交互优化：点击其他区域后自动收起</li>
+</ul>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" checked disabled> 增加失效图片的默认占位图片</p>
+</li>
+</ul>
+<h1 id="3-遇到的问题">3. 遇到的问题</h1>
+<p>前面上个阶段提到的问题与优化并不是全部，更多的优化和 BUG 修改穿插在日常使用过程中。</p>
+<p>整个博客迁移过程还算顺利，但也遇到两个棘手的问题：</p>
+<ol>
+<li>DocSearch 认证</li>
+<li>全站 URL 小写后的兼容</li>
+</ol>
+<h2 id="31-docsearch-认证">3.1 DocSearch 认证</h2>
+<p>迁移到新站后，页面布局和样式都发生了变化，原先的 DocSearch Crawler 自然也就不能再使用。</p>
+<p>如果让我自己去更新这个爬虫，我肯定要耗费九牛二虎之力，而且还不一定对，但现在是 AI 时代，这对 AI 来说和开卷考试没什么区别。</p>
+<p>既然如此，那我究竟遇到什么问题了呢？</p>
+<p>更新完爬虫后，按照 AI 的提示，我尝试使用站点里的某个 URL 对爬虫进行测试。</p>
+<p>这时页面上的错误阻塞了我的测试：</p>
+<pre>This domain is not DocSearch verified. Please verify your domain ownership or contact support for assistance.
+</pre>
+<p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SummaryImages/not-DocSearch-verified.png" alt="not-DocSearch-verified"></p>
+<p>同时在 Domains 页面上也出现了类似的错误。</p>
+<p>我将错误信息和截图告诉 AI 后，它告诉我先不要保存修改的爬虫代码，避免原来的索引失效。</p>
+<p>它接着又说，点击 Domains 页面里的 <code>Contact Support</code> 并提交下面这段内容：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span><span class="code-line-number">13</span><span class="code-line-number">14</span><span class="code-line-number">15</span><span class="code-line-number">16</span><span class="code-line-number">17</span><span class="code-line-number">18</span><span class="code-line-number">19</span><span class="code-line-number">20</span><span class="code-line-number">21</span><span class="code-line-number">22</span><span class="code-line-number">23</span><span class="code-line-number">24</span><span class="code-line-number">25</span><span class="code-line-number">26</span><span class="code-line-number">27</span></span><code><span class="line"><span>Hello Algolia Crawler Support,</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>I am the owner of the following existing DocSearch application and crawler:</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Application ID: xxxxxxxxxx</span></span>
+<span class="line"><span>Crawler name: mofan212io</span></span>
+<span class="line"><span>Index name: mofan212io</span></span>
+<span class="line"><span>Domain: https://mofan212.github.io</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>The Domains page shows that mofan212.github.io is verified and was added by the system.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>However, the Crawler Editor and URL Tester display the following error:</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>"This domain is not DocSearch verified. Please verify your domain ownership or contact support for assistance."</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>The Domains page also displays:</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>"Domain Verification is disabled on application BAFEL7A6K1. Contact support to have one added manually."</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Could you please manually mark mofan212.github.io as DocSearch verified for application BAFEL7A6K1?</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>The website has recently been migrated from Hexo to Astro, but the domain and existing article URLs remain unchanged. I need to update the crawler selectors and run a complete crawl for the new page structure.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>I have attached screenshots of the Domains page and the Configuration Error.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Thank you,</span></span>
+<span class="line"><span>Mofan</span></span></code></pre>
+<p>简单来说就是向 Algolia 的支持团队提交工单，寻求他们的帮助。</p>
+<p>如果不想使用系统的默认邮箱（比如 Windows 下的 Outlook）发邮件，那么需要将 <code>support+crawler@algolia.com</code> 设置为收件人，以下面的内容作为标题，邮件详情继续使用上述内容即可：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span>Domain Verification is disabled for DocSearch application BAFEL7A6K1</span></span></code></pre>
+<p>我收到的第一次回复内容如下：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span><span class="code-line-number">13</span></span><code><span class="line"><span>Hi Mofan, </span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Thank you for contacting the Algolia Support team!</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>By default, we have a limited view of your application. Since your question requires us to access your Crawler's configuration, would you mind granting us access to your application?</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Please head over to the Algolia support access page to provide us with at least 14 days or more of read access. When you have completed this step, please confirm by replying to this email.</span></span>
+<span class="line"><span> </span></span>
+<span class="line"><span>Thanks in advance, looking forward to your reply!</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Best,</span></span>
+<span class="line"><span>Lindsay Burton</span></span>
+<span class="line"><span>Developer Support Engineer</span></span></code></pre>
+<p>简单来说，Algolia 支持团队目前看不到我的爬虫配置，需要我临时授权他们读取我对应应用下的配置。</p>
+<p>根据 AI 的指引，我向他们授予了 14 天的只读权限，并回复了以下内容：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span></span><code><span class="line"><span>Hi Lindsay,</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>I have granted Algolia Support read access to application xxxxxxxxxx for 14 days.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Please let me know if you need any additional information.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Thank you,</span></span>
+<span class="line"><span>Mofan</span></span></code></pre>
+<p>我原本以为这个问题会很快得到解决，但我在第二次回复中被告知一线支持团队无法直接修复这个问题，需要升级给工程团队进行调查。</p>
+<p>又过了两天，我收到了第三次回复。在第三次回复中，工程团队认为旧爬虫抓取到了许多无效或打不开的 URL，让我继续排查。不过他们没有给出具体的 URL，因此在 AI 的帮助下，我询问他们能否提供一些示例，告诉我究竟是哪些 URL 出了问题。</p>
+<p>不过在看到这第三次回复时我就感觉他们好像理解错了。</p>
+<p>果不其然，他们确实理解错了。工程团队给我的示例 URL 可以正常打开，我想可能是因为上线了新站导致的？</p>
+<p>我把我的疑惑发给 AI，AI 给我重新拟了一份邮件，在邮件里把事实讲清楚，并希望他们可以继续排查。</p>
+<p>过了几个小时，我收到了一份新邮件。这次换人了，不再是先前的 Lindsay，而是 Lydia 在帮我处理。她告诉我已经确认了 <code>This domain is not DocSearch verified</code> 错误仍然存在，并且把问题交给了 Crawler 团队，让他们手动恢复域名的 DocSearch 验证状态。</p>
+<p>这次处理相当迅速，不到十分钟我又收到了新邮件，Lydia 告诉我 Crawler 团队已经帮我手动恢复了验证。</p>
+<p>之后，我继续借助 AI 的帮助完成了爬虫的更新和验证。</p>
+<p>Algolia 支持团队使用 PDT（北美太平洋夏令时间，所属时区是 GMT-7），与北京时间（GMT+8）差了 15 个小时。我晚上睡前他们可能才刚上班，我们的交流最多也就在这一个小时里，平均下来，一天只能互相回一封邮件。再叠加前期问题被理解错误，所以从发送第一份寻求支持的邮件开始到正式解决问题，一共花了一周时间。</p>
+<p>再换个角度，幸亏有 AI 的帮助，不然别说后面要与 Algolia 支持团队互通好几封邮件，我甚至可能都不会开始这次博客迁移。</p>
+<p>感谢 AI，赞美 AI。</p>
+<h2 id="32-规范文章-url">3.2 规范文章 URL</h2>
+<p>AI 的作用还远不止于此。</p>
+<p>在旧站中，文章的 URL 并不规范，主要问题有：</p>
+<ul>
+<li>大小写混用</li>
+<li>存在特殊符号，比如 <code>+</code>、<code>'</code> 和 <code>.</code>，这些符号在复制、统计或者某些工具中容易产生编码歧义</li>
+</ul>
+<p>借着这次迁移的机会，我打算规范下文章的 URL，统一使用小写 kebab-case，只允许出现小写字母、数字和短横线，并且还要：</p>
+<ul>
+<li>保持兼容，即使用旧 URL 时，依然能够访问到规范后的 URL</li>
+<li>不重新计算不蒜子的文章阅读量，需要在原来的数量上进行累加</li>
+</ul>
+<p>保持兼容很简单。需要规范的文章保留两套标识 <code>slug</code> 和 <code>legacySlug</code>，其中 <code>slug</code> 是新的 URL，而 <code>legacySlug</code> 是原来的 URL。针对这些文章生成两套 HTML，在访问旧 URL 时，利用 JS 跳转到新 URL。</p>
+<p>要实现阅读量的累加则要麻烦些，使用「旧 URL 计数桥接」：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span></span><code><span class="line"><span>访问新 URL</span></span>
+<span class="line"><span>    ↓</span></span>
+<span class="line"><span>新文章页加载一个隐藏 iframe</span></span>
+<span class="line"><span>    ↓</span></span>
+<span class="line"><span>iframe 地址为旧 URL</span></span>
+<span class="line"><span>    ↓</span></span>
+<span class="line"><span>不蒜子以旧 URL 作为 Referer 计数</span></span>
+<span class="line"><span>    ↓</span></span>
+<span class="line"><span>iframe 将旧 page_pv 返回新文章页显示</span></span></code></pre>
+<p>这样无论用户访问旧 URL 还是新 URL，最终都只会给旧 URL 对应的不蒜子记录增加一次访问量。新 URL 不建立另一套文章计数，不再额外加载一次不蒜子。</p>
+<p>具体来说：</p>
+<ul>
+<li>
+<p>迁移前已经存在的、需要规范 URL 的文章：同时有 <code>slug</code> 和 <code>legacySlug</code>，访问新 URL 时隐藏加载旧 URL，以延续原阅读量</p>
+</li>
+<li>
+<p>迁移后新增的文章：只有规范的 <code>slug</code>，直接按新 URL 请求不蒜子，不使用 iframe</p>
+</li>
+</ul>
+<p>上面的方案都是由 GPT 6 提出，后续实现也交给它完成，最后的效果也意外地不错，完全满足我的要求。</p>
+<p>这就是 AI。</p>
+<p>AI 时代下想法比实现更加重要。</p>
+<h1 id="4-参考过的站点设计">4. 参考过的站点设计</h1>
+<blockquote><p>AstroPaper</p></blockquote>
+<ul>
+<li><a href="https://tangbinqiang.github.io/">https://tangbinqiang.github.io/</a> ：<a href="https://tangbinqiang.github.io/tools/">工具集</a> 页面的卡片样式</li>
+<li><a href="https://amanhimself.dev/%EF%BC%9A%5BProjects">https://amanhimself.dev/：[Projects</a>](<a href="https://amanhimself.dev/projects/">https://amanhimself.dev/projects/</a>) 页面的卡片样式</li>
+</ul>
+<blockquote><p>Cactus</p></blockquote>
+<ul>
+<li><a href="https://reinhart-l.cn/">https://reinhart-l.cn/</a> ：全站浏览量样式参考</li>
+</ul>
+<h1 id="附录-1-优化-codex-的规则">附录 1. 优化 Codex 的规则</h1>
+<p>GPT 5.6 贼喜欢补全，有时候改一点需求要改好多内容，也不能说它改的不对，就是不够精简。突然灵光一现，想到了这个，用了几天，效果意外地还不错：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="markdown" data-language-name="Markdown"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E5C07B">-</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> 每完成一轮实质性修改后，以及任务准备完成前，反问一句「真的需要改这么多吗？」如果答案是不需要，精简后再次反问，直到答案是需要</span></span></code></pre>
+<p>这句规则在写 SKILL、维护 SKILL、写后端逻辑代码时很有帮助，但是在以下的场景会有问题：</p>
+<ul>
+<li>优化前端显示效果时，这句话会用最小实现完成，但最终效果可能就没那么美观了，甚至出现 AI 先改得很美观，但是触发这句话后，AI 又会进行精简，最后变得不美观，还要进行二次修复</li>
+</ul>
+<p>在 Skill 和后端逻辑中，必要性通常能根据职责、正确性和测试判断。但在前端视觉任务中，间距、层次、阴影、动效等细节单独看都像「可以删」，组合起来却决定最终质感。反复追问「真的需要改这么多吗？」会让 AI 默认产生删减压力，把已经达到的视觉效果当成冗余。</p>
+<p>「真的需要改这么多吗？」是一个带有删减倾向的诱导式问题，它把优化对象设成了改动量，更合理的是审查每项改动的实际贡献：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="markdown" data-language-name="Markdown"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E5C07B">-</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> 每完成一轮实质性修改后，以及任务准备完成前，内部自问「真的需要改这么多吗？」若存在不影响任务完成度和成果质量的内容，精简后再次自问；一旦继续精简会造成退化，就停止精简</span></span></code></pre> </article> <div class="text-muted-foreground max-w-app mt-20 w-full space-y-3 text-center text-sm" data-astro-cid-7ap3hmvm> <aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full px-2 text-center leading-6 sm:px-0"> <p class="m-0 break-words"> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a><span> 许可协议，</span><span class="max-sm:block">转载时请署名并注明<a href="https://mofan212.github.io/posts/migrating-to-astro-paper/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a> 🔗</span> </p> </aside> <section data-post-reward data-pagefind-ignore class="w-full" aria-label="赞赏"> <div class="flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:flex-wrap sm:gap-x-1.5 sm:gap-y-2"> <span class="sm:whitespace-nowrap">如果这篇文章对你有帮助，可以通过</span> <a href="/reward/" class="focus-outline border-accent text-accent hover:bg-accent/10 active:bg-accent/10 inline-block rounded-md border px-3 py-1 font-medium transition-colors"> 赞赏 </a> <span class="sm:whitespace-nowrap">请我喝杯 Coffee ☕</span> </div> </section> </div> <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm>  <ul id="post-tags" class="mt-4 mb-8 flex flex-wrap gap-4 sm:mb-8" data-astro-cid-7ap3hmvm> <li> <a href="/tags/AstroPaper/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> AstroPaper </a> </li> </ul>  <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2">  <a href="/posts/python-engineering-for-java-developers/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>下一篇</span> <div class="text-accent/85 text-sm">面向 Java 开发者的 Python 工程化实践</div> </div> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg> </a> </div> </main> <footer class="app-layout mt-auto" data-astro-cid-7ap3hmvm="true"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="text-muted-foreground my-2 flex w-fit flex-col items-start text-start text-sm whitespace-nowrap"> <div class="flex items-center gap-1.5"> <svg width="24" height="24" fill="currentColor" class="size-4" viewBox="-49.231 -39.385 738.462 590.769" aria-hidden="true"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9-.1-2.7-.2-5.4-.2-8.1 0-88.4 71.6-160 160-160 59.3 0 111 32.2 138.7 80.2A95.5 95.5 0 0 1 448 96c53 0 96 43 96 96 0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39L296 392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0z" /></svg> <span>最近更新：</span> <time class="tabular-nums" datetime="2026-09-19T13:04:57.000Z" data-deployed-at="2026-09-19T13:04:57.000Z" data-just-now="刚刚" data-locale="zh-CN"> 2026-09-19 21:04 </time> </div> <div class="mt-1 flex items-center gap-3 text-xs"> <span class="flex items-center gap-1" title="本站访客数"> <svg width="24" height="24" fill="currentColor" class="size-3" viewBox="-2.835 -3.241 453.671 518.481" aria-hidden="true"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3z" /></svg> <span class="sr-only">本站访客数：</span> <span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> <span aria-hidden="true">|</span> <span class="flex items-center gap-1.5" title="本站总浏览量"> <span class="flex size-4 items-center justify-center" aria-hidden="true"> <svg width="24" height="24" fill="currentColor" class="size-3.5" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48zM0 272c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v160c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zM368 96h32c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48" /></svg> </span> <span class="sr-only">本站总浏览量：</span> <span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> </div> </div> <div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"> <span>版权所有 &#169; 2020 – 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer> <script>
+  (() => {
+    const updateDeploymentTimes = () => {
+      document.querySelectorAll("[data-deployed-at]").forEach(element => {
+        const deployedAt = Date.parse(element.dataset.deployedAt ?? "");
+        if (Number.isNaN(deployedAt)) return;
+
+        const elapsed = Math.max(0, Date.now() - deployedAt);
+        if (elapsed < 60_000) {
+          element.textContent = element.dataset.justNow ?? "";
+          return;
+        }
+
+        let value;
+        let unit;
+        if (elapsed < 3_600_000) {
+          value = Math.floor(elapsed / 60_000);
+          unit = "minute";
+        } else if (elapsed < 86_400_000) {
+          value = Math.floor(elapsed / 3_600_000);
+          unit = "hour";
+        } else if (elapsed < 2_592_000_000) {
+          value = Math.floor(elapsed / 86_400_000);
+          unit = "day";
+        } else if (elapsed < 31_536_000_000) {
+          value = Math.floor(elapsed / 2_592_000_000);
+          unit = "month";
+        } else {
+          value = Math.floor(elapsed / 31_536_000_000);
+          unit = "year";
+        }
+
+        const formatter = new Intl.RelativeTimeFormat(
+          element.dataset.locale ?? document.documentElement.lang,
+          { numeric: "always" }
+        );
+        element.textContent = formatter.format(-value, unit);
+      });
+    };
+
+    updateDeploymentTimes();
+
+    const initializedKey = "__astroBlogDeploymentTimeUpdaterInitialized";
+    if (window[initializedKey]) return;
+
+    window[initializedKey] = true;
+    document.addEventListener("astro:page-load", updateDeploymentTimes);
+    window.setInterval(updateDeploymentTimes, 60_000);
+  })();
+</script>    <script type="module" src="/_astro/Layout.astro_astro_type_script_index_0_lang.DvbTyXa-.js"></script> <script type="module" src="/_astro/Layout.astro_astro_type_script_index_1_lang.BOJC2Ywz.js"></script> </body> </html>  <script data-astro-rerun>
+  (() => {
+    window.__postProgressBarCleanup?.();
+
+    const myBar = document.getElementById("myBar");
+    if (!myBar) return;
+
+    const controller = new AbortController();
+    const { signal } = controller;
+    let frame = 0;
+
+    function update() {
+      frame = 0;
+      const root = document.scrollingElement || document.documentElement;
+      const scrollHeight = root.scrollHeight - root.clientHeight;
+      const scrolled =
+        scrollHeight > 0 ? (root.scrollTop / scrollHeight) * 100 : 0;
+      myBar.style.width = `${Math.min(100, Math.max(0, scrolled))}%`;
+    }
+
+    function requestUpdate() {
+      if (frame) return;
+      frame = requestAnimationFrame(update);
+    }
+
+    document.addEventListener("scroll", requestUpdate, {
+      passive: true,
+      signal,
+    });
+    window.addEventListener("resize", requestUpdate, { signal });
+
+    window.__postProgressBarCleanup = () => {
+      controller.abort();
+      if (frame) cancelAnimationFrame(frame);
+      window.__postProgressBarCleanup = undefined;
+    };
+
+    document.addEventListener(
+      "astro:before-swap",
+      () => window.__postProgressBarCleanup?.(),
+      { once: true, signal }
+    );
+
+    update();
+  })();
+</script> <script type="module" src="/_astro/index.astro_astro_type_script_index_0_lang.ma03KInd.js"></script>
