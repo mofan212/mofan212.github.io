@@ -14,7 +14,7 @@
         // Expose value so theme.ts can skip re-detection.
         window.__theme = { value: theme };
       })();
-    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.CQyIOEGY.css">
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.DzRs86ni.css">
 <style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
 .toc-link[data-astro-cid-po2ckxzl][data-active]{border-inline-start-color:var(--accent);color:var(--accent);font-weight:600}.toc-toggle[data-astro-cid-po2ckxzl][aria-expanded=true] .toc-toggle-icon[data-astro-cid-po2ckxzl]{rotate:-90deg}.toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-width:thin}.post-toc-desktop[data-astro-cid-taqt6xe3] .toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-gutter:stable}.toc-scroll[data-astro-cid-taqt6xe3]:after{display:block;block-size:20dvh;content:""}[data-astro-cid-taqt6xe3][data-toc-dialog]{opacity:0;transform:translate(1.25rem);transition:opacity .16s ease-out,transform .22s cubic-bezier(.22,1,.36,1);will-change:opacity,transform}[data-astro-cid-taqt6xe3][data-toc-dialog][data-toc-visible]{opacity:1;transform:translate(0)}[data-astro-cid-taqt6xe3][data-toc-dialog]::backdrop{background-color:#0000;transition:background-color .18s ease-out}[data-astro-cid-taqt6xe3][data-toc-dialog][data-toc-visible]::backdrop{background-color:#0000007f}@media(prefers-reduced-motion:reduce){[data-astro-cid-taqt6xe3][data-toc-dialog]{transform:none;transition:none}[data-astro-cid-taqt6xe3][data-toc-dialog]::backdrop{transition:none}}[data-astro-cid-4wxclohh][data-post-series]{interpolate-size:allow-keywords}[data-astro-cid-4wxclohh][data-post-series]::details-content{block-size:0;overflow:hidden;opacity:0;transition:block-size .2s ease-out,opacity .15s ease-out,content-visibility .2s allow-discrete}[data-astro-cid-4wxclohh][data-post-series][open]::details-content{block-size:auto;opacity:1}@media(prefers-reduced-motion:reduce){[data-astro-cid-4wxclohh][data-post-series]::details-content{transition:none}}.post-sidebar[data-astro-cid-7ap3hmvm]{display:contents}@media(min-width:90rem){.post-sidebar[data-astro-cid-7ap3hmvm]{position:fixed;inset-block-start:9rem;inset-inline-start:calc(50% + var(--app-max-width) / 2 + 2rem);display:flex;width:min(18rem,calc(50vw - var(--app-max-width) / 2 - 3rem));height:calc(100dvh - 11rem);min-height:0;flex-direction:column}}
 </style><style>[data-astro-transition-scope="astro-36ssibgs-1"] { view-transition-name: AI; }@layer astro { ::view-transition-old(AI) { 
@@ -616,15 +616,15 @@
     update();
   })();
 </script> </div> <article id="article" class="mt-8 w-full app-prose max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)" data-astro-cid-7ap3hmvm> <!-- 封面来源：由博主个人绘制，如需使用请联系博主。 -->
-<p>参考链接：<a href="https://www.bilibili.com/video/BV1mX3NzrEu6">尚硅谷 LangChain4j 实战</a></p>
-<p>LangChain4J 官网：<a href="https://docs.langchain4j.dev/">LangChain4j</a></p>
-<p>源码仓库：<a href="https://github.com/mofan212/langchain4j-demo">mofan212/langchain4j-demo</a></p>
+<p>参考链接：<a href="https://www.bilibili.com/video/BV1mX3NzrEu6" target="_blank" rel="noopener noreferrer">尚硅谷 LangChain4j 实战</a></p>
+<p>LangChain4J 官网：<a href="https://docs.langchain4j.dev/" target="_blank" rel="noopener noreferrer">LangChain4j</a></p>
+<p>源码仓库：<a href="https://github.com/mofan212/langchain4j-demo" target="_blank" rel="noopener noreferrer">mofan212/langchain4j-demo</a></p>
 <h1 id="1-开工前的准备">1. 开工前的准备</h1>
 <h2 id="11-前置约定">1.1 前置约定</h2>
 <p><strong>以阿里百炼平台（通义千问）为主，并辅以 DeepSeek 模型。</strong></p>
 <p><strong>涉及的所有调用均基于 OpenAI 协议标准或者 SpringBoot 官方推荐整合规则，</strong> 实现一致的接口设计与规范，确保多模型切换的便利性，提供高度可扩展的开发支持。</p>
 <h2 id="12-三件套准备">1.2 三件套准备</h2>
-<p>阿里百炼平台：<a href="https://bailian.console.aliyun.com/">大模型服务平台百炼控制台</a></p>
+<p>阿里百炼平台：<a href="https://bailian.console.aliyun.com/" target="_blank" rel="noopener noreferrer">大模型服务平台百炼控制台</a></p>
 <p>三件套是什么？</p>
 <ol>
 <li>获得 API-KEY</li>
@@ -913,11 +913,11 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <h1 id="3-整合-springboot">3. 整合 SpringBoot</h1>
-<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/spring-boot-integration">Spring Boot Integration</a></p>
-<p>LangChain4J 有 <a href="https://docs.langchain4j.dev/intro#2-levels-of-abstraction">两种抽象级别</a>：</p>
+<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/spring-boot-integration" target="_blank" rel="noopener noreferrer">Spring Boot Integration</a></p>
+<p>LangChain4J 有 <a href="https://docs.langchain4j.dev/intro#2-levels-of-abstraction" target="_blank" rel="noopener noreferrer">两种抽象级别</a>：</p>
 <ol>
-<li>低阶。在这个级别，你可以最自由地访问所有底层组件，比如 <a href="https://docs.langchain4j.dev/tutorials/chat-and-language-models/"><code>ChatModel</code></a>、<code>UserMessage</code>、<code>AiMessage</code>、<code>EmbeddingStore</code>、<code>Embedding</code> 等等。这些是由 LLM 驱动的应用程序的「原语」（primitives）。你可以完全控制如何组合它们，但需要编写更多的胶水代码。</li>
-<li>高阶。在这个级别，你可以使用高级 API（如 <a href="https://docs.langchain4j.dev/tutorials/ai-services/">AI Services</a>）与 LLM 进行交互，从而隐藏所有复杂性和样板代码。你仍可以以声明式的方式对模型进行微调。</li>
+<li>低阶。在这个级别，你可以最自由地访问所有底层组件，比如 <a href="https://docs.langchain4j.dev/tutorials/chat-and-language-models/" target="_blank" rel="noopener noreferrer"><code>ChatModel</code></a>、<code>UserMessage</code>、<code>AiMessage</code>、<code>EmbeddingStore</code>、<code>Embedding</code> 等等。这些是由 LLM 驱动的应用程序的「原语」（primitives）。你可以完全控制如何组合它们，但需要编写更多的胶水代码。</li>
+<li>高阶。在这个级别，你可以使用高级 API（如 <a href="https://docs.langchain4j.dev/tutorials/ai-services/" target="_blank" rel="noopener noreferrer">AI Services</a>）与 LLM 进行交互，从而隐藏所有复杂性和样板代码。你仍可以以声明式的方式对模型进行微调。</li>
 </ol>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AIImages/langchain4j-components.png" alt="LangChain4J-Components"></p>
 <p>导入以下两个依赖，分别对应低级和高级抽象级别的使用：</p>
@@ -969,7 +969,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <h1 id="4-低阶和高阶-api">4. 低阶和高阶 API</h1>
 <h2 id="41-低阶-api">4.1 低阶 API</h2>
-<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/chat-and-language-models">Chat and Language Models</a></p>
+<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/chat-and-language-models" target="_blank" rel="noopener noreferrer">Chat and Language Models</a></p>
 <p>LLM 目前有两种 API 类型：</p>
 <ol>
 <li><code>LanguageModel</code>：它们的 API 非常简单，接收一个字符串入参，并返回一个字符串出参。这种 API 目前已经过时，取而代之的是 chat API（接下来的第二章 API 类型）；</li>
@@ -979,10 +979,10 @@
 <p><code>ChatModel</code> 是 LangChain4J 中与 LLM 进行交互的低阶 API，提供了强大的功能和灵活性。</p>
 <p>除 <code>ChatModel</code> 外，<code>UserMessage</code>、<code>AiMessage</code>、<code>EmbeddingStore</code>、<code>Embedding</code> 等也属于低阶 API。</p>
 <h2 id="42-高阶-api">4.2 高阶 API</h2>
-<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/ai-services">AI Services</a></p>
+<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/ai-services" target="_blank" rel="noopener noreferrer">AI Services</a></p>
 <p>使用低阶 API 可以自由组合各个组件，但需要编写更多的胶水代码。由 LLM 驱动的应用程序不仅需要单个组件，通常需要多个组件相互协同工作，编排它们也变得更加繁琐。</p>
 <p>为了更专注于业务逻辑，而不是低阶实现细节，为此 LangChain4J 提供了 AI Services 和 Chains 两个高级概念。其中的 Chain 被官方认定为过时的，而 AI Services 是专为 Java 量身定制的解决方案。</p>
-<p>使用高阶 API 时，需要自行定义接口，调用 <code>AiServices</code> 类中的方法进行实现，不仅减少了代码的复杂性，也可以进行灵活的微调（见文档：<a href="https://docs.langchain4j.dev/tutorials/ai-services#simplest-ai-service">Simplest AI Service</a>）。</p>
+<p>使用高阶 API 时，需要自行定义接口，调用 <code>AiServices</code> 类中的方法进行实现，不仅减少了代码的复杂性，也可以进行灵活的微调（见文档：<a href="https://docs.langchain4j.dev/tutorials/ai-services#simplest-ai-service" target="_blank" rel="noopener noreferrer">Simplest AI Service</a>）。</p>
 <blockquote><p>使用示例</p></blockquote>
 <p>定义接口：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> interface</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> ChatAssistant</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
@@ -1020,10 +1020,10 @@
 <p>在 Web 开发中，定义一个 Service 后，需要定义其对应的实现类。现在使用高阶 API 定义接口后，不用再定义实现类，LangChain4J 会帮你完成。</p>
 <p>注意与前文使用案例的区分，创建 <code>Assistant</code> 接口后，并没有使用 <code>@AiService</code> 标记它，因为 <code>@AiService</code> 是与 SpringBoot 集成所需要的。</p>
 <blockquote><p>工作原理</p></blockquote>
-<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/ai-services#how-does-it-work">How does it work?</a></p>
+<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/ai-services#how-does-it-work" target="_blank" rel="noopener noreferrer">How does it work?</a></p>
 <p>简单来说，将接口的 <code>Class</code> 对象和低阶组件（<code>ChatModel</code>）传给 <code>AiServices</code> 后，会使用反射创建接口的代理对象。</p>
 <h2 id="43-token">4.3 Token</h2>
-<p>参考 DeepSeek API 文档中的 <a href="https://api-docs.deepseek.com/zh-cn/quick_start/token_usage">介绍</a>：</p>
+<p>参考 DeepSeek API 文档中的 <a href="https://api-docs.deepseek.com/zh-cn/quick_start/token_usage" target="_blank" rel="noopener noreferrer">介绍</a>：</p>
 <p>token 是模型用来表示自然语言文本的基本单位，也是我们的计费单元，可以直观的理解为「字」或「词」；通常 1 个中文词语、1 个英文单词、1 个数字或 1 个符号计为 1 个 token。</p>
 <p>一般情况下模型中 token 和字数的换算比例大致如下：</p>
 <ul>
@@ -1049,10 +1049,10 @@
 <span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    return</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> result </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">+</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> "</span><span style="--shiki-light:#0184BC;--shiki-dark:#56B6C2">\t\n</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> +</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> tokenUsage</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span></code></pre>
 <h1 id="5-模型参数">5. 模型参数</h1>
-<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/model-parameters">Model Parameters</a></p>
-<p>在与 SpringBoot 进行整合时，可以在配置文件中配置模型参数，参考：<a href="https://docs.langchain4j.dev/integrations/language-models/open-ai/#spring-boot-1">Spring Boot</a></p>
+<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/model-parameters" target="_blank" rel="noopener noreferrer">Model Parameters</a></p>
+<p>在与 SpringBoot 进行整合时，可以在配置文件中配置模型参数，参考：<a href="https://docs.langchain4j.dev/integrations/language-models/open-ai/#spring-boot-1" target="_blank" rel="noopener noreferrer">Spring Boot</a></p>
 <blockquote><p>日志</p></blockquote>
-<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/logging">Logging</a></p>
+<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/logging" target="_blank" rel="noopener noreferrer">Logging</a></p>
 <p>在配置类中添加 <code>ChatModel</code> 类型的 Bean 时调用 <code>logRequests(true)</code> 和 <code>logResponses(true)</code> 方法：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span></span><code><span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">OpenAiChatModel</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">builder</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">()</span></span>
 <span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">    // --snip--</span></span>
@@ -1067,8 +1067,8 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">dependency</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span></code></pre>
 <p>不需要在配置文件里设置日志级别为 DEBUG。</p>
 <blockquote><p>监听</p></blockquote>
-<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/observability">Observability</a></p>
-<p>整合了 SpringBoot 时，可以在配置类中进行监听的配置：<a href="https://docs.langchain4j.dev/tutorials/spring-boot-integration#observability">Observability | Spring Boot Integration</a></p>
+<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/observability" target="_blank" rel="noopener noreferrer">Observability</a></p>
+<p>整合了 SpringBoot 时，可以在配置类中进行监听的配置：<a href="https://docs.langchain4j.dev/tutorials/spring-boot-integration#observability" target="_blank" rel="noopener noreferrer">Observability | Spring Boot Integration</a></p>
 <p>实现 <code>ChatModelListener</code> 接口：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span><span class="code-line-number">13</span><span class="code-line-number">14</span><span class="code-line-number">15</span><span class="code-line-number">16</span><span class="code-line-number">17</span><span class="code-line-number">18</span><span class="code-line-number">19</span><span class="code-line-number">20</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">Slf4j</span></span>
 <span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> class</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> TestChatModelListener</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> implements</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> ChatModelListener</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
@@ -1127,7 +1127,7 @@
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">    chat-model</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">:</span></span>
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">      timeout</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">: </span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">2s</span></span></code></pre>
 <h1 id="6-多模态视觉理解">6. 多模态视觉理解</h1>
-<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/chat-and-language-models#multimodality">Multimodality</a></p>
+<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/chat-and-language-models#multimodality" target="_blank" rel="noopener noreferrer">Multimodality</a></p>
 <p><code>UserMessage</code> 不仅仅可以包含文本，还可以包含其他类型的内容。<code>UserMessage</code> 包含一个 <code>List&#x3C;Content> contents</code>。</p>
 <p><code>Content</code> 是一个接口，有下列实现：</p>
 <ul>
@@ -1137,9 +1137,9 @@
 <li><code>VideoContent</code></li>
 <li><code>PdfFileContent</code></li>
 </ul>
-<p>可以从 <a href="https://docs.langchain4j.dev/integrations/language-models/">这个表</a> 中查看哪些 LLM 提供商提供了哪些输入模式。</p>
+<p>可以从 <a href="https://docs.langchain4j.dev/integrations/language-models/" target="_blank" rel="noopener noreferrer">这个表</a> 中查看哪些 LLM 提供商提供了哪些输入模式。</p>
 <h2 id="61-解读图片">6.1 解读图片</h2>
-<p>本节选用 <a href="https://bailian.console.aliyun.com/?tab=model#/model-market/detail/qwen-vl-max?modelGroup=qwen-vl-max">通义千问VL-Max</a> 作为使用的模型。</p>
+<p>本节选用 <a href="https://bailian.console.aliyun.com/?tab=model#/model-market/detail/qwen-vl-max?modelGroup=qwen-vl-max" target="_blank" rel="noopener noreferrer">通义千问VL-Max</a> 作为使用的模型。</p>
 <p>相应地需要调整配置类：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span><span class="code-line-number">13</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">Configuration</span></span>
 <span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> class</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> LLMConfig</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
@@ -1185,7 +1185,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <h2 id="62-接入三方平台">6.2 接入三方平台</h2>
-<p>以接入 DashScope(Qwen) 为例，按 <a href="https://docs.langchain4j.dev/integrations/language-models/dashscope#maven-dependency">官网</a> 说明，父工程新增 Maven 配置（最开始其实已经导入）：</p>
+<p>以接入 DashScope(Qwen) 为例，按 <a href="https://docs.langchain4j.dev/integrations/language-models/dashscope#maven-dependency" target="_blank" rel="noopener noreferrer">官网</a> 说明，父工程新增 Maven 配置（最开始其实已经导入）：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">dependencyManagement</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    &#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">dependency</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">        &#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">groupId</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">>dev.langchain4j&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">groupId</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
@@ -1216,7 +1216,7 @@
 <h2 id="71-基本概念">7.1 基本概念</h2>
 <p>流式输出（StreamingOutput）是一种逐步返回大模型生成结果的技术，允许服务器将响应内容分批次实时传输给客户端，而不是等待全部内容生成完毕后再一次性返回。</p>
 <p>这种机制能显著提升用户体验，尤其适用于大模型响应较慢的场景（如生成长文本或复杂推理结果）。</p>
-<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/response-streaming">Response Streaming</a></p>
+<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/response-streaming" target="_blank" rel="noopener noreferrer">Response Streaming</a></p>
 <p>LLM 一次生成一个 token，因此大多数 LLM 提供商都提供了逐个 token 流式输出的方式，而不是等待整个文本生成完成后才输出。这极大地改善了用户的体验，用户无需再等待未知的时间，可以立即开始阅读 LLM 的输出内容。</p>
 <p>与 <code>ChatModel</code> 对应，其流式输出接口是 <code>StreamingChatModel</code>，它接收一个 <code>StreamingChatResponseHandler</code> 接口的实现作为参数。</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> interface</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> StreamingChatResponseHandler</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
@@ -1327,7 +1327,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <h1 id="8-chat-memory">8. Chat Memory</h1>
-<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/chat-memory">Chat Memory</a></p>
+<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/chat-memory" target="_blank" rel="noopener noreferrer">Chat Memory</a></p>
 <p>Chat Memory 是聊天系统中的重要组件，用于存储和管理对话的上下文信息。它的主要作用是让 AI 助手能够「记住」之前的对话内容，从而提供连贯和个性化的回复。</p>
 <p>手动维护和管理 <code>ChatMessage</code> 非常麻烦，因此 LangChain4J 提供了一个 <code>ChatMemory</code> 抽象以及多种开箱即用的实现。<code>ChatMemory</code> 既可以作为独立的底层组件使用，也可以作为 AI Service 等高级组件的一部分使用。</p>
 <p><code>ChatMemory</code> 作为 <code>ChatMessage</code> 的容器（由 <code>List</code> 支持），并具有以下附加功能：</p>
@@ -1430,7 +1430,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span></code></pre>
 <h1 id="9-提示词工程">9. 提示词工程</h1>
 <h2 id="91-多种-chatmessage">9.1 多种 ChatMessage</h2>
-<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/chat-and-language-models#types-of-chatmessage">Types of ChatMessage</a></p>
+<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/chat-and-language-models#types-of-chatmessage" target="_blank" rel="noopener noreferrer">Types of ChatMessage</a></p>
 <p><code>ChatMessage</code> 是 LangChain4J 提供的一个接口，内置了 5 种默认实现，这在 <code>ChatMessageType</code> 枚举中也能发现：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> enum</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> ChatMessageType</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> {</span></span>
 <span class="line"><span style="--shiki-light:#986801;--shiki-dark:#D19A66">    SYSTEM</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">SystemMessage</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">class</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span></span>
@@ -1550,7 +1550,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <h1 id="10-持久化">10. 持久化</h1>
 <h2 id="101-官方介绍">10.1 官方介绍</h2>
-<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/chat-memory#persistence">Persistence</a></p>
+<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/chat-memory#persistence" target="_blank" rel="noopener noreferrer">Persistence</a></p>
 <p>默认情况下，<code>ChatMemory</code> 将 <code>ChatMessage</code> 存储在内存中。</p>
 <p>如果需要持久化，可以自定义 <code>ChatMemoryStore</code> 实现，将 <code>ChatMessage</code> 存储到选择的持久化存储区中：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span><span class="code-line-number">13</span><span class="code-line-number">14</span><span class="code-line-number">15</span><span class="code-line-number">16</span><span class="code-line-number">17</span><span class="code-line-number">18</span><span class="code-line-number">19</span><span class="code-line-number">20</span><span class="code-line-number">21</span><span class="code-line-number">22</span><span class="code-line-number">23</span><span class="code-line-number">24</span><span class="code-line-number">25</span><span class="code-line-number">26</span><span class="code-line-number">27</span><span class="code-line-number">28</span><span class="code-line-number">29</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">class</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> PersistentChatMemoryStore</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> implements</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> ChatMemoryStore</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
@@ -1687,7 +1687,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <h1 id="11-tools-function-calling">11. Tools (Function Calling)</h1>
 <h2 id="111-官方介绍">11.1 官方介绍</h2>
-<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/tools">Tools (Function Calling)</a></p>
+<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/tools" target="_blank" rel="noopener noreferrer">Tools (Function Calling)</a></p>
 <p>一些 LLM （并非所有）除了生成文本外，还可以触发操作。</p>
 <p>有一个被称为「tools（工具）」或「function calling（函数调用）」的概念。它允许 LLM 在必要时调用一个或多个由开发者定义、可用的工具。这个工具可以是任何东西：网络搜索、调用外部 API 或执行特定的代码等等。LLM 自身并不能调用工具，而是在响应中表达调用特定工具的意图（不是以纯文本的形式回答）。作为开发者，我们应该用提供的参数执行这个工具，并报告工具的执行结果。</p>
 <p>例如，我们知道 LLM 自身并不擅长数学计算。如果你的用例偶尔涉及到数学计算，你可能需要为 LLM 提供一个「数学工具」。通过在向 LLM 的请求中声明一个或多个工具，LLM 可以决定调用一个它认为合适的工具。给定一个数学问题和一系列「数学工具」，LLM 为了正确地回答问题，它应该首先调用提供的数学工具。</p>
@@ -1700,7 +1700,7 @@
 <li>高阶：使用 AI Service 和带有 <code>@Tools</code> 注解的 Java 方法</li>
 </ul>
 <h2 id="112-低阶-api">11.2 低阶 API</h2>
-<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/tools#low-level-tool-api">Low Level Tool API</a></p>
+<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/tools#low-level-tool-api" target="_blank" rel="noopener noreferrer">Low Level Tool API</a></p>
 <p>定义 AI Service 接口：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> interface</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> FunctionAssistant</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
 <span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">    String</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> chat</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">String</span><span style="--shiki-light:#383A42;--shiki-light-font-style:inherit;--shiki-dark:#E06C75;--shiki-dark-font-style:italic"> message</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span></span>
@@ -1925,9 +1925,9 @@
 <p>由于向量通常用于描述语义，仅仅看长度无法满足需求。</p>
 <p><strong>大多数相似度的测量要么仅依赖于方向，要么同时考虑方向和大小。</strong></p>
 <h2 id="122-embedding-model">12.2 Embedding Model</h2>
-<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/rag#embedding-model">Embedding Model</a></p>
+<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/rag#embedding-model" target="_blank" rel="noopener noreferrer">Embedding Model</a></p>
 <p><code>EmbeddingModel</code> 接口代表一种特殊类型的模型，可以将文本转换为 Embedding。</p>
-<p>目前支持的 Embedding Model：<a href="https://docs.langchain4j.dev/category/embedding-models/">Embedding Models</a></p>
+<p>目前支持的 Embedding Model：<a href="https://docs.langchain4j.dev/category/embedding-models/" target="_blank" rel="noopener noreferrer">Embedding Models</a></p>
 <p>使用方式：</p>
 <ul>
 <li><code>EmbeddingModel.embed(String)</code> 嵌入给定文本</li>
@@ -1943,9 +1943,9 @@
 <li>简单性：嵌入模型简化了文本转换为嵌入的过程。通过提供如 <code>embed(String text)</code> 和 <code>embed(Document document)</code> 这样简单的方法，去除处理原始文本数据和嵌入算法的复杂性。这个设计选择使开发者（尤其是那些初次接触 AI 的开发者），更容易在他们的应用程序中使用嵌入，而无需深入了解其底层机制。</li>
 </ol>
 <h2 id="123-embedding-store">12.3 Embedding Store</h2>
-<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/rag#embedding-store">Embedding Store</a></p>
+<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/rag#embedding-store" target="_blank" rel="noopener noreferrer">Embedding Store</a></p>
 <p><code>EmbeddingStore</code> 接口表示 Embedding 的存储空间，也成为向量数据库。它允许存储和搜索相似的 Embedding。</p>
-<p>目前支持的 Embedding Store：<a href="https://docs.langchain4j.dev/integrations/embedding-stores">Comparison table of all supported Embedding Stores</a></p>
+<p>目前支持的 Embedding Store：<a href="https://docs.langchain4j.dev/integrations/embedding-stores" target="_blank" rel="noopener noreferrer">Comparison table of all supported Embedding Stores</a></p>
 <p><code>EmbeddingStore</code> 可以单独存储 Embedding，也可以与相应的 <code>TextSegment</code> 一起存储：</p>
 <ul>
 <li>它只能按 ID 存储 Embedding。原始嵌入数据可以存储在其他地方，并使用 ID 进行关联</li>
@@ -1955,7 +1955,7 @@
 <p>向量存储（Vector Store）是一种用于存储和检索高维向量数据的数据库或存储解决方案，它特别适用于处理那些经过嵌入模型转换后的数据。在 Vector Store 中，查询与传统关系型数据库不一样，它们执行相似性搜索，而不是精准匹配。当给定一个向量作为查询时，Vector Store 返回与查询向量「相似」的向量。</p>
 <p>Vector Store 用于将您的数据与 AI 模型集成。在使用它们时的第一步是将您的数据加载到矢量数据库中。当用户将查询发送到 AI 模型时，首先检索一组相似文档。这些文档作为用户问题的上下文，并与用户的查询一起发送到 AI 模型。这种技术也被称为检索增强生成（Retrieval Augmented Generation，RAG）。</p>
 <blockquote><p>EmbeddingSearchRequest</p></blockquote>
-<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/rag#embeddingsearchrequest">EmbeddingSearchRequest</a></p>
+<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/rag#embeddingsearchrequest" target="_blank" rel="noopener noreferrer">EmbeddingSearchRequest</a></p>
 <p><code>EmbeddingSearchRequest</code> 表示在 <code>EmbeddingStore</code> 中进行搜索的请求。它具有以下属性：</p>
 <ul>
 <li><code>Embedding queryEmbedding</code>：用作参考的 Embedding</li>
@@ -1973,7 +1973,7 @@
 </ol>
 <p>即：将文本映射到高维空间中的点，使语义相似的文本在这个空间中距离接近。</p>
 <h2 id="125-编码实现">12.5 编码实现</h2>
-<p>本次选用 <a href="https://qdrant.tech/">Qdrant</a> 作为使用的向量数据库。</p>
+<p>本次选用 <a href="https://qdrant.tech/" target="_blank" rel="noopener noreferrer">Qdrant</a> 作为使用的向量数据库。</p>
 <p>Qdrant 是一个高性能的向量数据库，用于存储 Embedding 并进行快速的向量搜索。</p>
 <p>安装 Qdrant：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">docker</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> run</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -p</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> 6333:6333</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -p</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> 6334:6334</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> qdrant/qdrant</span></span></code></pre>
@@ -2108,7 +2108,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span></code></pre>
 <h1 id="13-rag">13. RAG</h1>
 <h2 id="131-相关概念">13.1 相关概念</h2>
-<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/rag">RAG </a></p>
+<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/rag" target="_blank" rel="noopener noreferrer">RAG </a></p>
 <p>LLM 的知识仅限于训练数据。如果想要让 LLM 了解特定领域的知识或专有数据，可以：</p>
 <ul>
 <li>使用 RAG</li>
@@ -2132,10 +2132,10 @@
 </ul>
 <p>RAG 给 LLM 装上了「实时百科大脑」，为了让 LLM 获取足够的上下文，以便获取到更广泛的信息源，通过先查资料再回答的机制，让 LLM 摆脱「知识遗忘和幻觉回复」的困境。</p>
 <h2 id="132-rag-stages">13.2 RAG Stages</h2>
-<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/rag#rag-stages">RAG Stages</a></p>
+<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/rag#rag-stages" target="_blank" rel="noopener noreferrer">RAG Stages</a></p>
 <p>RAG 过程分为两个明确的阶段：索引和检索。LangChain4j 为这两个阶段都提供了工具。</p>
 <blockquote><p>Indexing（索引）</p></blockquote>
-<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/rag#indexing">Indexing</a></p>
+<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/rag#indexing" target="_blank" rel="noopener noreferrer">Indexing</a></p>
 <p>在索引阶段会对给定文档进行预处理，以便在检索阶段进行高效地搜索。</p>
 <p>这一过程会根据使用的信息检索方式发生变化。对于向量搜索，这通常包括清理文档、用附加数据和元数据补充文档、将文档分割成更小的片段（分块）、嵌入（embedding）这些片段，最后将它们存储到向量数据库中。</p>
 <p>索引阶段通常是离线进行的，这意味着终端用户无需等待索引完成。例如，可以每周末定时对公司内部文档进行一次索引操作。负责检索的代码可以是一个只处理索引任务的单个应用程序。</p>
@@ -2143,14 +2143,14 @@
 <p>下面是索引阶段的简化流程图：</p>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AIImages/%E7%B4%A2%E5%BC%95%E9%98%B6%E6%AE%B5%E7%AE%80%E5%8C%96%E6%B5%81%E7%A8%8B%E5%9B%BE.png" alt="索引阶段简化流程图"></p>
 <blockquote><p>Retrieval（检索）</p></blockquote>
-<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/rag#retrieval">Retrieval</a></p>
+<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/rag#retrieval" target="_blank" rel="noopener noreferrer">Retrieval</a></p>
 <p>检索阶段通常是在线进行的，当用户提交一个问题时，将使用索引的文档给出答案。</p>
 <p>这一过程会根据使用的信息检索方式发生变化。对于向量搜索，这通常包括嵌入（embedding）用户的查询（问题），并在向量数据库中执行相似性搜索，最后将相关片段（原始文档中的片段）注入到提示词中并发送给 LLM。</p>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AIImages/%E6%A3%80%E7%B4%A2%E9%98%B6%E6%AE%B5%E7%AE%80%E5%8C%96%E6%B5%81%E7%A8%8B%E5%9B%BE.png" alt="检索阶段简化流程图"></p>
 <h2 id="133-核心-api">13.3 核心 API</h2>
-<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/rag#core-rag-apis">Core RAG APIs</a></p>
+<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/rag#core-rag-apis" target="_blank" rel="noopener noreferrer">Core RAG APIs</a></p>
 <blockquote><p>Embedding Store Ingestor</p></blockquote>
-<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/rag#embedding-store-ingestor">Embedding Store Ingestor</a></p>
+<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/rag#embedding-store-ingestor" target="_blank" rel="noopener noreferrer">Embedding Store Ingestor</a></p>
 <p>LangChain4j 中存在名为 <code>EmbeddingStoreIngestor</code> 的类，其内部有 5 个成员变量：</p>
 <ol>
 <li><code>DocumentTransformer documentTransformer</code>：文档转换</li>
@@ -2160,7 +2160,7 @@
 <li><code>EmbeddingStore&#x3C;TextSegment> embeddingStore</code>：存储生成的嵌入向量及其对应的文本段</li>
 </ol>
 <blockquote><p>Document Loader</p></blockquote>
-<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/rag#document-loader">Document Loader</a></p>
+<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/rag#document-loader" target="_blank" rel="noopener noreferrer">Document Loader</a></p>
 <p>可以根据一个 <code>String</code> 创建一个 <code>Document</code> 对象，但更简单的方式是通过 LangChain4j 中内置的文档加载器创建，比如：</p>
 <ul>
 <li><code>FileSystemDocumentLoader</code>：从文档系统中加载</li>
@@ -2171,7 +2171,7 @@
 <li><code>TencentCosDocumentLoader</code>：从腾讯云中加载</li>
 </ul>
 <blockquote><p>Document Parser</p></blockquote>
-<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/rag#document-parser">Document Parser</a></p>
+<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/rag#document-parser" target="_blank" rel="noopener noreferrer">Document Parser</a></p>
 <p><code>Document</code> 代表各种格式的文件，比如 PDF、DOC、TXT 等等。为了解析这些格式，LangChain4j 提供了 <code>DocumentParser</code> 接口及多种实现：</p>
 <ul>
 <li><code>TextDocumentParser</code>：解析纯文本格式的文档，比如 TXT、HTML、MD 等等</li>
@@ -2180,11 +2180,11 @@
 <li><code>ApacheTikaDocumentParser</code>：自动检测并解析几乎所有格式的文档 😲</li>
 </ul>
 <blockquote><p>Document Transformer</p></blockquote>
-<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/rag#document-transformer">Document Transformer </a></p>
+<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/rag#document-transformer" target="_blank" rel="noopener noreferrer">Document Transformer </a></p>
 <p>对文档执行各种转换，包括清理、过滤、增强或总结。</p>
 <p>没有通用的解决方案，需要根据需求自行实现 <code>DocumentTransformer</code>。</p>
 <blockquote><p>Document Splitter</p></blockquote>
-<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/rag#document-splitter">Document Splitter</a></p>
+<p>官方介绍：<a href="https://docs.langchain4j.dev/tutorials/rag#document-splitter" target="_blank" rel="noopener noreferrer">Document Splitter</a></p>
 <p>LangChain4j 提供了 <code>DocumentSplitter</code> 接口，及多种开箱即用的实现：</p>
 <ul>
 <li><code>DocumentByParagraphSplitter</code>：按段落拆分</li>
@@ -2204,7 +2204,7 @@
 <li>生成响应：将检索到的相关内容与用户查询一起提供给语言模型，生成最终响应</li>
 </ol>
 <h2 id="134-简单实现">13.4 简单实现</h2>
-<p>本节只做最简单的 <a href="https://docs.langchain4j.dev/tutorials/rag#easy-rag">Easy RAG</a> 演示。</p>
+<p>本节只做最简单的 <a href="https://docs.langchain4j.dev/tutorials/rag#easy-rag" target="_blank" rel="noopener noreferrer">Easy RAG</a> 演示。</p>
 <p>引入依赖：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">dependency</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    &#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">groupId</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">>dev.langchain4j&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">groupId</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
@@ -2263,8 +2263,8 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <h1 id="14-mcp">14. MCP</h1>
 <h2 id="141-相关概念">14.1 相关概念</h2>
-<p>LangChain4j 官方介绍：<a href="https://docs.langchain4j.dev/tutorials/mcp">Model Context Protocol (MCP)</a></p>
-<p>MCP 官方介绍：<a href="https://modelcontextprotocol.io/introduction">Introduction - Model Context Protocol</a></p>
+<p>LangChain4j 官方介绍：<a href="https://docs.langchain4j.dev/tutorials/mcp" target="_blank" rel="noopener noreferrer">Model Context Protocol (MCP)</a></p>
+<p>MCP 官方介绍：<a href="https://modelcontextprotocol.io/introduction" target="_blank" rel="noopener noreferrer">Introduction - Model Context Protocol</a></p>
 <p>MCP，Model Context Protocol，模型上下文协议。</p>
 <p>MCP 是一种开放协议，它规范了应用程序向 LLM 提供上下文的方式。把 MCP 想象成 AI 应用程序的 USB-C 接口，就像 USB-C 接口提供了将设备连接到各种外设和配件，MCP 也提供了将 AI 模型连接到不同数据源和工具（Tool）的标准化方式。</p>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AIImages/MCP%E6%9E%B6%E6%9E%84%E5%9B%BE%E7%A4%BA.png" alt="MCP架构图示"></p>
@@ -2311,9 +2311,9 @@
 <table><thead><tr><th align="center">特新</th><th align="center">SSE</th><th align="center">STDIO</th></tr></thead><tbody><tr><td align="center">传输协议</td><td align="center">HTTP（长连接）</td><td align="center">操作系统级文件描述符</td></tr><tr><td align="center">方向</td><td align="center">服务器到客户端（单向传输）</td><td align="center">双向流（stdin，stdout）</td></tr><tr><td align="center">保持连接</td><td align="center">长连接（Connection: keep-alive）</td><td align="center">不保证长时间打开，取决于进程生命周期</td></tr><tr><td align="center">数据格式</td><td align="center">文本流（EventStream 格式）</td><td align="center">原始字节流</td></tr><tr><td align="center">异常处理</td><td align="center">可通过 HTTP 状态码或重连机制</td><td align="center">进程退出或管道断裂</td></tr></tbody></table></div>
 <p>MCP 可以类比于 OpenFeign，前者用于大模型之间的通讯，后者用于微服务之间的通讯。</p>
 <p>MCP 是比 Tools(Function Calling) 更高一级的抽象，也是实现智能体 Agent 的基础。</p>
-<p>访问 <a href="https://mcp.so/">MCP.so</a> 选择调用的 MCP Server。</p>
+<p>访问 <a href="https://mcp.so/" target="_blank" rel="noopener noreferrer">MCP.so</a> 选择调用的 MCP Server。</p>
 <h2 id="142-通用架构">14.2 通用架构</h2>
-<p>官方链接：<a href="https://modelcontextprotocol.io/introduction#general-architecture">General architecture</a></p>
+<p>官方链接：<a href="https://modelcontextprotocol.io/introduction#general-architecture" target="_blank" rel="noopener noreferrer">General architecture</a></p>
 <p>MCP 遵循客户端-服务器架构，其中主机应用程序可以连接到多个服务器：</p>
 <div class="mermaid">flowchart LR
     subgraph "Your Computer"
@@ -2342,9 +2342,9 @@
 <li>Remote Services（远程服务）：MCP 服务器可以连接到的远程资源，如通过 API 提供的数据</li>
 </ul>
 <h2 id="143-简单使用">14.3 简单使用</h2>
-<p>选择 <a href="https://mcp.so/zh/server/baidu-map/baidu-maps">Baidu Map</a> 作为本次 MCP Server。</p>
+<p>选择 <a href="https://mcp.so/zh/server/baidu-map/baidu-maps" target="_blank" rel="noopener noreferrer">Baidu Map</a> 作为本次 MCP Server。</p>
 <p>预先安装 Node.js。</p>
-<p>进入 <a href="https://lbsyun.baidu.com/">百度地图开发平台</a>，创建应用，获取「访问应用 (AK)」并将其配置到系统环境变量，可以参考百度地图 MCP Server 的介绍，同样以 <code>BAIDU_MAP_API_KEY</code> 作为环境变量名称。</p>
+<p>进入 <a href="https://lbsyun.baidu.com/" target="_blank" rel="noopener noreferrer">百度地图开发平台</a>，创建应用，获取「访问应用 (AK)」并将其配置到系统环境变量，可以参考百度地图 MCP Server 的介绍，同样以 <code>BAIDU_MAP_API_KEY</code> 作为环境变量名称。</p>
 <p>配置完环境变量后，记得重启 IDEA！</p>
 <p>引入依赖：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">dependency</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
@@ -2436,7 +2436,7 @@
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">            mcpClient</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">close</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">();</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">        }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
-<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre> </article> <div class="text-muted-foreground max-w-app mt-20 w-full space-y-3 text-center text-sm" data-astro-cid-7ap3hmvm> <aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full px-2 text-center leading-6 sm:px-0"> <p class="m-0 break-words"> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a><span> 许可协议，</span><span class="max-sm:block">转载时请署名并注明<a href="https://mofan212.github.io/posts/quick-start-with-langchain4j/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a> 🔗</span> </p> </aside> <section data-post-reward data-pagefind-ignore class="w-full" aria-label="赞赏"> <div class="flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:flex-wrap sm:gap-x-1.5 sm:gap-y-2"> <span class="sm:whitespace-nowrap">如果这篇文章对你有帮助，可以通过</span> <a href="/reward/" class="focus-outline border-accent text-accent hover:bg-accent/10 active:bg-accent/10 inline-block rounded-md border px-3 py-1 font-medium transition-colors"> 赞赏 </a> <span class="sm:whitespace-nowrap">请我喝杯 Coffee ☕</span> </div> </section> </div> <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm>  <ul id="post-tags" class="mt-4 mb-8 flex flex-wrap gap-4 sm:mb-8" data-astro-cid-7ap3hmvm> <li> <a href="/tags/AI/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> AI </a> </li><li> <a href="/tags/LangChain4j/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-2"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> LangChain4j </a> </li> </ul>  <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/docker-desktop/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.3l105.3-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg> <div> <span>上一篇</span> <div class="text-accent/85 text-sm">Docker Desktop</div> </div> </a> <a href="/posts/functors-applicatives-and-monads-in-pictures/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>下一篇</span> <div class="text-accent/85 text-sm">Functors, Applicatives and Monads In Pictures</div> </div> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg> </a> </div> </main> <footer class="app-layout mt-auto" data-astro-cid-7ap3hmvm="true"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="text-muted-foreground my-2 flex w-fit flex-col items-start text-start text-sm whitespace-nowrap"> <div class="flex items-center gap-1.5"> <svg width="24" height="24" fill="currentColor" class="size-4" viewBox="-49.231 -39.385 738.462 590.769" aria-hidden="true"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9-.1-2.7-.2-5.4-.2-8.1 0-88.4 71.6-160 160-160 59.3 0 111 32.2 138.7 80.2A95.5 95.5 0 0 1 448 96c53 0 96 43 96 96 0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39L296 392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0z" /></svg> <span>最近更新：</span> <time class="tabular-nums" datetime="2026-09-20T05:52:56.000Z" data-deployed-at="2026-09-20T05:52:56.000Z" data-just-now="刚刚" data-locale="zh-CN"> 2026-09-20 13:52 </time> </div> <div class="mt-1 flex items-center gap-3 text-xs"> <span class="flex items-center gap-1" title="本站访客数"> <svg width="24" height="24" fill="currentColor" class="size-3" viewBox="-2.835 -3.241 453.671 518.481" aria-hidden="true"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3z" /></svg> <span class="sr-only">本站访客数：</span> <span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> <span aria-hidden="true">|</span> <span class="flex items-center gap-1.5" title="本站总浏览量"> <span class="flex size-4 items-center justify-center" aria-hidden="true"> <svg width="24" height="24" fill="currentColor" class="size-3.5" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48zM0 272c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v160c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zM368 96h32c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48" /></svg> </span> <span class="sr-only">本站总浏览量：</span> <span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> </div> </div> <div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"> <span>版权所有 &#169; 2020 – 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer> <script>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre> </article> <div class="text-muted-foreground max-w-app mt-20 w-full space-y-3 text-center text-sm" data-astro-cid-7ap3hmvm> <aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full px-2 text-center leading-6 sm:px-0"> <p class="m-0 break-words"> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a><span> 许可协议，</span><span class="max-sm:block">转载时请署名并注明<a href="https://mofan212.github.io/posts/quick-start-with-langchain4j/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a> 🔗</span> </p> </aside> <section data-post-reward data-pagefind-ignore class="w-full" aria-label="赞赏"> <div class="flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:flex-wrap sm:gap-x-1.5 sm:gap-y-2"> <span class="sm:whitespace-nowrap">如果这篇文章对你有帮助，可以通过</span> <a href="/reward/" class="focus-outline border-accent text-accent hover:bg-accent/10 active:bg-accent/10 inline-block rounded-md border px-3 py-1 font-medium transition-colors"> 赞赏 </a> <span class="sm:whitespace-nowrap">请我喝杯 Coffee ☕</span> </div> </section> </div> <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm>  <ul id="post-tags" class="mt-4 mb-8 flex flex-wrap gap-4 sm:mb-8" data-astro-cid-7ap3hmvm> <li> <a href="/tags/AI/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> AI </a> </li><li> <a href="/tags/LangChain4j/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-2"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> LangChain4j </a> </li> </ul>  <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/docker-desktop/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.3l105.3-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg> <div> <span>上一篇</span> <div class="text-accent/85 text-sm">Docker Desktop</div> </div> </a> <a href="/posts/functors-applicatives-and-monads-in-pictures/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>下一篇</span> <div class="text-accent/85 text-sm">Functors, Applicatives and Monads In Pictures</div> </div> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg> </a> </div> </main> <footer class="app-layout mt-auto" data-astro-cid-7ap3hmvm="true"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="text-muted-foreground my-2 flex w-fit flex-col items-start text-start text-sm whitespace-nowrap"> <div class="flex items-center gap-1.5"> <svg width="24" height="24" fill="currentColor" class="size-4" viewBox="-49.231 -39.385 738.462 590.769" aria-hidden="true"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9-.1-2.7-.2-5.4-.2-8.1 0-88.4 71.6-160 160-160 59.3 0 111 32.2 138.7 80.2A95.5 95.5 0 0 1 448 96c53 0 96 43 96 96 0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39L296 392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0z" /></svg> <span>最近更新：</span> <time class="tabular-nums" datetime="2026-09-20T09:53:22.000Z" data-deployed-at="2026-09-20T09:53:22.000Z" data-just-now="刚刚" data-locale="zh-CN"> 2026-09-20 17:53 </time> </div> <div class="mt-1 flex items-center gap-3 text-xs"> <span class="flex items-center gap-1" title="本站访客数"> <svg width="24" height="24" fill="currentColor" class="size-3" viewBox="-2.835 -3.241 453.671 518.481" aria-hidden="true"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3z" /></svg> <span class="sr-only">本站访客数：</span> <span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> <span aria-hidden="true">|</span> <span class="flex items-center gap-1.5" title="本站总浏览量"> <span class="flex size-4 items-center justify-center" aria-hidden="true"> <svg width="24" height="24" fill="currentColor" class="size-3.5" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48zM0 272c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v160c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zM368 96h32c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48" /></svg> </span> <span class="sr-only">本站总浏览量：</span> <span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> </div> </div> <div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"> <span>版权所有 &#169; 2020 – 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer> <script>
   (() => {
     const updateDeploymentTimes = () => {
       document.querySelectorAll("[data-deployed-at]").forEach(element => {
