@@ -1,0 +1,2 @@
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["_astro/mermaid.BumsKttJ.js","_astro/preload-helper.CVfkMyKi.js","_astro/index.astro_astro_type_script_index_0_lang.BCG830Cw.js"])))=>i.map(i=>d[i]);
+import{_ as d}from"./preload-helper.CVfkMyKi.js";function e(){document.querySelector(".mermaid")&&d(()=>import("./mermaid.BumsKttJ.js"),__vite__mapDeps([0,1,2]))}e();document.addEventListener("astro:page-load",e);
