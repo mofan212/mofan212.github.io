@@ -1,4 +1,4 @@
-<!DOCTYPE html><html dir="ltr" lang="zh-CN" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/the-basics-of-redis-part-two/"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.3.0/400.css"><link rel="preconnect" href="https://busuanzi.ibruce.info"><meta name="generator" content="Astro v6.4.2"><!-- Primary meta --><title>【下篇】Redis 基础篇 | Mofan</title><meta name="title" content="【下篇】Redis 基础篇 | Mofan"><meta name="description" content="本文主要介绍了 Redis 事务、发布订阅、Redis 的复制以及如何整合 SpringBoot。"><meta name="author" content="默烦"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Mofan"><meta property="og:title" content="【下篇】Redis 基础篇 | Mofan"><meta property="og:description" content="本文主要介绍了 Redis 事务、发布订阅、Redis 的复制以及如何整合 SpringBoot。"><meta property="og:url" content="https://mofan212.github.io/posts/the-basics-of-redis-part-two/"><meta property="og:image" content="https://mofan212.github.io/default-og.jpg"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://mofan212.github.io/posts/the-basics-of-redis-part-two/"><meta property="twitter:title" content="【下篇】Redis 基础篇 | Mofan"><meta property="twitter:description" content="本文主要介绍了 Redis 事务、发布订阅、Redis 的复制以及如何整合 SpringBoot。"><meta property="twitter:image" content="https://mofan212.github.io/default-og.jpg"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Mofan" href="https://mofan212.github.io/rss.xml"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2020-12-08T00:00:00.000Z"><meta property="article:modified_time" content="2022-03-27T00:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"【下篇】Redis 基础篇 | Mofan","url":"https://mofan212.github.io/posts/the-basics-of-redis-part-two/","mainEntityOfPage":"https://mofan212.github.io/posts/the-basics-of-redis-part-two/","datePublished":"2020-12-08T00:00:00.000Z","dateModified":"2022-03-27T00:00:00.000Z","author":[{"@type":"Person","name":"默烦","url":"https://github.com/mofan212"}]}</script> <!--
+<!DOCTYPE html><html dir="ltr" lang="zh-CN" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/the-basics-of-redis-part-two/"><link rel="preconnect" href="https://npm.elemecdn.com"><link rel="preconnect" href="https://gcore.jsdelivr.net"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/lxgwwenkaiscreen.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.3.0/400.css"><link rel="preconnect" href="https://busuanzi.ibruce.info"><meta name="generator" content="Astro v6.4.2"><!-- Primary meta --><title>【下篇】Redis 基础篇 | Mofan</title><meta name="title" content="【下篇】Redis 基础篇 | Mofan"><meta name="description" content="本文主要介绍了 Redis 事务、发布订阅、Redis 的复制以及如何整合 SpringBoot。"><meta name="author" content="默烦"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Mofan"><meta property="og:title" content="【下篇】Redis 基础篇 | Mofan"><meta property="og:description" content="本文主要介绍了 Redis 事务、发布订阅、Redis 的复制以及如何整合 SpringBoot。"><meta property="og:url" content="https://mofan212.github.io/posts/the-basics-of-redis-part-two/"><meta property="og:image" content="https://mofan212.github.io/default-og.jpg"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://mofan212.github.io/posts/the-basics-of-redis-part-two/"><meta property="twitter:title" content="【下篇】Redis 基础篇 | Mofan"><meta property="twitter:description" content="本文主要介绍了 Redis 事务、发布订阅、Redis 的复制以及如何整合 SpringBoot。"><meta property="twitter:image" content="https://mofan212.github.io/default-og.jpg"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Mofan" href="https://mofan212.github.io/rss.xml"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2020-12-08T00:00:00.000Z"><meta property="article:modified_time" content="2022-03-27T00:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"【下篇】Redis 基础篇 | Mofan","url":"https://mofan212.github.io/posts/the-basics-of-redis-part-two/","mainEntityOfPage":"https://mofan212.github.io/posts/the-basics-of-redis-part-two/","datePublished":"2020-12-08T00:00:00.000Z","dateModified":"2022-03-27T00:00:00.000Z","author":[{"@type":"Person","name":"默烦","url":"https://github.com/mofan212"}]}</script> <!--
       Inline FOUC-prevention script: sets data-theme on <html> before
       the browser paints. Runs synchronously, no defer/async.
     --><script>
@@ -14,7 +14,7 @@
         // Expose value so theme.ts can skip re-detection.
         window.__theme = { value: theme };
       })();
-    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.8-7lwm7-.css">
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.CRJPB6-j.css">
 <style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
 .toc-link[data-astro-cid-po2ckxzl]{position:relative;transition:color .2s ease}.toc-link[data-astro-cid-po2ckxzl]:before{position:absolute;inset-block:.375rem;inset-inline-start:-2px;width:2px;border-radius:2px;background-color:var(--accent);content:"";opacity:0;transition:opacity .2s ease}.toc-link[data-astro-cid-po2ckxzl][data-active]{color:var(--accent)}.toc-link[data-astro-cid-po2ckxzl][data-active]:before{opacity:1}.toc-toggle[data-astro-cid-po2ckxzl][aria-expanded=true] .toc-toggle-icon[data-astro-cid-po2ckxzl]{rotate:-90deg}.toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-width:thin}.post-toc-desktop[data-astro-cid-taqt6xe3] .toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-gutter:stable}.toc-scroll[data-astro-cid-taqt6xe3]:after{display:block;block-size:20dvh;content:""}[data-astro-cid-taqt6xe3][data-toc-dialog]{opacity:0;transform:translate(1.25rem);transition:opacity .16s ease-out,transform .22s cubic-bezier(.22,1,.36,1);will-change:opacity,transform}[data-astro-cid-taqt6xe3][data-toc-dialog][data-toc-visible]{opacity:1;transform:translate(0)}[data-astro-cid-taqt6xe3][data-toc-dialog]::backdrop{background-color:#0000;transition:background-color .18s ease-out}[data-astro-cid-taqt6xe3][data-toc-dialog][data-toc-visible]::backdrop{background-color:#0000007f}@media(prefers-reduced-motion:reduce){[data-astro-cid-taqt6xe3][data-toc-dialog]{transform:none;transition:none}[data-astro-cid-taqt6xe3][data-toc-dialog]::backdrop{transition:none}}[data-astro-cid-4wxclohh][data-post-series]{interpolate-size:allow-keywords}[data-astro-cid-4wxclohh][data-post-series]::details-content{block-size:0;overflow:hidden;opacity:0;transition:block-size .2s ease-out,opacity .15s ease-out,content-visibility .2s allow-discrete}[data-astro-cid-4wxclohh][data-post-series][open]::details-content{block-size:auto;opacity:1}@media(prefers-reduced-motion:reduce){[data-astro-cid-4wxclohh][data-post-series]::details-content{transition:none}}.post-sidebar[data-astro-cid-7ap3hmvm]{display:contents}@media(min-width:90rem){.post-sidebar[data-astro-cid-7ap3hmvm]{position:fixed;inset-block-start:9rem;inset-inline-start:calc(50% + var(--app-max-width) / 2 + 2rem);display:flex;width:min(18rem,calc(50vw - var(--app-max-width) / 2 - 3rem));height:calc(100dvh - 11rem);min-height:0;flex-direction:column}}
 </style><style>[data-astro-transition-scope="astro-36ssibgs-1"] { view-transition-name: redis; }@layer astro { ::view-transition-old(redis) { 
@@ -629,17 +629,17 @@
 
     update();
   })();
-</script> </div> <article id="article" class="mt-8 w-full app-prose max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)" data-astro-cid-7ap3hmvm> <!-- 封面来源：碧蓝航线 永夜幻光 活动 CG -->
+</script> </div> <article id="article" class="mt-8 w-full app-prose post-content max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)" data-astro-cid-7ap3hmvm> <!-- 封面来源：碧蓝航线 永夜幻光 活动 CG -->
 <p>Redis 命令参考：<a href="http://doc.redisfans.com/" target="_blank" rel="noopener noreferrer">Redis 命令参考</a></p>
 <p>本文参考：<a href="https://www.bilibili.com/video/BV1oW411u75R" target="_blank" rel="noopener noreferrer">尚硅谷超经典Redis教程,redis实战,阳哥版从入门到精通</a></p>
-<h1 id="1-redis-事务">1. Redis 事务</h1>
-<h2 id="11-事务概述">1.1 事务概述</h2>
+<h2 id="1-redis-事务">1. Redis 事务</h2>
+<h3 id="11-事务概述">1.1 事务概述</h3>
 <blockquote><p>什么是事务</p></blockquote>
 <p>可以一次执行多个命令，本质是一组命令的集合。一个事务中的所有命令都会序列化，按顺序地串行化执行而不会被其它命令插入，不许加塞。</p>
 <p>Redis 支持事务，但只部分支持，并不像常见关系型数据库那样强一致性。</p>
 <blockquote><p>事务可以干嘛</p></blockquote>
 <p>一个队列中，一次性、顺序性、排他性的执行一系列命令。</p>
-<h2 id="12-怎么使用">1.2 怎么使用</h2>
+<h3 id="12-怎么使用">1.2 怎么使用</h3>
 <p>在官网上 <a href="https://redis.io/topics/transactions" target="_blank" rel="noopener noreferrer">Transactions</a> 内有这样一段话：</p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/Redis%E4%BA%8B%E5%8A%A1Usage.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/Redis%E4%BA%8B%E5%8A%A1Usage.png" alt="Redis事务Usage" data-responsive-image="true"></picture></p>
 <blockquote><p>常用命令</p></blockquote>
@@ -672,7 +672,7 @@
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">命令</th><th align="center">描述</th></tr></thead><tbody><tr><td align="center">DISCARD</td><td align="center">取消事务，放弃执行事务块内的所有命令</td></tr><tr><td align="center">EXEC</td><td align="center">执行所有事务块内的命令</td></tr><tr><td align="center">MULTI</td><td align="center">标记一个事务块的开始</td></tr><tr><td align="center">UNWATCH</td><td align="center">取消 WATCH 命令对所有 key 的监视</td></tr><tr><td align="center">WATCH key [key …]</td><td align="center">监视一个（或多个）key，如果在事务执行之前这个（或这些）key 被其他命令所改动，那么事务将被打断</td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">命令</th><th align="center">描述</th></tr></thead><tbody><tr><td align="center">DISCARD</td><td align="center">取消事务，放弃执行事务块内的所有命令</td></tr><tr><td align="center">EXEC</td><td align="center">执行所有事务块内的命令</td></tr><tr><td align="center">MULTI</td><td align="center">标记一个事务块的开始</td></tr><tr><td align="center">UNWATCH</td><td align="center">取消 WATCH 命令对所有 key 的监视</td></tr><tr><td align="center">WATCH key [key …]</td><td align="center">监视一个（或多个）key，如果在事务执行之前这个（或这些）key 被其他命令所改动，那么事务将被打断</td></tr></tbody></table></div>
 <blockquote><p>正常执行</p></blockquote>
 <pre>[root@cheny bin]# redis-server /Redis/redis_aof.conf
 [root@cheny bin]# redis-cli -p 6379
@@ -717,7 +717,7 @@ OK
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/Redis%E4%BA%8B%E5%8A%A1%E5%86%A4%E5%A4%B4%E5%80%BA%E4%B8%BB.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/Redis%E4%BA%8B%E5%8A%A1%E5%86%A4%E5%A4%B4%E5%80%BA%E4%B8%BB.png" alt="Redis事务冤头债主" data-responsive-image="true"></picture></p>
 <p>这里的命令没错，过程中没有报错，都入队了，但 k1 是 「aa」，不是数字不能加一，因此针对 k1 的错误不执行，但其他的操作会执行。类似 Java 的运行异常。</p>
 <p>在 Redis 事务中还有 watch 监控，这部分内容较多且重要，单独提出来编写。</p>
-<h2 id="13-watch-监控">1.3 watch 监控</h2>
+<h3 id="13-watch-监控">1.3 watch 监控</h3>
 <blockquote><p>知识回顾</p></blockquote>
 <p>回顾一下行锁和表锁：</p>
 <p>参考链接：<a href="https://zhuanlan.zhihu.com/p/52678870" target="_blank" rel="noopener noreferrer">深入理解数据库行锁与表锁</a></p>
@@ -762,7 +762,7 @@ QUEUED
 <blockquote><p>小结</p></blockquote>
 <p><code>WATCH</code> 指令，类似乐观锁，事务提交时，如果看 key 的值已被别的客户端改变，比如某个 list 已被别的客户端 push / pop 过了，整个事务队列都不会被执行。</p>
 <p>通过 <code>WATCH</code> 命令在事务执行之前监控了多个 keys，倘若在 <code>WATCH</code> 之后有任何 key 的值发生了变化，<code>EXEC</code> 命令执行的事务都将被放弃，同时返回 Nullmulti-bulk 应答以通知调用者事务执行失败。</p>
-<h2 id="14-三阶段和三特性">1.4 三阶段和三特性</h2>
+<h3 id="14-三阶段和三特性">1.4 三阶段和三特性</h3>
 <blockquote><p>三阶段</p></blockquote>
 <p>1、开启：以 <code>MULTI</code> 开始一个事务</p>
 <p>2、入队：将多个命令入队到事务中，接到这些命令并不会立即执行，而是放到等待执行的事务队列里面</p>
@@ -772,8 +772,8 @@ QUEUED
 <p>2、<strong>没有隔离级别的概念</strong>：队列中的命令在没有提交之前都不会实际的被执行，因为事务提交前任何指令都不会被实际执行，也就不存在「事务内的查询要看到事务里的更新，在事务外查询不能看到」这个让人万分头痛的问题</p>
 <p>3、<strong>不保证原子性</strong>：Redis 同一个事务中如果有一条命令执行失败，其后的命令仍然会被执行，没有回滚</p>
 <p>不遵循传统的 ACID 中的 AI（原子性和隔离性）。</p>
-<h1 id="2-发布订阅">2. 发布订阅</h1>
-<h2 id="21-什么是发布订阅">2.1 什么是发布订阅</h2>
+<h2 id="2-发布订阅">2. 发布订阅</h2>
+<h3 id="21-什么是发布订阅">2.1 什么是发布订阅</h3>
 <p>进程间的一种消息通信模式：发送者（pub）发送消息，订阅者（sub）接收消息。</p>
 <p>Redis 有发布订阅的功能，但是在实际企业开发的时候并不会使用 Redis 作为消息中间件，本节做个了解即可。</p>
 <blockquote><p>订阅 / 发布消息图</p></blockquote>
@@ -781,7 +781,7 @@ QUEUED
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/%E8%AE%A2%E9%98%85channel1.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/%E8%AE%A2%E9%98%85channel1.png" alt="订阅channel1" data-responsive-image="true"></picture></p>
 <p>当有新消息通过 PUBLISH 命令发送给频道 channel1 时，这个消息就会被发送给订阅它的三个客户端：</p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/channel1%E5%8F%91%E5%B8%83%E6%B6%88%E6%81%AF.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/channel1%E5%8F%91%E5%B8%83%E6%B6%88%E6%81%AF.png" alt="channel1发布消息" data-responsive-image="true"></picture></p>
-<h2 id="22-常用命令">2.2 常用命令</h2>
+<h3 id="22-常用命令">2.2 常用命令</h3>
 
 
 
@@ -815,8 +815,8 @@ QUEUED
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">命令</th><th align="center">描述</th></tr></thead><tbody><tr><td align="center">PSUBSCRIBE pattern [pattern …]</td><td align="center">订阅一个或多个符合给定模式的频道</td></tr><tr><td align="center">PUBSUB subcommand [argument [argument …]]</td><td align="center">查看订阅与发布系统状态</td></tr><tr><td align="center">PUBLISH channel message</td><td align="center">将信息发送到指定的频道</td></tr><tr><td align="center">PUNSUBSCRIBE [pattern [pattern …]]</td><td align="center">退订所有给定模式的频道</td></tr><tr><td align="center">SUBSCRIBE channel [channel …]</td><td align="center">订阅给定的一个或多个频道的信息</td></tr><tr><td align="center">UNSUBSCRIBE [channel [channel …]]</td><td align="center">指退订给定的频道</td></tr></tbody></table></div>
-<h2 id="23-相关案例">2.3 相关案例</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">命令</th><th align="center">描述</th></tr></thead><tbody><tr><td align="center">PSUBSCRIBE pattern [pattern …]</td><td align="center">订阅一个或多个符合给定模式的频道</td></tr><tr><td align="center">PUBSUB subcommand [argument [argument …]]</td><td align="center">查看订阅与发布系统状态</td></tr><tr><td align="center">PUBLISH channel message</td><td align="center">将信息发送到指定的频道</td></tr><tr><td align="center">PUNSUBSCRIBE [pattern [pattern …]]</td><td align="center">退订所有给定模式的频道</td></tr><tr><td align="center">SUBSCRIBE channel [channel …]</td><td align="center">订阅给定的一个或多个频道的信息</td></tr><tr><td align="center">UNSUBSCRIBE [channel [channel …]]</td><td align="center">指退订给定的频道</td></tr></tbody></table></div>
+<h3 id="23-相关案例">2.3 相关案例</h3>
 <blockquote><p>依次订阅多个频道</p></blockquote>
 <p>要模拟 Redis 的发布和订阅，需要在 Linux 上开启两个终端，并在两个终端上都启动 Redis 服务，打开 Redis 客户端。其中一个终端用于订阅并接收消息，另一个终端用于发送消息。</p>
 <p>首先使一个终端订阅三个频道：</p>
@@ -880,8 +880,8 @@ Reading messages... (press Ctrl-C to quit)
 2) "new*"
 3) "new666"
 4) "mofan212.getee.io"</pre>
-<h1 id="3-redis-的复制">3. Redis 的复制</h1>
-<h2 id="31-什么是主从复制">3.1 什么是主从复制</h2>
+<h2 id="3-redis-的复制">3. Redis 的复制</h2>
+<h3 id="31-什么是主从复制">3.1 什么是主从复制</h3>
 <p>Redis 官网介绍：<a href="https://redis.io/topics/replication" target="_blank" rel="noopener noreferrer">Replication</a></p>
 <p>主从复制（Master / Slaver），主机数据更新后根据配置和策略，自动同步到备机的 master / slaver 机制。简单来说就是将一台 Redis 服务器的数据，复制到其他的 Redis 服务器。前者称为主节点（master / leader），后者称为从节点（slave / follower）。</p>
 <p>数据的复制是单向的，只能由主节点到从节点。Master 以写为主，Slave 以读为主。</p>
@@ -895,7 +895,7 @@ Reading messages... (press Ctrl-C to quit)
 <p>一般来说，在工程项目中不会仅仅只使用一台 Redis，因为：</p>
 <p>1、一台 Redis 会发生单点故障，而且一台服务器处理所有的请求压力会很大</p>
 <p>2、单个 Redis 服务器的容量有限，一般来说，单台 Redis 最大使用内存不应该超过 20G。</p>
-<h2 id="32-环境配置">3.2 环境配置</h2>
+<h3 id="32-环境配置">3.2 环境配置</h3>
 <p>1、配从（库）不配主（库）</p>
 <p>2、从库配置命令：<code>slaveof 主库IP 主库端口</code></p>
 <ul>
@@ -942,7 +942,7 @@ root      20992      1  0 14:47 ?        00:00:00 <font color="#EF2929"><b>redis
 root      21069      1  0 14:48 ?        00:00:00 <font color="#EF2929"><b>redis</b></font>-server 127.0.0.1:6381
 root      21084  20502  0 14:48 pts/0    00:00:00 grep --color=auto <font color="#EF2929"><b>redis</b></font></pre>
 <p>启动三个服务后，会在路径（我这里的路径是 <code>/usr/local/bin</code>）下生成对应的日志文件。</p>
-<h2 id="33-一主二仆">3.3 一主二仆</h2>
+<h3 id="33-一主二仆">3.3 一主二仆</h3>
 <p>启动 Redis 服务后，在 <strong>三个终端</strong> 里打开 Redis 客户端：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="bash" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span></span><code><span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic"># 第一个终端</span></span>
 <span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">redis-cli</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -p</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 6379</span></span>
@@ -1109,7 +1109,7 @@ OK
 "v7"
 </pre>
 <p>重新连接主机后，从机 6380 又能获取到 k7 了。</p>
-<h2 id="51-薪火相传">5.1 薪火相传</h2>
+<h3 id="51-薪火相传">5.1 薪火相传</h3>
 <p>在一主二仆中，Master 带了两个仆，当然还可以有多仆的情况，这个时候，Master 的压力就很大，带了很多仆。</p>
 <p>那么我们可以使用「薪火相传」以去中心化，简单来说就是一个 Master 带几个仆，这些仆又来了几个仆，比如：</p>
 <picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/%E8%96%AA%E7%81%AB%E7%9B%B8%E4%BC%A0.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/薪火相传.png" alt="薪火相传" style="zoom: 50%;" data-responsive-image="true"></picture>
@@ -1182,7 +1182,7 @@ repl_backlog_size:1048576
 repl_backlog_first_byte_offset:1790
 repl_backlog_histlen:1942</pre>
 <p>6380 的角色还是从机，翻身？不可能的！只不过可以从信息看到 6380 从机还连接了一个从机 6381。</p>
-<h2 id="71-反客为主">7.1 反客为主</h2>
+<h3 id="71-反客为主">7.1 反客为主</h3>
 <blockquote><p>介绍前的准备</p></blockquote>
 <p>在介绍「反客为主」之前，我们先将 6381 设置成 6379 的从机：</p>
 <pre>127.0.0.1:6381> SLAVEOF 127.0.0.1 6379
@@ -1290,13 +1290,13 @@ repl_backlog_histlen:0
 </pre>
 <p>就算 6379 又活过来也不行了，6379 已经是光杆司令了。6380 和 6381 是一套体系，6379 又是另外一套体系（果然只是诈尸）。</p>
 <p>如果将 6380 又设置成 6379 的主机，这时候在 6379 中可以获取到 6380 中的数据，这个时候就相当于是「薪火相传」的情况。</p>
-<h2 id="111-复制原理">11.1 复制原理</h2>
+<h3 id="111-复制原理">11.1 复制原理</h3>
 <p>Slave 启动成功连接到 Master 后会发送一个 sync 命令</p>
 <p>Master 接到命令启动后台的存盘进程，同时收集所有接收到的用于修改数据集命令，在后台进程执行完毕之后，Master 将传送整个数据文件到 Slave，以完成一次完全同步</p>
 <p>全量复制：Slave 服务在接收到数据库文件数据后，会将其存盘并加载到内存中。</p>
 <p>增量复制：Master 继续将新的所有收集到的修改命令依次传给 Slave，完成同步</p>
 <p>但是只要是重新连接 Master，一次完全同步（全量复制）将被自动执行</p>
-<h2 id="112-哨兵模式">11.2 哨兵模式</h2>
+<h3 id="112-哨兵模式">11.2 哨兵模式</h3>
 <p>参考链接：<a href="https://www.jianshu.com/p/06ab9daf921d" target="_blank" rel="noopener noreferrer">Redis哨兵（Sentinel）模式</a></p>
 <p><strong>主从切换技术的方法是：当主服务器宕机后，需要手动把一台从服务器切换为主服务器，这就需要人工干预，费事费力，还会造成一段时间内服务不可用。</strong> 这不是一种推荐的方式，更多时候，我们优先考虑 <strong>哨兵模式</strong>。Redis 从 2.8 开始正式提供了 Sentinel（哨兵） 架构来解决这个问题。</p>
 <blockquote><p>哨兵模式概述</p></blockquote>
@@ -1517,11 +1517,11 @@ repl_backlog_histlen:59450</pre>
 <p><strong>缺点：</strong></p>
 <p>1、Redis 较难支持在线扩容，在集群容量达到上限时在线扩容会变得很复杂</p>
 <p>2、实现哨兵模式的配置也不简单，甚至可以说有些繁琐</p>
-<h2 id="141-复制的缺点">14.1 复制的缺点</h2>
+<h3 id="141-复制的缺点">14.1 复制的缺点</h3>
 <p><strong>复制延时</strong></p>
 <p>由于所有的写操作都是先在 Master 上操作，然后同步更新到 Slave 上，所以从 Master 同步到 Slave 机器有一定的延迟，当系统很繁忙的时候，延迟问题会更加严重，Slave 机器数量的增加也会使这个问题更加严重。</p>
-<h1 id="15-jedis">15. Jedis</h1>
-<h2 id="151-测试连通">15.1 测试连通</h2>
+<h2 id="15-jedis">15. Jedis</h2>
+<h3 id="151-测试连通">15.1 测试连通</h3>
 <p>Jedis 是 Redis 官方推荐的 Java 连接开发工具。要在 Java 开发中使用好 Redis 中间件，必须对 Jedis 熟悉才能写成漂亮的代码。</p>
 <p>在使用 IDEA 连接虚拟机的 Redis 时，需要先修改配置文件 redis.conf。因为我是使用的是拷贝的配置文件 redis_aof.conf，所以需要修改这个配置文件，使用命令 <code>vi redis_aof.conf</code>。</p>
 <p>在 Redis 6.0.8 中，修改 NETWORK 栏中的配置：</p>
@@ -1545,7 +1545,7 @@ repl_backlog_histlen:59450</pre>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <p>然后运行代码，可以在控制台看到打印出来的 PONG，证明我们连接成功。</p>
-<h2 id="152-常用-api">15.2 常用 API</h2>
+<h3 id="152-常用-api">15.2 常用 API</h3>
 <blockquote><p>数据添加和获取</p></blockquote>
 <p>现在 Linux 中看看 Redis 里有没有数据：</p>
 <pre>127.0.0.1:6379> KEYS *
@@ -1597,7 +1597,7 @@ repl_backlog_histlen:59450</pre>
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">语法</th><th align="center">描述</th></tr></thead><tbody><tr><td align="center">jedis.sort(String key, sortingParams.alpha())</td><td align="center">队列按首字母 a-z  排序</td></tr><tr><td align="center">jedis.sort(String key,  sortingParams.asc())</td><td align="center">队列按数字升序排列</td></tr><tr><td align="center">jedis.sort(String key, sortingParams.desc())</td><td align="center">队列按数字降序排列</td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">语法</th><th align="center">描述</th></tr></thead><tbody><tr><td align="center">jedis.sort(String key, sortingParams.alpha())</td><td align="center">队列按首字母 a-z  排序</td></tr><tr><td align="center">jedis.sort(String key,  sortingParams.asc())</td><td align="center">队列按数字升序排列</td></tr><tr><td align="center">jedis.sort(String key, sortingParams.desc())</td><td align="center">队列按数字降序排列</td></tr></tbody></table></div>
 <p>测试代码：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> static</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> void</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> testSortedList</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">() {</span></span>
 <span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">    Jedis</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> jedis </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> new</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> Jedis</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"redis"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 6379</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
@@ -1616,7 +1616,7 @@ repl_backlog_histlen:59450</pre>
 [1, 2, 3, a, b, c]
 [c, b, a, 3, 2, 1]
 </pre>
-<h2 id="153-事务">15.3 事务</h2>
+<h3 id="153-事务">15.3 事务</h3>
 <blockquote><p>日常 API 使用</p></blockquote>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span><span class="code-line-number">13</span><span class="code-line-number">14</span><span class="code-line-number">15</span><span class="code-line-number">16</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> static</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> void</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> testTransaction</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">() {</span></span>
 <span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">    Jedis</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> jedis </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> new</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> Jedis</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"redis"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 6379</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
@@ -1696,7 +1696,7 @@ OK
 <pre>modify
 main retValue-------: false
 </pre>
-<h2 id="154-主从复制">15.4 主从复制</h2>
+<h3 id="154-主从复制">15.4 主从复制</h3>
 <p>在 Linux 上让 6379 和 6380 启动，并让各自先独立，即：两个客户端的角色都是 Master，同时清空数据（如果使用了其他配置文件，记得按照最开始那样修改配置文件）。</p>
 <p>然后编写代码，实现主机写，从机读：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> static</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> void</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> main</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">String</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">[] args) {</span></span>
@@ -1709,7 +1709,7 @@ main retValue-------: false
 <span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">    String</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> result </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B"> jedisS</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">get</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"mofan"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span></span>
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">    System</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">out</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">println</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(result);</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span></code></pre>
-<h2 id="155-jedispool">15.5 JedisPool</h2>
+<h3 id="155-jedispool">15.5 JedisPool</h3>
 <blockquote><p>JedisPoolUtil</p></blockquote>
 <p>一个工具类，并且是单例的。</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span><span class="code-line-number">13</span><span class="code-line-number">14</span><span class="code-line-number">15</span><span class="code-line-number">16</span><span class="code-line-number">17</span><span class="code-line-number">18</span><span class="code-line-number">19</span><span class="code-line-number">20</span><span class="code-line-number">21</span><span class="code-line-number">22</span><span class="code-line-number">23</span><span class="code-line-number">24</span><span class="code-line-number">25</span><span class="code-line-number">26</span><span class="code-line-number">27</span><span class="code-line-number">28</span><span class="code-line-number">29</span><span class="code-line-number">30</span><span class="code-line-number">31</span><span class="code-line-number">32</span></span><code><span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">/**</span></span>
@@ -1809,8 +1809,8 @@ main retValue-------: false
 <li>numTestsPerEvictionRun = -1</li>
 </ul>
 <p>注意：以上部分配置在高版本的 Jedis 中已被启用，导致编写代码时无法使用，官方也提供了代替的方法，因此上述配置仅供参考。</p>
-<h1 id="16-三种特殊数据类型">16. 三种特殊数据类型</h1>
-<h2 id="161-geospatial-地理位置">16.1 Geospatial 地理位置</h2>
+<h2 id="16-三种特殊数据类型">16. 三种特殊数据类型</h2>
+<h3 id="161-geospatial-地理位置">16.1 Geospatial 地理位置</h3>
 <p>Geospatial 在 Redis 3.2 版本中推出，这个功能可以将用户给定的地理位置信息储存起来，并对这些信息进行操作，来实现一些依赖于地理位置信息的功能，比如：附近的人。</p>
 <p>GEO 的数据类型为 Zset。</p>
 <p>GEO 的数据结构总共有六个常用命令：</p>
@@ -1965,12 +1965,12 @@ main retValue-------: false
 4) "shenzhen"
 5) "hangzhou"
 6) "shanghai"</pre>
-<h2 id="162-hyperloglog">16.2 HyperLogLog</h2>
+<h3 id="162-hyperloglog">16.2 HyperLogLog</h3>
 <blockquote><p>HyperLogLog 概述</p></blockquote>
 <p>参考链接：<a href="https://www.runoob.com/redis/redis-hyperloglog.html" target="_blank" rel="noopener noreferrer">Redis HyperLogLog</a></p>
 <p>Redis 在 2.8.9 版本添加了 HyperLogLog 结构。</p>
 <p>Redis HyperLogLog 是用来做基数统计的算法，HyperLogLog 的优点是，在输入元素的数量或者体积非常非常大时，计算基数所需的空间总是固定 的、并且是很小的。</p>
-<p>在 Redis 里面，每个 HyperLogLog 键只需要花费 12 KB 内存，就可以计算接近 2^64^ 个不同元素的基 数。这和计算基数时，元素越多耗费内存就越多的集合形成鲜明对比。</p>
+<p>在 Redis 里面，每个 HyperLogLog 键只需要花费 12 KB 内存，就可以计算接近 2<sup>64</sup> 个不同元素的基 数。这和计算基数时，元素越多耗费内存就越多的集合形成鲜明对比。</p>
 <p>但是，因为 HyperLogLog 只会根据输入元素来计算基数，而不会储存输入元素本身，所以 HyperLogLog 不能像集合那样，返回输入的各个元素。</p>
 <p>那这有什么用呢？</p>
 <p>比如我们想实现网站的浏览用户数量（UV），一个人多次访问这个网站，还是算作一个人，就可以使用 HyperLogLog 来实现。</p>
@@ -1999,7 +1999,7 @@ main retValue-------: false
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">命令</th><th align="center">描述</th></tr></thead><tbody><tr><td align="center">PFADD key element [element …]</td><td align="center">添加指定元素到 HyperLogLog 中</td></tr><tr><td align="center">PFCOUNT key [key …]</td><td align="center">返回给定 HyperLogLog 的基数估算值</td></tr><tr><td align="center">PFMERGE destkey sourcekey [sourcekey …]</td><td align="center">将多个 HyperLogLog 合并为一个 HyperLogLog</td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">命令</th><th align="center">描述</th></tr></thead><tbody><tr><td align="center">PFADD key element [element …]</td><td align="center">添加指定元素到 HyperLogLog 中</td></tr><tr><td align="center">PFCOUNT key [key …]</td><td align="center">返回给定 HyperLogLog 的基数估算值</td></tr><tr><td align="center">PFMERGE destkey sourcekey [sourcekey …]</td><td align="center">将多个 HyperLogLog 合并为一个 HyperLogLog</td></tr></tbody></table></div>
 <blockquote><p>具体使用</p></blockquote>
 <pre>127.0.0.1:6379> PFADD hyll1 a a b b c c d d
 (integer) 1
@@ -2016,10 +2016,10 @@ OK
 127.0.0.1:6379> PFCOUNT hyll2
 (integer) 4
 </pre>
-<h2 id="163-bitmaps">16.3 Bitmaps</h2>
+<h3 id="163-bitmaps">16.3 Bitmaps</h3>
 <blockquote><p>概述</p></blockquote>
 <p>Bitmaps（位图），Bitmaps 本身不是一种数据结构，实际上就是字符串，但是它可以对字符串的位进行操作，是定义在 String 类型上的一个面向字节操作的集合。</p>
-<p>可以把 Bitmaps 想象成一个以位为单位数组，数组中的每个单元只能存 0 或者 1，数组的下标在 Bitmaps 中叫做偏移量。因为字符串是二进制安全的块，他们的最大长度是 512M，最适合设置成 2^32 个不同字节。单个 Bitmaps 的最大长度是 512 MB，即 2^32^ 个比特位。</p>
+<p>可以把 Bitmaps 想象成一个以位为单位数组，数组中的每个单元只能存 0 或者 1，数组的下标在 Bitmaps 中叫做偏移量。因为字符串是二进制安全的块，他们的最大长度是 512M，最适合设置成 2^32 个不同字节。单个 Bitmaps 的最大长度是 512 MB，即 2<sup>32</sup> 个比特位。</p>
 <p>Bitmaps 的最大优势之一在存储信息时极其节约空间。例如，在一个以增量用户 ID 来标识不同用户的系统中，记录用户的四十亿的一个单独 bit 信息（例如，要知道用户是否想要接收最新的来信）仅仅使用 512M 内存。</p>
 <blockquote><p>具体使用</p></blockquote>
 <p>比如，我们可以使用 Bitmaps 来统计某一员工在一周内的打开次数，打卡了设置成 1，没打开设置成  0。</p>
@@ -2086,13 +2086,13 @@ OK
 127.0.0.1:6379> GETBIT and-result 3
 (integer) 1
 </pre>
-<h1 id="17-缓存穿透击穿雪崩">17. 缓存穿透、击穿、雪崩</h1>
+<h2 id="17-缓存穿透击穿雪崩">17. 缓存穿透、击穿、雪崩</h2>
 <p>Redis 缓存的使用，极大的提升了应用程序的性能和效率，特别是数据查询方面。但同时，它也带来了一些问题。其中，最要害的问题，就是数据的一致性问题，从严格意义上讲，这个问题无解。如果对数据的一致性要求很高，那么就不能使用缓存。</p>
 <p>另外的一些典型问题就是，缓存穿透、缓存雪崩和缓存击穿。目前，业界也都有比较流行的解决方案。</p>
 <p>参考链接：</p>
 <p><a href="https://baijiahao.baidu.com/s?id=1655304940308056733" target="_blank" rel="noopener noreferrer">帮你解读什么是Redis缓存穿透和缓存雪崩（包含解决方案）</a></p>
 <p><a href="https://blog.csdn.net/fei33423/article/details/79027790" target="_blank" rel="noopener noreferrer">最佳实践 缓存穿透,瞬间并发,缓存雪崩的解决方法</a></p>
-<h2 id="171-缓存穿透">17.1 缓存穿透</h2>
+<h3 id="171-缓存穿透">17.1 缓存穿透</h3>
 <p>缓存穿透是指查询一个一定不存在的数据，由于缓存是不命中时需要从数据库查询，查不到数据则不写入缓存，这将导致这个不存在的数据每次请求都要到数据库去查询，造成缓存穿透。</p>
 <p>简单来说就是：用户想要查询一个数据，发现 Redis 内存数据库没有，也就是缓存没有命中，于是向持久层数据库查询。发现也没有，于是本次查询失败。当用户很多的时候，缓存都没有命中，于是都去请求了持久层数据库。这会给持久层数据库造成很大的压力，这时候就相当于出现了缓存穿透。</p>
 <blockquote><p>解决方法</p></blockquote>
@@ -2115,7 +2115,7 @@ OK
 <p>即使对空值设置了过期时间，还是会存在缓存层和存储层的数据会有一段时间窗口的不一致，这对于需要保持一致性的业务会有影响</p>
 </li>
 </ul>
-<h2 id="172-缓存击穿">17.2 缓存击穿</h2>
+<h3 id="172-缓存击穿">17.2 缓存击穿</h3>
 <p><strong>这里需要注意和缓存击穿的区别，缓存击穿，是指一个 key 非常热点，在不停的扛着大并发，大并发集中对这一个点进行访问，当这个 key 在失效的瞬间，持续的大并发就穿破缓存，直接请求数据库，就像在一个屏障上凿开了一个洞。</strong></p>
 <p>当某个 key 在过期的瞬间，有大量的请求并发访问，这类数据一般是热点数据，由于缓存过期，会同时访问数据库来查询最新数据，并且回写缓存，会导使数据库瞬间压力过大。</p>
 <p>简单来说，缓存穿透是查询缓存和数据库中都没有的数据，而缓存击穿是查询缓存中没有（一般是缓存时间到期）但数据库中有的数据。</p>
@@ -2124,7 +2124,7 @@ OK
 <p>从缓存层面来看，没有设置过期时间，所以不会出现热点 key 过期后产生的问题。</p>
 <p><strong>2、加互斥锁</strong><br>
 分布式锁：使用分布式锁，保证对于每个 key 同时只有一个线程去查询后端服务，其他线程没有获得分布式锁的权限，因此只需要等待即可。这种方式将高并发的压力转移到了分布式锁，因此对分布式锁的考验很大。</p>
-<h2 id="173-缓存雪崩">17.3 缓存雪崩</h2>
+<h3 id="173-缓存雪崩">17.3 缓存雪崩</h3>
 <p>如果缓存集中在一段时间内失效，发生大量的缓存穿透，所有的查询都落在数据库上，造成了缓存雪崩。</p>
 <p>或者说缓存层出现了错误，不能正常工作了，于是所有的请求都会达到存储层，存储层的调用量会暴增，造成存储层也会挂掉的情况。</p>
 <p>这个没有完美解决办法，但可以分析用户行为，尽量让失效时间点均匀分布。大多数系统设计者考虑用加锁或者队列的方式保证缓存的单线程（进程）写，从而避免失效时大量的并发请求落到底层存储系统上。</p>
@@ -2141,21 +2141,21 @@ OK
 <p>使用主备两层缓存，他们的作用分别是：</p>
 <p>主缓存：有效期按照经验值设置，设置为主读取的缓存，主缓存失效后从数据库加载最新值。</p>
 <p>备份缓存：有效期长，获取锁失败时读取的缓存，主缓存更新时需要同步更新备份缓存。</p>
-<h2 id="174-缓存预热">17.4 缓存预热</h2>
+<h3 id="174-缓存预热">17.4 缓存预热</h3>
 <p>缓存预热就是系统上线后，将相关的缓存数据直接加载到缓存系统，这样就可以避免在用户请求的时候，先查询数据库，然后再将数据回写到缓存。</p>
 <p>如果不进行预热，那么 Redis 初始状态数据为空，系统上线初期，对于高并发的流量，都会访问到数据库中，对数据库造成流量的压力。</p>
 <blockquote><p>缓存预热的操作方法</p></blockquote>
 <p>1、数据量不大的时候，工程启动的时候进行加载缓存动作；</p>
 <p>2、数据量大的时候，设置一个定时任务脚本，进行缓存的刷新；</p>
 <p>3、数据量太大的时候，优先保证热点数据进行提前加载到缓存。</p>
-<h2 id="175-缓存降级">17.5 缓存降级</h2>
+<h3 id="175-缓存降级">17.5 缓存降级</h3>
 <p>缓存降级是指缓存失效或缓存服务器挂掉的情况下，不去访问数据库，直接返回默认数据或访问服务的内存数据。</p>
 <p>在项目实战中通常会将部分热点数据缓存到服务的内存中，这样一旦缓存出现异常，可以直接使用服务的内存数据，从而避免数据库遭受巨大压力。</p>
 <p>降级一般是有损的操作，所以尽量减少降级对于业务的影响程度。</p>
-<h1 id="18-内存淘汰策略">18. 内存淘汰策略</h1>
-<h2 id="181-内存淘汰策略的定义">18.1 内存淘汰策略的定义</h2>
+<h2 id="18-内存淘汰策略">18. 内存淘汰策略</h2>
+<h3 id="181-内存淘汰策略的定义">18.1 内存淘汰策略的定义</h3>
 <p>Redis 内存淘汰策略是指当缓存内存不足时，通过淘汰旧数据处理新加入数据选择的策略。</p>
-<h2 id="182-最大内存的配置">18.2 最大内存的配置</h2>
+<h3 id="182-最大内存的配置">18.2 最大内存的配置</h3>
 <blockquote><p>通过配置文件配置</p></blockquote>
 <p>可以通过修改 <code>redis.conf</code> 配置文件来配置最大内存：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span>maxmemory 1024mb  # 设置Redis最大占用内存大小为1024M</span></span></code></pre>
@@ -2167,7 +2167,7 @@ OK
 1) "maxmemory"
 2) "209715200"
 </pre>
-<h2 id="183-淘汰策略的分类">18.3 淘汰策略的分类</h2>
+<h3 id="183-淘汰策略的分类">18.3 淘汰策略的分类</h3>
 <p>Redis 官方定义了以下八种策略来淘汰旧数据加入新数据：</p>
 <blockquote><p>noeviction</p></blockquote>
 <p>默认策略，对于写请求直接返回错误，不进行淘汰。</p>
@@ -2186,7 +2186,7 @@ OK
 <blockquote><p>volatile-lfu</p></blockquote>
 <p>lfu（Least Frequently Used），最少使用频率。从设置了过期时间的 key 中使用近似 LFU 算法进行淘汰。这种策略从 Redis 4.0 开始支持。</p>
 <p><mark class="flexible-marker flexible-marker-default">注意：</mark> 当使用 volatile-lru、volatile-random、volatile-ttl 这三种策略时，如果没有设置过期的 key 可以被淘汰，则和 noeviction 一样返回错误。</p>
-<h2 id="184-lru-最近最少使用">18.4 LRU 最近最少使用</h2>
+<h3 id="184-lru-最近最少使用">18.4 LRU 最近最少使用</h3>
 <p>LRU（Least Recently Used），即最近最少使用，是一种缓存置换算法。其核心思想是：如果一个数据在最近一段时间没有被用到，那么将来被使用到的可能性也很小，所以就可以被淘汰掉。</p>
 <blockquote><p>LRU 在 Redis 中的实现</p></blockquote>
 <p>Redis 使用的是近似 LRU 算法，它跟常规的 LRU 算法还不太一样。近似 LRU 算法通过随机采样法淘汰数据，每次随机出 5 个（默认）key，从里面淘汰掉最近最少使用的 key。</p>
@@ -2196,17 +2196,17 @@ OK
 <blockquote><p>Redis3.0 对近似 LRU 的优化</p></blockquote>
 <p>Redis3.0 对近似 LRU 算法进行了一些优化。新算法会维护一个候选池（大小为 16），池中的数据根据访问时间进行排序，第一次随机选取的 key 都会放入池中，随后每次随机选取的 key 只有在访问时间小于池中最小的时间才会放入池中，直到候选池被放满。当放满后，如果有新的 key 需要放入，则将池中最后访问时间最大（最近被访问）的移除。</p>
 <p>当需要淘汰的时候，则直接从池中选取最近访问时间最小（最久没被访问）的 key 淘汰掉就行。</p>
-<h2 id="185-lfu-最少使用频率">18.5 LFU 最少使用频率</h2>
+<h3 id="185-lfu-最少使用频率">18.5 LFU 最少使用频率</h3>
 <p>LFU（Least Frequently Used），是 Redis4.0 新加的一种淘汰策略，它的核心思想是根据 key 的最近被访问的频率进行淘汰，很少被访问的优先被淘汰，被访问的多的则被留下来。</p>
 <p>LFU 算法能更好的表示一个 key 被访问的热度。假如你使用的是 LRU 算法，一个 key 很久没有被访问到，只刚刚是偶尔被访问了一次，那么它就被认为是热点数据，不会被淘汰，而有些 key 将来是很有可能被访问到的则被淘汰了。如果使用 LFU 算法则不会出现这种情况，因为使用一次并不会使一个 key 成为热点数据。</p>
-<h1 id="19-内存模型">19. 内存模型</h1>
+<h2 id="19-内存模型">19. 内存模型</h2>
 <p>Redis 内部使用文件事件处理器 file event handler，这个文件事件处理器是单线程的，所以 Redis 也被叫做单线程的模型。它采用 IO 多路复用机制同时监听多个 Socket，根据 Socket 上的事件来选择对应的事件处理器进行处理。</p>
 <blockquote><p>那为啥 Redis 单线程模型也能效率这么高？</p></blockquote>
 <p>1、纯内存操作</p>
 <p>2、核心是基于非阻塞的 IO 多路复用机制</p>
 <p>3、单线程反而避免了多线程的频繁上下文切换问题</p>
-<h1 id="20-整合-springboot">20. 整合 SpringBoot</h1>
-<h2 id="201-基础使用">20.1 基础使用</h2>
+<h2 id="20-整合-springboot">20. 整合 SpringBoot</h2>
+<h3 id="201-基础使用">20.1 基础使用</h3>
 <blockquote><p>环境准备</p></blockquote>
 <p>在 SpringBoot 中操作数据可以使用：Spring Data xxx</p>
 <p>我们要使用 SpringBoot 操作 Redis 就要使用 Spring Data Redis。</p>
@@ -2357,7 +2357,7 @@ OK
 <span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">    // 省略其他代码</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span></code></pre>
 <p>既然如此，那么我们就自己编写一个 RedisTemplate 并注入 Spring 容器中吧！:punch:</p>
-<h2 id="202-自定义-redistemplate">20.2 自定义 RedisTemplate</h2>
+<h3 id="202-自定义-redistemplate">20.2 自定义 RedisTemplate</h3>
 <blockquote><p>简单测试</p></blockquote>
 <p>在编写之前，我们需要了解序列化的问题，一般来说，我们的实体类都会实现序列化接口，同时传输对象的时候都会使用 JSON 进行传输。</p>
 <p>我们先试试使用 JSON 序列化传输。</p>
@@ -3074,7 +3074,7 @@ OK
 <span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">            return</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> (</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">long</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">) </span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">0</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">        }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
-<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre> </article> <div class="text-muted-foreground max-w-app mt-20 w-full space-y-3 text-center text-sm" data-astro-cid-7ap3hmvm> <aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full px-2 text-center leading-6 sm:px-0"> <p class="m-0 break-words"> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a><span> 许可协议，</span><span class="max-sm:block">转载时请署名并注明<a href="https://mofan212.github.io/posts/the-basics-of-redis-part-two/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a> 🔗</span> </p> </aside> <section data-post-reward data-pagefind-ignore class="w-full" aria-label="赞赏"> <div class="flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:flex-wrap sm:gap-x-1.5 sm:gap-y-2"> <span class="sm:whitespace-nowrap">如果这篇文章对你有帮助，可以通过</span> <a href="/reward/" class="focus-outline border-accent text-accent hover:bg-accent/10 active:bg-accent/10 inline-block rounded-md border px-3 py-1 font-medium transition-colors"> 赞赏 </a> <span class="sm:whitespace-nowrap">请我喝杯 Coffee ☕</span> </div> </section> </div> <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm>  <ul id="post-tags" class="mt-4 mb-8 flex flex-wrap gap-4 sm:mb-8" data-astro-cid-7ap3hmvm> <li> <a href="/tags/redis/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> Redis </a> </li><li> <a href="/tags/middleware/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-2"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> 中间件 </a> </li> </ul>  <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/java-class-library-jackson/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.3l105.3-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg> <div> <span>上一篇</span> <div class="text-accent/85 text-sm">Jackson 的基本使用</div> </div> </a> <a href="/posts/the-basics-of-redis-part-one/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>下一篇</span> <div class="text-accent/85 text-sm">【上篇】Redis 基础篇</div> </div> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg> </a> </div> </main> <footer class="app-layout mt-auto" data-astro-cid-7ap3hmvm="true"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="text-muted-foreground my-2 flex w-fit flex-col items-start text-start text-sm whitespace-nowrap"> <div class="flex items-center gap-1.5"> <svg width="24" height="24" fill="currentColor" class="size-4" viewBox="-49.231 -39.385 738.462 590.769" aria-hidden="true"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9-.1-2.7-.2-5.4-.2-8.1 0-88.4 71.6-160 160-160 59.3 0 111 32.2 138.7 80.2A95.5 95.5 0 0 1 448 96c53 0 96 43 96 96 0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39L296 392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0z" /></svg> <span>最近更新：</span> <time class="tabular-nums" datetime="2026-10-21T03:16:11.000Z" data-deployed-at="2026-10-21T03:16:11.000Z" data-just-now="刚刚" data-locale="zh-CN"> 2026-10-21 11:16 </time> </div> <div class="mt-1 flex items-center gap-3 text-xs"> <span class="flex items-center gap-1" title="本站访客数"> <svg width="24" height="24" fill="currentColor" class="size-3" viewBox="-2.835 -3.241 453.671 518.481" aria-hidden="true"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3z" /></svg> <span class="sr-only">本站访客数：</span> <span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> <span aria-hidden="true">|</span> <span class="flex items-center gap-1.5" title="本站总浏览量"> <span class="flex size-4 items-center justify-center" aria-hidden="true"> <svg width="24" height="24" fill="currentColor" class="size-3.5" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48zM0 272c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v160c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zM368 96h32c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48" /></svg> </span> <span class="sr-only">本站总浏览量：</span> <span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> </div> </div> <div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"> <span>版权所有 &#169; 2020 – 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer> <script>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre> </article> <div class="text-muted-foreground max-w-app mt-20 w-full space-y-3 text-center text-sm" data-astro-cid-7ap3hmvm> <aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full px-2 text-center leading-6 sm:px-0"> <p class="m-0 break-words"> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a><span> 许可协议，</span><span class="max-sm:block">转载时请署名并注明<a href="https://mofan212.github.io/posts/the-basics-of-redis-part-two/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a> 🔗</span> </p> </aside> <section data-post-reward data-pagefind-ignore class="w-full" aria-label="赞赏"> <div class="flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:flex-wrap sm:gap-x-1.5 sm:gap-y-2"> <span class="sm:whitespace-nowrap">如果这篇文章对你有帮助，可以通过</span> <a href="/reward/" class="focus-outline border-accent text-accent hover:bg-accent/10 active:bg-accent/10 inline-block rounded-md border px-3 py-1 font-medium transition-colors"> 赞赏 </a> <span class="sm:whitespace-nowrap">请我喝杯 Coffee ☕</span> </div> </section> </div> <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm>  <ul id="post-tags" class="mt-4 mb-8 flex flex-wrap gap-4 sm:mb-8" data-astro-cid-7ap3hmvm> <li> <a href="/tags/redis/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> Redis </a> </li><li> <a href="/tags/middleware/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-2"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> 中间件 </a> </li> </ul>  <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/java-class-library-jackson/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.3l105.3-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg> <div> <span>上一篇</span> <div class="text-accent/85 text-sm">Jackson 的基本使用</div> </div> </a> <a href="/posts/the-basics-of-redis-part-one/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>下一篇</span> <div class="text-accent/85 text-sm">【上篇】Redis 基础篇</div> </div> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg> </a> </div> </main> <footer class="app-layout mt-auto" data-astro-cid-7ap3hmvm="true"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="text-muted-foreground my-2 flex w-fit flex-col items-start text-start text-sm whitespace-nowrap"> <div class="flex items-center gap-1.5"> <svg width="24" height="24" fill="currentColor" class="size-4" viewBox="-49.231 -39.385 738.462 590.769" aria-hidden="true"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9-.1-2.7-.2-5.4-.2-8.1 0-88.4 71.6-160 160-160 59.3 0 111 32.2 138.7 80.2A95.5 95.5 0 0 1 448 96c53 0 96 43 96 96 0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39L296 392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0z" /></svg> <span>最近更新：</span> <time class="tabular-nums" datetime="2026-10-22T08:22:01.000Z" data-deployed-at="2026-10-22T08:22:01.000Z" data-just-now="刚刚" data-locale="zh-CN"> 2026-10-22 16:22 </time> </div> <div class="mt-1 flex items-center gap-3 text-xs"> <span class="flex items-center gap-1" title="本站访客数"> <svg width="24" height="24" fill="currentColor" class="size-3" viewBox="-2.835 -3.241 453.671 518.481" aria-hidden="true"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3z" /></svg> <span class="sr-only">本站访客数：</span> <span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> <span aria-hidden="true">|</span> <span class="flex items-center gap-1.5" title="本站总浏览量"> <span class="flex size-4 items-center justify-center" aria-hidden="true"> <svg width="24" height="24" fill="currentColor" class="size-3.5" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48zM0 272c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v160c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zM368 96h32c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48" /></svg> </span> <span class="sr-only">本站总浏览量：</span> <span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> </div> </div> <div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"> <span>版权所有 &#169; 2020 – 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer> <script>
   (() => {
     const updateDeploymentTimes = () => {
       document.querySelectorAll("[data-deployed-at]").forEach(element => {
@@ -3123,4 +3123,4 @@ OK
     document.addEventListener("astro:page-load", updateDeploymentTimes);
     window.setInterval(updateDeploymentTimes, 60_000);
   })();
-</script>    <script type="module" src="/_astro/Layout.astro_astro_type_script_index_0_lang.DQQu8RqY.js"></script> <script type="module" src="/_astro/Layout.astro_astro_type_script_index_1_lang.DRvjezMo.js"></script> </body> </html>  <script type="module" src="/_astro/index.astro_astro_type_script_index_0_lang.Oly9xh_g.js"></script>
+</script>    <script type="module" src="/_astro/Layout.astro_astro_type_script_index_0_lang.BrDp0sUM.js"></script> <script type="module" src="/_astro/Layout.astro_astro_type_script_index_1_lang.DRvjezMo.js"></script> </body> </html>  <script type="module" src="/_astro/index.astro_astro_type_script_index_0_lang.Oly9xh_g.js"></script>

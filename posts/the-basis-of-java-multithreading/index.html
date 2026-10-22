@@ -1,4 +1,4 @@
-<!DOCTYPE html><html dir="ltr" lang="zh-CN" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/the-basis-of-java-multithreading/"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.3.0/400.css"><link rel="preconnect" href="https://busuanzi.ibruce.info"><meta name="generator" content="Astro v6.4.2"><!-- Primary meta --><title>学毛线（Thread）的 Java | Mofan</title><meta name="title" content="学毛线（Thread）的 Java | Mofan"><meta name="description" content="线程怎么创建、有哪些状态、怎么同步、怎么协作？"><meta name="author" content="默烦"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Mofan"><meta property="og:title" content="学毛线（Thread）的 Java | Mofan"><meta property="og:description" content="线程怎么创建、有哪些状态、怎么同步、怎么协作？"><meta property="og:url" content="https://mofan212.github.io/posts/the-basis-of-java-multithreading/"><meta property="og:image" content="https://mofan212.github.io/default-og.jpg"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://mofan212.github.io/posts/the-basis-of-java-multithreading/"><meta property="twitter:title" content="学毛线（Thread）的 Java | Mofan"><meta property="twitter:description" content="线程怎么创建、有哪些状态、怎么同步、怎么协作？"><meta property="twitter:image" content="https://mofan212.github.io/default-og.jpg"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Mofan" href="https://mofan212.github.io/rss.xml"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2020-10-09T00:00:00.000Z"><meta property="article:modified_time" content="2024-07-11T00:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"学毛线（Thread）的 Java | Mofan","url":"https://mofan212.github.io/posts/the-basis-of-java-multithreading/","mainEntityOfPage":"https://mofan212.github.io/posts/the-basis-of-java-multithreading/","datePublished":"2020-10-09T00:00:00.000Z","dateModified":"2024-07-11T00:00:00.000Z","author":[{"@type":"Person","name":"默烦","url":"https://github.com/mofan212"}]}</script> <!--
+<!DOCTYPE html><html dir="ltr" lang="zh-CN" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/the-basis-of-java-multithreading/"><link rel="preconnect" href="https://npm.elemecdn.com"><link rel="preconnect" href="https://gcore.jsdelivr.net"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/lxgwwenkaiscreen.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.3.0/400.css"><link rel="preconnect" href="https://busuanzi.ibruce.info"><meta name="generator" content="Astro v6.4.2"><!-- Primary meta --><title>学毛线（Thread）的 Java | Mofan</title><meta name="title" content="学毛线（Thread）的 Java | Mofan"><meta name="description" content="线程怎么创建、有哪些状态、怎么同步、怎么协作？"><meta name="author" content="默烦"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Mofan"><meta property="og:title" content="学毛线（Thread）的 Java | Mofan"><meta property="og:description" content="线程怎么创建、有哪些状态、怎么同步、怎么协作？"><meta property="og:url" content="https://mofan212.github.io/posts/the-basis-of-java-multithreading/"><meta property="og:image" content="https://mofan212.github.io/default-og.jpg"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://mofan212.github.io/posts/the-basis-of-java-multithreading/"><meta property="twitter:title" content="学毛线（Thread）的 Java | Mofan"><meta property="twitter:description" content="线程怎么创建、有哪些状态、怎么同步、怎么协作？"><meta property="twitter:image" content="https://mofan212.github.io/default-og.jpg"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Mofan" href="https://mofan212.github.io/rss.xml"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2020-10-09T00:00:00.000Z"><meta property="article:modified_time" content="2024-07-11T00:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"学毛线（Thread）的 Java | Mofan","url":"https://mofan212.github.io/posts/the-basis-of-java-multithreading/","mainEntityOfPage":"https://mofan212.github.io/posts/the-basis-of-java-multithreading/","datePublished":"2020-10-09T00:00:00.000Z","dateModified":"2024-07-11T00:00:00.000Z","author":[{"@type":"Person","name":"默烦","url":"https://github.com/mofan212"}]}</script> <!--
       Inline FOUC-prevention script: sets data-theme on <html> before
       the browser paints. Runs synchronously, no defer/async.
     --><script>
@@ -14,7 +14,7 @@
         // Expose value so theme.ts can skip re-detection.
         window.__theme = { value: theme };
       })();
-    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.8-7lwm7-.css">
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.CRJPB6-j.css">
 <style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
 .toc-link[data-astro-cid-po2ckxzl]{position:relative;transition:color .2s ease}.toc-link[data-astro-cid-po2ckxzl]:before{position:absolute;inset-block:.375rem;inset-inline-start:-2px;width:2px;border-radius:2px;background-color:var(--accent);content:"";opacity:0;transition:opacity .2s ease}.toc-link[data-astro-cid-po2ckxzl][data-active]{color:var(--accent)}.toc-link[data-astro-cid-po2ckxzl][data-active]:before{opacity:1}.toc-toggle[data-astro-cid-po2ckxzl][aria-expanded=true] .toc-toggle-icon[data-astro-cid-po2ckxzl]{rotate:-90deg}.toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-width:thin}.post-toc-desktop[data-astro-cid-taqt6xe3] .toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-gutter:stable}.toc-scroll[data-astro-cid-taqt6xe3]:after{display:block;block-size:20dvh;content:""}[data-astro-cid-taqt6xe3][data-toc-dialog]{opacity:0;transform:translate(1.25rem);transition:opacity .16s ease-out,transform .22s cubic-bezier(.22,1,.36,1);will-change:opacity,transform}[data-astro-cid-taqt6xe3][data-toc-dialog][data-toc-visible]{opacity:1;transform:translate(0)}[data-astro-cid-taqt6xe3][data-toc-dialog]::backdrop{background-color:#0000;transition:background-color .18s ease-out}[data-astro-cid-taqt6xe3][data-toc-dialog][data-toc-visible]::backdrop{background-color:#0000007f}@media(prefers-reduced-motion:reduce){[data-astro-cid-taqt6xe3][data-toc-dialog]{transform:none;transition:none}[data-astro-cid-taqt6xe3][data-toc-dialog]::backdrop{transition:none}}[data-astro-cid-4wxclohh][data-post-series]{interpolate-size:allow-keywords}[data-astro-cid-4wxclohh][data-post-series]::details-content{block-size:0;overflow:hidden;opacity:0;transition:block-size .2s ease-out,opacity .15s ease-out,content-visibility .2s allow-discrete}[data-astro-cid-4wxclohh][data-post-series][open]::details-content{block-size:auto;opacity:1}@media(prefers-reduced-motion:reduce){[data-astro-cid-4wxclohh][data-post-series]::details-content{transition:none}}.post-sidebar[data-astro-cid-7ap3hmvm]{display:contents}@media(min-width:90rem){.post-sidebar[data-astro-cid-7ap3hmvm]{position:fixed;inset-block-start:9rem;inset-inline-start:calc(50% + var(--app-max-width) / 2 + 2rem);display:flex;width:min(18rem,calc(50vw - var(--app-max-width) / 2 - 3rem));height:calc(100dvh - 11rem);min-height:0;flex-direction:column}}
 </style><style>[data-astro-transition-scope="astro-36ssibgs-1"] { view-transition-name: java; }@layer astro { ::view-transition-old(java) { 
@@ -629,21 +629,21 @@
 
     update();
   })();
-</script> </div> <article id="article" class="mt-8 w-full app-prose max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)" data-astro-cid-7ap3hmvm> <!-- 封面来源：碧蓝航线 铁血、音符 & 誓言 活动 CG -->
+</script> </div> <article id="article" class="mt-8 w-full app-prose post-content max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)" data-astro-cid-7ap3hmvm> <!-- 封面来源：碧蓝航线 铁血、音符 & 誓言 活动 CG -->
 <p>本文视频参考地址：<a href="https://www.bilibili.com/video/BV1V4411p7EF" target="_blank" rel="noopener noreferrer">【狂神说Java】多线程详解</a></p>
-<h1 id="1-线程简介">1. 线程简介</h1>
-<h2 id="11-多任务">1.1 多任务</h2>
+<h2 id="1-线程简介">1. 线程简介</h2>
+<h3 id="11-多任务">1.1 多任务</h3>
 <p>什么叫多任务？</p>
 <p>其实现实生活中就有很多这样的例子，比如：边吃饭边玩手机的低头族、又开车又打电话还挂点滴的疯狂司机，以及边玩手机边撇条的「厕所困难户」。当然这些行为都是不好的！</p>
 <p>现实中这样的例子有很多，看起来是多个任务都在做，实质上我们的大脑在同一时间依旧只做了一件事情。</p>
-<h2 id="12-普通方法调用和多线程">1.2 普通方法调用和多线程</h2>
+<h3 id="12-普通方法调用和多线程">1.2 普通方法调用和多线程</h3>
 <picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JavaImages/%E6%99%AE%E9%80%9A%E6%96%B9%E6%B3%95%E8%B0%83%E7%94%A8%E5%92%8C%E5%A4%9A%E7%BA%BF%E7%A8%8B.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JavaImages/普通方法调用和多线程.png" alt="普通方法调用和多线程" style="zoom:50%;" data-responsive-image="true"></picture>
-<h2 id="13-程序进程线程">1.3 程序、进程、线程</h2>
+<h3 id="13-程序进程线程">1.3 程序、进程、线程</h3>
 <p>说起进程（Process），就不得不说说 <strong>程序</strong> 。程序是指指令和数据的有序集合，其本身没有任何运行的含义，是一个静态的概念。</p>
 <p>而 <strong>进程</strong> 则是执行程序的一次执行过程，它是一个动态的概念，是系统资源分配的单位。</p>
 <p>通常在一个进程中可以包含若干个 <strong>线程</strong> （Thread），当然一个进程中至少有一个线程，不然没有存在的意义。线程是 CPU 调度和执行的单位。</p>
 <p><mark class="flexible-marker flexible-marker-default">注意：</mark> 许多多线程都是模拟出来的，真正意义上的多线程是指有多个 CPU，即多核，比如服务器。如果是模拟出来的多线程，即在一个 CPU 的情况下，在同一个时间点，CPU 只能执行一个代码（时间片轮转调度了解一下？），因为切换得很快，所以就有了同时执行的错觉。</p>
-<h2 id="14-核心概念">1.4 核心概念</h2>
+<h3 id="14-核心概念">1.4 核心概念</h3>
 <p>线程是独立的执行路径。</p>
 <p>在程序运行时，即使没有自己创建线程，后台也会有多个线程，比如主线程、GC 线程等。</p>
 <p><code>main()</code> 称之为主线程，为系统的入口，用于执行整个程序。</p>
@@ -651,8 +651,8 @@
 <p>对同一份资源进行操作时，会存在资源抢夺的问题，因此需要加入并发控制。</p>
 <p>线程会带来额外的开销，如 CPU 调度时间、并发控制开销等。</p>
 <p><mark class="flexible-marker flexible-marker-default">每个线程在自己的工作内存交互，内存控制不当会造成数据不一致。</mark></p>
-<h1 id="2-线程的创建">2. 线程的创建</h1>
-<h2 id="21-继承-thread-类">2.1 继承 Thread 类</h2>
+<h2 id="2-线程的创建">2. 线程的创建</h2>
+<h3 id="21-继承-thread-类">2.1 继承 Thread 类</h3>
 <blockquote><p>编写步骤</p></blockquote>
 <p>1、自定义线程类继承 <mark class="flexible-marker flexible-marker-default">Thread 类</mark></p>
 <p>2、重写 <mark class="flexible-marker flexible-marker-default">run()</mark> 方法，编写线程执行体</p>
@@ -738,7 +738,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <p>上述下载的图片是 B 站的封面图片，感觉以我现在的知识储备，似乎可以做一个根据网址或 bv \ av 号获取 B 站视频封面的小工具？（挖个坑）</p>
-<h2 id="22-实现-runnable-接口">2.2 实现 Runnable 接口</h2>
+<h3 id="22-实现-runnable-接口">2.2 实现 Runnable 接口</h3>
 <blockquote><p>编写步骤</p></blockquote>
 <p>1、自定义线程类实现 <mark class="flexible-marker flexible-marker-default">Runnable</mark> 接口</p>
 <p>2、<mark class="flexible-marker flexible-marker-default">实现 run()</mark> 方法，编写线程执行体</p>
@@ -788,7 +788,7 @@
 <li>启动线程：<code>传入目标对象 + Thread对象.start()</code></li>
 <li>推荐使用：避免单继承局限性，灵活方便，方便同一个对象被多个线程使用</li>
 </ul>
-<h2 id="23-初识并发">2.3 初识并发</h2>
+<h3 id="23-初识并发">2.3 初识并发</h3>
 <p>上面讲述了两种创建线程的方法，假设现在有多个线程来使用同一个对象，会出现什么情况呢？</p>
 <p>我们来模拟一下最经典的「买票问题」：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span><span class="code-line-number">13</span><span class="code-line-number">14</span><span class="code-line-number">15</span><span class="code-line-number">16</span><span class="code-line-number">17</span><span class="code-line-number">18</span><span class="code-line-number">19</span><span class="code-line-number">20</span><span class="code-line-number">21</span><span class="code-line-number">22</span><span class="code-line-number">23</span><span class="code-line-number">24</span><span class="code-line-number">25</span><span class="code-line-number">26</span><span class="code-line-number">27</span><span class="code-line-number">28</span><span class="code-line-number">29</span><span class="code-line-number">30</span><span class="code-line-number">31</span><span class="code-line-number">32</span><span class="code-line-number">33</span><span class="code-line-number">34</span><span class="code-line-number">35</span><span class="code-line-number">36</span><span class="code-line-number">37</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">package</span><span style="--shiki-light:#383A42;--shiki-dark:#C678DD"> com.yang.demo01</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
@@ -834,7 +834,7 @@
 <li>某人购买到第 0 张或第 -1 张票</li>
 </ul>
 <p>这种情况就是在多个线程操作同一个对象（资源）的情况下，导致线程不安全，进而数据紊乱。</p>
-<h2 id="24-模拟龟兔赛跑">2.4 模拟龟兔赛跑</h2>
+<h3 id="24-模拟龟兔赛跑">2.4 模拟龟兔赛跑</h3>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span><span class="code-line-number">13</span><span class="code-line-number">14</span><span class="code-line-number">15</span><span class="code-line-number">16</span><span class="code-line-number">17</span><span class="code-line-number">18</span><span class="code-line-number">19</span><span class="code-line-number">20</span><span class="code-line-number">21</span><span class="code-line-number">22</span><span class="code-line-number">23</span><span class="code-line-number">24</span><span class="code-line-number">25</span><span class="code-line-number">26</span><span class="code-line-number">27</span><span class="code-line-number">28</span><span class="code-line-number">29</span><span class="code-line-number">30</span><span class="code-line-number">31</span><span class="code-line-number">32</span><span class="code-line-number">33</span><span class="code-line-number">34</span><span class="code-line-number">35</span><span class="code-line-number">36</span><span class="code-line-number">37</span><span class="code-line-number">38</span><span class="code-line-number">39</span><span class="code-line-number">40</span><span class="code-line-number">41</span><span class="code-line-number">42</span><span class="code-line-number">43</span><span class="code-line-number">44</span><span class="code-line-number">45</span><span class="code-line-number">46</span><span class="code-line-number">47</span><span class="code-line-number">48</span><span class="code-line-number">49</span><span class="code-line-number">50</span><span class="code-line-number">51</span><span class="code-line-number">52</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">package</span><span style="--shiki-light:#383A42;--shiki-dark:#C678DD"> com.yang.demo01</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
 <span class="line"></span>
 <span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">/**</span></span>
@@ -887,7 +887,7 @@
 <span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">        new</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> Thread</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(race, </span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"乌龟"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">).</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">start</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">();</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h2 id="25-实现-callable-接口">2.5 实现 Callable 接口</h2>
+<h3 id="25-实现-callable-接口">2.5 实现 Callable 接口</h3>
 <p>PS：当前只做了解即可。</p>
 <blockquote><p>编写步骤</p></blockquote>
 <p>1、实现 Callable 接口，需要返回值类型</p>
@@ -977,8 +977,8 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">        }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h1 id="3-lambda-表达式">3. Lambda 表达式</h1>
-<h2 id="31-基本含义">3.1 基本含义</h2>
+<h2 id="3-lambda-表达式">3. Lambda 表达式</h2>
+<h3 id="31-基本含义">3.1 基本含义</h3>
 <p>λ 是希腊字母表中排序第十一位的字母，英文名称为 Lambda</p>
 <p>Lambda 表达式可以避免匿名内部类定义过多，其实质属于函数式编程的概念：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span></span><code><span class="line"><span>(params) -> expression [表达式]</span></span>
@@ -994,7 +994,7 @@
 </ul>
 <p>也许你会说，看了 Lambda 表达式后，不但不觉得简洁，反而觉得更乱了，而且还看不懂了。</p>
 <p>那是因为我们没有使用习惯，用得多了，看习惯了，自然就好了。</p>
-<h2 id="32-函数式接口">3.2 函数式接口</h2>
+<h3 id="32-函数式接口">3.2 函数式接口</h3>
 <p>理解 Functional Interface（函数式接口）是学习 Java 8 Lambda 表达式的关键所在。</p>
 <p>函数式接口的定义：</p>
 <p>任何接口，如果只包含唯一一个抽象方法，那么它就是函数式接口，比如：</p>
@@ -1002,7 +1002,7 @@
 <span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> abstract</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> void</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> run</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">();</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <p>对于函数式接口，我们可以通过 Lambda 表达式来创建该接口的对象。</p>
-<h2 id="33-lambda-的演化">3.3 Lambda 的演化</h2>
+<h3 id="33-lambda-的演化">3.3 Lambda 的演化</h3>
 <p>Lambda 表达式针对的是函数式接口，函数式接口也是一种接口，只不过比较特殊。</p>
 <p>因此，函数式接口也可以有实现类。如果想要使用一个函数式接口，就需要新开一个类，这个类作为函数式接口的 <strong>实现类</strong> ，再对这个实现类实例化，然后使用实例化得到的对象调用方法。</p>
 <p>但是这样需要新开一个类，为了不新开一个类可以使用当前类中编写一个 <strong>静态嵌套类</strong> ，这个静态嵌套类也需要实现接口，后续的使用就和最开始的一样。</p>
@@ -1124,7 +1124,7 @@
 <span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    void</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> love</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">int</span><span style="--shiki-light:#383A42;--shiki-light-font-style:inherit;--shiki-dark:#E06C75;--shiki-dark-font-style:italic"> a</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <p>如果函数式接口中的抽象方法有返回值，只需要在 <code>{}</code> 包裹的函数体内 <code>return</code> 即可。</p>
-<h1 id="4-静态代理">4. 静态代理</h1>
+<h2 id="4-静态代理">4. 静态代理</h2>
 <p>为什么多线程讲的好好的，突然讲到 Lambda 表达式，然后又讲到静态代理呢？</p>
 <p>那肯定是因为多线程里面涉及了这两个知识点嘛~ 😜</p>
 <p>创建线程的第二种方式，使用实现 <code>Runnable</code> 接口的方式就和动态代理一样。</p>
@@ -1200,8 +1200,8 @@
 <p>1、真实角色和代理对象需要实现同一个接口</p>
 <p>2、代理对象要代理真实对象</p>
 <p>这样做的好处：可以让代理对象做很多真实对象做不了的事，真实对象可以专注于自己的事</p>
-<h1 id="5-线程状态">5. 线程状态</h1>
-<h2 id="51-状态概述">5.1 状态概述</h2>
+<h2 id="5-线程状态">5. 线程状态</h2>
+<h3 id="51-状态概述">5.1 状态概述</h3>
 <blockquote><p>相关概述</p></blockquote>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JavaImages/%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81%E5%9B%BE%E8%A7%A3.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JavaImages/%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81%E5%9B%BE%E8%A7%A3.png" alt="线程状态图解" data-responsive-image="true"></picture></p>
 <p><code>Thread t = new Thread();</code>，这行代码可以创建一个线程，线程对象一旦创建就进入到新生状态。</p>
@@ -1243,8 +1243,8 @@
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">方法</th><th align="center">说明</th></tr></thead><tbody><tr><td align="center">setPriority(int newPriority)</td><td align="center">更改线程的优先级</td></tr><tr><td align="center">static void sleep(long millis)</td><td align="center">在指定的毫秒数内让当前正在执行的线程休眠</td></tr><tr><td align="center">void join()</td><td align="center">等待该线程终止</td></tr><tr><td align="center">static void yield()</td><td align="center">暂停当前正在执行的线程对象，并执行其他线程</td></tr><tr><td align="center">void interrupt()</td><td align="center">中断线程，不建议使用</td></tr><tr><td align="center">boolean isAlive()</td><td align="center">测试线程是否处于活动状态</td></tr></tbody></table></div>
-<h2 id="52-线程停止">5.2 线程停止</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">方法</th><th align="center">说明</th></tr></thead><tbody><tr><td align="center">setPriority(int newPriority)</td><td align="center">更改线程的优先级</td></tr><tr><td align="center">static void sleep(long millis)</td><td align="center">在指定的毫秒数内让当前正在执行的线程休眠</td></tr><tr><td align="center">void join()</td><td align="center">等待该线程终止</td></tr><tr><td align="center">static void yield()</td><td align="center">暂停当前正在执行的线程对象，并执行其他线程</td></tr><tr><td align="center">void interrupt()</td><td align="center">中断线程，不建议使用</td></tr><tr><td align="center">boolean isAlive()</td><td align="center">测试线程是否处于活动状态</td></tr></tbody></table></div>
+<h3 id="52-线程停止">5.2 线程停止</h3>
 <p>JDK 官方已不推荐使用 <code>stop()</code> 和 <code>destory()</code> 来停止一个线程。</p>
 <p>建议使用一个标志位进行终止变量，当 <code>flag == false</code> 时，终止线程运行。</p>
 <blockquote><p>测试代码</p></blockquote>
@@ -1290,7 +1290,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <p>运行后可能会看不到结果，可以多运行几次试试，毕竟我们不能更改 CPU 的调度。</p>
-<h2 id="53-线程休眠">5.3 线程休眠</h2>
+<h3 id="53-线程休眠">5.3 线程休眠</h3>
 <p>sleep（休眠时间）指定当前线程阻塞的毫秒数；</p>
 <p>sleep 存在异常 <code>InterruptedException</code>；</p>
 <p>sleep 时间达到后，线程就进入就绪状态；</p>
@@ -1334,7 +1334,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">        }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h2 id="54-线程礼让">5.4 线程礼让</h2>
+<h3 id="54-线程礼让">5.4 线程礼让</h3>
 <p>礼让（yield）线程，让当前正在执行的线程暂停，但不阻塞。</p>
 <p>让线程从运行状态转为就绪状态。</p>
 <p><strong>让 CPU 重新调度，但是礼让不一定成功，「需要看 CPU 的心情」。</strong></p>
@@ -1363,7 +1363,7 @@
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">        System</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">out</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">println</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">Thread</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">currentThread</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">().</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">getName</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">() </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">+</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> " 线程停止执行......"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h2 id="55-线程强制执行">5.5 线程强制执行</h2>
+<h3 id="55-线程强制执行">5.5 线程强制执行</h3>
 <p>Join 合并线程，等当前线程执行完后，再执行其他线程，其他线程阻塞，可以想象成插队。</p>
 <p>与休眠方法 <code>sleep()</code> 一样，<code>join()</code> 方法存在异常 <code>InterruptedException</code>。</p>
 <blockquote><p>测试代码</p></blockquote>
@@ -1397,7 +1397,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">        }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h2 id="56-线程状态观测">5.6 线程状态观测</h2>
+<h3 id="56-线程状态观测">5.6 线程状态观测</h3>
 <blockquote><p>Thread.State</p></blockquote>
 <p>线程状态。线程可以处于以下状态之一：</p>
 <p>NEW：尚未启动的线程处于此状态</p>
@@ -1444,7 +1444,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">        }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h2 id="57-线程优先级">5.7 线程优先级</h2>
+<h3 id="57-线程优先级">5.7 线程优先级</h3>
 <p>Java 提供一个线程调度器来监控程序启动后进入就绪状态的所有线程，线程调度器按照优先级决定应该调度哪个线程执行。</p>
 <p>线程的优先级用数字表示，范围从 0 ~ 10：</p>
 <ul>
@@ -1506,7 +1506,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">                +</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B"> Thread</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">currentThread</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">().</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">getPriority</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">());</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h2 id="58-守护线程">5.8 守护线程</h2>
+<h3 id="58-守护线程">5.8 守护线程</h3>
 <p>守护（daemon）线程。线程分为 <mark class="flexible-marker flexible-marker-default">用户线程</mark> 和 <mark class="flexible-marker flexible-marker-default">守护线程</mark>。</p>
 <p>虚拟机必须确保用户线程执行完毕，虚拟机不用等待守护线程执行完毕，比如：后台记录操作日志、监控内存、垃圾回收等待…</p>
 <blockquote><p>测试代码</p></blockquote>
@@ -1553,8 +1553,8 @@
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">        System</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">out</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">println</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"====== GoodBye World ======"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h1 id="6-线程同步">6. 线程同步</h1>
-<h2 id="61-线程同步机制">6.1 线程同步机制</h2>
+<h2 id="6-线程同步">6. 线程同步</h2>
+<h3 id="61-线程同步机制">6.1 线程同步机制</h3>
 <blockquote><p>线程同步</p></blockquote>
 <p>需要在多个线程操作同一个资源时进行线程同步。</p>
 <p>并发：<mark class="flexible-marker flexible-marker-default">同一个对象</mark> 被 <mark class="flexible-marker flexible-marker-default">多个线程</mark> <strong>同时操作</strong>。比如：抢火车票、两个银行同时取钱…</p>
@@ -1570,7 +1570,7 @@
 <li>在多线程竞争下，加锁和释放锁会导致比较多的上下文切换和调度延时，这会引起性能问题</li>
 <li>如果一个优先级高的线程等待一个优先级低的线程释放锁会导致优先级倒置，引起性能问题</li>
 </ul>
-<h2 id="62-线程不安全案例">6.2 线程不安全案例</h2>
+<h3 id="62-线程不安全案例">6.2 线程不安全案例</h3>
 <p>在 <strong>2.3 初始并发</strong> 中，编写了一个买票的经典案例，运行那个案例后，在控制台可能会看到某人购买到第 0 张或第 -1 张票的情况，这种情况就是线程不安全的一种案例。</p>
 <p>我们将买票的逻辑抽出来，重新编写一个 <code>buy()</code> 方法，然后在重写的 <code>run()</code> 方法中调用 <code>buy()</code> 方法：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span><span class="code-line-number">13</span><span class="code-line-number">14</span><span class="code-line-number">15</span><span class="code-line-number">16</span><span class="code-line-number">17</span><span class="code-line-number">18</span><span class="code-line-number">19</span><span class="code-line-number">20</span><span class="code-line-number">21</span><span class="code-line-number">22</span><span class="code-line-number">23</span><span class="code-line-number">24</span><span class="code-line-number">25</span><span class="code-line-number">26</span><span class="code-line-number">27</span><span class="code-line-number">28</span><span class="code-line-number">29</span><span class="code-line-number">30</span><span class="code-line-number">31</span><span class="code-line-number">32</span><span class="code-line-number">33</span><span class="code-line-number">34</span><span class="code-line-number">35</span><span class="code-line-number">36</span><span class="code-line-number">37</span><span class="code-line-number">38</span><span class="code-line-number">39</span><span class="code-line-number">40</span><span class="code-line-number">41</span><span class="code-line-number">42</span><span class="code-line-number">43</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">package</span><span style="--shiki-light:#383A42;--shiki-dark:#C678DD"> com.yang.syn</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
@@ -1709,7 +1709,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <p>运行后，可以在控制台看到数组的长度没有达到 10000，这是由于在某一时刻多个线程向同一个位置插入了多个数据，最终导致数组长度没有达到 10000。因此，JDK 提供的 ArrayList 是线程不安全的。</p>
-<h2 id="63-同步方法与同步块">6.3 同步方法与同步块</h2>
+<h3 id="63-同步方法与同步块">6.3 同步方法与同步块</h3>
 <p>我们可以通过 <code>private</code> 关键字来保证数据对象只能被方法访问，所以我们需要针对方法提出一套机制，这套机制就是 <code>synchronized</code> 关键字，它包括两种用法：<code>synchronized</code> 方法和 <code>synchronized</code> 块。</p>
 <blockquote><p>同步方法</p></blockquote>
 <p>同步方法 :</p>
@@ -1776,7 +1776,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">        }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">    })</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">start</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">();</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span></code></pre>
-<h2 id="64-copyonwritearraylist">6.4 CopyOnWriteArrayList</h2>
+<h3 id="64-copyonwritearraylist">6.4 CopyOnWriteArrayList</h3>
 <p>在 JDK 5.0 中引入了一个新的包，名为 <code>java.util.concurrent</code>  （简称 JUC），在这个包中提供了在并发编程中很常用到的工具类。</p>
 <p>前文说到，JDK 提供了 ArrayList 是非线程安全的，在并发环境下使用会出现数据异常，为此，JUC 中提供了一个相似的类，名为 <code>CopyOnWriteArrayList</code>，它也是一个动态数组，但它是线程安全的。</p>
 <p>我们可以测试一下：</p>
@@ -1805,7 +1805,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <p>控制台最后输出的结果一直是 10000，并没有出现数据异常的情况。</p>
 <p>关于 JUC 的其他内容先挖个坑，以后慢慢填~ 😏</p>
-<h2 id="65-死锁">6.5 死锁</h2>
+<h3 id="65-死锁">6.5 死锁</h3>
 <p>多个线程各自占有一些共享资源，并且互相等待其他线程占有的资源，得到那个资源后才能运行，而导致两个或者多个线程都在等待对方释放资源，最后都停止执行的情形。</p>
 <p>某一个同步块同时拥有 「  <mark class="flexible-marker flexible-marker-default">两个以上对象的锁</mark>  」 时，就可能会发生 「 死锁 」 的问题。</p>
 <blockquote><p>死锁案例</p></blockquote>
@@ -1919,7 +1919,7 @@
 <li>循环等待条件：若干进程之间形成一种头尾相接的循环等待资源关系。</li>
 </ol>
 <p>上面列出了死锁的四个必要条件，我们只要想办法破其中的任意一个或多个条件就可以避免死锁发生。</p>
-<h2 id="66-lock">6.6 Lock</h2>
+<h3 id="66-lock">6.6 Lock</h3>
 <p>从 JDK 5.0 开始，Java 提供了更强大的线程同步机制——通过显式定义同步锁对象来实现同步。同步锁使用 Lock 对象充当。<br>
 <code>java.util.concurrent.locks.Lock</code> 接口是控制多个线程对共享资源进行访问的工具。锁提供了对共享资源的独占访问，每次只能有一个线程对 Lock 对象加锁，线程开始访问共享资源之前应先获得 Lock 对象。</p>
 <p><code>ReentrantLock</code> （可重入锁）类实现了 <code>Lock</code>，它拥有与 <code>synchronized</code> 相同的并发性和内存语义，在实现线程安全的控制中，比较常用的是 <code>ReentrantLock</code>，可以显式加锁、释放锁。</p>
@@ -1977,8 +1977,8 @@
 <p><code>Lock</code> 只有代码块锁，<code>synchronized</code> 有代码块锁和方法锁。</p>
 <p>使用 <code>Lock</code> 锁，JVM 将花费较少的时间来调度线程，性能更好，并且具有更好的扩展性（提供更多的子类）。</p>
 <p>优先使用顺序：Lock  >  同步代码块（已经进入了方法体，分配了相应资源）> 同步方法（在方法体之外）</p>
-<h1 id="7-线程协作">7. 线程协作</h1>
-<h2 id="71-生产者消费者问题">7.1 生产者消费者问题</h2>
+<h2 id="7-线程协作">7. 线程协作</h2>
+<h3 id="71-生产者消费者问题">7.1 生产者消费者问题</h3>
 <blockquote><p>问题描述</p></blockquote>
 <p>应用场景：生产者和消费者问题。</p>
 <p>1、假设仓库中只能存放一件产品，生产者将生产出来的产品放入仓库，消费者将仓库中产品取走消费。</p>
@@ -2016,7 +2016,7 @@
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">方法名</th><th align="center">作用</th></tr></thead><tbody><tr><td align="center">wait()</td><td align="center">线程一直等待，直到其他线程通知，与 <code>sleep()</code> 不同，它会释放锁</td></tr><tr><td align="center">wait(long timeout)</td><td align="center">指定等待的毫秒数</td></tr><tr><td align="center">notify()</td><td align="center">唤醒一个处于等待状态的线程</td></tr><tr><td align="center">notifyAll()</td><td align="center">唤醒同一个对象上所有调用 wait()方法的线程，优先级别高的线程优先调度</td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">方法名</th><th align="center">作用</th></tr></thead><tbody><tr><td align="center">wait()</td><td align="center">线程一直等待，直到其他线程通知，与 <code>sleep()</code> 不同，它会释放锁</td></tr><tr><td align="center">wait(long timeout)</td><td align="center">指定等待的毫秒数</td></tr><tr><td align="center">notify()</td><td align="center">唤醒一个处于等待状态的线程</td></tr><tr><td align="center">notifyAll()</td><td align="center">唤醒同一个对象上所有调用 wait()方法的线程，优先级别高的线程优先调度</td></tr></tbody></table></div>
 <p><mark class="flexible-marker flexible-marker-default">注意：</mark> 这些方法均是 <code>Object</code> 类的方法，都 <strong>只能在同步方法或者同步代码块中使用</strong>，否则会抛出异常 <code>IllegalMonitorStateException</code></p>
 <p>至于为什么是 <code>Objext</code> 类的方法，其实很简单。因为每个对象都有一个锁，因此定义在所有类的「祖宗类」 <code>Object</code> 类中。</p>
 <p>这三个方法的调用者必须是同步代码块或同步方法中的同步监视器。比如，同步代码块中的就是 <code>synchronized(this) {}</code> 中的 <code>this</code>，这个 this 就是同步监视器，它可以换成任何一个唯一的对象。也就是说，如果使用 this，这三个方法的调用者必须都是 this（在同步代码块中 this 可以省略）。</p>
@@ -2031,7 +2031,7 @@
 <p>1、管程法</p>
 <p>2、信号灯法</p>
 <p>3、使用线程池</p>
-<h2 id="72-管程法">7.2 管程法</h2>
+<h3 id="72-管程法">7.2 管程法</h3>
 <blockquote><p>方法描述</p></blockquote>
 <p>简单来说，就是引入一缓冲区。</p>
 <p>生产者：负责生产数据的模块 (可能是方法 , 对象 , 线程 , 进程)；</p>
@@ -2145,7 +2145,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h2 id="73-信号灯法">7.3 信号灯法</h2>
+<h3 id="73-信号灯法">7.3 信号灯法</h3>
 <p>所谓信号灯法，就是设置一个标志位。不多 BB，直接整代码：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span><span class="code-line-number">13</span><span class="code-line-number">14</span><span class="code-line-number">15</span><span class="code-line-number">16</span><span class="code-line-number">17</span><span class="code-line-number">18</span><span class="code-line-number">19</span><span class="code-line-number">20</span><span class="code-line-number">21</span><span class="code-line-number">22</span><span class="code-line-number">23</span><span class="code-line-number">24</span><span class="code-line-number">25</span><span class="code-line-number">26</span><span class="code-line-number">27</span><span class="code-line-number">28</span><span class="code-line-number">29</span><span class="code-line-number">30</span><span class="code-line-number">31</span><span class="code-line-number">32</span><span class="code-line-number">33</span><span class="code-line-number">34</span><span class="code-line-number">35</span><span class="code-line-number">36</span><span class="code-line-number">37</span><span class="code-line-number">38</span><span class="code-line-number">39</span><span class="code-line-number">40</span><span class="code-line-number">41</span><span class="code-line-number">42</span><span class="code-line-number">43</span><span class="code-line-number">44</span><span class="code-line-number">45</span><span class="code-line-number">46</span><span class="code-line-number">47</span><span class="code-line-number">48</span><span class="code-line-number">49</span><span class="code-line-number">50</span><span class="code-line-number">51</span><span class="code-line-number">52</span><span class="code-line-number">53</span><span class="code-line-number">54</span><span class="code-line-number">55</span><span class="code-line-number">56</span><span class="code-line-number">57</span><span class="code-line-number">58</span><span class="code-line-number">59</span><span class="code-line-number">60</span><span class="code-line-number">61</span><span class="code-line-number">62</span><span class="code-line-number">63</span><span class="code-line-number">64</span><span class="code-line-number">65</span><span class="code-line-number">66</span><span class="code-line-number">67</span><span class="code-line-number">68</span><span class="code-line-number">69</span><span class="code-line-number">70</span><span class="code-line-number">71</span><span class="code-line-number">72</span><span class="code-line-number">73</span><span class="code-line-number">74</span><span class="code-line-number">75</span><span class="code-line-number">76</span><span class="code-line-number">77</span><span class="code-line-number">78</span><span class="code-line-number">79</span><span class="code-line-number">80</span><span class="code-line-number">81</span><span class="code-line-number">82</span><span class="code-line-number">83</span><span class="code-line-number">84</span><span class="code-line-number">85</span><span class="code-line-number">86</span><span class="code-line-number">87</span><span class="code-line-number">88</span><span class="code-line-number">89</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">package</span><span style="--shiki-light:#383A42;--shiki-dark:#C678DD"> com.yang.advanced</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
 <span class="line"></span>
@@ -2236,7 +2236,7 @@
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">        this</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">flag</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> =</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> !</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">this</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">flag</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h2 id="74-线程池">7.4 线程池</h2>
+<h3 id="74-线程池">7.4 线程池</h3>
 <blockquote><p>基本概念</p></blockquote>
 <p>背景：当经常创建和销毁、使用量特别大的资源，比如并发情况下的线程，对性能影响很大。</p>
 <p>思路：提前创建好多个线程，放入线程池中，使用时直接获取，使用完放回池中。这样可以避免频繁创建销毁，从而实现重复利用。这类似生活中的公共交通工具。</p>
@@ -2288,7 +2288,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <hr>
-<p><span style="text-align: center;display:block;">Java 多线程基础完 </span></p> </article> <div class="text-muted-foreground max-w-app mt-20 w-full space-y-3 text-center text-sm" data-astro-cid-7ap3hmvm> <aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full px-2 text-center leading-6 sm:px-0"> <p class="m-0 break-words"> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a><span> 许可协议，</span><span class="max-sm:block">转载时请署名并注明<a href="https://mofan212.github.io/posts/the-basis-of-java-multithreading/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a> 🔗</span> </p> </aside> <section data-post-reward data-pagefind-ignore class="w-full" aria-label="赞赏"> <div class="flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:flex-wrap sm:gap-x-1.5 sm:gap-y-2"> <span class="sm:whitespace-nowrap">如果这篇文章对你有帮助，可以通过</span> <a href="/reward/" class="focus-outline border-accent text-accent hover:bg-accent/10 active:bg-accent/10 inline-block rounded-md border px-3 py-1 font-medium transition-colors"> 赞赏 </a> <span class="sm:whitespace-nowrap">请我喝杯 Coffee ☕</span> </div> </section> </div> <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm>  <ul id="post-tags" class="mt-4 mb-8 flex flex-wrap gap-4 sm:mb-8" data-astro-cid-7ap3hmvm> <li> <a href="/tags/java/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> Java </a> </li><li> <a href="/tags/concurrent-programming/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-2"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> 并发编程 </a> </li> </ul>  <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/java-genericity/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.3l105.3-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg> <div> <span>上一篇</span> <div class="text-accent/85 text-sm">Java 泛型</div> </div> </a> <a href="/posts/algorithm-backtracking/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>下一篇</span> <div class="text-accent/85 text-sm">【算法】回溯</div> </div> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg> </a> </div> </main> <footer class="app-layout mt-auto" data-astro-cid-7ap3hmvm="true"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="text-muted-foreground my-2 flex w-fit flex-col items-start text-start text-sm whitespace-nowrap"> <div class="flex items-center gap-1.5"> <svg width="24" height="24" fill="currentColor" class="size-4" viewBox="-49.231 -39.385 738.462 590.769" aria-hidden="true"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9-.1-2.7-.2-5.4-.2-8.1 0-88.4 71.6-160 160-160 59.3 0 111 32.2 138.7 80.2A95.5 95.5 0 0 1 448 96c53 0 96 43 96 96 0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39L296 392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0z" /></svg> <span>最近更新：</span> <time class="tabular-nums" datetime="2026-10-21T03:16:11.000Z" data-deployed-at="2026-10-21T03:16:11.000Z" data-just-now="刚刚" data-locale="zh-CN"> 2026-10-21 11:16 </time> </div> <div class="mt-1 flex items-center gap-3 text-xs"> <span class="flex items-center gap-1" title="本站访客数"> <svg width="24" height="24" fill="currentColor" class="size-3" viewBox="-2.835 -3.241 453.671 518.481" aria-hidden="true"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3z" /></svg> <span class="sr-only">本站访客数：</span> <span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> <span aria-hidden="true">|</span> <span class="flex items-center gap-1.5" title="本站总浏览量"> <span class="flex size-4 items-center justify-center" aria-hidden="true"> <svg width="24" height="24" fill="currentColor" class="size-3.5" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48zM0 272c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v160c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zM368 96h32c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48" /></svg> </span> <span class="sr-only">本站总浏览量：</span> <span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> </div> </div> <div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"> <span>版权所有 &#169; 2020 – 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer> <script>
+<p><span style="text-align: center;display:block;">Java 多线程基础完 </span></p> </article> <div class="text-muted-foreground max-w-app mt-20 w-full space-y-3 text-center text-sm" data-astro-cid-7ap3hmvm> <aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full px-2 text-center leading-6 sm:px-0"> <p class="m-0 break-words"> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a><span> 许可协议，</span><span class="max-sm:block">转载时请署名并注明<a href="https://mofan212.github.io/posts/the-basis-of-java-multithreading/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a> 🔗</span> </p> </aside> <section data-post-reward data-pagefind-ignore class="w-full" aria-label="赞赏"> <div class="flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:flex-wrap sm:gap-x-1.5 sm:gap-y-2"> <span class="sm:whitespace-nowrap">如果这篇文章对你有帮助，可以通过</span> <a href="/reward/" class="focus-outline border-accent text-accent hover:bg-accent/10 active:bg-accent/10 inline-block rounded-md border px-3 py-1 font-medium transition-colors"> 赞赏 </a> <span class="sm:whitespace-nowrap">请我喝杯 Coffee ☕</span> </div> </section> </div> <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm>  <ul id="post-tags" class="mt-4 mb-8 flex flex-wrap gap-4 sm:mb-8" data-astro-cid-7ap3hmvm> <li> <a href="/tags/java/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> Java </a> </li><li> <a href="/tags/concurrent-programming/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-2"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> 并发编程 </a> </li> </ul>  <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/java-genericity/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.3l105.3-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg> <div> <span>上一篇</span> <div class="text-accent/85 text-sm">Java 泛型</div> </div> </a> <a href="/posts/algorithm-backtracking/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>下一篇</span> <div class="text-accent/85 text-sm">【算法】回溯</div> </div> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg> </a> </div> </main> <footer class="app-layout mt-auto" data-astro-cid-7ap3hmvm="true"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="text-muted-foreground my-2 flex w-fit flex-col items-start text-start text-sm whitespace-nowrap"> <div class="flex items-center gap-1.5"> <svg width="24" height="24" fill="currentColor" class="size-4" viewBox="-49.231 -39.385 738.462 590.769" aria-hidden="true"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9-.1-2.7-.2-5.4-.2-8.1 0-88.4 71.6-160 160-160 59.3 0 111 32.2 138.7 80.2A95.5 95.5 0 0 1 448 96c53 0 96 43 96 96 0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39L296 392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0z" /></svg> <span>最近更新：</span> <time class="tabular-nums" datetime="2026-10-22T08:22:01.000Z" data-deployed-at="2026-10-22T08:22:01.000Z" data-just-now="刚刚" data-locale="zh-CN"> 2026-10-22 16:22 </time> </div> <div class="mt-1 flex items-center gap-3 text-xs"> <span class="flex items-center gap-1" title="本站访客数"> <svg width="24" height="24" fill="currentColor" class="size-3" viewBox="-2.835 -3.241 453.671 518.481" aria-hidden="true"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3z" /></svg> <span class="sr-only">本站访客数：</span> <span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> <span aria-hidden="true">|</span> <span class="flex items-center gap-1.5" title="本站总浏览量"> <span class="flex size-4 items-center justify-center" aria-hidden="true"> <svg width="24" height="24" fill="currentColor" class="size-3.5" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48zM0 272c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v160c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zM368 96h32c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48" /></svg> </span> <span class="sr-only">本站总浏览量：</span> <span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> </div> </div> <div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"> <span>版权所有 &#169; 2020 – 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer> <script>
   (() => {
     const updateDeploymentTimes = () => {
       document.querySelectorAll("[data-deployed-at]").forEach(element => {
@@ -2337,4 +2337,4 @@
     document.addEventListener("astro:page-load", updateDeploymentTimes);
     window.setInterval(updateDeploymentTimes, 60_000);
   })();
-</script>    <script type="module" src="/_astro/Layout.astro_astro_type_script_index_0_lang.DQQu8RqY.js"></script> <script type="module" src="/_astro/Layout.astro_astro_type_script_index_1_lang.DRvjezMo.js"></script> </body> </html>  <script type="module" src="/_astro/index.astro_astro_type_script_index_0_lang.Oly9xh_g.js"></script>
+</script>    <script type="module" src="/_astro/Layout.astro_astro_type_script_index_0_lang.BrDp0sUM.js"></script> <script type="module" src="/_astro/Layout.astro_astro_type_script_index_1_lang.DRvjezMo.js"></script> </body> </html>  <script type="module" src="/_astro/index.astro_astro_type_script_index_0_lang.Oly9xh_g.js"></script>

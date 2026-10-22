@@ -1,4 +1,4 @@
-<!DOCTYPE html><html dir="ltr" lang="zh-CN" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/android-3/"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.3.0/400.css"><link rel="preconnect" href="https://busuanzi.ibruce.info"><meta name="generator" content="Astro v6.4.2"><!-- Primary meta --><title>Android资源、活动条与消息通知（三） | Mofan</title><meta name="title" content="Android资源、活动条与消息通知（三） | Mofan"><meta name="description" content="本文介绍了对Android各种资源的创建与使用、Action Bar的使用、消息、通知与广播的使用进行了介绍。"><meta name="author" content="默烦"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Mofan"><meta property="og:title" content="Android资源、活动条与消息通知（三） | Mofan"><meta property="og:description" content="本文介绍了对Android各种资源的创建与使用、Action Bar的使用、消息、通知与广播的使用进行了介绍。"><meta property="og:url" content="https://mofan212.github.io/posts/android-3/"><meta property="og:image" content="https://mofan212.github.io/default-og.jpg"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://mofan212.github.io/posts/android-3/"><meta property="twitter:title" content="Android资源、活动条与消息通知（三） | Mofan"><meta property="twitter:description" content="本文介绍了对Android各种资源的创建与使用、Action Bar的使用、消息、通知与广播的使用进行了介绍。"><meta property="twitter:image" content="https://mofan212.github.io/default-og.jpg"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Mofan" href="https://mofan212.github.io/rss.xml"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2020-05-29T00:00:00.000Z"><meta property="article:modified_time" content="2020-07-20T00:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Android资源、活动条与消息通知（三） | Mofan","url":"https://mofan212.github.io/posts/android-3/","mainEntityOfPage":"https://mofan212.github.io/posts/android-3/","datePublished":"2020-05-29T00:00:00.000Z","dateModified":"2020-07-20T00:00:00.000Z","author":[{"@type":"Person","name":"默烦","url":"https://github.com/mofan212"}]}</script> <!--
+<!DOCTYPE html><html dir="ltr" lang="zh-CN" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/android-3/"><link rel="preconnect" href="https://npm.elemecdn.com"><link rel="preconnect" href="https://gcore.jsdelivr.net"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/lxgwwenkaiscreen.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.3.0/400.css"><link rel="preconnect" href="https://busuanzi.ibruce.info"><meta name="generator" content="Astro v6.4.2"><!-- Primary meta --><title>Android资源、活动条与消息通知（三） | Mofan</title><meta name="title" content="Android资源、活动条与消息通知（三） | Mofan"><meta name="description" content="本文介绍了对Android各种资源的创建与使用、Action Bar的使用、消息、通知与广播的使用进行了介绍。"><meta name="author" content="默烦"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Mofan"><meta property="og:title" content="Android资源、活动条与消息通知（三） | Mofan"><meta property="og:description" content="本文介绍了对Android各种资源的创建与使用、Action Bar的使用、消息、通知与广播的使用进行了介绍。"><meta property="og:url" content="https://mofan212.github.io/posts/android-3/"><meta property="og:image" content="https://mofan212.github.io/default-og.jpg"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://mofan212.github.io/posts/android-3/"><meta property="twitter:title" content="Android资源、活动条与消息通知（三） | Mofan"><meta property="twitter:description" content="本文介绍了对Android各种资源的创建与使用、Action Bar的使用、消息、通知与广播的使用进行了介绍。"><meta property="twitter:image" content="https://mofan212.github.io/default-og.jpg"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Mofan" href="https://mofan212.github.io/rss.xml"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2020-05-29T00:00:00.000Z"><meta property="article:modified_time" content="2020-07-20T00:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Android资源、活动条与消息通知（三） | Mofan","url":"https://mofan212.github.io/posts/android-3/","mainEntityOfPage":"https://mofan212.github.io/posts/android-3/","datePublished":"2020-05-29T00:00:00.000Z","dateModified":"2020-07-20T00:00:00.000Z","author":[{"@type":"Person","name":"默烦","url":"https://github.com/mofan212"}]}</script> <!--
       Inline FOUC-prevention script: sets data-theme on <html> before
       the browser paints. Runs synchronously, no defer/async.
     --><script>
@@ -14,7 +14,7 @@
         // Expose value so theme.ts can skip re-detection.
         window.__theme = { value: theme };
       })();
-    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.8-7lwm7-.css">
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.CRJPB6-j.css">
 <style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
 .toc-link[data-astro-cid-po2ckxzl]{position:relative;transition:color .2s ease}.toc-link[data-astro-cid-po2ckxzl]:before{position:absolute;inset-block:.375rem;inset-inline-start:-2px;width:2px;border-radius:2px;background-color:var(--accent);content:"";opacity:0;transition:opacity .2s ease}.toc-link[data-astro-cid-po2ckxzl][data-active]{color:var(--accent)}.toc-link[data-astro-cid-po2ckxzl][data-active]:before{opacity:1}.toc-toggle[data-astro-cid-po2ckxzl][aria-expanded=true] .toc-toggle-icon[data-astro-cid-po2ckxzl]{rotate:-90deg}.toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-width:thin}.post-toc-desktop[data-astro-cid-taqt6xe3] .toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-gutter:stable}.toc-scroll[data-astro-cid-taqt6xe3]:after{display:block;block-size:20dvh;content:""}[data-astro-cid-taqt6xe3][data-toc-dialog]{opacity:0;transform:translate(1.25rem);transition:opacity .16s ease-out,transform .22s cubic-bezier(.22,1,.36,1);will-change:opacity,transform}[data-astro-cid-taqt6xe3][data-toc-dialog][data-toc-visible]{opacity:1;transform:translate(0)}[data-astro-cid-taqt6xe3][data-toc-dialog]::backdrop{background-color:#0000;transition:background-color .18s ease-out}[data-astro-cid-taqt6xe3][data-toc-dialog][data-toc-visible]::backdrop{background-color:#0000007f}@media(prefers-reduced-motion:reduce){[data-astro-cid-taqt6xe3][data-toc-dialog]{transform:none;transition:none}[data-astro-cid-taqt6xe3][data-toc-dialog]::backdrop{transition:none}}[data-astro-cid-4wxclohh][data-post-series]{interpolate-size:allow-keywords}[data-astro-cid-4wxclohh][data-post-series]::details-content{block-size:0;overflow:hidden;opacity:0;transition:block-size .2s ease-out,opacity .15s ease-out,content-visibility .2s allow-discrete}[data-astro-cid-4wxclohh][data-post-series][open]::details-content{block-size:auto;opacity:1}@media(prefers-reduced-motion:reduce){[data-astro-cid-4wxclohh][data-post-series]::details-content{transition:none}}.post-sidebar[data-astro-cid-7ap3hmvm]{display:contents}@media(min-width:90rem){.post-sidebar[data-astro-cid-7ap3hmvm]{position:fixed;inset-block-start:9rem;inset-inline-start:calc(50% + var(--app-max-width) / 2 + 2rem);display:flex;width:min(18rem,calc(50vw - var(--app-max-width) / 2 - 3rem));height:calc(100dvh - 11rem);min-height:0;flex-direction:column}}
 </style><style>[data-astro-transition-scope="astro-36ssibgs-1"] { view-transition-name: android; }@layer astro { ::view-transition-old(android) { 
@@ -593,12 +593,12 @@
 
     update();
   })();
-</script> </div> <article id="article" class="mt-8 w-full app-prose max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)" data-astro-cid-7ap3hmvm> <!-- 封面画师：KNYT&emsp; &emsp;&emsp;&emsp;封面ID：73718817 -->
-<h1 id="android-应用的资源">Android 应用的资源</h1>
+</script> </div> <article id="article" class="mt-8 w-full app-prose post-content max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)" data-astro-cid-7ap3hmvm> <!-- 封面画师：KNYT&emsp; &emsp;&emsp;&emsp;封面ID：73718817 -->
+<h2 id="android-应用的资源">Android 应用的资源</h2>
 <p><mark class="flexible-marker flexible-marker-default">定义资源文件时注意标签首字母小写！</mark></p>
 <p><mark class="flexible-marker flexible-marker-default">定义资源文件时注意标签首字母小写！</mark></p>
 <p><mark class="flexible-marker flexible-marker-default">定义资源文件时注意标签首字母小写！</mark></p>
-<h2 id="字符串资源">字符串资源</h2>
+<h3 id="字符串资源">字符串资源</h3>
 <blockquote><p>字符串资源的使用</p></blockquote>
 <ol>
 <li>定义字符串资源文件	<code>&#x3C;string></code></li>
@@ -635,7 +635,7 @@
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">        textView</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">setText</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">getResources</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">().</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">getString</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">R</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">string</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">motto</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">));</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h2 id="颜色资源">颜色资源</h2>
+<h3 id="颜色资源">颜色资源</h3>
 <p><strong>颜色值：</strong></p>
 <p>Android 中，颜色值是由 透明度 加 红绿蓝三原色的值 来表示的。</p>
 <p>格式： <strong># + 透明度 + RGB</strong></p>
@@ -677,7 +677,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <p>在设置文字颜色时，需要我们修改 build.gradle 文件：将最小 sdk 版本更改至 23。</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="text"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span>minSdkVersion 23</span></span></code></pre>
-<h2 id="尺寸资源">尺寸资源</h2>
+<h3 id="尺寸资源">尺寸资源</h3>
 <p>常用尺寸单位：dp、sp</p>
 <p>dp：设备独立像素。根据设备屏幕大小自适应。常用于边距、组件大小的设置。</p>
 <p>sp：可伸缩像素。设置字体大小的单位。根据用户手机字体大小首选项进行缩放。</p>
@@ -716,7 +716,7 @@
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">        textView</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">setTextSize</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">getResources</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">().</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">getDimension</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">R</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">dimen</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">title</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">));</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h2 id="布局资源">布局资源</h2>
+<h3 id="布局资源">布局资源</h3>
 <p>布局资源位置：<strong>res/layout/**.xml</strong></p>
 <p>我们经常设置布局的 XML 文件就是布局资源文件，如：activity_main.xml</p>
 <p>我们 <strong>在Java文件中使用布局资源</strong>，通常是用：</p>
@@ -724,7 +724,7 @@
 <p><strong>在XML文件中使用布局资源文件：</strong></p>
 <p>假设我们已经在 layout 目录下创建了一个布局资源文件 image.xml，这时候我们想要在 activity_main.xml 中使用 image.xml 文件，那么可以使用：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">include</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> layout</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">=</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"@layout/image"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> >&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">include</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span></code></pre>
-<h2 id="数组资源">数组资源</h2>
+<h3 id="数组资源">数组资源</h3>
 <p>数组定义：数组是具有 <strong>一组相同类型</strong> 的 <strong>一组数据</strong> 的 <strong>集合</strong>。</p>
 <p>在 Android 中不推荐在 Java 程序中使用数组，而是建议使用数组资源文件。</p>
 <blockquote><p>使用数组</p></blockquote>
@@ -756,7 +756,7 @@
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">子元素名</th><th align="center">作用</th></tr></thead><tbody><tr><td align="center"><code>&#x3C;array></code></td><td align="center">定义普通类型数组。颜色、字符串、尺寸资源</td></tr><tr><td align="center"><code>&#x3C;integer-array></code></td><td align="center">定义整型数组。可以是十进制、十六进制等</td></tr><tr><td align="center"><code>&#x3C;string-array></code></td><td align="center">定义字符串数组</td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">子元素名</th><th align="center">作用</th></tr></thead><tbody><tr><td align="center"><code>&#x3C;array></code></td><td align="center">定义普通类型数组。颜色、字符串、尺寸资源</td></tr><tr><td align="center"><code>&#x3C;integer-array></code></td><td align="center">定义整型数组。可以是十进制、十六进制等</td></tr><tr><td align="center"><code>&#x3C;string-array></code></td><td align="center">定义字符串数组</td></tr></tbody></table></div>
 <p><strong>在XML文件中使用尺寸资源：</strong></p>
 <p>使用场景：为下拉列表框或列表视图指定要显示的数据。</p>
 <p>首先在 array.xml 文件中新建资源：</p>
@@ -798,7 +798,7 @@
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">        listView</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">setAdapter</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(adapter);</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h2 id="drawable-资源">Drawable 资源</h2>
+<h3 id="drawable-资源">Drawable 资源</h3>
 <p>我们不仅可以使用图片作为资源，还可以使用多种 XML 作为资源。只要这个 XML 文件可以被系统编译成 Drawable 子类的对象，那么这个 XML 文件就可以作为 Drawable 资源。</p>
 <p>Drawable 资源被保存在 res/drawable 目录下。AS 在创建项目时，会自动给我们创建 drawable 文件夹。</p>
 <p>为了适应不同分辨率，我们一般会在 res 目录下手动创建以下目录：drawable-hdpi、drawable-mdpi、drawable-xhdpi、drawable-xxhdpi、drawable-xxxhdpi。</p>
@@ -853,7 +853,7 @@
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">属性名</th><th align="center">含义</th></tr></thead><tbody><tr><td align="center">android:state_pressed</td><td align="center">是否处于按下状态</td></tr><tr><td align="center">android:state_focused</td><td align="center">是否处于聚焦状态</td></tr><tr><td align="center">android:state_selected</td><td align="center">是否处于选中状态</td></tr><tr><td align="center">android:state_checkable</td><td align="center">是否处于可勾选状态</td></tr><tr><td align="center">android:state_checked</td><td align="center">是否处于勾选状态</td></tr><tr><td align="center">android:state_enabled</td><td align="center">是否处于可用状态</td></tr><tr><td align="center">android:window_focused</td><td align="center">当前程序窗口是否有焦点</td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">属性名</th><th align="center">含义</th></tr></thead><tbody><tr><td align="center">android:state_pressed</td><td align="center">是否处于按下状态</td></tr><tr><td align="center">android:state_focused</td><td align="center">是否处于聚焦状态</td></tr><tr><td align="center">android:state_selected</td><td align="center">是否处于选中状态</td></tr><tr><td align="center">android:state_checkable</td><td align="center">是否处于可勾选状态</td></tr><tr><td align="center">android:state_checked</td><td align="center">是否处于勾选状态</td></tr><tr><td align="center">android:state_enabled</td><td align="center">是否处于可用状态</td></tr><tr><td align="center">android:window_focused</td><td align="center">当前程序窗口是否有焦点</td></tr></tbody></table></div>
 <p>注意：StateList 中第一个匹配当前状态的 item 会被使用。因此，如果第一个 item 没有任何状态特性的话，那么它将每次都被使用，这也是为什么默认的值必须总是在最后。</p>
 <hr>
 <p>实例：<strong>根据编辑框的焦点状态改变字体颜色</strong></p>
@@ -879,7 +879,7 @@
 <span class="line"><span style="--shiki-light:#986801;--shiki-dark:#D19A66">          android:layout_below</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">=</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"@+id/editText"</span></span>
 <span class="line"><span style="--shiki-light:#986801;--shiki-dark:#D19A66">          android:layout_alignParentLeft</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">=</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"true"</span></span>
 <span class="line"><span style="--shiki-light:#986801;--shiki-dark:#D19A66">          android:layout_alignParentStart</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">=</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"true"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">/></span></span></code></pre>
-<h2 id="mipmap-资源">mipmap 资源</h2>
+<h3 id="mipmap-资源">mipmap 资源</h3>
 <p>AS 在创建项目时，会自动给我们创建 mipmap 文件夹。这个文件夹就是用来存放 mipmap 资源文件的。</p>
 <p>mipmap 资源通常是 APP 的启动图标，我们把图标文件放在 mipmap 目录下，不仅可以提高系统渲染图片的速度，还可以图片的质量。</p>
 <p>与 drawable 目录一样，mipmap 目录也拥有相同的目录结构。比如 mipmap 目录下也有 mipmap-hdpi、mipmap-mdpi，mipmap-xhdpi 等目录。</p>
@@ -902,7 +902,7 @@
 <blockquote><p>mipmap 和 drawable 的区别</p></blockquote>
 <p>mipmap：存放应用程序图标</p>
 <p>drawable：可以存放图像文件、9-Patch、Shape、StateListDrawable 等。</p>
-<h2 id="主题资源">主题资源</h2>
+<h3 id="主题资源">主题资源</h3>
 <p>作用：设置窗口整体样式，改变窗口外观。</p>
 <p>在 AS 中我们可以切换系统自带的主题资源，在主题资源中还可以找到不显示 ActionBar 的主题资源。</p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AndroidImages/image-20200428225125078.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AndroidImages/image-20200428225125078.png" alt="image-20200428225125078" data-responsive-image="true"></picture></p>
@@ -964,7 +964,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <p><mark class="flexible-marker flexible-marker-default">在 Java 文件中使用主题资源：在 Activity 的 <code>onCreate()</code> 方法中，设置使用的主题资源时，一定要在方法 <code>setContentView()</code> 之间设置，否则不起作用。</mark></p>
-<h2 id="样式资源">样式资源</h2>
+<h3 id="样式资源">样式资源</h3>
 <p>我们可以在 res/values/styles.xml 中编写我们直接的样式资源。</p>
 <p>既然样式资源和主题资源都是在 styles.xml 中进行编写，<mark class="flexible-marker flexible-marker-default">那他们有什么区别呢</mark>？</p>
 <ul>
@@ -999,7 +999,7 @@
 <span class="line"><span style="--shiki-light:#986801;--shiki-dark:#D19A66">        android:layout_below</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">=</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"@+id/textView"</span></span>
 <span class="line"><span style="--shiki-light:#986801;--shiki-dark:#D19A66">        style</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">=</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"@style/context"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">/></span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">RelativeLayout</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span></code></pre>
-<h2 id="菜单资源">菜单资源</h2>
+<h3 id="菜单资源">菜单资源</h3>
 <p>AS 在创建项目时，不会默认给我们创建了菜单资源目录及文件。</p>
 <p>需要我们手动创建，文件位置为：<strong>res/menu/**.xml</strong></p>
 <blockquote><p>菜单资源的使用</p></blockquote>
@@ -1011,7 +1011,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    &#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">item</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> android:id</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">=</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"help"</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> android:title</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">=</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"帮助"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">>&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">item</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    &#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">item</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> android:id</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">=</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"feedback"</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> android:title</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">=</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"我要反馈"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">>&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">item</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">menu</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span></code></pre>
-<h2 id="创建选项菜单">创建选项菜单</h2>
+<h3 id="创建选项菜单">创建选项菜单</h3>
 <p>选项菜单：点击手机上的物理按键（菜单键）或手机 APP 右上角的三个小圆点弹出的菜单。</p>
 <p><strong>创建步骤：</strong></p>
 <ol>
@@ -1066,7 +1066,7 @@
 <span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">        return</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B"> super</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">onOptionsItemSelected</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(item);</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h2 id="创建上下文菜单">创建上下文菜单</h2>
+<h3 id="创建上下文菜单">创建上下文菜单</h3>
 <p>上下文菜单：就是我们在界面上长按某一组件时弹出的菜单。</p>
 <p><strong>创建步骤：</strong></p>
 <ol>
@@ -1120,12 +1120,12 @@
 <span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">        return</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> true</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h1 id="action-bar-的使用">Action Bar 的使用</h1>
-<h2 id="初识-action-bar">初识 Action Bar</h2>
+<h2 id="action-bar-的使用">Action Bar 的使用</h2>
+<h3 id="初识-action-bar">初识 Action Bar</h3>
 <picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AndroidImages/Action%20Bar.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AndroidImages/Action Bar.png" alt="Action Bar" style="zoom: 33%;" data-responsive-image="true"></picture>
 <p>Action Bar 可以含有：APP 图标、Activity 标题、选项菜单、溢出菜单、向上按钮、Tab 导航等。</p>
 <p>可供参考链接：			<a href="https://www.cnblogs.com/jerehedu/p/4514772.html" target="_blank" rel="noopener noreferrer">参考链接1</a></p>
-<h2 id="显示和隐藏-action-bar">显示和隐藏 Action Bar</h2>
+<h3 id="显示和隐藏-action-bar">显示和隐藏 Action Bar</h3>
 <p>从 Android 3.0（API 11）开始 Activity 就默认包含了 Action Bar 组件。</p>
 <p><strong>显示Action Bar：</strong></p>
 <p>那么只需要在 build.gradle 文件中将 <code>android:minSdkVersion</code> 设置成 11 或以上版本就可以了。</p>
@@ -1172,7 +1172,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">        }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    });</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span></code></pre>
-<h2 id="添加-action-item">添加 Action Item</h2>
+<h3 id="添加-action-item">添加 Action Item</h3>
 <p>在 Action Bar 上可以看到很多 <strong>小图标</strong>，这些小图标就叫做：Action Item。由于 Action Bar 上的空间是有限的，有些放不下的小图标可以放到 <strong>溢出菜单</strong>。</p>
 <p><strong>Action Bar空间划分示例：</strong></p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AndroidImages/image-20200429132355580.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AndroidImages/image-20200429132355580.png" alt="image-20200429132355580" data-responsive-image="true"></picture></p>
@@ -1233,7 +1233,7 @@
 <p>在 <strong>showAsAction属性详解</strong> 中我们已经知道可以通过设置 withText 作为属性值来显示 title。因此我们是否可以通过设置<code>app:showAsAction="always|withText"</code>来同时显示 title 和 icon</p>
 <p>我们发现这样也不一定生效，因为 withText 对 actionBar 的 title 来说只是一个 hint，在条件允许的情况下 actionBar 会显示 title，但是当设置了 icon 并由于空间限制也不会显示 title。</p>
 <p>而且 <strong>系统默认在竖屏时是只显示icon</strong>，不论是否设置了 withText 属性在竖屏时都只显示 icon 而不显示 title。withText 属性要在横屏时才体现的出来，将设备横屏显示就既显示图标又显示文字了。</p>
-<h2 id="添加-action-view">添加 Action View</h2>
+<h3 id="添加-action-view">添加 Action View</h3>
 <p>在一些 APP 界面的 Action Bar 上，经常可以看到有用来进行搜索操作的输入框或者可以进行搜索的组件，这些就是 Action View。但也并不是说只有搜索框或搜索组件才是 Action View，Action View 是用于替换 Action Button 并显示在 Action Bar 上面的一种可视组件。</p>
 <blockquote><p>添加 Action View</p></blockquote>
 <p><strong>方法：</strong></p>
@@ -1303,7 +1303,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span>
 <span class="line"></span></code></pre>
-<h2 id="action-bar-与-tab">Action Bar 与 Tab</h2>
+<h3 id="action-bar-与-tab">Action Bar 与 Tab</h3>
 <p>在最新版的 Android 中，已经不推荐使用这种方法来实现顶部的 Tab 切换，推荐使用 TabLayout。</p>
 <p>内容太多，在此给出 4 片文章作为参考，也可根据自己需要自行搜索：</p>
 <p><a href="https://www.jianshu.com/p/822013d9600e" target="_blank" rel="noopener noreferrer">TabLayout-标签布局-</a></p>
@@ -1311,7 +1311,7 @@
 <p><a href="https://www.jianshu.com/p/fde38f367019" target="_blank" rel="noopener noreferrer">Tablayout使用全解，一篇就够了</a></p>
 <p><a href="https://blog.csdn.net/m0_37168878/article/details/73326095" target="_blank" rel="noopener noreferrer">TabLayout使用详解</a></p>
 <p>前三篇为属性讲解和基本使用，最后一篇为小实战。</p>
-<h2 id="实现层级式导航">实现层级式导航</h2>
+<h3 id="实现层级式导航">实现层级式导航</h3>
 <p>在 APP 的一些界面中，我们可以看到左上角有一个返回箭头，当我们点击这个箭头时，我们就会回到上一界面，这个箭头启用了层级式导航才实现了这样的功能。</p>
 <p><strong>实现方法：</strong></p>
 <ol>
@@ -1378,8 +1378,8 @@
 <span class="line"><span style="--shiki-light:#986801;--shiki-dark:#D19A66">               android:name</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">=</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"android.support.PARENT_ACTIVITY"</span></span>
 <span class="line"><span style="--shiki-light:#986801;--shiki-dark:#D19A66">               android:value</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">=</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">".MainActivity"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">/></span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">activity</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span></code></pre>
-<h1 id="消息通知与广播">消息、通知与广播</h1>
-<h2 id="通过-toast-显示消息提示框">通过 Toast 显示消息提示框</h2>
+<h2 id="消息通知与广播">消息、通知与广播</h2>
+<h3 id="通过-toast-显示消息提示框">通过 Toast 显示消息提示框</h3>
 <p><strong>消息提示框特点：</strong></p>
 <ol>
 <li>没有控制按钮</li>
@@ -1402,7 +1402,7 @@
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">Toast</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">makeText</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">MainActivity</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">this</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"******"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">Toast</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">LENGTH_SHORT</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">).</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">show</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">();</span></span></code></pre>
 <p>makeText 第一个参数为上下文对象，第二个参数为消息内容，第三个参数为持续时间。</p>
 <p>持续时间： <code>LENGTH_SHORT</code>(2 s)		<code>LENGTH_LONG</code>(3.5 s)</p>
-<h2 id="使用-alertdialog-实现对话框">使用 AlertDialog 实现对话框</h2>
+<h3 id="使用-alertdialog-实现对话框">使用 AlertDialog 实现对话框</h3>
 <p><strong>对话框组成部分：</strong></p>
 <picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AndroidImages/%E5%AF%B9%E8%AF%9D%E6%A1%86.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AndroidImages/对话框.png" alt="对话框" style="zoom: 25%;" data-responsive-image="true"></picture>
 <p>其中，图标区和标题区 <strong>不是必须的</strong>。</p>
@@ -1586,7 +1586,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <blockquote><p>总结：</p></blockquote>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AndroidImages/AlertDialog.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AndroidImages/AlertDialog.png" alt="AlertDialog" data-responsive-image="true"></picture></p>
-<h2 id="使用-notification-显示通知">使用 Notification 显示通知</h2>
+<h3 id="使用-notification-显示通知">使用 Notification 显示通知</h3>
 <p>这里的通知是指在顶部状态栏上的通知。</p>
 <p><strong>使用Notification显示通知的步骤：</strong></p>
 <ol>
@@ -1655,7 +1655,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <hr>
-<h3 id="问题思考">问题思考</h3>
+<h4 id="问题思考">问题思考</h4>
 <p>编写好 MainActivity 运行后，状态栏不会显示通知，并弹出消息提示框，显示：<mark class="flexible-marker flexible-marker-default">Failed to post notification on channel “null”</mark></p>
 <p>参考链接：<a href="https://stackoverflow.com/questions/53191386/failed-to-post-notification-on-channel-null" target="_blank" rel="noopener noreferrer">Failed to post notification on channel “null”</a></p>
 <p>原因：Since Android Oreo, you need a Channel to send your notifications.</p>
@@ -1670,7 +1670,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">            notificationManager.createNotificationChannel(notificationChannel);</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">        }</span></span></code></pre>
 <p>其中，<strong>notificationManager是实例的NotificationManager对象，builder是实例的Notification.Builder对象</strong>。</p>
-<h2 id="使用-broadcastreceiver">使用 BroadcastReceiver</h2>
+<h3 id="使用-broadcastreceiver">使用 BroadcastReceiver</h3>
 <p>BroadcastReceiver：广播接收器。</p>
 <picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AndroidImages/BroadcastReceiver.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AndroidImages/BroadcastReceiver.png" alt="BroadcastReceiver" style="zoom:50%;" data-responsive-image="true"></picture>
 <p>在安卓中，广播没有自己的表现形式，但我们可以通过通知、对话框、消息提示框来展示出来。</p>
@@ -1735,7 +1735,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <p>我们在这个案例中使用的是动态注册广播，因为我们使用的是 Android 10，在 Android 8 及以上的版本中静态注册广播的方式无效，因此选用动态注册广播。</p>
 <p>至于静态注册在此不再说明，只需要在 AndroidManifest.xml 文件中配置即可，可自行搜索了解。</p>
-<h2 id="使用-alarmmanager-设置闹钟">使用 AlarmManager 设置闹钟</h2>
+<h3 id="使用-alarmmanager-设置闹钟">使用 AlarmManager 设置闹钟</h3>
 <p>通过案例来介绍：</p>
 <blockquote><p>应用 AlarmManager 类实现一个定时启动的闹钟</p></blockquote>
 <p>案例介绍：先设置一个闹钟，当到达设置的时间后，会弹出对话框显示。</p>
@@ -1812,14 +1812,14 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <hr>
-<h3 id="闹钟类型">闹钟类型</h3>
+<h4 id="闹钟类型">闹钟类型</h4>
 <p><code>ELAPSED_REALTIME</code>：设置在指定的延时后提醒，不会唤醒系统<br>
 <code>ELAPSED_REALTIME_WAKEUP</code>：设置在指定的延时后提醒，会唤醒系统<br>
 <code>RTC</code>：使用真实的时间提醒，到达指定的时间提醒，不会唤醒系统<br>
 <code>RTC_WAKEUP</code>：使用真实的时间提醒，到达指定的时间提醒，会唤醒系统</p>
 <p>使用 AlarmManager 类的实例对象中的 <code>set()</code> 方法设置闹钟。</p>
 <hr>
-<p>​																					<mark class="flexible-marker flexible-marker-default">Android 资源、活动条与信息通知完</mark></p> </article> <div class="text-muted-foreground max-w-app mt-20 w-full space-y-3 text-center text-sm" data-astro-cid-7ap3hmvm> <aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full px-2 text-center leading-6 sm:px-0"> <p class="m-0 break-words"> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a><span> 许可协议，</span><span class="max-sm:block">转载时请署名并注明<a href="https://mofan212.github.io/posts/android-3/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a> 🔗</span> </p> </aside> <section data-post-reward data-pagefind-ignore class="w-full" aria-label="赞赏"> <div class="flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:flex-wrap sm:gap-x-1.5 sm:gap-y-2"> <span class="sm:whitespace-nowrap">如果这篇文章对你有帮助，可以通过</span> <a href="/reward/" class="focus-outline border-accent text-accent hover:bg-accent/10 active:bg-accent/10 inline-block rounded-md border px-3 py-1 font-medium transition-colors"> 赞赏 </a> <span class="sm:whitespace-nowrap">请我喝杯 Coffee ☕</span> </div> </section> </div> <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm>  <ul id="post-tags" class="mt-4 mb-8 flex flex-wrap gap-4 sm:mb-8" data-astro-cid-7ap3hmvm> <li> <a href="/tags/android/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> Android </a> </li> </ul>  <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/android-2/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.3l105.3-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg> <div> <span>上一篇</span> <div class="text-accent/85 text-sm">Android核心与事件处理（二）</div> </div> </a> <a href="/posts/android-4/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>下一篇</span> <div class="text-accent/85 text-sm">Android图像处理和多媒体（四）</div> </div> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg> </a> </div> </main> <footer class="app-layout mt-auto" data-astro-cid-7ap3hmvm="true"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="text-muted-foreground my-2 flex w-fit flex-col items-start text-start text-sm whitespace-nowrap"> <div class="flex items-center gap-1.5"> <svg width="24" height="24" fill="currentColor" class="size-4" viewBox="-49.231 -39.385 738.462 590.769" aria-hidden="true"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9-.1-2.7-.2-5.4-.2-8.1 0-88.4 71.6-160 160-160 59.3 0 111 32.2 138.7 80.2A95.5 95.5 0 0 1 448 96c53 0 96 43 96 96 0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39L296 392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0z" /></svg> <span>最近更新：</span> <time class="tabular-nums" datetime="2026-10-21T03:16:11.000Z" data-deployed-at="2026-10-21T03:16:11.000Z" data-just-now="刚刚" data-locale="zh-CN"> 2026-10-21 11:16 </time> </div> <div class="mt-1 flex items-center gap-3 text-xs"> <span class="flex items-center gap-1" title="本站访客数"> <svg width="24" height="24" fill="currentColor" class="size-3" viewBox="-2.835 -3.241 453.671 518.481" aria-hidden="true"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3z" /></svg> <span class="sr-only">本站访客数：</span> <span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> <span aria-hidden="true">|</span> <span class="flex items-center gap-1.5" title="本站总浏览量"> <span class="flex size-4 items-center justify-center" aria-hidden="true"> <svg width="24" height="24" fill="currentColor" class="size-3.5" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48zM0 272c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v160c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zM368 96h32c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48" /></svg> </span> <span class="sr-only">本站总浏览量：</span> <span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> </div> </div> <div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"> <span>版权所有 &#169; 2020 – 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer> <script>
+<p>​																					<mark class="flexible-marker flexible-marker-default">Android 资源、活动条与信息通知完</mark></p> </article> <div class="text-muted-foreground max-w-app mt-20 w-full space-y-3 text-center text-sm" data-astro-cid-7ap3hmvm> <aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full px-2 text-center leading-6 sm:px-0"> <p class="m-0 break-words"> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a><span> 许可协议，</span><span class="max-sm:block">转载时请署名并注明<a href="https://mofan212.github.io/posts/android-3/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a> 🔗</span> </p> </aside> <section data-post-reward data-pagefind-ignore class="w-full" aria-label="赞赏"> <div class="flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:flex-wrap sm:gap-x-1.5 sm:gap-y-2"> <span class="sm:whitespace-nowrap">如果这篇文章对你有帮助，可以通过</span> <a href="/reward/" class="focus-outline border-accent text-accent hover:bg-accent/10 active:bg-accent/10 inline-block rounded-md border px-3 py-1 font-medium transition-colors"> 赞赏 </a> <span class="sm:whitespace-nowrap">请我喝杯 Coffee ☕</span> </div> </section> </div> <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm>  <ul id="post-tags" class="mt-4 mb-8 flex flex-wrap gap-4 sm:mb-8" data-astro-cid-7ap3hmvm> <li> <a href="/tags/android/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> Android </a> </li> </ul>  <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/android-2/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.3l105.3-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg> <div> <span>上一篇</span> <div class="text-accent/85 text-sm">Android核心与事件处理（二）</div> </div> </a> <a href="/posts/android-4/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>下一篇</span> <div class="text-accent/85 text-sm">Android图像处理和多媒体（四）</div> </div> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg> </a> </div> </main> <footer class="app-layout mt-auto" data-astro-cid-7ap3hmvm="true"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="text-muted-foreground my-2 flex w-fit flex-col items-start text-start text-sm whitespace-nowrap"> <div class="flex items-center gap-1.5"> <svg width="24" height="24" fill="currentColor" class="size-4" viewBox="-49.231 -39.385 738.462 590.769" aria-hidden="true"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9-.1-2.7-.2-5.4-.2-8.1 0-88.4 71.6-160 160-160 59.3 0 111 32.2 138.7 80.2A95.5 95.5 0 0 1 448 96c53 0 96 43 96 96 0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39L296 392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0z" /></svg> <span>最近更新：</span> <time class="tabular-nums" datetime="2026-10-22T08:22:01.000Z" data-deployed-at="2026-10-22T08:22:01.000Z" data-just-now="刚刚" data-locale="zh-CN"> 2026-10-22 16:22 </time> </div> <div class="mt-1 flex items-center gap-3 text-xs"> <span class="flex items-center gap-1" title="本站访客数"> <svg width="24" height="24" fill="currentColor" class="size-3" viewBox="-2.835 -3.241 453.671 518.481" aria-hidden="true"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3z" /></svg> <span class="sr-only">本站访客数：</span> <span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> <span aria-hidden="true">|</span> <span class="flex items-center gap-1.5" title="本站总浏览量"> <span class="flex size-4 items-center justify-center" aria-hidden="true"> <svg width="24" height="24" fill="currentColor" class="size-3.5" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48zM0 272c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v160c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zM368 96h32c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48" /></svg> </span> <span class="sr-only">本站总浏览量：</span> <span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> </div> </div> <div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"> <span>版权所有 &#169; 2020 – 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer> <script>
   (() => {
     const updateDeploymentTimes = () => {
       document.querySelectorAll("[data-deployed-at]").forEach(element => {
@@ -1868,4 +1868,4 @@
     document.addEventListener("astro:page-load", updateDeploymentTimes);
     window.setInterval(updateDeploymentTimes, 60_000);
   })();
-</script>    <script type="module" src="/_astro/Layout.astro_astro_type_script_index_0_lang.DQQu8RqY.js"></script> <script type="module" src="/_astro/Layout.astro_astro_type_script_index_1_lang.DRvjezMo.js"></script> </body> </html>  <script type="module" src="/_astro/index.astro_astro_type_script_index_0_lang.Oly9xh_g.js"></script>
+</script>    <script type="module" src="/_astro/Layout.astro_astro_type_script_index_0_lang.BrDp0sUM.js"></script> <script type="module" src="/_astro/Layout.astro_astro_type_script_index_1_lang.DRvjezMo.js"></script> </body> </html>  <script type="module" src="/_astro/index.astro_astro_type_script_index_0_lang.Oly9xh_g.js"></script>

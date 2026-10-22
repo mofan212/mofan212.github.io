@@ -1,4 +1,4 @@
-<!DOCTYPE html><html dir="ltr" lang="zh-CN" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/android-2/"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.3.0/400.css"><link rel="preconnect" href="https://busuanzi.ibruce.info"><meta name="generator" content="Astro v6.4.2"><!-- Primary meta --><title>Android核心与事件处理（二） | Mofan</title><meta name="title" content="Android核心与事件处理（二） | Mofan"><meta name="description" content="本文重点介绍了基本程序单元 Activity 和应用核心 Intent 的基本使用。"><meta name="author" content="默烦"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Mofan"><meta property="og:title" content="Android核心与事件处理（二） | Mofan"><meta property="og:description" content="本文重点介绍了基本程序单元 Activity 和应用核心 Intent 的基本使用。"><meta property="og:url" content="https://mofan212.github.io/posts/android-2/"><meta property="og:image" content="https://mofan212.github.io/default-og.jpg"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://mofan212.github.io/posts/android-2/"><meta property="twitter:title" content="Android核心与事件处理（二） | Mofan"><meta property="twitter:description" content="本文重点介绍了基本程序单元 Activity 和应用核心 Intent 的基本使用。"><meta property="twitter:image" content="https://mofan212.github.io/default-og.jpg"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Mofan" href="https://mofan212.github.io/rss.xml"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2020-05-29T00:00:00.000Z"><meta property="article:modified_time" content="2020-07-20T00:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Android核心与事件处理（二） | Mofan","url":"https://mofan212.github.io/posts/android-2/","mainEntityOfPage":"https://mofan212.github.io/posts/android-2/","datePublished":"2020-05-29T00:00:00.000Z","dateModified":"2020-07-20T00:00:00.000Z","author":[{"@type":"Person","name":"默烦","url":"https://github.com/mofan212"}]}</script> <!--
+<!DOCTYPE html><html dir="ltr" lang="zh-CN" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/android-2/"><link rel="preconnect" href="https://npm.elemecdn.com"><link rel="preconnect" href="https://gcore.jsdelivr.net"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/lxgwwenkaiscreen.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.3.0/400.css"><link rel="preconnect" href="https://busuanzi.ibruce.info"><meta name="generator" content="Astro v6.4.2"><!-- Primary meta --><title>Android核心与事件处理（二） | Mofan</title><meta name="title" content="Android核心与事件处理（二） | Mofan"><meta name="description" content="本文重点介绍了基本程序单元 Activity 和应用核心 Intent 的基本使用。"><meta name="author" content="默烦"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Mofan"><meta property="og:title" content="Android核心与事件处理（二） | Mofan"><meta property="og:description" content="本文重点介绍了基本程序单元 Activity 和应用核心 Intent 的基本使用。"><meta property="og:url" content="https://mofan212.github.io/posts/android-2/"><meta property="og:image" content="https://mofan212.github.io/default-og.jpg"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://mofan212.github.io/posts/android-2/"><meta property="twitter:title" content="Android核心与事件处理（二） | Mofan"><meta property="twitter:description" content="本文重点介绍了基本程序单元 Activity 和应用核心 Intent 的基本使用。"><meta property="twitter:image" content="https://mofan212.github.io/default-og.jpg"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Mofan" href="https://mofan212.github.io/rss.xml"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2020-05-29T00:00:00.000Z"><meta property="article:modified_time" content="2020-07-20T00:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Android核心与事件处理（二） | Mofan","url":"https://mofan212.github.io/posts/android-2/","mainEntityOfPage":"https://mofan212.github.io/posts/android-2/","datePublished":"2020-05-29T00:00:00.000Z","dateModified":"2020-07-20T00:00:00.000Z","author":[{"@type":"Person","name":"默烦","url":"https://github.com/mofan212"}]}</script> <!--
       Inline FOUC-prevention script: sets data-theme on <html> before
       the browser paints. Runs synchronously, no defer/async.
     --><script>
@@ -14,7 +14,7 @@
         // Expose value so theme.ts can skip re-detection.
         window.__theme = { value: theme };
       })();
-    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.8-7lwm7-.css">
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.CRJPB6-j.css">
 <style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
 .toc-link[data-astro-cid-po2ckxzl]{position:relative;transition:color .2s ease}.toc-link[data-astro-cid-po2ckxzl]:before{position:absolute;inset-block:.375rem;inset-inline-start:-2px;width:2px;border-radius:2px;background-color:var(--accent);content:"";opacity:0;transition:opacity .2s ease}.toc-link[data-astro-cid-po2ckxzl][data-active]{color:var(--accent)}.toc-link[data-astro-cid-po2ckxzl][data-active]:before{opacity:1}.toc-toggle[data-astro-cid-po2ckxzl][aria-expanded=true] .toc-toggle-icon[data-astro-cid-po2ckxzl]{rotate:-90deg}.toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-width:thin}.post-toc-desktop[data-astro-cid-taqt6xe3] .toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-gutter:stable}.toc-scroll[data-astro-cid-taqt6xe3]:after{display:block;block-size:20dvh;content:""}[data-astro-cid-taqt6xe3][data-toc-dialog]{opacity:0;transform:translate(1.25rem);transition:opacity .16s ease-out,transform .22s cubic-bezier(.22,1,.36,1);will-change:opacity,transform}[data-astro-cid-taqt6xe3][data-toc-dialog][data-toc-visible]{opacity:1;transform:translate(0)}[data-astro-cid-taqt6xe3][data-toc-dialog]::backdrop{background-color:#0000;transition:background-color .18s ease-out}[data-astro-cid-taqt6xe3][data-toc-dialog][data-toc-visible]::backdrop{background-color:#0000007f}@media(prefers-reduced-motion:reduce){[data-astro-cid-taqt6xe3][data-toc-dialog]{transform:none;transition:none}[data-astro-cid-taqt6xe3][data-toc-dialog]::backdrop{transition:none}}[data-astro-cid-4wxclohh][data-post-series]{interpolate-size:allow-keywords}[data-astro-cid-4wxclohh][data-post-series]::details-content{block-size:0;overflow:hidden;opacity:0;transition:block-size .2s ease-out,opacity .15s ease-out,content-visibility .2s allow-discrete}[data-astro-cid-4wxclohh][data-post-series][open]::details-content{block-size:auto;opacity:1}@media(prefers-reduced-motion:reduce){[data-astro-cid-4wxclohh][data-post-series]::details-content{transition:none}}.post-sidebar[data-astro-cid-7ap3hmvm]{display:contents}@media(min-width:90rem){.post-sidebar[data-astro-cid-7ap3hmvm]{position:fixed;inset-block-start:9rem;inset-inline-start:calc(50% + var(--app-max-width) / 2 + 2rem);display:flex;width:min(18rem,calc(50vw - var(--app-max-width) / 2 - 3rem));height:calc(100dvh - 11rem);min-height:0;flex-direction:column}}
 </style><style>[data-astro-transition-scope="astro-36ssibgs-1"] { view-transition-name: android; }@layer astro { ::view-transition-old(android) { 
@@ -593,9 +593,9 @@
 
     update();
   })();
-</script> </div> <article id="article" class="mt-8 w-full app-prose max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)" data-astro-cid-7ap3hmvm> <!-- 封面画师：画师JW&emsp; &emsp;&emsp;&emsp;封面ID：78042954 -->
-<h1 id="基本程序单元-activity">基本程序单元 Activity</h1>
-<h2 id="activity-概述">Activity 概述</h2>
+</script> </div> <article id="article" class="mt-8 w-full app-prose post-content max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)" data-astro-cid-7ap3hmvm> <!-- 封面画师：画师JW&emsp; &emsp;&emsp;&emsp;封面ID：78042954 -->
+<h2 id="基本程序单元-activity">基本程序单元 Activity</h2>
+<h3 id="activity-概述">Activity 概述</h3>
 <p>Activity 中文含义：活动，但是在 Android 中 Activity 的含义是手机屏幕的一屏，它是 Android 程序中重要的基本组件之一。</p>
 <blockquote><p>Activity 的 4 种状态</p></blockquote>
 <p><strong>运行状态</strong>：当安卓应用在运行时，此时就是处于运行状态。</p>
@@ -606,7 +606,7 @@
 <blockquote><p>Activity 的生命周期</p></blockquote>
 <picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AndroidImages/image-20200423135231955.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AndroidImages/image-20200423135231955.png" alt="image-20200423135231955" style="zoom:50%;" data-responsive-image="true"></picture>
 <p>矩形框内表示内容可已被回调的方法，<strong>非矩形框内表示Activity的重要状态。</strong></p>
-<h2 id="创建启动和关闭-activity">创建、启动和关闭 Activity</h2>
+<h3 id="创建启动和关闭-activity">创建、启动和关闭 Activity</h3>
 <blockquote><p>创建 Activity</p></blockquote>
 <ol>
 <li>创建继承自 Activity 的 Activity；</li>
@@ -712,7 +712,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <p><mark class="flexible-marker flexible-marker-default">实现刷新当前 Activity：直接调用 <code>onCreate(null);</code> 即可</mark></p>
-<h2 id="多个-activity-的使用">多个 Activity 的使用</h2>
+<h3 id="多个-activity-的使用">多个 Activity 的使用</h3>
 <blockquote><p>Bundle</p></blockquote>
 <p><strong>Bundle</strong>：一个键值对的组合，要读取时，我们只需要使用 key 就可以找到对应的 value。</p>
 <p><strong>可以使用Bundle在Activity之间交换数据。</strong></p>
@@ -912,7 +912,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">        });</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h2 id="使用-fragment">使用 Fragment</h2>
+<h3 id="使用-fragment">使用 Fragment</h3>
 <blockquote><p>Fragment 的生命周期</p></blockquote>
 <p><strong>通俗理解：</strong></p>
 <p>如果我们把 Activity 比作成 <strong>鱼塘的水</strong>，那么 Fragment 就相当于 <strong>鱼塘中的鱼</strong>。当鱼塘干涸时，鱼也就死掉了；当 Activity 暂停时，里面的所有 Fragment 也会被暂停；当 Activity 被销毁时，它里面的所有 Fragment 也会被销毁。只有当 Activity 正在运行时，我们才能对里面的 Fragment 进行操作。</p>
@@ -1041,7 +1041,7 @@
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">        fragmentTransaction</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">commit</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">();</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h2 id="实现-tab-标签切换功能">实现 Tab 标签切换功能</h2>
+<h3 id="实现-tab-标签切换功能">实现 Tab 标签切换功能</h3>
 <p>在本次案例中，使用 Fragment 实现 Tab 标签的切换功能。</p>
 <p>我们需要准备三个图标资源：主页、地图、我</p>
 <p><strong>我们先设置三个标签对应的页面，我们使用文本框来代替：</strong></p>
@@ -1152,8 +1152,8 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">        }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">    }</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h1 id="应用核心-intent">应用核心 Intent</h1>
-<h2 id="初始-intent">初始 Intent</h2>
+<h2 id="应用核心-intent">应用核心 Intent</h2>
+<h3 id="初始-intent">初始 Intent</h3>
 <p>中文翻译：n. 意图、目的</p>
 <blockquote><p>概括 Intent</p></blockquote>
 <p>我们在 Android 应用程序中需要用到三种组件：<strong>Activity</strong>、<strong>Service</strong>、<strong>BroadcastReceiver</strong>。这三个组件是独立的，但他们可以相互调用、协调工作，最终组成一个完整的安卓应用。</p>
@@ -1169,7 +1169,7 @@
 <li>通过 Intent 可以开启一个 Service（比如点击下载按钮后下载某种文件、应用）；</li>
 <li>用来传递广播。</li>
 </ol>
-<h2 id="intent-对象的属性">Intent 对象的属性</h2>
+<h3 id="intent-对象的属性">Intent 对象的属性</h3>
 <p>Intent 对象的属性包括：<strong>Component name</strong>、<strong>Action</strong>、<strong>Data</strong>、<strong>Category</strong>、<strong>Extras</strong>，<strong>Flags</strong>。</p>
 <p>可以参考上文中 <strong>概述Intent</strong> 中的图。</p>
 <blockquote><p><strong>Component name</strong></p></blockquote>
@@ -1370,7 +1370,7 @@
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">Category 常量</th><th align="center">常量对应字符串</th><th align="center">简单说明</th></tr></thead><tbody><tr><td align="center">CATEGORY_DEFAULT</td><td align="center">android.intent.category.DEFAULT</td><td align="center">默认的 Category</td></tr><tr><td align="center">CATEGORY_BROWSABLE</td><td align="center">android.intent.category.BROWSABLE</td><td align="center">指定该 Activity 能被浏览器安全调用</td></tr><tr><td align="center">CATEGORY_TAB</td><td align="center">android.intent.category.TAB</td><td align="center">指定 Activity 作为 TabActivity 的 Tab 页</td></tr><tr><td align="center">CATEGORY_LAUNCHER</td><td align="center">android.intent.category.LAUNCHER</td><td align="center">Activity 显示顶级程序列表中(设置程序主入口)</td></tr><tr><td align="center">CATEGORY_INFO</td><td align="center">android.intent.category.INFO</td><td align="center">用于提供包信息</td></tr><tr><td align="center">CATEGORY_HOME</td><td align="center">android.intent.category.HOME</td><td align="center">设置该 Activity 随系统启动而运行(返回系统桌面)</td></tr><tr><td align="center">CATEGORY_PREFERENCE</td><td align="center">android.intent.category.PREFERENCE</td><td align="center">该 Activity 是参数面板</td></tr><tr><td align="center">CATEGORY_TEST</td><td align="center">android.intent.category.TEST</td><td align="center">该 Activity 是一个测试</td></tr><tr><td align="center">CATEGORY_CAR_DOCK</td><td align="center">android.intent.category.CAR_DOCK</td><td align="center">指定手机被插入汽车底座(硬件)时运行该 Activity</td></tr><tr><td align="center">CATEGORY_DESK_DOCK</td><td align="center">android.intent.category.DESK_DOCK</td><td align="center">指定手机被插入桌面底座(硬件)时运行该 Activity</td></tr><tr><td align="center">CATEGORY_CAR_MODE</td><td align="center">android.intent.category.CAR_MODE</td><td align="center">设置该 Activity 可在车载环境下使用</td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">Category 常量</th><th align="center">常量对应字符串</th><th align="center">简单说明</th></tr></thead><tbody><tr><td align="center">CATEGORY_DEFAULT</td><td align="center">android.intent.category.DEFAULT</td><td align="center">默认的 Category</td></tr><tr><td align="center">CATEGORY_BROWSABLE</td><td align="center">android.intent.category.BROWSABLE</td><td align="center">指定该 Activity 能被浏览器安全调用</td></tr><tr><td align="center">CATEGORY_TAB</td><td align="center">android.intent.category.TAB</td><td align="center">指定 Activity 作为 TabActivity 的 Tab 页</td></tr><tr><td align="center">CATEGORY_LAUNCHER</td><td align="center">android.intent.category.LAUNCHER</td><td align="center">Activity 显示顶级程序列表中(设置程序主入口)</td></tr><tr><td align="center">CATEGORY_INFO</td><td align="center">android.intent.category.INFO</td><td align="center">用于提供包信息</td></tr><tr><td align="center">CATEGORY_HOME</td><td align="center">android.intent.category.HOME</td><td align="center">设置该 Activity 随系统启动而运行(返回系统桌面)</td></tr><tr><td align="center">CATEGORY_PREFERENCE</td><td align="center">android.intent.category.PREFERENCE</td><td align="center">该 Activity 是参数面板</td></tr><tr><td align="center">CATEGORY_TEST</td><td align="center">android.intent.category.TEST</td><td align="center">该 Activity 是一个测试</td></tr><tr><td align="center">CATEGORY_CAR_DOCK</td><td align="center">android.intent.category.CAR_DOCK</td><td align="center">指定手机被插入汽车底座(硬件)时运行该 Activity</td></tr><tr><td align="center">CATEGORY_DESK_DOCK</td><td align="center">android.intent.category.DESK_DOCK</td><td align="center">指定手机被插入桌面底座(硬件)时运行该 Activity</td></tr><tr><td align="center">CATEGORY_CAR_MODE</td><td align="center">android.intent.category.CAR_MODE</td><td align="center">设置该 Activity 可在车载环境下使用</td></tr></tbody></table></div>
 <hr>
 <p>案例：<strong>实现单击按钮关闭界面回到系统桌面</strong></p>
 <p>activity_main.xml：</p>
@@ -1444,7 +1444,7 @@
 <p><strong>运行结果：</strong></p>
 <p>如果 <mark class="flexible-marker flexible-marker-default">不使用</mark><code>FLAG_ACTIVITY_NO_HISTORY</code>，当我们点击「查看详情」按钮后，界面会跳转到 activity_detail界面，并显示内容：“详情内容”。此时我们不停止当前程序，然后返回至系统桌面，再在后台找到该项目并进入该项目，进去后我们会发现 <strong>当前界面依旧在activity_detail 界面</strong>。</p>
 <p>如果 <mark class="flexible-marker flexible-marker-default">使用</mark><code>FLAG_ACTIVITY_NO_HISTORY</code>，当我们点击「查看详情」按钮后，界面会跳转到 activity_detail 界面，并显示内容：「详情内容」。此时我们不停止当前程序，然后返回至系统桌面，再在后台找到该项目并进入该项目，进去后我们会发现 <strong>当前界面已经返回至程序入口界面</strong>。</p>
-<h2 id="intent-种类">Intent 种类</h2>
+<h3 id="intent-种类">Intent 种类</h3>
 <p>Intent 种类分为两种：<strong>显式Intent</strong> 和 <strong>隐式Intent</strong>。</p>
 <blockquote><p>显式 Intent</p></blockquote>
 <p><strong>含义</strong>：我们在创建 Intent 对象时，直接指定目标组件（Activity、Service、BroadcastReceiver）名称就可以启动目标组件。我们明确知道要启动的 Activity 或 Service 类的名称时就使用显式 Intent。</p>
@@ -1500,8 +1500,8 @@
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">显式 Intent</th><th align="center">隐式 Intent</th></tr></thead><tbody><tr><td align="center">直接指定目标组件的名称</td><td align="center">不会用组件名称定义要激活的目标组件</td></tr><tr><td align="center">多用于在应用程序内部传递信息</td><td align="center">多用于在不同应用之间传递信息</td></tr></tbody></table></div>
-<h2 id="intent-过滤器">Intent 过滤器</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">显式 Intent</th><th align="center">隐式 Intent</th></tr></thead><tbody><tr><td align="center">直接指定目标组件的名称</td><td align="center">不会用组件名称定义要激活的目标组件</td></tr><tr><td align="center">多用于在应用程序内部传递信息</td><td align="center">多用于在不同应用之间传递信息</td></tr></tbody></table></div>
+<h3 id="intent-过滤器">Intent 过滤器</h3>
 <p><strong>主要应用在使用隐式Intent来启动Activity时。</strong></p>
 <p>隐式启动 Activity 时，并没有在 Intent 中指明 Acitivity 所在的类，因此，Android 系统一定存在某种匹配机制，使 Android 系统能够根据 Intent 中的数据信息，找到需要启动的 Activity。这种匹配机制是依靠 Android 系统中的 Intent 过滤器（Intent Filter）来实现的。</p>
 <p>Intent 过滤器是一种根据 Intent 中的动作(action)、类别(category)和数据(data)等内容，对适合接收该 Intent 的组件进行匹配和筛选的机制。Intent 过滤器可以匹配数据类型、路径和协议，还可以确定多个匹配项顺序的优先级（priority）。应用程序的 Activity、Service 和 BroadcastReceiver 组件都可以注册 Intent 过滤器。这样，这些组件在特定的数据格式上则可以产生相应的动作。</p>
@@ -1557,8 +1557,8 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">        &#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">category</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> android:name</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">=</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"android.intent.category.DEFAULT"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">/></span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    &#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">intent-filter</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">activity</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span></code></pre>
-<h1 id="android-程序调试">Android 程序调试</h1>
-<h2 id="ddms-工具使用">DDMS 工具使用</h2>
+<h2 id="android-程序调试">Android 程序调试</h2>
+<h3 id="ddms-工具使用">DDMS 工具使用</h3>
 <p>Android 开发管径提供的调试工具，可以查看到指定进程运行时的线程信息、内存信息、内存分配、</p>
 <p>为测试设备截屏、查看 Log Cat 日志等等。</p>
 <p><mark class="flexible-marker flexible-marker-default">谷歌正慢慢将 DDMS 抛弃！</mark></p>
@@ -1570,7 +1570,7 @@
 <p>打开 DDMS 之前，我们需要在 Android Studio 中打开模拟器。</p>
 <p><mark class="flexible-marker flexible-marker-default">Android Studio 升级到 3.0 以后，使用 Android Profiler 替代了 DDMS。</mark></p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AndroidImages/image-20200426162158810.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AndroidImages/image-20200426162158810.png" alt="image-20200426162158810" data-responsive-image="true"></picture></p>
-<h2 id="输出日志信息">输出日志信息</h2>
+<h3 id="输出日志信息">输出日志信息</h3>
 <blockquote><p>Log 类</p></blockquote>
 <p>结构：</p>
 <p>继承 	java.lang.Object<br>
@@ -1611,7 +1611,7 @@
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">方法</th><th align="center">作用</th><th align="center">日志颜色</th></tr></thead><tbody><tr><td align="center">Log.v(String tag,String msg)</td><td align="center">输出冗余信息</td><td align="center">黑色 - VERBOSE</td></tr><tr><td align="center">Log.d(String tag,String msg)</td><td align="center">输出调试信息</td><td align="center">蓝色 - DEBUG</td></tr><tr><td align="center">Log.i(String tag,String msg)</td><td align="center">输出普通信息</td><td align="center">绿色 - INFO</td></tr><tr><td align="center">Log.w(String tag,String msg)</td><td align="center">输出警告信息</td><td align="center">橙色 - WARN</td></tr><tr><td align="center">Log.e(String tag,String msg)</td><td align="center">输出错误信息</td><td align="center">红色 - ERROR</td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">方法</th><th align="center">作用</th><th align="center">日志颜色</th></tr></thead><tbody><tr><td align="center">Log.v(String tag,String msg)</td><td align="center">输出冗余信息</td><td align="center">黑色 - VERBOSE</td></tr><tr><td align="center">Log.d(String tag,String msg)</td><td align="center">输出调试信息</td><td align="center">蓝色 - DEBUG</td></tr><tr><td align="center">Log.i(String tag,String msg)</td><td align="center">输出普通信息</td><td align="center">绿色 - INFO</td></tr><tr><td align="center">Log.w(String tag,String msg)</td><td align="center">输出警告信息</td><td align="center">橙色 - WARN</td></tr><tr><td align="center">Log.e(String tag,String msg)</td><td align="center">输出错误信息</td><td align="center">红色 - ERROR</td></tr></tbody></table></div>
 <p>日志级别从低到高。</p>
 <hr>
 <p>案例：<strong>测试输出日志信息</strong></p>
@@ -1641,7 +1641,7 @@
 <p>输出结果：</p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AndroidImages/image-20200426165421978.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AndroidImages/image-20200426165421978.png" alt="image-20200426165421978" data-responsive-image="true"></picture></p>
 <p>日志级别过滤器可以输出 <mark class="flexible-marker flexible-marker-default">比选中级别高</mark> 的日志信息。</p>
-<h2 id="程序调试">程序调试</h2>
+<h3 id="程序调试">程序调试</h3>
 <blockquote><p>使用 Android Studio 编译器调试</p></blockquote>
 <p>使用 Android Studio 编写代码时，使用 <code>ALT + ENTER</code> 快捷键可以快速修正代码。</p>
 <p>其他 AS 使用操作与 IDEA 一样，毕竟 AS 是基于 Intellij IDEA 的，在此不再累述。</p>
@@ -1657,8 +1657,8 @@
 <p><strong>Variables（变量面板）：</strong></p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AndroidImages/image-20200426173809958.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AndroidImages/image-20200426173809958.png" alt="image-20200426173809958" data-responsive-image="true"></picture></p>
 <p>在变量面板修改某个变量的值：右击选中变量 > Set Value > 输入修改的值并回车以完成修改。</p>
-<h1 id="android-事件处理和手势">Android 事件处理和手势</h1>
-<h2 id="事件处理概述">事件处理概述</h2>
+<h2 id="android-事件处理和手势">Android 事件处理和手势</h2>
+<h3 id="事件处理概述">事件处理概述</h3>
 <blockquote><p>基于监听的事件处理</p></blockquote>
 <p><strong>做法：</strong></p>
 <p>为安卓的 UI 组件绑定特定的事件监听器。比如：为按钮绑定单击事件监听器。</p>
@@ -1708,7 +1708,7 @@
 <blockquote><p>区别</p></blockquote>
 <p>对于 <strong>通用性</strong> 的事件采用基于 <strong>回调</strong> 的事件处理方式。</p>
 <p>对于 <strong>某些特定的</strong> 事件采用基于 <strong>监听</strong> 的事件处理方式。</p>
-<h2 id="物理按键事件处理">物理按键事件处理</h2>
+<h3 id="物理按键事件处理">物理按键事件处理</h3>
 <p>物理按键：手机上真实存在的按键。</p>
 <p><strong>按键状态：</strong></p>
 <p>安卓为每一个物理按键都提供了三个方法，分别是：</p>
@@ -1754,15 +1754,15 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">        }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h2 id="触摸屏事件处理">触摸屏事件处理</h2>
-<h3 id="单击事件">单击事件</h3>
+<h3 id="触摸屏事件处理">触摸屏事件处理</h3>
+<h4 id="单击事件">单击事件</h4>
 <p>为主键设置单击事件监听器：<code>setOnClickListener(View.OnClickListener)</code></p>
 <p><code>setOnClickListener()</code>：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> static</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> interface</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> View</span><span style="--shiki-light:#C18401;--shiki-dark:#E06C75">.OnClickListener</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">{</span></span>
 <span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> void</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> onClick</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">View</span><span style="--shiki-light:#383A42;--shiki-light-font-style:inherit;--shiki-dark:#E06C75;--shiki-dark-font-style:italic"> v</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <p>正因如此，我们在以前为按钮设置单击事件监听器时需要重写 <code>onClick()</code> 方法。</p>
-<h3 id="长按事件">长按事件</h3>
+<h4 id="长按事件">长按事件</h4>
 <p>长按事件需要 <strong>长按2秒以上才会触发</strong>。</p>
 <p><code>setOnLongClickListener(View.OnLongClickListener)</code> 为组件设置长按事件监听器。</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> static</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> interface</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> View</span><span style="--shiki-light:#C18401;--shiki-dark:#E06C75">.OnLongClickListener</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">{</span></span>
@@ -1805,7 +1805,7 @@
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">        menu</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">add</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"举报"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h3 id="触摸事件">触摸事件</h3>
+<h4 id="触摸事件">触摸事件</h4>
 <p><code>setOntouchListener(View.OnTouchListener)</code> 为组件设置触摸事件监听器</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> interface</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> View</span><span style="--shiki-light:#C18401;--shiki-dark:#E06C75">.OnTouchListener</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">{</span></span>
 <span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> abstract</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> boolean</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> onTouch</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">View</span><span style="--shiki-light:#383A42;--shiki-light-font-style:inherit;--shiki-dark:#E06C75;--shiki-dark-font-style:italic"> v</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">MotionEvent</span><span style="--shiki-light:#383A42;--shiki-light-font-style:inherit;--shiki-dark:#E06C75;--shiki-dark-font-style:italic"> event</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span></span>
@@ -1869,7 +1869,7 @@
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">        rl</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">addView</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(hat);</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h3 id="单击事件和触摸事件的区别">单击事件和触摸事件的区别</h3>
+<h4 id="单击事件和触摸事件的区别">单击事件和触摸事件的区别</h4>
 <p>安卓应用在执行的时候 <strong>会先触发触摸事件</strong>，如果触摸事件没有完全消费掉事件，<strong>再触发单击事件</strong>。</p>
 <p><strong>消费事件</strong>：一次 UI 操作是否完成响应了，如果在重写的方法当中返回了 <code>true</code>，那么就表示完全消费了这个事件；如果返回的是 <code>false</code>，那么它会再交给后面的事件进行处理。</p>
 <blockquote><p>单击事件与触摸事件的区别案例</p></blockquote>
@@ -1915,7 +1915,7 @@
 <p>结论：</p>
 <p><mark class="flexible-marker flexible-marker-default">单击事件触发一个动作，触摸事件触发两个动作。</mark></p>
 <p><mark class="flexible-marker flexible-marker-default">安卓应用在执行的时候会先触发触摸事件，如果触摸事件没有完全消费掉事件，再触发单击事件。</mark></p>
-<h2 id="手势检测">手势检测</h2>
+<h3 id="手势检测">手势检测</h3>
 <p>安卓为手势检测提供了 GestureDetector 类。</p>
 <p>我们在创建这个类的对象的时候需要传入 GestureDetector.OnGestureListener 接口的实例，这个接口是个监听器，用来对用户的手势进行响应。</p>
 <p>我们在实现 OnGestureListener 实例的时候，必须重写六个方法：</p>
@@ -1952,7 +1952,7 @@
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">方法名</th><th align="center">含义</th></tr></thead><tbody><tr><td align="center">onDown()</td><td align="center">触摸事件按下时触发</td></tr><tr><td align="center">onFling()</td><td align="center">当用户的手指在屏幕上滑过一段距离时触发</td></tr><tr><td align="center">onLongPress()</td><td align="center">当用户的手指在屏幕上长按时触发</td></tr><tr><td align="center">onScroll()</td><td align="center">当用户的手指在屏幕上滑动时触发</td></tr><tr><td align="center">onShowPress()</td><td align="center">当用户的手指在屏幕上还没有滑动时触发</td></tr><tr><td align="center">onSingleTapUp()</td><td align="center">当用户的手指在屏幕上轻击时触发</td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">方法名</th><th align="center">含义</th></tr></thead><tbody><tr><td align="center">onDown()</td><td align="center">触摸事件按下时触发</td></tr><tr><td align="center">onFling()</td><td align="center">当用户的手指在屏幕上滑过一段距离时触发</td></tr><tr><td align="center">onLongPress()</td><td align="center">当用户的手指在屏幕上长按时触发</td></tr><tr><td align="center">onScroll()</td><td align="center">当用户的手指在屏幕上滑动时触发</td></tr><tr><td align="center">onShowPress()</td><td align="center">当用户的手指在屏幕上还没有滑动时触发</td></tr><tr><td align="center">onSingleTapUp()</td><td align="center">当用户的手指在屏幕上轻击时触发</td></tr></tbody></table></div>
 <blockquote><p>实现滑动图片以切换图片</p></blockquote>
 <p><strong>准备：</strong> 我们需要准备四张图片，取名为 image1 ~ image4，并将它们放置于 drawable 目录下。然后编写动画文件，并放置于 res/anim 下（anim 需要自行创建）。</p>
 <p><strong>动画文件：</strong></p>
@@ -2063,7 +2063,7 @@
 <span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">        return</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B"> detector</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">onTouchEvent</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(event);</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h2 id="手势的添加">手势的添加</h2>
+<h3 id="手势的添加">手势的添加</h3>
 <p>我们可以自定义我们的手势，就像手写输入法可以识别我们手写的文字一样。</p>
 <p>我们需要先创建手势文件，手势文件的创建需要用到一个 APP：<strong>GestureBuilder</strong>。该软件可以在谷歌应用商店安装。（当然，进谷歌应用商店需要绿色上网，或者你也可以联系本文作者获取软件）</p>
 <p>该软件在低版本的 Android Studio 中是内置的，但高版本似乎取消了这个软件。</p>
@@ -2078,7 +2078,7 @@
 <p><strong>我们将我们的手势文件放置res/raw目录下。</strong></p>
 <p>Android Studio 的 res 目录下没有默认创建 raw 目录，因此需要我们手动创建。</p>
 <p>到此，我们已经成功创建好了手势文件，并将其放置于指定的目录当中了。</p>
-<h2 id="手势的识别">手势的识别</h2>
+<h3 id="手势的识别">手势的识别</h3>
 <p>通过手势的添加后，我们已经拥有了我们的手势文件，并放置在了指定的目录。</p>
 <p>接下来我们可以通过一个示例来完成手势的识别。</p>
 <p>activity_main.xml：</p>
@@ -2160,7 +2160,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <hr>
-<p>​																								<mark class="flexible-marker flexible-marker-default">Android 核心与事件处理完</mark></p> </article> <div class="text-muted-foreground max-w-app mt-20 w-full space-y-3 text-center text-sm" data-astro-cid-7ap3hmvm> <aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full px-2 text-center leading-6 sm:px-0"> <p class="m-0 break-words"> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a><span> 许可协议，</span><span class="max-sm:block">转载时请署名并注明<a href="https://mofan212.github.io/posts/android-2/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a> 🔗</span> </p> </aside> <section data-post-reward data-pagefind-ignore class="w-full" aria-label="赞赏"> <div class="flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:flex-wrap sm:gap-x-1.5 sm:gap-y-2"> <span class="sm:whitespace-nowrap">如果这篇文章对你有帮助，可以通过</span> <a href="/reward/" class="focus-outline border-accent text-accent hover:bg-accent/10 active:bg-accent/10 inline-block rounded-md border px-3 py-1 font-medium transition-colors"> 赞赏 </a> <span class="sm:whitespace-nowrap">请我喝杯 Coffee ☕</span> </div> </section> </div> <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm>  <ul id="post-tags" class="mt-4 mb-8 flex flex-wrap gap-4 sm:mb-8" data-astro-cid-7ap3hmvm> <li> <a href="/tags/android/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> Android </a> </li> </ul>  <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/android-1/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.3l105.3-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg> <div> <span>上一篇</span> <div class="text-accent/85 text-sm">Android布局与组件（一）</div> </div> </a> <a href="/posts/android-3/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>下一篇</span> <div class="text-accent/85 text-sm">Android资源、活动条与消息通知（三）</div> </div> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg> </a> </div> </main> <footer class="app-layout mt-auto" data-astro-cid-7ap3hmvm="true"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="text-muted-foreground my-2 flex w-fit flex-col items-start text-start text-sm whitespace-nowrap"> <div class="flex items-center gap-1.5"> <svg width="24" height="24" fill="currentColor" class="size-4" viewBox="-49.231 -39.385 738.462 590.769" aria-hidden="true"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9-.1-2.7-.2-5.4-.2-8.1 0-88.4 71.6-160 160-160 59.3 0 111 32.2 138.7 80.2A95.5 95.5 0 0 1 448 96c53 0 96 43 96 96 0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39L296 392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0z" /></svg> <span>最近更新：</span> <time class="tabular-nums" datetime="2026-10-21T03:16:11.000Z" data-deployed-at="2026-10-21T03:16:11.000Z" data-just-now="刚刚" data-locale="zh-CN"> 2026-10-21 11:16 </time> </div> <div class="mt-1 flex items-center gap-3 text-xs"> <span class="flex items-center gap-1" title="本站访客数"> <svg width="24" height="24" fill="currentColor" class="size-3" viewBox="-2.835 -3.241 453.671 518.481" aria-hidden="true"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3z" /></svg> <span class="sr-only">本站访客数：</span> <span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> <span aria-hidden="true">|</span> <span class="flex items-center gap-1.5" title="本站总浏览量"> <span class="flex size-4 items-center justify-center" aria-hidden="true"> <svg width="24" height="24" fill="currentColor" class="size-3.5" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48zM0 272c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v160c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zM368 96h32c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48" /></svg> </span> <span class="sr-only">本站总浏览量：</span> <span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> </div> </div> <div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"> <span>版权所有 &#169; 2020 – 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer> <script>
+<p>​																								<mark class="flexible-marker flexible-marker-default">Android 核心与事件处理完</mark></p> </article> <div class="text-muted-foreground max-w-app mt-20 w-full space-y-3 text-center text-sm" data-astro-cid-7ap3hmvm> <aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full px-2 text-center leading-6 sm:px-0"> <p class="m-0 break-words"> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a><span> 许可协议，</span><span class="max-sm:block">转载时请署名并注明<a href="https://mofan212.github.io/posts/android-2/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a> 🔗</span> </p> </aside> <section data-post-reward data-pagefind-ignore class="w-full" aria-label="赞赏"> <div class="flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:flex-wrap sm:gap-x-1.5 sm:gap-y-2"> <span class="sm:whitespace-nowrap">如果这篇文章对你有帮助，可以通过</span> <a href="/reward/" class="focus-outline border-accent text-accent hover:bg-accent/10 active:bg-accent/10 inline-block rounded-md border px-3 py-1 font-medium transition-colors"> 赞赏 </a> <span class="sm:whitespace-nowrap">请我喝杯 Coffee ☕</span> </div> </section> </div> <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm>  <ul id="post-tags" class="mt-4 mb-8 flex flex-wrap gap-4 sm:mb-8" data-astro-cid-7ap3hmvm> <li> <a href="/tags/android/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> Android </a> </li> </ul>  <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/android-1/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.3l105.3-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg> <div> <span>上一篇</span> <div class="text-accent/85 text-sm">Android布局与组件（一）</div> </div> </a> <a href="/posts/android-3/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>下一篇</span> <div class="text-accent/85 text-sm">Android资源、活动条与消息通知（三）</div> </div> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg> </a> </div> </main> <footer class="app-layout mt-auto" data-astro-cid-7ap3hmvm="true"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="text-muted-foreground my-2 flex w-fit flex-col items-start text-start text-sm whitespace-nowrap"> <div class="flex items-center gap-1.5"> <svg width="24" height="24" fill="currentColor" class="size-4" viewBox="-49.231 -39.385 738.462 590.769" aria-hidden="true"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9-.1-2.7-.2-5.4-.2-8.1 0-88.4 71.6-160 160-160 59.3 0 111 32.2 138.7 80.2A95.5 95.5 0 0 1 448 96c53 0 96 43 96 96 0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39L296 392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0z" /></svg> <span>最近更新：</span> <time class="tabular-nums" datetime="2026-10-22T08:22:01.000Z" data-deployed-at="2026-10-22T08:22:01.000Z" data-just-now="刚刚" data-locale="zh-CN"> 2026-10-22 16:22 </time> </div> <div class="mt-1 flex items-center gap-3 text-xs"> <span class="flex items-center gap-1" title="本站访客数"> <svg width="24" height="24" fill="currentColor" class="size-3" viewBox="-2.835 -3.241 453.671 518.481" aria-hidden="true"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3z" /></svg> <span class="sr-only">本站访客数：</span> <span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> <span aria-hidden="true">|</span> <span class="flex items-center gap-1.5" title="本站总浏览量"> <span class="flex size-4 items-center justify-center" aria-hidden="true"> <svg width="24" height="24" fill="currentColor" class="size-3.5" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48zM0 272c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v160c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zM368 96h32c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48" /></svg> </span> <span class="sr-only">本站总浏览量：</span> <span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> </div> </div> <div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"> <span>版权所有 &#169; 2020 – 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer> <script>
   (() => {
     const updateDeploymentTimes = () => {
       document.querySelectorAll("[data-deployed-at]").forEach(element => {
@@ -2209,4 +2209,4 @@
     document.addEventListener("astro:page-load", updateDeploymentTimes);
     window.setInterval(updateDeploymentTimes, 60_000);
   })();
-</script>    <script type="module" src="/_astro/Layout.astro_astro_type_script_index_0_lang.DQQu8RqY.js"></script> <script type="module" src="/_astro/Layout.astro_astro_type_script_index_1_lang.DRvjezMo.js"></script> </body> </html>  <script type="module" src="/_astro/index.astro_astro_type_script_index_0_lang.Oly9xh_g.js"></script>
+</script>    <script type="module" src="/_astro/Layout.astro_astro_type_script_index_0_lang.BrDp0sUM.js"></script> <script type="module" src="/_astro/Layout.astro_astro_type_script_index_1_lang.DRvjezMo.js"></script> </body> </html>  <script type="module" src="/_astro/index.astro_astro_type_script_index_0_lang.Oly9xh_g.js"></script>

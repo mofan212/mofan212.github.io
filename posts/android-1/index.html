@@ -1,4 +1,4 @@
-<!DOCTYPE html><html dir="ltr" lang="zh-CN" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/android-1/"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.3.0/400.css"><link rel="preconnect" href="https://busuanzi.ibruce.info"><meta name="generator" content="Astro v6.4.2"><!-- Primary meta --><title>Android布局与组件（一） | Mofan</title><meta name="title" content="Android布局与组件（一） | Mofan"><meta name="description" content="本文对 Android 的 UI 布局、基本 UI 组件、高级 UI 组件进行了介绍。"><meta name="author" content="默烦"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Mofan"><meta property="og:title" content="Android布局与组件（一） | Mofan"><meta property="og:description" content="本文对 Android 的 UI 布局、基本 UI 组件、高级 UI 组件进行了介绍。"><meta property="og:url" content="https://mofan212.github.io/posts/android-1/"><meta property="og:image" content="https://mofan212.github.io/default-og.jpg"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://mofan212.github.io/posts/android-1/"><meta property="twitter:title" content="Android布局与组件（一） | Mofan"><meta property="twitter:description" content="本文对 Android 的 UI 布局、基本 UI 组件、高级 UI 组件进行了介绍。"><meta property="twitter:image" content="https://mofan212.github.io/default-og.jpg"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Mofan" href="https://mofan212.github.io/rss.xml"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2020-05-29T00:00:00.000Z"><meta property="article:modified_time" content="2020-07-20T00:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Android布局与组件（一） | Mofan","url":"https://mofan212.github.io/posts/android-1/","mainEntityOfPage":"https://mofan212.github.io/posts/android-1/","datePublished":"2020-05-29T00:00:00.000Z","dateModified":"2020-07-20T00:00:00.000Z","author":[{"@type":"Person","name":"默烦","url":"https://github.com/mofan212"}]}</script> <!--
+<!DOCTYPE html><html dir="ltr" lang="zh-CN" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/android-1/"><link rel="preconnect" href="https://npm.elemecdn.com"><link rel="preconnect" href="https://gcore.jsdelivr.net"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/lxgwwenkaiscreen.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.3.0/400.css"><link rel="preconnect" href="https://busuanzi.ibruce.info"><meta name="generator" content="Astro v6.4.2"><!-- Primary meta --><title>Android布局与组件（一） | Mofan</title><meta name="title" content="Android布局与组件（一） | Mofan"><meta name="description" content="本文对 Android 的 UI 布局、基本 UI 组件、高级 UI 组件进行了介绍。"><meta name="author" content="默烦"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Mofan"><meta property="og:title" content="Android布局与组件（一） | Mofan"><meta property="og:description" content="本文对 Android 的 UI 布局、基本 UI 组件、高级 UI 组件进行了介绍。"><meta property="og:url" content="https://mofan212.github.io/posts/android-1/"><meta property="og:image" content="https://mofan212.github.io/default-og.jpg"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://mofan212.github.io/posts/android-1/"><meta property="twitter:title" content="Android布局与组件（一） | Mofan"><meta property="twitter:description" content="本文对 Android 的 UI 布局、基本 UI 组件、高级 UI 组件进行了介绍。"><meta property="twitter:image" content="https://mofan212.github.io/default-og.jpg"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Mofan" href="https://mofan212.github.io/rss.xml"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2020-05-29T00:00:00.000Z"><meta property="article:modified_time" content="2020-07-20T00:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Android布局与组件（一） | Mofan","url":"https://mofan212.github.io/posts/android-1/","mainEntityOfPage":"https://mofan212.github.io/posts/android-1/","datePublished":"2020-05-29T00:00:00.000Z","dateModified":"2020-07-20T00:00:00.000Z","author":[{"@type":"Person","name":"默烦","url":"https://github.com/mofan212"}]}</script> <!--
       Inline FOUC-prevention script: sets data-theme on <html> before
       the browser paints. Runs synchronously, no defer/async.
     --><script>
@@ -14,7 +14,7 @@
         // Expose value so theme.ts can skip re-detection.
         window.__theme = { value: theme };
       })();
-    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.8-7lwm7-.css">
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.CRJPB6-j.css">
 <style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
 .toc-link[data-astro-cid-po2ckxzl]{position:relative;transition:color .2s ease}.toc-link[data-astro-cid-po2ckxzl]:before{position:absolute;inset-block:.375rem;inset-inline-start:-2px;width:2px;border-radius:2px;background-color:var(--accent);content:"";opacity:0;transition:opacity .2s ease}.toc-link[data-astro-cid-po2ckxzl][data-active]{color:var(--accent)}.toc-link[data-astro-cid-po2ckxzl][data-active]:before{opacity:1}.toc-toggle[data-astro-cid-po2ckxzl][aria-expanded=true] .toc-toggle-icon[data-astro-cid-po2ckxzl]{rotate:-90deg}.toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-width:thin}.post-toc-desktop[data-astro-cid-taqt6xe3] .toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-gutter:stable}.toc-scroll[data-astro-cid-taqt6xe3]:after{display:block;block-size:20dvh;content:""}[data-astro-cid-taqt6xe3][data-toc-dialog]{opacity:0;transform:translate(1.25rem);transition:opacity .16s ease-out,transform .22s cubic-bezier(.22,1,.36,1);will-change:opacity,transform}[data-astro-cid-taqt6xe3][data-toc-dialog][data-toc-visible]{opacity:1;transform:translate(0)}[data-astro-cid-taqt6xe3][data-toc-dialog]::backdrop{background-color:#0000;transition:background-color .18s ease-out}[data-astro-cid-taqt6xe3][data-toc-dialog][data-toc-visible]::backdrop{background-color:#0000007f}@media(prefers-reduced-motion:reduce){[data-astro-cid-taqt6xe3][data-toc-dialog]{transform:none;transition:none}[data-astro-cid-taqt6xe3][data-toc-dialog]::backdrop{transition:none}}[data-astro-cid-4wxclohh][data-post-series]{interpolate-size:allow-keywords}[data-astro-cid-4wxclohh][data-post-series]::details-content{block-size:0;overflow:hidden;opacity:0;transition:block-size .2s ease-out,opacity .15s ease-out,content-visibility .2s allow-discrete}[data-astro-cid-4wxclohh][data-post-series][open]::details-content{block-size:auto;opacity:1}@media(prefers-reduced-motion:reduce){[data-astro-cid-4wxclohh][data-post-series]::details-content{transition:none}}.post-sidebar[data-astro-cid-7ap3hmvm]{display:contents}@media(min-width:90rem){.post-sidebar[data-astro-cid-7ap3hmvm]{position:fixed;inset-block-start:9rem;inset-inline-start:calc(50% + var(--app-max-width) / 2 + 2rem);display:flex;width:min(18rem,calc(50vw - var(--app-max-width) / 2 - 3rem));height:calc(100dvh - 11rem);min-height:0;flex-direction:column}}
 </style><style>[data-astro-transition-scope="astro-36ssibgs-1"] { view-transition-name: android; }@layer astro { ::view-transition-old(android) { 
@@ -593,17 +593,17 @@
 
     update();
   })();
-</script> </div> <article id="article" class="mt-8 w-full app-prose max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)" data-astro-cid-7ap3hmvm> <!-- 封面画师：画师JW&emsp; &emsp;&emsp;&emsp;封面ID：77038942 -->
-<h1 id="android-简介">Android 简介</h1>
+</script> </div> <article id="article" class="mt-8 w-full app-prose post-content max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)" data-astro-cid-7ap3hmvm> <!-- 封面画师：画师JW&emsp; &emsp;&emsp;&emsp;封面ID：77038942 -->
+<h2 id="android-简介">Android 简介</h2>
 <p>​ 安卓是一种基于 Linux 内核（不包含 GNU 组件）的自由及开放源代码的操作系统。主要使用于移动设备，如智能手机和平板电脑，由 Google 公司和开放手机联盟领导及开发。Android 操作系统最初由 Andy Rubin 开发，主要支持手机。2005 年 8 月由 Google 收购注资。2007 年 11 月，Google 与 84 家硬件制造商、软件开发商及电信营运商组建开放手机联盟共同研发改良 Android 系统。随后 Google 以 Apache 开源许可证的授权方式，发布了 Android 的源代码。</p>
 <p>​ Android 一词的本义指「机器人」，同时也是 Google 于 2007 年 11 月 5 日宣布的基于 Linux 平台的开源手机操作系统的名称，该平台由操作系统、中间件、用户界面和应用软件组成。</p>
 <p>​ Android 一词最早出现于法国作家利尔亚当（Auguste Villiers de l’Isle-Adam）在 1886 年发表的科幻小说《未来夏娃》（<em>L’ève future</em>）中。他将外表像人的机器起名为 Android。</p>
 <p>​ Android 的 Logo 是由 Ascender 公司设计的，诞生于 2010 年，其设计灵感源于男女厕所门上的图形符号，于是布洛克绘制了一个简单的机器人，它的躯干就像锡罐的形状，头上还有两根天线，Android 小机器人便诞生了。其中的文字使用了 Ascender 公司专门制作的称之为「Droid 」 的字体。Android 是一个全身绿色的机器人，绿色也是 Android 的标志。颜色采用了 PMS 376C 和 RGB 中十六进制的#A4C639 来绘制，这是 Android 操作系统的品牌象徵。有时候，它们还会使用纯文字的 Logo。</p>
 <p>内容摘录于百度百科——<a href="https://baike.baidu.com/item/Android/60243?fr=aladdin" target="_blank" rel="noopener noreferrer">Android</a>。</p>
-<h1 id="android-studio">Android Studio</h1>
+<h2 id="android-studio">Android Studio</h2>
 <p>Android Studio 是开发 Android 应用程序的官方 IDE，基于 Intellij IDEA。</p>
 <p>删除一个 Module 的方法：选中要删除的 Module > Open Module Settings > 选中要删除的 Module，然后点击”-” > 坚持磁盘目录下文件是否被删除，如果没有，删除即可。</p>
-<h2 id="java-节点">java 节点</h2>
+<h3 id="java-节点">java 节点</h3>
 <ul>
 <li>如果创建项目后，R 文件生成失败被标红处理：</li>
 </ul>
@@ -623,7 +623,7 @@
 <li>删除&#x3C;Your_AVD_Directory>.android\avd\Pixel_XL_API_28.avd 目录下.lock 文件，然后重新载入。</li>
 <li>打开 AVD manager，选中模拟器，右击，wipe data，然后启动模拟器。</li>
 </ol>
-<h2 id="res-节点">res 节点</h2>
+<h3 id="res-节点">res 节点</h3>
 <blockquote><p>drawable 目录</p></blockquote>
 <p>主要用于放置位图文件（PNG，JEPG 或者 GIF）、9-Patch 图片文件、Shape Drawable、Drawable 对象等 XML 资源文件。<strong>图片命名不能大写！！</strong></p>
 <blockquote><p>layout 目录</p></blockquote>
@@ -638,8 +638,8 @@
 </ol>
 <blockquote><p>values 目录</p></blockquote>
 <p>主要用于保存字符串资源、样式资源、尺寸资源、颜色资源。</p>
-<h1 id="ui-布局">UI 布局</h1>
-<h2 id="view">View</h2>
+<h2 id="ui-布局">UI 布局</h2>
+<h3 id="view">View</h3>
 <p>我们一般不直接使用 View 类，而是使用 View 类的子类（比如 TextView）。</p>
 <p><strong>View类位于android.view包中；View类的子类一般都用于android.widget包中。</strong></p>
 <blockquote><p>常用属性：</p></blockquote>
@@ -692,7 +692,7 @@
 <p>所有的 UI 界面都是由 View 类、ViewGroup 类或其子类组合而成的。</p>
 <p>ViewGroup 中可以包含多个 View 和 ViewGroup，其中的 ViewGroup 又可以包含多个 View 和 ViewGroup…</p>
 <p><strong>禁止套娃！！</strong></p>
-<h2 id="控制-ui-界面">控制 UI 界面</h2>
+<h3 id="控制-ui-界面">控制 UI 界面</h3>
 <p>方法：<strong>使用XML布局文件控制UI界面</strong>（推荐）、在 Java 代码中控制 UI 界面、使用 XML 和 Java 代码混合控制 UI 界面、开发自定义的 View。</p>
 <blockquote><p>使用 XML 布局文件控制 UI 界面</p></blockquote>
 <ol>
@@ -701,7 +701,7 @@
 </ol>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">setContentView</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">R</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">layout</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">activity_main</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span></code></pre>
 <p><code>android:layout_gravity</code>	用来设置该 view 相对与父 view 的位置，比如值为 center 将该 view 置于父 view 中间。</p>
-<h2 id="relativelayout">RelativeLayout</h2>
+<h3 id="relativelayout">RelativeLayout</h3>
 <p>RelativeLayout：<strong>相对布局管理器</strong></p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">RelativeLayout</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">>&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">RelativeLayout</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span></code></pre>
 <p>使用相对布局需要一个参考点，所有的组件以参考点的位置为基准。</p>
@@ -742,7 +742,7 @@
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">属性名</th><th align="center">作用</th></tr></thead><tbody><tr><td align="center"><code>android:layout_above</code></td><td align="center">上方</td></tr><tr><td align="center"><code>android:layout_below</code></td><td align="center">下方</td></tr><tr><td align="center"><code>android:layout_toLeftOf</code></td><td align="center">左方</td></tr><tr><td align="center"><code>android:layout_toRightOf</code></td><td align="center">右方</td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">属性名</th><th align="center">作用</th></tr></thead><tbody><tr><td align="center"><code>android:layout_above</code></td><td align="center">上方</td></tr><tr><td align="center"><code>android:layout_below</code></td><td align="center">下方</td></tr><tr><td align="center"><code>android:layout_toLeftOf</code></td><td align="center">左方</td></tr><tr><td align="center"><code>android:layout_toRightOf</code></td><td align="center">右方</td></tr></tbody></table></div>
 <ul>
 <li>组件与布局管理器(父容器)哪边对齐：</li>
 </ul>
@@ -771,7 +771,7 @@
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">属性名</th><th align="center">作用</th></tr></thead><tbody><tr><td align="center"><code>android:layout_alignParentBottom</code></td><td align="center">底部对齐</td></tr><tr><td align="center"><code>android:layout_alignParentLeft</code></td><td align="center">左对齐</td></tr><tr><td align="center"><code>android:layout_alignParentRight</code></td><td align="center">右对齐</td></tr><tr><td align="center"><code>android:layout_alignParentTop</code></td><td align="center">顶部对齐</td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">属性名</th><th align="center">作用</th></tr></thead><tbody><tr><td align="center"><code>android:layout_alignParentBottom</code></td><td align="center">底部对齐</td></tr><tr><td align="center"><code>android:layout_alignParentLeft</code></td><td align="center">左对齐</td></tr><tr><td align="center"><code>android:layout_alignParentRight</code></td><td align="center">右对齐</td></tr><tr><td align="center"><code>android:layout_alignParentTop</code></td><td align="center">顶部对齐</td></tr></tbody></table></div>
 <ul>
 <li>组件与哪个组件的上、下、左、右边界对齐：</li>
 </ul>
@@ -800,7 +800,7 @@
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">属性名</th><th align="center">作用</th></tr></thead><tbody><tr><td align="center"><code>android:layout_alignBottom</code></td><td align="center">底部对齐</td></tr><tr><td align="center"><code>android:layout_alignLeft</code></td><td align="center">左对齐</td></tr><tr><td align="center"><code>android:layout_alignRight</code></td><td align="center">右对齐</td></tr><tr><td align="center"><code>android:layout_alignTop</code></td><td align="center">顶部对齐</td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">属性名</th><th align="center">作用</th></tr></thead><tbody><tr><td align="center"><code>android:layout_alignBottom</code></td><td align="center">底部对齐</td></tr><tr><td align="center"><code>android:layout_alignLeft</code></td><td align="center">左对齐</td></tr><tr><td align="center"><code>android:layout_alignRight</code></td><td align="center">右对齐</td></tr><tr><td align="center"><code>android:layout_alignTop</code></td><td align="center">顶部对齐</td></tr></tbody></table></div>
 <ul>
 <li>设置组件位于布局管理器的哪个位置：</li>
 </ul>
@@ -825,8 +825,8 @@
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">属性名</th><th align="center">作用</th></tr></thead><tbody><tr><td align="center"><code>android:layout_centerHorizontal</code></td><td align="center">位于水平居中</td></tr><tr><td align="center"><code>android:layout_centerInparent</code></td><td align="center">位于中间位置</td></tr><tr><td align="center"><code>android:layout_centerVertical</code></td><td align="center">位于垂直居中</td></tr></tbody></table></div>
-<h2 id="linearlayout">LinearLayout</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">属性名</th><th align="center">作用</th></tr></thead><tbody><tr><td align="center"><code>android:layout_centerHorizontal</code></td><td align="center">位于水平居中</td></tr><tr><td align="center"><code>android:layout_centerInparent</code></td><td align="center">位于中间位置</td></tr><tr><td align="center"><code>android:layout_centerVertical</code></td><td align="center">位于垂直居中</td></tr></tbody></table></div>
+<h3 id="linearlayout">LinearLayout</h3>
 <p>LinearLayout：<strong>线性布局管理器</strong></p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">LinearLayout</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">>&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">LinearLayout</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span></code></pre>
 <p>将放入其中的组件按照水平或垂直的方向进行排列。</p>
@@ -845,7 +845,7 @@
 <blockquote><p><strong>gravity</strong> 和 <strong>layout_gravity</strong> 的不同处</p></blockquote>
 <p><code>gravity</code> 是设置控件自身内部元素的对齐方式。比如一个 TextView，则是设置内部文字的对齐方式。如果是 ViewGroup 组件如 LinearLayout 的话，则为设置它内部 view 组件的对齐方式。</p>
 <p><code>layout_gravity</code> 是设置控件自身相当于父容器的对齐方式。比如，一个 TextView 设置 layout_gravity 属性，则表示这 TextView 相对于父容器的对齐方式。</p>
-<h2 id="framelayout">FrameLayout</h2>
+<h3 id="framelayout">FrameLayout</h3>
 <p>FrameLayout：<strong>帧布局管理器</strong></p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">FrameLayout</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">>&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">FrameLayout</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span></code></pre>
 <p>帧布局容器为每个加入其中的组件创建一个 <strong>空白的区域</strong> (称为一 <strong>帧</strong> )，每个子组件占据一帧，默认是把他们放在这块 <strong>区域的左上角</strong> ，但是我们也可以 <strong>通过layout_gravity属性</strong> ，指定到其他的位置。</p>
@@ -858,7 +858,7 @@
 <p><strong><code>android:foregroundGravity</code></strong>	设置 <strong>前景图像的位置</strong></p>
 <p>属性值之间可以使用<code>|</code>分割，达到组合的效果，如</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">android</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">:</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">foregroundGravity </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> "right|bottom"</span><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">	//使前景图像位于右下角</span></span></code></pre>
-<h2 id="tablelayout">TableLayout</h2>
+<h3 id="tablelayout">TableLayout</h3>
 <p>TableLayout：<strong>表格布局管理器</strong></p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">TableLayout</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">>&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">TableLayout</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span></code></pre>
 <p>表格布局由 <strong>TableLayout</strong> 类代表，其会采用行、列的形式来管理 UI 组件。</p>
@@ -880,7 +880,7 @@
 <span class="line"><span style="--shiki-light:#986801;--shiki-dark:#D19A66">        android:shrinkColumns</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">=</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"1"</span></span>
 <span class="line"><span style="--shiki-light:#986801;--shiki-dark:#D19A66">        android:stretchColumns</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">=</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"2"</span></span>
 <span class="line"><span style="--shiki-light:#986801;--shiki-dark:#D19A66">        android:collapseColumns</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">=</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"3"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span></code></pre>
-<h2 id="gridlayout">GridLayout</h2>
+<h3 id="gridlayout">GridLayout</h3>
 <p>GridLayout：<strong>网格布局管理器</strong></p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">GridLayout</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">>&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">GridLayout</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span></code></pre>
 <p>GridLayout 布局是 Android 4.0 以后引入的新布局，和 TableLayout(表格布局) 有点类似，不过它功能更多，也更加好用：</p>
@@ -934,13 +934,13 @@
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">属性名</th><th align="center">含义</th></tr></thead><tbody><tr><td align="center"><code>android:layout_column</code></td><td align="center">指定子组件位于网格的第几列</td></tr><tr><td align="center"><code>android:layout_columnSpan</code></td><td align="center">指定子组件横向跨几列</td></tr><tr><td align="center"><code>android:layout_columnWeight</code></td><td align="center">指定子组件在水平方向上的权重</td></tr><tr><td align="center"><code>android:layout_gravity</code></td><td align="center">指定子组件以什么方式占据网格空间</td></tr><tr><td align="center"><code>android:layout_row</code></td><td align="center">指定子组件位于网格的第几行</td></tr><tr><td align="center"><code>android:layout_rowSpan</code></td><td align="center">指定子组件纵向跨几行</td></tr><tr><td align="center"><code>android:layout_rowWeight</code></td><td align="center">指定子组件在垂直方向上的权重</td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">属性名</th><th align="center">含义</th></tr></thead><tbody><tr><td align="center"><code>android:layout_column</code></td><td align="center">指定子组件位于网格的第几列</td></tr><tr><td align="center"><code>android:layout_columnSpan</code></td><td align="center">指定子组件横向跨几列</td></tr><tr><td align="center"><code>android:layout_columnWeight</code></td><td align="center">指定子组件在水平方向上的权重</td></tr><tr><td align="center"><code>android:layout_gravity</code></td><td align="center">指定子组件以什么方式占据网格空间</td></tr><tr><td align="center"><code>android:layout_row</code></td><td align="center">指定子组件位于网格的第几行</td></tr><tr><td align="center"><code>android:layout_rowSpan</code></td><td align="center">指定子组件纵向跨几行</td></tr><tr><td align="center"><code>android:layout_rowWeight</code></td><td align="center">指定子组件在垂直方向上的权重</td></tr></tbody></table></div>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span></span><code><span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">&#x3C;!--从0开始计算，与表格布局类似--></span></span>
 <span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">&#x3C;!--设置组件位于第二行--></span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">android:layout_row = "1"	</span></span>
 <span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">&#x3C;!--设置组件位于第三列--></span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">android:layout_column = "2"  </span></span></code></pre>
-<h2 id="布局管理器的嵌套">布局管理器的嵌套</h2>
+<h3 id="布局管理器的嵌套">布局管理器的嵌套</h3>
 <blockquote><p>嵌套原则</p></blockquote>
 <ol>
 <li>根布局管理器必须包含 xmlns 属性；</li>
@@ -948,11 +948,11 @@
 <li>不能嵌套地太深，如果嵌套太深，会影响性能。</li>
 </ol>
 <p><strong>不能套娃太深！！</strong></p>
-<h1 id="基本-ui-组件">基本 UI 组件</h1>
+<h2 id="基本-ui-组件">基本 UI 组件</h2>
 <p><mark class="flexible-marker flexible-marker-default">使用 UI 组件时注意字母的大小写！</mark></p>
 <p><mark class="flexible-marker flexible-marker-default">使用 UI 组件时注意字母的大小写！</mark></p>
 <p><mark class="flexible-marker flexible-marker-default">使用 UI 组件时注意字母的大小写！</mark></p>
-<h2 id="文本框组件">文本框组件</h2>
+<h3 id="文本框组件">文本框组件</h3>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">TextView</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> /></span></span></code></pre>
 <blockquote><p>属性</p></blockquote>
 <p><code>android:text</code>	设置文本框中要显示的内容。</p>
@@ -982,7 +982,7 @@
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">        textView</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">setSelected</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">true</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">			//必须</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span></code></pre>
 <p>这只是简单实现页面中单个跑马灯，如果界面中有 EditText 等能获取焦点的组件时，这种方法会失效。具体操作可以参考：<a href="https://www.jianshu.com/p/67e74148a122" target="_blank" rel="noopener noreferrer">Android之跑马灯详解</a></p>
-<h2 id="编辑框">编辑框</h2>
+<h3 id="编辑框">编辑框</h3>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">EditText</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> /></span></span></code></pre>
 <p>它是文本框组件的子类。</p>
 <blockquote><p>属性</p></blockquote>
@@ -1006,7 +1006,7 @@
 <span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">    EditText</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> et </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> findViewById</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">R</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">id</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">et</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">    et</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">getText</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">();</span><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">		//这样就可以获取到编辑框中的内容</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span></code></pre>
-<h2 id="普通按钮">普通按钮</h2>
+<h3 id="普通按钮">普通按钮</h3>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">Button</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> /></span></span></code></pre>
 <p>它是文本框组件的子类。</p>
 <blockquote><p>为普通按钮添加点击事件监听器</p></blockquote>
@@ -1042,7 +1042,7 @@
 <li>将 <code>android:onClick</code> 属性指定为步骤(1)中的方法名。</li>
 </ol>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">android:onClick = "myClick"</span></span></code></pre>
-<h2 id="图片按钮">图片按钮</h2>
+<h3 id="图片按钮">图片按钮</h3>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">ImageButton</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> /></span></span></code></pre>
 <blockquote><p>ImageButton 和 Button 的异同：</p></blockquote>
 <p>相同点：</p>
@@ -1066,7 +1066,7 @@
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">                    WindowManager</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">LayoutParams</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">FLAG_FULLSCREEN</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    ...</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span></code></pre>
-<h2 id="单选按钮">单选按钮</h2>
+<h3 id="单选按钮">单选按钮</h3>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">RadioButton</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> /></span></span></code></pre>
 <blockquote><p>基本使用（属性）</p></blockquote>
 <p><code>android:text</code>	给单选按钮旁设置说明性文字</p>
@@ -1141,7 +1141,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">        }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    });</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span></code></pre>
-<h2 id="复选框">复选框</h2>
+<h3 id="复选框">复选框</h3>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">CheckBox</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> /></span></span></code></pre>
 <blockquote><p>使用（本身属性）</p></blockquote>
 <p>设置多个复选框只需要使用多个 <code>&#x3C;CheckBox /></code> 即可</p>
@@ -1186,7 +1186,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">            }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">        });</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">     </span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span></code></pre>
-<h2 id="日期选择器">日期选择器</h2>
+<h3 id="日期选择器">日期选择器</h3>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">DatePicker</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> /></span></span></code></pre>
 <p>常将日期选择器的长宽设置成根据父容器变化。</p>
 <p>如果添加日期选择器后发现日期没有显示完全，应该进入对应的 Activity 中 <strong>修改继承的类</strong>。</p>
@@ -1226,7 +1226,7 @@
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">        Toast</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">makeText</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">DatepickerActivity</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">this</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, str, </span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">Toast</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">LENGTH_SHORT</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">).</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">show</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">();</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h2 id="时间选择器">时间选择器</h2>
+<h3 id="时间选择器">时间选择器</h3>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">TimePicker</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> /></span></span></code></pre>
 <p>常将日期选择器的长宽设置成根据父容器变化。</p>
 <blockquote><p>选择时间后，相应的给出我们选择的时间</p></blockquote>
@@ -1252,7 +1252,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">        });</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h2 id="计时器">计时器</h2>
+<h3 id="计时器">计时器</h3>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">Chronometer</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> /></span></span></code></pre>
 <p>它是文本框组件的子类。</p>
 <p>计时器默认的样式是 <strong>时:分:秒</strong></p>
@@ -1289,7 +1289,7 @@
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">方法名</th><th align="center">含义</th></tr></thead><tbody><tr><td align="center"><code>setBase()</code></td><td align="center">设置计时器的起始时间</td></tr><tr><td align="center"><code>setFormat()</code></td><td align="center">设置显示时间的格式</td></tr><tr><td align="center"><code>start()</code></td><td align="center">指定开始计时</td></tr><tr><td align="center"><code>stop()</code></td><td align="center">指定停止时间</td></tr><tr><td align="center"><code>setOnChronometerTickListener()</code></td><td align="center">为计时器绑定事件监听器，当计时器改变时触发该监听器</td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">方法名</th><th align="center">含义</th></tr></thead><tbody><tr><td align="center"><code>setBase()</code></td><td align="center">设置计时器的起始时间</td></tr><tr><td align="center"><code>setFormat()</code></td><td align="center">设置显示时间的格式</td></tr><tr><td align="center"><code>start()</code></td><td align="center">指定开始计时</td></tr><tr><td align="center"><code>stop()</code></td><td align="center">指定停止时间</td></tr><tr><td align="center"><code>setOnChronometerTickListener()</code></td><td align="center">为计时器绑定事件监听器，当计时器改变时触发该监听器</td></tr></tbody></table></div>
 <blockquote><p>编写一个计数器</p></blockquote>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">Chronometer</span></span>
 <span class="line"><span style="--shiki-light:#986801;--shiki-dark:#D19A66">    android:id</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">=</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"@+id/chronometer_1"</span></span>
@@ -1317,11 +1317,11 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">        });</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h1 id="高级-ui-组件">高级 UI 组件</h1>
+<h2 id="高级-ui-组件">高级 UI 组件</h2>
 <p><mark class="flexible-marker flexible-marker-default">使用 UI 组件时注意字母的大小写！</mark></p>
 <p><mark class="flexible-marker flexible-marker-default">使用 UI 组件时注意字母的大小写！</mark></p>
 <p><mark class="flexible-marker flexible-marker-default">使用 UI 组件时注意字母的大小写！</mark></p>
-<h2 id="进度条">进度条</h2>
+<h3 id="进度条">进度条</h3>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">ProgressBar</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> /></span></span></code></pre>
 <p>安卓提供了两种进度条模式：水平进度条和圆形进度条。默认是圆形进度条。</p>
 <blockquote><p>属性</p></blockquote>
@@ -1348,7 +1348,7 @@
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">属性值</th><th align="center">含义</th></tr></thead><tbody><tr><td align="center">?android:attr/progressBarStyleHorizontal</td><td align="center">细水平长条进度条</td></tr><tr><td align="center">?android:attr/progressBarStyleSmall</td><td align="center">小圆形进度条</td></tr><tr><td align="center">?android:attr/progressBarStyleLarge</td><td align="center">大圆形进度条</td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">属性值</th><th align="center">含义</th></tr></thead><tbody><tr><td align="center">?android:attr/progressBarStyleHorizontal</td><td align="center">细水平长条进度条</td></tr><tr><td align="center">?android:attr/progressBarStyleSmall</td><td align="center">小圆形进度条</td></tr><tr><td align="center">?android:attr/progressBarStyleLarge</td><td align="center">大圆形进度条</td></tr></tbody></table></div>
 <p>通过安卓给我定义的样式资源进行设置，如：</p>
 
 
@@ -1371,7 +1371,7 @@
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">属性值</th><th align="center">含义</th></tr></thead><tbody><tr><td align="center">@android:style/Widget.ProgressBar.Horizontal</td><td align="center">粗水平长条进度条</td></tr><tr><td align="center">@android:style/Widget.ProgressBar.Large</td><td align="center">旋转画面的大圆形进度条</td></tr><tr><td align="center">@android:style/Widget.ProgressBar.Small</td><td align="center">旋转画面的小圆形进度条</td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">属性值</th><th align="center">含义</th></tr></thead><tbody><tr><td align="center">@android:style/Widget.ProgressBar.Horizontal</td><td align="center">粗水平长条进度条</td></tr><tr><td align="center">@android:style/Widget.ProgressBar.Large</td><td align="center">旋转画面的大圆形进度条</td></tr><tr><td align="center">@android:style/Widget.ProgressBar.Small</td><td align="center">旋转画面的小圆形进度条</td></tr></tbody></table></div>
 <p><code>android:max</code>	设置进度条的最大值，属性值为具体数值，如：100</p>
 <p><code>android:progress</code>	设置进度条当前进度，属性值为具体数值，如：50</p>
 <p>进度条更新流程：</p>
@@ -1435,7 +1435,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">        }).</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">start</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">();</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h2 id="拖动条">拖动条</h2>
+<h3 id="拖动条">拖动条</h3>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">SeekBar</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> /></span></span></code></pre>
 <p>它是进度条的子类。</p>
 <blockquote><p>属性</p></blockquote>
@@ -1477,7 +1477,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <p>拓展：设置图片透明度可用 <code>setAlpha()</code> 方法进行设置，参数为透明度。安卓中透明度最高为 255。</p>
 <p><strong>图像视图</strong> 参考下文。</p>
-<h2 id="星级评分条">星级评分条</h2>
+<h3 id="星级评分条">星级评分条</h3>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">RatingBar</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> /></span></span></code></pre>
 <blockquote><p>属性</p></blockquote>
 <p><code>android:numStars</code>	设置星级评分条中星级的个数。默认星级是 5。属性值为整型，如：8。</p>
@@ -1510,7 +1510,7 @@
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">        Toast</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">makeText</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">MainActivity</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">this</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"progress："</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">+</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">progress, </span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">Toast</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">LENGTH_SHORT</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">).</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">show</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">();</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h2 id="图像视图">图像视图</h2>
+<h3 id="图像视图">图像视图</h3>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">ImageView</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> /></span></span></code></pre>
 <blockquote><p>属性</p></blockquote>
 <p><code>android:src</code>	设置 ImageView 的内容，属性值是图片的地址。如：其中 image1 是图片名称</p>
@@ -1569,7 +1569,7 @@
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">属性值</th><th align="center">含义</th></tr></thead><tbody><tr><td align="center"><code>center</code></td><td align="center">按图片的原来size居中显示，当图片长/宽超过View的长/宽，则截取图片的居中部分显示</td></tr><tr><td align="center"><code>centerCrop</code></td><td align="center">按比例扩大图片的size居中显示，使得图片长(宽)等于或大于View的长(宽)</td></tr><tr><td align="center"><code>centerInside</code></td><td align="center">将图片的内容完整居中显示，通过按比例缩小或原来的size使得图片长/宽等于或小于View的长/宽</td></tr><tr><td align="center"><code>fitCenter</code></td><td align="center">把图片按比例扩大/缩小到View的宽度，居中显示</td></tr><tr><td align="center"><code>fitEnd</code></td><td align="center">把图片按比例扩大/缩小到View的宽度，显示在View的下部分位置</td></tr><tr><td align="center"><code>fitStart</code></td><td align="center">把图片按比例扩大/缩小到View的宽度，显示在View的上部分位置</td></tr><tr><td align="center"><code>fitXY</code></td><td align="center">把图片不按比例扩大/缩小到View的大小显示</td></tr><tr><td align="center"><code>matrix</code></td><td align="center">用矩阵来绘制，动态缩小放大图片来显示。</td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">属性值</th><th align="center">含义</th></tr></thead><tbody><tr><td align="center"><code>center</code></td><td align="center">按图片的原来size居中显示，当图片长/宽超过View的长/宽，则截取图片的居中部分显示</td></tr><tr><td align="center"><code>centerCrop</code></td><td align="center">按比例扩大图片的size居中显示，使得图片长(宽)等于或大于View的长(宽)</td></tr><tr><td align="center"><code>centerInside</code></td><td align="center">将图片的内容完整居中显示，通过按比例缩小或原来的size使得图片长/宽等于或小于View的长/宽</td></tr><tr><td align="center"><code>fitCenter</code></td><td align="center">把图片按比例扩大/缩小到View的宽度，居中显示</td></tr><tr><td align="center"><code>fitEnd</code></td><td align="center">把图片按比例扩大/缩小到View的宽度，显示在View的下部分位置</td></tr><tr><td align="center"><code>fitStart</code></td><td align="center">把图片按比例扩大/缩小到View的宽度，显示在View的上部分位置</td></tr><tr><td align="center"><code>fitXY</code></td><td align="center">把图片不按比例扩大/缩小到View的大小显示</td></tr><tr><td align="center"><code>matrix</code></td><td align="center">用矩阵来绘制，动态缩小放大图片来显示。</td></tr></tbody></table></div>
 <p><code>android:adjustViewBounds</code>		参考链接：<a href="https://www.jianshu.com/p/49f8d5e5965b?utm_campaign=haruki" target="_blank" rel="noopener noreferrer">参考链接1</a>		<a href="https://www.jianshu.com/p/13de1774471c" target="_blank" rel="noopener noreferrer">参考链接2</a></p>
 <p>官方表述：Adjust the ImageView’s bounds to preserve the aspect ration of its drawable.  解释：<strong>调整ImageView的界限来保持图片纵横比不变。</strong></p>
 <p><strong>adjustViewBounds不管是设置成true还是false，都是不会影响图片本身的比例的（长/宽）！</strong></p>
@@ -1578,7 +1578,7 @@
 <p><code>android:maxWidth</code>/<code>android:maxHeight</code>	设置ImageView可以显示的最大宽/高，但是在Android中，<strong>只用当设置android:adjustViewBounds=“ture”的时候</strong>，maxWidth/maxHeight 设置效果才能有效。</p>
 <p><strong>adjustViewBounds=“ture”的时候，会将这个ImageView的android:scaleType属性设置为fitCenter</strong>，但是如果同时在 XML 文件中设置 android:scaleType，则 android:scaleType 的优先级会更高，adjustViewBounds=“ture”中对 android:scaleType 属性设置将会失效。这种情况，只有在 Java 代码中设置 setAdjustViewBounds（true）的时候，才会生效。</p>
 <p><code>android:tint</code>	安卓着色器。将图片渲染成指定的颜色。</p>
-<h2 id="图像切换器">图像切换器</h2>
+<h3 id="图像切换器">图像切换器</h3>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">ImageSwitcher</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> /></span></span></code></pre>
 <blockquote><p>单击图片切换图片</p></blockquote>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">ImageSwitcher</span></span>
@@ -1704,7 +1704,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">        });</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h2 id="网格视图">网格视图</h2>
+<h3 id="网格视图">网格视图</h3>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">GridView</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> /></span></span></code></pre>
 <p>可应用于相册。</p>
 <blockquote><p>属性</p></blockquote>
@@ -1713,7 +1713,7 @@
 <p><code>android:horizontalSpacing</code>	设置水平间距，单位 dp。</p>
 <p><code>android:stretchMode="columnWidth"</code>		缩放与列宽大小同步</p>
 <p><code>android:columnWidth</code>		设置列宽度，单位 dp。</p>
-<h3 id="适配器">适配器</h3>
+<h4 id="适配器">适配器</h4>
 <p>连接后端数据和前端显示的接口，是数据和 UI 组件的一个重要纽带。主要在 View 上显示(一般是 ListView)。可以看作是界面数据绑定的一种理解。它所操纵的数据一般都是一些比较复杂的数据，如数组，链表，数据库，集合等。适配器就像显示器，把复杂的东西按人可以接受的方式来展现。</p>
 <p>使用者：ListView、GridView、Spinner、Gallery、ViewPage 等都需要使用适配器来为其设置数据源。</p>
 <blockquote><p>常用的适配器</p></blockquote>
@@ -1727,7 +1727,7 @@
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AndroidImages/%E9%80%82%E9%85%8D%E5%99%A8%E7%BB%A7%E6%89%BF%E5%9B%BE.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/AndroidImages/%E9%80%82%E9%85%8D%E5%99%A8%E7%BB%A7%E6%89%BF%E5%9B%BE.png" alt="适配器继承图" data-responsive-image="true"></picture></p>
 <p>具体使用和参数意义参考下列链接。</p>
 <p>参考链接： <a href="https://www.cnblogs.com/huolan/p/5126794.html" target="_blank" rel="noopener noreferrer">参考链接1</a>				<a href="https://blog.csdn.net/leeziyuan/article/details/49717347" target="_blank" rel="noopener noreferrer">参考链接2</a>					<a href="https://blog.csdn.net/qq_27061049/article/details/80472080" target="_blank" rel="noopener noreferrer">参考链接3</a></p>
-<h3 id="实现网格视图">实现网格视图</h3>
+<h4 id="实现网格视图">实现网格视图</h4>
 <blockquote><p>实现网格视图，使用 SimpleAdapter</p></blockquote>
 <p>准备工作：在 drawable 目录中放入 9 张图片，并命名为 image1 ~image9。</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">GridView</span></span>
@@ -1814,7 +1814,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">        }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h2 id="下拉列表框">下拉列表框</h2>
+<h3 id="下拉列表框">下拉列表框</h3>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">Spinner</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> /></span></span></code></pre>
 <blockquote><p>属性</p></blockquote>
 <p><code>android:entries</code>		为下拉列表框指定列表项，属性值为数组资源。</p>
@@ -1874,7 +1874,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">        });</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h2 id="列表视图">列表视图</h2>
+<h3 id="列表视图">列表视图</h3>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">ListView</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> /></span></span></code></pre>
 <p>可应用于用户列表。</p>
 <p>和下拉列表框一样，可以使用 <code>android:entries</code> 来给列表视图设置列表项。</p>
@@ -1907,7 +1907,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">        });</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h2 id="滚动视图">滚动视图</h2>
+<h3 id="滚动视图">滚动视图</h3>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">ScrollView</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> /></span></span></code></pre>
 <p>滚动视图可以在 xml 文件中添加，也可以在 java 文件中添加。</p>
 <p>滚动视图默认是竖直的滚动，但我们也可以设置其他的滚动方式。</p>
@@ -2001,7 +2001,7 @@
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">        ll2</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">addView</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(textView);</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h2 id="选项卡">选项卡</h2>
+<h3 id="选项卡">选项卡</h3>
 <p>我们不能使用某个具体的组件在 xml 文件添加选项卡。</p>
 <blockquote><p>使用步骤</p></blockquote>
 <ol>
@@ -2083,7 +2083,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <hr>
-<p>​																						<mark class="flexible-marker flexible-marker-default">Android 布局与组件完</mark></p> </article> <div class="text-muted-foreground max-w-app mt-20 w-full space-y-3 text-center text-sm" data-astro-cid-7ap3hmvm> <aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full px-2 text-center leading-6 sm:px-0"> <p class="m-0 break-words"> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a><span> 许可协议，</span><span class="max-sm:block">转载时请署名并注明<a href="https://mofan212.github.io/posts/android-1/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a> 🔗</span> </p> </aside> <section data-post-reward data-pagefind-ignore class="w-full" aria-label="赞赏"> <div class="flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:flex-wrap sm:gap-x-1.5 sm:gap-y-2"> <span class="sm:whitespace-nowrap">如果这篇文章对你有帮助，可以通过</span> <a href="/reward/" class="focus-outline border-accent text-accent hover:bg-accent/10 active:bg-accent/10 inline-block rounded-md border px-3 py-1 font-medium transition-colors"> 赞赏 </a> <span class="sm:whitespace-nowrap">请我喝杯 Coffee ☕</span> </div> </section> </div> <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm>  <ul id="post-tags" class="mt-4 mb-8 flex flex-wrap gap-4 sm:mb-8" data-astro-cid-7ap3hmvm> <li> <a href="/tags/android/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> Android </a> </li> </ul>  <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/advanced-hbase/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.3l105.3-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg> <div> <span>上一篇</span> <div class="text-accent/85 text-sm">HBase原理</div> </div> </a> <a href="/posts/android-2/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>下一篇</span> <div class="text-accent/85 text-sm">Android核心与事件处理（二）</div> </div> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg> </a> </div> </main> <footer class="app-layout mt-auto" data-astro-cid-7ap3hmvm="true"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="text-muted-foreground my-2 flex w-fit flex-col items-start text-start text-sm whitespace-nowrap"> <div class="flex items-center gap-1.5"> <svg width="24" height="24" fill="currentColor" class="size-4" viewBox="-49.231 -39.385 738.462 590.769" aria-hidden="true"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9-.1-2.7-.2-5.4-.2-8.1 0-88.4 71.6-160 160-160 59.3 0 111 32.2 138.7 80.2A95.5 95.5 0 0 1 448 96c53 0 96 43 96 96 0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39L296 392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0z" /></svg> <span>最近更新：</span> <time class="tabular-nums" datetime="2026-10-21T03:16:11.000Z" data-deployed-at="2026-10-21T03:16:11.000Z" data-just-now="刚刚" data-locale="zh-CN"> 2026-10-21 11:16 </time> </div> <div class="mt-1 flex items-center gap-3 text-xs"> <span class="flex items-center gap-1" title="本站访客数"> <svg width="24" height="24" fill="currentColor" class="size-3" viewBox="-2.835 -3.241 453.671 518.481" aria-hidden="true"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3z" /></svg> <span class="sr-only">本站访客数：</span> <span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> <span aria-hidden="true">|</span> <span class="flex items-center gap-1.5" title="本站总浏览量"> <span class="flex size-4 items-center justify-center" aria-hidden="true"> <svg width="24" height="24" fill="currentColor" class="size-3.5" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48zM0 272c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v160c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zM368 96h32c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48" /></svg> </span> <span class="sr-only">本站总浏览量：</span> <span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> </div> </div> <div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"> <span>版权所有 &#169; 2020 – 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer> <script>
+<p>​																						<mark class="flexible-marker flexible-marker-default">Android 布局与组件完</mark></p> </article> <div class="text-muted-foreground max-w-app mt-20 w-full space-y-3 text-center text-sm" data-astro-cid-7ap3hmvm> <aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full px-2 text-center leading-6 sm:px-0"> <p class="m-0 break-words"> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a><span> 许可协议，</span><span class="max-sm:block">转载时请署名并注明<a href="https://mofan212.github.io/posts/android-1/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a> 🔗</span> </p> </aside> <section data-post-reward data-pagefind-ignore class="w-full" aria-label="赞赏"> <div class="flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:flex-wrap sm:gap-x-1.5 sm:gap-y-2"> <span class="sm:whitespace-nowrap">如果这篇文章对你有帮助，可以通过</span> <a href="/reward/" class="focus-outline border-accent text-accent hover:bg-accent/10 active:bg-accent/10 inline-block rounded-md border px-3 py-1 font-medium transition-colors"> 赞赏 </a> <span class="sm:whitespace-nowrap">请我喝杯 Coffee ☕</span> </div> </section> </div> <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm>  <ul id="post-tags" class="mt-4 mb-8 flex flex-wrap gap-4 sm:mb-8" data-astro-cid-7ap3hmvm> <li> <a href="/tags/android/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> Android </a> </li> </ul>  <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/advanced-hbase/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.3l105.3-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg> <div> <span>上一篇</span> <div class="text-accent/85 text-sm">HBase原理</div> </div> </a> <a href="/posts/android-2/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>下一篇</span> <div class="text-accent/85 text-sm">Android核心与事件处理（二）</div> </div> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg> </a> </div> </main> <footer class="app-layout mt-auto" data-astro-cid-7ap3hmvm="true"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="text-muted-foreground my-2 flex w-fit flex-col items-start text-start text-sm whitespace-nowrap"> <div class="flex items-center gap-1.5"> <svg width="24" height="24" fill="currentColor" class="size-4" viewBox="-49.231 -39.385 738.462 590.769" aria-hidden="true"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9-.1-2.7-.2-5.4-.2-8.1 0-88.4 71.6-160 160-160 59.3 0 111 32.2 138.7 80.2A95.5 95.5 0 0 1 448 96c53 0 96 43 96 96 0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39L296 392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0z" /></svg> <span>最近更新：</span> <time class="tabular-nums" datetime="2026-10-22T08:22:01.000Z" data-deployed-at="2026-10-22T08:22:01.000Z" data-just-now="刚刚" data-locale="zh-CN"> 2026-10-22 16:22 </time> </div> <div class="mt-1 flex items-center gap-3 text-xs"> <span class="flex items-center gap-1" title="本站访客数"> <svg width="24" height="24" fill="currentColor" class="size-3" viewBox="-2.835 -3.241 453.671 518.481" aria-hidden="true"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3z" /></svg> <span class="sr-only">本站访客数：</span> <span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> <span aria-hidden="true">|</span> <span class="flex items-center gap-1.5" title="本站总浏览量"> <span class="flex size-4 items-center justify-center" aria-hidden="true"> <svg width="24" height="24" fill="currentColor" class="size-3.5" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48zM0 272c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v160c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zM368 96h32c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48" /></svg> </span> <span class="sr-only">本站总浏览量：</span> <span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> </div> </div> <div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"> <span>版权所有 &#169; 2020 – 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer> <script>
   (() => {
     const updateDeploymentTimes = () => {
       document.querySelectorAll("[data-deployed-at]").forEach(element => {
@@ -2132,4 +2132,4 @@
     document.addEventListener("astro:page-load", updateDeploymentTimes);
     window.setInterval(updateDeploymentTimes, 60_000);
   })();
-</script>    <script type="module" src="/_astro/Layout.astro_astro_type_script_index_0_lang.DQQu8RqY.js"></script> <script type="module" src="/_astro/Layout.astro_astro_type_script_index_1_lang.DRvjezMo.js"></script> </body> </html>  <script type="module" src="/_astro/index.astro_astro_type_script_index_0_lang.Oly9xh_g.js"></script>
+</script>    <script type="module" src="/_astro/Layout.astro_astro_type_script_index_0_lang.BrDp0sUM.js"></script> <script type="module" src="/_astro/Layout.astro_astro_type_script_index_1_lang.DRvjezMo.js"></script> </body> </html>  <script type="module" src="/_astro/index.astro_astro_type_script_index_0_lang.Oly9xh_g.js"></script>

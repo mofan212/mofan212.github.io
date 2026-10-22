@@ -1,4 +1,4 @@
-<!DOCTYPE html><html dir="ltr" lang="zh-CN" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/distributed-message-queue-rocketmq-part-two/"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.3.0/400.css"><link rel="preconnect" href="https://busuanzi.ibruce.info"><meta name="generator" content="Astro v6.4.2"><!-- Primary meta --><title>【下篇】分布式消息队列 RocketMQ | Mofan</title><meta name="title" content="【下篇】分布式消息队列 RocketMQ | Mofan"><meta name="description" content="本文介绍了 RocketMQ 的工作原理与应用。"><meta name="author" content="默烦"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Mofan"><meta property="og:title" content="【下篇】分布式消息队列 RocketMQ | Mofan"><meta property="og:description" content="本文介绍了 RocketMQ 的工作原理与应用。"><meta property="og:url" content="https://mofan212.github.io/posts/distributed-message-queue-rocketmq-part-two/"><meta property="og:image" content="https://mofan212.github.io/default-og.jpg"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://mofan212.github.io/posts/distributed-message-queue-rocketmq-part-two/"><meta property="twitter:title" content="【下篇】分布式消息队列 RocketMQ | Mofan"><meta property="twitter:description" content="本文介绍了 RocketMQ 的工作原理与应用。"><meta property="twitter:image" content="https://mofan212.github.io/default-og.jpg"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Mofan" href="https://mofan212.github.io/rss.xml"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2021-09-19T00:00:00.000Z"><meta property="article:modified_time" content="2021-09-19T00:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"【下篇】分布式消息队列 RocketMQ | Mofan","url":"https://mofan212.github.io/posts/distributed-message-queue-rocketmq-part-two/","mainEntityOfPage":"https://mofan212.github.io/posts/distributed-message-queue-rocketmq-part-two/","datePublished":"2021-09-19T00:00:00.000Z","dateModified":"2021-09-19T00:00:00.000Z","author":[{"@type":"Person","name":"默烦","url":"https://github.com/mofan212"}]}</script> <!--
+<!DOCTYPE html><html dir="ltr" lang="zh-CN" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/distributed-message-queue-rocketmq-part-two/"><link rel="preconnect" href="https://npm.elemecdn.com"><link rel="preconnect" href="https://gcore.jsdelivr.net"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/lxgwwenkaiscreen.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.3.0/400.css"><link rel="preconnect" href="https://busuanzi.ibruce.info"><meta name="generator" content="Astro v6.4.2"><!-- Primary meta --><title>【下篇】分布式消息队列 RocketMQ | Mofan</title><meta name="title" content="【下篇】分布式消息队列 RocketMQ | Mofan"><meta name="description" content="本文介绍了 RocketMQ 的工作原理与应用。"><meta name="author" content="默烦"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Mofan"><meta property="og:title" content="【下篇】分布式消息队列 RocketMQ | Mofan"><meta property="og:description" content="本文介绍了 RocketMQ 的工作原理与应用。"><meta property="og:url" content="https://mofan212.github.io/posts/distributed-message-queue-rocketmq-part-two/"><meta property="og:image" content="https://mofan212.github.io/default-og.jpg"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://mofan212.github.io/posts/distributed-message-queue-rocketmq-part-two/"><meta property="twitter:title" content="【下篇】分布式消息队列 RocketMQ | Mofan"><meta property="twitter:description" content="本文介绍了 RocketMQ 的工作原理与应用。"><meta property="twitter:image" content="https://mofan212.github.io/default-og.jpg"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Mofan" href="https://mofan212.github.io/rss.xml"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2021-09-19T00:00:00.000Z"><meta property="article:modified_time" content="2021-09-19T00:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"【下篇】分布式消息队列 RocketMQ | Mofan","url":"https://mofan212.github.io/posts/distributed-message-queue-rocketmq-part-two/","mainEntityOfPage":"https://mofan212.github.io/posts/distributed-message-queue-rocketmq-part-two/","datePublished":"2021-09-19T00:00:00.000Z","dateModified":"2021-09-19T00:00:00.000Z","author":[{"@type":"Person","name":"默烦","url":"https://github.com/mofan212"}]}</script> <!--
       Inline FOUC-prevention script: sets data-theme on <html> before
       the browser paints. Runs synchronously, no defer/async.
     --><script>
@@ -14,7 +14,7 @@
         // Expose value so theme.ts can skip re-detection.
         window.__theme = { value: theme };
       })();
-    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.8-7lwm7-.css">
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.CRJPB6-j.css">
 <style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
 .toc-link[data-astro-cid-po2ckxzl]{position:relative;transition:color .2s ease}.toc-link[data-astro-cid-po2ckxzl]:before{position:absolute;inset-block:.375rem;inset-inline-start:-2px;width:2px;border-radius:2px;background-color:var(--accent);content:"";opacity:0;transition:opacity .2s ease}.toc-link[data-astro-cid-po2ckxzl][data-active]{color:var(--accent)}.toc-link[data-astro-cid-po2ckxzl][data-active]:before{opacity:1}.toc-toggle[data-astro-cid-po2ckxzl][aria-expanded=true] .toc-toggle-icon[data-astro-cid-po2ckxzl]{rotate:-90deg}.toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-width:thin}.post-toc-desktop[data-astro-cid-taqt6xe3] .toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-gutter:stable}.toc-scroll[data-astro-cid-taqt6xe3]:after{display:block;block-size:20dvh;content:""}[data-astro-cid-taqt6xe3][data-toc-dialog]{opacity:0;transform:translate(1.25rem);transition:opacity .16s ease-out,transform .22s cubic-bezier(.22,1,.36,1);will-change:opacity,transform}[data-astro-cid-taqt6xe3][data-toc-dialog][data-toc-visible]{opacity:1;transform:translate(0)}[data-astro-cid-taqt6xe3][data-toc-dialog]::backdrop{background-color:#0000;transition:background-color .18s ease-out}[data-astro-cid-taqt6xe3][data-toc-dialog][data-toc-visible]::backdrop{background-color:#0000007f}@media(prefers-reduced-motion:reduce){[data-astro-cid-taqt6xe3][data-toc-dialog]{transform:none;transition:none}[data-astro-cid-taqt6xe3][data-toc-dialog]::backdrop{transition:none}}[data-astro-cid-4wxclohh][data-post-series]{interpolate-size:allow-keywords}[data-astro-cid-4wxclohh][data-post-series]::details-content{block-size:0;overflow:hidden;opacity:0;transition:block-size .2s ease-out,opacity .15s ease-out,content-visibility .2s allow-discrete}[data-astro-cid-4wxclohh][data-post-series][open]::details-content{block-size:auto;opacity:1}@media(prefers-reduced-motion:reduce){[data-astro-cid-4wxclohh][data-post-series]::details-content{transition:none}}.post-sidebar[data-astro-cid-7ap3hmvm]{display:contents}@media(min-width:90rem){.post-sidebar[data-astro-cid-7ap3hmvm]{position:fixed;inset-block-start:9rem;inset-inline-start:calc(50% + var(--app-max-width) / 2 + 2rem);display:flex;width:min(18rem,calc(50vw - var(--app-max-width) / 2 - 3rem));height:calc(100dvh - 11rem);min-height:0;flex-direction:column}}
 </style><style>[data-astro-transition-scope="astro-36ssibgs-1"] { view-transition-name: rocketmq; }@layer astro { ::view-transition-old(rocketmq) { 
@@ -629,11 +629,11 @@
 
     update();
   })();
-</script> </div> <article id="article" class="mt-8 w-full app-prose max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)" data-astro-cid-7ap3hmvm> <!-- 封面来源：本文封面来源于网络，如有侵权，请联系删除。 -->
+</script> </div> <article id="article" class="mt-8 w-full app-prose post-content max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)" data-astro-cid-7ap3hmvm> <!-- 封面来源：本文封面来源于网络，如有侵权，请联系删除。 -->
 <p>本文参考：<a href="https://www.bilibili.com/video/BV1cf4y157sz" target="_blank" rel="noopener noreferrer">【尚硅谷】2021最新版RocketMQ教程丨轻松入门分布式消息系统</a></p>
-<h1 id="1-rocketmq-工作原理">1. RocketMQ 工作原理</h1>
-<h2 id="11-消息的生产">1.1 消息的生产</h2>
-<h3 id="111-消息的生产过程">1.1.1 消息的生产过程</h3>
+<h2 id="1-rocketmq-工作原理">1. RocketMQ 工作原理</h2>
+<h3 id="11-消息的生产">1.1 消息的生产</h3>
+<h4 id="111-消息的生产过程">1.1.1 消息的生产过程</h4>
 <p>Producer 可以将消息写入到某 Broker 中的某 Queue 中，其经历了如下过程：</p>
 <p>1、Producer 发送消息之前，会先向 NameServer 发出获取 <strong>消息 Topic 的路由信息</strong> 的请求；</p>
 <p>2、NameServer 返回该 Topic 的 <strong>路由表</strong> 及 <strong>Broker 列表</strong>；</p>
@@ -645,7 +645,7 @@
 <blockquote><p>Borker 列表</p></blockquote>
 <p>实际上也是一个 Map，Key 为 BrokerName，Value 为 BrokerData。</p>
 <p>那么一个 Broker 对应一个 BrokerData 实例？这种说法是不对。一套 BrokerName 名称相同的 Master-Slave 小集群对应一个 BrokerData。BrokerData 中包含 BrokerName 和一个 Map。该 Map 的 Key 为 BrokerId，Value 为该 Broker 对应的地址。BrokerId 为 0 表示该 Broker 为 Master，非 0 则表示 Slave。</p>
-<h3 id="112-queue-选择算法">1.1.2 Queue 选择算法</h3>
+<h4 id="112-queue-选择算法">1.1.2 Queue 选择算法</h4>
 <p>对于无序消息，其 Queue 选择算法，也称为消息投递算法，常见的有两种：</p>
 <blockquote><p>轮询算法</p></blockquote>
 <p>默认选择算法。该算法保证了每个 Queue 中可以均匀的获取到消息。</p>
@@ -653,7 +653,7 @@
 <blockquote><p>最小投递延迟算法</p></blockquote>
 <p>该算法会统计每次消息投递的时间延迟，然后根据统计出的结果将消息投递到时间延迟最小的 Queue。如果延迟相同，则采用轮询算法投递。该算法可以有效提升消息的投递性能。</p>
 <p>该算法也存在一个问题：消息在 Queue 上的分配不均匀。投递延迟小的 Queue 其可能会存在大量的消息，进而对该 Queue 的消费者压力会增大，降低消息的消费能力，导致 MQ 中消息的堆积。</p>
-<h2 id="12-消息的存储">1.2 消息的存储</h2>
+<h3 id="12-消息的存储">1.2 消息的存储</h3>
 <p>RocketMQ 中的消息存储在本地文件系统中，这些相关文件默认在当前用户主目录下的 store 目录中：</p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/RocketMQ%E6%B6%88%E6%81%AF%E7%9A%84%E5%AD%98%E5%82%A8%E4%BD%8D%E7%BD%AE.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/RocketMQ%E6%B6%88%E6%81%AF%E7%9A%84%E5%AD%98%E5%82%A8%E4%BD%8D%E7%BD%AE.png" alt="RocketMQ消息的存储位置" data-responsive-image="true"></picture></p>
 <blockquote><p>各文件解析</p></blockquote>
@@ -664,7 +664,7 @@
 <p>consumequeue：存放着 consumequeue 文件，队列就存放在这个目录中。</p>
 <p>index：其中存放着消息索引文件 indexFile。</p>
 <p>lock：运行期间使用到的全局资源锁。</p>
-<h3 id="121-commitlog-文件">1.2.1 commitlog 文件</h3>
+<h4 id="121-commitlog-文件">1.2.1 commitlog 文件</h4>
 <p>说明：在很多资料中 commitlog 目录中的文件简单就称为 commitlog 文件。但在源码中，该文件被命名为 mappedFile。</p>
 <blockquote><p>目录与文件</p></blockquote>
 <p>commitlog 目录中存放着很多的 mappedFile 文件，当前 Broker 中的所有消息都是落盘到这些 mappedFile 文件中的。</p>
@@ -679,7 +679,7 @@
 <p>需要注意到，消息单元中是包含 Queue 相关属性的。那么 commitlog 与 Queue 间的关系是什么？</p>
 <p>一个 mappedFile 文件中第 <code>m+1</code> 个消息单元的 commitlog offset 偏移量为：</p>
 <p><code>L(m+1) = L(m) + MsgLen(m) (m >= 0)</code></p>
-<h3 id="122-consumequeue">1.2.2 ConsumeQueue</h3>
+<h4 id="122-consumequeue">1.2.2 ConsumeQueue</h4>
 <blockquote><p>目录与文件</p></blockquote>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/consumequeue%E6%96%87%E4%BB%B6%E7%A4%BA%E4%BE%8B.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/consumequeue%E6%96%87%E4%BB%B6%E7%A4%BA%E4%BE%8B.png" alt="consumequeue文件示例" data-responsive-image="true"></picture></p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/RocketMQ%E7%94%9F%E4%BA%A7%E8%80%85%E4%B8%8E%E6%B6%88%E8%B4%B9%E8%80%85.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/RocketMQ%E7%94%9F%E4%BA%A7%E8%80%85%E4%B8%8E%E6%B6%88%E8%B4%B9%E8%80%85.png" alt="RocketMQ生产者与消费者" data-responsive-image="true"></picture></p>
@@ -689,7 +689,7 @@
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/consumerqueue%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%80%E4%B8%AA%E7%B4%A2%E5%BC%95%E6%9D%A1%E7%9B%AE%E7%9A%84%E7%BB%93%E6%9E%84%E7%A4%BA%E6%84%8F%E5%9B%BE.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/consumerqueue%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%80%E4%B8%AA%E7%B4%A2%E5%BC%95%E6%9D%A1%E7%9B%AE%E7%9A%84%E7%BB%93%E6%9E%84%E7%A4%BA%E6%84%8F%E5%9B%BE.png" alt="consumerqueue文件的一个索引条目的结构示意图" data-responsive-image="true"></picture></p>
 <p>每个 consumequeue 文件可以包含 30w 个索引条目，每个索引条目包含了三个消息重要属性：消息在 mappedFile 文件中的偏移量 CommitLog Offset、消息长度、消息 Tag 的 hashcode 值。这三个属性占 20 个字节，所以每个文件的大小是固定的 <code>30w * 20</code> 字节。</p>
 <p>一个 consumequeue 文件中所有消息的 Topic 一定是相同的，但每条消息的 Tag 可能不同。</p>
-<h3 id="123-对文件的读写">1.2.3 对文件的读写</h3>
+<h4 id="123-对文件的读写">1.2.3 对文件的读写</h4>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/RocketMQ%E5%AF%B9%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/RocketMQ%E5%AF%B9%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99.png" alt="RocketMQ对文件的读写" data-responsive-image="true"></picture></p>
 <blockquote><p>消息写入</p></blockquote>
 <p>一条消息进入到 Broker 后将经历以下几个过程才最终被持久化：</p>
@@ -715,17 +715,17 @@
 <p>PageCache 机制，页面缓存机制，是操作系统对文件的缓存机制，用于加速对文件的读写操作。一般来说，程序对文件进行 <strong>顺序读写</strong> 的速度几乎接近于内存读写速度，主要原因是由于 OS （操作系统）使用 PageCache 机制对读写访问操作进行性能优化，将一部分的内存用作 PageCache。</p>
 <p>写操作：OS 会先将数据写入到 PageCache 中，随后会以异步方式由 pdflush（page dirty flush）内核线程将 Cache 中的数据刷盘到物理磁盘。</p>
 <p>读操作：若用户要读取数据，其首先会从 PageCache 中读取，若没有命中，则 OS 再从物理磁盘上加载该数据到 PageCache 的同时，也会顺序对其相邻数据块中的数据进行预读取。</p>
-<h3 id="124-与-kafka-的对比">1.2.4 与 Kafka 的对比</h3>
+<h4 id="124-与-kafka-的对比">1.2.4 与 Kafka 的对比</h4>
 <p>RocketMQ 的很多思想来源于 Kafka，比如 commitlog 与 consumequeue 就是来自 Kafka 的。</p>
 <p>RocketMQ 中的 commitlog 目录与 consumequeue 的结合类似于 Kafka 中的 partition 分区目录。mappedFile 文件类似于 Kafka 中的 segment 段。</p>
 <p>Kafka 中 Topic 的消息被分割为一个或多个 partition。partition 是一个物理概念，对应到系统上就是 Topic 目录下的一个或多个目录。每个 partition 中包含的文件称为 segment，是具体存放消息的文件。</p>
 <p>Kafka 中消息存放的目录结构是：Topic 目录下有 partition 目录，partition 目录下有 segment 文件。</p>
 <p>Kafka 中没有二级分类标签 Tag 这个概念。</p>
 <p>Kafka 中无需索引文件。因为生产者是将消息直接写在了 partition 中的，消费者也是直接从 partition 中读取数据的。</p>
-<h2 id="13-indexfile">1.3 indexFile</h2>
+<h3 id="13-indexfile">1.3 indexFile</h3>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/indexFile%E6%96%87%E4%BB%B6%E7%A4%BA%E4%BE%8B.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/indexFile%E6%96%87%E4%BB%B6%E7%A4%BA%E4%BE%8B.png" alt="indexFile文件示例" data-responsive-image="true"></picture></p>
 <p>除了通过通常的指定 Topic 进行消息消费外，RocketMQ 还提供了 <strong>根据 key 进行消息查询的功能</strong>。该查询是通过 store 目录中的 index 子目录中的 indexFile 进行索引实现的快速查询。当然，这个 indexFile 中的索引数据是在 <strong>包含了 Key 的消息</strong> 被发送到 Broker 时写入的。如果消息中没有包含 Key，则不会写入。</p>
-<h3 id="131-索引条目结构">1.3.1 索引条目结构</h3>
+<h4 id="131-索引条目结构">1.3.1 索引条目结构</h4>
 <p>每个 Broker 中会包含一组 indexFile，每个 indexFile 都是以一个 <strong>时间戳</strong> 命名的（这个 indexFile 被创建时的时间戳）。每个 indexFile 文件由三部分构成：indexHeader，slots 槽位，indexes 索引数据。每个 indexFile 文件中包含 500w 个 slot 槽。而每个 slot 槽又可能会挂载很多的 index 索引单元。</p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/indexFile%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E7%A4%BA%E6%84%8F%E5%9B%BE.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/indexFile%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E7%A4%BA%E6%84%8F%E5%9B%BE.png" alt="indexFile文件结构示意图" data-responsive-image="true"></picture></p>
 <p>indexHeader 固定 40 个字节，其中存放着如下数据：</p>
@@ -749,14 +749,14 @@
 <p>phyOffset：当前 key 对应的消息在 commitlog 中的偏移量 commitlog offset；</p>
 <p>timeDiff：当前 key 对应消息的存储时间与当前 indexFile 创建时间的时间差；</p>
 <p>preIndexNo：当前 slot 下当前 index 索引单元的前一个 index 索引单元的 indexNo。</p>
-<h3 id="132-indexfile-的创建">1.3.2 indexFile 的创建</h3>
+<h4 id="132-indexfile-的创建">1.3.2 indexFile 的创建</h4>
 <p>indexFile 的文件名为当前文件被创建时的时间戳。这个时间戳有什么用处呢？</p>
 <p>根据业务 key 进行查询时，查询条件除了 key 之外，还需要指定一个要查询的时间戳，表示要查询不大于该时间戳的最新的消息，即查询指定时间戳之前存储的最新消息。这个时间戳文件名可以简化查询，提高查询效率。</p>
 <p>indexFile 文件创建的条件（时机）有两个：</p>
 <p>1、当第一条带 key 的消息发送来后，系统发现没有 indexFile，此时会创建第一个 indexFile 文件；</p>
 <p>2、当一个 indexFile 中挂载的 index 索引单元数量超出 2000w 个时，会创建新的 indexFile。当带 key 的消息发送到来后，系统会找到最新的 indexFile，并从其 indexHeader 的最后 4 字节中读取到 indexCount。若 <code>indexCount >= 2000w</code>，就创建新的 indexFile。</p>
 <p>由于可以推算出，一个 indexFile 最大可有 <code>(40 + 500w * 4 + 2000w * 20)</code> 字节</p>
-<h3 id="133-查询流程">1.3.3 查询流程</h3>
+<h4 id="133-查询流程">1.3.3 查询流程</h4>
 <p>当消费者通过业务 key 来查询相应的消息时，其需要经过一个相对较复杂的查询流程。不过，在分析查询流程之前，首先要清楚几个定位计算式子：</p>
 <p>1、计算指定消息 key 的 slot 槽位序号：<code>slot槽位序号 = key 的 hash % 500w</code></p>
 <p>2、计算槽位序号为 n 的 slot 在 indexFile 中的起始位置：<code>slot(n)位置 = 40 + (n - 1) * 4</code></p>
@@ -764,9 +764,9 @@
 <p>在上述式子中，40 为 indexFile 中 indexHeader 的字节数，<code>500w * 4</code> 是所有 slots 所占的字节数。</p>
 <p>具体查询流程如下：</p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/RocketMQ%E6%B6%88%E6%81%AF%E6%9F%A5%E8%AF%A2%E6%B5%81%E7%A8%8B.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/RocketMQ%E6%B6%88%E6%81%AF%E6%9F%A5%E8%AF%A2%E6%B5%81%E7%A8%8B.png" alt="RocketMQ消息查询流程" data-responsive-image="true"></picture></p>
-<h2 id="14-消息的消费">1.4 消息的消费</h2>
+<h3 id="14-消息的消费">1.4 消息的消费</h3>
 <p>消费者从 Broker 中获取消息的方式有两种：pull 拉取方式和 push 推动方式。消费者组对于消息消费的模式又分为两种：集群消费 Clustering 和广播消费 Broadcasting。</p>
-<h3 id="141-获取消费类型">1.4.1 获取消费类型</h3>
+<h4 id="141-获取消费类型">1.4.1 获取消费类型</h4>
 <blockquote><p>拉取式消费</p></blockquote>
 <p>Consumer 主动从 Broker 中拉取消息，主动权由 Consumer 控制。一旦获取了批量消息，就会启动消费过程。不过，该方式的实时性较弱，当 Broker 中有了新的消息时消费者并不能及时发现并消费。</p>
 <p>由于拉取时间间隔是由用户指定的，所以在设置该间隔时需要注意平稳：间隔太短，空请求比例会增加；间隔太长，消息的实时性太差。</p>
@@ -776,7 +776,7 @@
 <blockquote><p>两者之间的对比</p></blockquote>
 <p>pull：需要应用去实现对关联 Queue 的遍历，实时性差，但便于应用控制消息的拉取；</p>
 <p>push：封装了对关联 Queue 的遍历，实时性强，但会占用较多的系统资源。</p>
-<h3 id="142-消费模式">1.4.2 消费模式</h3>
+<h4 id="142-消费模式">1.4.2 消费模式</h4>
 <blockquote><p>广播消费模式</p></blockquote>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/RocketMQ%E5%B9%BF%E6%92%AD%E6%B6%88%E8%B4%B9%E6%A8%A1%E5%BC%8F%E7%A4%BA%E6%84%8F%E5%9B%BE.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/RocketMQ%E5%B9%BF%E6%92%AD%E6%B6%88%E8%B4%B9%E6%A8%A1%E5%BC%8F%E7%A4%BA%E6%84%8F%E5%9B%BE.png" alt="RocketMQ广播消费模式示意图" data-responsive-image="true"></picture></p>
 <p>广播消费模式下，相同 Consumer Group 的每个 Consumer 实例都接收同一个 Topic 的全量消息，即每条消息都会被发送到 Consumer Group 中的 <strong>每个</strong> Consumer。</p>
@@ -788,7 +788,7 @@
 <p>集群模式：消费进度保存在 Broker 中。Consumer Group 中的所有 Consumer 共同消费同一个 Topic 中的消息，同一条消息只会被消费一次。消费进度会参与到了消费的负载均衡中，故消费进度是需要共享的。</p>
 <p>下图是 Broker 中存放的各个 Topic 的各个 Queue 的消费进度：</p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/%E5%90%84%E4%B8%AATopic%E7%9A%84%E5%90%84%E4%B8%AAQueue%E7%9A%84%E6%B6%88%E8%B4%B9%E8%BF%9B%E5%BA%A6.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/%E5%90%84%E4%B8%AATopic%E7%9A%84%E5%90%84%E4%B8%AAQueue%E7%9A%84%E6%B6%88%E8%B4%B9%E8%BF%9B%E5%BA%A6.png" alt="各个Topic的各个Queue的消费进度" data-responsive-image="true"></picture></p>
-<h3 id="143-rebalance-机制">1.4.3 Rebalance 机制</h3>
+<h4 id="143-rebalance-机制">1.4.3 Rebalance 机制</h4>
 <p>Rebalance 机制讨论的前提是：消费模式是 <strong>集群消费模式</strong>。</p>
 <blockquote><p>什么是 Rebalance</p></blockquote>
 <p>Rebalance 即再均衡，指的是将⼀个 Topic 下的多个 Queue 在同⼀个 Consumer Group 中的多个 Consumer 间进行重新分配的过程。</p>
@@ -818,7 +818,7 @@
 <blockquote><p>与 Kafka 对比</p></blockquote>
 <p>在 Kafka 中，一旦发现出现了 Rebalance 条件，Broker 会调用 Group Coordinator 来完成 Rebalance。Coordinator 是 Broker 中的一个进程。Coordinator 会在 Consumer Group 中选出一个 Group Leader，由这个 Leader 根据自己本身组情况完成 Partition 分区的再分配。这个再分配结果会上报给 Coordinator，并由 Coordinator 同步给 Group 中的所有 Consumer 实例。</p>
 <p>Kafka 中的 Rebalance 是由 Consumer Leader 完成的，而 RocketMQ 中的 Rebalance 是由每个 Consumer 自身完成的，Group 中不存在 Leader。</p>
-<h3 id="144-queue-分配算法">1.4.4 Queue 分配算法</h3>
+<h4 id="144-queue-分配算法">1.4.4 Queue 分配算法</h4>
 <p>一个 Topic 中的 Queue 只能由 Consumer Group 中的一个 Consumer 进行消费，而一个 Consumer 可以同时消费多个 Queue 中的消息。那么 Queue 与 Consumer 间的配对关系是如何确定的，即 Queue 要分配给哪个 Consumer 进行消费，这也是有算法策略的。常见的有四种策略，这些策略是通过在创建 Consumer 时的构造器传进去的。</p>
 <blockquote><p>平均分配策略</p></blockquote>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/Queue%E5%88%86%E9%85%8D%E7%AE%97%E6%B3%95%E4%B9%8B%E5%B9%B3%E5%9D%87%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/Queue%E5%88%86%E9%85%8D%E7%AE%97%E6%B3%95%E4%B9%8B%E5%B9%B3%E5%9D%87%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5.png" alt="Queue分配算法之平均分配策略" data-responsive-image="true"></picture></p>
@@ -842,18 +842,18 @@
 <p>平均分配策略与一致性 hash 策略在 Consumer 扩容后的 Rebalance 情况示例图：</p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/%E5%B9%B3%E5%9D%87%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5%E4%B8%8B%E6%B6%88%E8%B4%B9%E8%80%85%E7%BB%84%E6%89%A9%E5%AE%B9%E5%89%8D%E5%90%8E.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/%E5%B9%B3%E5%9D%87%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5%E4%B8%8B%E6%B6%88%E8%B4%B9%E8%80%85%E7%BB%84%E6%89%A9%E5%AE%B9%E5%89%8D%E5%90%8E.png" alt="平均分配策略下消费者组扩容前后" data-responsive-image="true"></picture></p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/%E4%B8%80%E8%87%B4%E6%80%A7hash%E7%AD%96%E7%95%A5%E4%B8%8B%E6%B6%88%E8%B4%B9%E8%80%85%E7%BB%84%E6%89%A9%E5%AE%B9%E5%89%8D%E5%90%8E.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/%E4%B8%80%E8%87%B4%E6%80%A7hash%E7%AD%96%E7%95%A5%E4%B8%8B%E6%B6%88%E8%B4%B9%E8%80%85%E7%BB%84%E6%89%A9%E5%AE%B9%E5%89%8D%E5%90%8E.png" alt="一致性hash策略下消费者组扩容前后" data-responsive-image="true"></picture></p>
-<h3 id="145-至少一次原则">1.4.5 至少一次原则</h3>
+<h4 id="145-至少一次原则">1.4.5 至少一次原则</h4>
 <p>RocketMQ 有一个原则：每条消息必须要被 <strong>成功消费</strong> 一次。</p>
 <p>那么什么是成功消费呢？Consumer 在消费完消息后会向其 <strong>消费进度记录器</strong> 提交其消费消息的 offset，offset 被成功记录到记录器中，那么这条消费就被成功消费了。</p>
 <blockquote><p>什么是消费进度记录器？</p></blockquote>
 <p>对于广播消费模式来说，Consumer 本身就是消费进度记录器。</p>
 <p>对于集群消费模式来说，Broker 是消费进度记录器。</p>
-<h2 id="15-订阅关系的一致性">1.5 订阅关系的一致性</h2>
+<h3 id="15-订阅关系的一致性">1.5 订阅关系的一致性</h3>
 <p>订阅关系的一致性指的是，同一个消费者组（Group ID 相同）下所有 Consumer 实例所订阅的 Topic 与 Tag 及对消息的处理逻辑必须完全一致。否则，消息消费的逻辑就会混乱，甚至导致消息丢失。</p>
-<h3 id="151-正确订阅关系">1.5.1 正确订阅关系</h3>
+<h4 id="151-正确订阅关系">1.5.1 正确订阅关系</h4>
 <p>多个消费者组订阅了多个 Topic，并且每个消费者组里的多个消费者实例的订阅关系保持了一致。</p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/RocketMQ%E7%9A%84%E6%AD%A3%E7%A1%AE%E8%AE%A2%E9%98%85%E5%85%B3%E7%B3%BB.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/RocketMQ%E7%9A%84%E6%AD%A3%E7%A1%AE%E8%AE%A2%E9%98%85%E5%85%B3%E7%B3%BB.png" alt="RocketMQ的正确订阅关系" data-responsive-image="true"></picture></p>
-<h3 id="152-错误订阅关系">1.5.2 错误订阅关系</h3>
+<h4 id="152-错误订阅关系">1.5.2 错误订阅关系</h4>
 <p>一个消费者组订阅了多个 Topic，但是该消费者组里的多个 Consumer 实例的订阅关系并没有保持一致。</p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/RocketMQ%E7%9A%84%E9%94%99%E8%AF%AF%E8%AE%A2%E9%98%85%E5%85%B3%E7%B3%BB.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/RocketMQ%E7%9A%84%E9%94%99%E8%AF%AF%E8%AE%A2%E9%98%85%E5%85%B3%E7%B3%BB.png" alt="RocketMQ的错误订阅关系" data-responsive-image="true"></picture></p>
 <blockquote><p>订阅了不同 Topic</p></blockquote>
@@ -928,19 +928,19 @@
 <span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">        return</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B"> Action</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">CommitMessage</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">});</span></span></code></pre>
-<h2 id="16-offset-管理">1.6 offset 管理</h2>
+<h3 id="16-offset-管理">1.6 offset 管理</h3>
 <p><mark class="flexible-marker flexible-marker-default">这里的 offset 指的是 Consumer 的消费进度 offset。</mark></p>
 <p>消费进度 offset 是用来记录每个 Queue 的不同消费组的消费进度的。根据消费进度记录器的不同，可以分为两种模式：本地模式和远程模式。</p>
-<h3 id="161-offset-本地管理模式">1.6.1 offset 本地管理模式</h3>
+<h4 id="161-offset-本地管理模式">1.6.1 offset 本地管理模式</h4>
 <p>当消费模式为 <strong>广播消费</strong> 时，offset 使用本地模式存储。因为每条消息会被所有的消费者消费，每个消费者管理自己的消费进度，各个消费者之间不存在消费进度的交集。</p>
 <p>Consumer 在广播消费模式下 offset 相关数据以 JSON 的形式持久化到 Consumer 本地磁盘文件中，默认文件路径为当前用户主目录下的 <code>.rocketmq_offsets/${clientId}/${group}/Offsets.json</code>。</p>
 <p>其中 <code>${clientId}</code> 为当前消费者 id，默认为 <code>ip@DEFAULT</code>；<code>${group}</code> 为消费者组名称。</p>
-<h3 id="162-offset-远程管理模式">1.6.2 offset 远程管理模式</h3>
+<h4 id="162-offset-远程管理模式">1.6.2 offset 远程管理模式</h4>
 <p>当消费模式为 <strong>集群消费</strong> 时，offset 使用远程模式管理。因为所有 Cosnumer 实例对消息采用的是均衡消费，所有 Consumer 共享 Queue 的消费进度。</p>
 <p>Consumer 在集群消费模式下 offset 相关数据以 JSON 的形式持久化到 Broker 磁盘文件中，文件路径为当前用户主目录下的 <code>store/config/consumerOffset.json</code>。</p>
 <p>Broker 启动时会加载这个文件，并写入到一个双层 Map（ConsumerOffsetManager）。外层 Map 的 Key 为 topic@group，Value 为内层 Map。内层 Map 的 Key 为 queueId，Value 为 offset。当发生 Rebalance 时，新的 Consumer 会从该 Map 中获取到相应的数据来继续消费。</p>
 <p>如果仅仅是为了持续消费，offset 也可以采用本地模式存储。但是这样带来了一个问题，比如某个时间点某个 Consumer 挂了，此时就会产生 Rebalance 机制，原先被挂了的 Consumer 消费的 Queue 重新分配给新的 Consumer 消费，而这时新的 Consumer 并不知道这个 Queue 的消费进度。因此集群模式下 offset 采用远程管理模式，主要是为了保证 Rebalance 机制。</p>
-<h3 id="163-offset-用途">1.6.3 offset 用途</h3>
+<h4 id="163-offset-用途">1.6.3 offset 用途</h4>
 <p>消费者是如何从最开始持续消费消息的？消费者要消费的第一条消息的起始位置是用户自己通过 <code>consumer.setConsumeFromWhere()</code> 方法指定的。</p>
 <p>在 Consumer 启动后，其要消费的第一条消息的起始位置常用的有三种，这三种位置可以通过 <code>ConsumeFromWhere</code> 枚举的枚举项来设置。</p>
 <blockquote><p>ConsumeFromWhere 枚举可选值</p></blockquote>
@@ -948,18 +948,18 @@
 <p>2、CONSUME_FROM_FIRST_OFFSET：从 queue 的第一条消息开始消费；</p>
 <p>3、CONSUME_FROM_TIMESTAMP：从指定的具体时间戳位置的消息开始消费。这个具体时间戳是通过 <code>consumer.setConsumeTimestamp("yyyyMMddHHmmss")</code> 指定的。</p>
 <p>当消费完一批消息后，Consumer 会提交其消费进度 offset 给 Broker，Broker 在收到消费进度后会将其更新到那个双层 Map（ConsumerOffsetManager）及 consumerOffset.json 文件中，然后向该 Consumer 进行 ACK，而 ACK 内容中包含三项数据：当前消费队列的最小 offset（minOffset）、最大 offset（maxOffset）、及下次消费的起始 offset（nextBeginOffset，这个值保证了持续消费）。</p>
-<h3 id="164-重试队列">1.6.4 重试队列</h3>
+<h4 id="164-重试队列">1.6.4 重试队列</h4>
 <p>当 RocketMQ 对消息的消费出现异常时，会将发生异常的消息的 offset 提交到 Broker 中的重试队列。系统在发生消息消费异常时会为当前的 topic@group 创建一个重试队列，该队列以 <code>%RETRY%</code> 开头，到达重试时间后进行消费重试。</p>
-<h3 id="165-offset-的同步提交与异步提交">1.6.5 offset 的同步提交与异步提交</h3>
+<h4 id="165-offset-的同步提交与异步提交">1.6.5 offset 的同步提交与异步提交</h4>
 <p>集群消费模式下，Consumer 消费完消息后会向 Broker 提交消费进度 offset，其提交方式分为两种：</p>
 <p><strong>同步提交：</strong> 消费者在消费完一批消息后会向 Broker 提交这些消息的 offset，然后等待 Broker 的成功响应。若在等待超时之前收到了成功响应，则继续读取下一批消息进行消费（从 ACK 中获取 nextBeginOffset）。若没有收到响应，则会重新提交，直到获取到响应。而在这个等待过程中，消费者是阻塞的。这种提交方式严重影响了消费者的吞吐量。</p>
 <p><strong>异步提交：</strong> 消费者在消费完一批消息后向 Broker 提交 offset，但无需等待 Broker 的成功响应，可以继续读取并消费下一批消息。这种方式提高了消费者的吞吐量。但需要注意，Broker 在收到提交的 offset 后，还是会向消费者进行响应的，可能还没有收到 ACK，此时 Consumer 会从 Broker 中直接获取 nextBeginOffset（ACK 中的 nextBeginOffset 是来自于 Broker 的）。</p>
-<h2 id="17-消费幂等">1.7 消费幂等</h2>
-<h3 id="171-什么是消费幂等">1.7.1 什么是消费幂等</h3>
+<h3 id="17-消费幂等">1.7 消费幂等</h3>
+<h4 id="171-什么是消费幂等">1.7.1 什么是消费幂等</h4>
 <p>当出现消费者对某条消息重复消费的情况时，重复消费的结果与消费一次的结果是相同的，并且多次消费并未对业务系统产生任何负面影响，那么这个消费过程就是消费幂等的。</p>
 <p>幂等：幂等（idempotent、idempotence）是一个数学与计算机学概念，常见于抽象代数中。在编程中一个幂等操作的特点是其任意多次执行所产生的影响均与一次执行的影响相同。</p>
 <p>在互联网应用中，尤其在网络不稳定的情况下，消息很有可能会出现重复发送或重复消费。如果重复的消息可能会影响业务处理，那么就应该对消息做幂等处理。</p>
-<h3 id="172-消息重复的场景分析">1.7.2 消息重复的场景分析</h3>
+<h4 id="172-消息重复的场景分析">1.7.2 消息重复的场景分析</h4>
 <p>什么情况下可能会出现消息被重复消费呢？最常见的有以下三种情况：</p>
 <blockquote><p>发送时消息重复</p></blockquote>
 <p>当一条消息已被成功发送到 Broker 并完成持久化，此时出现了网络闪断，从而导致 Broker 对 Producer 应答失败。如果此时 Producer 意识到消息发送失败并尝试再次发送消息，此时 Broker 中就可能会出现两条内容相同并且 Message ID 也相同的消息，那么后续 Consumer 就一定会消费两次该消息。</p>
@@ -967,7 +967,7 @@
 <p>消息已投递到 Consumer 并完成业务处理，当 Consumer 给 Broker 反馈应答时网络闪断，Broker 没有接收到消费成功响应。为了保证消息至少被消费一次的原则，Broker 将在网络恢复后再次尝试投递之前已被处理过的消息。此时消费者就会收到与之前处理过的内容相同、Message ID 也相同的消息。</p>
 <blockquote><p>Rebalance 时消息重复</p></blockquote>
 <p>当 Consumer Group 中的 Consumer 数量发生变化时，或其订阅的 Topic 的 Queue 数量发生变化时，会触发 Rebalance，此时 Consumer 可能会收到曾经被消费过的消息。</p>
-<h3 id="173-通用解决方案">1.7.3 通用解决方案</h3>
+<h4 id="173-通用解决方案">1.7.3 通用解决方案</h4>
 <blockquote><p>幂等解决方案的两要素</p></blockquote>
 <p>幂等解决方案的设计中涉及到两项要素：幂等令牌，与唯一性处理。只要充分利用好这两要素，就可以设计出好的幂等解决方案。</p>
 <p>幂等令牌：是生产者和消费者两者中的既定协议，通常指具备唯⼀业务标识的字符串。例如，订单号、流水号。一般由 Producer 随着消息一同发送来的。</p>
@@ -987,7 +987,7 @@
 <p>1）完成支付任务；</p>
 <p>2）将当前支付流水号作为 Key，任意字符串作为 Value，通过 <code>set(key, value, expireTime)</code> 将数据写入到 Redis 缓存；</p>
 <p>3）将当前支付流水号作为主键，与其它相关数据共同写入到 DBMS。</p>
-<h3 id="174-消费幂等的实现">1.7.4 消费幂等的实现</h3>
+<h4 id="174-消费幂等的实现">1.7.4 消费幂等的实现</h4>
 <p>综上所述，消费幂等的解决方案很简单：为消息指定不会重复的唯一标识。因为 Message ID 有可能出现重复的情况，所以真正安全的幂等处理，不建议以 Message ID 作为处理依据。最好的方式是以业务唯一标识作为幂等处理的关键依据，而业务的唯一标识可以通过消息 Key 设置。</p>
 <p>以支付场景为例，可以将消息的 Key 设置为订单号，作为幂等处理的依据。具体代码示例如下：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span></span><code><span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">Message</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> message </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> new</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> Message</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">()</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
@@ -1007,13 +1007,13 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">});</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> </span></span></code></pre>
 <p>RocketMQ 能够保证消息不丢失，但不能保证消息不重复。</p>
-<h2 id="18-消息堆积与消费延迟">1.8 消息堆积与消费延迟</h2>
-<h3 id="181-概念">1.8.1 概念</h3>
+<h3 id="18-消息堆积与消费延迟">1.8 消息堆积与消费延迟</h3>
+<h4 id="181-概念">1.8.1 概念</h4>
 <p>消息处理流程中，如果 Consumer 的消费速度跟不上 Producer 的发送速度，MQ 中未处理的消息会越来越多（进的多出的少），这部分消息就被称为 <strong>堆积消息</strong>。消息出现堆积进而会造成消息的 <strong>消费延迟</strong>。</p>
 <p>以下场景需要重点关注消息堆积和消费延迟问题：</p>
 <p>1、业务系统上下游能力不匹配造成的持续堆积，且无法自行恢复。</p>
 <p>2、业务系统对消息的消费实时性要求较高，即使是短暂的堆积造成的消费延迟也无法接受。</p>
-<h3 id="182-产生原因分析">1.8.2 产生原因分析</h3>
+<h4 id="182-产生原因分析">1.8.2 产生原因分析</h4>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/RocketMQ%E6%B6%88%E6%81%AF%E6%8B%89%E5%8F%96%E4%B8%8E%E6%B6%88%E6%81%AF%E6%B6%88%E8%B4%B9%E5%9B%BE%E7%A4%BA.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/RocketMQ%E6%B6%88%E6%81%AF%E6%8B%89%E5%8F%96%E4%B8%8E%E6%B6%88%E6%81%AF%E6%B6%88%E8%B4%B9%E5%9B%BE%E7%A4%BA.png" alt="RocketMQ消息拉取与消息消费图示" data-responsive-image="true"></picture></p>
 <p>Consumer 使用长轮询 Pull 模式消费消息时，分为以下两个阶段：</p>
 <p><strong>1、消息拉取</strong></p>
@@ -1023,7 +1023,7 @@
 <p>Consumer 将本地缓存的消息提交到消费线程中，使用业务消费逻辑对消息进行处理，处理完毕后获取到一个结果，这是真正的消息消费过程。此时 Consumer 的消费能力完全依赖于消息的 <strong>消费耗时</strong> 和 <strong>消费并发度</strong>。如果由于业务处理逻辑复杂等原因，导致处理单条消息的耗时较长，则整体的消息吞吐量肯定不会太高，此时就会导致 Consumer 本地缓冲队列达到上限，进而停止从服务端拉取消息，造成消息堆积。</p>
 <blockquote><p>结论</p></blockquote>
 <p>消息堆积的主要瓶颈在于客户端的消费能力，而消费能力由消费耗时和消费并发度决定。<mark class="flexible-marker flexible-marker-default">注意，消费耗时的优先级要高于消费并发度。</mark> 因此需要在保证了消费耗时的合理性前提下，再考虑消费并发度问题。</p>
-<h3 id="183--消费耗时">1.8.3  消费耗时</h3>
+<h4 id="183--消费耗时">1.8.3  消费耗时</h4>
 <p>影响消息处理时长的主要因素是代码逻辑，而代码逻辑中可能会影响处理时长代码主要有两种类型：<strong>CPU 内部计算型代码</strong> 和 <strong>外部 I/O 操作型代码</strong>。</p>
 <p>通常情况下代码中如果没有复杂的递归和循环的话，内部计算耗时相对外部 I/O 操作来说几乎可以忽略。所以外部 IO 型代码是影响消息处理时长的主要症结所在。</p>
 <blockquote><p>外部 I/O 操作型代码举例</p></blockquote>
@@ -1032,7 +1032,7 @@
 <p>3、下游系统调用。例如 Dubbo 的 RPC 远程调用，Spring Cloud 的对下游系统的 Http 接口调用。</p>
 <p>关于下游系统调用逻辑需要进行提前梳理，掌握每个调用操作预期的耗时，这样做是为了能够判断消费逻辑中 I/O 操作的耗时是否合理。通常消息堆积是由于下游系统出现了 <strong>服务异常</strong> 或 <strong>达到了 DBMS 容量限制</strong>，导致消费耗时增加。</p>
 <p>服务异常，并不仅仅是系统中出现的类似 500 这样的代码错误，而可能是更加隐蔽的问题。例如，网络带宽问题。如果达到了 DBMS 容量限制，也会引发消息的消费耗时增加。</p>
-<h3 id="184-消费并发度">1.8.4 消费并发度</h3>
+<h4 id="184-消费并发度">1.8.4 消费并发度</h4>
 <p>一般情况下，消费者端的消费并发度由单节点线程数和节点数量共同决定，其值为 <strong>单节点线程数 * 节点数量</strong>。不过，通常需要优先调整单节点的线程数，若单机硬件资源达到了上限，则需要通过横向扩展来提高消费并发度。</p>
 <blockquote><p>单节点线程数与节点数量</p></blockquote>
 <p>单节点线程数，即单个 Consumer 所包含的线程数量；</p>
@@ -1041,12 +1041,12 @@
 <p>对于普通消息、延时消息及事务消息，并发度计算都是 <strong>单节点线程数 * 节点数量</strong>，但对于顺序消息则是不同的，顺序消息的消费并发度等于 <strong>Topic 的 Queue 分区数量</strong>。</p>
 <p>1、全局顺序消息：该类型消息的 Topic 只有一个 Queue 分区，这样可以保证该 Topic 的所有消息被顺序消费。为了保证这个全局顺序性，Consumer Group 中在同一时刻只能有一个 Consumer 的一个线程进行消费，所以其并发度为 1。</p>
 <p>2、分区顺序消息：该类型消息的 Topic 有多个 Queue 分区，这样只可以保证该 Topic 的每个 Queue 分区中的消息被顺序消费，不能保证整个 Topic 中消息的顺序消费。为了保证这个分区顺序性，每个 Queue 分区中的消息在 Consumer Group 中的同一时刻只能有一个 Consumer 的一个线程进行消费。也就是说，在同一时刻最多会出现多个 Queue 分区有多个 Consumer 的多个线程并行消费，所以分区顺序消息的并发度为 Topic 的分区数量。</p>
-<h3 id="185-单机线程数计算">1.8.5 单机线程数计算</h3>
+<h4 id="185-单机线程数计算">1.8.5 单机线程数计算</h4>
 <p>对于一台主机中线程池中线程数的设置需要谨慎，不能盲目直接调大线程数，设置过大的线程数反而会带来大量的线程切换的开销。理想环境下单节点的最优线程数计算模型为：<code>C * (T1 + T2) / T1</code>。</p>
 <p>其中：C 表示 CPU 的内核数；T1 表示 CPU 内部逻辑计算耗时；T2 表示外部 I/O 操作耗时。</p>
 <p>最优线程数 = C * (T1 + T2) / T1 = C * T1 / T1 + C * T2 / T1 = C + C * T2 / T1</p>
 <p>注意，该计算出的数值是理想状态下的理论数据。在生产环境中，不建议直接使用，应当根据当前环境，先设置一个比该值小的数值然后观察其压测效果，然后再根据效果逐步调大线程数，直至找到在该环境中性能最佳时的值。</p>
-<h3 id="186-如何避免">1.8.6 如何避免</h3>
+<h4 id="186-如何避免">1.8.6 如何避免</h4>
 <p>为了避免在业务使用时出现非预期的消息堆积和消费延迟问题，需要在前期设计阶段对整个业务逻辑进行完善的排查和梳理。其中最重要的就是 <strong>梳理消息的消费耗时</strong> 和 <strong>设置消息消费的并发度</strong>。</p>
 <blockquote><p>梳理消息的消费耗时</p></blockquote>
 <p>通过压测获取消息的消费耗时，并对耗时较高的操作的代码逻辑进行分析。梳理消息的消费耗时需要关注以下信息：</p>
@@ -1057,7 +1057,7 @@
 <p>对于消息消费并发度的计算，可以通过以下两步实施：</p>
 <p>1、逐步调大单个 Consumer 节点的线程数，并观测节点的系统指标，得到单个节点最优的消费线程数和消息吞吐量。</p>
 <p>2、根据上下游链路的 <strong>流量峰值</strong> 计算出需要设置的节点数。其中，节点数 = 流量峰值 / 单个节点消息吞吐量。</p>
-<h2 id="19-消息的清理">1.9 消息的清理</h2>
+<h3 id="19-消息的清理">1.9 消息的清理</h3>
 <p>消息被消费过后会被清理掉吗？不会。</p>
 <p>消息是被顺序存储在 commitlog 文件的，且消息大小不定长，所以消息的清理是不可能以消息为单位进行清理的，而是以 commitlog 文件为单位进行清理的。否则会急剧下降清理效率，并实现逻辑复杂。</p>
 <p>commitlog 文件存在一个过期时间，默认为 72 小时，即三天。除了用户手动清理外，在以下情况下也会被自动清理，无论文件中的消息是否被消费过：</p>
@@ -1068,9 +1068,9 @@
 <blockquote><p>注意事项</p></blockquote>
 <p>1、对于 RocketMQ 系统来说，删除一个 1G 大小的文件，是一个压力巨大的 IO 操作。在删除过程中，系统性能会骤然下降。所以，其默认清理时间点为凌晨 4 点，访问量最小的时间。也正因如此，我们要保障磁盘空间的空闲率，不要使系统出现在其它时间点删除 commitlog 文件的情况。</p>
 <p>2、官方建议 RocketMQ 服务的 Linux 文件系统采用 ext4。因为对于文件删除操作，ext4 要比 ext3 性能更好。</p>
-<h1 id="2-rocketmq-的应用">2. RocketMQ 的应用</h1>
-<h2 id="21-普通消息">2.1 普通消息</h2>
-<h3 id="211-消息发送分类">2.1.1 消息发送分类</h3>
+<h2 id="2-rocketmq-的应用">2. RocketMQ 的应用</h2>
+<h3 id="21-普通消息">2.1 普通消息</h3>
+<h4 id="211-消息发送分类">2.1.1 消息发送分类</h4>
 <p>Producer 对于消息的发送方式也有多种选择，不同的方式会产生不同的系统效果。</p>
 <blockquote><p>同步发送消息</p></blockquote>
 <p>同步发送消息是指，Producer 发出⼀条消息后，会在收到 MQ 返回的 ACK 之后才发下⼀条消息。该方式的消息可靠性最高，但消息发送效率太低。</p>
@@ -1081,7 +1081,7 @@
 <blockquote><p>单向发送消息</p></blockquote>
 <p>单向发送消息是指，Producer 仅负责发送消息，不等待、不处理 MQ 的 ACK。该发送方式时 MQ 也不返回 ACK。该方式的消息发送效率最高，但消息可靠性较差。</p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/RocketMQ%E5%8D%95%E5%90%91%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/RocketMQ%E5%8D%95%E5%90%91%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF.png" alt="RocketMQ单向发送消息" data-responsive-image="true"></picture></p>
-<h3 id="212-代码举例">2.1.2 代码举例</h3>
+<h4 id="212-代码举例">2.1.2 代码举例</h4>
 <blockquote><p>初始化项目</p></blockquote>
 <p>创建一个 Maven 的 Java 工程 rocketmq-test。然后修改其 pom.xml 文件：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span><span class="code-line-number">13</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">properties</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
@@ -1257,11 +1257,11 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <p>运行上述代码后，成功消费消息，控制台打印出信息，但是此时程序并没有终止，依旧处于监听状态，如果有新的且符合条件的消息进入 RocketMQ 中，就会被消费。</p>
 <p>如果我们手动终止程序，并再次运行程序，会发现控制台仅打印出 <code>Consumer Started</code>，并没有消息被消费的信息，这是因为 RocketMQ 中已经没有符合条件且没有被消费的消息了。如果我们使用生产者生产符合条件的消息，消费者就会再次消费消息，控制台也就能看到打印出的消息信息了。</p>
-<h2 id="22-顺序消息">2.2 顺序消息</h2>
-<h3 id="221-什么是顺序消息">2.2.1 什么是顺序消息</h3>
+<h3 id="22-顺序消息">2.2 顺序消息</h3>
+<h4 id="221-什么是顺序消息">2.2.1 什么是顺序消息</h4>
 <p>顺序消息指的是，严格按照消息的 <strong>发送顺序</strong> 进行 <strong>消费</strong> 的消息（FIFO）。</p>
 <p>默认情况下生产者会把消息以 Round Robin 轮询方式发送到不同的 Queue 分区队列，而消费消息时会从多个 Queue 上拉取消息，这种情况下的发送和消费是不能保证顺序的。如果将消息仅发送到同一个 Queue 中，消费时也只从这个 Queue 上拉取消息，就严格保证了消息的顺序性。</p>
-<h3 id="222-为什么需要顺序消息">2.2.2 为什么需要顺序消息</h3>
+<h4 id="222-为什么需要顺序消息">2.2.2 为什么需要顺序消息</h4>
 <p>例如，现在有 <code>TOPIC ORDER_STATUS</code>（订单状态），其下有 4 个 Queue 队列，该 Topic 中的不同消息用于描述当前订单的不同状态。假设订单有状态：未支付、已支付、发货中、发货成功、发货失败。</p>
 <p>根据以上订单状态，生产者从 <strong>时序</strong> 上可以生成如下几个消息：</p>
 <pre>订单T0000001:未支付 --> 订单T0000001:已支付 --> 订单T0000001:发货中 --> 订单T0000001:发货失败
@@ -1271,7 +1271,7 @@
 <p>这种情况下，我们希望 Consumer 消费消息的顺序和我们发送是一致的，然而上述 MQ 的投递和消费方式，我们无法保证顺序是正确的。对于顺序异常的消息，Consumer 即使设置有一定的状态容错，也不能完全处理好这么多种随机出现组合情况。</p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/%E5%AE%9A%E4%B9%89%E7%AD%96%E7%95%A5%EF%BC%8C%E8%AE%A2%E5%8D%95%E7%8A%B6%E6%80%81%E6%B6%88%E6%81%AF%E9%A1%BA%E5%BA%8F%E5%AD%98%E6%94%BE%E5%9C%A8RocketMQ.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/%E5%AE%9A%E4%B9%89%E7%AD%96%E7%95%A5%EF%BC%8C%E8%AE%A2%E5%8D%95%E7%8A%B6%E6%80%81%E6%B6%88%E6%81%AF%E9%A1%BA%E5%BA%8F%E5%AD%98%E6%94%BE%E5%9C%A8RocketMQ.png" alt="定义策略，订单状态消息顺序存放在RocketMQ" data-responsive-image="true"></picture></p>
 <p>基于上述的情况，可以设计如下方案：对于相同订单号的消息，通过一定的策略，将其放置在一个 Queue 中，然后消费者再采用一定的策略（例如，一个线程独立处理一个 Queue，保证处理消息的顺序性），能够保证消费的顺序性。</p>
-<h3 id="223-有序性分类">2.2.3 有序性分类</h3>
+<h4 id="223-有序性分类">2.2.3 有序性分类</h4>
 <p>根据有序范围的不同，RocketMQ 可以严格地保证两种消息的有序性：<strong>分区有序</strong> 与 <strong>全局有序</strong>。</p>
 <blockquote><p>全局有序</p></blockquote>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/RocketMQ%E5%85%A8%E5%B1%80%E6%9C%89%E5%BA%8F%E7%A4%BA%E6%84%8F%E5%9B%BE.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/RocketMQ%E5%85%A8%E5%B1%80%E6%9C%89%E5%BA%8F%E7%A4%BA%E6%84%8F%E5%9B%BE.png" alt="RocketMQ全局有序示意图" data-responsive-image="true"></picture></p>
@@ -1293,7 +1293,7 @@
 <p>一般性的作法是，从消息中获取到选择 Key，对其进行判断。若是当前 Consumer 需要消费的消息，则直接消费，否则，什么也不做。这种做法要求选择 Key 要能够随着消息一起被 Consumer 获取到。此时使用消息 Key 作为选择 Key 是比较好的做法。</p>
 <p>以上做法会不会出现如下新的问题呢？不属于那个 Consumer 的消息被拉取走了，那么应该消费该消息的 Consumer 是否还能再消费该消息呢？</p>
 <p>同一个 Queue 中的消息不可能被同一个 Group 中的不同 Consumer 同时消费。所以，消费现一个 Queue 的不同选择 Key 的消息的 Consumer 一定属于不同的 Group，而不同的 Group 中的 Consumer 间的消费是相互隔离的，互不影响的。</p>
-<h3 id="224-代码举例">2.2.4 代码举例</h3>
+<h4 id="224-代码举例">2.2.4 代码举例</h4>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span><span class="code-line-number">13</span><span class="code-line-number">14</span><span class="code-line-number">15</span><span class="code-line-number">16</span><span class="code-line-number">17</span><span class="code-line-number">18</span><span class="code-line-number">19</span><span class="code-line-number">20</span><span class="code-line-number">21</span><span class="code-line-number">22</span><span class="code-line-number">23</span><span class="code-line-number">24</span><span class="code-line-number">25</span><span class="code-line-number">26</span><span class="code-line-number">27</span><span class="code-line-number">28</span><span class="code-line-number">29</span><span class="code-line-number">30</span><span class="code-line-number">31</span><span class="code-line-number">32</span><span class="code-line-number">33</span><span class="code-line-number">34</span><span class="code-line-number">35</span><span class="code-line-number">36</span><span class="code-line-number">37</span><span class="code-line-number">38</span><span class="code-line-number">39</span><span class="code-line-number">40</span><span class="code-line-number">41</span><span class="code-line-number">42</span></span><code><span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">/**</span></span>
 <span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic"> * 顺序消息</span></span>
 <span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic"> *</span></span>
@@ -1336,20 +1336,20 @@
 <span class="line"></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h2 id="23-延时消息">2.3 延时消息</h2>
-<h3 id="231-什么是延时消息">2.3.1 什么是延时消息</h3>
+<h3 id="23-延时消息">2.3 延时消息</h3>
+<h4 id="231-什么是延时消息">2.3.1 什么是延时消息</h4>
 <p>当消息写入到 Broker 后，在指定的时长后才可被消费处理的消息，称为延时消息。</p>
 <p>采用 RocketMQ 的延时消息可以实现 <strong>定时任务</strong> 的功能，而无需使用定时器。典型的应用场景有电商交易中超时未支付关闭订单的场景、12306 平台订票超时未支付取消订票等。</p>
 <p>在电商平台中，订单创建时会发送一条延迟消息。这条消息将会在 30 分钟后投递给后台业务系统（Consumer），后台业务系统收到该消息后会判断对应的订单是否已经完成支付。如果未完成，则取消订单，将商品再次放回到库存；如果完成支付，则忽略。</p>
 <p>在 12306 平台中，车票预订成功后就会发送一条延迟消息。这条消息将会在 45 分钟后投递给后台业务系统（Consumer），后台业务系统收到该消息后会判断对应的订单是否已经完成支付。如果未完成，则取消预订，将车票再次放回到票池；如果完成支付，则忽略。</p>
-<h3 id="232-延时等级">2.3.2 延时等级</h3>
+<h4 id="232-延时等级">2.3.2 延时等级</h4>
 <p>延时消息的延迟时长不支持随意时长的延迟，是通过特定的延迟等级来指定的。延时等级定义在 RocketMQ 服务端的 <code>MessageStoreConfig</code> 类中的 <code>messageDelayLevel</code> 变量中：</p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/MessageStoreConfig%E4%B8%AD%E7%9A%84messageDelayLevel.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/MessageStoreConfig%E4%B8%AD%E7%9A%84messageDelayLevel.png" alt="MessageStoreConfig中的messageDelayLevel" data-responsive-image="true"></picture></p>
 <p>也就是说，若指定的延时等级为 3，则表示延迟时长为 10s，即延迟等级是从 1 开始计数的。</p>
 <p>当然，如果需要自定义的延时等级，可以通过在 Broker 加载的配置中新增如下配置（例如下面增加了 1 天这个等级 1d）。配置文件在 RocketMQ 安装目录下的 conf 目录中。</p>
 <pre>messageDelayLevel = 1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h 1d
 </pre>
-<h3 id="233-延时消息实现原理">2.3.3 延时消息实现原理</h3>
+<h4 id="233-延时消息实现原理">2.3.3 延时消息实现原理</h4>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/RocketMQ%E5%BB%B6%E6%97%B6%E6%B6%88%E6%81%AF%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/RocketMQ%E5%BB%B6%E6%97%B6%E6%B6%88%E6%81%AF%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86.png" alt="RocketMQ延时消息的实现原理" data-responsive-image="true"></picture></p>
 <blockquote><p>修改消息</p></blockquote>
 <p>Producer 将消息发送到 Broker 后，Broker 会首先将消息写入到 commitlog 文件，然后需要将其分发到相应的 consumequeue。不过，在分发之前，系统会先判断消息中是否带有延时等级。若没有，则直接正常分发；若有则需要经历一个复杂的过程：</p>
@@ -1367,7 +1367,7 @@
 <blockquote><p>将消息重新写入 commitlog</p></blockquote>
 <p>延迟消息服务类 <code>ScheuleMessageService</code> 将延迟消息再次发送给了 commitlog，并再次形成新的消息索引条目，分发到相应 Queue。</p>
 <p>这其实就是一次普通消息发送，只不过这次的消息 Producer 是延迟消息服务类 <code>ScheuleMessageService</code>。</p>
-<h3 id="234-代码举例">2.3.4 代码举例</h3>
+<h4 id="234-代码举例">2.3.4 代码举例</h4>
 <blockquote><p>定义延迟消息生产者</p></blockquote>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span><span class="code-line-number">13</span><span class="code-line-number">14</span><span class="code-line-number">15</span><span class="code-line-number">16</span><span class="code-line-number">17</span><span class="code-line-number">18</span><span class="code-line-number">19</span><span class="code-line-number">20</span><span class="code-line-number">21</span><span class="code-line-number">22</span><span class="code-line-number">23</span><span class="code-line-number">24</span><span class="code-line-number">25</span></span><code><span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">/**</span></span>
 <span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic"> * 延迟消息生产者</span></span>
@@ -1421,8 +1421,8 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <p>如果我们先运行消费者，再运行生产者生产消息，消息生产成功后消费者并不会立即消费消息，而是要得到延迟时间过后才消费消息。</p>
-<h2 id="24-事务消息">2.4 事务消息</h2>
-<h3 id="241-问题引入">2.4.1 问题引入</h3>
+<h3 id="24-事务消息">2.4 事务消息</h3>
+<h4 id="241-问题引入">2.4.1 问题引入</h4>
 <p>这里的一个需求场景是：工行用户 A 向建行用户 B 转账 1 万元。</p>
 <p>我们可以使用同步消息来处理该需求场景：</p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/%E8%BD%AC%E8%B4%A6%E6%93%8D%E4%BD%9C%E7%9A%84%E5%90%8C%E6%AD%A5%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86%E6%96%B9%E5%BC%8F%E7%A4%BA%E6%84%8F%E5%9B%BE.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/%E8%BD%AC%E8%B4%A6%E6%93%8D%E4%BD%9C%E7%9A%84%E5%90%8C%E6%AD%A5%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86%E6%96%B9%E5%BC%8F%E7%A4%BA%E6%84%8F%E5%9B%BE.png" alt="转账操作的同步消息处理方式示意图" data-responsive-image="true"></picture></p>
@@ -1432,7 +1432,7 @@
 <p>4、建行系统从 Broker 中获取到消息 M；</p>
 <p>5、建行系统消费消息 M，即向用户 B 中增加 1 万元。</p>
 <p>这其中是有问题的：若第 3 步中的扣款操作失败，但消息已经成功发送到了 Broker。对于 RocketMQ 来说，只要消息写入成功，那么这个消息就可以被消费。此时建行系统中用户 B 增加了 1 万元，出现了数据不一致问题。</p>
-<h3 id="242-解决思路">2.4.2 解决思路</h3>
+<h4 id="242-解决思路">2.4.2 解决思路</h4>
 <p>解决思路是，让第 1、2、3 步具有原子性，要么全部成功，要么全部失败。即消息发送成功后，必须要保证扣款成功。如果扣款失败，则回滚发送成功的消息，而该思路即使用事务消息。这里要使用分布式事务解决方案。</p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/%E8%BD%AC%E8%B4%A6%E6%93%8D%E4%BD%9C%E7%9A%84%E4%BA%8B%E7%89%A9%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86%E6%96%B9%E5%BC%8F%E7%A4%BA%E6%84%8F%E5%9B%BE.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/%E8%BD%AC%E8%B4%A6%E6%93%8D%E4%BD%9C%E7%9A%84%E4%BA%8B%E7%89%A9%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86%E6%96%B9%E5%BC%8F%E7%A4%BA%E6%84%8F%E5%9B%BE.png" alt="转账操作的事物消息处理方式示意图" data-responsive-image="true"></picture></p>
 <p>使用事务消息来处理该需求场景：</p>
@@ -1459,7 +1459,7 @@
 ② TC 接收到的若是 Global Rollback 指令，则向 Broker 与工行系统发送 Branch Rollback 指令。此时 Broker 中的消息 M 将被撤销，工行用户 A 中的扣款操作将被回滚。</p>
 <p>以上方案就是为了确保消息投递与扣款操作能够在一个事务中，要成功都成功，有一个失败，则全部回滚。</p>
 <p>以上方案并不是一个典型的 XA 模式，因为 XA 模式中的分支事务是异步的，而事务消息方案中的消息预提交与预扣款操作间是同步的。</p>
-<h3 id="243-基础">2.4.3 基础</h3>
+<h4 id="243-基础">2.4.3 基础</h4>
 <blockquote><p>分布式事务</p></blockquote>
 <p>对于分布式事务，通俗地说就是，一次操作由若干分支操作组成，这些分支操作分属不同应用，分布在不同服务器上。分布式事务需要保证这些分支操作要么全部成功，要么全部失败。分布式事务与普通事务一样，就是为了保证操作结果的一致性。</p>
 <blockquote><p>事务消息</p></blockquote>
@@ -1486,7 +1486,7 @@
 <p>1、transactionTimeout = 20，指定 TM 在 20 秒内应将最终确认状态发送给 TC，否则引发消息回查。默认为 60 秒。</p>
 <p>2、transactionCheckMax = 5，指定最多回查 5 次，超过后将丢弃消息并记录错误日志。默认 15 次。</p>
 <p>3、transactionCheckInterval = 10，指定设置的多次消息回查的时间间隔为 10 秒。默认为 60 秒。</p>
-<h3 id="244-xa-模式三剑客">2.4.4 XA 模式三剑客</h3>
+<h4 id="244-xa-模式三剑客">2.4.4 XA 模式三剑客</h4>
 <blockquote><p>XA 协议</p></blockquote>
 <p>XA（Unix Transaction）是一种分布式事务解决方案，一种分布式事务处理模式，是基于 XA 协议的。XA 协议由 Tuxedo（Transaction for Unix has been Extended for Distributed Operation，分布式操作扩展之后的 Unix 事务系统）首先提出的，并交给 X/Open 组织，作为资源管理器与事务管理器的接口标准。</p>
 <p>XA 模式中有三个重要组件：TC、TM、RM。</p>
@@ -1496,7 +1496,7 @@
 <p>Transaction Manager，事务管理器。定义全局事务的范围：开始全局事务、提交或回滚全局事务。它实际是全局事务的发起者。RocketMQ 中事务消息的 Producer 充当 TM。</p>
 <blockquote><p>RM</p></blockquote>
 <p>Resource Manager，资源管理器。管理分支事务处理的资源，与 TC 交谈以注册分支事务和报告分支事务的状态，并驱动分支事务提交或回滚。RocketMQ 中事务消息的 Producer 及 Broker 均是 RM。</p>
-<h3 id="245-xa-模式架构">2.4.5 XA 模式架构</h3>
+<h4 id="245-xa-模式架构">2.4.5 XA 模式架构</h4>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/XA%E6%A8%A1%E5%BC%8F%E6%9E%B6%E6%9E%84.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/XA%E6%A8%A1%E5%BC%8F%E6%9E%B6%E6%9E%84.png" alt="XA模式架构" data-responsive-image="true"></picture></p>
 <p>XA 模式是一个典型的 2PC，其执行原理如下：</p>
 <p>1、TM 向 TC 发起指令，开启一个全局事务；</p>
@@ -1507,10 +1507,10 @@
 <p>若所有结果都是成功响应，则向 TC 发送 Global Commit 指令；只要有结果是失败响应，则向 TC 发送 Global Rollback 指令。</p>
 <p>6、TC 在接收到指令后再次向 RM 发送确认指令。</p>
 <p>事务消息方案并不是一个典型的 XA 模式。因为 XA 模式中的分支事务是异步的，而事务消息方案中的消息预提交与预扣款操作间是同步的。</p>
-<h3 id="246-注意">2.4.6 注意</h3>
+<h4 id="246-注意">2.4.6 注意</h4>
 <p>1、事务消息不支持延时消息；</p>
 <p>2、对于事务消息要做好幂等性检查，因为事务消息可能不止一次被消费（因为存在回滚后再提交的情况）。</p>
-<h3 id="247-代码举例">2.4.7 代码举例</h3>
+<h4 id="247-代码举例">2.4.7 代码举例</h4>
 <blockquote><p>定义工行事务监听器</p></blockquote>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span><span class="code-line-number">13</span><span class="code-line-number">14</span><span class="code-line-number">15</span><span class="code-line-number">16</span><span class="code-line-number">17</span><span class="code-line-number">18</span><span class="code-line-number">19</span><span class="code-line-number">20</span><span class="code-line-number">21</span><span class="code-line-number">22</span><span class="code-line-number">23</span><span class="code-line-number">24</span><span class="code-line-number">25</span><span class="code-line-number">26</span><span class="code-line-number">27</span><span class="code-line-number">28</span><span class="code-line-number">29</span><span class="code-line-number">30</span><span class="code-line-number">31</span><span class="code-line-number">32</span><span class="code-line-number">33</span><span class="code-line-number">34</span><span class="code-line-number">35</span><span class="code-line-number">36</span><span class="code-line-number">37</span><span class="code-line-number">38</span><span class="code-line-number">39</span><span class="code-line-number">40</span><span class="code-line-number">41</span><span class="code-line-number">42</span><span class="code-line-number">43</span><span class="code-line-number">44</span><span class="code-line-number">45</span></span><code><span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">/**</span></span>
 <span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic"> * 工行事务监听器</span></span>
@@ -1618,8 +1618,8 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <p>当我们运行消息生产者时，三条消息都会预提交成功，但是 <code>TAGC</code> 对应的消息会执行消息回查，因为 <code>TAGC</code> 对应的消息在进行预提交时返回的是 <code>UNKNOW</code>。</p>
 <p>然后再运行消费者时，会消费 <code>TAGA</code> 和 <code>TAGC</code> 对应的消息，不会消费 <code>TAGB</code> 对应的消息，这是因为 <code>TAGB</code> 对应的消息在预提交时返回了 <code>ROLLBACK_MESSAGE</code>，导致消息回滚。</p>
-<h2 id="25-批量消息">2.5 批量消息</h2>
-<h3 id="251-批量发送消息">2.5.1 批量发送消息</h3>
+<h3 id="25-批量消息">2.5 批量消息</h3>
+<h4 id="251-批量发送消息">2.5.1 批量发送消息</h4>
 <blockquote><p>发送限制</p></blockquote>
 <p>生产者进行消息发送时可以一次发送多条消息，这可以大大提升 Producer 的发送效率。不过需要注意以下几点：</p>
 <p>1、批量发送的消息必须具有相同的 Topic；</p>
@@ -1632,7 +1632,7 @@
 <blockquote><p>生产者发送的消息大小</p></blockquote>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/Producer%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF%E7%9A%84%E7%BB%93%E6%9E%84.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/Producer%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF%E7%9A%84%E7%BB%93%E6%9E%84.png" alt="Producer发送消息的结构" data-responsive-image="true"></picture></p>
 <p>生产者通过 <code>send()</code> 方法发送的 Message，并不是直接将 Message 序列化后发送到网络上的，而是通过这个 Message 生成了一个字符串发送出去的。这个字符串由四部分构成：Topic、消息 Body、消息日志（占 20 字节），及用于描述消息的一堆属性 key-value。这些属性中包含例如生产者地址、生产时间、要发送的 QueueId 等，最终写入到 Broker 中消息单元中的数据都是来自于这些属性。</p>
-<h3 id="252-批量消费消息">2.5.2 批量消费消息</h3>
+<h4 id="252-批量消费消息">2.5.2 批量消费消息</h4>
 <blockquote><p>修改批量属性</p></blockquote>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> interface</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> MessageListenerConcurrently</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> extends</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> MessageListener</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
 <span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">    ConsumeConcurrentlyStatus</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> consumeMessage</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">final</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> List</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">MessageExt</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">> </span><span style="--shiki-light:#383A42;--shiki-light-font-style:inherit;--shiki-dark:#E06C75;--shiki-dark-font-style:italic">msgs</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span></span>
@@ -1644,7 +1644,7 @@
 <p>当然不是。</p>
 <p>pullBatchSize 值设置的越大，Consumer 每拉取一次需要的时间就会越长，且在网络上传输出现问题的可能性就越高。若在拉取过程中若出现了问题，那么本批次所有消息都需要全部重新拉取。<br>
 consumeMessageBatchMaxSize 值设置的越大，Consumer 的消息并发消费能力越低，且这批被消费的消息具有相同的消费结果。因为 consumeMessageBatchMaxSize 指定的一批消息只会使用一个线程进行处理，且在处理过程中只要有一个消息处理异常，则这批消息需要全部重新再次消费处理。</p>
-<h3 id="253-代码举例">2.5.3 代码举例</h3>
+<h4 id="253-代码举例">2.5.3 代码举例</h4>
 <p>该批量发送的需求是，不修改最大发送 4M 的默认值，但要防止发送的批量消息超出 4M 的限制。</p>
 <blockquote><p>定义消息列表分割器</p></blockquote>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span><span class="code-line-number">13</span><span class="code-line-number">14</span><span class="code-line-number">15</span><span class="code-line-number">16</span><span class="code-line-number">17</span><span class="code-line-number">18</span><span class="code-line-number">19</span><span class="code-line-number">20</span><span class="code-line-number">21</span><span class="code-line-number">22</span><span class="code-line-number">23</span><span class="code-line-number">24</span><span class="code-line-number">25</span><span class="code-line-number">26</span><span class="code-line-number">27</span><span class="code-line-number">28</span><span class="code-line-number">29</span><span class="code-line-number">30</span><span class="code-line-number">31</span><span class="code-line-number">32</span><span class="code-line-number">33</span><span class="code-line-number">34</span><span class="code-line-number">35</span><span class="code-line-number">36</span><span class="code-line-number">37</span><span class="code-line-number">38</span><span class="code-line-number">39</span><span class="code-line-number">40</span><span class="code-line-number">41</span><span class="code-line-number">42</span><span class="code-line-number">43</span><span class="code-line-number">44</span><span class="code-line-number">45</span><span class="code-line-number">46</span><span class="code-line-number">47</span><span class="code-line-number">48</span><span class="code-line-number">49</span><span class="code-line-number">50</span><span class="code-line-number">51</span><span class="code-line-number">52</span><span class="code-line-number">53</span><span class="code-line-number">54</span><span class="code-line-number">55</span><span class="code-line-number">56</span><span class="code-line-number">57</span><span class="code-line-number">58</span><span class="code-line-number">59</span><span class="code-line-number">60</span><span class="code-line-number">61</span><span class="code-line-number">62</span><span class="code-line-number">63</span><span class="code-line-number">64</span><span class="code-line-number">65</span><span class="code-line-number">66</span><span class="code-line-number">67</span><span class="code-line-number">68</span><span class="code-line-number">69</span><span class="code-line-number">70</span><span class="code-line-number">71</span><span class="code-line-number">72</span></span><code><span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">/**</span></span>
@@ -1784,14 +1784,14 @@ consumeMessageBatchMaxSize 值设置的越大，Consumer 的消息并发消费�
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">        System</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">out</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">println</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"Consumer Started"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h2 id="26-消息过滤">2.6 消息过滤</h2>
+<h3 id="26-消息过滤">2.6 消息过滤</h3>
 <p>消息者在进行消息订阅时，除了可以指定要订阅消息的 Topic 外，还可以对指定 Topic 中的消息根据指定条件进行过滤，即可以订阅比 Topic 更加细粒度的消息类型。</p>
 <p>对于指定 Topic 消息的过滤有两种过滤方式：Tag 过滤与 SQL 过滤。</p>
-<h3 id="261-tag-过滤">2.6.1 Tag 过滤</h3>
+<h4 id="261-tag-过滤">2.6.1 Tag 过滤</h4>
 <p>通过 Consumer 的 <code>subscribe()</code> 方法指定要订阅消息的 Tag。如果订阅多个 Tag 的消息，Tag 间使用或运算符（双竖线 <code>||</code>）连接。</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span></span><code><span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">DefaultMQPushConsumer</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> consumer </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> new</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> DefaultMQPushConsumer</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"CID_EXAMPLE"</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">consumer</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">subscribe</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"TOPIC"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"TAGA || TAGB || TAGC"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span></span></code></pre>
-<h3 id="262-sql-过滤">2.6.2 SQL 过滤</h3>
+<h4 id="262-sql-过滤">2.6.2 SQL 过滤</h4>
 <p>SQL 过滤是一种通过特定表达式对事先埋入到消息中的 <strong>用户属性</strong> 进行筛选过滤的方式。通过 SQL 过滤，可以实现对消息的复杂过滤。不过，只有使用 <strong>PUSH 模式</strong> 的消费者才能使用 SQL 过滤。</p>
 <p>SQL 过滤表达式中支持多种常量类型与运算符。</p>
 <blockquote><p>支持的常量类型</p></blockquote>
@@ -1811,7 +1811,7 @@ consumeMessageBatchMaxSize 值设置的越大，Consumer 的消息并发消费�
 <p>由于我们早已修改了 broker.conf 配置文件，加上前面出现的一系列错误，因此我们的启动 Broker 命令应该如下：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">nohup</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> sh</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> bin/mqbroker</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -n</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> xx.xxx.xxx.xx:9876</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -c</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> conf/broker.conf</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> autoCreateTopicEnable=</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">true</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">  >  </span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">bin/startMqBroker.log</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> 2>&#x26;1 &#x26;</span></span></code></pre>
 <p><code>xx.xxx.xxx.xx</code> 表示服务器或虚拟机的 IP 地址。</p>
-<h3 id="263-代码举例">2.6.3 代码举例</h3>
+<h4 id="263-代码举例">2.6.3 代码举例</h4>
 <blockquote><p>Tag 过滤</p></blockquote>
 <p>定义 Tag 过滤 Producer：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span><span class="code-line-number">13</span><span class="code-line-number">14</span><span class="code-line-number">15</span><span class="code-line-number">16</span><span class="code-line-number">17</span><span class="code-line-number">18</span><span class="code-line-number">19</span><span class="code-line-number">20</span><span class="code-line-number">21</span><span class="code-line-number">22</span></span><code><span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">/**</span></span>
@@ -1918,8 +1918,8 @@ For more information, please visit the url, http://rocketmq.apache.org/docs/faq/
 </pre>
 <p>很显然，这是我们没有开启 SQL 过滤功能，我们只需要按照前面所说的方式开启即可。</p>
 <p>我们先关闭 RocketMQ，然后按照要求修改配置后并重启 RocketMQ。此时可以看控制台看到 RocketMQ 消费的消息的 age 都是介于 0 到 6 之间的，证明 SQL 过过滤成功。</p>
-<h2 id="27-消息发送重试机制">2.7 消息发送重试机制</h2>
-<h3 id="271-说明">2.7.1 说明</h3>
+<h3 id="27-消息发送重试机制">2.7 消息发送重试机制</h3>
+<h4 id="271-说明">2.7.1 说明</h4>
 <p>Producer 对发送失败的消息进行重新发送的机制，称为消息发送重试机制，也称为消息重投机制。对于消息重投，需要注意以下几点：</p>
 <p>1、生产者在发送消息时，若采用 <strong>同步或异步发送</strong> 方式，发送失败会重试，但 oneway  消 息发送方式发送失败是没有重试机制的；</p>
 <p>2、只有普通消息具有发送重试机制，顺序消息是没有的；</p>
@@ -1928,7 +1928,7 @@ For more information, please visit the url, http://rocketmq.apache.org/docs/faq/
 <p>5、消息重复无法避免，但要避免消息的重复消费；</p>
 <p>6、避免消息重复消费的解决方案是，为消息添加唯一标识（例如消息 key），使消费者对消息进行消费判断来避免重复消费；</p>
 <p>7、消息发送重试有三种策略可以选择：同步发送失败策略、异步发送失败策略、消息刷盘失败策略。</p>
-<h3 id="272-同步发送失败策略">2.7.2 同步发送失败策略</h3>
+<h4 id="272-同步发送失败策略">2.7.2 同步发送失败策略</h4>
 <p>对于普通消息，消息发送默认采用 round-robin 策略来选择所发送到的队列。如果发送失败，默认重试 2 次，但在重试时是不会选择上次发送失败的 Broker，而是选择其它 Broker。当然，若只有一个 Broker 其也只能发送到该 Broker，但其会尽量发送到该 Broker 上的其它 Queue。</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span></span><code><span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 创建一个 Producer，参数为 Producer Group 名称</span></span>
 <span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">DefaultMQProducer</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> producer </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> new</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> DefaultMQProducer</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"pg"</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
@@ -1944,25 +1944,25 @@ For more information, please visit the url, http://rocketmq.apache.org/docs/faq/
 <p>1、方案一：Producer 中维护某 JUC 的 Map 集合，其 key 是发生失败的时间戳，value 为 Broker 实例。Producer 中还维护着一个 Set 集合，其中存放着所有未发生发送异常的 Broker 实例。选择目标 Broker 是从该 Set 集合中选择的。再定义一个定时任务，定期从 Map 集合中将长期未发生发送异常的 Broker 清理出去，并添加到 Set 集合。</p>
 <p>2）方案二：为 Producer 中的 Broker 实例添加一个标识，例如是一个 AtomicBoolean 属性。只要该 Broker 上发生过发送异常，就将其置为 true。选择目标 Broker 就是选择该属性值为 false 的 Broker。再定义一个定时任务，定期将 Broker 的该属性置为 false。</p>
 <p>3）方案三：为 Producer 中的 Broker 实例添加一个标识，例如是一个 AtomicLong 属性。只要该 Broker 上发生过发送异常，就使其值增一。选择目标 Broker 就是选择该属性值最小的 Broker。若该值相同，采用轮询方式选择。</p>
-<h3 id="273-异步发送失败策略">2.7.3 异步发送失败策略</h3>
+<h4 id="273-异步发送失败策略">2.7.3 异步发送失败策略</h4>
 <p>异步发送失败重试时，异步重试不会选择其他 Broker，仅在同一个 Broker 上做重试，所以该策略无法保证消息不丢失。</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span></span><code><span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">DefaultMQProducer</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> producer </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> new</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> DefaultMQProducer</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"pg"</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">producer</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">setNamesrvAddr</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"rocketmq:9876"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span></span>
 <span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 指定异步发送失败后不进行重试发送</span></span>
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">producer</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">setRetryTimesWhenSendAsyncFailed</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">0</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span></span></code></pre>
-<h3 id="274-消息刷盘失败策略">2.7.4 消息刷盘失败策略</h3>
+<h4 id="274-消息刷盘失败策略">2.7.4 消息刷盘失败策略</h4>
 <p>消息刷盘超时（Master 或 Slave）或 Slave 不可用（Slave 在做数据同步时向 Master 返回状态不是 SEND_OK）时，默认是不会将消息尝试发送到其他 Broker 的。不过，对于重要消息可以通过在 Broker 的配置文件设置 retryAnotherBrokerWhenNotStoreOK 属性为 true 来开启。</p>
-<h2 id="28-消息消费重试机制">2.8 消息消费重试机制</h2>
-<h3 id="281-顺序消息的消费重试">2.8.1 顺序消息的消费重试</h3>
+<h3 id="28-消息消费重试机制">2.8 消息消费重试机制</h3>
+<h4 id="281-顺序消息的消费重试">2.8.1 顺序消息的消费重试</h4>
 <p>对于顺序消息，当 Consumer 消费消息失败后，为了保证消息的顺序性，其会自动不断地进行消息重试，直到消费成功。消费重试默认间隔时间为 1000 毫秒。重试期间应用会出现消息消费被阻塞的情况。</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span></span><code><span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">DefaultMQPushConsumer</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> consumer </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> new</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> DefaultMQPushConsumer</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"cg"</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
 <span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 顺序消息消费失败的消费重试时间间隔，单位毫秒，默认为 1000，其取值范围为 [10, 30000]</span></span>
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">consumer</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">setSuspendCurrentQueueTimeMillis</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">100</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span></span></code></pre>
 <p>由于对顺序消息的重试是无休止、不间断的，直至消费成功，所以对于顺序消息的消费，务必要保证应用能够及时监控并处理消费失败的情况，避免消费被永久性阻塞。</p>
 <p><mark class="flexible-marker flexible-marker-default">注意：</mark> 顺序消息没有发送失败重试机制，但具有消费失败重试机制。</p>
-<h3 id="282-无序消息的消费重试">2.8.2 无序消息的消费重试</h3>
+<h4 id="282-无序消息的消费重试">2.8.2 无序消息的消费重试</h4>
 <p>对于无序消息（普通消息、延时消息、事务消息），当 Consumer 消费消息失败时，可以通过设置返回状态达到消息重试的效果。不过需要注意，无序消息的重试 <strong>只对集群消费方式生效</strong>，广播消费方式不提供失败重试特性。也就是说，对于广播消费消费失败后，失败消息不再重试，继续消费后续消息。</p>
-<h3 id="283-消费重试次数与间隔">2.8.3 消费重试次数与间隔</h3>
+<h4 id="283-消费重试次数与间隔">2.8.3 消费重试次数与间隔</h4>
 <p>对于 <strong>无序消息集群消费</strong> 下的重试消费，每条消息默认最多重试 16 次，但每次重试的间隔时间是不同的，会逐渐变长。每次重试的间隔时间如下表。</p>
 
 
@@ -2023,7 +2023,7 @@ For more information, please visit the url, http://rocketmq.apache.org/docs/faq/
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">重试次数</th><th align="center">与上次重试的间隔时间</th><th align="center">重试次数</th><th align="center">与上次重试的间隔时间</th></tr></thead><tbody><tr><td align="center">1</td><td align="center">10 秒</td><td align="center">9</td><td align="center">7 分钟</td></tr><tr><td align="center">2</td><td align="center">30 秒</td><td align="center">10</td><td align="center">8 分钟</td></tr><tr><td align="center">3</td><td align="center">1 分钟</td><td align="center">11</td><td align="center">9 分钟</td></tr><tr><td align="center">4</td><td align="center">2 分钟</td><td align="center">12</td><td align="center">10 分钟</td></tr><tr><td align="center">5</td><td align="center">3 分钟</td><td align="center">13</td><td align="center">20 分钟</td></tr><tr><td align="center">6</td><td align="center">4 分钟</td><td align="center">14</td><td align="center">30 分钟</td></tr><tr><td align="center">7</td><td align="center">5 分钟</td><td align="center">15</td><td align="center">1 小时</td></tr><tr><td align="center">8</td><td align="center">6 分钟</td><td align="center">16</td><td align="center">2 小时</td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">重试次数</th><th align="center">与上次重试的间隔时间</th><th align="center">重试次数</th><th align="center">与上次重试的间隔时间</th></tr></thead><tbody><tr><td align="center">1</td><td align="center">10 秒</td><td align="center">9</td><td align="center">7 分钟</td></tr><tr><td align="center">2</td><td align="center">30 秒</td><td align="center">10</td><td align="center">8 分钟</td></tr><tr><td align="center">3</td><td align="center">1 分钟</td><td align="center">11</td><td align="center">9 分钟</td></tr><tr><td align="center">4</td><td align="center">2 分钟</td><td align="center">12</td><td align="center">10 分钟</td></tr><tr><td align="center">5</td><td align="center">3 分钟</td><td align="center">13</td><td align="center">20 分钟</td></tr><tr><td align="center">6</td><td align="center">4 分钟</td><td align="center">14</td><td align="center">30 分钟</td></tr><tr><td align="center">7</td><td align="center">5 分钟</td><td align="center">15</td><td align="center">1 小时</td></tr><tr><td align="center">8</td><td align="center">6 分钟</td><td align="center">16</td><td align="center">2 小时</td></tr></tbody></table></div>
 <p>若一条消息在一直消费失败的前提下，将会在正常消费后的第 4 小时 46 分后进行第 16 次重试。若仍然失败，则将消息投递到 <strong>死信队列</strong>。</p>
 <blockquote><p>修改消费重试次数</p></blockquote>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span></span><code><span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">DefaultMQPushConsumer</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> consumer </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> new</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> DefaultMQPushConsumer</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"cg"</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
@@ -2033,13 +2033,13 @@ For more information, please visit the url, http://rocketmq.apache.org/docs/faq/
 <p>1、若修改值小于 16，按照指定间隔进行重试；</p>
 <p>2、若修改值大于 16，则超过 16 次的重试时间间隔均为 2 小时。</p>
 <p>对于 Consumer Group，若仅修改了一个 Consumer 的消费重试次数，则会应用到该 Group 中所有其它 Consumer 实例。若出现多个 Consumer 均做了修改的情况，则采用覆盖方式生效，即最后被修改的值会覆盖前面设置的值。</p>
-<h3 id="284-重试队列">2.8.4 重试队列</h3>
+<h4 id="284-重试队列">2.8.4 重试队列</h4>
 <p>对于需要重试消费的消息，并不是 Consumer 在等待了指定时长后再次去拉取原来的消息进行消费，而是将这些需要重试消费的消息放入到了一个特殊 Topic 的队列中，而后进行再次消费的。这个特殊的队列就是重试队列。</p>
 <p>当出现需要进行重试消费的消息时，Broker 会为每个消费组都设置一个 Topic 名称为 <code>%RETRY%consumerGroup@consumerGroup</code> 的重试队列。</p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/RocketMQ%E9%87%8D%E8%AF%95%E9%98%9F%E5%88%97.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/RocketMQ%E9%87%8D%E8%AF%95%E9%98%9F%E5%88%97.png" alt="RocketMQ重试队列" data-responsive-image="true"></picture></p>
 <p>这个重试队列是针对消息者组的，而不是针对每个 Topic 设置的（一个 Topic 的消息可以让多个消费者组进行消费，所以会为这些消费者组各创建一个重试队列）。只有当出现需要进行重试消费的消息时，才会为该消费者组创建重试队列。</p>
 <p>我们发现消费重试的时间间隔与延时消费的延时等级十分相似，除了没有延时等级的前两个时间外，其它的时间都是相同的。这是因为 Broker 对于重试消息的处理是通过 <strong>延时消息</strong> 实现的，先将消息保存到 SCHEDULE_TOPIC_XXXX 延迟队列中，延迟时间到后，会将消息投递到 <code>%RETRY%consumerGroup@consumerGroup</code> 重试队列中。</p>
-<h3 id="285-消费重试配置方式">2.8.5 消费重试配置方式</h3>
+<h4 id="285-消费重试配置方式">2.8.5 消费重试配置方式</h4>
 <p>集群消费方式下，消息消费失败后若希望消费重试，则需要在 <strong>消息监听器接口</strong> 的实现中明确进行如下三种方式之一的配置：</p>
 <p>方式一：返回 <code>ConsumeConcurrentlyStatus.RECONSUME_LATER</code>（推荐）</p>
 <p>方式二：返回 <code>null</code></p>
@@ -2077,20 +2077,20 @@ For more information, please visit the url, http://rocketmq.apache.org/docs/faq/
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">        System</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">out</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">println</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"Consumer Started"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h3 id="286-消费不重试配置方式">2.8.6 消费不重试配置方式</h3>
+<h4 id="286-消费不重试配置方式">2.8.6 消费不重试配置方式</h4>
 <p>集群消费方式下，消息消费失败后若不希望消费重试，则可以在捕获到异常后同样返回与消费成功后的相同的结果，即 <code>ConsumeConcurrentlyStatus.CONSUME_SUCCESS</code>。</p>
-<h2 id="29-死信队列">2.9 死信队列</h2>
-<h3 id="291-什么是死信队列">2.9.1 什么是死信队列</h3>
+<h3 id="29-死信队列">2.9 死信队列</h3>
+<h4 id="291-什么是死信队列">2.9.1 什么是死信队列</h4>
 <p>当一条消息初次消费失败，消息队列会自动进行消费重试。达到最大重试次数后，若消费依然失败，则表明消费者在正常情况下无法正确地消费该消息，但是消息队列不会立刻将消息丢弃，而是将其发送到该消费者对应的特殊队列中。这个队列就是死信队列（Dead-Letter Queue，DLQ），而其中的消息则称为死信消息（Dead-Letter Message，DLM）。</p>
 <p>死信队列是用于处理无法被正常消费的消息的。</p>
-<h3 id="292-死信队列的特征">2.9.2 死信队列的特征</h3>
+<h4 id="292-死信队列的特征">2.9.2 死信队列的特征</h4>
 <p>死信队列具有如下特征：</p>
 <p>1、死信队列中的消息不会再被消费者正常消费，即 DLQ 对于消费者是不可见的；</p>
 <p>2、死信存储有效期与正常消息相同，均为 3 天（commitlog 文件的过期时间），3 天后会被自动删除；</p>
 <p>3、死信队列就是一个特殊的 Topic，名称为 %DLQ%consumerGroup@consumerGroup，即每个消费者组都有一个死信队列；</p>
 <p>4、如果⼀个消费者组未产生死信消息，则不会为其创建相应的死信队列。</p>
-<h3 id="293-死信消息的处理">2.9.3 死信消息的处理</h3>
-<p>实际上，当⼀条消息进入死信队列，就意味着系统中某些地方出现了问题，从而导致消费者无法正常消费该消息，比如代码中原本就存在 Bug。因此，对于死信消息，通常需要开发人员进行特殊处理。最关键的步骤是要排查可疑因素，解决代码中可能存在的 Bug，然后再将原来的死信消息再次进行投递消费。</p> </article> <div class="text-muted-foreground max-w-app mt-20 w-full space-y-3 text-center text-sm" data-astro-cid-7ap3hmvm> <aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full px-2 text-center leading-6 sm:px-0"> <p class="m-0 break-words"> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a><span> 许可协议，</span><span class="max-sm:block">转载时请署名并注明<a href="https://mofan212.github.io/posts/distributed-message-queue-rocketmq-part-two/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a> 🔗</span> </p> </aside> <section data-post-reward data-pagefind-ignore class="w-full" aria-label="赞赏"> <div class="flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:flex-wrap sm:gap-x-1.5 sm:gap-y-2"> <span class="sm:whitespace-nowrap">如果这篇文章对你有帮助，可以通过</span> <a href="/reward/" class="focus-outline border-accent text-accent hover:bg-accent/10 active:bg-accent/10 inline-block rounded-md border px-3 py-1 font-medium transition-colors"> 赞赏 </a> <span class="sm:whitespace-nowrap">请我喝杯 Coffee ☕</span> </div> </section> </div> <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm>  <ul id="post-tags" class="mt-4 mb-8 flex flex-wrap gap-4 sm:mb-8" data-astro-cid-7ap3hmvm> <li> <a href="/tags/rocketmq/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> RocketMQ </a> </li><li> <a href="/tags/middleware/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-2"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> 中间件 </a> </li> </ul>  <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/the-basics-of-linux-part-one/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.3l105.3-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg> <div> <span>上一篇</span> <div class="text-accent/85 text-sm">【上篇】Linux 基础</div> </div> </a> <a href="/posts/design-pattern-template-method-pattern/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>下一篇</span> <div class="text-accent/85 text-sm">【设计模式】模板方法模式</div> </div> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg> </a> </div> </main> <footer class="app-layout mt-auto" data-astro-cid-7ap3hmvm="true"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="text-muted-foreground my-2 flex w-fit flex-col items-start text-start text-sm whitespace-nowrap"> <div class="flex items-center gap-1.5"> <svg width="24" height="24" fill="currentColor" class="size-4" viewBox="-49.231 -39.385 738.462 590.769" aria-hidden="true"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9-.1-2.7-.2-5.4-.2-8.1 0-88.4 71.6-160 160-160 59.3 0 111 32.2 138.7 80.2A95.5 95.5 0 0 1 448 96c53 0 96 43 96 96 0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39L296 392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0z" /></svg> <span>最近更新：</span> <time class="tabular-nums" datetime="2026-10-21T03:16:11.000Z" data-deployed-at="2026-10-21T03:16:11.000Z" data-just-now="刚刚" data-locale="zh-CN"> 2026-10-21 11:16 </time> </div> <div class="mt-1 flex items-center gap-3 text-xs"> <span class="flex items-center gap-1" title="本站访客数"> <svg width="24" height="24" fill="currentColor" class="size-3" viewBox="-2.835 -3.241 453.671 518.481" aria-hidden="true"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3z" /></svg> <span class="sr-only">本站访客数：</span> <span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> <span aria-hidden="true">|</span> <span class="flex items-center gap-1.5" title="本站总浏览量"> <span class="flex size-4 items-center justify-center" aria-hidden="true"> <svg width="24" height="24" fill="currentColor" class="size-3.5" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48zM0 272c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v160c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zM368 96h32c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48" /></svg> </span> <span class="sr-only">本站总浏览量：</span> <span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> </div> </div> <div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"> <span>版权所有 &#169; 2020 – 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer> <script>
+<h4 id="293-死信消息的处理">2.9.3 死信消息的处理</h4>
+<p>实际上，当⼀条消息进入死信队列，就意味着系统中某些地方出现了问题，从而导致消费者无法正常消费该消息，比如代码中原本就存在 Bug。因此，对于死信消息，通常需要开发人员进行特殊处理。最关键的步骤是要排查可疑因素，解决代码中可能存在的 Bug，然后再将原来的死信消息再次进行投递消费。</p> </article> <div class="text-muted-foreground max-w-app mt-20 w-full space-y-3 text-center text-sm" data-astro-cid-7ap3hmvm> <aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full px-2 text-center leading-6 sm:px-0"> <p class="m-0 break-words"> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a><span> 许可协议，</span><span class="max-sm:block">转载时请署名并注明<a href="https://mofan212.github.io/posts/distributed-message-queue-rocketmq-part-two/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a> 🔗</span> </p> </aside> <section data-post-reward data-pagefind-ignore class="w-full" aria-label="赞赏"> <div class="flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:flex-wrap sm:gap-x-1.5 sm:gap-y-2"> <span class="sm:whitespace-nowrap">如果这篇文章对你有帮助，可以通过</span> <a href="/reward/" class="focus-outline border-accent text-accent hover:bg-accent/10 active:bg-accent/10 inline-block rounded-md border px-3 py-1 font-medium transition-colors"> 赞赏 </a> <span class="sm:whitespace-nowrap">请我喝杯 Coffee ☕</span> </div> </section> </div> <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm>  <ul id="post-tags" class="mt-4 mb-8 flex flex-wrap gap-4 sm:mb-8" data-astro-cid-7ap3hmvm> <li> <a href="/tags/rocketmq/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> RocketMQ </a> </li><li> <a href="/tags/middleware/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-2"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> 中间件 </a> </li> </ul>  <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/the-basics-of-linux-part-one/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.3l105.3-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg> <div> <span>上一篇</span> <div class="text-accent/85 text-sm">【上篇】Linux 基础</div> </div> </a> <a href="/posts/design-pattern-template-method-pattern/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>下一篇</span> <div class="text-accent/85 text-sm">【设计模式】模板方法模式</div> </div> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg> </a> </div> </main> <footer class="app-layout mt-auto" data-astro-cid-7ap3hmvm="true"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="text-muted-foreground my-2 flex w-fit flex-col items-start text-start text-sm whitespace-nowrap"> <div class="flex items-center gap-1.5"> <svg width="24" height="24" fill="currentColor" class="size-4" viewBox="-49.231 -39.385 738.462 590.769" aria-hidden="true"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9-.1-2.7-.2-5.4-.2-8.1 0-88.4 71.6-160 160-160 59.3 0 111 32.2 138.7 80.2A95.5 95.5 0 0 1 448 96c53 0 96 43 96 96 0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39L296 392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0z" /></svg> <span>最近更新：</span> <time class="tabular-nums" datetime="2026-10-22T08:22:01.000Z" data-deployed-at="2026-10-22T08:22:01.000Z" data-just-now="刚刚" data-locale="zh-CN"> 2026-10-22 16:22 </time> </div> <div class="mt-1 flex items-center gap-3 text-xs"> <span class="flex items-center gap-1" title="本站访客数"> <svg width="24" height="24" fill="currentColor" class="size-3" viewBox="-2.835 -3.241 453.671 518.481" aria-hidden="true"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3z" /></svg> <span class="sr-only">本站访客数：</span> <span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> <span aria-hidden="true">|</span> <span class="flex items-center gap-1.5" title="本站总浏览量"> <span class="flex size-4 items-center justify-center" aria-hidden="true"> <svg width="24" height="24" fill="currentColor" class="size-3.5" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48zM0 272c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v160c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zM368 96h32c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48" /></svg> </span> <span class="sr-only">本站总浏览量：</span> <span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> </div> </div> <div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"> <span>版权所有 &#169; 2020 – 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer> <script>
   (() => {
     const updateDeploymentTimes = () => {
       document.querySelectorAll("[data-deployed-at]").forEach(element => {
@@ -2139,4 +2139,4 @@ For more information, please visit the url, http://rocketmq.apache.org/docs/faq/
     document.addEventListener("astro:page-load", updateDeploymentTimes);
     window.setInterval(updateDeploymentTimes, 60_000);
   })();
-</script>    <script type="module" src="/_astro/Layout.astro_astro_type_script_index_0_lang.DQQu8RqY.js"></script> <script type="module" src="/_astro/Layout.astro_astro_type_script_index_1_lang.DRvjezMo.js"></script> </body> </html>  <script type="module" src="/_astro/index.astro_astro_type_script_index_0_lang.Oly9xh_g.js"></script>
+</script>    <script type="module" src="/_astro/Layout.astro_astro_type_script_index_0_lang.BrDp0sUM.js"></script> <script type="module" src="/_astro/Layout.astro_astro_type_script_index_1_lang.DRvjezMo.js"></script> </body> </html>  <script type="module" src="/_astro/index.astro_astro_type_script_index_0_lang.Oly9xh_g.js"></script>

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html dir="ltr" lang="zh-CN" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/the-structure-of-jvm/"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.3.0/400.css"><link rel="preconnect" href="https://busuanzi.ibruce.info"><meta name="generator" content="Astro v6.4.2"><!-- Primary meta --><title>JVM 内存结构 | Mofan</title><meta name="title" content="JVM 内存结构 | Mofan"><meta name="description" content="JVM 快速入门第一部分：JVM 内存结构。"><meta name="author" content="默烦"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Mofan"><meta property="og:title" content="JVM 内存结构 | Mofan"><meta property="og:description" content="JVM 快速入门第一部分：JVM 内存结构。"><meta property="og:url" content="https://mofan212.github.io/posts/the-structure-of-jvm/"><meta property="og:image" content="https://mofan212.github.io/default-og.jpg"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://mofan212.github.io/posts/the-structure-of-jvm/"><meta property="twitter:title" content="JVM 内存结构 | Mofan"><meta property="twitter:description" content="JVM 快速入门第一部分：JVM 内存结构。"><meta property="twitter:image" content="https://mofan212.github.io/default-og.jpg"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Mofan" href="https://mofan212.github.io/rss.xml"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2025-05-05T00:00:00.000Z"><meta property="article:modified_time" content="2025-05-05T00:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"JVM 内存结构 | Mofan","url":"https://mofan212.github.io/posts/the-structure-of-jvm/","mainEntityOfPage":"https://mofan212.github.io/posts/the-structure-of-jvm/","datePublished":"2025-05-05T00:00:00.000Z","dateModified":"2025-05-05T00:00:00.000Z","author":[{"@type":"Person","name":"默烦","url":"https://github.com/mofan212"}]}</script> <!--
+<!DOCTYPE html><html dir="ltr" lang="zh-CN" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/the-structure-of-jvm/"><link rel="preconnect" href="https://npm.elemecdn.com"><link rel="preconnect" href="https://gcore.jsdelivr.net"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/lxgwwenkaiscreen.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.3.0/400.css"><link rel="preconnect" href="https://busuanzi.ibruce.info"><meta name="generator" content="Astro v6.4.2"><!-- Primary meta --><title>JVM 内存结构 | Mofan</title><meta name="title" content="JVM 内存结构 | Mofan"><meta name="description" content="JVM 快速入门第一部分：JVM 内存结构。"><meta name="author" content="默烦"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Mofan"><meta property="og:title" content="JVM 内存结构 | Mofan"><meta property="og:description" content="JVM 快速入门第一部分：JVM 内存结构。"><meta property="og:url" content="https://mofan212.github.io/posts/the-structure-of-jvm/"><meta property="og:image" content="https://mofan212.github.io/default-og.jpg"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://mofan212.github.io/posts/the-structure-of-jvm/"><meta property="twitter:title" content="JVM 内存结构 | Mofan"><meta property="twitter:description" content="JVM 快速入门第一部分：JVM 内存结构。"><meta property="twitter:image" content="https://mofan212.github.io/default-og.jpg"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Mofan" href="https://mofan212.github.io/rss.xml"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2025-05-05T00:00:00.000Z"><meta property="article:modified_time" content="2025-05-05T00:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"JVM 内存结构 | Mofan","url":"https://mofan212.github.io/posts/the-structure-of-jvm/","mainEntityOfPage":"https://mofan212.github.io/posts/the-structure-of-jvm/","datePublished":"2025-05-05T00:00:00.000Z","dateModified":"2025-05-05T00:00:00.000Z","author":[{"@type":"Person","name":"默烦","url":"https://github.com/mofan212"}]}</script> <!--
       Inline FOUC-prevention script: sets data-theme on <html> before
       the browser paints. Runs synchronously, no defer/async.
     --><script>
@@ -14,7 +14,7 @@
         // Expose value so theme.ts can skip re-detection.
         window.__theme = { value: theme };
       })();
-    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.8-7lwm7-.css">
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.CRJPB6-j.css">
 <style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
 .toc-link[data-astro-cid-po2ckxzl]{position:relative;transition:color .2s ease}.toc-link[data-astro-cid-po2ckxzl]:before{position:absolute;inset-block:.375rem;inset-inline-start:-2px;width:2px;border-radius:2px;background-color:var(--accent);content:"";opacity:0;transition:opacity .2s ease}.toc-link[data-astro-cid-po2ckxzl][data-active]{color:var(--accent)}.toc-link[data-astro-cid-po2ckxzl][data-active]:before{opacity:1}.toc-toggle[data-astro-cid-po2ckxzl][aria-expanded=true] .toc-toggle-icon[data-astro-cid-po2ckxzl]{rotate:-90deg}.toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-width:thin}.post-toc-desktop[data-astro-cid-taqt6xe3] .toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-gutter:stable}.toc-scroll[data-astro-cid-taqt6xe3]:after{display:block;block-size:20dvh;content:""}[data-astro-cid-taqt6xe3][data-toc-dialog]{opacity:0;transform:translate(1.25rem);transition:opacity .16s ease-out,transform .22s cubic-bezier(.22,1,.36,1);will-change:opacity,transform}[data-astro-cid-taqt6xe3][data-toc-dialog][data-toc-visible]{opacity:1;transform:translate(0)}[data-astro-cid-taqt6xe3][data-toc-dialog]::backdrop{background-color:#0000;transition:background-color .18s ease-out}[data-astro-cid-taqt6xe3][data-toc-dialog][data-toc-visible]::backdrop{background-color:#0000007f}@media(prefers-reduced-motion:reduce){[data-astro-cid-taqt6xe3][data-toc-dialog]{transform:none;transition:none}[data-astro-cid-taqt6xe3][data-toc-dialog]::backdrop{transition:none}}[data-astro-cid-4wxclohh][data-post-series]{interpolate-size:allow-keywords}[data-astro-cid-4wxclohh][data-post-series]::details-content{block-size:0;overflow:hidden;opacity:0;transition:block-size .2s ease-out,opacity .15s ease-out,content-visibility .2s allow-discrete}[data-astro-cid-4wxclohh][data-post-series][open]::details-content{block-size:auto;opacity:1}@media(prefers-reduced-motion:reduce){[data-astro-cid-4wxclohh][data-post-series]::details-content{transition:none}}.post-sidebar[data-astro-cid-7ap3hmvm]{display:contents}@media(min-width:90rem){.post-sidebar[data-astro-cid-7ap3hmvm]{position:fixed;inset-block-start:9rem;inset-inline-start:calc(50% + var(--app-max-width) / 2 + 2rem);display:flex;width:min(18rem,calc(50vw - var(--app-max-width) / 2 - 3rem));height:calc(100dvh - 11rem);min-height:0;flex-direction:column}}
 </style><style>[data-astro-transition-scope="astro-36ssibgs-1"] { view-transition-name: jvm; }@layer astro { ::view-transition-old(jvm) { 
@@ -593,11 +593,11 @@
 
     update();
   })();
-</script> </div> <article id="article" class="mt-8 w-full app-prose max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)" data-astro-cid-7ap3hmvm> <!-- 封面来源：由博主个人绘制，如需使用请联系博主。 -->
+</script> </div> <article id="article" class="mt-8 w-full app-prose post-content max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)" data-astro-cid-7ap3hmvm> <!-- 封面来源：由博主个人绘制，如需使用请联系博主。 -->
 <p>参考链接：<a href="https://www.bilibili.com/video/BV1yE411Z7AP/" target="_blank" rel="noopener noreferrer">黑马程序员JVM快速入门</a></p>
 <p>本文涉及的代码：<a href="https://github.com/mofan212/jvm-demo" target="_blank" rel="noopener noreferrer">mofan212/jvm-demo</a></p>
 <blockquote><p>除特别注明外，本文内容都基于 JDK 1.8</p></blockquote>
-<h1 id="1-程序计数器">1. 程序计数器</h1>
+<h2 id="1-程序计数器">1. 程序计数器</h2>
 <p>Program Counter Register，程序计数器（寄存器）。</p>
 <p>作用：记住下一条 JVM 指令的执行地址</p>
 <p>特点：</p>
@@ -631,8 +631,8 @@
 <p>当前一条指令执行完成后，解释器会去「程序计数器」中取得下一条 JVM 指令的执行地址，然后再执行。</p>
 <p>Java 程序支持多线程运行。当系统中有多个线程正在运行时，CPU 会为每个线程分配时间片。如果一个线程中的逻辑在一个时间片内未执行完，CPU 会将该线程的状态进行暂存，然后切换到另一个线程并执行它的逻辑，后续又轮到第一个线程执行时，能够继续执行 <strong>剩余</strong> 逻辑。</p>
 <p>由于「程序计数器」是线程私有的，线程在时间片轮转的过程中能够轻松得知下一条指令的执行地址，完成剩余逻辑的执行。</p>
-<h1 id="2-虚拟机栈">2. 虚拟机栈</h1>
-<h2 id="21-栈与栈帧">2.1 栈与栈帧</h2>
+<h2 id="2-虚拟机栈">2. 虚拟机栈</h2>
+<h3 id="21-栈与栈帧">2.1 栈与栈帧</h3>
 <p>Java Virtual Machine Stacks，Java 虚拟机栈。</p>
 <ul>
 <li>每个线程运行时所需要的内存，称为「虚拟机栈」</li>
@@ -643,7 +643,7 @@
 <p>每个 Java 线程在运行时需要一定的内存空间，这个内存空间就是「虚拟机栈」。如果有多个运行的线程，也对应着多个「虚拟机栈」。</p>
 <p>「虚拟机栈」中存放的元素是「栈帧」，一个「栈帧」对应着一次「方法调用」，是每个方法运行时需要的内存。方法可以接受参数，内部可以定义局部变量，还可以有返回值，这些信息都需要占用内存，因此在方法执行前需要预先分配一定的内存空间。</p>
 <p>Java 线程在执行一个方法时，会为该方法划分一段栈帧空间，并将「栈帧」压入「虚拟机栈」内；当方法执行完成后，再将对应「栈帧」从「虚拟机栈」中移除。</p>
-<h2 id="22-问题辨析">2.2 问题辨析</h2>
+<h3 id="22-问题辨析">2.2 问题辨析</h3>
 <blockquote><p>垃圾回收是否涉及栈内存？</p></blockquote>
 <p>不涉及，栈中的数据在作用域结束后自行释放，垃圾回收只会回收堆中数据。</p>
 <blockquote><p>栈内存分配越大越好吗？</p></blockquote>
@@ -687,7 +687,7 @@
 <li><code>m2()</code> 方法中的 <code>sb</code> 对象并不是线程安全的，因为 <code>sb</code> 是通过参数传入的，它可能会被其他线程使用</li>
 <li><code>m3()</code> 方法中的 <code>sb</code> 对象也不是线程安全的，它通过方法返回值返回出去后，可以被多个线程使用</li>
 </ul>
-<h2 id="23-栈内存溢出">2.3 栈内存溢出</h2>
+<h3 id="23-栈内存溢出">2.3 栈内存溢出</h3>
 <p>什么情况下会导致栈内存溢出（<code>java.lang.StackOverflowError</code>）？</p>
 <ul>
 <li>栈帧过多</li>
@@ -698,21 +698,21 @@
 <li>没有正确设置递归终止条件</li>
 <li>将存在循环引用的对象进行 JSON 序列化</li>
 </ul>
-<h2 id="24-线程运行诊断">2.4 线程运行诊断</h2>
+<h3 id="24-线程运行诊断">2.4 线程运行诊断</h3>
 <blockquote><p>CPU 占用过多</p></blockquote>
 <p>见 <a href="/posts/the-basics-of-linux-part-two/" target="_blank" rel="noopener noreferrer">【下篇】Linux 基础</a> 中的 「排查 Java 进程导致 CPU 飙升」</p>
 <blockquote><p>程序运行很长时间没有效果</p></blockquote>
 <p>这往往是因为产生了「死锁」，借助 <code>jstack pid</code> 查看对应进程下 JVM 中当前时刻的线程快照。</p>
 <p>仔细阅读最后的 <code>Java stack information for the threads listed above:</code> 信息即可定位到问题代码。</p>
-<h1 id="3-本地方法栈">3. 本地方法栈</h1>
+<h2 id="3-本地方法栈">3. 本地方法栈</h2>
 <p>Native Method Stack，本地方法栈。</p>
 <p>用于管理通过 <strong>JNI（Java Native Interface）</strong> 调用的非 Java 代码（如 C/C++）的执行。</p>
 <p>与虚拟机栈类似，只不过虚拟机栈用于处理 Java 方法的调用，本地方法栈用于处理 Native 方法的调用。</p>
 <p>本地方法栈也是线程私有的。</p>
 <p>在某些 JVM 的实现中，会将本地方法栈和虚拟机栈合并为一个栈，以简化实现。</p>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JVMImages/JVM%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84%E4%B9%8B%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%A0%88.svg" alt="JVM内存结构之本地方法栈"></p>
-<h1 id="4-堆">4. 堆</h1>
-<h2 id="41-堆的特点">4.1 堆的特点</h2>
+<h2 id="4-堆">4. 堆</h2>
+<h3 id="41-堆的特点">4.1 堆的特点</h3>
 <p>Heap，堆。</p>
 <p>通过 <code>new</code> 关键字创建的对象都会使用堆内存。</p>
 <p>特点：</p>
@@ -721,7 +721,7 @@
 <li>有垃圾回收机制</li>
 </ul>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JVMImages/JVM%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84%E4%B9%8B%E5%A0%86.svg" alt="JVM内存结构之堆"></p>
-<h2 id="42-堆内存溢出">4.2 堆内存溢出</h2>
+<h3 id="42-堆内存溢出">4.2 堆内存溢出</h3>
 <p>堆内存溢出的异常信息：<code>java.lang.OutofMemoryError ：java heap space</code>。比如：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span><span class="code-line-number">13</span><span class="code-line-number">14</span><span class="code-line-number">15</span><span class="code-line-number">16</span><span class="code-line-number">17</span><span class="code-line-number">18</span><span class="code-line-number">19</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> class</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> Demo_1</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
 <span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> static</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> void</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> main</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">String</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">[] </span><span style="--shiki-light:#383A42;--shiki-light-font-style:inherit;--shiki-dark:#E06C75;--shiki-dark-font-style:italic">args</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
@@ -744,13 +744,13 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JVMImages/%E5%A0%86%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BAOOM%E7%A4%BA%E4%BE%8B.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JVMImages/%E5%A0%86%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BAOOM%E7%A4%BA%E4%BE%8B.png" alt="堆内存溢出OOM示例" data-responsive-image="true"></picture></p>
 <p>与使用 <code>-Xss</code> 设置栈内存大小类似，可以使用 <code>-Xmx</code> 来指定最大堆内存大小。</p>
-<h2 id="43-堆内存诊断">4.3 堆内存诊断</h2>
+<h3 id="43-堆内存诊断">4.3 堆内存诊断</h3>
 <p><code>jps</code> 工具：查看当前系统中有哪些 Java 进程</p>
 <p><code>jmap</code> 工具：查看某一时刻堆内存占用情况，比如 <code>jmap -heap pid</code></p>
 <p><code>jconsole</code> 工具：多功能图形界面监测工具，可以连续监测</p>
 <p><code>jvisualvm</code> 工具：图形化的虚拟机工具，可以利用它的「堆转储」（dump）功能分析某一时刻堆的使用情况。注意，在 JDK9 之后的版本中已经不再自带该工具，需要额外下载</p>
-<h1 id="5-方法区">5. 方法区</h1>
-<h2 id="51-定义与组成">5.1 定义与组成</h2>
+<h2 id="5-方法区">5. 方法区</h2>
+<h3 id="51-定义与组成">5.1 定义与组成</h3>
 <p>​	<img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JVMImages/JVM%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84%E4%B9%8B%E6%96%B9%E6%B3%95%E5%8C%BA.svg" alt="JVM内存结构之方法区"></p>
 <p>以 JDK8 为例，JVM 规范中对于 <a href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html#jvms-2.5.4" target="_blank" rel="noopener noreferrer">方法区</a> 的定义如下：</p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JVMImages/JVM%E8%A7%84%E8%8C%83%E4%B8%AD%E5%AF%B9%E6%96%B9%E6%B3%95%E5%8C%BA%E7%9A%84%E5%AE%9A%E4%B9%89.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JVMImages/JVM%E8%A7%84%E8%8C%83%E4%B8%AD%E5%AF%B9%E6%96%B9%E6%B3%95%E5%8C%BA%E7%9A%84%E5%AE%9A%E4%B9%89.png" alt="JVM规范中对方法区的定义" data-responsive-image="true"></picture></p>
@@ -769,7 +769,7 @@
 <p>JDK 1.8 版本之前方法区使用堆的内存，叫永久代；JDK 1.8 之后用操作系统的内存，叫元空间。</p>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JVMImages/Java6%E4%B8%ADJVM%E7%9A%84%E5%A0%86%E4%B8%8E%E6%96%B9%E6%B3%95%E5%8C%BA.svg" alt="Java6中JVM的堆与方法区"></p>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JVMImages/Java8%E4%B8%ADJVM%E7%9A%84%E5%A0%86%E4%B8%8E%E6%96%B9%E6%B3%95%E5%8C%BA.svg" alt="Java8中JVM的堆与方法区."></p>
-<h2 id="52-方法区内存溢出">5.2 方法区内存溢出</h2>
+<h3 id="52-方法区内存溢出">5.2 方法区内存溢出</h3>
 <p>不同 Java 版本中方法区的实现不相同，因此方法区内存溢出时的错误信息也有所区别：</p>
 <ul>
 <li>Java 8 以前会导致 <strong>永久代</strong> 内存溢出：<code>java.lang.OutOfMemoryError: PermGen space</code></li>
@@ -807,7 +807,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JVMImages/%E6%96%B9%E6%B3%95%E5%8C%BA%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BAOOM%E7%A4%BA%E4%BE%8B.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JVMImages/%E6%96%B9%E6%B3%95%E5%8C%BA%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BAOOM%E7%A4%BA%E4%BE%8B.png" alt="方法区内存溢出OOM示例" data-responsive-image="true"></picture></p>
-<h2 id="53-运行时常量池">5.3 运行时常量池</h2>
+<h3 id="53-运行时常量池">5.3 运行时常量池</h3>
 <ul>
 <li><strong>常量池</strong>：就是一张表，虚拟机指令根据这张常量表找到要执行的类名、方法名、参数类型、字面量等信息</li>
 <li><strong>运行时常量池</strong>：常量池存在于 <code>*.class</code> 文件中，当该类被加载，它的常量池信息就会被放入运行时常量池，并把里面的符号地址变为真实地址</li>
@@ -908,8 +908,8 @@
 <span class="line"><span></span></span>
 <span class="line"><span>SourceFile: "HelloWorld.java"</span></span></code></pre>
 <p>每条虚拟机指令都会对应常量池表中一个地址（比如 <code>getstatic #2</code> 中的 <code>#2</code> 就是常量池中的一个地址），常量池表中的地址可能对应着一个类名、方法名、参数类型等信息。</p>
-<h1 id="6-stringtable">6. StringTable</h1>
-<h2 id="61-特性">6.1 特性</h2>
+<h2 id="6-stringtable">6. StringTable</h2>
+<h3 id="61-特性">6.1 特性</h3>
 <p>StringTable（字符串常量池） 有如下特性：</p>
 <ul>
 <li>运行时常量池中的字符串仅是符号，只有在被用到时才会转化为对象</li>
@@ -1044,10 +1044,10 @@
 <li><code>s2</code> 和 <code>x</code> 都指向 StringTable 中的 <code>ab</code> 字符串，故 <code>s2 == x</code> 返回 <code>true</code></li>
 <li>由于 StringTable 已经先有 <code>ab</code> 字符串了，不会再把 <code>s</code> 对象放入 StringTable 中，因此 <code>s</code> 和 <code>x</code> 指向不同的对象，那么 <code>s == x</code> 返回 <code>false</code></li>
 </ul>
-<h2 id="62-所在位置">6.2 所在位置</h2>
+<h3 id="62-所在位置">6.2 所在位置</h3>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JVMImages/Java6%E4%B8%ADJVM%E7%9A%84%E5%A0%86%E4%B8%8E%E6%96%B9%E6%B3%95%E5%8C%BA.svg" alt="Java6中JVM的堆与方法区"></p>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JVMImages/Java8%E4%B8%ADJVM%E7%9A%84%E5%A0%86%E4%B8%8E%E6%96%B9%E6%B3%95%E5%8C%BA.svg" alt="Java8中JVM的堆与方法区"></p>
-<h2 id="63-stringtable-的垃圾回收">6.3 StringTable 的垃圾回收</h2>
+<h3 id="63-stringtable-的垃圾回收">6.3 StringTable 的垃圾回收</h3>
 <p>先介绍几个待会要用的虚拟机参数：</p>
 <ul>
 <li><code>-Xmx10m</code>：老熟人了，用于指定最大堆内存的大小</li>
@@ -1075,7 +1075,7 @@
 </pre>
 <p>这证明触发了 GC。</p>
 <p>在堆内存空间不足时，会触发 StringTable 的垃圾回收。</p>
-<h2 id="64-性能调优">6.4 性能调优</h2>
+<h3 id="64-性能调优">6.4 性能调优</h3>
 <blockquote><p>使用 <code>-XX:StringTableSize</code> 参数</p></blockquote>
 <p>StringTable 的底层由 Hashtable 实现。当 Hashtable 中的桶数量太少，而添加到 StringTable 中的字符串太多时，会增加哈希碰撞的几率，也会增加将字符串添加到 StringTable 中使用的时间。</p>
 <p>可以使用以下虚拟机参数调整桶个数：</p>
@@ -1083,8 +1083,8 @@
 <p>可选的桶个数范围是 <code>[1009, 2305843009213693951]</code>。</p>
 <blockquote><p>尝试将字符串添加到 StringTable</p></blockquote>
 <p>当系统中存在大量、可重复的字符串时，可以考虑调用 <code>String#intern()</code> 方法将字符串添加到 StringTable 中，以减少堆内存的使用。</p>
-<h1 id="7-直接内存">7. 直接内存</h1>
-<h2 id="71-定义">7.1 定义</h2>
+<h2 id="7-直接内存">7. 直接内存</h2>
+<h3 id="71-定义">7.1 定义</h3>
 <p>Direct Memory，直接内存。</p>
 <ul>
 <li>常见于 NIO 操作时，用于数据缓冲区</li>
@@ -1101,7 +1101,7 @@
 <p>要想提高效率，那么数据就不能复制两次。</p>
 <p>「直接内存」是操作系统和 Java 代码都可以直接访问的一块区域，不用再将系统内存中的数据复制到 Java 堆内存中，相比前一种方式减少了一次数据复制，进而提高了效率。</p>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/JVMImages/Java%E4%BD%BF%E7%94%A8%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98%E8%AF%BB%E5%8F%96%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6.svg" alt="Java使用直接内存读取磁盘文件"></p>
-<h2 id="72-内存溢出">7.2 内存溢出</h2>
+<h3 id="72-内存溢出">7.2 内存溢出</h3>
 <p>使用 <code>ByteBuffer.allocateDirect()</code> 方法来分配一块直接内存。</p>
 <p>由于直接内存不受 JVM 的内存回收管理，因此使用不当可能会导致内存溢出。</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span><span class="code-line-number">13</span><span class="code-line-number">14</span><span class="code-line-number">15</span><span class="code-line-number">16</span><span class="code-line-number">17</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> class</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> Demo_6_1</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
@@ -1127,7 +1127,7 @@
 	at java.nio.ByteBuffer.allocateDirect(ByteBuffer.java:311)
 	at indi.mofan.Demo_6.main(Demo_6.java:21)
 </pre>
-<h2 id="73-内存释放原理">7.3 内存释放原理</h2>
+<h3 id="73-内存释放原理">7.3 内存释放原理</h3>
 <p>直接内存不受 JVM 的内存回收管理。</p>
 <p>做一个实验：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span><span class="code-line-number">13</span><span class="code-line-number">14</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> class</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> Demo_6_2</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
@@ -1272,7 +1272,7 @@
 <p>在使用 <code>-XX:+DisableExplicitGC</code> 参数后，那么上述代码中的 <code>System.gc()</code> 方法会失效，无法触发垃圾回收。尽管没有引用 <code>byteBuffer</code> 的地方（<code>byteBuffer = null;</code>），但在堆内存充裕的情况下，<code>byteBuffer</code> 对象还会一直存活，那么其对应的直接内存也无法及时得到释放，只有等到 JVM 回收 <code>byteBuffer</code> 对象时，这块直接内存才会被释放。</p>
 <p>既然这样，那把 <code>-XX:+DisableExplicitGC</code> 参数去掉呗？</p>
 <p>这肯定也不行。</p>
-<p>如果要想及时释放不再使用的直接内存，应当使用 <code>Unsafe</code> 类来分配直接内存，在使用完之后调用 <code>Unsafe#freeMemory()</code> 方法释放直接内存。</p> </article> <div class="text-muted-foreground max-w-app mt-20 w-full space-y-3 text-center text-sm" data-astro-cid-7ap3hmvm> <aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full px-2 text-center leading-6 sm:px-0"> <p class="m-0 break-words"> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a><span> 许可协议，</span><span class="max-sm:block">转载时请署名并注明<a href="https://mofan212.github.io/posts/the-structure-of-jvm/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a> 🔗</span> </p> </aside> <section data-post-reward data-pagefind-ignore class="w-full" aria-label="赞赏"> <div class="flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:flex-wrap sm:gap-x-1.5 sm:gap-y-2"> <span class="sm:whitespace-nowrap">如果这篇文章对你有帮助，可以通过</span> <a href="/reward/" class="focus-outline border-accent text-accent hover:bg-accent/10 active:bg-accent/10 inline-block rounded-md border px-3 py-1 font-medium transition-colors"> 赞赏 </a> <span class="sm:whitespace-nowrap">请我喝杯 Coffee ☕</span> </div> </section> </div> <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm>  <ul id="post-tags" class="mt-4 mb-8 flex flex-wrap gap-4 sm:mb-8" data-astro-cid-7ap3hmvm> <li> <a href="/tags/jvm/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> JVM </a> </li> </ul>  <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/functors-applicatives-and-monads-in-pictures/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.3l105.3-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg> <div> <span>上一篇</span> <div class="text-accent/85 text-sm">Functors, Applicatives and Monads In Pictures</div> </div> </a> <a href="/posts/implement-dubbo-default-service/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>下一篇</span> <div class="text-accent/85 text-sm">实现 Dubbo 默认服务</div> </div> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg> </a> </div> </main> <footer class="app-layout mt-auto" data-astro-cid-7ap3hmvm="true"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="text-muted-foreground my-2 flex w-fit flex-col items-start text-start text-sm whitespace-nowrap"> <div class="flex items-center gap-1.5"> <svg width="24" height="24" fill="currentColor" class="size-4" viewBox="-49.231 -39.385 738.462 590.769" aria-hidden="true"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9-.1-2.7-.2-5.4-.2-8.1 0-88.4 71.6-160 160-160 59.3 0 111 32.2 138.7 80.2A95.5 95.5 0 0 1 448 96c53 0 96 43 96 96 0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39L296 392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0z" /></svg> <span>最近更新：</span> <time class="tabular-nums" datetime="2026-10-21T03:16:11.000Z" data-deployed-at="2026-10-21T03:16:11.000Z" data-just-now="刚刚" data-locale="zh-CN"> 2026-10-21 11:16 </time> </div> <div class="mt-1 flex items-center gap-3 text-xs"> <span class="flex items-center gap-1" title="本站访客数"> <svg width="24" height="24" fill="currentColor" class="size-3" viewBox="-2.835 -3.241 453.671 518.481" aria-hidden="true"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3z" /></svg> <span class="sr-only">本站访客数：</span> <span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> <span aria-hidden="true">|</span> <span class="flex items-center gap-1.5" title="本站总浏览量"> <span class="flex size-4 items-center justify-center" aria-hidden="true"> <svg width="24" height="24" fill="currentColor" class="size-3.5" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48zM0 272c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v160c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zM368 96h32c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48" /></svg> </span> <span class="sr-only">本站总浏览量：</span> <span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> </div> </div> <div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"> <span>版权所有 &#169; 2020 – 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer> <script>
+<p>如果要想及时释放不再使用的直接内存，应当使用 <code>Unsafe</code> 类来分配直接内存，在使用完之后调用 <code>Unsafe#freeMemory()</code> 方法释放直接内存。</p> </article> <div class="text-muted-foreground max-w-app mt-20 w-full space-y-3 text-center text-sm" data-astro-cid-7ap3hmvm> <aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full px-2 text-center leading-6 sm:px-0"> <p class="m-0 break-words"> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a><span> 许可协议，</span><span class="max-sm:block">转载时请署名并注明<a href="https://mofan212.github.io/posts/the-structure-of-jvm/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a> 🔗</span> </p> </aside> <section data-post-reward data-pagefind-ignore class="w-full" aria-label="赞赏"> <div class="flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:flex-wrap sm:gap-x-1.5 sm:gap-y-2"> <span class="sm:whitespace-nowrap">如果这篇文章对你有帮助，可以通过</span> <a href="/reward/" class="focus-outline border-accent text-accent hover:bg-accent/10 active:bg-accent/10 inline-block rounded-md border px-3 py-1 font-medium transition-colors"> 赞赏 </a> <span class="sm:whitespace-nowrap">请我喝杯 Coffee ☕</span> </div> </section> </div> <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm>  <ul id="post-tags" class="mt-4 mb-8 flex flex-wrap gap-4 sm:mb-8" data-astro-cid-7ap3hmvm> <li> <a href="/tags/jvm/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> JVM </a> </li> </ul>  <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/functors-applicatives-and-monads-in-pictures/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.3l105.3-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg> <div> <span>上一篇</span> <div class="text-accent/85 text-sm">Functors, Applicatives and Monads In Pictures</div> </div> </a> <a href="/posts/implement-dubbo-default-service/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>下一篇</span> <div class="text-accent/85 text-sm">实现 Dubbo 默认服务</div> </div> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg> </a> </div> </main> <footer class="app-layout mt-auto" data-astro-cid-7ap3hmvm="true"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="text-muted-foreground my-2 flex w-fit flex-col items-start text-start text-sm whitespace-nowrap"> <div class="flex items-center gap-1.5"> <svg width="24" height="24" fill="currentColor" class="size-4" viewBox="-49.231 -39.385 738.462 590.769" aria-hidden="true"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9-.1-2.7-.2-5.4-.2-8.1 0-88.4 71.6-160 160-160 59.3 0 111 32.2 138.7 80.2A95.5 95.5 0 0 1 448 96c53 0 96 43 96 96 0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39L296 392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0z" /></svg> <span>最近更新：</span> <time class="tabular-nums" datetime="2026-10-22T08:22:01.000Z" data-deployed-at="2026-10-22T08:22:01.000Z" data-just-now="刚刚" data-locale="zh-CN"> 2026-10-22 16:22 </time> </div> <div class="mt-1 flex items-center gap-3 text-xs"> <span class="flex items-center gap-1" title="本站访客数"> <svg width="24" height="24" fill="currentColor" class="size-3" viewBox="-2.835 -3.241 453.671 518.481" aria-hidden="true"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3z" /></svg> <span class="sr-only">本站访客数：</span> <span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> <span aria-hidden="true">|</span> <span class="flex items-center gap-1.5" title="本站总浏览量"> <span class="flex size-4 items-center justify-center" aria-hidden="true"> <svg width="24" height="24" fill="currentColor" class="size-3.5" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48zM0 272c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v160c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zM368 96h32c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48" /></svg> </span> <span class="sr-only">本站总浏览量：</span> <span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> </div> </div> <div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"> <span>版权所有 &#169; 2020 – 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer> <script>
   (() => {
     const updateDeploymentTimes = () => {
       document.querySelectorAll("[data-deployed-at]").forEach(element => {
@@ -1321,4 +1321,4 @@
     document.addEventListener("astro:page-load", updateDeploymentTimes);
     window.setInterval(updateDeploymentTimes, 60_000);
   })();
-</script>    <script type="module" src="/_astro/Layout.astro_astro_type_script_index_0_lang.DQQu8RqY.js"></script> <script type="module" src="/_astro/Layout.astro_astro_type_script_index_1_lang.DRvjezMo.js"></script> </body> </html>  <script type="module" src="/_astro/index.astro_astro_type_script_index_0_lang.Oly9xh_g.js"></script>
+</script>    <script type="module" src="/_astro/Layout.astro_astro_type_script_index_0_lang.BrDp0sUM.js"></script> <script type="module" src="/_astro/Layout.astro_astro_type_script_index_1_lang.DRvjezMo.js"></script> </body> </html>  <script type="module" src="/_astro/index.astro_astro_type_script_index_0_lang.Oly9xh_g.js"></script>

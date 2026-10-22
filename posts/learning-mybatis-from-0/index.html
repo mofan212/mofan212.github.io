@@ -1,4 +1,4 @@
-<!DOCTYPE html><html dir="ltr" lang="zh-CN" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/learning-mybatis-from-0/"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.3.0/400.css"><link rel="preconnect" href="https://busuanzi.ibruce.info"><meta name="generator" content="Astro v6.4.2"><!-- Primary meta --><title>从 0 开始的 MyBatis 3.x 学习 | Mofan</title><meta name="title" content="从 0 开始的 MyBatis 3.x 学习 | Mofan"><meta name="description" content="本文对 MyBatis 的一些基本使用进行了介绍。"><meta name="author" content="默烦"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Mofan"><meta property="og:title" content="从 0 开始的 MyBatis 3.x 学习 | Mofan"><meta property="og:description" content="本文对 MyBatis 的一些基本使用进行了介绍。"><meta property="og:url" content="https://mofan212.github.io/posts/learning-mybatis-from-0/"><meta property="og:image" content="https://mofan212.github.io/default-og.jpg"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://mofan212.github.io/posts/learning-mybatis-from-0/"><meta property="twitter:title" content="从 0 开始的 MyBatis 3.x 学习 | Mofan"><meta property="twitter:description" content="本文对 MyBatis 的一些基本使用进行了介绍。"><meta property="twitter:image" content="https://mofan212.github.io/default-og.jpg"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Mofan" href="https://mofan212.github.io/rss.xml"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2020-05-29T00:00:00.000Z"><meta property="article:modified_time" content="2021-10-13T00:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"从 0 开始的 MyBatis 3.x 学习 | Mofan","url":"https://mofan212.github.io/posts/learning-mybatis-from-0/","mainEntityOfPage":"https://mofan212.github.io/posts/learning-mybatis-from-0/","datePublished":"2020-05-29T00:00:00.000Z","dateModified":"2021-10-13T00:00:00.000Z","author":[{"@type":"Person","name":"默烦","url":"https://github.com/mofan212"}]}</script> <!--
+<!DOCTYPE html><html dir="ltr" lang="zh-CN" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/learning-mybatis-from-0/"><link rel="preconnect" href="https://npm.elemecdn.com"><link rel="preconnect" href="https://gcore.jsdelivr.net"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/lxgwwenkaiscreen.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.3.0/400.css"><link rel="preconnect" href="https://busuanzi.ibruce.info"><meta name="generator" content="Astro v6.4.2"><!-- Primary meta --><title>从 0 开始的 MyBatis 3.x 学习 | Mofan</title><meta name="title" content="从 0 开始的 MyBatis 3.x 学习 | Mofan"><meta name="description" content="本文对 MyBatis 的一些基本使用进行了介绍。"><meta name="author" content="默烦"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Mofan"><meta property="og:title" content="从 0 开始的 MyBatis 3.x 学习 | Mofan"><meta property="og:description" content="本文对 MyBatis 的一些基本使用进行了介绍。"><meta property="og:url" content="https://mofan212.github.io/posts/learning-mybatis-from-0/"><meta property="og:image" content="https://mofan212.github.io/default-og.jpg"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://mofan212.github.io/posts/learning-mybatis-from-0/"><meta property="twitter:title" content="从 0 开始的 MyBatis 3.x 学习 | Mofan"><meta property="twitter:description" content="本文对 MyBatis 的一些基本使用进行了介绍。"><meta property="twitter:image" content="https://mofan212.github.io/default-og.jpg"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Mofan" href="https://mofan212.github.io/rss.xml"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2020-05-29T00:00:00.000Z"><meta property="article:modified_time" content="2021-10-13T00:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"从 0 开始的 MyBatis 3.x 学习 | Mofan","url":"https://mofan212.github.io/posts/learning-mybatis-from-0/","mainEntityOfPage":"https://mofan212.github.io/posts/learning-mybatis-from-0/","datePublished":"2020-05-29T00:00:00.000Z","dateModified":"2021-10-13T00:00:00.000Z","author":[{"@type":"Person","name":"默烦","url":"https://github.com/mofan212"}]}</script> <!--
       Inline FOUC-prevention script: sets data-theme on <html> before
       the browser paints. Runs synchronously, no defer/async.
     --><script>
@@ -14,7 +14,7 @@
         // Expose value so theme.ts can skip re-detection.
         window.__theme = { value: theme };
       })();
-    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.8-7lwm7-.css">
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.CRJPB6-j.css">
 <style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
 .toc-link[data-astro-cid-po2ckxzl]{position:relative;transition:color .2s ease}.toc-link[data-astro-cid-po2ckxzl]:before{position:absolute;inset-block:.375rem;inset-inline-start:-2px;width:2px;border-radius:2px;background-color:var(--accent);content:"";opacity:0;transition:opacity .2s ease}.toc-link[data-astro-cid-po2ckxzl][data-active]{color:var(--accent)}.toc-link[data-astro-cid-po2ckxzl][data-active]:before{opacity:1}.toc-toggle[data-astro-cid-po2ckxzl][aria-expanded=true] .toc-toggle-icon[data-astro-cid-po2ckxzl]{rotate:-90deg}.toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-width:thin}.post-toc-desktop[data-astro-cid-taqt6xe3] .toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-gutter:stable}.toc-scroll[data-astro-cid-taqt6xe3]:after{display:block;block-size:20dvh;content:""}[data-astro-cid-taqt6xe3][data-toc-dialog]{opacity:0;transform:translate(1.25rem);transition:opacity .16s ease-out,transform .22s cubic-bezier(.22,1,.36,1);will-change:opacity,transform}[data-astro-cid-taqt6xe3][data-toc-dialog][data-toc-visible]{opacity:1;transform:translate(0)}[data-astro-cid-taqt6xe3][data-toc-dialog]::backdrop{background-color:#0000;transition:background-color .18s ease-out}[data-astro-cid-taqt6xe3][data-toc-dialog][data-toc-visible]::backdrop{background-color:#0000007f}@media(prefers-reduced-motion:reduce){[data-astro-cid-taqt6xe3][data-toc-dialog]{transform:none;transition:none}[data-astro-cid-taqt6xe3][data-toc-dialog]::backdrop{transition:none}}[data-astro-cid-4wxclohh][data-post-series]{interpolate-size:allow-keywords}[data-astro-cid-4wxclohh][data-post-series]::details-content{block-size:0;overflow:hidden;opacity:0;transition:block-size .2s ease-out,opacity .15s ease-out,content-visibility .2s allow-discrete}[data-astro-cid-4wxclohh][data-post-series][open]::details-content{block-size:auto;opacity:1}@media(prefers-reduced-motion:reduce){[data-astro-cid-4wxclohh][data-post-series]::details-content{transition:none}}.post-sidebar[data-astro-cid-7ap3hmvm]{display:contents}@media(min-width:90rem){.post-sidebar[data-astro-cid-7ap3hmvm]{position:fixed;inset-block-start:9rem;inset-inline-start:calc(50% + var(--app-max-width) / 2 + 2rem);display:flex;width:min(18rem,calc(50vw - var(--app-max-width) / 2 - 3rem));height:calc(100dvh - 11rem);min-height:0;flex-direction:column}}
 </style><style>[data-astro-transition-scope="astro-36ssibgs-1"] { view-transition-name: mybatis; }@layer astro { ::view-transition-old(mybatis) { 
@@ -593,10 +593,10 @@
 
     update();
   })();
-</script> </div> <article id="article" class="mt-8 w-full app-prose max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)" data-astro-cid-7ap3hmvm> <!-- 封面画师：T5-茨舞（微博）&emsp; &emsp;&emsp;&emsp;封面ID：74539039 -->
+</script> </div> <article id="article" class="mt-8 w-full app-prose post-content max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)" data-astro-cid-7ap3hmvm> <!-- 封面画师：T5-茨舞（微博）&emsp; &emsp;&emsp;&emsp;封面ID：74539039 -->
 <p>本文参考：2018 尚硅谷 雷丰阳 MyBatis 3.x</p>
-<h1 id="0-mybatis-的初步使用">0. MyBatis 的初步使用</h1>
-<h2 id="01-为什么要使用-mybatis">0.1 为什么要使用 MyBatis？</h2>
+<h2 id="0-mybatis-的初步使用">0. MyBatis 的初步使用</h2>
+<h3 id="01-为什么要使用-mybatis">0.1 为什么要使用 MyBatis？</h3>
 <p>MyBatis 是一个半自动化的持久层框架。</p>
 <blockquote><p>JDBC</p></blockquote>
 <ul>
@@ -612,7 +612,7 @@
 <hr>
 <p>对于开发人员而言，核心的 SQL 还是需要自己优化。</p>
 <p>SQL 和 Java 编码分开，功能边界清晰，一个专注业务，一个专注数据！</p>
-<h2 id="02-简单使用步骤">0.2 简单使用步骤</h2>
+<h3 id="02-简单使用步骤">0.2 简单使用步骤</h3>
 <p>1、编写 xml 配置文件（全局配置文件）</p>
 <p>2、编写 SQL 映射文件（配置了每一个 SQL，以及 SQL 的封装规则）</p>
 <p>3、将 SQL 映射文件注册在全局配置文件中</p>
@@ -624,14 +624,14 @@
 </ul>
 <p>当然还可以使用接口式编程，获取接口的实现类对象，MyBatis 会为接口自动创建一个代理对象，代理对象去实现 CRUD。（mapper 接口没有实现类，但是 MyBatis 会为这个接口生成一个代理对象）</p>
 <p>如果实体类的属性 名和数据库的字段名不对应，将无法查询出结果，可以在 SQL 语句中对相关的字段名（字段名的别名设置为属性名）使用别名进行查询。</p>
-<h1 id="1-全局配置文件标签">1. 全局配置文件标签</h1>
+<h2 id="1-全局配置文件标签">1. 全局配置文件标签</h2>
 <p>全局配置文件，其中包含了数据库连接池信息、事务管理器信息等系统运行环境信息（非必须，可以使用 Java 代码编写）。</p>
 <p>全局配置文件约束信息：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;?</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">xml</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> version</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">=</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"1.0"</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> encoding</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">=</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"UTF-8"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">?></span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;!</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">DOCTYPE</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B"> configuration</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">        "http://mybatis.org/dtd/mybatis-3-config.dtd"></span></span></code></pre>
-<h2 id="11-properties">1.1 properties</h2>
+<h3 id="11-properties">1.1 properties</h3>
 <ul>
 <li>
 <p>作用：使用该标签可以引入外部 properties 配置文件（数据库连接信息）的内容</p>
@@ -643,7 +643,7 @@
 </li>
 </ul>
 <p>该标签仅做了解，实际开发中会将 MyBatis 与 Spring 绑定，这些配置文件信息一般都会交给 Spring 进行管理，因此该标签的使用并不多。</p>
-<h2 id="12-settings">1.2 settings</h2>
+<h3 id="12-settings">1.2 settings</h3>
 <ul>
 <li>
 <p><code>&#x3C;settings></code> 标签包含很多重要的设置项，一个 <code>&#x3C;settings></code> 标签下可以包含多个 <code>&#x3C;setting></code> 标签，<code>&#x3C;setting></code> 标签用来设置一个设置项</p>
@@ -665,7 +665,7 @@
 <span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">    &#x3C;!-- 打印sql日志 --></span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    &#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">setting</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> name</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">=</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"logImpl"</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> value</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">=</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"STDOUT_LOGGING"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> /></span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">settings</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span></code></pre>
-<h2 id="13-typealiases">1.3 typeAliases</h2>
+<h3 id="13-typealiases">1.3 typeAliases</h3>
 <p>作用：别名处理器，能够为我们的 Java 类型取别名，<mark class="flexible-marker flexible-marker-default">别名不区分大小写</mark></p>
 <p>尽管别名可以让 SQL 映射文件中的代码变得简洁，但是为了方便后续阅读代码，还是建议使用全类名</p>
 <blockquote><p>单个别名</p></blockquote>
@@ -688,7 +688,7 @@
 <p><code>@Alias</code>：在批量取别名的情况下（使用了 <code>&#x3C;package></code> 标签的情况下），可以为某个 JavaBean 指定新的别名（该注解的位置在类上），以防止别名冲突。</p>
 <p>MyBatis 为普通的 Java 类型提供了许多内建的类型别名，因此我们在自定义别名时应当避免与这些别名相同。比如下图的部分内建别名（全部内建别名请参考官方文档）：</p>
 <picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SSMImages/MyBatis%E5%86%85%E5%BB%BA%E9%83%A8%E5%88%86%E5%88%AB%E5%90%8D.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SSMImages/MyBatis内建部分别名.png" alt="MyBatis内建部分别名" style="zoom:67%;" data-responsive-image="true"></picture>
-<h2 id="14-typehandlers">1.4 typeHandlers</h2>
+<h3 id="14-typehandlers">1.4 typeHandlers</h3>
 <p>作用：类型处理器。无论是 MyBatis 在预处理语句（PreparedStatement）中设置一个参数，还是从结果集中取出一个值，都会用类型处理器将获取的值以合适的方式转换成 Java 类型。</p>
 <blockquote><p>使用示例</p></blockquote>
 <p>处理枚举类型（需要从 <code>EnumTypeHandler</code> 或者 <code>EnumOrdinalTypeHandler</code> 中选一个来使用）时，MyBatis 默认使用的是 <code>EnumTypeHandler</code>，现在将处理枚举类型改为 <code>EnumOrdinalTypeHandler</code>：</p>
@@ -696,36 +696,36 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">typeHandlers</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">typeHandler</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> handler</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">=</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"org.apache.ibatis.type.EnumOrdinalTypeHandler"</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 		   javaType</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">=</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"com.yang.domain.UserStatus"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">/></span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">typeHandlers</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span></code></pre>
-<h2 id="15-plugins">1.5 plugins</h2>
+<h3 id="15-plugins">1.5 plugins</h3>
 <p>见 <strong>7. 插件</strong> 。</p>
-<h2 id="16-environments">1.6 environments</h2>
+<h3 id="16-environments">1.6 environments</h3>
 <p>作用：配置 MyBatis 环境，MyBatis 可以配置多种环境。</p>
 <p><strong><code>&#x3C;environments></code></strong> 标签属性：</p>
 <ul>
 <li>default：指定当前 MyBatis 使用的环境，可以达到快速切换环境</li>
 </ul>
 <p><mark class="flexible-marker flexible-marker-default">需要注意的是：</mark> <code>&#x3C;environments></code> 标签下需要包含的标签：<code>&#x3C;environment></code> 标签。而 <code>&#x3C;environment></code> 标签下需要包含 <code>&#x3C;transactionManager></code> 标签和 <code>&#x3C;dataSource></code> 标签。</p>
-<h2 id="17-environment">1.7 environment</h2>
+<h3 id="17-environment">1.7 environment</h3>
 <p>作用：配置一个具体的环境信息。这个标签下必须包含两个标签：<code>&#x3C;transactionManager></code>、<code>&#x3C;dataSource></code>。</p>
 <p><strong><code>&#x3C;environment></code></strong> 标签属性：</p>
 <ul>
 <li>id：指定当前环境的唯一标识</li>
 </ul>
-<h2 id="18-transactionmanager">1.8 transactionManager</h2>
+<h3 id="18-transactionmanager">1.8 transactionManager</h3>
 <p>作用：事物管理器。（了解）</p>
 <p><strong><code>&#x3C;transactionManager></code></strong> 标签属性：</p>
 <ul>
 <li>type：事物管理器的类型。值有两种选择：JDBC、MANAGED，这两个值其实是别名（分析源码可得）</li>
 </ul>
 <p>自定义事物管理器：实现 <code>TransactionFactory</code> 接口，type 属性指定为全类名。</p>
-<h2 id="19-datasource">1.9 dataSource</h2>
+<h3 id="19-datasource">1.9 dataSource</h3>
 <p>作用：配置数据源。</p>
 <p><strong><code>&#x3C;dataSource></code></strong> 标签属性：</p>
 <ul>
 <li>type：数据库类型。值有三种选择：UNPOOLED（不使用连接池）、POOLED（使用连接池）、JNDI，这三个值也是别名（分析源码可得）</li>
 </ul>
 <p>自定义数据源：实现 <code>DataSourceFactory</code> 接口，type 属性指定为全类名。</p>
-<h2 id="110-databaseidprovider">1.10 databaseIdProvider</h2>
+<h3 id="110-databaseidprovider">1.10 databaseIdProvider</h3>
 <p>作用：数据库厂商标识，用于支持多数据库厂商。</p>
 <p><strong><code>&#x3C;databaseIdProvider></code></strong> 标签属性：</p>
 <ul>
@@ -744,7 +744,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    select * from users where id = #{uid}</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">select</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span></code></pre>
 <p>假设当前数据库环境是 MySQL，同时需要根据员工的 id 来查询对应的员工，又假设在 SQL 映射文件中针对这个需求编写了两条 SQL 语句，一条没有添加数据库厂商标识，另一条添加了 MySQL 数据库厂商标识，MyBatis 在执行 SQL 语句时会 <strong>优先执行指定更加明确的语句</strong> ，即：添加了 MySQL 数据库厂商标识的 SQL 语句。</p>
-<h2 id="111-mappers">1.11 mappers</h2>
+<h3 id="111-mappers">1.11 mappers</h3>
 <p>作用：将 SQL 映射文件注册到全局配置文件中，将 SQL 映射文件和全局配置文件进行关联（ <mark class="flexible-marker flexible-marker-default">重要</mark> ）。</p>
 <p><code>&#x3C;mappers></code> 标签下可以包含多个 <code>&#x3C;mapper></code> 标签，<code>&#x3C;mapper></code> 标签可以关联一个 SQL 映射文件。<code>&#x3C;mappers></code> 标签下还可以包含一个 <code>&#x3C;package></code> 标签，以进行批量注册。</p>
 <p><strong><code>&#x3C;mapper></code></strong> 标签属性：</p>
@@ -768,12 +768,12 @@
 <li>name：SQL 映射文件（或接口）的包路径</li>
 </ul>
 <p><code>&#x3C;package></code> 标签中 name 属性使用规范：存在 SQL 映射文件时，映射文件必须和接口同名，并且放在与接口同一目录下。</p>
-<h2 id="112-标签书写顺序">1.12 标签书写顺序</h2>
+<h3 id="112-标签书写顺序">1.12 标签书写顺序</h3>
 <p><strong>MyBatis 全局配置文件中的标签顺序并不是任意的。</strong></p>
 <p>全局配置文件中可以不存在某些标签，但是存在的标签必须按照以下的先后顺序进行书写：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span>properties?, settings?, typeAliases?, typeHandlers?, objectFactory?, objectWrapperFactory?, reflectorFactory?, plugins?, environments?, databaseIdProvider?, mappers?</span></span></code></pre>
-<h1 id="2-获取主键值与参数处理">2. 获取主键值与参数处理</h1>
-<h2 id="21-sql-映射文件约束">2.1 SQL 映射文件约束</h2>
+<h2 id="2-获取主键值与参数处理">2. 获取主键值与参数处理</h2>
+<h3 id="21-sql-映射文件约束">2.1 SQL 映射文件约束</h3>
 <p>SQL 映射文件中保存了每一个 SQL 语句的信息（ <mark class="flexible-marker flexible-marker-default">必须</mark> ）。</p>
 <p>SQL 映射文件约束信息：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;?</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">xml</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> version</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">=</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"1.0"</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> encoding</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">=</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"UTF-8"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">?></span></span>
@@ -804,12 +804,12 @@
 <span class="line"><span></span></span>
 <span class="line"><span>dept table:</span></span>
 <span class="line"><span>id | deptName</span></span></code></pre>
-<h2 id="22-简单-crud">2.2 简单 CRUD</h2>
+<h3 id="22-简单-crud">2.2 简单 CRUD</h3>
 <p>在 MyBatis 中，允许增删改查直接定义以下类型的返回值：<code>Integer</code>、<code>Long</code>、<code>Boolean</code>、<code>void</code>。</p>
 <p>对于 Boolean 类型的返回值来说，如果执行增加、删除、修改等操作时影响了一行以上的数据，那么就会返回 <code>true</code>。</p>
 <p>在 Mybatis 中进行 CRUD 时，需要使用对应的标签，比如：<code>&#x3C;insert></code>、<code>&#x3C;delete></code>、<code>&#x3C;update></code> 和 <code>&#x3C;select></code>，在这些标签中都有一个名为 <code>parameterType</code> 的属性，这个属性是老式风格的参数映射，已被废弃，但是也可以使用，使用时指定参数类型的全类名或别名即可。既然这个属性已被废弃，因此 <strong>我们在编写时也可以不写这个属性</strong>。</p>
 <p><mark class="flexible-marker flexible-marker-default">在 SQL 映射文件中写 SQL 时，请不要在末尾写上分号！</mark></p>
-<h2 id="23-插入获取主键值">2.3 插入获取主键值</h2>
+<h3 id="23-插入获取主键值">2.3 插入获取主键值</h3>
 <blockquote><p>对于支持主键自增的数据库</p></blockquote>
 <p>例如，MySQL 数据库支持主键自增，MyBatis 可以利用 <code>statement.getGeneratedKeys()</code> 获取自增主键值。</p>
 <p>那么应该怎么做呢？</p>
@@ -847,7 +847,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">insert</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span></code></pre>
 <p>使用 <code>order = "AFTER"</code> 后插入语句的执行顺序是：先运行插入的 SQL 语句（从序列中取出新值作为 id），然后再运行 <code>&#x3C;selectKey></code> 标签中查询 id 的 SQL。</p>
 <p>实际使用中通常使用 BEFORE 方式，而不是 AFTER 方式，因为  AFTER 方式插入多条数据时会出现问题，插入多条数据时只能获取到最后一个主键值！</p>
-<h2 id="24-参数处理">2.4 参数处理</h2>
+<h3 id="24-参数处理">2.4 参数处理</h3>
 <p>使用 MyBatis 时，我们通常会编写若干个 Mapper 接口，每个 Mapper 接口还有与之对应的 SQL 映射文件。在 SQL 映射文件中获取接口中的参数时，似乎只用 <code>#{参数名}</code> 的方式就能够获取到。其实并不是这么简单，不同情况下参数的获取方式也不同。</p>
 <blockquote><p>单个参数</p></blockquote>
 <p>MyBatis <strong>不会做特殊处理</strong> ，直接使用 <code>#{参数名}</code> 即可取出参数值。</p>
@@ -881,7 +881,7 @@
 <p>POJO：如果多个参数恰好是我们业务逻辑的数据模型，我们可以在接口参数中直接传入实体类。然后在 SQL 映射文件中使用 <code>#{属性名}</code> 就可以取出传入的实体类的属性值。</p>
 <p>Map：如果传入的数据不是业务模型的数据，没有对应的 POJO，且不经常使用，我们可以传入 Map 集合。在 SQL 映射文件中使用 <code>#{key}</code> 就可取出 Map 集合中对应的 value 值。</p>
 <p>TO：如果多个参数不是业务模型中的数据，但需要经常使用，推荐编写一个 TO（Transfer, Object）数据传输对象。</p>
-<h2 id="25-参数处理思考">2.5 参数处理思考</h2>
+<h3 id="25-参数处理思考">2.5 参数处理思考</h3>
 <p>根据下列给出的接口，写出在 SQL 映射文件中获取参数的方式。</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> User</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> getUser</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">Param</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"id"</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">) </span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">Integer</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> id</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> String</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> username)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span></code></pre>
 <p>id：#{id} 或者 #{param1}</p>
@@ -898,7 +898,7 @@
 <li>对于数组来说，key 是 array</li>
 </ul>
 <p>因此，对于上述给出的接口，我们想在 SQL 映射文件中获取第一个 id 的值时，可以使用 <code>#{list[0]}</code> 进行获取。</p>
-<h2 id="26---和---的区别">2.6 #{ } 和 ${ } 的区别</h2>
+<h3 id="26---和---的区别">2.6 #{ } 和 ${ } 的区别</h3>
 <p>在 SQL 映射文件中获取参数值时可以使用 <code>#{ }</code> 和 <code>${ }</code> 来获取 Map 中的值或者 POJO 对象属性的值。</p>
 <blockquote><p>#{ } 和 ${ } 的区别</p></blockquote>
 <p>1、<code>#{ }</code> 采用 <strong>预编译</strong> 的形式，将参数添加到 SQL 语句中，类似 PreparedStatement，相当于 jdbc 的？。使用这种方式防止 SQL 注入，并会自动添加单引号。</p>
@@ -918,8 +918,8 @@
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">settings</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    &#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">setting</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> name</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> = </span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"jdbcTypeForNull"</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> value</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> = </span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"NULL"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">/></span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">settings</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span></code></pre>
-<h1 id="3-select-标签">3. select 标签</h1>
-<h2 id="31-resulttype">3.1 resultType</h2>
+<h2 id="3-select-标签">3. select 标签</h2>
+<h3 id="31-resulttype">3.1 resultType</h3>
 <p>使用 <code>&#x3C;select></code> 标签进行数据查询时，通常需要设置这个标签的两个属性：</p>
 <ul>
 <li>一个属性是 id，值是 Mapper 接口中的方法名</li>
@@ -942,7 +942,7 @@
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">select</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> id</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">=</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"getUserByUsernameLikeReturnMap"</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> resultType</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">=</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"com.yang.pojo.User"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    select * from user where username like #{username}</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">select</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span></code></pre>
-<h2 id="32-resultmap">3.2 resultMap</h2>
+<h3 id="32-resultmap">3.2 resultMap</h3>
 <p><strong>这个标签用于数据库字段名与自定义的 JavaBean 属性名不同的场合</strong> ，比如：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> User</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> findUserById</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> (</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">Integer</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> id)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span></code></pre>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span><span class="code-line-number">13</span><span class="code-line-number">14</span><span class="code-line-number">15</span><span class="code-line-number">16</span><span class="code-line-number">17</span><span class="code-line-number">18</span><span class="code-line-number">19</span><span class="code-line-number">20</span></span><code><span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">&#x3C;!-- 自定义某个JavaBean的封装规则</span></span>
@@ -965,7 +965,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">select</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> id</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> = </span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"findUserById"</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> resultMap</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> = </span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"MyUser"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    select * from user where id = #{id}</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">select</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span></code></pre>
-<h2 id="33-关联查询">3.3 关联查询</h2>
+<h3 id="33-关联查询">3.3 关联查询</h3>
 <blockquote><p>场景一</p></blockquote>
 <p><strong>查询用户的同时查询用户所在的部门</strong> （级联属性封装结果集）。</p>
 <p>在 Mapper 接口中的方法如下：</p>
@@ -1119,7 +1119,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    SELECT id, deptName FROM dept WHERE id = #{id}</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">select</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
 <span class="line"></span></code></pre>
-<h2 id="34-模糊查询">3.4 模糊查询</h2>
+<h3 id="34-模糊查询">3.4 模糊查询</h3>
 <p>在 <code>DepartmentMapper</code> 接口中新增一个抽象方法：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span></span><code><span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">/**</span></span>
 <span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic"> * 根据用户模糊查询用户信息</span></span>
@@ -1131,7 +1131,7 @@
 <span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">    &#x3C;!-- select * from user where username like concat('%', #{username}, '%') --></span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    select * from user where username like "%"#{username}"%"</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">select</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span></code></pre>
-<h2 id="35-拓展">3.5 拓展</h2>
+<h3 id="35-拓展">3.5 拓展</h3>
 <p><code>&#x3C;collection></code> 标签中的 column 属性需要传递多列的值时，可以将多列的值封装换成 Map 进行传递，那么 column 可以这么写：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span>column= "{key1 = column1, key2 = column2}"</span></span></code></pre>
 <p>因此上文中，<code>&#x3C;collection></code> 标签中的 column 属性值也可以改写为：</p>
@@ -1174,8 +1174,8 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">select</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> id</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> = </span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"getUserByIdStep"</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> resultMap</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> = </span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"MyUserDis"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">	SELECT * FROM user WHERE id = #{id}</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">select</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span></code></pre>
-<h1 id="4-动态-sql">4. 动态 SQL</h1>
-<h2 id="41-动态-sql-简介">4.1 动态 SQL 简介</h2>
+<h2 id="4-动态-sql">4. 动态 SQL</h2>
+<h3 id="41-动态-sql-简介">4.1 动态 SQL 简介</h3>
 <p>动态 SQL 是 MyBatis 强大的特性之一，极大的简化了我们拼接 SQL 的操作。如果条件很多，使用原生的方式拼接 SQL 简直就是煎熬！😡</p>
 <p>动态 SQL 元素和使用 JSTL 或其他类似基于 XML 的文本处理器相似。</p>
 <p>MyBatis 采用功能强大的基于 OGNL 表达式来简化操作：</p>
@@ -1187,7 +1187,7 @@
 </ul>
 <blockquote><p>涉及的文件</p></blockquote>
 <p>在本节中，Mapper 接口名为 <code>UserMapperDynamicSQL</code>，对应的 SQL 映射文件名为 <code>UserMapperDynamicSQL</code>，这两个文件都位于 <code>com.yang.dao.UserMapper</code> 包下。</p>
-<h2 id="42-条件判断">4.2 条件判断</h2>
+<h3 id="42-条件判断">4.2 条件判断</h3>
 <p>现在有一个需求：根据传递的信息查询对应的用户，这些信息可能是多个或没有，如果没有时，就查询出全部用户。</p>
 <p>Mapper 接口的抽象方法如下：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span></span><code><span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// 携带了那个字段查询条件就带上这个字段的值</span></span>
@@ -1250,7 +1250,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">select</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span></code></pre>
 <p><mark class="flexible-marker flexible-marker-default">但需要注意的是：</mark> <code>&#x3C;where></code> 标签只会去掉首位多出来的 and 或者 or，不会去掉末尾的 and 或 or。</p>
 <p>但是有些小机灵鬼就喜欢将 and 或者 or 写在末尾，那应该怎么办呢？</p>
-<h2 id="43-字符串截取">4.3 字符串截取</h2>
+<h3 id="43-字符串截取">4.3 字符串截取</h3>
 <p>如果只使用 <code>&#x3C;where></code> 标签是无法解决拼接 SQL 末尾多余的 and 或 or，在 MyBatis 中，可以使用 <code>&#x3C;trim></code> 标签来解决这个问题。</p>
 <p>使用 <code>&#x3C;trim></code> 标签后得到的 SQL 语句是 <code>&#x3C;trim></code> 标签体中整个字符串拼串后的结果。</p>
 <p><code>&#x3C;trim></code> 标签提供了 4 个属性用于规范拼串得到的 SQL 语句：</p>
@@ -1279,7 +1279,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">select</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span></code></pre>
 <p>Mapper 接口的抽象方法如下：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> List</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">&#x3C;</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">User</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">></span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> getUsersByConditionTrim</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">User</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> user)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span></code></pre>
-<h2 id="44-分支选择">4.4 分支选择</h2>
+<h3 id="44-分支选择">4.4 分支选择</h3>
 <p>在 Java 语言中，用于条件判断的关键字是 <code>if</code>，还有一些用于分支选择的关键字 <code>switch</code>、<code>case</code> 和 <code>default</code>，在 MyBatis 的动态 SQL 中，也提供了分支选择的标签：<code>&#x3C;choose></code>、<code>&#x3C;when></code> 和 <code>&#x3C;otherwise></code>。</p>
 <p>假设现在有一个需求：根据携带的条件（id、username、email）在用户表中查询用户信息，携带的条件只能使用一个。如果没有携带任何条件，就查询性别为女（gender = 0）的用户。</p>
 <p>Mapper 接口的抽象方法如下：</p>
@@ -1310,7 +1310,7 @@
 <p><code>switch</code> 和 <code>case</code> 组成一个条件选择语句，找到相同的 <code>case</code> 值做为入口，执行后面的程序；若所有的 <code>case</code> 都不满足，则找 <code>default</code> 入口；若未找到则退出整个 <code>switch </code>。所以 <code>default</code> 只是一个备用的入口，有没有都无所谓。</p>
 <p>不写 <code>default</code> 是建立在自己书写的条件已经包含了所有情况下，为了程序逻辑的完整性，建议写上 <code>default</code>。</p>
 <p>PS：在阿里巴巴的代码规范中，<code>switch</code> 和 <code>case</code> 后强制要求书写 <code>default</code>。</p>
-<h2 id="45-封装修改条件">4.5 封装修改条件</h2>
+<h3 id="45-封装修改条件">4.5 封装修改条件</h3>
 <p><code>&#x3C;where></code> 标签用于封装查询条件，而 <code>&#x3C;set></code> 标签可用于封装修改条件。</p>
 <p>在查询数据时，可能会存在多出的 and 或 or，我们可以使用 <code>&#x3C;where></code> 或 <code>&#x3C;trim></code> 来解决。</p>
 <p>在更新数据时，可能会存在多出的逗号，那么可以使用 <code>&#x3C;set></code> 或 <code>&#x3C;where></code> 来解决。</p>
@@ -1333,7 +1333,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    where id = #{id}</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">update</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span></code></pre>
 <p>除了使用 <code>&#x3C;set></code> 标签来解决多余的逗号外，还可以使用 <code>&#x3C;trim></code> 标签，使用该标签中的 <code>suffixOverrides</code> 属性，将其值指定为 <code>,</code> 即可。</p>
-<h2 id="46-遍历">4.6 遍历</h2>
+<h3 id="46-遍历">4.6 遍历</h3>
 <p>现在有一个需求：接口的抽象方法接收到一个包含了多个 id 的 List 集合，需要从数据库中查询这些这些 id 对应的用户信息。</p>
 <p>我们可以将每个 id 一一取出来，然后进行查询，这个时候就需要用到 MyBatis 中的遍历了，需要用到 <code>&#x3C;foreach></code> 标签。</p>
 <blockquote><p>具体使用</p></blockquote>
@@ -1361,7 +1361,7 @@
 <p>在 <code>&#x3C;foreach></code> 标签中，collection 属性是必选的，表示需要进行遍历的对象。该属性的属性值一般是接口抽象方法中的需要被遍历的参数。</p>
 <p>如果这个参数是 List 对象，默认用 “list” 代替作为键；如果这个参数是数组，默认用 “array” 代替作为键。这两个默认值相当于 MyBatis 内置的别名。</p>
 <p>在作为入参时还可以使用 <code>@Param("keyName")</code> 来设置键，设置 keyName 后，两个默认值 list 和 array 将会失效。</p>
-<h2 id="47-mysql-批量保存">4.7 MySQL 批量保存</h2>
+<h3 id="47-mysql-批量保存">4.7 MySQL 批量保存</h3>
 <p>在 MySQL 环境下，使用 MyBatis 实现批量保存可以使用 <code>&#x3C;foreach></code> 进行遍历，MySQL 支持以下语法：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="sql" data-language-name="SQL"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> values</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(), (), () </span></span></code></pre>
 <p>Mapper 接口的抽象方法如下：</p>
@@ -1378,7 +1378,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">insert</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span></code></pre>
 <p>除此之外，还可以执行多条 SQL 语句，这些 SQL 语句使用分号进行隔开。</p>
 <p>MySQL 下允许在一条语句中使用 <strong>分号</strong> 来分割多条查询，但这个功能默认是关闭的，开启这个功能需要在 jdbc.url（数据库连接属性） 中添加设置 <code>allowMultQueries = true</code>。</p>
-<h2 id="48-其他">4.8 其他</h2>
+<h3 id="48-其他">4.8 其他</h3>
 <blockquote><p>MyBatis 默认内置参数</p></blockquote>
 <p>1、_parameter：代表整个参数体</p>
 <ul>
@@ -1404,9 +1404,9 @@
 <p>1、<code>&#x3C;include refid="insertColumn"/></code></p>
 <p>2、还可以在 <code>&#x3C;include></code> 标签中定义一个 <code>&#x3C;property></code> 标签，用于自定义属性。</p>
 <p>3、include-property 取值的正确方式是 <code>${prop}</code>，不能使用 <code>#{ }</code> 取值。</p>
-<h1 id="5-缓存">5. 缓存</h1>
+<h2 id="5-缓存">5. 缓存</h2>
 <p>MyBatis 包含一个非常强大的查询缓存特性，它可以非常方便地进行配置和定制。缓存可以极大的提升查询效率。</p>
-<h2 id="51-一级缓存">5.1 一级缓存</h2>
+<h3 id="51-一级缓存">5.1 一级缓存</h3>
 <p>一级缓存又被称为本地缓存，属于 SqlSession 级别的缓存，一级缓存是 <strong>一直开启，不可被关闭的</strong> 。与数据库同一次会话期间查询到的数据会被放到本地缓存中，以后如果需要获取相同的数据，直接从缓存中拿，不会再去查询数据库。通常只有在单机的情况下才有效，集群情况下会有数据不一致的问题。</p>
 <blockquote><p>一级缓存失效的情况</p></blockquote>
 <p>所谓一级缓存失效，就是在获取相同的数据时还需要向数据库发出查询请求。</p>
@@ -1437,7 +1437,7 @@
 <p>控制台打印结果：</p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SSMImages/%E6%89%8B%E5%8A%A8%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%80%E7%BA%A7%E7%BC%93%E5%AD%98%E4%B8%8D%E5%A4%B1%E6%95%88.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SSMImages/%E6%89%8B%E5%8A%A8%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%80%E7%BA%A7%E7%BC%93%E5%AD%98%E4%B8%8D%E5%A4%B1%E6%95%88.png" alt="手动修改数据库一级缓存不失效" data-responsive-image="true"></picture></p>
 <p>可以看到整个过程只执行了一条 SQL，两次查询得到的对象也是同一个，证明手动修改数据库不会令一级缓存失效。</p>
-<h2 id="52-二级缓存">5.2 二级缓存</h2>
+<h3 id="52-二级缓存">5.2 二级缓存</h3>
 <p>二级缓存又称为全局缓存，基于 namespace 级别的缓存，一个 namespace 对应一个二级缓存，同时一个 namespace 也对应了一个 SQL 映射文件。</p>
 <blockquote><p>工作机制</p></blockquote>
 <p>1、一个会话：查询一条数据，这个数据就会被放到当前会话的 <strong>一级缓存</strong> 中</p>
@@ -1484,7 +1484,7 @@
 <ul>
 <li>注意：查出的数据都会默认先放到一级缓存中，只有会话提交或关闭后，一级缓存中的数据才会转移到二级缓存</li>
 </ul>
-<h2 id="53-相关设置与属性">5.3 相关设置与属性</h2>
+<h3 id="53-相关设置与属性">5.3 相关设置与属性</h3>
 <p>全局配置文件中 <code>&#x3C;setting></code> 标签中的 cacheEnabled：设置为 false 时，关闭二级缓存，一级缓存一直可用且不可被关闭。</p>
 <p>每个 <code>&#x3C;select></code> 标签默认都有一个 <code>useCache="true"</code> 属性。这个属性设置为 false 时，不使用二级缓存，但一级缓存依然可用。</p>
 <p>每个增删改标签中 <strong>默认</strong> 都有 flushCache=“true”，表示执行增删改后 <strong>一、二级缓存都被清空</strong> 。</p>
@@ -1497,7 +1497,7 @@
 </ul>
 <p>缓存的顺序：二级缓存 —> 一级缓存 —> 数据库</p>
 <p><strong>SqlSession 关闭之后，一级缓存中数据会写入二级缓存</strong>。</p>
-<h2 id="54-整合-ehcache">5.4 整合 EhCache</h2>
+<h3 id="54-整合-ehcache">5.4 整合 EhCache</h3>
 <p>PS：了解即可，这年头谁还用这玩意啊，都用 Redis 了  😏</p>
 <p>首先需要在 pom.xml 中导入相关依赖：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span></span><code><span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">&#x3C;!-- https://mvnrepository.com/artifact/org.mybatis.caches/mybatis-ehcache --></span></span>
@@ -1542,9 +1542,9 @@
 <p>如果每个 SQL 映射文件都要使用 EhCache，那岂不是每次都要写一遍 <code>&#x3C;cache>&#x3C;/cache></code>，这里还有一个标签：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">cache-ref</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> namespace</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">=</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"com.yang.dao.IUserDao"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">/></span></span></code></pre>
 <p>这个标签表示引用缓存，它有一个名为 <code>namespace</code> 的属性，可以通过这个属性指定当前 SQL 映射文件使用的缓存和哪个名称空间下的缓存一样。</p>
-<h1 id="6-运行原理">6. 运行原理</h1>
+<h2 id="6-运行原理">6. 运行原理</h2>
 <blockquote><p>以「根据员工 ID 查询员工信息」为例：</p></blockquote>
-<h2 id="61-执行流程">6.1 执行流程</h2>
+<h3 id="61-执行流程">6.1 执行流程</h3>
 <p>1、读取配置文件</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">InputStream</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> in </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B"> Resources</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">getResourceAsStream</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"SqlMapConfig.xml"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span></span></code></pre>
 <p>2、创建 <code>SqlSessionFactory</code> 工厂</p>
@@ -1560,27 +1560,27 @@
 <p>6、释放资源</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span></span><code><span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">sqlSession</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">close</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">();</span></span>
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">in</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">close</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">();</span></span></code></pre>
-<h2 id="62-sqlsessionfactory-初始化">6.2 SqlSessionFactory 初始化</h2>
+<h3 id="62-sqlsessionfactory-初始化">6.2 SqlSessionFactory 初始化</h3>
 <blockquote><p>执行流程</p></blockquote>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SSMImages/initializeSqlSessionFactory.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SSMImages/initializeSqlSessionFactory.png" alt="initializeSqlSessionFactory" data-responsive-image="true"></picture></p>
 <p><code>MappedStatement</code>：一个 MappedStatement 就代表 SQL 映射文件中一个增删改查的详细信息。</p>
 <p>Configuration 对象封装了所有配置文件的详细信息。</p>
 <p><strong>总结：</strong> 把配置文件的信息解析并保存在 Configuration 对象中，返回包含了 Configuration 的 DefaultSqlSessionFactory 对象。</p>
-<h2 id="63-opensession-获取-sqlsession-对象">6.3 openSession 获取 SqlSession 对象</h2>
+<h3 id="63-opensession-获取-sqlsession-对象">6.3 openSession 获取 SqlSession 对象</h3>
 <blockquote><p>执行流程</p></blockquote>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SSMImages/getSqlSession.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SSMImages/getSqlSession.png" alt="getSqlSession" data-responsive-image="true"></picture></p>
 <p><strong>总结：</strong> 返回 SqlSession 的实现类 DefaultSqlSession 对象，它里面包含了 Executor 和 Configuration，四大对象中的 <strong>Executor</strong> 会在这一步被创建。</p>
 <p>SqlSession 和 JDBC 中的 Connection 一样，是 <strong>非线程安全</strong> 的，不能将 SqlSession 写成一个成员变量，SqlSession 代表和数据库的一次对话，每次使用都应该去重新获取，用完后必须关闭。</p>
-<h2 id="64-getmapper-获取接口代理对象">6.4 getMapper 获取接口代理对象</h2>
+<h3 id="64-getmapper-获取接口代理对象">6.4 getMapper 获取接口代理对象</h3>
 <blockquote><p>执行流程：</p></blockquote>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SSMImages/getObject.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SSMImages/getObject.png" alt="getObject" data-responsive-image="true"></picture></p>
 <p><strong>总结：</strong> getMapper 使用 MapperProxyFactory 创建一个 MapperProxy 的代理对象，这个代理对象包含了 DefaultSqlSession（Executor）对象。</p>
-<h2 id="65-查询实现">6.5 查询实现</h2>
+<h3 id="65-查询实现">6.5 查询实现</h3>
 <blockquote><p>执行流程</p></blockquote>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SSMImages/queryProcess.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SSMImages/queryProcess.png" alt="queryProcess" data-responsive-image="true"></picture></p>
 <blockquote><p>查询流程总结</p></blockquote>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SSMImages/processSummary.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SSMImages/processSummary.png" alt="processSummary" data-responsive-image="true"></picture></p>
-<h2 id="66-原理总结">6.6 原理总结</h2>
+<h3 id="66-原理总结">6.6 原理总结</h3>
 <p>1、根据配置文件（全局配置文件、SQL 映射文件）初始化 Configuration 对象</p>
 <p>2、创建一个 DefaultSqlSession 对象，里面包含 Configuration 以及 Executor（根据全局配置文件中的 defaultExecutorType 创建出对应的 Executor）</p>
 <p>3、DefaultSqlSession.getMapper()：拿到 Mapper 接口对应的 MapperProxy</p>
@@ -1604,14 +1604,14 @@
 </li>
 </ul>
 <p>6、注意：每个四大对象创建的时候都有一个 <code>interceptorChain.pluginAll(parameterHandler)</code></p>
-<h1 id="7-插件">7. 插件</h1>
-<h2 id="71-插件原理">7.1 插件原理</h2>
+<h2 id="7-插件">7. 插件</h2>
+<h3 id="71-插件原理">7.1 插件原理</h3>
 <p>MyBatis 四大对象创建的时候：</p>
 <p>1、每个创建出来的对象不是直接返回的，而是调用 <code>interceptorChain.pluginAll(parameterHandler)</code> 后返回的</p>
 <p>2、pluginAll() 可以获取所有的 interceptor（拦截器）（插件需要实现的接口），调用 <code>interceptor.plugin(target);</code> 返回 target 包装后的对象</p>
 <p>插件机制：我们可以使用插件为目标对象创建一个代理对象（类似 AOP）。</p>
 <p>我们的插件可以为四大对象创建出代理对象，代理对象可以拦截到四大对象的每一个执行。</p>
-<h2 id="72-插件编写">7.2 插件编写</h2>
+<h3 id="72-插件编写">7.2 插件编写</h3>
 <blockquote><p>编写流程</p></blockquote>
 <p>1、编写 <code>Interceptor</code> 的实现类</p>
 <p>2、使用 <code>@Intercepts</code> 注解完成插件签名</p>
@@ -1695,8 +1695,8 @@
 <li>执行目标方法后，按照 <strong>逆向顺序</strong> 执行。（感觉和栈有点像？😳）</li>
 </ul>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SSMImages/%E5%A4%9A%E4%B8%AA%E6%8F%92%E4%BB%B6%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SSMImages/%E5%A4%9A%E4%B8%AA%E6%8F%92%E4%BB%B6%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F.png" alt="多个插件执行顺序" data-responsive-image="true"></picture></p>
-<h1 id="8-其他">8. 其他</h1>
-<h2 id="81-日志">8.1 日志</h2>
+<h2 id="8-其他">8. 其他</h2>
+<h3 id="81-日志">8.1 日志</h3>
 <p>使用日志：</p>
 <p>在全局配置文件中添加（以使用 <code>STDOUT_LOGGING</code> 为例）：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">configuration</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
@@ -1714,7 +1714,7 @@
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">logger</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">debug</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"xxxx"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span></span>
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">logger</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">error</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"xxxx"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">...</span></span></code></pre>
-<h2 id="82-分页">8.2 分页</h2>
+<h3 id="82-分页">8.2 分页</h3>
 <p><strong>方法一：</strong> SQL 语句使用 limit 子句：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="sql" data-language-name="SQL"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">select</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> * </span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">from</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> tableName </span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">limit</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> i,n</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"># tableName：表名</span></span>
@@ -1724,7 +1724,7 @@
 <span class="line"></span>
 <span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">limit</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> n 等同于 </span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">limit</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 0</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,n</span></span></code></pre>
 <p><strong>方法二：</strong> 使用 PageHelper 插件进行分页（项目中需要先导入相关依赖）：<a href="https://pagehelper.github.io/" target="_blank" rel="noopener noreferrer">PageHelper官网</a></p>
-<h2 id="83-批量">8.3 批量</h2>
+<h3 id="83-批量">8.3 批量</h3>
 <p>为什么要批量执行？数据库无法接收太长的拼接 SQL 语句，因此需要批量执行。</p>
 <p>批量与非批量的比较（假设插入 1w 条数据）：</p>
 <ul>
@@ -1736,9 +1736,9 @@
 <span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">//true表示自动提交事务</span></span>
 <span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">SqlSession</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> sqlSession </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B"> factory</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">openSession</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">ExecutorType</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">BATCH</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">true</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span></span></code></pre>
 <p>与 Spring 整合时参考视频：<a href="https://www.bilibili.com/video/BV1bb411A7bD?p=84" target="_blank" rel="noopener noreferrer">尚硅谷 MyBatis 3.x P84</a></p>
-<h2 id="84-存储过程">8.4 存储过程</h2>
+<h3 id="84-存储过程">8.4 存储过程</h3>
 <p>参考视频：<a href="https://www.bilibili.com/video/BV1bb411A7bD?p=85" target="_blank" rel="noopener noreferrer">尚硅谷 MyBatis 3.x P85</a></p>
-<h2 id="85-处理枚举类型">8.5 处理枚举类型</h2>
+<h3 id="85-处理枚举类型">8.5 处理枚举类型</h3>
 <blockquote><p>准备</p></blockquote>
 <p>假设原始数据库用户表中再添加一列 userStatus，用于保存用户的状态，最终用户表形式为：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span></span><code><span class="line"><span>user table:</span></span>
@@ -1762,7 +1762,7 @@
 <blockquote><p>总结</p></blockquote>
 <p>进行测试后发现，MyBatis 默认使用的是 <code>EnumTypeHandler</code>，保存到数据库的是枚举名。</p>
 <p>按照 <strong>1.4 typeHandlers</strong> 更改使用的类后，保存到数据库的枚举的索引（索引从 0 开始）。</p>
-<h2 id="86-自定义类型处理器">8.6 自定义类型处理器</h2>
+<h3 id="86-自定义类型处理器">8.6 自定义类型处理器</h3>
 <p>在 <strong>8.5 处理枚举类型</strong> 的基础上进行修改，使数据库保存的是我们自定义的状态码，最后返回的是枚举名：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span><span class="code-line-number">13</span><span class="code-line-number">14</span><span class="code-line-number">15</span><span class="code-line-number">16</span><span class="code-line-number">17</span><span class="code-line-number">18</span><span class="code-line-number">19</span><span class="code-line-number">20</span><span class="code-line-number">21</span><span class="code-line-number">22</span><span class="code-line-number">23</span><span class="code-line-number">24</span><span class="code-line-number">25</span><span class="code-line-number">26</span><span class="code-line-number">27</span><span class="code-line-number">28</span><span class="code-line-number">29</span><span class="code-line-number">30</span><span class="code-line-number">31</span><span class="code-line-number">32</span><span class="code-line-number">33</span><span class="code-line-number">34</span><span class="code-line-number">35</span><span class="code-line-number">36</span><span class="code-line-number">37</span><span class="code-line-number">38</span><span class="code-line-number">39</span><span class="code-line-number">40</span><span class="code-line-number">41</span><span class="code-line-number">42</span><span class="code-line-number">43</span><span class="code-line-number">44</span><span class="code-line-number">45</span><span class="code-line-number">46</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">package</span><span style="--shiki-light:#383A42;--shiki-dark:#C678DD"> com.yang.domain</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
 <span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">/**</span></span>
@@ -1858,7 +1858,7 @@
 <span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">          注意：如果在参数位置修改TypeHandler，应该保证保存数据和查询数据用的TypeHandler是一样的。</span></span>
 <span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">    --></span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">typeHandlers</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span></code></pre>
-<p>经过上面的编写后，可以让枚举保存到数据库的数据是自定义的状态码，而不是枚举从 0 开始的索引。</p> </article> <div class="text-muted-foreground max-w-app mt-20 w-full space-y-3 text-center text-sm" data-astro-cid-7ap3hmvm> <aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full px-2 text-center leading-6 sm:px-0"> <p class="m-0 break-words"> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a><span> 许可协议，</span><span class="max-sm:block">转载时请署名并注明<a href="https://mofan212.github.io/posts/learning-mybatis-from-0/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a> 🔗</span> </p> </aside> <section data-post-reward data-pagefind-ignore class="w-full" aria-label="赞赏"> <div class="flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:flex-wrap sm:gap-x-1.5 sm:gap-y-2"> <span class="sm:whitespace-nowrap">如果这篇文章对你有帮助，可以通过</span> <a href="/reward/" class="focus-outline border-accent text-accent hover:bg-accent/10 active:bg-accent/10 inline-block rounded-md border px-3 py-1 font-medium transition-colors"> 赞赏 </a> <span class="sm:whitespace-nowrap">请我喝杯 Coffee ☕</span> </div> </section> </div> <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm>  <ul id="post-tags" class="mt-4 mb-8 flex flex-wrap gap-4 sm:mb-8" data-astro-cid-7ap3hmvm> <li> <a href="/tags/mybatis/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> MyBatis </a> </li> </ul>  <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/install-hbase/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.3l105.3-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg> <div> <span>上一篇</span> <div class="text-accent/85 text-sm">HBase的安装</div> </div> </a> <a href="/posts/learning-springmvc-from-0/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>下一篇</span> <div class="text-accent/85 text-sm">从 0 开始的 SpringMVC 学习</div> </div> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg> </a> </div> </main> <footer class="app-layout mt-auto" data-astro-cid-7ap3hmvm="true"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="text-muted-foreground my-2 flex w-fit flex-col items-start text-start text-sm whitespace-nowrap"> <div class="flex items-center gap-1.5"> <svg width="24" height="24" fill="currentColor" class="size-4" viewBox="-49.231 -39.385 738.462 590.769" aria-hidden="true"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9-.1-2.7-.2-5.4-.2-8.1 0-88.4 71.6-160 160-160 59.3 0 111 32.2 138.7 80.2A95.5 95.5 0 0 1 448 96c53 0 96 43 96 96 0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39L296 392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0z" /></svg> <span>最近更新：</span> <time class="tabular-nums" datetime="2026-10-21T03:16:11.000Z" data-deployed-at="2026-10-21T03:16:11.000Z" data-just-now="刚刚" data-locale="zh-CN"> 2026-10-21 11:16 </time> </div> <div class="mt-1 flex items-center gap-3 text-xs"> <span class="flex items-center gap-1" title="本站访客数"> <svg width="24" height="24" fill="currentColor" class="size-3" viewBox="-2.835 -3.241 453.671 518.481" aria-hidden="true"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3z" /></svg> <span class="sr-only">本站访客数：</span> <span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> <span aria-hidden="true">|</span> <span class="flex items-center gap-1.5" title="本站总浏览量"> <span class="flex size-4 items-center justify-center" aria-hidden="true"> <svg width="24" height="24" fill="currentColor" class="size-3.5" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48zM0 272c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v160c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zM368 96h32c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48" /></svg> </span> <span class="sr-only">本站总浏览量：</span> <span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> </div> </div> <div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"> <span>版权所有 &#169; 2020 – 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer> <script>
+<p>经过上面的编写后，可以让枚举保存到数据库的数据是自定义的状态码，而不是枚举从 0 开始的索引。</p> </article> <div class="text-muted-foreground max-w-app mt-20 w-full space-y-3 text-center text-sm" data-astro-cid-7ap3hmvm> <aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full px-2 text-center leading-6 sm:px-0"> <p class="m-0 break-words"> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a><span> 许可协议，</span><span class="max-sm:block">转载时请署名并注明<a href="https://mofan212.github.io/posts/learning-mybatis-from-0/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a> 🔗</span> </p> </aside> <section data-post-reward data-pagefind-ignore class="w-full" aria-label="赞赏"> <div class="flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:flex-wrap sm:gap-x-1.5 sm:gap-y-2"> <span class="sm:whitespace-nowrap">如果这篇文章对你有帮助，可以通过</span> <a href="/reward/" class="focus-outline border-accent text-accent hover:bg-accent/10 active:bg-accent/10 inline-block rounded-md border px-3 py-1 font-medium transition-colors"> 赞赏 </a> <span class="sm:whitespace-nowrap">请我喝杯 Coffee ☕</span> </div> </section> </div> <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm>  <ul id="post-tags" class="mt-4 mb-8 flex flex-wrap gap-4 sm:mb-8" data-astro-cid-7ap3hmvm> <li> <a href="/tags/mybatis/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> MyBatis </a> </li> </ul>  <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/install-hbase/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.3l105.3-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg> <div> <span>上一篇</span> <div class="text-accent/85 text-sm">HBase的安装</div> </div> </a> <a href="/posts/learning-springmvc-from-0/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>下一篇</span> <div class="text-accent/85 text-sm">从 0 开始的 SpringMVC 学习</div> </div> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg> </a> </div> </main> <footer class="app-layout mt-auto" data-astro-cid-7ap3hmvm="true"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="text-muted-foreground my-2 flex w-fit flex-col items-start text-start text-sm whitespace-nowrap"> <div class="flex items-center gap-1.5"> <svg width="24" height="24" fill="currentColor" class="size-4" viewBox="-49.231 -39.385 738.462 590.769" aria-hidden="true"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9-.1-2.7-.2-5.4-.2-8.1 0-88.4 71.6-160 160-160 59.3 0 111 32.2 138.7 80.2A95.5 95.5 0 0 1 448 96c53 0 96 43 96 96 0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39L296 392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0z" /></svg> <span>最近更新：</span> <time class="tabular-nums" datetime="2026-10-22T08:22:01.000Z" data-deployed-at="2026-10-22T08:22:01.000Z" data-just-now="刚刚" data-locale="zh-CN"> 2026-10-22 16:22 </time> </div> <div class="mt-1 flex items-center gap-3 text-xs"> <span class="flex items-center gap-1" title="本站访客数"> <svg width="24" height="24" fill="currentColor" class="size-3" viewBox="-2.835 -3.241 453.671 518.481" aria-hidden="true"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3z" /></svg> <span class="sr-only">本站访客数：</span> <span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> <span aria-hidden="true">|</span> <span class="flex items-center gap-1.5" title="本站总浏览量"> <span class="flex size-4 items-center justify-center" aria-hidden="true"> <svg width="24" height="24" fill="currentColor" class="size-3.5" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48zM0 272c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v160c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zM368 96h32c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48" /></svg> </span> <span class="sr-only">本站总浏览量：</span> <span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> </div> </div> <div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"> <span>版权所有 &#169; 2020 – 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer> <script>
   (() => {
     const updateDeploymentTimes = () => {
       document.querySelectorAll("[data-deployed-at]").forEach(element => {
@@ -1907,4 +1907,4 @@
     document.addEventListener("astro:page-load", updateDeploymentTimes);
     window.setInterval(updateDeploymentTimes, 60_000);
   })();
-</script>    <script type="module" src="/_astro/Layout.astro_astro_type_script_index_0_lang.DQQu8RqY.js"></script> <script type="module" src="/_astro/Layout.astro_astro_type_script_index_1_lang.DRvjezMo.js"></script> </body> </html>  <script type="module" src="/_astro/index.astro_astro_type_script_index_0_lang.Oly9xh_g.js"></script>
+</script>    <script type="module" src="/_astro/Layout.astro_astro_type_script_index_0_lang.BrDp0sUM.js"></script> <script type="module" src="/_astro/Layout.astro_astro_type_script_index_1_lang.DRvjezMo.js"></script> </body> </html>  <script type="module" src="/_astro/index.astro_astro_type_script_index_0_lang.Oly9xh_g.js"></script>

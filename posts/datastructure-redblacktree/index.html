@@ -1,4 +1,4 @@
-<!DOCTYPE html><html dir="ltr" lang="zh-CN" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/datastructure-redblacktree/"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.3.0/400.css"><link rel="preconnect" href="https://busuanzi.ibruce.info"><meta name="generator" content="Astro v6.4.2"><!-- Primary meta --><title>数据结构之红黑树 | Mofan</title><meta name="title" content="数据结构之红黑树 | Mofan"><meta name="description" content="HashMap 解决哈希冲突使用的红黑树是长什么样子的？一起来看看吧。"><meta name="author" content="默烦"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Mofan"><meta property="og:title" content="数据结构之红黑树 | Mofan"><meta property="og:description" content="HashMap 解决哈希冲突使用的红黑树是长什么样子的？一起来看看吧。"><meta property="og:url" content="https://mofan212.github.io/posts/datastructure-redblacktree/"><meta property="og:image" content="https://mofan212.github.io/default-og.jpg"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://mofan212.github.io/posts/datastructure-redblacktree/"><meta property="twitter:title" content="数据结构之红黑树 | Mofan"><meta property="twitter:description" content="HashMap 解决哈希冲突使用的红黑树是长什么样子的？一起来看看吧。"><meta property="twitter:image" content="https://mofan212.github.io/default-og.jpg"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Mofan" href="https://mofan212.github.io/rss.xml"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2020-07-19T00:00:00.000Z"><meta property="article:modified_time" content="2020-11-08T00:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"数据结构之红黑树 | Mofan","url":"https://mofan212.github.io/posts/datastructure-redblacktree/","mainEntityOfPage":"https://mofan212.github.io/posts/datastructure-redblacktree/","datePublished":"2020-07-19T00:00:00.000Z","dateModified":"2020-11-08T00:00:00.000Z","author":[{"@type":"Person","name":"默烦","url":"https://github.com/mofan212"}]}</script> <!--
+<!DOCTYPE html><html dir="ltr" lang="zh-CN" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/datastructure-redblacktree/"><link rel="preconnect" href="https://npm.elemecdn.com"><link rel="preconnect" href="https://gcore.jsdelivr.net"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/lxgwwenkaiscreen.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.3.0/400.css"><link rel="preconnect" href="https://busuanzi.ibruce.info"><meta name="generator" content="Astro v6.4.2"><!-- Primary meta --><title>数据结构之红黑树 | Mofan</title><meta name="title" content="数据结构之红黑树 | Mofan"><meta name="description" content="HashMap 解决哈希冲突使用的红黑树是长什么样子的？一起来看看吧。"><meta name="author" content="默烦"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Mofan"><meta property="og:title" content="数据结构之红黑树 | Mofan"><meta property="og:description" content="HashMap 解决哈希冲突使用的红黑树是长什么样子的？一起来看看吧。"><meta property="og:url" content="https://mofan212.github.io/posts/datastructure-redblacktree/"><meta property="og:image" content="https://mofan212.github.io/default-og.jpg"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://mofan212.github.io/posts/datastructure-redblacktree/"><meta property="twitter:title" content="数据结构之红黑树 | Mofan"><meta property="twitter:description" content="HashMap 解决哈希冲突使用的红黑树是长什么样子的？一起来看看吧。"><meta property="twitter:image" content="https://mofan212.github.io/default-og.jpg"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Mofan" href="https://mofan212.github.io/rss.xml"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2020-07-19T00:00:00.000Z"><meta property="article:modified_time" content="2020-11-08T00:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"数据结构之红黑树 | Mofan","url":"https://mofan212.github.io/posts/datastructure-redblacktree/","mainEntityOfPage":"https://mofan212.github.io/posts/datastructure-redblacktree/","datePublished":"2020-07-19T00:00:00.000Z","dateModified":"2020-11-08T00:00:00.000Z","author":[{"@type":"Person","name":"默烦","url":"https://github.com/mofan212"}]}</script> <!--
       Inline FOUC-prevention script: sets data-theme on <html> before
       the browser paints. Runs synchronously, no defer/async.
     --><script>
@@ -14,7 +14,7 @@
         // Expose value so theme.ts can skip re-detection.
         window.__theme = { value: theme };
       })();
-    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.8-7lwm7-.css">
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.CRJPB6-j.css">
 <style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
 .toc-link[data-astro-cid-po2ckxzl]{position:relative;transition:color .2s ease}.toc-link[data-astro-cid-po2ckxzl]:before{position:absolute;inset-block:.375rem;inset-inline-start:-2px;width:2px;border-radius:2px;background-color:var(--accent);content:"";opacity:0;transition:opacity .2s ease}.toc-link[data-astro-cid-po2ckxzl][data-active]{color:var(--accent)}.toc-link[data-astro-cid-po2ckxzl][data-active]:before{opacity:1}.toc-toggle[data-astro-cid-po2ckxzl][aria-expanded=true] .toc-toggle-icon[data-astro-cid-po2ckxzl]{rotate:-90deg}.toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-width:thin}.post-toc-desktop[data-astro-cid-taqt6xe3] .toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-gutter:stable}.toc-scroll[data-astro-cid-taqt6xe3]:after{display:block;block-size:20dvh;content:""}[data-astro-cid-taqt6xe3][data-toc-dialog]{opacity:0;transform:translate(1.25rem);transition:opacity .16s ease-out,transform .22s cubic-bezier(.22,1,.36,1);will-change:opacity,transform}[data-astro-cid-taqt6xe3][data-toc-dialog][data-toc-visible]{opacity:1;transform:translate(0)}[data-astro-cid-taqt6xe3][data-toc-dialog]::backdrop{background-color:#0000;transition:background-color .18s ease-out}[data-astro-cid-taqt6xe3][data-toc-dialog][data-toc-visible]::backdrop{background-color:#0000007f}@media(prefers-reduced-motion:reduce){[data-astro-cid-taqt6xe3][data-toc-dialog]{transform:none;transition:none}[data-astro-cid-taqt6xe3][data-toc-dialog]::backdrop{transition:none}}[data-astro-cid-4wxclohh][data-post-series]{interpolate-size:allow-keywords}[data-astro-cid-4wxclohh][data-post-series]::details-content{block-size:0;overflow:hidden;opacity:0;transition:block-size .2s ease-out,opacity .15s ease-out,content-visibility .2s allow-discrete}[data-astro-cid-4wxclohh][data-post-series][open]::details-content{block-size:auto;opacity:1}@media(prefers-reduced-motion:reduce){[data-astro-cid-4wxclohh][data-post-series]::details-content{transition:none}}.post-sidebar[data-astro-cid-7ap3hmvm]{display:contents}@media(min-width:90rem){.post-sidebar[data-astro-cid-7ap3hmvm]{position:fixed;inset-block-start:9rem;inset-inline-start:calc(50% + var(--app-max-width) / 2 + 2rem);display:flex;width:min(18rem,calc(50vw - var(--app-max-width) / 2 - 3rem));height:calc(100dvh - 11rem);min-height:0;flex-direction:column}}
 </style><style>[data-astro-transition-scope="astro-36ssibgs-1"] { view-transition-name: data-structure; }@layer astro { ::view-transition-old(data-structure) { 
@@ -593,11 +593,11 @@
 
     update();
   })();
-</script> </div> <article id="article" class="mt-8 w-full app-prose max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)" data-astro-cid-7ap3hmvm> <!-- 封面画师：ツチヤ&emsp; &emsp;&emsp;&emsp;封面ID：79730190 -->
+</script> </div> <article id="article" class="mt-8 w-full app-prose post-content max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)" data-astro-cid-7ap3hmvm> <!-- 封面画师：ツチヤ&emsp; &emsp;&emsp;&emsp;封面ID：79730190 -->
 <p>本文参考视频：小马哥教育(SEEMYGO) 2019 年 恋上数据结构与算法（第一季）</p>
 <p>源码仓库：<a href="https://github.com/mofan212/data-structure-and-algorithm" target="_blank" rel="noopener noreferrer">mofan212/data-structure-and-algorithm (github.com)</a></p>
 <p>辅助学习网址：<a href="https://visualgo.net/zh" target="_blank" rel="noopener noreferrer">数据结构和算法动态可视化</a></p>
-<h1 id="0-初始红黑树">0. 初始红黑树</h1>
+<h2 id="0-初始红黑树">0. 初始红黑树</h2>
 <picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/%E5%88%9D%E8%AF%86%E7%BA%A2%E9%BB%91%E6%A0%91.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/初识红黑树.png" alt="初识红黑树" style="zoom: 33%;" data-responsive-image="true"></picture>
 <p>红黑树（Red Black Tree），一种自平衡二叉搜索树，旧时称为：平衡二叉 B 树（Symmetric Binary Tree）。红黑树必须满足以下 <strong>五条</strong> 性质：</p>
 <ul>
@@ -613,8 +613,8 @@
 <li>从任一节点到<span style="color:darkorange ">叶子节点</span>的所有路径都包含相同数目的 <em><strong>BLACK</strong></em> 节点</li>
 </ul>
 <p>使用上述五条性质就可以保证红黑树平衡！ 😲</p>
-<h1 id="1-b-树">1. B 树</h1>
-<h2 id="11-初识-b-树">1.1 初识 B 树</h2>
+<h2 id="1-b-树">1. B 树</h2>
+<h3 id="11-初识-b-树">1.1 初识 B 树</h3>
 <p>B 树（B-tree、B- 树）是一种平衡的 <span style="color:darkorange ">多路搜索树</span>，多用于文件系统、数据库的实现。</p>
 <p>示意图：</p>
 <picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/%E4%B8%89%E9%98%B6B%E6%A0%91.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/三阶B树.png" alt="三阶 B 树" style="zoom:50%;" data-responsive-image="true"></picture>
@@ -631,7 +631,7 @@
 <p><strong>表示一个节点中最多拥有 m （m表示阶数）个子节点。</strong></p>
 <p>附赠一张自己做的表情包：</p>
 <picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/%E8%83%BD%E4%B8%8D%E8%83%BD%E6%9C%89%E7%82%B9B%E6%A0%91.jpg?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/能不能有点B树.jpg" style="zoom: 25%;" data-responsive-image="true"></picture>
-<h2 id="12-b-树的性质">1.2 B 树的性质</h2>
+<h3 id="12-b-树的性质">1.2 B 树的性质</h3>
 <p>这里指的是 m 阶 B 树的性质（m >= 2）：</p>
 <p>假设一个节点存储的元素个数为 x：</p>
 <ul>
@@ -656,16 +656,16 @@
 <p>m = 6，3 &#x3C;= y &#x3C;= 6，因此可以成为(3,6)树</p>
 <p>m = 7，4 &#x3C;= y &#x3C;= 7，因此可以成为(4,6)树</p>
 <p>如果 m = 2，那么这棵 B 树就是二叉搜索树。现实中，数据库实现中一般用 200 ~ 300 阶 B 树。</p>
-<h2 id="13-b-树-vs-bst">1.3 B 树 VS BST</h2>
+<h3 id="13-b-树-vs-bst">1.3 B 树 VS BST</h3>
 <p>B 树和二叉搜索树在逻辑上是等价的。就是说，将二叉搜索树的一些节点进行合并，就可以得到一棵 B 树。</p>
 <p>多代节点（父子节点、爷父子节点…）合并，可以获得一个超级节点（B 树上存储了多个元素的节点）。</p>
 <ul>
 <li>两代合并的超级节点，最多拥有 4 个子节点（至少是 四阶 B 树）</li>
 <li>三代合并的超级节点，最多拥有 8 个子节点（至少是 八阶 B 树）</li>
-<li>n 代合并的超级节点，最多拥有 2^n^ 个子节点 （至少是 2^n^ 阶 B 树）</li>
+<li>n 代合并的超级节点，最多拥有 2<sup>n</sup> 个子节点 （至少是 2<sup>n</sup> 阶 B 树）</li>
 </ul>
-<p>m 阶 B 树，最多需要 log<del>2</del> m 代合并</p>
-<h2 id="14-节点添加">1.4 节点添加</h2>
+<p>m 阶 B 树，最多需要 log<sub>2</sub> m 代合并</p>
+<h3 id="14-节点添加">1.4 节点添加</h3>
 <blockquote><p>节点搜索</p></blockquote>
 <picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/%E5%9B%9B%E9%98%B6B%E6%A0%91.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/四阶B树.png" alt="四阶 B 树" style="zoom:50%;" data-responsive-image="true"></picture>
 <p>B 树跟二叉搜索树的搜索类似：</p>
@@ -682,7 +682,7 @@
 <picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/B%E6%A0%91%E6%B7%BB%E5%8A%A0%E5%85%83%E7%B4%A095.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/B树添加元素95.png" alt="B 树添加元素 95" style="zoom:50%;" data-responsive-image="true"></picture>
 <p>又插入元素 98 呢？</p>
 <p>由于这是一棵四阶 B 树，那么最右下角的叶子节点的元素个数将超过限制，这种现象可以称之为： <strong>上溢</strong> （overflow）</p>
-<h2 id="15-解决上溢">1.5 解决上溢</h2>
+<h3 id="15-解决上溢">1.5 解决上溢</h3>
 <p>假设这棵 B 树是五阶的，对这棵 B 树添加元素，抽象出其中一块子树：</p>
 <picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/%E4%B8%8A%E6%BA%A2%E6%8A%BD%E8%B1%A1%E5%AD%90%E6%A0%91.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/上溢抽象子树.png" alt="上溢抽象子树" style="zoom:50%;" data-responsive-image="true"></picture>
 <p>上溢节点的元素个数必然等于 m （m 为 B 树的阶数）</p>
@@ -700,7 +700,7 @@
 <picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/B%E6%A0%91%E6%B7%BB%E5%8A%A0%E5%85%83%E7%B4%A098.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/B树添加元素98.png" alt="B 树添加元素 98" style="zoom:50%;" data-responsive-image="true"></picture>
 <p>然后再依次添加元素 52、 54 后，可得到：</p>
 <picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/B%E6%A0%91%E6%B7%BB%E5%8A%A0%E5%85%83%E7%B4%A052%E5%92%8C54.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/B树添加元素52和54.png" alt="B 树添加元素 52 和 54" style="zoom:50%;" data-responsive-image="true"></picture>
-<h2 id="16-节点删除">1.6 节点删除</h2>
+<h3 id="16-节点删除">1.6 节点删除</h3>
 <blockquote><p>删除叶子节点</p></blockquote>
 <p>如果删除的元素在 <strong>叶子节点</strong> 中，<mark class="flexible-marker flexible-marker-default">直接删除即可</mark>！</p>
 <blockquote><p>删除非叶子节点</p></blockquote>
@@ -717,7 +717,7 @@
 <li>所有上述的删除前驱或后继元素，就是最开始提到的情况：删除的元素在叶子节点中</li>
 <li><mark class="flexible-marker flexible-marker-default">真正的删除元素都是发生在叶子节点中的</mark></li>
 </ul>
-<h2 id="17-下溢问题">1.7 下溢问题</h2>
+<h3 id="17-下溢问题">1.7 下溢问题</h3>
 <p>先有一棵下列这样的二叉树：</p>
 <picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/%E4%B8%8B%E6%BA%A2B%E6%A0%91.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/下溢B树.png" alt="下溢 B 树" style="zoom:50%;" data-responsive-image="true"></picture>
 <p>假设这是一棵五阶 B 树（即： m = 5），对元素 22 进行删除：</p>
@@ -740,7 +740,7 @@
 </ul>
 <picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/%E8%A7%A3%E5%86%B3%E4%B8%8B%E6%BA%A2%E6%96%B9%E5%BC%8F%E4%BA%8C.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/解决下溢方式二.png" alt="解决下溢方式二" style="zoom:50%;" data-responsive-image="true"></picture>
 <p><strong>下溢至根节点，是唯一一种能够让B树“变矮”的情况。</strong></p>
-<h2 id="18-四阶-b-树">1.8 四阶 B 树</h2>
+<h3 id="18-四阶-b-树">1.8 四阶 B 树</h3>
 <p>如果能够先了解四阶 B 树（2-3-4 树），将能更好地学习理解红黑树。</p>
 <p>四阶 B 树的性质：</p>
 <ul>
@@ -752,10 +752,10 @@
 <p>添加元素后，这个 B 树为：</p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/%E5%9B%9B%E9%98%B6B%E6%A0%91-%E7%BB%83%E4%B9%A0.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/%E5%9B%9B%E9%98%B6B%E6%A0%91-%E7%BB%83%E4%B9%A0.png" alt="四阶B树-练习" data-responsive-image="true"></picture></p>
 <p>可视化添加网址： <a href="https://www.cs.usfca.edu/~galles/visualization/Algorithms.html" target="_blank" rel="noopener noreferrer">Data Structure Visualizations</a></p>
-<h1 id="2-红黑树">2. 红黑树</h1>
+<h2 id="2-红黑树">2. 红黑树</h2>
 <p><mark class="flexible-marker flexible-marker-default">注意：红黑树中的叶子节点指的是假想的空节点（null）。</mark></p>
 <p>内容所限，后面展示的红黑树都将省略 <em><strong>NULL</strong></em> 节点。</p>
-<h2 id="21-等价变换">2.1 等价变换</h2>
+<h3 id="21-等价变换">2.1 等价变换</h3>
 <p>现有一棵下列这样的红黑树，我们将它的布局变一下：</p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/%E7%BA%A2%E9%BB%91%E6%A0%91%E5%B8%83%E5%B1%80%E5%8F%98%E6%8D%A2.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/%E7%BA%A2%E9%BB%91%E6%A0%91%E5%B8%83%E5%B1%80%E5%8F%98%E6%8D%A2.png" alt="红黑树布局变换" data-responsive-image="true"></picture></p>
 <p>从右边的图我们可以看到，这棵红黑树的样子很像前面学习的 B 树。可得一棵四阶 B 树：</p>
@@ -771,7 +771,7 @@
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/%E7%BA%A2%E9%BB%91%E6%A0%91%E5%85%B6%E4%BB%96%E5%B8%83%E5%B1%80%E5%8F%98%E6%8D%A2.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/%E7%BA%A2%E9%BB%91%E6%A0%91%E5%85%B6%E4%BB%96%E5%B8%83%E5%B1%80%E5%8F%98%E6%8D%A2.png" alt="红黑树其他布局变换" data-responsive-image="true"></picture></p>
 <p>如果上图最底层的 <em><strong>BLACK</strong></em> 节点是不存在的，在 B 树中会是什么样的情形呢？</p>
 <p>整棵 B 树只有一个根节点，而且是超级节点。</p>
-<h2 id="22-辅助函数">2.2 辅助函数</h2>
+<h3 id="22-辅助函数">2.2 辅助函数</h3>
 <blockquote><p>一些英文定义</p></blockquote>
 <picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/%E8%BE%85%E5%8A%A9%E5%87%BD%E6%95%B0%E7%BA%A2%E9%BB%91%E6%A0%91.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/辅助函数红黑树.png" alt="辅助函数红黑树" style="zoom:50%;" data-responsive-image="true"></picture>
 <ul>
@@ -887,7 +887,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <p>如果需要求某一节点的叔父节点，直接 <code>node.parent.sibling()</code> 即可。</p>
-<h2 id="23-添加分析">2.3 添加分析</h2>
+<h3 id="23-添加分析">2.3 添加分析</h3>
 <p>已知：</p>
 <ul>
 <li>B 树中，新添加元素必定是添加到 <span style="color:darkorange ">叶子节点</span> 中</li>
@@ -897,7 +897,7 @@
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/%E7%BA%A2%E9%BB%91%E6%A0%91%E5%B8%83%E5%B1%80%E5%8F%98%E6%8D%A2.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/%E7%BA%A2%E9%BB%91%E6%A0%91%E5%B8%83%E5%B1%80%E5%8F%98%E6%8D%A2.png" alt="红黑树布局变换" data-responsive-image="true"></picture></p>
 <p>建议新添加的节点默认为 <mark class="flexible-marker flexible-marker-default"><em>RED</em></mark>，这样能够让红黑树的性质尽快满足。（性质 1、2、3、5 都满足，性质 4 有待思考）</p>
 <p>如果添加的是根节点，染成 <em><strong>BLACK</strong></em> 即可。</p>
-<h2 id="24-添加分类">2.4 添加分类</h2>
+<h3 id="24-添加分类">2.4 添加分类</h3>
 <p>先将一颗红黑树的布局进行变换一下：</p>
 <picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/%E6%B7%BB%E5%8A%A0%E6%83%85%E5%86%B5.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/添加情况.png" alt="添加情况" style="zoom:50%;" data-responsive-image="true"></picture>
 <p>根据前面的分析，添加节点时一共有下列 12 种位置情况：</p>
@@ -918,7 +918,7 @@
 <p>性质 4： 红黑树中不能有两个连续的红色节点</p>
 <p>那么，剩下的 8 中情况不满足红黑树的性质 4： parent 为 <mark class="flexible-marker flexible-marker-default"><em>RED</em></mark> （<mark class="flexible-marker flexible-marker-default"><em>Double Red</em></mark>），即：</p>
 <picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/%E6%B7%BB%E5%8A%A0%E8%8A%82%E7%82%B9%E4%B8%8D%E6%BB%A1%E8%B6%B3%E6%80%A7%E8%B4%A84.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/添加节点不满足性质4.png" alt="添加节点不满足性质 4" style="zoom:50%;" data-responsive-image="true"></picture>
-<h2 id="25-添加修复">2.5 添加修复</h2>
+<h3 id="25-添加修复">2.5 添加修复</h3>
 <p>上图中，在节点 50 的右子节点添加节点 52 后，似乎会导致节点 46 失衡？注意，现在这棵树是红黑树，不是 AVL 树，在红黑树中没有平衡因子的概念，更没有失衡的概念，我们只需要满足红黑树的 5 条性质就可以让红黑树保持平衡。（用前朝的剑，斩本朝的官？ 😨）</p>
 <blockquote><p>添加 - LL / RR</p></blockquote>
 <picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/%E6%B7%BB%E5%8A%A0LL%E4%B8%8ERR.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/添加LL与RR.png" alt="添加 LL 与 RR" style="zoom:50%;" data-responsive-image="true"></picture>
@@ -987,7 +987,7 @@
 <li>grand 染成 <mark class="flexible-marker flexible-marker-default"><em>RED</em></mark>，当作是新添加的节点进行处理</li>
 </ul>
 <p>然后套用前面的逻辑即可。</p>
-<h2 id="26-添加实现">2.6 添加实现</h2>
+<h3 id="26-添加实现">2.6 添加实现</h3>
 <p>在 <strong>2.5 添加修复</strong> 中已经介绍，在红黑树中插入节点时需要使用到旋转的操作，而红黑树的旋转和 AVL 树的旋转代码逻辑是一样的，两者是可以复用的，因此，我们需要对代码再次进行重构。</p>
 <p>编写一个表示自平衡二叉搜索树的类 <code>BBST</code>，在这个类中存放与旋转有关的代码，然后就可以用描述 AVL 树的类和描述红黑树的类来继承这个类，达到旋转代码复用的目的。</p>
 <p>BBST.java：</p>
@@ -1167,7 +1167,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span>
 <span class="line"></span>
 <span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> static</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> void</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> main</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">String</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">[] args) { </span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">test2</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">()</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> }</span></span></code></pre>
-<h2 id="27-删除分析">2.7 删除分析</h2>
+<h3 id="27-删除分析">2.7 删除分析</h3>
 <p>介绍 B 树时，已经知道： 在 B 树中删除元素时，真正删除的元素都是发生在 <span style="color:darkorange ">叶子节点</span> 中的。</p>
 <p>而红黑树是可以变换成四阶 B 树的，比如对于下图的红黑树，真正删除的元素已被圈出：</p>
 <picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/%E7%BA%A2%E9%BB%91%E6%A0%91%E8%8A%82%E7%82%B9%E5%88%A0%E9%99%A4%E4%BD%8D%E7%BD%AE.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/红黑树节点删除位置.png" alt="红黑树节点删除位置" style="zoom: 67%;" data-responsive-image="true"></picture>
@@ -1180,7 +1180,7 @@
 <p>删除黑色节点时 （后续分析）</p>
 </li>
 </ul>
-<h2 id="28-删除黑色节点">2.8 删除黑色节点</h2>
+<h3 id="28-删除黑色节点">2.8 删除黑色节点</h3>
 <p>对于删除黑色节点，共有三种情况：</p>
 <p>1、拥有两个 <em><mark class="flexible-marker flexible-marker-default">RED</mark></em> 子节点的 <em><strong>BLACK</strong></em> 节点</p>
 <ul>
@@ -1241,7 +1241,7 @@
 <p>删除节点 88，示意图如下：</p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/%E5%88%A0%E9%99%A4%E8%8A%82%E7%82%B9%E5%85%84%E5%BC%9F%E8%8A%82%E7%82%B9%E4%B8%BA%E7%BA%A2%E8%89%B2.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/DataStructureImages/%E5%88%A0%E9%99%A4%E8%8A%82%E7%82%B9%E5%85%84%E5%BC%9F%E8%8A%82%E7%82%B9%E4%B8%BA%E7%BA%A2%E8%89%B2.png" alt="删除节点兄弟节点为红色" data-responsive-image="true"></picture></p>
 <p>染色后，对节点 80 进行右旋转，让节点 76 成为被删除节点 88 的兄弟节点（可以理解为 LL，这里的 LL 指的是节点 46），主要目的还是为了让节点 76 成为被删除节点 88 的兄弟节点。</p>
-<h2 id="29-删除实现">2.9 删除实现</h2>
+<h3 id="29-删除实现">2.9 删除实现</h3>
 <blockquote><p>分析</p></blockquote>
 <p>删除可以使用 <code>BST</code> 类中的删除代码，分为：</p>
 <ul>
@@ -1447,7 +1447,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span></code></pre>
 <p>我傻了，这玩意儿真的多 😡</p>
-<h1 id="3-红黑树的平衡">3. 红黑树的平衡</h1>
+<h2 id="3-红黑树的平衡">3. 红黑树的平衡</h2>
 <p>红黑树与 AVL 树都是自平衡二叉搜索树，AVL 树中引入平衡因子的概念，要求每个节点的平衡因子绝对值不大于 1，这样就能够使 AVL 达到平衡，那么对于红黑树又是怎么进行平衡的呢？</p>
 <p>在本文开头，我们首先就说明了红黑树的五条性质，同时要求红黑树必须满足这些性质才能叫红黑树，那么这些性质有什么用？</p>
 <p>这些性质就可以保证红黑树是平衡的，或者说那五条性质可以保证红黑树是等价于四阶 B 树的。</p>
@@ -1457,9 +1457,9 @@
 <p>相比于 AVL 树，红黑树的平衡标准比较宽松： <span style="color:darkorange ">没有一条路径会大于其他路径的 2 倍</span>，为什么有这样的标准？</p>
 <p>在红黑树中，最长路径是每有一个黑节点就来一个红节点的路径，最短路径是黑色根节点后就只有一个黑子节点的路径，这样就会出现<span style="color:darkorange ">没有一条路径会大于其他路径的 2 倍</span>。</p>
 <p>红黑树的平衡是一种弱平衡、黑高度平衡，而 AVL 树就是一种强平衡。</p>
-<p>红黑树的最大高度是 2 * log<del>2</del> (n + 1)，依然是 <code>O(logn)</code> 级别的。</p>
-<h1 id="4-性能对比">4. 性能对比</h1>
-<h2 id="41-平均时间复杂度">4.1 平均时间复杂度</h2>
+<p>红黑树的最大高度是 2 * log<sub>2</sub> (n + 1)，依然是 <code>O(logn)</code> 级别的。</p>
+<h2 id="4-性能对比">4. 性能对比</h2>
+<h3 id="41-平均时间复杂度">4.1 平均时间复杂度</h3>
 <blockquote><p>红黑树平均时间复杂度</p></blockquote>
 <ul>
 <li>搜索： O(logn)</li>
@@ -1472,17 +1472,17 @@
 <li>添加： O(logn)，需 O(1)次的旋转操作（并不是说只操作 1 次，而是说旋转次数是常数级别的）</li>
 <li>删除： O(logn)，最多需要 O(logn)次的旋转操作</li>
 </ul>
-<h2 id="42-avl-树-vs-红黑树">4.2 AVL 树 VS 红黑树</h2>
+<h3 id="42-avl-树-vs-红黑树">4.2 AVL 树 VS 红黑树</h3>
 <blockquote><p>AVL 树</p></blockquote>
 <ul>
 <li>平衡标准比较严格： <span style="color:darkorange ">每个左右子树的高度差不超过 1 </span></li>
-<li>最大高度是 1.44 * log<del>2</del> (n + 2) - 1.328 （100W 个节点，AVL 树最大树高 28）</li>
+<li>最大高度是 1.44 * log<sub>2</sub> (n + 2) - 1.328 （100W 个节点，AVL 树最大树高 28）</li>
 <li>搜索、添加、删除都是 O(logn) 复杂度，其中添加仅需 O(1) 次调整、删除最多需要 O(logn) 次旋转调整</li>
 </ul>
 <blockquote><p>红黑树</p></blockquote>
 <ul>
 <li>平衡标准比较宽松： <span style="color:darkorange ">没有一条路径会大于其他路径的 2 倍</span></li>
-<li>最大高度是 2 * log<del>2</del> (n + 1) （100W 个节点，红黑树最大树高 40）</li>
+<li>最大高度是 2 * log<sub>2</sub> (n + 1) （100W 个节点，红黑树最大树高 40）</li>
 <li>搜索、添加、删除都是 O(logn) 复杂度，其中添加、删除都仅需 O(1) 次旋转调整</li>
 </ul>
 <blockquote><p>二者抉择</p></blockquote>
@@ -1491,7 +1491,7 @@
 <li>相对于 AVL 树来说，红黑树牺牲了部分平衡性以换取插入/删除操作时少量旋转操作，整体来说性能优于 AVL 树</li>
 <li>红黑树的平均统计性能优于 AVL 树，实际应用中更多选择使用红黑树</li>
 </ul>
-<p>🌸赤黒木の大きな勝利（皮一下，渣机翻）🌸</p> </article> <div class="text-muted-foreground max-w-app mt-20 w-full space-y-3 text-center text-sm" data-astro-cid-7ap3hmvm> <aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full px-2 text-center leading-6 sm:px-0"> <p class="m-0 break-words"> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a><span> 许可协议，</span><span class="max-sm:block">转载时请署名并注明<a href="https://mofan212.github.io/posts/datastructure-redblacktree/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a> 🔗</span> </p> </aside> <section data-post-reward data-pagefind-ignore class="w-full" aria-label="赞赏"> <div class="flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:flex-wrap sm:gap-x-1.5 sm:gap-y-2"> <span class="sm:whitespace-nowrap">如果这篇文章对你有帮助，可以通过</span> <a href="/reward/" class="focus-outline border-accent text-accent hover:bg-accent/10 active:bg-accent/10 inline-block rounded-md border px-3 py-1 font-medium transition-colors"> 赞赏 </a> <span class="sm:whitespace-nowrap">请我喝杯 Coffee ☕</span> </div> </section> </div> <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm>  <ul id="post-tags" class="mt-4 mb-8 flex flex-wrap gap-4 sm:mb-8" data-astro-cid-7ap3hmvm> <li> <a href="/tags/data-structure/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> 数据结构 </a> </li> </ul>  <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/how-to-use-idea/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.3l105.3-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg> <div> <span>上一篇</span> <div class="text-accent/85 text-sm">帅气地使用 IDEA</div> </div> </a> <a href="/posts/datastructure-avltree/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>下一篇</span> <div class="text-accent/85 text-sm">数据结构之“艾薇儿”树</div> </div> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg> </a> </div> </main> <footer class="app-layout mt-auto" data-astro-cid-7ap3hmvm="true"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="text-muted-foreground my-2 flex w-fit flex-col items-start text-start text-sm whitespace-nowrap"> <div class="flex items-center gap-1.5"> <svg width="24" height="24" fill="currentColor" class="size-4" viewBox="-49.231 -39.385 738.462 590.769" aria-hidden="true"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9-.1-2.7-.2-5.4-.2-8.1 0-88.4 71.6-160 160-160 59.3 0 111 32.2 138.7 80.2A95.5 95.5 0 0 1 448 96c53 0 96 43 96 96 0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39L296 392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0z" /></svg> <span>最近更新：</span> <time class="tabular-nums" datetime="2026-10-21T03:16:11.000Z" data-deployed-at="2026-10-21T03:16:11.000Z" data-just-now="刚刚" data-locale="zh-CN"> 2026-10-21 11:16 </time> </div> <div class="mt-1 flex items-center gap-3 text-xs"> <span class="flex items-center gap-1" title="本站访客数"> <svg width="24" height="24" fill="currentColor" class="size-3" viewBox="-2.835 -3.241 453.671 518.481" aria-hidden="true"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3z" /></svg> <span class="sr-only">本站访客数：</span> <span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> <span aria-hidden="true">|</span> <span class="flex items-center gap-1.5" title="本站总浏览量"> <span class="flex size-4 items-center justify-center" aria-hidden="true"> <svg width="24" height="24" fill="currentColor" class="size-3.5" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48zM0 272c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v160c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zM368 96h32c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48" /></svg> </span> <span class="sr-only">本站总浏览量：</span> <span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> </div> </div> <div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"> <span>版权所有 &#169; 2020 – 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer> <script>
+<p>🌸赤黒木の大きな勝利（皮一下，渣机翻）🌸</p> </article> <div class="text-muted-foreground max-w-app mt-20 w-full space-y-3 text-center text-sm" data-astro-cid-7ap3hmvm> <aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full px-2 text-center leading-6 sm:px-0"> <p class="m-0 break-words"> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a><span> 许可协议，</span><span class="max-sm:block">转载时请署名并注明<a href="https://mofan212.github.io/posts/datastructure-redblacktree/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a> 🔗</span> </p> </aside> <section data-post-reward data-pagefind-ignore class="w-full" aria-label="赞赏"> <div class="flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:flex-wrap sm:gap-x-1.5 sm:gap-y-2"> <span class="sm:whitespace-nowrap">如果这篇文章对你有帮助，可以通过</span> <a href="/reward/" class="focus-outline border-accent text-accent hover:bg-accent/10 active:bg-accent/10 inline-block rounded-md border px-3 py-1 font-medium transition-colors"> 赞赏 </a> <span class="sm:whitespace-nowrap">请我喝杯 Coffee ☕</span> </div> </section> </div> <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm>  <ul id="post-tags" class="mt-4 mb-8 flex flex-wrap gap-4 sm:mb-8" data-astro-cid-7ap3hmvm> <li> <a href="/tags/data-structure/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> 数据结构 </a> </li> </ul>  <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/how-to-use-idea/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.3l105.3-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg> <div> <span>上一篇</span> <div class="text-accent/85 text-sm">帅气地使用 IDEA</div> </div> </a> <a href="/posts/datastructure-avltree/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>下一篇</span> <div class="text-accent/85 text-sm">数据结构之“艾薇儿”树</div> </div> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg> </a> </div> </main> <footer class="app-layout mt-auto" data-astro-cid-7ap3hmvm="true"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="text-muted-foreground my-2 flex w-fit flex-col items-start text-start text-sm whitespace-nowrap"> <div class="flex items-center gap-1.5"> <svg width="24" height="24" fill="currentColor" class="size-4" viewBox="-49.231 -39.385 738.462 590.769" aria-hidden="true"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9-.1-2.7-.2-5.4-.2-8.1 0-88.4 71.6-160 160-160 59.3 0 111 32.2 138.7 80.2A95.5 95.5 0 0 1 448 96c53 0 96 43 96 96 0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39L296 392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0z" /></svg> <span>最近更新：</span> <time class="tabular-nums" datetime="2026-10-22T08:22:01.000Z" data-deployed-at="2026-10-22T08:22:01.000Z" data-just-now="刚刚" data-locale="zh-CN"> 2026-10-22 16:22 </time> </div> <div class="mt-1 flex items-center gap-3 text-xs"> <span class="flex items-center gap-1" title="本站访客数"> <svg width="24" height="24" fill="currentColor" class="size-3" viewBox="-2.835 -3.241 453.671 518.481" aria-hidden="true"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3z" /></svg> <span class="sr-only">本站访客数：</span> <span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> <span aria-hidden="true">|</span> <span class="flex items-center gap-1.5" title="本站总浏览量"> <span class="flex size-4 items-center justify-center" aria-hidden="true"> <svg width="24" height="24" fill="currentColor" class="size-3.5" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48zM0 272c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v160c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zM368 96h32c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48" /></svg> </span> <span class="sr-only">本站总浏览量：</span> <span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> </div> </div> <div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"> <span>版权所有 &#169; 2020 – 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer> <script>
   (() => {
     const updateDeploymentTimes = () => {
       document.querySelectorAll("[data-deployed-at]").forEach(element => {
@@ -1540,4 +1540,4 @@
     document.addEventListener("astro:page-load", updateDeploymentTimes);
     window.setInterval(updateDeploymentTimes, 60_000);
   })();
-</script>    <script type="module" src="/_astro/Layout.astro_astro_type_script_index_0_lang.DQQu8RqY.js"></script> <script type="module" src="/_astro/Layout.astro_astro_type_script_index_1_lang.DRvjezMo.js"></script> </body> </html>  <script type="module" src="/_astro/index.astro_astro_type_script_index_0_lang.Oly9xh_g.js"></script>
+</script>    <script type="module" src="/_astro/Layout.astro_astro_type_script_index_0_lang.BrDp0sUM.js"></script> <script type="module" src="/_astro/Layout.astro_astro_type_script_index_1_lang.DRvjezMo.js"></script> </body> </html>  <script type="module" src="/_astro/index.astro_astro_type_script_index_0_lang.Oly9xh_g.js"></script>

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html dir="ltr" lang="zh-CN" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/redis-cluster-and-distributed-locks/"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.3.0/400.css"><link rel="preconnect" href="https://busuanzi.ibruce.info"><meta name="generator" content="Astro v6.4.2"><!-- Primary meta --><title>Redis 集群与分布式锁 | Mofan</title><meta name="title" content="Redis 集群与分布式锁 | Mofan"><meta name="description" content="本文介绍了 Redis 集群的模拟搭建、故障恢复、利用 Redis 实现简单的分布式锁和 Redis 6 中的新特性。"><meta name="author" content="默烦"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Mofan"><meta property="og:title" content="Redis 集群与分布式锁 | Mofan"><meta property="og:description" content="本文介绍了 Redis 集群的模拟搭建、故障恢复、利用 Redis 实现简单的分布式锁和 Redis 6 中的新特性。"><meta property="og:url" content="https://mofan212.github.io/posts/redis-cluster-and-distributed-locks/"><meta property="og:image" content="https://mofan212.github.io/default-og.jpg"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://mofan212.github.io/posts/redis-cluster-and-distributed-locks/"><meta property="twitter:title" content="Redis 集群与分布式锁 | Mofan"><meta property="twitter:description" content="本文介绍了 Redis 集群的模拟搭建、故障恢复、利用 Redis 实现简单的分布式锁和 Redis 6 中的新特性。"><meta property="twitter:image" content="https://mofan212.github.io/default-og.jpg"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Mofan" href="https://mofan212.github.io/rss.xml"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2022-03-28T00:00:00.000Z"><meta property="article:modified_time" content="2022-03-28T00:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Redis 集群与分布式锁 | Mofan","url":"https://mofan212.github.io/posts/redis-cluster-and-distributed-locks/","mainEntityOfPage":"https://mofan212.github.io/posts/redis-cluster-and-distributed-locks/","datePublished":"2022-03-28T00:00:00.000Z","dateModified":"2022-03-28T00:00:00.000Z","author":[{"@type":"Person","name":"默烦","url":"https://github.com/mofan212"}]}</script> <!--
+<!DOCTYPE html><html dir="ltr" lang="zh-CN" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/redis-cluster-and-distributed-locks/"><link rel="preconnect" href="https://npm.elemecdn.com"><link rel="preconnect" href="https://gcore.jsdelivr.net"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/lxgwwenkaiscreen.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.3.0/400.css"><link rel="preconnect" href="https://busuanzi.ibruce.info"><meta name="generator" content="Astro v6.4.2"><!-- Primary meta --><title>Redis 集群与分布式锁 | Mofan</title><meta name="title" content="Redis 集群与分布式锁 | Mofan"><meta name="description" content="本文介绍了 Redis 集群的模拟搭建、故障恢复、利用 Redis 实现简单的分布式锁和 Redis 6 中的新特性。"><meta name="author" content="默烦"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Mofan"><meta property="og:title" content="Redis 集群与分布式锁 | Mofan"><meta property="og:description" content="本文介绍了 Redis 集群的模拟搭建、故障恢复、利用 Redis 实现简单的分布式锁和 Redis 6 中的新特性。"><meta property="og:url" content="https://mofan212.github.io/posts/redis-cluster-and-distributed-locks/"><meta property="og:image" content="https://mofan212.github.io/default-og.jpg"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://mofan212.github.io/posts/redis-cluster-and-distributed-locks/"><meta property="twitter:title" content="Redis 集群与分布式锁 | Mofan"><meta property="twitter:description" content="本文介绍了 Redis 集群的模拟搭建、故障恢复、利用 Redis 实现简单的分布式锁和 Redis 6 中的新特性。"><meta property="twitter:image" content="https://mofan212.github.io/default-og.jpg"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Mofan" href="https://mofan212.github.io/rss.xml"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2022-03-28T00:00:00.000Z"><meta property="article:modified_time" content="2022-03-28T00:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Redis 集群与分布式锁 | Mofan","url":"https://mofan212.github.io/posts/redis-cluster-and-distributed-locks/","mainEntityOfPage":"https://mofan212.github.io/posts/redis-cluster-and-distributed-locks/","datePublished":"2022-03-28T00:00:00.000Z","dateModified":"2022-03-28T00:00:00.000Z","author":[{"@type":"Person","name":"默烦","url":"https://github.com/mofan212"}]}</script> <!--
       Inline FOUC-prevention script: sets data-theme on <html> before
       the browser paints. Runs synchronously, no defer/async.
     --><script>
@@ -14,7 +14,7 @@
         // Expose value so theme.ts can skip re-detection.
         window.__theme = { value: theme };
       })();
-    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.8-7lwm7-.css">
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.CRJPB6-j.css">
 <style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
 .toc-link[data-astro-cid-po2ckxzl]{position:relative;transition:color .2s ease}.toc-link[data-astro-cid-po2ckxzl]:before{position:absolute;inset-block:.375rem;inset-inline-start:-2px;width:2px;border-radius:2px;background-color:var(--accent);content:"";opacity:0;transition:opacity .2s ease}.toc-link[data-astro-cid-po2ckxzl][data-active]{color:var(--accent)}.toc-link[data-astro-cid-po2ckxzl][data-active]:before{opacity:1}.toc-toggle[data-astro-cid-po2ckxzl][aria-expanded=true] .toc-toggle-icon[data-astro-cid-po2ckxzl]{rotate:-90deg}.toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-width:thin}.post-toc-desktop[data-astro-cid-taqt6xe3] .toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-gutter:stable}.toc-scroll[data-astro-cid-taqt6xe3]:after{display:block;block-size:20dvh;content:""}[data-astro-cid-taqt6xe3][data-toc-dialog]{opacity:0;transform:translate(1.25rem);transition:opacity .16s ease-out,transform .22s cubic-bezier(.22,1,.36,1);will-change:opacity,transform}[data-astro-cid-taqt6xe3][data-toc-dialog][data-toc-visible]{opacity:1;transform:translate(0)}[data-astro-cid-taqt6xe3][data-toc-dialog]::backdrop{background-color:#0000;transition:background-color .18s ease-out}[data-astro-cid-taqt6xe3][data-toc-dialog][data-toc-visible]::backdrop{background-color:#0000007f}@media(prefers-reduced-motion:reduce){[data-astro-cid-taqt6xe3][data-toc-dialog]{transform:none;transition:none}[data-astro-cid-taqt6xe3][data-toc-dialog]::backdrop{transition:none}}[data-astro-cid-4wxclohh][data-post-series]{interpolate-size:allow-keywords}[data-astro-cid-4wxclohh][data-post-series]::details-content{block-size:0;overflow:hidden;opacity:0;transition:block-size .2s ease-out,opacity .15s ease-out,content-visibility .2s allow-discrete}[data-astro-cid-4wxclohh][data-post-series][open]::details-content{block-size:auto;opacity:1}@media(prefers-reduced-motion:reduce){[data-astro-cid-4wxclohh][data-post-series]::details-content{transition:none}}.post-sidebar[data-astro-cid-7ap3hmvm]{display:contents}@media(min-width:90rem){.post-sidebar[data-astro-cid-7ap3hmvm]{position:fixed;inset-block-start:9rem;inset-inline-start:calc(50% + var(--app-max-width) / 2 + 2rem);display:flex;width:min(18rem,calc(50vw - var(--app-max-width) / 2 - 3rem));height:calc(100dvh - 11rem);min-height:0;flex-direction:column}}
 </style><style>[data-astro-transition-scope="astro-36ssibgs-1"] { view-transition-name: redis; }@layer astro { ::view-transition-old(redis) { 
@@ -629,10 +629,10 @@
 
     update();
   })();
-</script> </div> <article id="article" class="mt-8 w-full app-prose max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)" data-astro-cid-7ap3hmvm> <!-- 封面来源：碧蓝航线 永夜幻光 活动 CG -->
+</script> </div> <article id="article" class="mt-8 w-full app-prose post-content max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)" data-astro-cid-7ap3hmvm> <!-- 封面来源：碧蓝航线 永夜幻光 活动 CG -->
 <p>本文参考：<a href="https://www.bilibili.com/video/BV1Rv41177Af?p=36" target="_blank" rel="noopener noreferrer">【尚硅谷】Redis 6 入门到精通 超详细 教程</a></p>
-<h1 id="1-集群">1. 集群</h1>
-<h2 id="11-问题">1.1 问题</h2>
+<h2 id="1-集群">1. 集群</h2>
+<h3 id="11-问题">1.1 问题</h3>
 <p>容量不够，Redis 如何进行扩容？</p>
 <p>并发写操作，Redis 如何分摊？</p>
 <p>另外，主从模式，薪火相传模式，主机宕机，导致 ip 地址发生变化，应用程序中配置需要修改对应的主机地址、端口等信息。</p>
@@ -647,10 +647,10 @@
 <p>这种模式下取消代理主机的存在。假设依旧是三台主机，它们也有各自的从机，并组成一个无中心化集群。当请求打到集群上时，请求自动转移到目标服务器。</p>
 <p>比如现有一个订单请求打到集群上存放了用户信息的 Redis 主机上，由于这台主机存放的并不是订单信息，因此将请求移交给另一台 Redis 主机，依次类推，直到请求打到存放了订单信息的 Redis 主机上。</p>
 <p>简单来说就是一种「踢皮球」。</p>
-<h2 id="12-什么是集群">1.2 什么是集群</h2>
+<h3 id="12-什么是集群">1.2 什么是集群</h3>
 <p>Redis 集群实现了对 Redis 的水平扩容，即启动 N 个 Redis 节点，将整个数据库分布存储在这 N 个节点中，每个节点存储总数据的 1/N。</p>
 <p>Redis 集群通过分区（partition）来提供一定程度的可用性（availability），即使集群中有一部分节点失效或者无法进行通讯，集群也可以继续处理命令请求。</p>
-<h2 id="13-模拟集群的搭建">1.3 模拟集群的搭建</h2>
+<h3 id="13-模拟集群的搭建">1.3 模拟集群的搭建</h3>
 <p>在搭建前删除 RDB 和 AOF 产生的持久化文件，避免造成混淆。</p>
 <p>我们将制作 6 个实例（当然了，都是在一台 Redis 上进行模拟操作，真正的 6 个实例对我来说过于奢侈），它们的访问端口号分别为 6379、6380、6381、6389、6390、6391。</p>
 <blockquote><p>启动 6 个 Redis 实例</p></blockquote>
@@ -707,7 +707,7 @@
 <p>在上述命令上加个 <code>-c</code> 就可以采用集群策略连接，存储数据时会自动切换到对应的写主机。</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">redis-cli</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -c</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -p</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 6379</span></span></code></pre>
 <p>还可以使用 <code>cluster nodes</code> 命令查看集群信息。</p>
-<h2 id="14-集群操作">1.4 集群操作</h2>
+<h3 id="14-集群操作">1.4 集群操作</h3>
 <blockquote><p>节点的分配</p></blockquote>
 <p>已经使用 6 台 Redis 实例搭建起一个集群，那么 Redis 集群是如何分配这 6 个节点的呢？</p>
 <p>一个集群至少要有三个主节点。</p>
@@ -738,7 +738,7 @@
 <p>查询为 k1 的 key 在集群中的哪个插槽：<code>CLUSTER KEYSLOT k1</code></p>
 <p>查询 12706 插槽中 key 的数量（注意，12706 插槽必须在当前客户端中，否则 12706 中就算有 key，查得的结果也是 0）：<code>CLUSTER COUNTKEYSINSLOT 12706</code></p>
 <p>获取 5474 插槽中的前 10 个 key（不足 10 个显示所有）：<code>CLUSTER GETKEYSINSLOT 5474 10</code></p>
-<h2 id="15-故障恢复">1.5 故障恢复</h2>
+<h3 id="15-故障恢复">1.5 故障恢复</h3>
 <p>在集群中，如果某个主节点宕机，从节点能否自动升为主节点？</p>
 <p>答案是肯定的。</p>
 <p>宕机的主节点再次恢复后，主从节点的关系如何？</p>
@@ -747,7 +747,7 @@
 <p>这取决于 redis.conf （配置文件）中 <code>cluster-require-full-coverage</code> 参数的值：</p>
 <p>1、如果值为 <code>yes</code>，那么整个集群都会挂掉；</p>
 <p>2、如果值为 <code>no</code>，仅仅是无法向那段插槽录入或读取数据。</p>
-<h2 id="16-使用-jedis-操作集群">1.6 使用 Jedis 操作集群</h2>
+<h3 id="16-使用-jedis-操作集群">1.6 使用 Jedis 操作集群</h3>
 <p>使用 Jedis 操作集群与操作单机类似，由于 Redis 集群是无中心化主从集群，因此此时连接的不是主机，集群也会自动切换主机存储。</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> void</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> testCluster</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">() {</span></span>
 <span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">    HostAndPort</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> hostAndPort </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> new</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> HostAndPort</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"redis"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 6379</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
@@ -757,7 +757,7 @@
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">    Assert</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">assertEquals</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"v4"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, k4);</span></span>
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">    jedisCluster</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">close</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">();</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span></code></pre>
-<h2 id="17-优点与不足">1.7 优点与不足</h2>
+<h3 id="17-优点与不足">1.7 优点与不足</h3>
 <blockquote><p>优点</p></blockquote>
 <p>1、实现扩容</p>
 <p>2、分摊压力</p>
@@ -766,8 +766,8 @@
 <p>1、不支持多键操作（可以在定义组后进行多键操作）</p>
 <p>2、多键的 Redis 事务是不被支持的，Lua 脚本也不被支持</p>
 <p>3、由于 Redis Cluster 方案出现较晚，很多公司已经采用了其他的集群方案，而代理或者客户端分片的方案想要迁移至 Redis Cluster，需要整体迁移而不是逐步过渡，迁移的复杂度较大</p>
-<h1 id="2-分布式锁">2. 分布式锁</h1>
-<h2 id="21-遇到的问题">2.1 遇到的问题</h2>
+<h2 id="2-分布式锁">2. 分布式锁</h2>
+<h3 id="21-遇到的问题">2.1 遇到的问题</h3>
 <p>随着业务发展的需要，原单体单机部署的系统被演化成分布式集群系统后，由于分布式系统多线程、多进程并且分布在不同机器上，使得原单机部署情况下的并发控制锁策略失效，而单纯的 Java API 又不能提供分布式锁的能力。</p>
 <p>为了解决这个问题就需要一种跨 JVM 的互斥机制来控制共享资源的访问，这也就是分布式锁要解决的问题。</p>
 <p>分布式锁的主流实现方案有以下三种：</p>
@@ -778,7 +778,7 @@
 <p>1、从性能角度出发：Redis 性能最高</p>
 <p>2、从可靠性角度出发：Zookeeper 可靠性最高</p>
 <p>在此，我们基于 Redis 实现分布式锁。</p>
-<h2 id="22-简单的实现">2.2 简单的实现</h2>
+<h3 id="22-简单的实现">2.2 简单的实现</h3>
 <p>可以使用 Redis 命令简单实现分布式锁，即：使用 <code>setnx</code> 上锁，使用 <code>del</code> 释放锁。</p>
 <p>使用 <code>setnx</code> 上锁：</p>
 <pre>192.168.32.123:6381> setnx name mofan
@@ -857,7 +857,7 @@ OK
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">        }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span></code></pre>
-<h2 id="23-使用-uuid-防止误删">2.3 使用 UUID 防止误删</h2>
+<h3 id="23-使用-uuid-防止误删">2.3 使用 UUID 防止误删</h3>
 <p>上述实现看似完美，其实在分布式场景下存在问题：释放锁时可能会释放到其他服务器的锁。</p>
 <p>假设 Redis 分布式锁的过期时间为 10 秒，现有三台服务器（A、B、C）对数据进行操作，服务器 A 率先拿到锁，然后进行自己的业务逻辑，在执行的时候出现了服务器卡顿，并且在恢复正常之前已经到了分布式锁的过期时间，这时 A 的业务操作还没完，而锁已被自动释放。释放后 B 拿到了锁并执行自己的业务逻辑，B 在执行业务逻辑时 A 服务器恢复正常继续执行剩下的业务逻辑，在 B 还未执行完业务逻辑时，A 执行完剩余的业务逻辑并准备手动释放锁，在这时释放的锁就是 B 拿着的锁。这就相当于 B 没有被锁。</p>
 <p><strong>解决方案：在设置锁时设置一个唯一值（比如 UUID），而在释放锁时判断当前的唯一值是否和要释放的锁的唯一值一样。</strong></p>
@@ -891,7 +891,7 @@ OK
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">        }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span></code></pre>
-<h2 id="24-保证删除的原子性">2.4 保证删除的原子性</h2>
+<h3 id="24-保证删除的原子性">2.4 保证删除的原子性</h3>
 <p>引入 UUID 防止误删后依旧存在问题： <strong>删除操作缺乏原子性。</strong></p>
 <p>还是以三台服务器（A、B、C）为例，A 在释放锁时，查询到的锁的唯一值和当前的唯一值的确相等，但在 A 还没来得及手动释放锁时，锁的过期时间恰好到了，锁被自动释放了。这时 B 拿到了锁并执行自己的业务逻辑，业务逻辑还未执行完，A 进行手动释放锁，而释放的锁就是 B 的锁。</p>
 <p>为了保证删除的原子性，可以 <strong>使用 Lua 脚本进行锁的释放。</strong> Lua 脚本有一定的原子性，不会被其他命令插队。</p>
@@ -933,20 +933,20 @@ OK
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">        }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span></code></pre>
-<h2 id="25-总结">2.5 总结</h2>
+<h3 id="25-总结">2.5 总结</h3>
 <p>为了确保分布式锁可用，至少要确保锁的实现同时 <strong>满足以下四个条件：</strong></p>
 <p>1、互斥性。任意时刻，只有一个客户端能持有锁。</p>
 <p>2、不会发生死锁。即使有一个客户端在持有锁的期间崩溃而没有主动解锁，也能保证后续其他客户端能加锁。</p>
 <p>3、解铃还须系铃人。加锁和解锁必须是同一个客户端，客户端自己不能把别人加的锁给解了。</p>
 <p>4、加锁和解锁必须具有原子性。</p>
-<h1 id="3-acl">3. ACL</h1>
-<h2 id="31-acl-简介">3.1 ACL 简介</h2>
+<h2 id="3-acl">3. ACL</h2>
+<h3 id="31-acl-简介">3.1 ACL 简介</h3>
 <p>Redis ACL 是 Access Control List（访问控制列表）的缩写，该功能允许根据可以执行的命令和可以访问的键来限制某些连接。</p>
 <p>在 Redis 5 版本之前，Redis 安全规则只有密码控制，还有通过 <code>rename</code> 来调整高危命令，比如 <code>flushdb</code>，<code>KEYS*</code>，<code>shutdown</code> 等。Redis 6 则提供 ACL 的功能以便对用户进行更细粒度的权限控制，比如：</p>
 <p>1、接入权限：用户名和密码</p>
 <p>2、可以执行的命令</p>
 <p>3、可以操作的 KEY</p>
-<h2 id="32-命令">3.2 命令</h2>
+<h3 id="32-命令">3.2 命令</h3>
 <p>1、使用 <code>acl list</code> 命令显示用户的权限列表：</p>
 <pre>127.0.0.1:6379> acl list
 1) "user default on nopass ~* +@all"
@@ -956,7 +956,7 @@ OK
 <p>3、使用 <code>acl cat string</code> 命令查看 <code>string</code> 命令下具体可添加权限的指令；</p>
 <p>4、使用 <code>acl whoami</code> 命令查看当前用户</p>
 <p>5、使用 <code>aclsetuser</code> 命令创建用户并编辑用户的访问权限列表</p>
-<h2 id="33-acl-规则">3.3 ACL 规则</h2>
+<h3 id="33-acl-规则">3.3 ACL 规则</h3>
 <p>下面是有效 ACL 规则的列表。某些规则只是用于激活或删除标志，或对用户 ACL 执行给定更改的单个单词。其他规则是字符前缀，它们与命令或类别名称、键模式等连接在一起。</p>
 <blockquote><p>启动和禁用用户</p></blockquote>
 
@@ -976,7 +976,7 @@ OK
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">参数</th><th align="center">说明</th></tr></thead><tbody><tr><td align="center">on</td><td align="center">激活某用户账号</td></tr><tr><td align="center">off</td><td align="center">禁用某用户账号。注意，已验证的连接仍然可以工作。如果默认用户被标记为 off，则新连接将在未进行身份验证的情况下启动，并要求用户使用 AUTH 选项发送 AUTH 或 HELLO，以便以某种方式进行身份验证</td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">参数</th><th align="center">说明</th></tr></thead><tbody><tr><td align="center">on</td><td align="center">激活某用户账号</td></tr><tr><td align="center">off</td><td align="center">禁用某用户账号。注意，已验证的连接仍然可以工作。如果默认用户被标记为 off，则新连接将在未进行身份验证的情况下启动，并要求用户使用 AUTH 选项发送 AUTH 或 HELLO，以便以某种方式进行身份验证</td></tr></tbody></table></div>
 <blockquote><p>权限的添加和删除</p></blockquote>
 
 
@@ -1011,7 +1011,7 @@ OK
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">参数</th><th align="center">说明</th></tr></thead><tbody><tr><td align="center"><code>+&#x3C;command></code></td><td align="center">将指令添加到用户可以调用的指令列表中</td></tr><tr><td align="center"><code>-&#x3C;command></code></td><td align="center">从用户可执行指令列表移除指令</td></tr><tr><td align="center"><code>+@&#x3C;category></code></td><td align="center">添加该类别中用户要调用的所有指令，有效类别为 @admin、@set、@sortedset… 等，通过调用 ACL CAT 命令查看完整列表。特殊类别 @all 表示所有命令，包括当前存在于服务器中的命令，以及将来将通过模块加载的命令</td></tr><tr><td align="center"><code>-@&#x3C;actegory> </code></td><td align="center">从用户可调用指令中移除类别</td></tr><tr><td align="center"><code>allcommands</code></td><td align="center">+@all 的别名</td></tr><tr><td align="center"><code>nocommand</code></td><td align="center">-@all 的别名</td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">参数</th><th align="center">说明</th></tr></thead><tbody><tr><td align="center"><code>+&#x3C;command></code></td><td align="center">将指令添加到用户可以调用的指令列表中</td></tr><tr><td align="center"><code>-&#x3C;command></code></td><td align="center">从用户可执行指令列表移除指令</td></tr><tr><td align="center"><code>+@&#x3C;category></code></td><td align="center">添加该类别中用户要调用的所有指令，有效类别为 @admin、@set、@sortedset… 等，通过调用 ACL CAT 命令查看完整列表。特殊类别 @all 表示所有命令，包括当前存在于服务器中的命令，以及将来将通过模块加载的命令</td></tr><tr><td align="center"><code>-@&#x3C;actegory> </code></td><td align="center">从用户可调用指令中移除类别</td></tr><tr><td align="center"><code>allcommands</code></td><td align="center">+@all 的别名</td></tr><tr><td align="center"><code>nocommand</code></td><td align="center">-@all 的别名</td></tr></tbody></table></div>
 <blockquote><p>可操作键的添加或删除</p></blockquote>
 
 
@@ -1026,8 +1026,8 @@ OK
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">参数</th><th align="center">说明</th></tr></thead><tbody><tr><td align="center"><code>~&#x3C;pattern></code></td><td align="center">添加可作为用户可操作的键的模式。例如 <code>~*</code> 允许所有的键</td></tr></tbody></table></div>
-<h2 id="34-简单的示例">3.4 简单的示例</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">参数</th><th align="center">说明</th></tr></thead><tbody><tr><td align="center"><code>~&#x3C;pattern></code></td><td align="center">添加可作为用户可操作的键的模式。例如 <code>~*</code> 允许所有的键</td></tr></tbody></table></div>
+<h3 id="34-简单的示例">3.4 简单的示例</h3>
 <p>1、创建新用户并设置默认权限</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span>acl setuser mofan1</span></span></code></pre>
 <p>上述指令没有给 mofan 用户指定任何规则。如果用户不存在，这将使用 j ust created 的默认属性来创建用户。如果用户已经存在，则上面的命令将不执行任何操作。</p>
@@ -1046,25 +1046,25 @@ OK
 <pre>127.0.0.1:6379> get cached:1
 (nil)
 </pre>
-<h1 id="4-io-多线程">4. IO 多线程</h1>
-<h2 id="41-简介">4.1 简介</h2>
+<h2 id="4-io-多线程">4. IO 多线程</h2>
+<h3 id="41-简介">4.1 简介</h3>
 <p>Redis 6 支持多线程了，并不是说 Redis 就告别单线程了。</p>
 <p>IO 多线程其实指 <strong>客户端交互部分</strong> 的 <strong>网络 IO</strong> 交互处理模块 <strong>多线程</strong>，而非 <strong>执行命令多线程</strong>。Redis 6 执行命令依然是单线程。</p>
-<h2 id="42-原理架构">4.2 原理架构</h2>
+<h3 id="42-原理架构">4.2 原理架构</h3>
 <p>Redis 6 加入多线程，但跟 Memcached 这种从 IO 处理到数据访问多线程的实现模式有些差异。Redis 的多线程部分只是用来处理网络数据的读写和协议解析，执行命令仍然是单线程。</p>
 <p>之所以这么设计是不想因为多线程而变得复杂，需要去控制 key、Lua、事务、LPUSH/LPOP 等等的并发问题。整体的设计大体如下：</p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/Redis%E7%9A%84IO%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/Redis%E7%9A%84IO%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86.png" alt="Redis的IO多线程架构原理" data-responsive-image="true"></picture></p>
 <p>另外，多线程 IO 默认也是不开启的，需要在配置文件中进行配置：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span></span><code><span class="line"><span>io-threads-do-reads yes </span></span>
 <span class="line"><span>io-threads 4</span></span></code></pre>
-<h1 id="5-其他新特性">5. 其他新特性</h1>
-<h2 id="51-工具支持-cluster">5.1 工具支持 Cluster</h2>
+<h2 id="5-其他新特性">5. 其他新特性</h2>
+<h3 id="51-工具支持-cluster">5.1 工具支持 Cluster</h3>
 <p>之前老版本 Redis 想要搭集群需要单独安装 Ruby 环境，Redis 5 将 redis-trib.rb 的功能集成到 redis-cli。另外官方 redis-benchmark 工具开始支持 Cluster 模式了，通过多线程的方式对多个分片进行压测。</p>
-<h2 id="52-其他">5.2 其他</h2>
+<h3 id="52-其他">5.2 其他</h3>
 <p>1、RESP3 新的 Redis 通信协议：优化服务端与客户端之间通信</p>
 <p>2、Client Side Caching 客户端缓存：基于 RESP3 协议实现的客户端缓存功能。为了进一步提升缓存的性能，将客户端经常访问的数据 Cache 到客户端，减少 TCP 网络交互。</p>
 <p>3、Proxy 集群代理模式：Proxy 功能，让 Cluster 拥有像单实例一样的接入方式，降低大家使用 Cluster 的门槛。不过需要注意的是代理不改变 Cluster 的功能限制，不支持的命令还是不会支持，比如跨 Slot 的多 Key 操作。</p>
-<p>4、Modules API：Redis 6 中模块 API 开发进展非常大，因为 Redis Labs 为了开发复杂的功能，从一开始就用上 Redis 模块。Redis 可以变成一个框架，利用 Modules 来构建不同系统，而不需要从头开始写然后还要 BSD 许可。Redis 一开始就是一个向编写各种系统开放的平台。</p> </article> <div class="text-muted-foreground max-w-app mt-20 w-full space-y-3 text-center text-sm" data-astro-cid-7ap3hmvm> <aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full px-2 text-center leading-6 sm:px-0"> <p class="m-0 break-words"> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a><span> 许可协议，</span><span class="max-sm:block">转载时请署名并注明<a href="https://mofan212.github.io/posts/redis-cluster-and-distributed-locks/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a> 🔗</span> </p> </aside> <section data-post-reward data-pagefind-ignore class="w-full" aria-label="赞赏"> <div class="flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:flex-wrap sm:gap-x-1.5 sm:gap-y-2"> <span class="sm:whitespace-nowrap">如果这篇文章对你有帮助，可以通过</span> <a href="/reward/" class="focus-outline border-accent text-accent hover:bg-accent/10 active:bg-accent/10 inline-block rounded-md border px-3 py-1 font-medium transition-colors"> 赞赏 </a> <span class="sm:whitespace-nowrap">请我喝杯 Coffee ☕</span> </div> </section> </div> <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm>  <ul id="post-tags" class="mt-4 mb-8 flex flex-wrap gap-4 sm:mb-8" data-astro-cid-7ap3hmvm> <li> <a href="/tags/redis/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> Redis </a> </li><li> <a href="/tags/middleware/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-2"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> 中间件 </a> </li> </ul>  <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/class-resource-loading-in-java/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.3l105.3-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg> <div> <span>上一篇</span> <div class="text-accent/85 text-sm">Java 的类资源加载</div> </div> </a> <a href="/posts/lua-basics-manual/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>下一篇</span> <div class="text-accent/85 text-sm">Lua 基础知识手册</div> </div> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg> </a> </div> </main> <footer class="app-layout mt-auto" data-astro-cid-7ap3hmvm="true"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="text-muted-foreground my-2 flex w-fit flex-col items-start text-start text-sm whitespace-nowrap"> <div class="flex items-center gap-1.5"> <svg width="24" height="24" fill="currentColor" class="size-4" viewBox="-49.231 -39.385 738.462 590.769" aria-hidden="true"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9-.1-2.7-.2-5.4-.2-8.1 0-88.4 71.6-160 160-160 59.3 0 111 32.2 138.7 80.2A95.5 95.5 0 0 1 448 96c53 0 96 43 96 96 0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39L296 392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0z" /></svg> <span>最近更新：</span> <time class="tabular-nums" datetime="2026-10-21T03:16:11.000Z" data-deployed-at="2026-10-21T03:16:11.000Z" data-just-now="刚刚" data-locale="zh-CN"> 2026-10-21 11:16 </time> </div> <div class="mt-1 flex items-center gap-3 text-xs"> <span class="flex items-center gap-1" title="本站访客数"> <svg width="24" height="24" fill="currentColor" class="size-3" viewBox="-2.835 -3.241 453.671 518.481" aria-hidden="true"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3z" /></svg> <span class="sr-only">本站访客数：</span> <span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> <span aria-hidden="true">|</span> <span class="flex items-center gap-1.5" title="本站总浏览量"> <span class="flex size-4 items-center justify-center" aria-hidden="true"> <svg width="24" height="24" fill="currentColor" class="size-3.5" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48zM0 272c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v160c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zM368 96h32c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48" /></svg> </span> <span class="sr-only">本站总浏览量：</span> <span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> </div> </div> <div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"> <span>版权所有 &#169; 2020 – 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer> <script>
+<p>4、Modules API：Redis 6 中模块 API 开发进展非常大，因为 Redis Labs 为了开发复杂的功能，从一开始就用上 Redis 模块。Redis 可以变成一个框架，利用 Modules 来构建不同系统，而不需要从头开始写然后还要 BSD 许可。Redis 一开始就是一个向编写各种系统开放的平台。</p> </article> <div class="text-muted-foreground max-w-app mt-20 w-full space-y-3 text-center text-sm" data-astro-cid-7ap3hmvm> <aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full px-2 text-center leading-6 sm:px-0"> <p class="m-0 break-words"> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a><span> 许可协议，</span><span class="max-sm:block">转载时请署名并注明<a href="https://mofan212.github.io/posts/redis-cluster-and-distributed-locks/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a> 🔗</span> </p> </aside> <section data-post-reward data-pagefind-ignore class="w-full" aria-label="赞赏"> <div class="flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:flex-wrap sm:gap-x-1.5 sm:gap-y-2"> <span class="sm:whitespace-nowrap">如果这篇文章对你有帮助，可以通过</span> <a href="/reward/" class="focus-outline border-accent text-accent hover:bg-accent/10 active:bg-accent/10 inline-block rounded-md border px-3 py-1 font-medium transition-colors"> 赞赏 </a> <span class="sm:whitespace-nowrap">请我喝杯 Coffee ☕</span> </div> </section> </div> <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm>  <ul id="post-tags" class="mt-4 mb-8 flex flex-wrap gap-4 sm:mb-8" data-astro-cid-7ap3hmvm> <li> <a href="/tags/redis/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> Redis </a> </li><li> <a href="/tags/middleware/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-2"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> 中间件 </a> </li> </ul>  <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/class-resource-loading-in-java/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.3l105.3-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg> <div> <span>上一篇</span> <div class="text-accent/85 text-sm">Java 的类资源加载</div> </div> </a> <a href="/posts/lua-basics-manual/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>下一篇</span> <div class="text-accent/85 text-sm">Lua 基础知识手册</div> </div> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg> </a> </div> </main> <footer class="app-layout mt-auto" data-astro-cid-7ap3hmvm="true"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="text-muted-foreground my-2 flex w-fit flex-col items-start text-start text-sm whitespace-nowrap"> <div class="flex items-center gap-1.5"> <svg width="24" height="24" fill="currentColor" class="size-4" viewBox="-49.231 -39.385 738.462 590.769" aria-hidden="true"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9-.1-2.7-.2-5.4-.2-8.1 0-88.4 71.6-160 160-160 59.3 0 111 32.2 138.7 80.2A95.5 95.5 0 0 1 448 96c53 0 96 43 96 96 0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39L296 392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0z" /></svg> <span>最近更新：</span> <time class="tabular-nums" datetime="2026-10-22T08:22:01.000Z" data-deployed-at="2026-10-22T08:22:01.000Z" data-just-now="刚刚" data-locale="zh-CN"> 2026-10-22 16:22 </time> </div> <div class="mt-1 flex items-center gap-3 text-xs"> <span class="flex items-center gap-1" title="本站访客数"> <svg width="24" height="24" fill="currentColor" class="size-3" viewBox="-2.835 -3.241 453.671 518.481" aria-hidden="true"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3z" /></svg> <span class="sr-only">本站访客数：</span> <span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> <span aria-hidden="true">|</span> <span class="flex items-center gap-1.5" title="本站总浏览量"> <span class="flex size-4 items-center justify-center" aria-hidden="true"> <svg width="24" height="24" fill="currentColor" class="size-3.5" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48zM0 272c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v160c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zM368 96h32c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48" /></svg> </span> <span class="sr-only">本站总浏览量：</span> <span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> </div> </div> <div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"> <span>版权所有 &#169; 2020 – 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer> <script>
   (() => {
     const updateDeploymentTimes = () => {
       document.querySelectorAll("[data-deployed-at]").forEach(element => {
@@ -1113,4 +1113,4 @@ OK
     document.addEventListener("astro:page-load", updateDeploymentTimes);
     window.setInterval(updateDeploymentTimes, 60_000);
   })();
-</script>    <script type="module" src="/_astro/Layout.astro_astro_type_script_index_0_lang.DQQu8RqY.js"></script> <script type="module" src="/_astro/Layout.astro_astro_type_script_index_1_lang.DRvjezMo.js"></script> </body> </html>  <script type="module" src="/_astro/index.astro_astro_type_script_index_0_lang.Oly9xh_g.js"></script>
+</script>    <script type="module" src="/_astro/Layout.astro_astro_type_script_index_0_lang.BrDp0sUM.js"></script> <script type="module" src="/_astro/Layout.astro_astro_type_script_index_1_lang.DRvjezMo.js"></script> </body> </html>  <script type="module" src="/_astro/index.astro_astro_type_script_index_0_lang.Oly9xh_g.js"></script>

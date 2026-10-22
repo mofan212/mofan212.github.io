@@ -1,4 +1,4 @@
-<!DOCTYPE html><html dir="ltr" lang="zh-CN" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/docker-advanced/"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.3.0/400.css"><link rel="preconnect" href="https://busuanzi.ibruce.info"><meta name="generator" content="Astro v6.4.2"><!-- Primary meta --><title>Docker 高级篇 | Mofan</title><meta name="title" content="Docker 高级篇 | Mofan"><meta name="description" content="Develop faster. Run anywhere."><meta name="author" content="默烦"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Mofan"><meta property="og:title" content="Docker 高级篇 | Mofan"><meta property="og:description" content="Develop faster. Run anywhere."><meta property="og:url" content="https://mofan212.github.io/posts/docker-advanced/"><meta property="og:image" content="https://mofan212.github.io/default-og.jpg"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://mofan212.github.io/posts/docker-advanced/"><meta property="twitter:title" content="Docker 高级篇 | Mofan"><meta property="twitter:description" content="Develop faster. Run anywhere."><meta property="twitter:image" content="https://mofan212.github.io/default-og.jpg"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Mofan" href="https://mofan212.github.io/rss.xml"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2025-02-23T00:00:00.000Z"><meta property="article:modified_time" content="2025-02-23T00:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Docker 高级篇 | Mofan","url":"https://mofan212.github.io/posts/docker-advanced/","mainEntityOfPage":"https://mofan212.github.io/posts/docker-advanced/","datePublished":"2025-02-23T00:00:00.000Z","dateModified":"2025-02-23T00:00:00.000Z","author":[{"@type":"Person","name":"默烦","url":"https://github.com/mofan212"}]}</script> <!--
+<!DOCTYPE html><html dir="ltr" lang="zh-CN" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/docker-advanced/"><link rel="preconnect" href="https://npm.elemecdn.com"><link rel="preconnect" href="https://gcore.jsdelivr.net"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/lxgwwenkaiscreen.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.3.0/400.css"><link rel="preconnect" href="https://busuanzi.ibruce.info"><meta name="generator" content="Astro v6.4.2"><!-- Primary meta --><title>Docker 高级篇 | Mofan</title><meta name="title" content="Docker 高级篇 | Mofan"><meta name="description" content="Develop faster. Run anywhere."><meta name="author" content="默烦"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Mofan"><meta property="og:title" content="Docker 高级篇 | Mofan"><meta property="og:description" content="Develop faster. Run anywhere."><meta property="og:url" content="https://mofan212.github.io/posts/docker-advanced/"><meta property="og:image" content="https://mofan212.github.io/default-og.jpg"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://mofan212.github.io/posts/docker-advanced/"><meta property="twitter:title" content="Docker 高级篇 | Mofan"><meta property="twitter:description" content="Develop faster. Run anywhere."><meta property="twitter:image" content="https://mofan212.github.io/default-og.jpg"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Mofan" href="https://mofan212.github.io/rss.xml"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2025-02-23T00:00:00.000Z"><meta property="article:modified_time" content="2025-02-23T00:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Docker 高级篇 | Mofan","url":"https://mofan212.github.io/posts/docker-advanced/","mainEntityOfPage":"https://mofan212.github.io/posts/docker-advanced/","datePublished":"2025-02-23T00:00:00.000Z","dateModified":"2025-02-23T00:00:00.000Z","author":[{"@type":"Person","name":"默烦","url":"https://github.com/mofan212"}]}</script> <!--
       Inline FOUC-prevention script: sets data-theme on <html> before
       the browser paints. Runs synchronously, no defer/async.
     --><script>
@@ -14,7 +14,7 @@
         // Expose value so theme.ts can skip re-detection.
         window.__theme = { value: theme };
       })();
-    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.8-7lwm7-.css">
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.CRJPB6-j.css">
 <style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
 .toc-link[data-astro-cid-po2ckxzl]{position:relative;transition:color .2s ease}.toc-link[data-astro-cid-po2ckxzl]:before{position:absolute;inset-block:.375rem;inset-inline-start:-2px;width:2px;border-radius:2px;background-color:var(--accent);content:"";opacity:0;transition:opacity .2s ease}.toc-link[data-astro-cid-po2ckxzl][data-active]{color:var(--accent)}.toc-link[data-astro-cid-po2ckxzl][data-active]:before{opacity:1}.toc-toggle[data-astro-cid-po2ckxzl][aria-expanded=true] .toc-toggle-icon[data-astro-cid-po2ckxzl]{rotate:-90deg}.toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-width:thin}.post-toc-desktop[data-astro-cid-taqt6xe3] .toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-gutter:stable}.toc-scroll[data-astro-cid-taqt6xe3]:after{display:block;block-size:20dvh;content:""}[data-astro-cid-taqt6xe3][data-toc-dialog]{opacity:0;transform:translate(1.25rem);transition:opacity .16s ease-out,transform .22s cubic-bezier(.22,1,.36,1);will-change:opacity,transform}[data-astro-cid-taqt6xe3][data-toc-dialog][data-toc-visible]{opacity:1;transform:translate(0)}[data-astro-cid-taqt6xe3][data-toc-dialog]::backdrop{background-color:#0000;transition:background-color .18s ease-out}[data-astro-cid-taqt6xe3][data-toc-dialog][data-toc-visible]::backdrop{background-color:#0000007f}@media(prefers-reduced-motion:reduce){[data-astro-cid-taqt6xe3][data-toc-dialog]{transform:none;transition:none}[data-astro-cid-taqt6xe3][data-toc-dialog]::backdrop{transition:none}}[data-astro-cid-4wxclohh][data-post-series]{interpolate-size:allow-keywords}[data-astro-cid-4wxclohh][data-post-series]::details-content{block-size:0;overflow:hidden;opacity:0;transition:block-size .2s ease-out,opacity .15s ease-out,content-visibility .2s allow-discrete}[data-astro-cid-4wxclohh][data-post-series][open]::details-content{block-size:auto;opacity:1}@media(prefers-reduced-motion:reduce){[data-astro-cid-4wxclohh][data-post-series]::details-content{transition:none}}.post-sidebar[data-astro-cid-7ap3hmvm]{display:contents}@media(min-width:90rem){.post-sidebar[data-astro-cid-7ap3hmvm]{position:fixed;inset-block-start:9rem;inset-inline-start:calc(50% + var(--app-max-width) / 2 + 2rem);display:flex;width:min(18rem,calc(50vw - var(--app-max-width) / 2 - 3rem));height:calc(100dvh - 11rem);min-height:0;flex-direction:column}}
 </style><style>[data-astro-transition-scope="astro-36ssibgs-1"] { view-transition-name: docker; }@layer astro { ::view-transition-old(docker) { 
@@ -593,9 +593,9 @@
 
     update();
   })();
-</script> </div> <article id="article" class="mt-8 w-full app-prose max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)" data-astro-cid-7ap3hmvm> <!-- 封面来源：本文封面来源于 Docker 官网，如有侵权，请联系删除。 -->
+</script> </div> <article id="article" class="mt-8 w-full app-prose post-content max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)" data-astro-cid-7ap3hmvm> <!-- 封面来源：本文封面来源于 Docker 官网，如有侵权，请联系删除。 -->
 <p>参考链接：<a href="https://www.bilibili.com/video/BV1gr4y1U7CY/" target="_blank" rel="noopener noreferrer">尚硅谷Docker实战教程</a></p>
-<h1 id="1-安装-mysql-主从复制">1. 安装 MySQL 主从复制</h1>
+<h2 id="1-安装-mysql-主从复制">1. 安装 MySQL 主从复制</h2>
 <blockquote><p>新建主服务器容器实例 3307</p></blockquote>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">docker</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> run</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -p</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> 3307:3306</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> --name</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> mysql-master</span><span style="--shiki-light:#0184BC;--shiki-dark:#56B6C2"> \</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">-v </span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">/mydata/mysql-master/log:/var/log/mysql</span><span style="--shiki-light:#0184BC;--shiki-dark:#56B6C2"> \</span></span>
@@ -740,7 +740,7 @@
 <p>命令执行后没有报错，再尝试查询表里所有数据：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="sql" data-language-name="SQL"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">SELECT</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> * </span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">FROM</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> t1;</span></span></code></pre>
 <p>最终能够查询到在主数据库中添加的数据，证明主从复制功能无误。</p>
-<h1 id="2-分布式数据分区算法">2. 分布式数据分区算法</h1>
+<h2 id="2-分布式数据分区算法">2. 分布式数据分区算法</h2>
 <p>如果有亿级数据需要缓存，应该如何设计这个存储案例？</p>
 <p>此时使用单机 Redis 肯定是不行的，需要使用到分布式存储，那应该怎么落地？</p>
 <p>目前业界关于分布式数据分区有三种解决方案：</p>
@@ -749,7 +749,7 @@
 <li>一致性哈希算法</li>
 <li>哈希槽算法</li>
 </ol>
-<h2 id="21-哈希取余算法">2.1 哈希取余算法</h2>
+<h3 id="21-哈希取余算法">2.1 哈希取余算法</h3>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/%E5%93%88%E5%B8%8C%E5%8F%96%E4%BD%99%E7%AE%97%E6%B3%95%E5%9B%BE%E7%A4%BA.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/%E5%93%88%E5%B8%8C%E5%8F%96%E4%BD%99%E7%AE%97%E6%B3%95%E5%9B%BE%E7%A4%BA.png" alt="哈希取余算法图示" data-responsive-image="true"></picture></p>
 <p>以 2 亿条记录为例，在 Redis 里就是 2 亿个 KV 键值对，必须要使用分布式多机。</p>
 <p>假设 N 台机器构成一个集群，用户每次读写操作都要根据以下公式计算出哈希值，用来决定数据映射到哪一个 Redis 节点上：</p>
@@ -758,7 +758,7 @@
 <p>简单粗暴，直接有效，只需要预估好数据就能规划好节点，能保证一段时间的数据支撑。使用 Hash 算法让固定的一部分请求落到同一台服务器上，每台服务器固定处理一部分请求（并维护这些请求的信息），起到负载均衡与分而治之的作用。</p>
 <blockquote><p>缺点</p></blockquote>
 <p>如果集群进行了扩容或缩容导致节点数量发生变动，映射关系就需要重新计算。在服务器数量固定不变时没有问题，而在需要弹性扩容或故障停机的情况下，原来取模公式中的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span></span></span></span> 就会发生变化，此时运算结果会发生很大的变化，导致根据公式获取的服务器信息变得不可控。</p>
-<h2 id="22-一致性哈希算法">2.2 一致性哈希算法</h2>
+<h3 id="22-一致性哈希算法">2.2 一致性哈希算法</h3>
 <p>一致性哈希算法在 1997 年由麻省理工学院提出，设计目标是为了解决分布式缓存数据变动和映射问题。</p>
 <p>使用一致性哈希算法，当服务器个数发生变动时， 尽量减少客户端与服务器之间的映射关系的影响。</p>
 <p>一致性哈希算法分为 3 步：</p>
@@ -802,7 +802,7 @@
 <p>例如对 Node A 节点虚拟出 NodeA#1、NodeA#2 和 NodeA#3 共 3 个节点，对 Node B 虚拟出 NodeB#1、NodeB#2 和 NodeB#3 共 3 个节点，总共形成 6 个虚拟节点。</p>
 <p>如果再加入或删除节点，只会影响哈希环中顺时针方向相邻节点，而对其他节点无影响。</p>
 <p>此时数据的分布和节点的位置有关，因为这些虚拟节点不是均匀分布在哈希环上的，所以无法均匀地存储数据。</p>
-<h2 id="23-哈希槽算法">2.3 哈希槽算法</h2>
+<h3 id="23-哈希槽算法">2.3 哈希槽算法</h3>
 <p>哈希槽的本质是一个数组，数组 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><mn>0</mn><mo separator="true">,</mo><msup><mn>2</mn><mn>14</mn></msup><mo>−</mo><mn>1</mn><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">[0,2^{14} -1]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">14</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">]</span></span></span></span> 形成哈希槽（hash slot）空间。</p>
 <p>使用哈希槽能够解决数据不均匀分配的问题。在数据和节点之间添加一层哈希槽（slot），用于管理数据和节点之间的关系，此时节点上放的是槽，槽里放的才是数据。</p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/data-slot-redis.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/data-slot-redis.png" alt="data-slot-redis" data-responsive-image="true"></picture></p>
@@ -820,8 +820,8 @@
 <p>Redis 节点每秒需要发送一定数量的 ping 消息作为心跳，如果槽位为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>65536</mn></mrow><annotation encoding="application/x-tex">65536</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">65536</span></span></span></span>，那么这个 ping 消息头就会太大而浪费带宽。</p>
 <p>Redis 集群的主节点数量基本不可能超过 1000 个。集群节点越多，心跳包的消息体内携带的数据越多（心跳包带有节点的完整配置，可以用幂等的方式替换旧节点的配置，以更新旧节点）。如果节点超过 1000 个，也会导致网络拥堵。因此 Redis 作者不建议 Redis 集群节点超过 1000 个。对于节点数在 1000 以内的 Redis 集群，16384 个槽位足够了，没有必要扩展到 65536 个。</p>
 <p>槽位越小，节点少的情况下压缩比越高，更容易传输。Redis 主节点的配置信息中，它所负责的哈希槽是通过一个 Bitmap 来保存的，在传输过程中会对 Bitmap 进行压缩，但如果 Bitmap 的填充率 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mi>l</mi><mi>o</mi><mi>t</mi><mi>s</mi><mi mathvariant="normal">/</mi><mi>N</mi></mrow><annotation encoding="application/x-tex">slots / N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">s</span><span class="mord mathnormal" style="margin-right:0.0197em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal">t</span><span class="mord mathnormal">s</span><span class="mord">/</span><span class="mord mathnormal" style="margin-right:0.109em;">N</span></span></span></span>（<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span></span></span></span> 为节点数）很高，Bitmap 的压缩率会很低。如果节点数很少，但哈希槽很多，Bitmap 的压缩率就会很低。</p>
-<h1 id="3-安装-redis-集群">3. 安装 Redis 集群</h1>
-<h2 id="31-三主三从-redis-集群配置">3.1 三主三从 Redis 集群配置</h2>
+<h2 id="3-安装-redis-集群">3. 安装 Redis 集群</h2>
+<h3 id="31-三主三从-redis-集群配置">3.1 三主三从 Redis 集群配置</h3>
 <blockquote><p>新建 6 个 Docker 容器实例</p></blockquote>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span><span class="code-line-number">13</span><span class="code-line-number">14</span><span class="code-line-number">15</span><span class="code-line-number">16</span><span class="code-line-number">17</span></span><code><span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic"># 启动第 1 台节点</span></span>
 <span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">docker</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> run</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -d</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> --name</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> redis-node-1</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> --net</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> host</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> --privileged=true</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -v</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> /app/redis-cluster/share/redis-node-1:/data</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> redis:6.0.8</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> --cluster-enabled</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> yes</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> --appendonly</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> yes</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> --port</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 6381</span></span>
@@ -896,7 +896,7 @@ cluster_known_nodes:6
 </ul>
 <p>执行以下命令查看集群节点情况：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">cluster</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> nodes</span></span></code></pre>
-<h2 id="32-主从容错切换迁移">3.2 主从容错切换迁移</h2>
+<h3 id="32-主从容错切换迁移">3.2 主从容错切换迁移</h3>
 <blockquote><p>数据读写存储</p></blockquote>
 <p>先进入 <code>redis-node-1</code> 容器：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">docker</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> exec</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -it</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> redis-node-1</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> /bin/bash</span></span></code></pre>
@@ -935,7 +935,7 @@ OK
 <li>当前集群各节点存储的 key 的数量</li>
 <li>主从机信息</li>
 </ul>
-<h2 id="33-主从容错切换迁移">3.3 主从容错切换迁移</h2>
+<h3 id="33-主从容错切换迁移">3.3 主从容错切换迁移</h3>
 <p>已知当前 Redis 集群信息如下：</p>
 
 
@@ -958,7 +958,7 @@ OK
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">主机名称：端口</th><th align="center">对应从机名称：端口</th></tr></thead><tbody><tr><td align="center"><code>redis-node-1:6381</code></td><td align="center"><code>redis-node-4:6384</code></td></tr><tr><td align="center"><code>redis-node-2:6382</code></td><td align="center"><code>redis-node-5:6385</code></td></tr><tr><td align="center"><code>redis-node-3:6383</code></td><td align="center"><code>redis-node-6:6386</code></td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">主机名称：端口</th><th align="center">对应从机名称：端口</th></tr></thead><tbody><tr><td align="center"><code>redis-node-1:6381</code></td><td align="center"><code>redis-node-4:6384</code></td></tr><tr><td align="center"><code>redis-node-2:6382</code></td><td align="center"><code>redis-node-5:6385</code></td></tr><tr><td align="center"><code>redis-node-3:6383</code></td><td align="center"><code>redis-node-6:6386</code></td></tr></tbody></table></div>
 <p>模拟 <code>6381</code> 端口的 <code>redis-node-1</code> 容器宕机。</p>
 <p>查找 <code>6381</code> 端口的 PID：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">lsof</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -i:6381</span></span></code></pre>
@@ -991,7 +991,7 @@ redis-ser 25946 polkitd    6u  IPv6 83743781      0t0  TCP *:6381 (LISTEN)
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span></span><code><span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic"># 简单处理，用 docker stop 命令断开连接</span></span>
 <span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">docker</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> stop</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> 6384Redis对应的容器ID</span></span></code></pre>
 <p>这时 <code>6381</code> 又会恢复成主机，如果 <code>6384</code> 再复活，它也还是只能是从机。</p>
-<h2 id="34-主从扩容">3.4 主从扩容</h2>
+<h3 id="34-主从扩容">3.4 主从扩容</h3>
 <p>现在需要往 3 主 3 从的集群里再添加 1 主 1 从两个节点。</p>
 <p>首先启动 2 个新的容器，并指定端口信息：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">docker</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> run</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -d</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> --name</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> redis-node-7</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> --net</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> host</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> --privileged=true</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -v</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> /app/redis-cluster/share/redis-node-7:/data</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> redis:6.0.8</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> --cluster-enabled</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> yes</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> --appendonly</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> yes</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> --port</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 6387</span></span></code></pre>
@@ -1081,7 +1081,7 @@ S: 8759bf90bbf13e795bc76a677b34db1a433626c4 宿主机IP:6384
 <p>最后查看集群状态：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">redis-cli</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> --cluster</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> check</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> 宿主机IP:6381</span></span></code></pre>
 <p>此时集群中共有 4 台 Redis，新增 <code>6387</code> <code>6388</code> 两台一主一从，<code>6388</code> 作为从节点挂在 <code>6387</code> 下。</p>
-<h2 id="35-主从缩容">3.5 主从缩容</h2>
+<h3 id="35-主从缩容">3.5 主从缩容</h3>
 <p>现在需要贯彻落实开源节流，4 主 4 从的 Redis 集群太奢侈了，3 主 3 从就够用。那么要怎么缩容呢？</p>
 <p>假设需要将 <code>6387</code> 和 <code>6388</code> 「干掉」，先进入其他任意不包含这两个 Redis 的容器中：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">docker</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> exec</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -it</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> redis-node-1</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> /bin/bash</span></span></code></pre>
@@ -1142,8 +1142,8 @@ Source node #2: done
 <p>最后查看集群状态：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">redis-cli</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> --cluster</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> check</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> 宿主机IP:6381</span></span></code></pre>
 <p>集群中 3 个主机拥有的槽位数量大致均匀。</p>
-<h1 id="4-dockerfile">4. Dockerfile</h1>
-<h2 id="41-概述">4.1 概述</h2>
+<h2 id="4-dockerfile">4. Dockerfile</h2>
+<h3 id="41-概述">4.1 概述</h3>
 <p>官方网站：<a href="https://docs.docker.com/reference/dockerfile/" target="_blank" rel="noopener noreferrer">Dockerfile reference | Docker Docs</a></p>
 <p>Dockerfile 是用来构建 Docker 镜像的文本文件，是由一条条构建镜像所需的指令和参数构成的脚本。</p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/Dockerfile.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/Dockerfile.png" alt="Dockerfile" data-responsive-image="true"></picture></p>
@@ -1153,7 +1153,7 @@ Source node #2: done
 <li>使用 <code>docker build</code> 命令构建镜像</li>
 <li>使用 <code>docker run</code> 命令运行容器实例</li>
 </ol>
-<h2 id="42-构建过程">4.2 构建过程</h2>
+<h3 id="42-构建过程">4.2 构建过程</h3>
 <blockquote><p>Dockerfile 内容基础知识</p></blockquote>
 <ul>
 <li>每条保留字指令都 <strong>必须为大写字母</strong> 且后面要跟随至少一个参数</li>
@@ -1183,7 +1183,7 @@ Source node #2: done
 <li>Docker 镜像，在用 Dockerfile 定义一个文件之后，执行 <code>docker build</code> 命令时会产生一个 Docker 镜像，运行 Docker 镜像时会真正开始提供服务；</li>
 <li>Docker 容器是直接提供服务的。</li>
 </ol>
-<h2 id="43-dockerfile-保留字">4.3 Dockerfile 保留字</h2>
+<h3 id="43-dockerfile-保留字">4.3 Dockerfile 保留字</h3>
 <p>参考 Tomcat 的 Dockerfile：<a href="https://github.com/docker-library/tomcat" target="_blank" rel="noopener noreferrer">docker-library/tomcat</a></p>
 <blockquote><p>FROM</p></blockquote>
 <p>基础镜像，当前新镜像是基于哪个镜像的，指定一个已经存在的镜像作为模板，第一条必须是 <code>From</code>。</p>
@@ -1279,7 +1279,7 @@ Source node #2: done
 <p>但请注意，与 <code>CMD</code> 一样，如果 Dockerfile 中存在多个 <code>ENTRYPOINT</code> 指令，也是只有最后一个生效。</p>
 <blockquote><p>小总结</p></blockquote>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/Dockerfile%E4%B8%80%E5%9B%BE%E6%B5%81.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/Dockerfile%E4%B8%80%E5%9B%BE%E6%B5%81.png" alt="Dockerfile一图流" data-responsive-image="true"></picture></p>
-<h2 id="44-案例演示">4.4 案例演示</h2>
+<h3 id="44-案例演示">4.4 案例演示</h3>
 <blockquote><p>自定义镜像 <code>mycentosjava8</code></p></blockquote>
 <p>拉取 centos7 镜像：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">docker</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> pull</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> centos:7</span></span></code></pre>
@@ -1350,7 +1350,7 @@ bash: java: command not found
 <p>等待镜像构建成功后，执行以下命令创建容器实例：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">docker</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> run</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -it</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> mycentosjava8:1.0</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> /bin/bash</span></span></code></pre>
 <p>进入容器后，重新验证 <code>yum</code>、<code>ifconfig</code> 和 <code>java</code> 命令，如果无误，证明镜像构建成功。</p>
-<h2 id="45-虚悬镜像">4.5 虚悬镜像</h2>
+<h3 id="45-虚悬镜像">4.5 虚悬镜像</h3>
 <p>虚悬镜像，即 dangling image，仓库名、标签都是 <code>&#x3C;none></code> 的镜像。</p>
 <p>可以使用以下 Dockerfile 构建一个虚悬镜像：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="dockerfile" data-language-name="Dockerfile"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">from</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> ubuntu</span></span>
@@ -1373,8 +1373,8 @@ WARNING! This will remove all dangling images.
 Are you sure you want to continue? [y/N]
 </pre>
 <p>键入 <code>y</code> 删除所有虚悬镜像。</p>
-<h1 id="5-微服务实战">5. 微服务实战</h1>
-<h2 id="51-搭建项目">5.1 搭建项目</h2>
+<h2 id="5-微服务实战">5. 微服务实战</h2>
+<h3 id="51-搭建项目">5.1 搭建项目</h3>
 <p><mark class="flexible-marker flexible-marker-default">注意：</mark> 本次搭建的项目将采用当前最新的 SpringBoot 3.4.3 与 JDK21。</p>
 <p>本节的主要目的是获取项目打包后对应的 JAR 包，如果不了解 Java、SpringBoot、Maven 的基本操作，可以点击 <a href="https://pan.baidu.com/s/1jdzVXY4fAmK4_rgwllDL2Q?pwd=dqtj" target="_blank" rel="noopener noreferrer">链接</a> 下载所需 JAR 包。</p>
 <p>使用 IDEA 创建 SpringBoot 项目，<code>pom.xml</code> 内容如下：</p>
@@ -1442,7 +1442,7 @@ Are you sure you want to continue? [y/N]
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
 <p>使用 Maven 打包项目，在项目的 <code>target</code> 目录下得到名为 <code>docker-boot-0.0.1-SNAPSHOT.jar</code> 的 JAR 包。</p>
-<h2 id="52-发布到容器">5.2 发布到容器</h2>
+<h3 id="52-发布到容器">5.2 发布到容器</h3>
 <p>先尝试拉取 <code>openjdk:21</code> 镜像：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">docker</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> pull</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> openjdk:21</span></span></code></pre>
 <p>配置的 Docker 镜像加速器可能对该镜像的支持较弱，可以在 <code>/etc/docker/daemon.json</code> 文件中追加以下镜像加速器地址：</p>
@@ -1485,8 +1485,8 @@ hello world: 9999, UUID: a6e8b395-20ae-424e-bb1a-54456128055d
 <pre>[root@mofan mydocker]# curl 127.0.0.1:9999/order/index
 服务端口号: 9999, UUID: f7682e19-c565-4d27-b983-b143e564f617
 </pre>
-<h1 id="6-docker-网络">6. Docker 网络</h1>
-<h2 id="61-启动前后的网络">6.1 启动前后的网络</h2>
+<h2 id="6-docker-网络">6. Docker 网络</h2>
+<h3 id="61-启动前后的网络">6.1 启动前后的网络</h3>
 <p>在 <strong>首次</strong> 启动 Docker 服务前，使用 <code>ifconfig</code> 或 <code>ip addr</code> 查看网卡信息，可能出现：</p>
 <ul>
 <li>
@@ -1509,7 +1509,7 @@ hello world: 9999, UUID: a6e8b395-20ae-424e-bb1a-54456128055d
 </li>
 </ul>
 <p>Docker 容器的网络隔离是通过 Linux 内核特性 <code>namespace</code> 和 <code>cgroup</code> 实现的。</p>
-<h2 id="62-网络命令">6.2 网络命令</h2>
+<h3 id="62-网络命令">6.2 网络命令</h3>
 <blockquote><p>查看 Docker 网络模式</p></blockquote>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">docker</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> network</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> ls</span></span></code></pre>
 <p>默认有以下 3 个网络模式：</p>
@@ -1546,7 +1546,7 @@ Run 'docker network COMMAND --help' for more information on a command.
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">docker</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> network</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> inspect</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> 网络名称</span></span></code></pre>
 <p>删除所有无效的网络：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">docker</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> network</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> prune</span></span></code></pre>
-<h2 id="63-网络模式">6.3 网络模式</h2>
+<h3 id="63-网络模式">6.3 网络模式</h3>
 
 
 
@@ -1577,7 +1577,7 @@ Run 'docker network COMMAND --help' for more information on a command.
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">网络模式</th><th align="center">简介</th><th align="center">使用</th></tr></thead><tbody><tr><td align="center">bridge</td><td align="center">为每一个容器分配、设置 IP 等，并将容器连接到一个 <code>docker0</code> 虚拟网桥，默认为该模式</td><td align="center"><code>--network bridge</code>，默认使用 <code>docker0</code></td></tr><tr><td align="center">host</td><td align="center">容器将不会虚拟出自己的网卡、配置自己的 IP 等，而是使用宿主机的 IP 和端口</td><td align="center"><code>--network host</code></td></tr><tr><td align="center">none</td><td align="center">容器有独立的 Network namespace，但并没有对齐进行任何网络设置，如分配 <code>veth pari</code> 和 网桥连接、IP 等</td><td align="center"><code>--network none</code></td></tr><tr><td align="center">container</td><td align="center">新创建的容器不会创建自己的网卡和配置自己的 IP，而是和一个指定的容器共享 IP、端口范围等</td><td align="center"><code>--network container:NAME或者容器ID</code></td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">网络模式</th><th align="center">简介</th><th align="center">使用</th></tr></thead><tbody><tr><td align="center">bridge</td><td align="center">为每一个容器分配、设置 IP 等，并将容器连接到一个 <code>docker0</code> 虚拟网桥，默认为该模式</td><td align="center"><code>--network bridge</code>，默认使用 <code>docker0</code></td></tr><tr><td align="center">host</td><td align="center">容器将不会虚拟出自己的网卡、配置自己的 IP 等，而是使用宿主机的 IP 和端口</td><td align="center"><code>--network host</code></td></tr><tr><td align="center">none</td><td align="center">容器有独立的 Network namespace，但并没有对齐进行任何网络设置，如分配 <code>veth pari</code> 和 网桥连接、IP 等</td><td align="center"><code>--network none</code></td></tr><tr><td align="center">container</td><td align="center">新创建的容器不会创建自己的网卡和配置自己的 IP，而是和一个指定的容器共享 IP、端口范围等</td><td align="center"><code>--network container:NAME或者容器ID</code></td></tr></tbody></table></div>
 <blockquote><p>容器实例内默认网络 IP 生成规则</p></blockquote>
 <p>创建两个 ubuntu 容器实例：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">docker</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> run</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -it</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> --name</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> u1</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> ubuntu</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> bash</span></span>
@@ -1644,7 +1644,7 @@ a66712ac8b88   ubuntu    "bash"    31 seconds ago   Up 30 seconds             u1
 <span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">docker</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> inspect</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> u3</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> | </span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">tail</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -n</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 21</span></span></code></pre>
 <p><code>u3</code> 的 <code>IPAddress</code> 与先前关闭的 <code>u2</code> 一样，都是 <code>172.17.0.3</code>。</p>
 <p>这说明，<strong>Docker 容器内部的 IP 是有可能会发生改变的。</strong></p>
-<h2 id="64-docker0">6.4 docker0</h2>
+<h3 id="64-docker0">6.4 docker0</h3>
 <p>Docker 服务默认会创建一个 <code>docker0</code> 网桥（其上有一个 <code>docker0</code> 内部接口），该桥接网络的名称为 <code>docker0</code>，它在 <strong>内核层</strong> 连通了其他的物理或虚拟网卡，将所有容器和本地主机放到 <strong>同一个物理网络</strong>。</p>
 <p>Docker 默认指定了 <code>docker0</code> 接口的 IP 地址和子网掩码，<strong>让主机和容器之间可以通过网桥互相通信</strong>。</p>
 <p>查看 <code>bridge</code> 网络的详细信息，并通过 <code>grep</code> 获取名称：</p>
@@ -1652,7 +1652,7 @@ a66712ac8b88   ubuntu    "bash"    31 seconds ago   Up 30 seconds             u1
 <span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic"># 或者</span></span>
 <span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">ifconfig</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> | </span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">grep</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> docker</span></span></code></pre>
 <p>可以看到其名称为 <code>docker0</code>。</p>
-<h2 id="65-bridge-模式">6.5 bridge 模式</h2>
+<h3 id="65-bridge-模式">6.5 bridge 模式</h3>
 <p>Docker 使用 Linux 桥接，在宿主机虚拟一个 Docker 容器网桥（即 <code>docker0</code>），Docker 启动一个容器时会根据 <code>Docker</code> 网桥的网段分配给容器一个 IP 地址，称为 <code>Container-IP</code>，同时 Docker 网桥是每个容器的默认网关。在同一个宿主机内的容器接入同一个网桥后，容器之间能够通过容器的 <code>Container-IP</code> 直接通信。</p>
 <p>执行 <code>docker run</code> 且没有指定 <code>--network</code> 时，默认使用的网桥模式就是 bridge，使用的是 <code>docker0</code>。在宿主机中使用 <code>ifconfig</code> 命令就可以看到 <code>docker0</code> 和自己创建的网络。</p>
 <p>网桥 <code>docker0</code> 创建一对对等虚拟设备接口，一个叫 <code>veth</code>，另一个叫 <code>eth0</code>，它们成对匹配。</p>
@@ -1704,7 +1704,7 @@ end
 122:eth0 --> 123
 </div>
 <p>可以看到，宿主机的网络信息和容器的网络信息两两匹配。</p>
-<h2 id="66-host-模式">6.6 host 模式</h2>
+<h3 id="66-host-模式">6.6 host 模式</h3>
 <p>host 模式将直接使用宿主机的 IP 地址与外界进行通信，不再额外进行 NAT 转换。</p>
 <p>容器将不会获得一个独立的 Network namespace，而是和宿主机共用一个 Network space。</p>
 <p>容器将不会虚拟出自己的网卡，而是直接使用宿主机的 IP 和端口。</p>
@@ -1750,13 +1750,13 @@ end
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">docker</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> exec</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -it</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> tomcat3</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> bash</span></span></code></pre>
 <p>使用 <code>ip addr</code> 查看容器的 IP 信息，可以发现，容器的 IP 信息与宿主机的 IP 信息一致。</p>
 <p>使用 host 模式时，不再使用 <code>-p</code> 设置端口映射，此时容器的 IP 将借用宿主机的，使得外部主机可以直接与容器通信。如果要访问 <code>tomcat3</code> 容器内部的 Tomcat，需要使用 <code> 宿主机IP:8080</code> 的形式进行访问。</p>
-<h2 id="67-none-模式">6.7 none 模式</h2>
+<h3 id="67-none-模式">6.7 none 模式</h3>
 <p>none 模式将禁用网络功能。</p>
 <p>在 none 模式下，不为 Docker 容器进行任何网络配置，Docker 容器内没有网卡、IP、路由等信息，需要自行为 Docker 容器添加网卡、配置 IP 等。</p>
 <p>进入容器内，使用 <code>ip addr</code> 查看 IP 信息，只能看到 <code>lo</code>（本地回环网络 <code>127.0.0.1</code>）。</p>
 <p>使用以下命令创建使用 none 模式的容器实例：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">docker</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> run</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -d</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -p</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> 8084:8080</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> --network</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> none</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> --name</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> tomcat4</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> tomcat</span></span></code></pre>
-<h2 id="68-container-模式">6.8 container 模式</h2>
+<h3 id="68-container-模式">6.8 container 模式</h3>
 <p>新建的容器和已经存在的一个容器共享网络 IP 配置，而不是和宿主机共享。</p>
 <p>新创建的容器不会创建自己的网卡、配置自己的 IP，而是和一个指定的容器共享 IP、端口范围等。两个容器除了网络共享，其他的如文件系统、进程列表依然是隔离的。</p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/Docker%E7%BD%91%E7%BB%9Ccontainer%E6%A8%A1%E5%BC%8F.webp?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/Docker%E7%BD%91%E7%BB%9Ccontainer%E6%A8%A1%E5%BC%8F.webp" alt="Docker网络container模式" data-responsive-image="true"></picture></p>
@@ -1778,7 +1778,7 @@ end
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">docker</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> run</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -it</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> --network</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> container:alpine1</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> --name</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> alpine2</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> alpine</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> /bin/sh</span></span></code></pre>
 <p>分别使用 <code>ip addr</code> 查看两个容器的 IP 信息，可以发现，它们俩的 IP 信息都一样。</p>
 <p>如果此时停止 <code>alpine1</code> 容器的运行，再次查看 <code>alpine2</code> 容器的 IP 信息，会发现其 <code>eth0</code> 网卡不见了。这是因为 <code>alpine2</code> 使用了 <code>alpine1</code> 的网络共享，当后者「下线」时，<code>alpine2</code> 的 <code>eth0</code> 网卡自然也就不见了。</p>
-<h2 id="69-自定义网络模式">6.9 自定义网络模式</h2>
+<h3 id="69-自定义网络模式">6.9 自定义网络模式</h3>
 <p>Docker 容器内部的 IP 是有可能会发生变化的。</p>
 <p>当容器的 IP 发生变化时，希望能够通过容器名进行通信，而不受到影响。</p>
 <blockquote><p>不使用自定义网络</p></blockquote>
@@ -1830,13 +1830,13 @@ NETWORK ID     NAME            DRIVER    SCOPE
 <span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic"># or</span></span>
 <span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">ping</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> tomcat2</span></span></code></pre>
 <p>现在都能 ping 通了。</p>
-<h1 id="7-docker-compose">7. Docker Compose</h1>
-<h2 id="71-概述">7.1 概述</h2>
+<h2 id="7-docker-compose">7. Docker Compose</h2>
+<h3 id="71-概述">7.1 概述</h3>
 <p>由于 Docker 本身占用资源极少，Docker 官方建议每个容器中只运行一个服务，将每个服务单独的分割开来。如果需要同时部署多个服务，单独构建镜像、容器就比较麻烦，因此 Docker 官方推出了 Docker Compose 来部署多服务。</p>
 <p>比如要实现一个 Web 微服务项目，除了 Web 服务容器本身，还需要加上 MySQL、Redis 等一大批服务，此时单独部署就显得十分费劲。</p>
 <p>Docker Compose 是 Docker 官方的开源项目，负责实现对 Docker 容器集群的快速编排，管理多个 Docker 容器组成一个应用。</p>
 <p>定义一个 <code>compose.yaml</code> （新版写法，<code>docker-compose.yml</code> 是过去写法）配置文件，内部包含多个容器之间的调用关系，然后只需要一个命令就能同时启动或关闭这些容器。</p>
-<h2 id="72-安装">7.2 安装</h2>
+<h3 id="72-安装">7.2 安装</h3>
 <p>Docker Compose 安装文档：<a href="https://docs.docker.com/compose/install/linux/#install-using-the-repository" target="_blank" rel="noopener noreferrer">Install using the repository</a></p>
 <p>查看 Docker 版本：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">docker</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> version</span></span></code></pre>
@@ -1848,20 +1848,20 @@ NETWORK ID     NAME            DRIVER    SCOPE
 <pre>[root@mofan ~]# docker compose version
 Docker Compose version v2.27.1
 </pre>
-<h2 id="73-核心概念">7.3 核心概念</h2>
+<h3 id="73-核心概念">7.3 核心概念</h3>
 <p>一文件，即 <code>compose.yaml</code>。</p>
 <p>两要素：</p>
 <ol>
 <li>服务（<code>service</code>）：一个个应用容器实例</li>
 <li>工程（<code>project</code>）：由一组关联的应用容器组成的一个 <strong>完整业务单元</strong>，在 <code>compose.yaml</code> 中定义</li>
 </ol>
-<h2 id="74-使用步骤">7.4 使用步骤</h2>
+<h3 id="74-使用步骤">7.4 使用步骤</h3>
 <ol>
 <li>编写 Dockerfile 定义各个应用容器，并构建出对应的镜像文件；</li>
 <li>编写 <code>compose.yaml</code>，定义一个完整的业务单元，安排好应用中的各个容器服务；</li>
 <li>执行 <code>docker compose up</code> 命令，创建并运行整个应用程序，完成一键部署上线。</li>
 </ol>
-<h2 id="75-常用命令">7.5 常用命令</h2>
+<h3 id="75-常用命令">7.5 常用命令</h3>
 <p>执行命令时，需要在 <code>compose.yaml</code> （<code>docker-compose.yaml</code> 或 <code>docker-compose.yml</code>）文件所在目录下执行。</p>
 <p><mark class="flexible-marker flexible-marker-default">注意：</mark> 在最新的 Docker 中，Docker Compose 的命令不再是 <code>docker-compose</code>，不需要其中的连字号（Hyphen），而是使用 <code>docker compose</code>，甚至使用旧命令还会提示 <code>docker-compose: command not found</code>。</p>
 <blockquote><p>查看帮助</p></blockquote>
@@ -1890,7 +1890,7 @@ Docker Compose version v2.27.1
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">docker</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> compose</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> start</span></span></code></pre>
 <blockquote><p>停止服务</p></blockquote>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">docker</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> compose</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> stop</span></span></code></pre>
-<h2 id="76-编排微服务">7.6 编排微服务</h2>
+<h3 id="76-编排微服务">7.6 编排微服务</h3>
 <p>Compose file 官网：<a href="https://docs.docker.com/reference/compose-file/" target="_blank" rel="noopener noreferrer">Compose file reference</a></p>
 <p>不必聚焦微服务项目代码的编写，只看 Docker Compose 的使用。</p>
 <p><code>compose.yaml</code> 文件内容：</p>
@@ -1954,7 +1954,7 @@ Docker Compose version v2.27.1
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">docker</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> compose</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> up</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -d</span></span></code></pre>
 <p><mark class="flexible-marker flexible-marker-default">注意：</mark> 在使用 Docker Compose 后，容器间的通信不再使用容器名，而是使用 <code>compose.yaml</code> 文件里指定的服务名。</p>
 <p>本节的主要目标是熟悉 <code>compose.yaml</code> 文件的简单书写方式并打开思维，实际生产中多半会更加复杂，一切以官方文档为准。</p>
-<h1 id="8-portainer">8. Portainer</h1>
+<h2 id="8-portainer">8. Portainer</h2>
 <p>官网：<a href="https://www.portainer.io/" target="_blank" rel="noopener noreferrer">Kubernetes and Docker Container Management Software</a></p>
 <p>Portainer 是一款轻量级的应用，提供了图形化界面用于管理 Docker 环境，包括单机环境和集群环境。</p>
 <p>Portainer 分为开源社区版（CE 版）和商用版（BE 版/EE 版）。</p>
@@ -1980,15 +1980,15 @@ Docker Compose version v2.27.1
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/%E5%A1%AB%E5%86%99Nginx%E5%AE%B9%E5%99%A8%E5%AE%9E%E4%BE%8B%E4%BF%A1%E6%81%AF%E5%B9%B6%E9%83%A8%E7%BD%B2.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/%E5%A1%AB%E5%86%99Nginx%E5%AE%B9%E5%99%A8%E5%AE%9E%E4%BE%8B%E4%BF%A1%E6%81%AF%E5%B9%B6%E9%83%A8%E7%BD%B2.png" alt="填写Nginx容器实例信息并部署" data-responsive-image="true"></picture></p>
 <p>等待部署完成后，按照与访问 Portainer 类似的方式，访问 <code>宿主机IP:80</code> 访问 Nginx 首页：</p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/%E8%AE%BF%E9%97%AEPortainer%E9%83%A8%E7%BD%B2%E7%9A%84Nginx%E9%A6%96%E9%A1%B5.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/%E8%AE%BF%E9%97%AEPortainer%E9%83%A8%E7%BD%B2%E7%9A%84Nginx%E9%A6%96%E9%A1%B5.png" alt="访问Portainer部署的Nginx首页" data-responsive-image="true"></picture></p>
-<h1 id="9-cig-容器监控">9. CIG 容器监控</h1>
-<h2 id="91-背景">9.1 背景</h2>
+<h2 id="9-cig-容器监控">9. CIG 容器监控</h2>
+<h3 id="91-背景">9.1 背景</h3>
 <p>可以使用以下命令查看 Docker 容器的运行状态：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">docker</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> stats</span></span></code></pre>
 <p>注意命令是 <code>stats</code> 而不是 <code>status</code>。</p>
 <p>该命令能够很方便地查看当前宿主机下上所有 CPU 的占用情况、内存使用以及网络流量等数据，但并没有地方存储、健康指标过线预警等功能。</p>
 <p>此时可以使用 CIG 容器监控，即 CAdvisor（监控收集） + InfluxDB（存储数据） + Granfana（展示图表）。</p>
 <p><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/CIG.svg" alt="CIG"></p>
-<h2 id="92-组成部分">9.2 组成部分</h2>
+<h3 id="92-组成部分">9.2 组成部分</h3>
 <blockquote><p>CAdvisor</p></blockquote>
 <p>CAdvisor 是一个容器资源监控工具，能够对容器的内存、CPU、网络 IO、磁盘 IO 等信息进行监控，同时提供了一个 Web 页面用于查看容器的实时运行状态。</p>
 <p>CAdvisor 默认存储 2 分钟的数据，而且只是针对单物理机。不过 CAdvisor 提供了很多数据集成接口，支持 InfluxDB、Redis、Kafka、Elasticsearch 等集成，可以添加对应配置将监控数据发往到这些数据库存储起来。</p>
@@ -2030,7 +2030,7 @@ Docker Compose version v2.27.1
 <p>多数据源</p>
 </li>
 </ul>
-<h2 id="93-安装部署">9.3 安装部署</h2>
+<h3 id="93-安装部署">9.3 安装部署</h3>
 <p>新建 <code>/mydocker/cig</code> 目录：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">mkdir</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> /mydocker/cig</span></span></code></pre>
 <p>进入 <code>cig</code> 目录：</p>
@@ -2106,7 +2106,7 @@ Docker Compose version v2.27.1
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">docker</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> compose</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> up</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -d</span></span></code></pre>
 <p>查看三个容器是否启动成功：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="shell" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">docker</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> ps</span></span></code></pre>
-<h2 id="94-配置-grafana">9.4 配置 Grafana</h2>
+<h3 id="94-配置-grafana">9.4 配置 Grafana</h3>
 <p>在浏览器中以 <code>宿主机IP:3000</code> 的方式访问 Grafana，默认用户名和密码都是 <code>admin</code>。</p>
 <p>如果使用的是云服务器，其中的宿主机 IP 就是云服务器的公网 IP，记得把 <code>3000</code> 端口添加到安全组，方便外网访问。</p>
 <p>首次进入登录页时可能比较慢，请耐心等待。</p>
@@ -2122,7 +2122,7 @@ Docker Compose version v2.27.1
 <p>接下来创建 Dashboard：</p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/%E6%96%B0%E5%BB%BAGrafana%E7%9A%84Dashboard.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/%E6%96%B0%E5%BB%BAGrafana%E7%9A%84Dashboard.png" alt="新建Grafana的Dashboard" data-responsive-image="true"></picture></p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/Add-a-new-panel.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/Add-a-new-panel.png" alt="Add-a-new-panel" data-responsive-image="true"></picture></p>
-<p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/%E5%AE%8C%E6%88%90cig01-Dashboard%E9%85%8D%E7%BD%AE.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/%E5%AE%8C%E6%88%90cig01-Dashboard%E9%85%8D%E7%BD%AE.png" alt="完成cig01-Dashboard配置" data-responsive-image="true"></picture></p> </article> <div class="text-muted-foreground max-w-app mt-20 w-full space-y-3 text-center text-sm" data-astro-cid-7ap3hmvm> <aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full px-2 text-center leading-6 sm:px-0"> <p class="m-0 break-words"> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a><span> 许可协议，</span><span class="max-sm:block">转载时请署名并注明<a href="https://mofan212.github.io/posts/docker-advanced/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a> 🔗</span> </p> </aside> <section data-post-reward data-pagefind-ignore class="w-full" aria-label="赞赏"> <div class="flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:flex-wrap sm:gap-x-1.5 sm:gap-y-2"> <span class="sm:whitespace-nowrap">如果这篇文章对你有帮助，可以通过</span> <a href="/reward/" class="focus-outline border-accent text-accent hover:bg-accent/10 active:bg-accent/10 inline-block rounded-md border px-3 py-1 font-medium transition-colors"> 赞赏 </a> <span class="sm:whitespace-nowrap">请我喝杯 Coffee ☕</span> </div> </section> </div> <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm>  <ul id="post-tags" class="mt-4 mb-8 flex flex-wrap gap-4 sm:mb-8" data-astro-cid-7ap3hmvm> <li> <a href="/tags/docker/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> Docker </a> </li> </ul>  <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/java-lambda-in-action/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.3l105.3-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg> <div> <span>上一篇</span> <div class="text-accent/85 text-sm">Java Lambda In Action</div> </div> </a> <a href="/posts/docker-basics/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>下一篇</span> <div class="text-accent/85 text-sm">Docker 基础篇</div> </div> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg> </a> </div> </main> <footer class="app-layout mt-auto" data-astro-cid-7ap3hmvm="true"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="text-muted-foreground my-2 flex w-fit flex-col items-start text-start text-sm whitespace-nowrap"> <div class="flex items-center gap-1.5"> <svg width="24" height="24" fill="currentColor" class="size-4" viewBox="-49.231 -39.385 738.462 590.769" aria-hidden="true"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9-.1-2.7-.2-5.4-.2-8.1 0-88.4 71.6-160 160-160 59.3 0 111 32.2 138.7 80.2A95.5 95.5 0 0 1 448 96c53 0 96 43 96 96 0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39L296 392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0z" /></svg> <span>最近更新：</span> <time class="tabular-nums" datetime="2026-10-21T03:16:11.000Z" data-deployed-at="2026-10-21T03:16:11.000Z" data-just-now="刚刚" data-locale="zh-CN"> 2026-10-21 11:16 </time> </div> <div class="mt-1 flex items-center gap-3 text-xs"> <span class="flex items-center gap-1" title="本站访客数"> <svg width="24" height="24" fill="currentColor" class="size-3" viewBox="-2.835 -3.241 453.671 518.481" aria-hidden="true"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3z" /></svg> <span class="sr-only">本站访客数：</span> <span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> <span aria-hidden="true">|</span> <span class="flex items-center gap-1.5" title="本站总浏览量"> <span class="flex size-4 items-center justify-center" aria-hidden="true"> <svg width="24" height="24" fill="currentColor" class="size-3.5" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48zM0 272c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v160c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zM368 96h32c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48" /></svg> </span> <span class="sr-only">本站总浏览量：</span> <span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> </div> </div> <div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"> <span>版权所有 &#169; 2020 – 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer> <script>
+<p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/%E5%AE%8C%E6%88%90cig01-Dashboard%E9%85%8D%E7%BD%AE.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/CloudNativeImages/%E5%AE%8C%E6%88%90cig01-Dashboard%E9%85%8D%E7%BD%AE.png" alt="完成cig01-Dashboard配置" data-responsive-image="true"></picture></p> </article> <div class="text-muted-foreground max-w-app mt-20 w-full space-y-3 text-center text-sm" data-astro-cid-7ap3hmvm> <aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full px-2 text-center leading-6 sm:px-0"> <p class="m-0 break-words"> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a><span> 许可协议，</span><span class="max-sm:block">转载时请署名并注明<a href="https://mofan212.github.io/posts/docker-advanced/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a> 🔗</span> </p> </aside> <section data-post-reward data-pagefind-ignore class="w-full" aria-label="赞赏"> <div class="flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:flex-wrap sm:gap-x-1.5 sm:gap-y-2"> <span class="sm:whitespace-nowrap">如果这篇文章对你有帮助，可以通过</span> <a href="/reward/" class="focus-outline border-accent text-accent hover:bg-accent/10 active:bg-accent/10 inline-block rounded-md border px-3 py-1 font-medium transition-colors"> 赞赏 </a> <span class="sm:whitespace-nowrap">请我喝杯 Coffee ☕</span> </div> </section> </div> <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm>  <ul id="post-tags" class="mt-4 mb-8 flex flex-wrap gap-4 sm:mb-8" data-astro-cid-7ap3hmvm> <li> <a href="/tags/docker/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> Docker </a> </li> </ul>  <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/java-lambda-in-action/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.3l105.3-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg> <div> <span>上一篇</span> <div class="text-accent/85 text-sm">Java Lambda In Action</div> </div> </a> <a href="/posts/docker-basics/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>下一篇</span> <div class="text-accent/85 text-sm">Docker 基础篇</div> </div> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg> </a> </div> </main> <footer class="app-layout mt-auto" data-astro-cid-7ap3hmvm="true"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="text-muted-foreground my-2 flex w-fit flex-col items-start text-start text-sm whitespace-nowrap"> <div class="flex items-center gap-1.5"> <svg width="24" height="24" fill="currentColor" class="size-4" viewBox="-49.231 -39.385 738.462 590.769" aria-hidden="true"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9-.1-2.7-.2-5.4-.2-8.1 0-88.4 71.6-160 160-160 59.3 0 111 32.2 138.7 80.2A95.5 95.5 0 0 1 448 96c53 0 96 43 96 96 0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39L296 392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0z" /></svg> <span>最近更新：</span> <time class="tabular-nums" datetime="2026-10-22T08:22:01.000Z" data-deployed-at="2026-10-22T08:22:01.000Z" data-just-now="刚刚" data-locale="zh-CN"> 2026-10-22 16:22 </time> </div> <div class="mt-1 flex items-center gap-3 text-xs"> <span class="flex items-center gap-1" title="本站访客数"> <svg width="24" height="24" fill="currentColor" class="size-3" viewBox="-2.835 -3.241 453.671 518.481" aria-hidden="true"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3z" /></svg> <span class="sr-only">本站访客数：</span> <span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> <span aria-hidden="true">|</span> <span class="flex items-center gap-1.5" title="本站总浏览量"> <span class="flex size-4 items-center justify-center" aria-hidden="true"> <svg width="24" height="24" fill="currentColor" class="size-3.5" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48zM0 272c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v160c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zM368 96h32c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48" /></svg> </span> <span class="sr-only">本站总浏览量：</span> <span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> </div> </div> <div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"> <span>版权所有 &#169; 2020 – 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer> <script>
   (() => {
     const updateDeploymentTimes = () => {
       document.querySelectorAll("[data-deployed-at]").forEach(element => {
@@ -2171,4 +2171,4 @@ Docker Compose version v2.27.1
     document.addEventListener("astro:page-load", updateDeploymentTimes);
     window.setInterval(updateDeploymentTimes, 60_000);
   })();
-</script>    <script type="module" src="/_astro/Layout.astro_astro_type_script_index_0_lang.DQQu8RqY.js"></script> <script type="module" src="/_astro/Layout.astro_astro_type_script_index_1_lang.DRvjezMo.js"></script> </body> </html>  <script type="module" src="/_astro/index.astro_astro_type_script_index_0_lang.Oly9xh_g.js"></script>
+</script>    <script type="module" src="/_astro/Layout.astro_astro_type_script_index_0_lang.BrDp0sUM.js"></script> <script type="module" src="/_astro/Layout.astro_astro_type_script_index_1_lang.DRvjezMo.js"></script> </body> </html>  <script type="module" src="/_astro/index.astro_astro_type_script_index_0_lang.Oly9xh_g.js"></script>

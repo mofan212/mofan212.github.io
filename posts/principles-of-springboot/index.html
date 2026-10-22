@@ -1,4 +1,4 @@
-<!DOCTYPE html><html dir="ltr" lang="zh-CN" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/principles-of-springboot/"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.3.0/400.css"><link rel="preconnect" href="https://busuanzi.ibruce.info"><meta name="generator" content="Astro v6.4.2"><!-- Primary meta --><title>SpringBoot原理 | Mofan</title><meta name="title" content="SpringBoot原理 | Mofan"><meta name="description" content="误人子弟系列，不要看，后续找个时间重写。😶"><meta name="author" content="默烦"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Mofan"><meta property="og:title" content="SpringBoot原理 | Mofan"><meta property="og:description" content="误人子弟系列，不要看，后续找个时间重写。😶"><meta property="og:url" content="https://mofan212.github.io/posts/principles-of-springboot/"><meta property="og:image" content="https://mofan212.github.io/default-og.jpg"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://mofan212.github.io/posts/principles-of-springboot/"><meta property="twitter:title" content="SpringBoot原理 | Mofan"><meta property="twitter:description" content="误人子弟系列，不要看，后续找个时间重写。😶"><meta property="twitter:image" content="https://mofan212.github.io/default-og.jpg"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Mofan" href="https://mofan212.github.io/rss.xml"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2020-05-29T00:00:00.000Z"><meta property="article:modified_time" content="2020-11-05T00:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"SpringBoot原理 | Mofan","url":"https://mofan212.github.io/posts/principles-of-springboot/","mainEntityOfPage":"https://mofan212.github.io/posts/principles-of-springboot/","datePublished":"2020-05-29T00:00:00.000Z","dateModified":"2020-11-05T00:00:00.000Z","author":[{"@type":"Person","name":"默烦","url":"https://github.com/mofan212"}]}</script> <!--
+<!DOCTYPE html><html dir="ltr" lang="zh-CN" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/principles-of-springboot/"><link rel="preconnect" href="https://npm.elemecdn.com"><link rel="preconnect" href="https://gcore.jsdelivr.net"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/lxgwwenkaiscreen.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.3.0/400.css"><link rel="preconnect" href="https://busuanzi.ibruce.info"><meta name="generator" content="Astro v6.4.2"><!-- Primary meta --><title>SpringBoot原理 | Mofan</title><meta name="title" content="SpringBoot原理 | Mofan"><meta name="description" content="误人子弟系列，不要看，后续找个时间重写。😶"><meta name="author" content="默烦"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Mofan"><meta property="og:title" content="SpringBoot原理 | Mofan"><meta property="og:description" content="误人子弟系列，不要看，后续找个时间重写。😶"><meta property="og:url" content="https://mofan212.github.io/posts/principles-of-springboot/"><meta property="og:image" content="https://mofan212.github.io/default-og.jpg"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://mofan212.github.io/posts/principles-of-springboot/"><meta property="twitter:title" content="SpringBoot原理 | Mofan"><meta property="twitter:description" content="误人子弟系列，不要看，后续找个时间重写。😶"><meta property="twitter:image" content="https://mofan212.github.io/default-og.jpg"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Mofan" href="https://mofan212.github.io/rss.xml"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2020-05-29T00:00:00.000Z"><meta property="article:modified_time" content="2020-11-05T00:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"SpringBoot原理 | Mofan","url":"https://mofan212.github.io/posts/principles-of-springboot/","mainEntityOfPage":"https://mofan212.github.io/posts/principles-of-springboot/","datePublished":"2020-05-29T00:00:00.000Z","dateModified":"2020-11-05T00:00:00.000Z","author":[{"@type":"Person","name":"默烦","url":"https://github.com/mofan212"}]}</script> <!--
       Inline FOUC-prevention script: sets data-theme on <html> before
       the browser paints. Runs synchronously, no defer/async.
     --><script>
@@ -14,7 +14,7 @@
         // Expose value so theme.ts can skip re-detection.
         window.__theme = { value: theme };
       })();
-    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.8-7lwm7-.css">
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.CRJPB6-j.css">
 <style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
 .toc-link[data-astro-cid-po2ckxzl]{position:relative;transition:color .2s ease}.toc-link[data-astro-cid-po2ckxzl]:before{position:absolute;inset-block:.375rem;inset-inline-start:-2px;width:2px;border-radius:2px;background-color:var(--accent);content:"";opacity:0;transition:opacity .2s ease}.toc-link[data-astro-cid-po2ckxzl][data-active]{color:var(--accent)}.toc-link[data-astro-cid-po2ckxzl][data-active]:before{opacity:1}.toc-toggle[data-astro-cid-po2ckxzl][aria-expanded=true] .toc-toggle-icon[data-astro-cid-po2ckxzl]{rotate:-90deg}.toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-width:thin}.post-toc-desktop[data-astro-cid-taqt6xe3] .toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-gutter:stable}.toc-scroll[data-astro-cid-taqt6xe3]:after{display:block;block-size:20dvh;content:""}[data-astro-cid-taqt6xe3][data-toc-dialog]{opacity:0;transform:translate(1.25rem);transition:opacity .16s ease-out,transform .22s cubic-bezier(.22,1,.36,1);will-change:opacity,transform}[data-astro-cid-taqt6xe3][data-toc-dialog][data-toc-visible]{opacity:1;transform:translate(0)}[data-astro-cid-taqt6xe3][data-toc-dialog]::backdrop{background-color:#0000;transition:background-color .18s ease-out}[data-astro-cid-taqt6xe3][data-toc-dialog][data-toc-visible]::backdrop{background-color:#0000007f}@media(prefers-reduced-motion:reduce){[data-astro-cid-taqt6xe3][data-toc-dialog]{transform:none;transition:none}[data-astro-cid-taqt6xe3][data-toc-dialog]::backdrop{transition:none}}[data-astro-cid-4wxclohh][data-post-series]{interpolate-size:allow-keywords}[data-astro-cid-4wxclohh][data-post-series]::details-content{block-size:0;overflow:hidden;opacity:0;transition:block-size .2s ease-out,opacity .15s ease-out,content-visibility .2s allow-discrete}[data-astro-cid-4wxclohh][data-post-series][open]::details-content{block-size:auto;opacity:1}@media(prefers-reduced-motion:reduce){[data-astro-cid-4wxclohh][data-post-series]::details-content{transition:none}}.post-sidebar[data-astro-cid-7ap3hmvm]{display:contents}@media(min-width:90rem){.post-sidebar[data-astro-cid-7ap3hmvm]{position:fixed;inset-block-start:9rem;inset-inline-start:calc(50% + var(--app-max-width) / 2 + 2rem);display:flex;width:min(18rem,calc(50vw - var(--app-max-width) / 2 - 3rem));height:calc(100dvh - 11rem);min-height:0;flex-direction:column}}
 </style><style>[data-astro-transition-scope="astro-36ssibgs-1"] { view-transition-name: spring-boot; }@layer astro { ::view-transition-old(spring-boot) { 
@@ -629,10 +629,10 @@
 
     update();
   })();
-</script> </div> <article id="article" class="mt-8 w-full app-prose max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)" data-astro-cid-7ap3hmvm> <!-- 封面画师：adsuger&emsp; &emsp;&emsp;&emsp;封面ID：77171064 -->
-<h1 id="1-springboot-原理">1. SpringBoot 原理</h1>
+</script> </div> <article id="article" class="mt-8 w-full app-prose post-content max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)" data-astro-cid-7ap3hmvm> <!-- 封面画师：adsuger&emsp; &emsp;&emsp;&emsp;封面ID：77171064 -->
+<h2 id="1-springboot-原理">1. SpringBoot 原理</h2>
 <p>参考链接：<a href="https://www.springcloud.cc/spring-boot.html#boot-features-json" target="_blank" rel="noopener noreferrer">Spring Boot参考指南</a></p>
-<h2 id="11-hello-world">1.1 Hello World</h2>
+<h3 id="11-hello-world">1.1 Hello World</h3>
 <ul>
 <li>
 <p>使用 IDEA 创建 SpringBoot 项目：</p>
@@ -681,8 +681,8 @@
 </ul>
 </li>
 </ul>
-<h2 id="12-运行原理初探">1.2 运行原理初探</h2>
-<h3 id="21-启动器">2.1 启动器</h3>
+<h3 id="12-运行原理初探">1.2 运行原理初探</h3>
+<h4 id="21-启动器">2.1 启动器</h4>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">dependency</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    &#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">groupId</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">>org.springframework.boot&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">groupId</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    &#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">artifactId</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">>spring-boot-starter-web&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">artifactId</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
@@ -692,7 +692,7 @@
 <li><strong>spring-boot-starter-web</strong>：帮助我们导入 web 模块正常运行所依赖的组件</li>
 <li>作用：Springboot 将所有的场景抽取出来，做成了一个个启动器（starter），只需要在项目中引入启动器即可，所有的依赖都会导入进来。我们只需要选择我们自己需要的启动器，同时我们还可以自定义启动器</li>
 </ul>
-<h3 id="22-主启动类">2.2 主启动类</h3>
+<h4 id="22-主启动类">2.2 主启动类</h4>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">SpringBootApplication</span><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">      //使用SpringBootApplication来标注这是一个主程序类</span></span>
 <span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">//说明这是一个Springboot应用</span></span>
 <span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> class</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> Springboot01HelloworldApplication</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
@@ -702,8 +702,8 @@
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">        SpringApplication</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">run</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">Springboot01HelloworldApplication</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">class</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, args);</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h3 id="23-注解分析">2.3 注解分析</h3>
-<h4 id="231-springbootapplication">2.3.1 @SpringBootApplication</h4>
+<h4 id="23-注解分析">2.3 注解分析</h4>
+<h5 id="231-springbootapplication">2.3.1 @SpringBootApplication</h5>
 <ul>
 <li>
 <p><strong>作用：</strong> 标注在某个类上说明这个类是 SpringBoot 的主配置类，SpringBoot 就应该运行这个类的 main 方法来启动 SpringBoot 应用；启动类下的所有资源被导入</p>
@@ -731,12 +731,12 @@
 <span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> @</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">interface</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B"> SpringBootApplication</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> {</span></span>
 <span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">    //......</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span></code></pre>
-<h4 id="232-componentscan">2.3.2 @ComponentScan</h4>
+<h5 id="232-componentscan">2.3.2 @ComponentScan</h5>
 <ul>
 <li>Spring 内主要注解，它对应 XML 配置中的 <code>&#x3C;context:component-scan base-package="xxx" /></code> 元素</li>
 <li><strong>作用：</strong> 自动扫描并加载符合条件的组件或者 bean，将这个 bean 定义加载到 IOC 容器中</li>
 </ul>
-<h4 id="233-springbootconfiguration">2.3.3 @SpringBootConfiguration</h4>
+<h5 id="233-springbootconfiguration">2.3.3 @SpringBootConfiguration</h5>
 <ul>
 <li>
 <p><strong>作用：</strong> SpringBoot 的配置类。标注在某个类上，表示这是一个 SpringBoot 的配置类</p>
@@ -760,7 +760,7 @@
 </li>
 </ul>
 <blockquote><p>回到@SpringBootApplication 注解中，查看@EnableAutoConfiguration 注解</p></blockquote>
-<h4 id="234-enableautoconfiguration">2.3.4 @EnableAutoConfiguration</h4>
+<h5 id="234-enableautoconfiguration">2.3.4 @EnableAutoConfiguration</h5>
 <ul>
 <li><strong>作用：</strong> 开启自动配置功能。以前的一些框架的配置需要我们手动配置，现在 SpringBoot 可以自动帮我们配置。而@SpringBootApplication 可以开启 SpringBoot 的自动配置功能，这样自动配置才可以生效</li>
 </ul>
@@ -893,7 +893,7 @@
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SpringBootImages/SpringBoot%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E6%B3%A8%E8%A7%A3.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SpringBootImages/SpringBoot%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E6%B3%A8%E8%A7%A3.png" alt="SpringBoot中常用的注解" data-responsive-image="true"></picture></p>
 <p>到此，我们就大概的了解了 SpringBoot 的运行原理！</p>
 <hr>
-<h3 id="24-springapplicationrun">2.4 SpringApplication.run</h3>
+<h4 id="24-springapplicationrun">2.4 SpringApplication.run</h4>
 <ul>
 <li>该方法主要有两部分，一部分是 SpringApplication 的实例化，二是 run 方法的执行</li>
 <li>SpringApplication 类主要做了一下四件事：
@@ -913,8 +913,8 @@
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">    this</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">setListeners</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">this</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">getSpringFactoriesInstances</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">ApplicationListener</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">class</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">));</span></span>
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">    this</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">mainApplicationClass</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> =</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B"> this</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">deduceMainApplicationClass</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">();</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
-<h2 id="13-yaml-配置注入">1.3 yaml 配置注入</h2>
-<h3 id="31-基本语法">3.1 基本语法</h3>
+<h3 id="13-yaml-配置注入">1.3 yaml 配置注入</h3>
+<h4 id="31-基本语法">3.1 基本语法</h4>
 <ul>
 <li>application.yml
 <ul>
@@ -947,7 +947,7 @@
 </ul>
 </li>
 </ul>
-<h3 id="32-其他语法">3.2 其他语法</h3>
+<h4 id="32-其他语法">3.2 其他语法</h4>
 <ul>
 <li>对象、Map 键值对</li>
 </ul>
@@ -966,7 +966,7 @@
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">	- </span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">doctor</span></span></code></pre>
 <p>行内写法：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="yaml" data-language-name="YAML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">person</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">: [</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">student</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">teacher</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">doctor</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">]</span></span></code></pre>
-<h3 id="33-配置文件注入">3.3 配置文件注入</h3>
+<h4 id="33-配置文件注入">3.3 配置文件注入</h4>
 <blockquote><p>​		当我们需要给实体类注入匹配值时，根据 Spring 的学习，我们可以：使用@Component 将 bean 注册到容器中，然后使用@Value 注解给 bean 的每个属性注入值。现在我们还可以用 yaml 配置的方式进行注入：</p></blockquote>
 <ol>
 <li>首先编写一个实体类，Person 类</li>
@@ -1048,7 +1048,7 @@
 </ul></blockquote>
 </li>
 </ul>
-<h3 id="34-yaml总结">3.4 yaml总结</h3>
+<h4 id="34-yaml总结">3.4 yaml总结</h4>
 <ul>
 <li>@ConfigurationProperties 和@Value 对比：</li>
 </ul>
@@ -1087,7 +1087,7 @@
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center"></th><th align="center">@ConfigurationProperties</th><th align="center">@Value</th></tr></thead><tbody><tr><td align="center">功能</td><td align="center">批量注入配置文件中的属性</td><td align="center">一个一个地指定属性值</td></tr><tr><td align="center">松散绑定</td><td align="center">支持</td><td align="center">不支持</td></tr><tr><td align="center">SpEL</td><td align="center">不支持</td><td align="center">支持</td></tr><tr><td align="center">JSR303 校验</td><td align="center">支持</td><td align="center">不支持</td></tr><tr><td align="center">复杂类型封装</td><td align="center">支持</td><td align="center">不支持</td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center"></th><th align="center">@ConfigurationProperties</th><th align="center">@Value</th></tr></thead><tbody><tr><td align="center">功能</td><td align="center">批量注入配置文件中的属性</td><td align="center">一个一个地指定属性值</td></tr><tr><td align="center">松散绑定</td><td align="center">支持</td><td align="center">不支持</td></tr><tr><td align="center">SpEL</td><td align="center">不支持</td><td align="center">支持</td></tr><tr><td align="center">JSR303 校验</td><td align="center">支持</td><td align="center">不支持</td></tr><tr><td align="center">复杂类型封装</td><td align="center">支持</td><td align="center">不支持</td></tr></tbody></table></div>
 <ul>
 <li>松散绑定：比如我的 yml 中写的 last-name，这个和 lastName 是一样的，- 后面跟着的字母默认是大写的</li>
 <li>JSR303 数据校验，这个就是我们可以在字段是增加一层过滤器验证，可以保证数据的合法性</li>
@@ -1100,7 +1100,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="14-jsr303-数据校验">1.4 JSR303 数据校验</h2>
+<h3 id="14-jsr303-数据校验">1.4 JSR303 数据校验</h3>
 <ul>
 <li>使用：在 SpringBoot 中使用@Validated 注解来校验数据，如果数据处在异常，则会抛出异常，方便统一处理。比如，我们可以写一个注解使我们的 name 属性不能为空：</li>
 </ul>
@@ -1144,8 +1144,8 @@
 <span class="line"></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">等等</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">...</span></span>
 <span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">我们也可以自定义一些校验规则</span></span></code></pre>
-<h2 id="15-多环境切换">1.5 多环境切换</h2>
-<h3 id="51-多配置文件">5.1 多配置文件</h3>
+<h3 id="15-多环境切换">1.5 多环境切换</h3>
+<h4 id="51-多配置文件">5.1 多配置文件</h4>
 <ul>
 <li>我们在主配置文件编写的时候，文件名可以是 application-{profile}.properties/yml , 用来指定多个环境版本</li>
 </ul>
@@ -1156,7 +1156,7 @@
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="properties" data-language-name="INI"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span></span><code><span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">#比如在配置文件中指定使用dev环境，我们可以通过设置不同的端口号进行测试；</span></span>
 <span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">#我们启动SpringBoot，就可以看到已经切换到dev下的配置了；</span></span>
 <span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#C678DD">spring.profiles.active</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">=</span><span style="--shiki-light:#383A42;--shiki-dark:#98C379">dev</span></span></code></pre>
-<h3 id="52-yaml多文档块">5.2 yaml多文档块</h3>
+<h4 id="52-yaml多文档块">5.2 yaml多文档块</h4>
 <ul>
 <li>同样可以使用 yaml 配置文件实现多环境切换，但是使用 yaml 可以不需要创建多个配置文件，比如：</li>
 </ul>
@@ -1188,7 +1188,7 @@
 </ul>
 </li>
 </ul>
-<h3 id="53-配置文件加载顺序">5.3 配置文件加载顺序</h3>
+<h4 id="53-配置文件加载顺序">5.3 配置文件加载顺序</h4>
 <ul>
 <li>SpringBoot 启动会扫描一下位置的 application.properties 或者 application.yml 文件作为 Spring boot 的默认配置文件：</li>
 </ul>
@@ -1197,12 +1197,12 @@
 <span class="line"><span>优先级3：classpath:/config/			资源路径下的config文件夹配置文件</span></span>
 <span class="line"><span>优先级4：classpath:/				资源路径下配置文件</span></span></code></pre>
 <p>优先级由高到低，高优先级的配置会覆盖低优先级的配置。<strong>SpringBoot 会从这四个位置全部加载主配置文件，互补配置。</strong></p>
-<h2 id="16-自动装配原理">1.6 自动装配原理</h2>
+<h3 id="16-自动装配原理">1.6 自动装配原理</h3>
 <ul>
 <li><strong>思考：</strong> 经过编写 yaml 配置文件的学习，我们认识到可以使用 yaml 配置文件设置相关配置，但是配置文件到底该怎么写？又能写些什么？</li>
 </ul>
 <hr>
-<h3 id="61-原理分析">6.1 原理分析</h3>
+<h4 id="61-原理分析">6.1 原理分析</h4>
 <p>我们在 <strong>2. 运行原理初探</strong> 中已经找到了文件 <code>spring.factories</code> 所处的位置，</p>
 <p>这时我们可以选取 <strong>HttpEncodingAutoConfiguration（Http 编码自动配置）</strong> 为例解释自动配置原理：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span><span class="code-line-number">13</span><span class="code-line-number">14</span><span class="code-line-number">15</span><span class="code-line-number">16</span><span class="code-line-number">17</span><span class="code-line-number">18</span><span class="code-line-number">19</span><span class="code-line-number">20</span><span class="code-line-number">21</span><span class="code-line-number">22</span><span class="code-line-number">23</span><span class="code-line-number">24</span><span class="code-line-number">25</span><span class="code-line-number">26</span><span class="code-line-number">27</span><span class="code-line-number">28</span><span class="code-line-number">29</span><span class="code-line-number">30</span><span class="code-line-number">31</span><span class="code-line-number">32</span><span class="code-line-number">33</span><span class="code-line-number">34</span><span class="code-line-number">35</span><span class="code-line-number">36</span><span class="code-line-number">37</span><span class="code-line-number">38</span><span class="code-line-number">39</span><span class="code-line-number">40</span><span class="code-line-number">41</span><span class="code-line-number">42</span><span class="code-line-number">43</span><span class="code-line-number">44</span><span class="code-line-number">45</span><span class="code-line-number">46</span><span class="code-line-number">47</span></span><code><span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">//表示这是一个配置类，和以前编写的配置文件一样，也可以给容器中添加组件</span></span>
@@ -1268,7 +1268,7 @@
 <p>然后我们可以在配置文件中进行 httpencoding 的相关配置，并进行对比：</p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SpringBootImages/HttpProperties.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SpringBootImages/HttpProperties.png" alt="HttpProperties" data-responsive-image="true"></picture></p>
 <p>到此，我们就明白了自动装配的核心！</p>
-<h3 id="62-原理总结">6.2 原理总结</h3>
+<h4 id="62-原理总结">6.2 原理总结</h4>
 <ol>
 <li>
 <p>SpringBoot 启动会加载大量的自动配置类</p>
@@ -1296,7 +1296,7 @@
 </ul>
 </li>
 </ul>
-<h3 id="63-conditional">6.3 @Conditional</h3>
+<h4 id="63-conditional">6.3 @Conditional</h4>
 <ul>
 <li>SpringBoot 的自动装配类必须在一定的条件下才能生效，SpringBoot 用到了 <strong>@Conditional 派生注解</strong></li>
 <li><strong>作用：必须是@Conditional 指定的条件成立，才给容器中添加组件，配置配里面的所有内容才生效。</strong></li>
@@ -1358,7 +1358,7 @@
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">@Conditional 拓展注解</th><th align="center">作用（判断是否满足当前指定条件）</th></tr></thead><tbody><tr><td align="center">@ConditionalOnJava</td><td align="center">系统的 Java 版本是否符合要求</td></tr><tr><td align="center">@ConditionalOnBean</td><td align="center">容器中存在指定的 Bean</td></tr><tr><td align="center">@ConditionalOnMissingBean</td><td align="center">容器中不存在指定的 Bean</td></tr><tr><td align="center">@ConditionalOnExpression</td><td align="center">满足 SpEL 表达式的指定</td></tr><tr><td align="center">@ConditionalOnClass</td><td align="center">系统中有指定的类</td></tr><tr><td align="center">@ConditionalOnMissingClass</td><td align="center">系统中没有指定的类</td></tr><tr><td align="center">@ConditionalOnSingleCandidate</td><td align="center">容器中只有一个指定的 Bean，或者这个 Bean 是首选 Bean</td></tr><tr><td align="center">@ConditionalOnProperty</td><td align="center">系统中指定的属性是否有指定的值</td></tr><tr><td align="center">@ConditionalOnResource</td><td align="center">类路径下是否存在指定的资源文件</td></tr><tr><td align="center">@ConditionalOnWebApplication</td><td align="center">当前是 Web 环境</td></tr><tr><td align="center">@ConditionalOnNotWebApplication</td><td align="center">当前不是 Web 环境</td></tr><tr><td align="center">@ConditionalOnJndi</td><td align="center">JNDI 存在指定项</td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">@Conditional 拓展注解</th><th align="center">作用（判断是否满足当前指定条件）</th></tr></thead><tbody><tr><td align="center">@ConditionalOnJava</td><td align="center">系统的 Java 版本是否符合要求</td></tr><tr><td align="center">@ConditionalOnBean</td><td align="center">容器中存在指定的 Bean</td></tr><tr><td align="center">@ConditionalOnMissingBean</td><td align="center">容器中不存在指定的 Bean</td></tr><tr><td align="center">@ConditionalOnExpression</td><td align="center">满足 SpEL 表达式的指定</td></tr><tr><td align="center">@ConditionalOnClass</td><td align="center">系统中有指定的类</td></tr><tr><td align="center">@ConditionalOnMissingClass</td><td align="center">系统中没有指定的类</td></tr><tr><td align="center">@ConditionalOnSingleCandidate</td><td align="center">容器中只有一个指定的 Bean，或者这个 Bean 是首选 Bean</td></tr><tr><td align="center">@ConditionalOnProperty</td><td align="center">系统中指定的属性是否有指定的值</td></tr><tr><td align="center">@ConditionalOnResource</td><td align="center">类路径下是否存在指定的资源文件</td></tr><tr><td align="center">@ConditionalOnWebApplication</td><td align="center">当前是 Web 环境</td></tr><tr><td align="center">@ConditionalOnNotWebApplication</td><td align="center">当前不是 Web 环境</td></tr><tr><td align="center">@ConditionalOnJndi</td><td align="center">JNDI 存在指定项</td></tr></tbody></table></div>
 <ul>
 <li>如此多的自动配置类必须在满足了指定条件下才会生效，那么我们怎么知道哪些自动配置生效了呢？</li>
 </ul>
@@ -1369,7 +1369,7 @@
 <p><strong>Positive matches:（自动配置类启用的：正匹配）</strong></p>
 <p><strong>Negative matches:（没有启动，没有匹配成功的自动配置类：负匹配）</strong></p>
 <p><strong>Unconditional classes: （没有条件的类）</strong></p>
-<h2 id="17-自定义-starter">1.7 自定义 Starter</h2>
+<h3 id="17-自定义-starter">1.7 自定义 Starter</h3>
 <p>我们先明白 Starter 的一些基础知识：</p>
 <ul>
 <li>
@@ -1387,7 +1387,7 @@
 </li>
 </ul>
 <p>明白命名规约有助于帮助我们命名自定义启动器。</p>
-<h3 id="71-编写启动器">7.1 编写启动器</h3>
+<h4 id="71-编写启动器">7.1 编写启动器</h4>
 <ol>
 <li>在 IDEA 中新建一个空项目 spring-boot-starter-diy；</li>
 <li>完成第一步后，新建一个普通 Maven 模块：yang-spring-boot-starter</li>
@@ -1502,7 +1502,7 @@
 </ol>
 <picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SpringBootImages/installToMaven.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SpringBootImages/installToMaven.png" alt="installToMaven" style="zoom: 50%;" data-responsive-image="true"></picture>
 <p><mark class="flexible-marker flexible-marker-default">注意：</mark> 代码只在 <code>yang-spring-boot-starter-autoconfigure</code> 中编写，启动器 Starter 中没有任何代码。</p>
-<h3 id="72-测试starter">7.2 测试Starter</h3>
+<h4 id="72-测试starter">7.2 测试Starter</h4>
 <ol>
 <li>新建一个 SpringBoot 项目；</li>
 <li>导入我们自定义的启动器：</li>
@@ -1537,7 +1537,7 @@
 <li>启动项目测试，查看结果</li>
 </ol>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SpringBootImages/testStarter.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/SpringBootImages/testStarter.png" alt="testStarter" data-responsive-image="true"></picture></p>
-<p><strong>自定义启动器编写成功！</strong></p> </article> <div class="text-muted-foreground max-w-app mt-20 w-full space-y-3 text-center text-sm" data-astro-cid-7ap3hmvm> <aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full px-2 text-center leading-6 sm:px-0"> <p class="m-0 break-words"> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a><span> 许可协议，</span><span class="max-sm:block">转载时请署名并注明<a href="https://mofan212.github.io/posts/principles-of-springboot/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a> 🔗</span> </p> </aside> <section data-post-reward data-pagefind-ignore class="w-full" aria-label="赞赏"> <div class="flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:flex-wrap sm:gap-x-1.5 sm:gap-y-2"> <span class="sm:whitespace-nowrap">如果这篇文章对你有帮助，可以通过</span> <a href="/reward/" class="focus-outline border-accent text-accent hover:bg-accent/10 active:bg-accent/10 inline-block rounded-md border px-3 py-1 font-medium transition-colors"> 赞赏 </a> <span class="sm:whitespace-nowrap">请我喝杯 Coffee ☕</span> </div> </section> </div> <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm>  <ul id="post-tags" class="mt-4 mb-8 flex flex-wrap gap-4 sm:mb-8" data-astro-cid-7ap3hmvm> <li> <a href="/tags/spring-boot/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> Spring Boot </a> </li><li> <a href="/tags/source-code-analysis/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-2"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> 源码分析 </a> </li> </ul>  <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/learning-springmvc-from-0/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.3l105.3-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg> <div> <span>上一篇</span> <div class="text-accent/85 text-sm">从 0 开始的 SpringMVC 学习</div> </div> </a> <a href="/posts/springioc/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>下一篇</span> <div class="text-accent/85 text-sm">Spring IoC 巩固理解</div> </div> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg> </a> </div> </main> <footer class="app-layout mt-auto" data-astro-cid-7ap3hmvm="true"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="text-muted-foreground my-2 flex w-fit flex-col items-start text-start text-sm whitespace-nowrap"> <div class="flex items-center gap-1.5"> <svg width="24" height="24" fill="currentColor" class="size-4" viewBox="-49.231 -39.385 738.462 590.769" aria-hidden="true"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9-.1-2.7-.2-5.4-.2-8.1 0-88.4 71.6-160 160-160 59.3 0 111 32.2 138.7 80.2A95.5 95.5 0 0 1 448 96c53 0 96 43 96 96 0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39L296 392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0z" /></svg> <span>最近更新：</span> <time class="tabular-nums" datetime="2026-10-21T03:16:11.000Z" data-deployed-at="2026-10-21T03:16:11.000Z" data-just-now="刚刚" data-locale="zh-CN"> 2026-10-21 11:16 </time> </div> <div class="mt-1 flex items-center gap-3 text-xs"> <span class="flex items-center gap-1" title="本站访客数"> <svg width="24" height="24" fill="currentColor" class="size-3" viewBox="-2.835 -3.241 453.671 518.481" aria-hidden="true"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3z" /></svg> <span class="sr-only">本站访客数：</span> <span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> <span aria-hidden="true">|</span> <span class="flex items-center gap-1.5" title="本站总浏览量"> <span class="flex size-4 items-center justify-center" aria-hidden="true"> <svg width="24" height="24" fill="currentColor" class="size-3.5" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48zM0 272c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v160c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zM368 96h32c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48" /></svg> </span> <span class="sr-only">本站总浏览量：</span> <span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> </div> </div> <div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"> <span>版权所有 &#169; 2020 – 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer> <script>
+<p><strong>自定义启动器编写成功！</strong></p> </article> <div class="text-muted-foreground max-w-app mt-20 w-full space-y-3 text-center text-sm" data-astro-cid-7ap3hmvm> <aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full px-2 text-center leading-6 sm:px-0"> <p class="m-0 break-words"> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a><span> 许可协议，</span><span class="max-sm:block">转载时请署名并注明<a href="https://mofan212.github.io/posts/principles-of-springboot/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a> 🔗</span> </p> </aside> <section data-post-reward data-pagefind-ignore class="w-full" aria-label="赞赏"> <div class="flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:flex-wrap sm:gap-x-1.5 sm:gap-y-2"> <span class="sm:whitespace-nowrap">如果这篇文章对你有帮助，可以通过</span> <a href="/reward/" class="focus-outline border-accent text-accent hover:bg-accent/10 active:bg-accent/10 inline-block rounded-md border px-3 py-1 font-medium transition-colors"> 赞赏 </a> <span class="sm:whitespace-nowrap">请我喝杯 Coffee ☕</span> </div> </section> </div> <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm>  <ul id="post-tags" class="mt-4 mb-8 flex flex-wrap gap-4 sm:mb-8" data-astro-cid-7ap3hmvm> <li> <a href="/tags/spring-boot/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> Spring Boot </a> </li><li> <a href="/tags/source-code-analysis/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-2"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> 源码分析 </a> </li> </ul>  <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/learning-springmvc-from-0/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.3l105.3-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg> <div> <span>上一篇</span> <div class="text-accent/85 text-sm">从 0 开始的 SpringMVC 学习</div> </div> </a> <a href="/posts/springioc/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>下一篇</span> <div class="text-accent/85 text-sm">Spring IoC 巩固理解</div> </div> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg> </a> </div> </main> <footer class="app-layout mt-auto" data-astro-cid-7ap3hmvm="true"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="text-muted-foreground my-2 flex w-fit flex-col items-start text-start text-sm whitespace-nowrap"> <div class="flex items-center gap-1.5"> <svg width="24" height="24" fill="currentColor" class="size-4" viewBox="-49.231 -39.385 738.462 590.769" aria-hidden="true"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9-.1-2.7-.2-5.4-.2-8.1 0-88.4 71.6-160 160-160 59.3 0 111 32.2 138.7 80.2A95.5 95.5 0 0 1 448 96c53 0 96 43 96 96 0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39L296 392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0z" /></svg> <span>最近更新：</span> <time class="tabular-nums" datetime="2026-10-22T08:22:01.000Z" data-deployed-at="2026-10-22T08:22:01.000Z" data-just-now="刚刚" data-locale="zh-CN"> 2026-10-22 16:22 </time> </div> <div class="mt-1 flex items-center gap-3 text-xs"> <span class="flex items-center gap-1" title="本站访客数"> <svg width="24" height="24" fill="currentColor" class="size-3" viewBox="-2.835 -3.241 453.671 518.481" aria-hidden="true"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3z" /></svg> <span class="sr-only">本站访客数：</span> <span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> <span aria-hidden="true">|</span> <span class="flex items-center gap-1.5" title="本站总浏览量"> <span class="flex size-4 items-center justify-center" aria-hidden="true"> <svg width="24" height="24" fill="currentColor" class="size-3.5" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48zM0 272c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v160c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zM368 96h32c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48" /></svg> </span> <span class="sr-only">本站总浏览量：</span> <span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> </div> </div> <div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"> <span>版权所有 &#169; 2020 – 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer> <script>
   (() => {
     const updateDeploymentTimes = () => {
       document.querySelectorAll("[data-deployed-at]").forEach(element => {
@@ -1586,4 +1586,4 @@
     document.addEventListener("astro:page-load", updateDeploymentTimes);
     window.setInterval(updateDeploymentTimes, 60_000);
   })();
-</script>    <script type="module" src="/_astro/Layout.astro_astro_type_script_index_0_lang.DQQu8RqY.js"></script> <script type="module" src="/_astro/Layout.astro_astro_type_script_index_1_lang.DRvjezMo.js"></script> </body> </html>  <script type="module" src="/_astro/index.astro_astro_type_script_index_0_lang.Oly9xh_g.js"></script>
+</script>    <script type="module" src="/_astro/Layout.astro_astro_type_script_index_0_lang.BrDp0sUM.js"></script> <script type="module" src="/_astro/Layout.astro_astro_type_script_index_1_lang.DRvjezMo.js"></script> </body> </html>  <script type="module" src="/_astro/index.astro_astro_type_script_index_0_lang.Oly9xh_g.js"></script>

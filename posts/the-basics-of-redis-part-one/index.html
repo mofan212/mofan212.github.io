@@ -1,4 +1,4 @@
-<!DOCTYPE html><html dir="ltr" lang="zh-CN" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/the-basics-of-redis-part-one/"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/style.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.3.0/400.css"><link rel="preconnect" href="https://busuanzi.ibruce.info"><meta name="generator" content="Astro v6.4.2"><!-- Primary meta --><title>【上篇】Redis 基础篇 | Mofan</title><meta name="title" content="【上篇】Redis 基础篇 | Mofan"><meta name="description" content="本文主要介绍了 Redis 的五大数据类型、配置文件解析和两种持久化。"><meta name="author" content="默烦"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Mofan"><meta property="og:title" content="【上篇】Redis 基础篇 | Mofan"><meta property="og:description" content="本文主要介绍了 Redis 的五大数据类型、配置文件解析和两种持久化。"><meta property="og:url" content="https://mofan212.github.io/posts/the-basics-of-redis-part-one/"><meta property="og:image" content="https://mofan212.github.io/default-og.jpg"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://mofan212.github.io/posts/the-basics-of-redis-part-one/"><meta property="twitter:title" content="【上篇】Redis 基础篇 | Mofan"><meta property="twitter:description" content="本文主要介绍了 Redis 的五大数据类型、配置文件解析和两种持久化。"><meta property="twitter:image" content="https://mofan212.github.io/default-og.jpg"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Mofan" href="https://mofan212.github.io/rss.xml"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2020-12-05T00:00:00.000Z"><meta property="article:modified_time" content="2022-03-27T00:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"【上篇】Redis 基础篇 | Mofan","url":"https://mofan212.github.io/posts/the-basics-of-redis-part-one/","mainEntityOfPage":"https://mofan212.github.io/posts/the-basics-of-redis-part-one/","datePublished":"2020-12-05T00:00:00.000Z","dateModified":"2022-03-27T00:00:00.000Z","author":[{"@type":"Person","name":"默烦","url":"https://github.com/mofan212"}]}</script> <!--
+<!DOCTYPE html><html dir="ltr" lang="zh-CN" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="canonical" href="https://mofan212.github.io/posts/the-basics-of-redis-part-one/"><link rel="preconnect" href="https://npm.elemecdn.com"><link rel="preconnect" href="https://gcore.jsdelivr.net"><link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont@1.7.0/lxgwwenkaiscreen.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css"><link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.3.0/400.css"><link rel="preconnect" href="https://busuanzi.ibruce.info"><meta name="generator" content="Astro v6.4.2"><!-- Primary meta --><title>【上篇】Redis 基础篇 | Mofan</title><meta name="title" content="【上篇】Redis 基础篇 | Mofan"><meta name="description" content="本文主要介绍了 Redis 的五大数据类型、配置文件解析和两种持久化。"><meta name="author" content="默烦"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Mofan"><meta property="og:title" content="【上篇】Redis 基础篇 | Mofan"><meta property="og:description" content="本文主要介绍了 Redis 的五大数据类型、配置文件解析和两种持久化。"><meta property="og:url" content="https://mofan212.github.io/posts/the-basics-of-redis-part-one/"><meta property="og:image" content="https://mofan212.github.io/default-og.jpg"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://mofan212.github.io/posts/the-basics-of-redis-part-one/"><meta property="twitter:title" content="【上篇】Redis 基础篇 | Mofan"><meta property="twitter:description" content="本文主要介绍了 Redis 的五大数据类型、配置文件解析和两种持久化。"><meta property="twitter:image" content="https://mofan212.github.io/default-og.jpg"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Mofan" href="https://mofan212.github.io/rss.xml"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2020-12-05T00:00:00.000Z"><meta property="article:modified_time" content="2022-03-27T00:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"【上篇】Redis 基础篇 | Mofan","url":"https://mofan212.github.io/posts/the-basics-of-redis-part-one/","mainEntityOfPage":"https://mofan212.github.io/posts/the-basics-of-redis-part-one/","datePublished":"2020-12-05T00:00:00.000Z","dateModified":"2022-03-27T00:00:00.000Z","author":[{"@type":"Person","name":"默烦","url":"https://github.com/mofan212"}]}</script> <!--
       Inline FOUC-prevention script: sets data-theme on <html> before
       the browser paints. Runs synchronously, no defer/async.
     --><script>
@@ -14,7 +14,7 @@
         // Expose value so theme.ts can skip re-detection.
         window.__theme = { value: theme };
       })();
-    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.8-7lwm7-.css">
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.CRJPB6-j.css">
 <style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
 .toc-link[data-astro-cid-po2ckxzl]{position:relative;transition:color .2s ease}.toc-link[data-astro-cid-po2ckxzl]:before{position:absolute;inset-block:.375rem;inset-inline-start:-2px;width:2px;border-radius:2px;background-color:var(--accent);content:"";opacity:0;transition:opacity .2s ease}.toc-link[data-astro-cid-po2ckxzl][data-active]{color:var(--accent)}.toc-link[data-astro-cid-po2ckxzl][data-active]:before{opacity:1}.toc-toggle[data-astro-cid-po2ckxzl][aria-expanded=true] .toc-toggle-icon[data-astro-cid-po2ckxzl]{rotate:-90deg}.toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-width:thin}.post-toc-desktop[data-astro-cid-taqt6xe3] .toc-scroll[data-astro-cid-taqt6xe3]{scrollbar-gutter:stable}.toc-scroll[data-astro-cid-taqt6xe3]:after{display:block;block-size:20dvh;content:""}[data-astro-cid-taqt6xe3][data-toc-dialog]{opacity:0;transform:translate(1.25rem);transition:opacity .16s ease-out,transform .22s cubic-bezier(.22,1,.36,1);will-change:opacity,transform}[data-astro-cid-taqt6xe3][data-toc-dialog][data-toc-visible]{opacity:1;transform:translate(0)}[data-astro-cid-taqt6xe3][data-toc-dialog]::backdrop{background-color:#0000;transition:background-color .18s ease-out}[data-astro-cid-taqt6xe3][data-toc-dialog][data-toc-visible]::backdrop{background-color:#0000007f}@media(prefers-reduced-motion:reduce){[data-astro-cid-taqt6xe3][data-toc-dialog]{transform:none;transition:none}[data-astro-cid-taqt6xe3][data-toc-dialog]::backdrop{transition:none}}[data-astro-cid-4wxclohh][data-post-series]{interpolate-size:allow-keywords}[data-astro-cid-4wxclohh][data-post-series]::details-content{block-size:0;overflow:hidden;opacity:0;transition:block-size .2s ease-out,opacity .15s ease-out,content-visibility .2s allow-discrete}[data-astro-cid-4wxclohh][data-post-series][open]::details-content{block-size:auto;opacity:1}@media(prefers-reduced-motion:reduce){[data-astro-cid-4wxclohh][data-post-series]::details-content{transition:none}}.post-sidebar[data-astro-cid-7ap3hmvm]{display:contents}@media(min-width:90rem){.post-sidebar[data-astro-cid-7ap3hmvm]{position:fixed;inset-block-start:9rem;inset-inline-start:calc(50% + var(--app-max-width) / 2 + 2rem);display:flex;width:min(18rem,calc(50vw - var(--app-max-width) / 2 - 3rem));height:calc(100dvh - 11rem);min-height:0;flex-direction:column}}
 </style><style>[data-astro-transition-scope="astro-36ssibgs-1"] { view-transition-name: redis; }@layer astro { ::view-transition-old(redis) { 
@@ -629,11 +629,11 @@
 
     update();
   })();
-</script> </div> <article id="article" class="mt-8 w-full app-prose max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)" data-astro-cid-7ap3hmvm> <!-- 封面来源：碧蓝航线 永夜幻光 活动 CG -->
+</script> </div> <article id="article" class="mt-8 w-full app-prose post-content max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)" data-astro-cid-7ap3hmvm> <!-- 封面来源：碧蓝航线 永夜幻光 活动 CG -->
 <p>Redis 命令参考：<a href="http://doc.redisfans.com/" target="_blank" rel="noopener noreferrer">Redis 命令参考</a></p>
 <p>本文参考：<a href="https://www.bilibili.com/video/BV1oW411u75R" target="_blank" rel="noopener noreferrer">尚硅谷超经典Redis教程,redis实战,阳哥版从入门到精通</a></p>
-<h1 id="1-nosql-入门与概述上">1. NoSQL 入门与概述（上）</h1>
-<h2 id="11-为什么要有-nosql">1.1 为什么要有 NoSQL</h2>
+<h2 id="1-nosql-入门与概述上">1. NoSQL 入门与概述（上）</h2>
+<h3 id="11-为什么要有-nosql">1.1 为什么要有 NoSQL</h3>
 <blockquote><p>单机 MySQL 的美好年代</p></blockquote>
 <p>在 90 年代，一个网站的访问量一般都不大，用单个数据库完全可以轻松应付。</p>
 <p>在那个时候，更多的都是静态网站，动态交互类型的网站并不多。</p>
@@ -659,10 +659,10 @@
 <blockquote><p>为什么要使用 NoSQL</p></blockquote>
 <p>今天我们可以通过第三方平台（如：Google，Facebook 等）可以很容易获取数据。用户的个人信息，社交网络，地理位置，用户生成的数据和用户操作日志已经成倍的增加。我们如果要对这些用户数据进行挖掘，那 SQL 数据库已经不适合这些应用了，NoSQL 数据库的发展也却能很好的处理这些大的数据。</p>
 <picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/Web-Applications-Driving-Data-Growth.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/Web-Applications-Driving-Data-Growth.png" alt="Web-Applications-Driving-Data-Growth" style="zoom:67%;" data-responsive-image="true"></picture>
-<h2 id="12-什么是-nosql">1.2 什么是 NoSQL</h2>
+<h3 id="12-什么是-nosql">1.2 什么是 NoSQL</h3>
 <p>NoSQL（NoSQL = Not Only SQL），意即「不仅仅是 SQL」，<mark class="flexible-marker flexible-marker-default">泛指非关系型的数据库</mark>。随着互联网 web 2.0 网站的兴起，传统的关系数据库在应付 web 2.0 网站，特别是超大规模和高并发的 SNS 类型的 web 2.0 纯动态网站已经显得力不从心，暴露了很多难以克服的问题，而非关系型的数据库则由于其本身的特点得到了非常迅速的发展。NoSQL 数据库的产生就是为了解决大规模数据集合多重数据种类带来的挑战，尤其是大数据应用难题，包括超大规模数据的存储。</p>
 <p>例如谷歌或 Facebook 每天为他们的用户收集万亿比特的数据。<mark class="flexible-marker flexible-marker-default">这些类型的数据存储不需要固定的模式，无需多余操作就可以横向扩展。</mark></p>
-<h2 id="13-nosql-特性">1.3 NoSQL 特性</h2>
+<h3 id="13-nosql-特性">1.3 NoSQL 特性</h3>
 <blockquote><p>易扩展</p></blockquote>
 <p>NoSQL 数据库种类繁多，但是一个共同的特点是都去掉关系数据库的关系型特性。数据之间无关系，这样就非常容易扩展。也无形之间，在架构的层面上带来了可扩展的能力。</p>
 <blockquote><p>大数据量高性能</p></blockquote>
@@ -692,13 +692,13 @@
 <li>CAP 定理</li>
 <li>高性能，高可用性和可伸缩性</li>
 </ul>
-<h2 id="14-有哪些-nosql-数据库">1.4 有哪些 NoSQL 数据库</h2>
+<h3 id="14-有哪些-nosql-数据库">1.4 有哪些 NoSQL 数据库</h3>
 <ul>
 <li>Redis</li>
 <li>Memcached</li>
 <li>MongDB</li>
 </ul>
-<h2 id="15-有什么用">1.5 有什么用</h2>
+<h3 id="15-有什么用">1.5 有什么用</h3>
 <ul>
 <li>
 <p>KV</p>
@@ -713,8 +713,8 @@
 <p>…</p>
 </li>
 </ul>
-<h1 id="2-nosql-入门与概述下">2. NoSQL 入门与概述（下）</h1>
-<h2 id="21-3v--3-高">2.1 3V + 3 高</h2>
+<h2 id="2-nosql-入门与概述下">2. NoSQL 入门与概述（下）</h2>
+<h3 id="21-3v--3-高">2.1 3V + 3 高</h3>
 <blockquote><p>大数据时代的 3V</p></blockquote>
 <ul>
 <li>
@@ -739,7 +739,7 @@
 <p>高性能</p>
 </li>
 </ul>
-<h2 id="22-当下的-nosql-经典应用">2.2 当下的 NoSQL 经典应用</h2>
+<h3 id="22-当下的-nosql-经典应用">2.2 当下的 NoSQL 经典应用</h3>
 <p>当下的应用是 SQL 和 NoSQL 一起使用，了解一下阿里巴巴中文站商品信息如何存放。</p>
 <p>阿里巴巴架构发展历程：</p>
 <blockquote><p>演变过程</p></blockquote>
@@ -806,7 +806,7 @@
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/UDSL-API.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/UDSL-API.png" alt="UDSL-API" data-responsive-image="true"></picture></p>
 <p><strong>UDSL 热点缓存：</strong></p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/UDSL%E7%83%AD%E7%82%B9%E7%BC%93%E5%AD%98.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/UDSL%E7%83%AD%E7%82%B9%E7%BC%93%E5%AD%98.png" alt="UDSL热点缓存" data-responsive-image="true"></picture></p>
-<h2 id="23-nosql-数据模型简介">2.3 NoSQL 数据模型简介</h2>
+<h3 id="23-nosql-数据模型简介">2.3 NoSQL 数据模型简介</h3>
 <p>以一个电商客户、订单、订购、地址模型来对比关系型数据库和非关系型数据库。</p>
 <p>传统关系型数据库如何设计？可以画好 ER 图进行设计（其中 1:1 / 1:N / N:N，主外键很常见）。</p>
 <p>那么 NoSQL 又该怎么设计？</p>
@@ -841,7 +841,7 @@
 <li>图形：比如现实的人际关系图中是很复杂的，仅仅试试二维的行列关系图也是很难表示的，这个时候就需要使用到图。比如</li>
 </ul>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/%E5%9B%BE%E5%BD%A2%E7%A4%BA%E4%BE%8B.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/%E5%9B%BE%E5%BD%A2%E7%A4%BA%E4%BE%8B.png" alt="图形示例" data-responsive-image="true"></picture></p>
-<h2 id="24-nosql-数据库的四大分类">2.4 NoSQL 数据库的四大分类</h2>
+<h3 id="24-nosql-数据库的四大分类">2.4 NoSQL 数据库的四大分类</h3>
 <blockquote><p>K-V 键值对 NoSQL 数据库</p></blockquote>
 <ul>
 <li>新浪：BerkeleyDB + Redis</li>
@@ -871,7 +871,7 @@
 <p>图关系数据库不是放图形的，放的是关系，比如：朋友圈社交网络、广告推荐系统社交网络、推荐系统等，它专注于构建关系图谱。常见的图关系数据库有：Neo4j、InfoGrid。</p>
 <blockquote><p>四者的对比</p></blockquote>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/%E5%9B%9B%E5%A4%A7NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AF%B9%E6%AF%94.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/%E5%9B%9B%E5%A4%A7NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AF%B9%E6%AF%94.png" alt="四大NoSQL数据库对比" data-responsive-image="true"></picture></p>
-<h2 id="25-分布式数据库中-cap-原理">2.5 分布式数据库中 CAP 原理</h2>
+<h3 id="25-分布式数据库中-cap-原理">2.5 分布式数据库中 CAP 原理</h3>
 <blockquote><p>回顾 ACID</p></blockquote>
 <p>先说说传统关系型数据库的 ACID 特性，这也是事务的四大特征：</p>
 <p>1、原子性（atomicity）：事务是原子性操作，由一系列动作组成，事务的原子性确保动作要么全部完成，要么完全不起作用</p>
@@ -924,8 +924,8 @@
 <p>简单来讲：</p>
 <p>1、分布式：不同的多台服务器上面部署 <strong>不同</strong> 的服务模块（工程），他们之间通过 RPC / RMI 之间通信和调用，对外提供服务和组内协作。</p>
 <p>2、集群：不同的多台服务器上面部署 <strong>相同</strong> 的服务模块，通过分布式调度软件进行统一的调度，对外提供服务和连接。</p>
-<h1 id="3-redis-入门概述">3. Redis 入门概述</h1>
-<h2 id="31-入门概述">3.1 入门概述</h2>
+<h2 id="3-redis-入门概述">3. Redis 入门概述</h2>
+<h3 id="31-入门概述">3.1 入门概述</h3>
 <blockquote><p>什么是 Redis</p></blockquote>
 <p>Redis 不是一个单词，它是几个单词的缩写。<mark class="flexible-marker flexible-marker-default">Re</mark>mote <mark class="flexible-marker flexible-marker-default">Di</mark>ctionary <mark class="flexible-marker flexible-marker-default">S</mark>erver（远程字典服务器）是完全开源免费的，用 C 语言编写的，遵守 BSD 协议，是一个高性能的 Key / Value 分布式内存数据库，基于内存运行并支持持久化的 NoSQL 数据库，是当下最热门的 NoSQL 数据库之一，也被人们称为数据结构服务器。</p>
 <p>Redis 与其他 key - value 缓存产品相比有以下三个特点：</p>
@@ -947,7 +947,7 @@
 <p>3、事务的控制</p>
 <p>4、复制</p>
 <p>5、…</p>
-<h2 id="32-redis-的安装">3.2 Redis 的安装</h2>
+<h3 id="32-redis-的安装">3.2 Redis 的安装</h3>
 <p>本节基于 Linux 下安装 Redis。</p>
 <p>首先进入管理员权限（以后的每一步操作都请使用管理员进行操作）：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="bash" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">[mofan@cheny ~]$ su</span></span></code></pre>
@@ -1051,7 +1051,7 @@
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/CentOS-Media.repo%E4%BF%AE%E6%94%B9%E5%90%8E.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/CentOS-Media.repo%E4%BF%AE%E6%94%B9%E5%90%8E.png" alt="CentOS-Media.repo修改后" data-responsive-image="true"></picture></p>
 <p>这样，CentOS 本地 ISO 挂载并配置 ISO 镜像作为 yum 源就设置完成了。</p>
 <p>如果想要恢复使用网络上的源，再次把 CentOS-Base.repo.bak 重命名为 CentOS-Base.repo 就可以了，并把 CentOS-Media.repo 文件内容改回去就可以了。</p>
-<h2 id="33-hello-world">3.3 Hello World</h2>
+<h3 id="33-hello-world">3.3 Hello World</h3>
 <p>那我们的 Redis 安装在哪呢？</p>
 <p>执行以下命令查看：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="bash" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span></span><code><span class="line"><span style="--shiki-light:#0184BC;--shiki-dark:#56B6C2">cd</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> /usr/local/bin</span></span>
@@ -1086,7 +1086,7 @@
 <span class="line"><span>not connected> exit</span></span></code></pre>
 <p>如果再次查看服务进程，会发现 Redis 的服务进程已经消失，就和最开始未启动服务一样：</p>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/%E5%85%B3%E9%97%ADRedis%E5%90%8E%E6%9F%A5%E7%9C%8B%E6%9C%8D%E5%8A%A1%E8%BF%9B%E7%A8%8B.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/%E5%85%B3%E9%97%ADRedis%E5%90%8E%E6%9F%A5%E7%9C%8B%E6%9C%8D%E5%8A%A1%E8%BF%9B%E7%A8%8B.png" alt="关闭Redis后查看服务进程" data-responsive-image="true"></picture></p>
-<h2 id="34-启动后的杂项知识">3.4 启动后的杂项知识</h2>
+<h3 id="34-启动后的杂项知识">3.4 启动后的杂项知识</h3>
 <blockquote><p>Redis 自测</p></blockquote>
 <p>在 <code>/usr/local/bin</code> 目录下还有一个 <code>redis-benchmark</code>，我们可以运行一下，就可以让 Redis 进行自测（或许也是一种电脑跑分？）。当然，运行它必须让 Redis 处于启动状态：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span>redis-benchmark</span></span></code></pre>
@@ -1190,7 +1190,7 @@
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">序号</th><th align="center">选项</th><th align="center">描述</th><th align="center">默认值</th></tr></thead><tbody><tr><td align="center">1</td><td align="center"><strong>-h</strong></td><td align="center">指定服务器主机名</td><td align="center">127.0.0.1</td></tr><tr><td align="center">2</td><td align="center"><strong>-p</strong></td><td align="center">指定服务器端口</td><td align="center">6379</td></tr><tr><td align="center">3</td><td align="center"><strong>-s</strong></td><td align="center">指定服务器 socket</td><td align="center"></td></tr><tr><td align="center">4</td><td align="center"><strong>-c</strong></td><td align="center">指定并发连接数</td><td align="center">50</td></tr><tr><td align="center">5</td><td align="center"><strong>-n</strong></td><td align="center">指定请求数</td><td align="center">10000</td></tr><tr><td align="center">6</td><td align="center"><strong>-d</strong></td><td align="center">以字节的形式指定 SET/GET 值的数据大小</td><td align="center">2</td></tr><tr><td align="center">7</td><td align="center"><strong>-k</strong></td><td align="center">1=keep alive 0=reconnect</td><td align="center">1</td></tr><tr><td align="center">8</td><td align="center"><strong>-r</strong></td><td align="center">SET/GET/INCR 使用随机 key, SADD 使用随机值</td><td align="center"></td></tr><tr><td align="center">9</td><td align="center"><strong>-P</strong></td><td align="center">通过管道传输 <numreq> 请求</numreq></td><td align="center">1</td></tr><tr><td align="center">10</td><td align="center"><strong>-q</strong></td><td align="center">强制退出 redis。仅显示 query/sec 值</td><td align="center"></td></tr><tr><td align="center">11</td><td align="center"><strong>—csv</strong></td><td align="center">以 CSV 格式输出</td><td align="center"></td></tr><tr><td align="center">12</td><td align="center"><strong>-l</strong></td><td align="center">生成循环，永久执行测试</td><td align="center"></td></tr><tr><td align="center">13</td><td align="center"><strong>-t</strong></td><td align="center">仅运行以逗号分隔的测试命令列表</td><td align="center"></td></tr><tr><td align="center">14</td><td align="center"><strong>-I</strong></td><td align="center">Idle 模式。仅打开 N 个 idle 连接并等待</td><td align="center"></td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">序号</th><th align="center">选项</th><th align="center">描述</th><th align="center">默认值</th></tr></thead><tbody><tr><td align="center">1</td><td align="center"><strong>-h</strong></td><td align="center">指定服务器主机名</td><td align="center">127.0.0.1</td></tr><tr><td align="center">2</td><td align="center"><strong>-p</strong></td><td align="center">指定服务器端口</td><td align="center">6379</td></tr><tr><td align="center">3</td><td align="center"><strong>-s</strong></td><td align="center">指定服务器 socket</td><td align="center"></td></tr><tr><td align="center">4</td><td align="center"><strong>-c</strong></td><td align="center">指定并发连接数</td><td align="center">50</td></tr><tr><td align="center">5</td><td align="center"><strong>-n</strong></td><td align="center">指定请求数</td><td align="center">10000</td></tr><tr><td align="center">6</td><td align="center"><strong>-d</strong></td><td align="center">以字节的形式指定 SET/GET 值的数据大小</td><td align="center">2</td></tr><tr><td align="center">7</td><td align="center"><strong>-k</strong></td><td align="center">1=keep alive 0=reconnect</td><td align="center">1</td></tr><tr><td align="center">8</td><td align="center"><strong>-r</strong></td><td align="center">SET/GET/INCR 使用随机 key, SADD 使用随机值</td><td align="center"></td></tr><tr><td align="center">9</td><td align="center"><strong>-P</strong></td><td align="center">通过管道传输 <numreq> 请求</numreq></td><td align="center">1</td></tr><tr><td align="center">10</td><td align="center"><strong>-q</strong></td><td align="center">强制退出 redis。仅显示 query/sec 值</td><td align="center"></td></tr><tr><td align="center">11</td><td align="center"><strong>—csv</strong></td><td align="center">以 CSV 格式输出</td><td align="center"></td></tr><tr><td align="center">12</td><td align="center"><strong>-l</strong></td><td align="center">生成循环，永久执行测试</td><td align="center"></td></tr><tr><td align="center">13</td><td align="center"><strong>-t</strong></td><td align="center">仅运行以逗号分隔的测试命令列表</td><td align="center"></td></tr><tr><td align="center">14</td><td align="center"><strong>-I</strong></td><td align="center">Idle 模式。仅打开 N 个 idle 连接并等待</td><td align="center"></td></tr></tbody></table></div>
 <p>比如：</p>
 <pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="bash" data-language-name="Shell"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">redis-benchmark</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -h</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 127.0.0.1</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -p</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 6379</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -t</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> set,lpush</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -n</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 10000</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> -q</span></span></code></pre>
 <p>表示：主机为 127.0.0.1，端口号为 6379，执行的命令为 set 和 lpush，请求数为 10000，通过 -q 参数让结果只显示每秒执行的请求数。</p>
@@ -1206,7 +1206,7 @@
 <p>Redis 拥有统一密码管理，16 个库都是同样密码，要么都连上要么一个也连接不上。</p>
 <p>Redis 索引都是从零开始。</p>
 <p>Redis 的默认端口是 6379，至于为啥可以自行了解。</p>
-<h2 id="35-windows-下安装-redis">3.5 Windows 下安装 Redis</h2>
+<h3 id="35-windows-下安装-redis">3.5 Windows 下安装 Redis</h3>
 <p>有些情况下会有这样的应用场景：在 Windows 本地搭建 Redis，添加到本地计算机的服务中，保证每次开机自动启动服务。</p>
 <p>首先下载 Windows 环境下的 Redis，下载地址：<a href="https://github.com/microsoftarchive/redis/releases" target="_blank" rel="noopener noreferrer">Redis-x64-3.2.100.zip</a></p>
 <p>然后选择一个你喜欢的路径，在该路径下解压下载的压缩包。</p>
@@ -1240,8 +1240,8 @@
 <p>同目录下的 <code>redis.windows.conf</code> 文件就是默认的配置，复制一份改个名就完事了。</p>
 <p>如果还是不行，看看 Windows 服务里的 Redis 服务是否是网络服务。如果是网络服务，直接双击此服务，修改为本地系统服务：</p>
 <picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/%E4%BF%AE%E6%94%B9Redis%E6%9C%8D%E5%8A%A1%E4%B8%BA%E6%9C%AC%E5%9C%B0%E7%B3%BB%E7%BB%9F%E6%9C%8D%E5%8A%A1.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/修改Redis服务为本地系统服务.png" alt="修改Redis服务为本地系统服务" style="zoom:50%;" data-responsive-image="true"></picture>
-<h1 id="4-redis-数据类型">4. Redis 数据类型</h1>
-<h2 id="41-redis-的五大数据类型">4.1 Redis 的五大数据类型</h2>
+<h2 id="4-redis-数据类型">4. Redis 数据类型</h2>
+<h3 id="41-redis-的五大数据类型">4.1 Redis 的五大数据类型</h3>
 <blockquote><p>String（字符串）</p></blockquote>
 <p>String 是 Redis 中最基本的类型，可以理解成与 Memcached 一模一样的类型，一个 key 对应一个 value。</p>
 <p>String 类型是二进制安全的。意思是 Redis 的 String 可以包含任何数据。比如 jpg 图片或者序列化的对象。</p>
@@ -1263,7 +1263,7 @@
 <p>那么去哪里获得 Redis 常见数据类型操作命令？</p>
 <p><a href="http://redisdoc.com/" target="_blank" rel="noopener noreferrer">Redis 命令参考</a></p>
 <p><a href="https://redis.io/commands" target="_blank" rel="noopener noreferrer">Redis 官网命令参考</a></p>
-<h2 id="42-key-关键字">4.2 Key 关键字</h2>
+<h3 id="42-key-关键字">4.2 Key 关键字</h3>
 <blockquote><p>常用的一些命令</p></blockquote>
 
 
@@ -1342,7 +1342,7 @@
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">命令</th><th align="center">描述</th></tr></thead><tbody><tr><td align="center">DEL key</td><td align="center">该命令用于在 key 存在时删除 key</td></tr><tr><td align="center">DUMP key</td><td align="center">序列化给定 key，并返回被序列化的值</td></tr><tr><td align="center">EXISTS key</td><td align="center">检查给定 key 是否存在</td></tr><tr><td align="center">EXPIRE key seconds</td><td align="center">为给定 key 设置过期时间，以秒计</td></tr><tr><td align="center">EXPIREAT key timestamp</td><td align="center">EXPIREAT 的作用和 EXPIRE 类似，都用于为 key 设置过期时间。不同在于 EXPIREAT 命令接受的时间参数是 UNIX 时间戳（unix timestamp）</td></tr><tr><td align="center">PEXPIRE key milliseconds</td><td align="center">设置 key 的过期时间以毫秒计</td></tr><tr><td align="center">PEXPIREAT key milliseconds-timestamp</td><td align="center">设置 key 过期时间的时间戳（unix timestamp）以毫秒计</td></tr><tr><td align="center">KEYS pattern</td><td align="center">查找所有符合给定模式（pattern）的 key</td></tr><tr><td align="center">MOVE key db</td><td align="center">将当前数据库的 key 移动到给定的数据库 db 当中</td></tr><tr><td align="center">PERSIST key</td><td align="center">移除 key 的过期时间，key 将持久保持</td></tr><tr><td align="center">PTTL key</td><td align="center">以毫秒为单位返回 key 的剩余的过期时间</td></tr><tr><td align="center">TTL key</td><td align="center">以秒为单位，返回给定 key 的剩余生存时间（TTL，time to live）</td></tr><tr><td align="center">RANDOMKEY</td><td align="center">从当前数据库中随机返回一个 key</td></tr><tr><td align="center">RENAME key newkey</td><td align="center">修改 key 的名称</td></tr><tr><td align="center">RENAMENX key newkey</td><td align="center">仅当 newkey 不存在时，将 key 改名为 newkey</td></tr><tr><td align="center">SCAN cursor [MATCH pattern] [COUNT count]</td><td align="center">迭代数据库中的数据库键</td></tr><tr><td align="center">TYPE key</td><td align="center">返回 key 所储存的值的类型</td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">命令</th><th align="center">描述</th></tr></thead><tbody><tr><td align="center">DEL key</td><td align="center">该命令用于在 key 存在时删除 key</td></tr><tr><td align="center">DUMP key</td><td align="center">序列化给定 key，并返回被序列化的值</td></tr><tr><td align="center">EXISTS key</td><td align="center">检查给定 key 是否存在</td></tr><tr><td align="center">EXPIRE key seconds</td><td align="center">为给定 key 设置过期时间，以秒计</td></tr><tr><td align="center">EXPIREAT key timestamp</td><td align="center">EXPIREAT 的作用和 EXPIRE 类似，都用于为 key 设置过期时间。不同在于 EXPIREAT 命令接受的时间参数是 UNIX 时间戳（unix timestamp）</td></tr><tr><td align="center">PEXPIRE key milliseconds</td><td align="center">设置 key 的过期时间以毫秒计</td></tr><tr><td align="center">PEXPIREAT key milliseconds-timestamp</td><td align="center">设置 key 过期时间的时间戳（unix timestamp）以毫秒计</td></tr><tr><td align="center">KEYS pattern</td><td align="center">查找所有符合给定模式（pattern）的 key</td></tr><tr><td align="center">MOVE key db</td><td align="center">将当前数据库的 key 移动到给定的数据库 db 当中</td></tr><tr><td align="center">PERSIST key</td><td align="center">移除 key 的过期时间，key 将持久保持</td></tr><tr><td align="center">PTTL key</td><td align="center">以毫秒为单位返回 key 的剩余的过期时间</td></tr><tr><td align="center">TTL key</td><td align="center">以秒为单位，返回给定 key 的剩余生存时间（TTL，time to live）</td></tr><tr><td align="center">RANDOMKEY</td><td align="center">从当前数据库中随机返回一个 key</td></tr><tr><td align="center">RENAME key newkey</td><td align="center">修改 key 的名称</td></tr><tr><td align="center">RENAMENX key newkey</td><td align="center">仅当 newkey 不存在时，将 key 改名为 newkey</td></tr><tr><td align="center">SCAN cursor [MATCH pattern] [COUNT count]</td><td align="center">迭代数据库中的数据库键</td></tr><tr><td align="center">TYPE key</td><td align="center">返回 key 所储存的值的类型</td></tr></tbody></table></div>
 <blockquote><p>命令示例</p></blockquote>
 <p><code>keys *</code>：查找到当前库下所有的 key</p>
 <p><code>exists key</code>：判断 key 在当前库是否存在</p>
@@ -1392,7 +1392,7 @@ OK
 127.0.0.1:6379> type k3
 string
 </pre>
-<h2 id="43-string-字符串">4.3 String 字符串</h2>
+<h3 id="43-string-字符串">4.3 String 字符串</h3>
 <blockquote><p>常用的一些命令</p></blockquote>
 
 
@@ -1483,7 +1483,7 @@ string
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">命令</th><th align="center">描述</th></tr></thead><tbody><tr><td align="center">SET key value</td><td align="center">设置指定 key 的值</td></tr><tr><td align="center">GET key</td><td align="center">获取指定 key 的值</td></tr><tr><td align="center">GETRANGE key start end</td><td align="center">返回 key 中字符串值的子字符</td></tr><tr><td align="center">GETSET key value</td><td align="center">将给定 key 的值设为 value，并返回 key 的旧值（old value）</td></tr><tr><td align="center">GETBIT key offset</td><td align="center">对 key 所储存的字符串值，获取指定偏移量上的位（bit）</td></tr><tr><td align="center">MGET key1 [key2..]</td><td align="center">获取所有(一个或多个)给定 key 的值</td></tr><tr><td align="center">SETBIT key offset value</td><td align="center">对 key 所储存的字符串值，设置或清除指定偏移量上的位（bit）</td></tr><tr><td align="center">SETEX key seconds value</td><td align="center">将值 value 关联到 key，并将 key 的过期时间设为 seconds（以秒为单位）</td></tr><tr><td align="center">SETNX key value</td><td align="center">只有在 key 不存在时设置 key 的值</td></tr><tr><td align="center">SETRANGE key offset value</td><td align="center">用 value 参数覆写给定 key 所储存的字符串值，从偏移量 offset 开始</td></tr><tr><td align="center">STRLEN key</td><td align="center">返回 key 所储存的字符串值的长度</td></tr><tr><td align="center">MSET key value [key value …]</td><td align="center">同时设置一个或多个 key-value 对</td></tr><tr><td align="center">MSETNX key value [key value …]</td><td align="center">同时设置一个或多个 key-value 对，当且仅当所有给定 key 都不存在</td></tr><tr><td align="center">PSETEX key milliseconds value</td><td align="center">这个命令和 SETEX 命令相似，但它以毫秒为单位设置 key 的生存时间，而不是像 SETEX 命令那样，以秒为单位</td></tr><tr><td align="center">INCR key</td><td align="center">将 key 中储存的数字值增一</td></tr><tr><td align="center">INCRBY key increment</td><td align="center">将 key 所储存的值加上给定的增量值（increment）</td></tr><tr><td align="center">INCRBYFLOAT key increment</td><td align="center">将 key 所储存的值加上给定的浮点增量值（increment）</td></tr><tr><td align="center">DECR key</td><td align="center">将 key 中储存的数字值减一</td></tr><tr><td align="center">DECRBY key decrement</td><td align="center">key 所储存的值减去给定的减量值（decrement）</td></tr><tr><td align="center">APPEND key value</td><td align="center">如果 key 已经存在并且是一个字符串，APPEND 命令将指定的 value 追加到该 key 原来值（value）的末尾</td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">命令</th><th align="center">描述</th></tr></thead><tbody><tr><td align="center">SET key value</td><td align="center">设置指定 key 的值</td></tr><tr><td align="center">GET key</td><td align="center">获取指定 key 的值</td></tr><tr><td align="center">GETRANGE key start end</td><td align="center">返回 key 中字符串值的子字符</td></tr><tr><td align="center">GETSET key value</td><td align="center">将给定 key 的值设为 value，并返回 key 的旧值（old value）</td></tr><tr><td align="center">GETBIT key offset</td><td align="center">对 key 所储存的字符串值，获取指定偏移量上的位（bit）</td></tr><tr><td align="center">MGET key1 [key2..]</td><td align="center">获取所有(一个或多个)给定 key 的值</td></tr><tr><td align="center">SETBIT key offset value</td><td align="center">对 key 所储存的字符串值，设置或清除指定偏移量上的位（bit）</td></tr><tr><td align="center">SETEX key seconds value</td><td align="center">将值 value 关联到 key，并将 key 的过期时间设为 seconds（以秒为单位）</td></tr><tr><td align="center">SETNX key value</td><td align="center">只有在 key 不存在时设置 key 的值</td></tr><tr><td align="center">SETRANGE key offset value</td><td align="center">用 value 参数覆写给定 key 所储存的字符串值，从偏移量 offset 开始</td></tr><tr><td align="center">STRLEN key</td><td align="center">返回 key 所储存的字符串值的长度</td></tr><tr><td align="center">MSET key value [key value …]</td><td align="center">同时设置一个或多个 key-value 对</td></tr><tr><td align="center">MSETNX key value [key value …]</td><td align="center">同时设置一个或多个 key-value 对，当且仅当所有给定 key 都不存在</td></tr><tr><td align="center">PSETEX key milliseconds value</td><td align="center">这个命令和 SETEX 命令相似，但它以毫秒为单位设置 key 的生存时间，而不是像 SETEX 命令那样，以秒为单位</td></tr><tr><td align="center">INCR key</td><td align="center">将 key 中储存的数字值增一</td></tr><tr><td align="center">INCRBY key increment</td><td align="center">将 key 所储存的值加上给定的增量值（increment）</td></tr><tr><td align="center">INCRBYFLOAT key increment</td><td align="center">将 key 所储存的值加上给定的浮点增量值（increment）</td></tr><tr><td align="center">DECR key</td><td align="center">将 key 中储存的数字值减一</td></tr><tr><td align="center">DECRBY key decrement</td><td align="center">key 所储存的值减去给定的减量值（decrement）</td></tr><tr><td align="center">APPEND key value</td><td align="center">如果 key 已经存在并且是一个字符串，APPEND 命令将指定的 value 追加到该 key 原来值（value）的末尾</td></tr></tbody></table></div>
 <blockquote><p>命令示例</p></blockquote>
 <p>String 简单来说就是单值单 value。</p>
 <p><strong>1、set / get / del / append / strlen</strong></p>
@@ -1590,7 +1590,7 @@ OK
 </pre>
 <p>使用 <code>mset</code> 批量添加时，如果添加的 key 在库中已经存在，那么新添加的 value 会覆盖原来的 value。使用 <code>msetnx</code> 批量添加时，如果添加的 key 在库中已经存在，那么所有的数据都不会添加成功。</p>
 <p><strong>8、getset(先 get 再 set)</strong></p>
-<h2 id="44-list-列表">4.4 List 列表</h2>
+<h3 id="44-list-列表">4.4 List 列表</h3>
 <blockquote><p>常用的一些命令</p></blockquote>
 
 
@@ -1669,7 +1669,7 @@ OK
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">命令</th><th align="center">描述</th></tr></thead><tbody><tr><td align="center">BLPOP key1 [key2 ] timeout</td><td align="center">移出并获取列表的第一个元素，如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止</td></tr><tr><td align="center">BRPOP key1 [key2 ] timeout</td><td align="center">移出并获取列表的最后一个元素，如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止</td></tr><tr><td align="center">BRPOPLPUSH source destination timeout</td><td align="center">从列表中弹出一个值，将弹出的元素插入到另外一个列表中并返回它；如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止</td></tr><tr><td align="center">LINDEX key index</td><td align="center">通过索引获取列表中的元素</td></tr><tr><td align="center">LINSERT key BEFORE/AFTER pivot value</td><td align="center">在列表的元素前或者后插入元素</td></tr><tr><td align="center">LLEN key</td><td align="center">获取列表长度</td></tr><tr><td align="center">LPOP key</td><td align="center">移出并获取列表的第一个元素</td></tr><tr><td align="center">LPUSH key value1 [value2]</td><td align="center">将一个或多个值插入到列表（不存在就创建）头部</td></tr><tr><td align="center">LPUSHX key value</td><td align="center">将一个值插入到已存在的列表头部。列表不存在，操作无效</td></tr><tr><td align="center">LRANGE key start stop</td><td align="center">获取列表指定范围内的元素</td></tr><tr><td align="center">LREM key count value</td><td align="center">移除列表元素</td></tr><tr><td align="center">LSET key index value</td><td align="center">通过索引设置列表元素的值</td></tr><tr><td align="center">LTRIM key start stop</td><td align="center">对一个列表进行修剪(trim)，就是说，让列表只保留指定区间内的元素，不在指定区间之内的元素都将被删除</td></tr><tr><td align="center">RPOP key</td><td align="center">移除列表的最后一个元素，返回值为移除的元素</td></tr><tr><td align="center">RPOPLPUSH source destination</td><td align="center">移除列表的最后一个元素，并将该元素添加到另一个列表并返回</td></tr><tr><td align="center">RPUSH key value1 [value2]</td><td align="center">将一个或多个值插入到列表（不存在就创建）的尾部（最右边）</td></tr><tr><td align="center">RPUSHX key value</td><td align="center">将一个值插入到已存在的列表尾部（最右边）。列表不存在，操作无效</td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">命令</th><th align="center">描述</th></tr></thead><tbody><tr><td align="center">BLPOP key1 [key2 ] timeout</td><td align="center">移出并获取列表的第一个元素，如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止</td></tr><tr><td align="center">BRPOP key1 [key2 ] timeout</td><td align="center">移出并获取列表的最后一个元素，如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止</td></tr><tr><td align="center">BRPOPLPUSH source destination timeout</td><td align="center">从列表中弹出一个值，将弹出的元素插入到另外一个列表中并返回它；如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止</td></tr><tr><td align="center">LINDEX key index</td><td align="center">通过索引获取列表中的元素</td></tr><tr><td align="center">LINSERT key BEFORE/AFTER pivot value</td><td align="center">在列表的元素前或者后插入元素</td></tr><tr><td align="center">LLEN key</td><td align="center">获取列表长度</td></tr><tr><td align="center">LPOP key</td><td align="center">移出并获取列表的第一个元素</td></tr><tr><td align="center">LPUSH key value1 [value2]</td><td align="center">将一个或多个值插入到列表（不存在就创建）头部</td></tr><tr><td align="center">LPUSHX key value</td><td align="center">将一个值插入到已存在的列表头部。列表不存在，操作无效</td></tr><tr><td align="center">LRANGE key start stop</td><td align="center">获取列表指定范围内的元素</td></tr><tr><td align="center">LREM key count value</td><td align="center">移除列表元素</td></tr><tr><td align="center">LSET key index value</td><td align="center">通过索引设置列表元素的值</td></tr><tr><td align="center">LTRIM key start stop</td><td align="center">对一个列表进行修剪(trim)，就是说，让列表只保留指定区间内的元素，不在指定区间之内的元素都将被删除</td></tr><tr><td align="center">RPOP key</td><td align="center">移除列表的最后一个元素，返回值为移除的元素</td></tr><tr><td align="center">RPOPLPUSH source destination</td><td align="center">移除列表的最后一个元素，并将该元素添加到另一个列表并返回</td></tr><tr><td align="center">RPUSH key value1 [value2]</td><td align="center">将一个或多个值插入到列表（不存在就创建）的尾部（最右边）</td></tr><tr><td align="center">RPUSHX key value</td><td align="center">将一个值插入到已存在的列表尾部（最右边）。列表不存在，操作无效</td></tr></tbody></table></div>
 <blockquote><p>命令示例</p></blockquote>
 <p>List 简单来说就是单值多 value。</p>
 <p>记性测试之前先执行 <code>FLUSHDB</code> 命令清空当前库。</p>
@@ -1835,7 +1835,7 @@ OK
 <p>4、如果值全移除，对应的键也就消失了。</p>
 <p>5、链表的操作无论是头和尾效率都极高，但假如是对中间元素进行操作，效率就很惨淡了。</p>
 <p>6、注意区别命令前的 l 和 r，并理解其中的区别。</p>
-<h2 id="45-set-集合">4.5 Set 集合</h2>
+<h3 id="45-set-集合">4.5 Set 集合</h3>
 <blockquote><p>常用的一些命令</p></blockquote>
 
 
@@ -1906,7 +1906,7 @@ OK
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">命令</th><th align="center">描述</th></tr></thead><tbody><tr><td align="center">SADD key member1 [member2]</td><td align="center">向集合添加一个或多个成员</td></tr><tr><td align="center">SCARD key</td><td align="center">获取集合的成员数</td></tr><tr><td align="center">SDIFF key1 [key2]</td><td align="center">返回给定所有集合的差集</td></tr><tr><td align="center">SDIFFSTORE destination key1 [key2]</td><td align="center">返回给定所有集合的差集并存储在 destination 中</td></tr><tr><td align="center">SINTER key1 [key2]</td><td align="center">返回给定所有集合的交集</td></tr><tr><td align="center">SINTERSTORE destination key1 [key2]</td><td align="center">返回给定所有集合的交集并存储在 destination 中</td></tr><tr><td align="center">SISMEMBER key member</td><td align="center">判断 member 元素是否是集合 key 的成员</td></tr><tr><td align="center">SMEMBERS key</td><td align="center">返回集合中的所有成员</td></tr><tr><td align="center">SMOVE source destination member</td><td align="center">将 member 元素从 source 集合移动到 destination 集合</td></tr><tr><td align="center">SPOP key</td><td align="center">移除并返回集合中的一个随机元素</td></tr><tr><td align="center">SRANDMEMBER key [count]</td><td align="center">返回集合中一个或多个随机数</td></tr><tr><td align="center">SREM key member1 [member2]</td><td align="center">移除集合中一个或多个成员</td></tr><tr><td align="center">SUNION key1 [key2]</td><td align="center">返回所有给定集合的并集</td></tr><tr><td align="center">SUNIONSTORE destination key1 [key2]</td><td align="center">所有给定集合的并集存储在 destination 集合中</td></tr><tr><td align="center">SSCAN key cursor [MATCH pattern] [COUNT count]</td><td align="center">迭代集合中的元素</td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">命令</th><th align="center">描述</th></tr></thead><tbody><tr><td align="center">SADD key member1 [member2]</td><td align="center">向集合添加一个或多个成员</td></tr><tr><td align="center">SCARD key</td><td align="center">获取集合的成员数</td></tr><tr><td align="center">SDIFF key1 [key2]</td><td align="center">返回给定所有集合的差集</td></tr><tr><td align="center">SDIFFSTORE destination key1 [key2]</td><td align="center">返回给定所有集合的差集并存储在 destination 中</td></tr><tr><td align="center">SINTER key1 [key2]</td><td align="center">返回给定所有集合的交集</td></tr><tr><td align="center">SINTERSTORE destination key1 [key2]</td><td align="center">返回给定所有集合的交集并存储在 destination 中</td></tr><tr><td align="center">SISMEMBER key member</td><td align="center">判断 member 元素是否是集合 key 的成员</td></tr><tr><td align="center">SMEMBERS key</td><td align="center">返回集合中的所有成员</td></tr><tr><td align="center">SMOVE source destination member</td><td align="center">将 member 元素从 source 集合移动到 destination 集合</td></tr><tr><td align="center">SPOP key</td><td align="center">移除并返回集合中的一个随机元素</td></tr><tr><td align="center">SRANDMEMBER key [count]</td><td align="center">返回集合中一个或多个随机数</td></tr><tr><td align="center">SREM key member1 [member2]</td><td align="center">移除集合中一个或多个成员</td></tr><tr><td align="center">SUNION key1 [key2]</td><td align="center">返回所有给定集合的并集</td></tr><tr><td align="center">SUNIONSTORE destination key1 [key2]</td><td align="center">所有给定集合的并集存储在 destination 集合中</td></tr><tr><td align="center">SSCAN key cursor [MATCH pattern] [COUNT count]</td><td align="center">迭代集合中的元素</td></tr></tbody></table></div>
 <blockquote><p>命令示例</p></blockquote>
 <p>Set 简单来说就是单值多 value。</p>
 <p><strong>1、sadd / smembers / sismember</strong></p>
@@ -2012,7 +2012,7 @@ OK
 6) "3"
 7) "2"
 </pre>
-<h2 id="46-hash-哈希">4.6 Hash 哈希</h2>
+<h3 id="46-hash-哈希">4.6 Hash 哈希</h3>
 <blockquote><p>常用的一些命令</p></blockquote>
 
 
@@ -2079,7 +2079,7 @@ OK
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">命令</th><th align="center">描述</th></tr></thead><tbody><tr><td align="center">HDEL key field1 [field2]</td><td align="center">删除一个或多个哈希表字段</td></tr><tr><td align="center">HEXISTS key field</td><td align="center">查看哈希表 key 中，指定的字段是否存在</td></tr><tr><td align="center">HGET key field</td><td align="center">获取存储在哈希表中指定字段的值</td></tr><tr><td align="center">HGETALL key</td><td align="center">获取在哈希表中指定 key 的所有字段和值</td></tr><tr><td align="center">HINCRBY key field increment</td><td align="center">为哈希表 key 中的指定字段的整数值加上增量 increment</td></tr><tr><td align="center">HINCRBYFLOAT key field increment</td><td align="center">为哈希表 key 中的指定字段的浮点数值加上增量 increment</td></tr><tr><td align="center">HKEYS key</td><td align="center">获取所有哈希表中的字段</td></tr><tr><td align="center">HLEN key</td><td align="center">获取哈希表中字段的数量</td></tr><tr><td align="center">HMGET key field1 [field2]</td><td align="center">获取所有给定字段的值</td></tr><tr><td align="center">HMSET key field1 value1 [field2 value2 ]</td><td align="center">同时将多个 field-value (域-值)对设置到哈希表 key 中</td></tr><tr><td align="center">HSET key field value</td><td align="center">将哈希表 key 中的字段 field 的值设为 value</td></tr><tr><td align="center">HSETNX key field value</td><td align="center">只有在字段 field 不存在时，设置哈希表字段的值</td></tr><tr><td align="center">HVALS key</td><td align="center">获取哈希表中所有值</td></tr><tr><td align="center">HSCAN key cursor [MATCH pattern] [COUNT count]</td><td align="center">迭代哈希表中的键值对</td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">命令</th><th align="center">描述</th></tr></thead><tbody><tr><td align="center">HDEL key field1 [field2]</td><td align="center">删除一个或多个哈希表字段</td></tr><tr><td align="center">HEXISTS key field</td><td align="center">查看哈希表 key 中，指定的字段是否存在</td></tr><tr><td align="center">HGET key field</td><td align="center">获取存储在哈希表中指定字段的值</td></tr><tr><td align="center">HGETALL key</td><td align="center">获取在哈希表中指定 key 的所有字段和值</td></tr><tr><td align="center">HINCRBY key field increment</td><td align="center">为哈希表 key 中的指定字段的整数值加上增量 increment</td></tr><tr><td align="center">HINCRBYFLOAT key field increment</td><td align="center">为哈希表 key 中的指定字段的浮点数值加上增量 increment</td></tr><tr><td align="center">HKEYS key</td><td align="center">获取所有哈希表中的字段</td></tr><tr><td align="center">HLEN key</td><td align="center">获取哈希表中字段的数量</td></tr><tr><td align="center">HMGET key field1 [field2]</td><td align="center">获取所有给定字段的值</td></tr><tr><td align="center">HMSET key field1 value1 [field2 value2 ]</td><td align="center">同时将多个 field-value (域-值)对设置到哈希表 key 中</td></tr><tr><td align="center">HSET key field value</td><td align="center">将哈希表 key 中的字段 field 的值设为 value</td></tr><tr><td align="center">HSETNX key field value</td><td align="center">只有在字段 field 不存在时，设置哈希表字段的值</td></tr><tr><td align="center">HVALS key</td><td align="center">获取哈希表中所有值</td></tr><tr><td align="center">HSCAN key cursor [MATCH pattern] [COUNT count]</td><td align="center">迭代哈希表中的键值对</td></tr></tbody></table></div>
 <blockquote><p>命令示例</p></blockquote>
 <p>哈希简单来说就是 KV 模式不变，但 V 是一个键值对。</p>
 <p><mark class="flexible-marker flexible-marker-default">1、hset / hget / hmset / hmget / hgetall / hdel</mark></p>
@@ -2153,7 +2153,7 @@ OK
 127.0.0.1:6379> HGET customer age
 "22"
 </pre>
-<h2 id="47-zset-有序集合">4.7 ZSet 有序集合</h2>
+<h3 id="47-zset-有序集合">4.7 ZSet 有序集合</h3>
 <blockquote><p>常用的一些命令</p></blockquote>
 
 
@@ -2244,7 +2244,7 @@ OK
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">命令</th><th align="center">描述</th></tr></thead><tbody><tr><td align="center">ZADD key score1 member1 [score2 member2]</td><td align="center">向有序集合添加一个或多个成员，或者更新已存在成员的分数</td></tr><tr><td align="center">ZCARD key</td><td align="center">获取有序集合的成员数</td></tr><tr><td align="center">ZCOUNT key min max</td><td align="center">计算在有序集合中指定区间分数的成员数</td></tr><tr><td align="center">ZINCRBY key increment member</td><td align="center">有序集合中对指定成员的分数加上增量 increment</td></tr><tr><td align="center">ZINTERSTORE destination numkeys key [key …]</td><td align="center">计算给定的一个或多个有序集的交集并将结果集存储在新的有序集合 key 中</td></tr><tr><td align="center">ZLEXCOUNT key min max</td><td align="center">在有序集合中计算指定字典区间内成员数量</td></tr><tr><td align="center">ZRANGE key start stop [WITHSCORES]</td><td align="center">通过索引区间返回有序集合指定区间内的成员</td></tr><tr><td align="center">ZRANGEBYLEX key min max [LIMIT offset count]</td><td align="center">通过字典区间返回有序集合的成员</td></tr><tr><td align="center">ZRANGEBYSCORE key min max [WITHSCORES] [LIMIT]</td><td align="center">通过分数返回有序集合指定区间内的成员</td></tr><tr><td align="center">ZRANK key member</td><td align="center">返回有序集合中指定成员的索引</td></tr><tr><td align="center">ZREM key member [member …]</td><td align="center">移除有序集合中的一个或多个成员</td></tr><tr><td align="center">ZREMRANGEBYLEX key min max</td><td align="center">移除有序集合中给定的字典区间的所有成员</td></tr><tr><td align="center">ZREMRANGEBYRANK key start stop</td><td align="center">移除有序集合中给定的排名区间的所有成员</td></tr><tr><td align="center">ZREMRANGEBYSCORE key min max</td><td align="center">移除有序集合中给定的分数区间的所有成员</td></tr><tr><td align="center">ZREVRANGE key start stop [WITHSCORES]</td><td align="center">返回有序集中指定区间内的成员，通过索引，分数从高到低</td></tr><tr><td align="center">ZREVRANGEBYSCORE key max min [WITHSCORES]</td><td align="center">返回有序集中指定分数区间内的成员，分数从高到低排序</td></tr><tr><td align="center">ZREVRANK key member</td><td align="center">返回有序集合中指定成员的排名，有序集成员按分数值递减(从大到小)排序</td></tr><tr><td align="center">ZSCORE key member</td><td align="center">返回有序集中，成员的分数值</td></tr><tr><td align="center">ZUNIONSTORE destination numkeys key [key …]</td><td align="center">计算给定的一个或多个有序集的并集，并存储在新的 key 中</td></tr><tr><td align="center">ZSCAN key cursor [MATCH pattern] [COUNT count]</td><td align="center">迭代有序集合中的元素（包括元素成员和元素分值）</td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">命令</th><th align="center">描述</th></tr></thead><tbody><tr><td align="center">ZADD key score1 member1 [score2 member2]</td><td align="center">向有序集合添加一个或多个成员，或者更新已存在成员的分数</td></tr><tr><td align="center">ZCARD key</td><td align="center">获取有序集合的成员数</td></tr><tr><td align="center">ZCOUNT key min max</td><td align="center">计算在有序集合中指定区间分数的成员数</td></tr><tr><td align="center">ZINCRBY key increment member</td><td align="center">有序集合中对指定成员的分数加上增量 increment</td></tr><tr><td align="center">ZINTERSTORE destination numkeys key [key …]</td><td align="center">计算给定的一个或多个有序集的交集并将结果集存储在新的有序集合 key 中</td></tr><tr><td align="center">ZLEXCOUNT key min max</td><td align="center">在有序集合中计算指定字典区间内成员数量</td></tr><tr><td align="center">ZRANGE key start stop [WITHSCORES]</td><td align="center">通过索引区间返回有序集合指定区间内的成员</td></tr><tr><td align="center">ZRANGEBYLEX key min max [LIMIT offset count]</td><td align="center">通过字典区间返回有序集合的成员</td></tr><tr><td align="center">ZRANGEBYSCORE key min max [WITHSCORES] [LIMIT]</td><td align="center">通过分数返回有序集合指定区间内的成员</td></tr><tr><td align="center">ZRANK key member</td><td align="center">返回有序集合中指定成员的索引</td></tr><tr><td align="center">ZREM key member [member …]</td><td align="center">移除有序集合中的一个或多个成员</td></tr><tr><td align="center">ZREMRANGEBYLEX key min max</td><td align="center">移除有序集合中给定的字典区间的所有成员</td></tr><tr><td align="center">ZREMRANGEBYRANK key start stop</td><td align="center">移除有序集合中给定的排名区间的所有成员</td></tr><tr><td align="center">ZREMRANGEBYSCORE key min max</td><td align="center">移除有序集合中给定的分数区间的所有成员</td></tr><tr><td align="center">ZREVRANGE key start stop [WITHSCORES]</td><td align="center">返回有序集中指定区间内的成员，通过索引，分数从高到低</td></tr><tr><td align="center">ZREVRANGEBYSCORE key max min [WITHSCORES]</td><td align="center">返回有序集中指定分数区间内的成员，分数从高到低排序</td></tr><tr><td align="center">ZREVRANK key member</td><td align="center">返回有序集合中指定成员的排名，有序集成员按分数值递减(从大到小)排序</td></tr><tr><td align="center">ZSCORE key member</td><td align="center">返回有序集中，成员的分数值</td></tr><tr><td align="center">ZUNIONSTORE destination numkeys key [key …]</td><td align="center">计算给定的一个或多个有序集的并集，并存储在新的 key 中</td></tr><tr><td align="center">ZSCAN key cursor [MATCH pattern] [COUNT count]</td><td align="center">迭代有序集合中的元素（包括元素成员和元素分值）</td></tr></tbody></table></div>
 <blockquote><p>命令示例</p></blockquote>
 <p>Zset 是在 Set 基础上，加一个 score 值。之前 Set 是 <code>k1 v1 v2 v3</code>，现在 Zset 是 <code>k1 score1 v1 score2 v2</code>。</p>
 <p><strong>1、zadd / zrange(withscores)</strong></p>
@@ -2361,8 +2361,8 @@ OK
 1) "v3"
 2) "v2"
 </pre>
-<h1 id="5-配置文件解析">5. 配置文件解析</h1>
-<h2 id="51-配置文件在哪">5.1 配置文件在哪</h2>
+<h2 id="5-配置文件解析">5. 配置文件解析</h2>
+<h3 id="51-配置文件在哪">5.1 配置文件在哪</h3>
 <p>Redis 的配置文件位于 Redis 安装目录下，其名为 redis.conf，我们在前文安装 Redis 的时候就将这份配置文件进行了拷贝并将拷贝文件移动到其他目录，而没有修改原配置文件。</p>
 <p>我们 Redis 的安装目录在 <code>/usr/local/redis</code> 下，在 Linux 中使用命令查看一下：</p>
 <picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/Redis%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E4%BD%8D%E7%BD%AE.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/Redis的配置文件位置.png" alt="Redis的配置文件位置" style="zoom:67%;" data-responsive-image="true"></picture>
@@ -2372,7 +2372,7 @@ OK
 2) "6379"
 </pre>
 <p><mark class="flexible-marker flexible-marker-default">注意：本节配置项基于旧版本的 Redis，新版本 Redis 在部分配置项的所处位置或是否保留可能存在差异。</mark></p>
-<h2 id="52-redis-常见配置项">5.2 Redis 常见配置项</h2>
+<h3 id="52-redis-常见配置项">5.2 Redis 常见配置项</h3>
 
 
 
@@ -2506,18 +2506,18 @@ OK
 
 
 
-<div class="table-scroll"><table><thead><tr><th align="center">配置项</th><th align="center">说明</th></tr></thead><tbody><tr><td align="center"><code>daemonize no</code></td><td align="center">Redis 默认不是以守护进程的方式运行，可以通过该配置项修改，使用 yes 启用守护进程（Windows 不支持守护线程的配置为 no ）</td></tr><tr><td align="center"><code>protected-mode yes</code></td><td align="center">开启保护模式，需要配置 bind ip 或设置访问密码</td></tr><tr><td align="center"><code>pidfile /var/run/redis_6379.pid</code></td><td align="center">当 Redis 以守护进程方式运行时，Redis 默认会把 pid 写入 /var/run/redis_6379.pid 文件，可以通过 pidfile 指定</td></tr><tr><td align="center"><code>port 6379</code></td><td align="center">指定 Redis 监听端口，默认端口为 6379，作者在自己的一篇博文中解释了为什么选用 6379 作为默认端口，因为 6379 在手机按键上 MERZ 对应的号码，而 MERZ 取自意大利歌女 Alessia Merz 的名字</td></tr><tr><td align="center"><code>bind 127.0.0.1</code></td><td align="center">绑定的主机地址</td></tr><tr><td align="center"><code>timeout 300</code></td><td align="center">当客户端闲置多长秒后关闭连接，如果指定为 0，表示关闭该功能</td></tr><tr><td align="center"><code>loglevel notice</code></td><td align="center">指定日志记录级别，Redis 总共支持四个级别：debug、verbose、notice、warning，默认为 notice</td></tr><tr><td align="center"><code>logfile ""</code></td><td align="center">日志记录方式，默认为标准输出，如果配置 Redis 为守护进程方式运行，而这里又配置为日志记录方式为标准输出，则日志将会发送给 /dev/null</td></tr><tr><td align="center"><code>databases 16</code></td><td align="center">设置数据库的数量，默认数据库为 0，可以使用 SELECT 命令在连接上指定数据库 id</td></tr><tr><td align="center"><code>save &#x3C;seconds> &#x3C;changes></code>Redis 默认配置文件中提供了三个条件：<code>save 900 1</code> <code>save 300 10</code> <code>save 60 10000</code></td><td align="center">分别表示 900 秒（15 分钟）内有 1 个更改，300 秒（5 分钟）内有 10 个更改以及 60 秒内有 10000 个更改。指定在多长时间内，有多少次更新操作，就将数据同步到数据文件，可以多个条件配合</td></tr><tr><td align="center"><code>rdbcompression yes</code></td><td align="center">指定存储至本地数据库时是否压缩数据，默认为 yes，Redis 采用 LZF 压缩，如果为了节省 CPU 时间，可以关闭该选项，但会导致数据库文件变的巨大</td></tr><tr><td align="center"><code>dbfilename dump.rdb</code></td><td align="center">指定本地数据库文件名，默认值为 dump.rdb</td></tr><tr><td align="center"><code>dir ./</code></td><td align="center">指定本地数据库文件的存放目录</td></tr><tr><td align="center"><code>slaveof &#x3C;masterip> &#x3C;masterport></code></td><td align="center">设置当本机为 slave 服务时，设置 master 服务的 IP 地址及端口，在 Redis 启动时，它会自动从 master 进行数据同步</td></tr><tr><td align="center"><code>masterauth &#x3C;master-password></code></td><td align="center">当 master 服务设置了密码保护时，slav 服务连接 master 的密码</td></tr><tr><td align="center"><code>requirepass foobared</code></td><td align="center">设置 Redis 连接密码，如果配置了连接密码，客户端在连接 Redis 时需要通过 AUTH <code>&#x3C;password> </code> 命令提供密码，默认关闭</td></tr><tr><td align="center"><code>maxclients 128</code></td><td align="center">设置同一时间最大客户端连接数，默认无限制，Redis 可以同时打开的客户端连接数为 Redis 进程可以打开的最大文件描述符数，如果设置 maxclients 0，表示不作限制。当客户端连接数到达限制时，Redis 会关闭新的连接并向客户端返回 max number of clients reached 错误信息</td></tr><tr><td align="center"><code>maxmemory &#x3C;bytes></code></td><td align="center">指定 Redis 最大内存限制，Redis 在启动时会把数据加载到内存中，达到最大内存后，Redis 会先尝试清除已到期或即将到期的 Key，当此方法处理 后，仍然到达最大内存设置，将无法再进行写入操作，但仍然可以进行读取操作。Redis 新的 vm 机制，会把 Key 存放内存，Value 会存放在 swap 区</td></tr><tr><td align="center"><code>appendonly no</code></td><td align="center">指定是否在每次更新操作后进行日志记录，Redis 在默认情况下是异步的把数据写入磁盘，如果不开启，可能会在断电时导致一段时间内的数据丢失。因为 redis 本身同步数据文件是按上面 save 条件来同步的，所以有的数据会在一段时间内只存在于内存中。默认为 no</td></tr><tr><td align="center"><code>appendfilename appendonly.aof</code></td><td align="center">指定更新日志文件名，默认为 appendonly.aof</td></tr><tr><td align="center"><code>appendfsync everysec</code></td><td align="center">指定更新日志条件，共有 3 个可选值：<br>no：表示等操作系统进行数据缓存同步到磁盘（快）<br>always：表示每次更新操作后手动调用 fsync() 将数据写到磁盘（慢，安全）<br>everysec：表示每秒同步一次（折中，默认值）<br></td></tr><tr><td align="center"><code>vm-enabled no</code></td><td align="center">指定是否启用虚拟内存机制，默认值为 no，简单的介绍一下，VM 机制将数据分页存放，由 Redis 将浏览量较少的页即冷数据 swap 到磁盘上，浏览多的页面由磁盘自动换出到内存中（在后面的文章我会仔细分析 Redis 的 VM 机制）</td></tr><tr><td align="center"><code>vm-swap-file /tmp/redis.swap</code></td><td align="center">虚拟内存文件路径，默认值为 /tmp/redis.swap，不可多个 Redis 实例共享</td></tr><tr><td align="center"><code>vm-max-memory 0</code></td><td align="center">将所有大于 vm-max-memory 的数据存入虚拟内存，无论 vm-max-memory 设置多小，所有索引数据都是内存存储的(Redis 的索引数据 就是 keys)，也就是说，当 vm-max-memory 设置为 0 的时候，其实是所有 value 都存在于磁盘。默认值为 0</td></tr><tr><td align="center"><code>vm-page-size 32</code></td><td align="center">Redis swap 文件分成了很多的 page，一个对象可以保存在多个 page 上面，但一个 page 上不能被多个对象共享，vm-page-size 是要根据存储的 数据大小来设定的，作者建议如果存储很多小对象，page 大小最好设置为 32 或者 64bytes；如果存储很大大对象，则可以使用更大的 page，如果不确定，就使用默认值</td></tr><tr><td align="center"><code>vm-pages 134217728</code></td><td align="center">设置 swap 文件中的 page 数量，由于页表（一种表示页面空闲或使用的 bitmap）是在放在内存中的，，在磁盘上每 8 个 pages 将消耗 1byte 的内存</td></tr><tr><td align="center"><code>vm-max-threads 4</code></td><td align="center">设置连接 swap 文件的线程数，最好不要超过机器的核数，如果设置为 0，那么所有对 swap 文件的操作都是串行的，可能会造成比较长时间的延迟。默认值为 4</td></tr><tr><td align="center"><code>glueoutputbuf yes</code></td><td align="center">设置在向客户端应答时，是否把较小的包合并为一个包发送，默认为开启</td></tr><tr><td align="center"><code>hash-max-zipmap-entries 64</code><br><code>hash-max-zipmap-value 512</code></td><td align="center">指定在超过一定的数量或者最大的元素超过某一临界值时，采用一种特殊的哈希算法</td></tr><tr><td align="center"><code>activerehashing yes</code></td><td align="center">指定是否激活重置哈希，默认为开启（后面在介绍 Redis 的哈希算法时具体介绍）</td></tr><tr><td align="center"><code>include /path/to/local.conf</code></td><td align="center">指定包含其它的配置文件，可以在同一主机上多个 Redis 实例之间使用同一份配置文件，而同时各个实例又拥有自己的特定配置文件</td></tr></tbody></table></div>
-<h2 id="53-units-单位">5.3 Units 单位</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center">配置项</th><th align="center">说明</th></tr></thead><tbody><tr><td align="center"><code>daemonize no</code></td><td align="center">Redis 默认不是以守护进程的方式运行，可以通过该配置项修改，使用 yes 启用守护进程（Windows 不支持守护线程的配置为 no ）</td></tr><tr><td align="center"><code>protected-mode yes</code></td><td align="center">开启保护模式，需要配置 bind ip 或设置访问密码</td></tr><tr><td align="center"><code>pidfile /var/run/redis_6379.pid</code></td><td align="center">当 Redis 以守护进程方式运行时，Redis 默认会把 pid 写入 /var/run/redis_6379.pid 文件，可以通过 pidfile 指定</td></tr><tr><td align="center"><code>port 6379</code></td><td align="center">指定 Redis 监听端口，默认端口为 6379，作者在自己的一篇博文中解释了为什么选用 6379 作为默认端口，因为 6379 在手机按键上 MERZ 对应的号码，而 MERZ 取自意大利歌女 Alessia Merz 的名字</td></tr><tr><td align="center"><code>bind 127.0.0.1</code></td><td align="center">绑定的主机地址</td></tr><tr><td align="center"><code>timeout 300</code></td><td align="center">当客户端闲置多长秒后关闭连接，如果指定为 0，表示关闭该功能</td></tr><tr><td align="center"><code>loglevel notice</code></td><td align="center">指定日志记录级别，Redis 总共支持四个级别：debug、verbose、notice、warning，默认为 notice</td></tr><tr><td align="center"><code>logfile ""</code></td><td align="center">日志记录方式，默认为标准输出，如果配置 Redis 为守护进程方式运行，而这里又配置为日志记录方式为标准输出，则日志将会发送给 /dev/null</td></tr><tr><td align="center"><code>databases 16</code></td><td align="center">设置数据库的数量，默认数据库为 0，可以使用 SELECT 命令在连接上指定数据库 id</td></tr><tr><td align="center"><code>save &#x3C;seconds> &#x3C;changes></code>Redis 默认配置文件中提供了三个条件：<code>save 900 1</code> <code>save 300 10</code> <code>save 60 10000</code></td><td align="center">分别表示 900 秒（15 分钟）内有 1 个更改，300 秒（5 分钟）内有 10 个更改以及 60 秒内有 10000 个更改。指定在多长时间内，有多少次更新操作，就将数据同步到数据文件，可以多个条件配合</td></tr><tr><td align="center"><code>rdbcompression yes</code></td><td align="center">指定存储至本地数据库时是否压缩数据，默认为 yes，Redis 采用 LZF 压缩，如果为了节省 CPU 时间，可以关闭该选项，但会导致数据库文件变的巨大</td></tr><tr><td align="center"><code>dbfilename dump.rdb</code></td><td align="center">指定本地数据库文件名，默认值为 dump.rdb</td></tr><tr><td align="center"><code>dir ./</code></td><td align="center">指定本地数据库文件的存放目录</td></tr><tr><td align="center"><code>slaveof &#x3C;masterip> &#x3C;masterport></code></td><td align="center">设置当本机为 slave 服务时，设置 master 服务的 IP 地址及端口，在 Redis 启动时，它会自动从 master 进行数据同步</td></tr><tr><td align="center"><code>masterauth &#x3C;master-password></code></td><td align="center">当 master 服务设置了密码保护时，slav 服务连接 master 的密码</td></tr><tr><td align="center"><code>requirepass foobared</code></td><td align="center">设置 Redis 连接密码，如果配置了连接密码，客户端在连接 Redis 时需要通过 AUTH <code>&#x3C;password> </code> 命令提供密码，默认关闭</td></tr><tr><td align="center"><code>maxclients 128</code></td><td align="center">设置同一时间最大客户端连接数，默认无限制，Redis 可以同时打开的客户端连接数为 Redis 进程可以打开的最大文件描述符数，如果设置 maxclients 0，表示不作限制。当客户端连接数到达限制时，Redis 会关闭新的连接并向客户端返回 max number of clients reached 错误信息</td></tr><tr><td align="center"><code>maxmemory &#x3C;bytes></code></td><td align="center">指定 Redis 最大内存限制，Redis 在启动时会把数据加载到内存中，达到最大内存后，Redis 会先尝试清除已到期或即将到期的 Key，当此方法处理 后，仍然到达最大内存设置，将无法再进行写入操作，但仍然可以进行读取操作。Redis 新的 vm 机制，会把 Key 存放内存，Value 会存放在 swap 区</td></tr><tr><td align="center"><code>appendonly no</code></td><td align="center">指定是否在每次更新操作后进行日志记录，Redis 在默认情况下是异步的把数据写入磁盘，如果不开启，可能会在断电时导致一段时间内的数据丢失。因为 redis 本身同步数据文件是按上面 save 条件来同步的，所以有的数据会在一段时间内只存在于内存中。默认为 no</td></tr><tr><td align="center"><code>appendfilename appendonly.aof</code></td><td align="center">指定更新日志文件名，默认为 appendonly.aof</td></tr><tr><td align="center"><code>appendfsync everysec</code></td><td align="center">指定更新日志条件，共有 3 个可选值：<br>no：表示等操作系统进行数据缓存同步到磁盘（快）<br>always：表示每次更新操作后手动调用 fsync() 将数据写到磁盘（慢，安全）<br>everysec：表示每秒同步一次（折中，默认值）<br></td></tr><tr><td align="center"><code>vm-enabled no</code></td><td align="center">指定是否启用虚拟内存机制，默认值为 no，简单的介绍一下，VM 机制将数据分页存放，由 Redis 将浏览量较少的页即冷数据 swap 到磁盘上，浏览多的页面由磁盘自动换出到内存中（在后面的文章我会仔细分析 Redis 的 VM 机制）</td></tr><tr><td align="center"><code>vm-swap-file /tmp/redis.swap</code></td><td align="center">虚拟内存文件路径，默认值为 /tmp/redis.swap，不可多个 Redis 实例共享</td></tr><tr><td align="center"><code>vm-max-memory 0</code></td><td align="center">将所有大于 vm-max-memory 的数据存入虚拟内存，无论 vm-max-memory 设置多小，所有索引数据都是内存存储的(Redis 的索引数据 就是 keys)，也就是说，当 vm-max-memory 设置为 0 的时候，其实是所有 value 都存在于磁盘。默认值为 0</td></tr><tr><td align="center"><code>vm-page-size 32</code></td><td align="center">Redis swap 文件分成了很多的 page，一个对象可以保存在多个 page 上面，但一个 page 上不能被多个对象共享，vm-page-size 是要根据存储的 数据大小来设定的，作者建议如果存储很多小对象，page 大小最好设置为 32 或者 64bytes；如果存储很大大对象，则可以使用更大的 page，如果不确定，就使用默认值</td></tr><tr><td align="center"><code>vm-pages 134217728</code></td><td align="center">设置 swap 文件中的 page 数量，由于页表（一种表示页面空闲或使用的 bitmap）是在放在内存中的，，在磁盘上每 8 个 pages 将消耗 1byte 的内存</td></tr><tr><td align="center"><code>vm-max-threads 4</code></td><td align="center">设置连接 swap 文件的线程数，最好不要超过机器的核数，如果设置为 0，那么所有对 swap 文件的操作都是串行的，可能会造成比较长时间的延迟。默认值为 4</td></tr><tr><td align="center"><code>glueoutputbuf yes</code></td><td align="center">设置在向客户端应答时，是否把较小的包合并为一个包发送，默认为开启</td></tr><tr><td align="center"><code>hash-max-zipmap-entries 64</code><br><code>hash-max-zipmap-value 512</code></td><td align="center">指定在超过一定的数量或者最大的元素超过某一临界值时，采用一种特殊的哈希算法</td></tr><tr><td align="center"><code>activerehashing yes</code></td><td align="center">指定是否激活重置哈希，默认为开启（后面在介绍 Redis 的哈希算法时具体介绍）</td></tr><tr><td align="center"><code>include /path/to/local.conf</code></td><td align="center">指定包含其它的配置文件，可以在同一主机上多个 Redis 实例之间使用同一份配置文件，而同时各个实例又拥有自己的特定配置文件</td></tr></tbody></table></div>
+<h3 id="53-units-单位">5.3 Units 单位</h3>
 <p>在配置文件开头有这样一段字：</p>
 <picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/Units%E5%8D%95%E4%BD%8D.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/Units单位.png" alt="Units单位" style="zoom:67%;" data-responsive-image="true"></picture>
 <p>这是配置文件大小单位，开头定义了一些基本的度量单位，只支持 bytes，不支持 bit。</p>
 <p>注意单位 <mark class="flexible-marker flexible-marker-default">带有</mark> 字母 b 和 <mark class="flexible-marker flexible-marker-default">不带有</mark> 字母 b 的区别。</p>
 <p>单位对大小写不敏感。</p>
-<h2 id="54-includes-包含">5.4 INCLUDES 包含</h2>
+<h3 id="54-includes-包含">5.4 INCLUDES 包含</h3>
 <p>在配置文件中，有一栏名为 INCLUDES：</p>
 <picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/INCLUDES%E6%A0%8F.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/INCLUDES栏.png" alt="INCLUDES栏" style="zoom:67%;" data-responsive-image="true"></picture>
 <p>这个很好理解，和我们的 MyBatis、Spring 等配置文件类似，可以通过 includes 包含，redis.conf 可以作为总闸，包含其他配置文件。</p>
-<h2 id="55-general-通用">5.5 GENERAL 通用</h2>
+<h3 id="55-general-通用">5.5 GENERAL 通用</h3>
 <blockquote><p>tcp-backlog 配置项</p></blockquote>
 <p>默认值：511，在 Redis 6.0.8 版本中该项位于 NETWORK 中。</p>
 <p>设置 Tcp 的 backlog，backlog 其实是一个连接队列，backlog 队列总和 = 未完成三次握手队列 + 已经完成三次握手队列。</p>
@@ -2537,7 +2537,7 @@ OK
 <p>系统日志默认是关闭的，配置项为 <code>syslog-enabled</code>，表示是否把日志输出到 syslog 中</p>
 <p>如果将系统日志打开，那么日志将会以 redis 开头，配置项为 <code>syslog-ident</code>，表示指定 syslog 里的日志标志</p>
 <p>还可以指定 syslog 设置，值可以是 USER 或 LOCAL0 - LOCAL7，配置项是 <code>syslog-facility</code></p>
-<h2 id="121-snapshotting-快照">12.1 SNAPSHOTTING 快照</h2>
+<h3 id="121-snapshotting-快照">12.1 SNAPSHOTTING 快照</h3>
 <p>这个配置通常与持久化 RDB 配合使用。</p>
 <p>RDB 是整个内存的压缩过的 Snapshot，由于 RDB 的数据结构，可以配置符合的快照触发条件。</p>
 <p>配置方式是：<code>save 秒数 写操作次数</code>，Redis 的配置文件中提供了默认的配置：</p>
@@ -2555,9 +2555,9 @@ OK
 <p>3、<code>rdbchecksum</code>，这个配置项默认值是 yes。它表示在存储快照后，还可以让 Redis 使用 CRC64 算法来进行数据校验，但是这样做会增加大约 10% 的性能消耗，如果希望获取到最大的性能提升，可以设置为 no 关闭此功能。</p>
 <p>4、<code>dbfilename</code>，这个配置项默认值是 dump.rdb。它指定了本地数据库文件名，默认值为 dump.rdb，也就是我们用来进行数据恢复的文件名。</p>
 <p>5、<code>dir</code>，这个配置项的默认值是 <code>./</code>。它指定本地数据库文件的存放目录，也就是 dump.rdb 的存放位置，默认是存放在 Redis 启动位置的。如果在默认值的情况下，我现在 <code>/usr/local/bin</code> 目录下启动了 Redis，然后添加了一些数据，最后关闭 Redis，并在目录下生成 dump.rdb 文件。之后我在 <code>/</code> 目录下启动 Redis，执行 <code>keys *</code> 是获取不到上次添加的数据的，因为当前目录下没有上次生成 的 dump.rdb 文件。可以对这个配置项进行配置，指定存放目录，这样就不会出现这种情况了。</p>
-<h2 id="122-replication-复制">12.2 REPLICATION 复制</h2>
+<h3 id="122-replication-复制">12.2 REPLICATION 复制</h3>
 <p>与主从复制相关，参考【Redis 基础 下篇】一文。</p>
-<h2 id="123-security-安全">12.3 SECURITY 安全</h2>
+<h3 id="123-security-安全">12.3 SECURITY 安全</h3>
 <p>在这一栏可以进行访问密码的查看、设置和取消。</p>
 <p>当我们启动了 Redis 并连接 Redis 时，只需要输入两个命令就可以了，而不用输入密码，但是根据 MySQL 的使用经验，MySQL 连接是需要输入密码的，当然也可以通过设置而不输入密码。</p>
 <p>Redis 连接动默认是不需要输入密码的，当然也可以设置输入密码。</p>
@@ -2575,7 +2575,7 @@ OK
 </pre>
 <p>然后重启 Redis，如果我们再次 ping，就无法显示 PONG，需要在输入命令前执行 <code>auth 设置的密码</code>。</p>
 <p>如果需要恢复原来的设置，需要执行 <code>config set requirepass ''</code></p>
-<h2 id="124-limits-限制">12.4 LIMITS 限制</h2>
+<h3 id="124-limits-限制">12.4 LIMITS 限制</h3>
 <p>在 Redis 6.0.8 版本中该栏已经被删除，其配置项分布在其他栏中。</p>
 <p>maxclients 配置项分布在 <code>CLIENTS</code> 栏中，表示 Redis 客户端最大连接数。</p>
 <p>maxmemory 配置项分布在 <code>MEMORY MANAGEMENT</code> 栏中，表示 Redis 的最大占用内存，默认是没被设置的。</p>
@@ -2619,7 +2619,7 @@ OK
 </li>
 </ul>
 <p><code>maxmemory-samples</code> 表示设置样本数量，LRU 算法和最小 TTL 算法都并非是精确的算法，而是估算值，所以你可以设置样本的大小，Redis 默认会检查这么多个 key 并选择其中 LRU 的那个</p>
-<h2 id="125-append-only-mode-追加">12.5 APPEND ONLY MODE 追加</h2>
+<h3 id="125-append-only-mode-追加">12.5 APPEND ONLY MODE 追加</h3>
 <p>这个配置通常与持久化 AOF 配合使用。</p>
 <p>在配置文件 redis.conf 中可以看到，append only 默认是关闭的：</p>
 <picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/append-only%E9%85%8D%E7%BD%AE.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/append-only配置.png" alt="append-only配置" style="zoom:67%;" data-responsive-image="true"></picture>
@@ -2686,8 +2686,8 @@ Could not connect to Redis at 127.0.0.1:6379: Connection refused
 <p>2、<code>no-appendfsync-on-rewrite</code>：默认值是 no，表示重写时是否可以运用 appendfsync，用默认即可，保证数据安全性。</p>
 <p>3、<code>auto-aof-rewrite-min-size</code>：默认是 64 mb，用于设置重写的基准值</p>
 <p>4、<code>auto-aof-rewrite-percentage</code>：默认是 100，用于设置重写的基准值</p>
-<h1 id="13-持久化之-rdb">13. 持久化之 RDB</h1>
-<h2 id="131-什么是-rdb">13.1 什么是 RDB</h2>
+<h2 id="13-持久化之-rdb">13. 持久化之 RDB</h2>
+<h3 id="131-什么是-rdb">13.1 什么是 RDB</h3>
 <p>RDB 全称是 Redis DataBase。</p>
 <p>它就是在指定的时间间隔内将内存中的数据集快照写入磁盘，也就是行话讲的 Snapshot 快照，它恢复时是将快照文件直接读到内存里。</p>
 <p>Redis 会单独创建（fork）一个子进程来进行持久化，会先将数据写入到 一个临时文件中，待持久化过程都结束了，再用这个临时文件替换上次持久化好的文件。整个过程中，主进程是不进行任何 IO 操作的，这就确保了极高的性能。</p>
@@ -2697,7 +2697,7 @@ Could not connect to Redis at 127.0.0.1:6379: Connection refused
 <p>RDB 保存的是 dump.rdb 文件。</p>
 <p>那在哪里进行配置呢？在 Redis 的配置文件 redis.conf 搜索 <code>SNAPSHOTTING</code>，参考本文 5.6。</p>
 <p>RDB 产生的快照文件是临时文件，当 Redis 关闭后，快照文件也会一并删除。因此常常需要将快照文件修改名称后并备份，等 Redis 重新启动后，再把名称改为 dump.rdb，此时备份数据会直接加载。</p>
-<h2 id="132-如何触发-rdb-快照">13.2 如何触发 RDB 快照</h2>
+<h3 id="132-如何触发-rdb-快照">13.2 如何触发 RDB 快照</h3>
 <p>触发 RDB 快照有以下几种方式：</p>
 <p>1、配置文件中 <code>SNAPSHOTTING </code> 一栏的默认的快照配置。<code>dbfilename dump.rdb</code> 指定了数据库文件名，一般会冷拷贝后重新使用，可以使用 <code>cp dump.rdb dump_new.rdb</code> 进行拷贝。</p>
 <p>2、执行命令 save 或者是 bgsave 后：</p>
@@ -2708,9 +2708,9 @@ Could not connect to Redis at 127.0.0.1:6379: Connection refused
 <p>3、执行 flushall 命令，也会产生 dump.rdb 文件，但里面是空的，无意义。</p>
 <p>4、SHUTDOWN（正常关闭）时，如果没有开启 AOF，会触发 RDB。<code>kill -9</code> 意外宕机不会触发 RDB 持久化。</p>
 <p>第一点属于自动触发，后面三点属于手动触发。</p>
-<h2 id="133-如何恢复数据">13.3 如何恢复数据</h2>
+<h3 id="133-如何恢复数据">13.3 如何恢复数据</h3>
 <p>将备份文件（dump.rdb）移动到 Redis 安装目录并启动服务即可，可以使用 <code>CONFIG GET dir</code> 命令获取目录。</p>
-<h2 id="134-优势与劣势">13.4 优势与劣势</h2>
+<h3 id="134-优势与劣势">13.4 优势与劣势</h3>
 <blockquote><p>优势</p></blockquote>
 <ul>
 <li>适合大规模的数据恢复</li>
@@ -2724,9 +2724,9 @@ Could not connect to Redis at 127.0.0.1:6379: Connection refused
 <li>fork 的时候，内存中的数据被克隆了一份，大致 2 倍的膨胀性需要考虑</li>
 <li>虽然 Redis 在 fork 时使用了写时拷贝技术，但如果数据过于庞大时还是比较消耗性能</li>
 </ul>
-<h2 id="135-如何停止">13.5 如何停止</h2>
+<h3 id="135-如何停止">13.5 如何停止</h3>
 <p>动态所有停止 RDB 保存规则的方法：<code>redis-cli config set save ""</code></p>
-<h2 id="136-小结">13.6 小结</h2>
+<h3 id="136-小结">13.6 小结</h3>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/RDB%E6%8C%81%E4%B9%85%E5%8C%96%E5%B0%8F%E7%BB%93.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/RDB%E6%8C%81%E4%B9%85%E5%8C%96%E5%B0%8F%E7%BB%93.png" alt="RDB持久化小结" data-responsive-image="true"></picture></p>
 <ul>
 <li>RDB 是一个非常紧凑的文件</li>
@@ -2735,8 +2735,8 @@ Could not connect to Redis at 127.0.0.1:6379: Connection refused
 <li>数据丢失风险大</li>
 <li>RDB 需要经常 fork 子进程来保存数据集到硬盘上，当数据集比较大的时候 fork 的过程是非常耗时的吗，可能会导致 Redis 在一些毫秒级不能回应客户端请求</li>
 </ul>
-<h1 id="14-持久化之-aof">14. 持久化之 AOF</h1>
-<h2 id="141-什么是-aof">14.1 什么是 AOF</h2>
+<h2 id="14-持久化之-aof">14. 持久化之 AOF</h2>
+<h3 id="141-什么是-aof">14.1 什么是 AOF</h3>
 <p>既然有了 RDB 为什么还要有 AOF 呢？AOF 作为新技术解决了 RDB 不能解决的什么问题？如果同时存在 RDB 和 AOF，它们会发生冲突，还是进行协作？</p>
 <p>AOF 全称是 Append Only File。</p>
 <p>它是以日志的形式来记录每个写操作，将 Redis 执行过的所有写指令记录下来（读操作不记录），只许追加文件但不可以改写文件，Redis 启动之初会读取该文件重新构建数据，换言之，Redis 重启的话就根据日志文件的内容将写指令从前到后执行一次以完成数据的恢复工作。</p>
@@ -2744,7 +2744,7 @@ Could not connect to Redis at 127.0.0.1:6379: Connection refused
 <p>那在哪里进行配置呢？在 Redis 的配置文件 redis.conf 搜索 <code>APPEND ONLY MODE</code>，参考本文 5.10。</p>
 <p>默认 AOF 是关闭的，只需修改 <code>appendonly</code>  配置项为 yes 就行。</p>
 <p>AOF 的备份并恢复操作和 RDB 是一样的，都是拷贝备份文件，进行数据恢复时拷贝到 Redis 工作目录下，系统启动时自动加载。</p>
-<h2 id="142-启动修复和恢复">14.2 启动、修复和恢复</h2>
+<h3 id="142-启动修复和恢复">14.2 启动、修复和恢复</h3>
 <blockquote><p>正常恢复</p></blockquote>
 <p>启动：设置 yes。修改默认的 appendonly no，改为 yes 即可。</p>
 <p>一般来说会对 aof 文件进行备份，将有数据的 aof 文件复制一份保存到对应目录（<code>config get dir</code>）。</p>
@@ -2753,7 +2753,7 @@ Could not connect to Redis at 127.0.0.1:6379: Connection refused
 <p>启动：与正常恢复一样，设置 yes。修改默认的 <code>appendonly no</code>，改为 yes 即可。</p>
 <p>先备份被写坏的 aof 文件，然后执行 <code>Redis-check-aof --fix aof文件</code> 进行修复。</p>
 <p>恢复：重启 Redis 然后重新加载。</p>
-<h2 id="143-rewrite">14.3 Rewrite</h2>
+<h3 id="143-rewrite">14.3 Rewrite</h3>
 <blockquote><p>什么是 rewrite</p></blockquote>
 <p>AOF 采用文件追加方式，文件会越来越大。为避免出现此种情况，新增了重写机制，当 AOF 文件的大小超过所设定的阈值时，Redis 就会启动 AOF 文件的内容压缩，只保留可以恢复数据的最小指令集。可以使用命令 <code>bgrewriteaof</code>。</p>
 <blockquote><p>重写原理</p></blockquote>
@@ -2763,7 +2763,7 @@ Could not connect to Redis at 127.0.0.1:6379: Connection refused
 <p>配置文件 APPEND ONLY MODE 一栏中的配置项：</p>
 <p><code>auto-aof-rewrite-min-size</code>：默认是 64 mb，rewrite 触发时 aof 文件的最小值</p>
 <p><code>auto-aof-rewrite-percentage</code>：默认是 100，表示 100%，即一倍</p>
-<h2 id="144-优势与劣势">14.4 优势与劣势</h2>
+<h3 id="144-优势与劣势">14.4 优势与劣势</h3>
 <blockquote><p>优势</p></blockquote>
 <ul>
 <li>每秒同步：appendfsync always（同步持久化）每次发生数据变更会被立即记录到磁盘，性能较差但数据完整性比较好</li>
@@ -2775,7 +2775,7 @@ Could not connect to Redis at 127.0.0.1:6379: Connection refused
 <li>相同数据集的数据而言 aof 文件要远大于 rdb 文件，恢复速度慢于 rdb</li>
 <li>AOF 运行效率要慢于 RDB，每秒同步策略效率较好，不同步效率和 RDB 相同</li>
 </ul>
-<h2 id="145-小结">14.5 小结</h2>
+<h3 id="145-小结">14.5 小结</h3>
 <p><picture><source type="image/webp" srcset="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/AOF%E6%8C%81%E4%B9%85%E5%8C%96%E5%B0%8F%E7%BB%93.png?x-oss-process=image/format,webp 1x" data-responsive-image-source="true"><img src="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/MiddlewareImages/AOF%E6%8C%81%E4%B9%85%E5%8C%96%E5%B0%8F%E7%BB%93.png" alt="AOF持久化小结" data-responsive-image="true"></picture></p>
 <ul>
 <li>aof 文件是一个只进行追加的日志文件</li>
@@ -2784,7 +2784,7 @@ Could not connect to Redis at 127.0.0.1:6379: Connection refused
 <li>对于相同的数据集来说，aof 文件的体积通常要大于 rdb 文件的体积</li>
 <li>根据所使用的 fsync 策略，AOF 的速度可能会慢于 RDB</li>
 </ul>
-<h2 id="146-持久化总结">14.6 持久化总结</h2>
+<h3 id="146-持久化总结">14.6 持久化总结</h3>
 <p>两种持久化策略到底该选哪一种呢？</p>
 <p>RDB 持久化方式能够在指定的时间间隔能对数据进行快照存储</p>
 <p>AOF 持久化方式记录每次对服务器写的操作，当服务器重启的时候会重新执行这些命令来恢复原始的数据，AOF 命令以 Redis 协议追加保存每次写的操作到文件末尾</p>
@@ -2798,7 +2798,7 @@ Could not connect to Redis at 127.0.0.1:6379: Connection refused
 <blockquote><p>性能建议</p></blockquote>
 <p>因为 rdb 文件只用作后备用途，建议只在 slave 上持久化 rdb 文件，而且只要 15 分钟备份一次就够了，只保留 <code>save 900 1</code> 这条规则。</p>
 <p>如果使用 AOF，好处是在最恶劣情况下也只会丢失不超过两秒数据，启动脚本较简单只加载自己的 aof 文件就可以了。代价一是带来了持续的 IO，二是 AOF rewrite 的最后将 rewrite 过程中产生的新数据写到新文件造成的阻塞几乎是不可避免的。只要硬盘许可，应该尽量减少 AOF rewrite 的频率，AOF 重写的基础大小默认值 64M 太小了，可以设到 5G 以上。默认是超过原文件大小 100% 时进行重写可以修改到适当的数值。</p>
-<p>如果不使用 AOF，仅靠 Master-Slave Replication （主从复制）实现高可用性也可以。能省掉一大笔 IO 也减少了 rewrite 时带来的系统波 动。代价是如果 Master / Slave 同时倒掉，会丢失十几分钟的数据，启动脚本也要比较两个 Master / Slave 中的 rdb 文件，并载入较新的那个。新浪微博就选用了这种架构。</p> </article> <div class="text-muted-foreground max-w-app mt-20 w-full space-y-3 text-center text-sm" data-astro-cid-7ap3hmvm> <aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full px-2 text-center leading-6 sm:px-0"> <p class="m-0 break-words"> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a><span> 许可协议，</span><span class="max-sm:block">转载时请署名并注明<a href="https://mofan212.github.io/posts/the-basics-of-redis-part-one/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a> 🔗</span> </p> </aside> <section data-post-reward data-pagefind-ignore class="w-full" aria-label="赞赏"> <div class="flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:flex-wrap sm:gap-x-1.5 sm:gap-y-2"> <span class="sm:whitespace-nowrap">如果这篇文章对你有帮助，可以通过</span> <a href="/reward/" class="focus-outline border-accent text-accent hover:bg-accent/10 active:bg-accent/10 inline-block rounded-md border px-3 py-1 font-medium transition-colors"> 赞赏 </a> <span class="sm:whitespace-nowrap">请我喝杯 Coffee ☕</span> </div> </section> </div> <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm>  <ul id="post-tags" class="mt-4 mb-8 flex flex-wrap gap-4 sm:mb-8" data-astro-cid-7ap3hmvm> <li> <a href="/tags/redis/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> Redis </a> </li><li> <a href="/tags/middleware/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-2"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> 中间件 </a> </li> </ul>  <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/the-basics-of-redis-part-two/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.3l105.3-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg> <div> <span>上一篇</span> <div class="text-accent/85 text-sm">【下篇】Redis 基础篇</div> </div> </a> <a href="/posts/record-a-test/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>下一篇</span> <div class="text-accent/85 text-sm">【随笔】记一次入职测试</div> </div> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg> </a> </div> </main> <footer class="app-layout mt-auto" data-astro-cid-7ap3hmvm="true"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="text-muted-foreground my-2 flex w-fit flex-col items-start text-start text-sm whitespace-nowrap"> <div class="flex items-center gap-1.5"> <svg width="24" height="24" fill="currentColor" class="size-4" viewBox="-49.231 -39.385 738.462 590.769" aria-hidden="true"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9-.1-2.7-.2-5.4-.2-8.1 0-88.4 71.6-160 160-160 59.3 0 111 32.2 138.7 80.2A95.5 95.5 0 0 1 448 96c53 0 96 43 96 96 0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39L296 392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0z" /></svg> <span>最近更新：</span> <time class="tabular-nums" datetime="2026-10-21T03:16:11.000Z" data-deployed-at="2026-10-21T03:16:11.000Z" data-just-now="刚刚" data-locale="zh-CN"> 2026-10-21 11:16 </time> </div> <div class="mt-1 flex items-center gap-3 text-xs"> <span class="flex items-center gap-1" title="本站访客数"> <svg width="24" height="24" fill="currentColor" class="size-3" viewBox="-2.835 -3.241 453.671 518.481" aria-hidden="true"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3z" /></svg> <span class="sr-only">本站访客数：</span> <span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> <span aria-hidden="true">|</span> <span class="flex items-center gap-1.5" title="本站总浏览量"> <span class="flex size-4 items-center justify-center" aria-hidden="true"> <svg width="24" height="24" fill="currentColor" class="size-3.5" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48zM0 272c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v160c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zM368 96h32c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48" /></svg> </span> <span class="sr-only">本站总浏览量：</span> <span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> </div> </div> <div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"> <span>版权所有 &#169; 2020 – 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer> <script>
+<p>如果不使用 AOF，仅靠 Master-Slave Replication （主从复制）实现高可用性也可以。能省掉一大笔 IO 也减少了 rewrite 时带来的系统波 动。代价是如果 Master / Slave 同时倒掉，会丢失十几分钟的数据，启动脚本也要比较两个 Master / Slave 中的 rdb 文件，并载入较新的那个。新浪微博就选用了这种架构。</p> </article> <div class="text-muted-foreground max-w-app mt-20 w-full space-y-3 text-center text-sm" data-astro-cid-7ap3hmvm> <aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full px-2 text-center leading-6 sm:px-0"> <p class="m-0 break-words"> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a><span> 许可协议，</span><span class="max-sm:block">转载时请署名并注明<a href="https://mofan212.github.io/posts/the-basics-of-redis-part-one/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a> 🔗</span> </p> </aside> <section data-post-reward data-pagefind-ignore class="w-full" aria-label="赞赏"> <div class="flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:flex-wrap sm:gap-x-1.5 sm:gap-y-2"> <span class="sm:whitespace-nowrap">如果这篇文章对你有帮助，可以通过</span> <a href="/reward/" class="focus-outline border-accent text-accent hover:bg-accent/10 active:bg-accent/10 inline-block rounded-md border px-3 py-1 font-medium transition-colors"> 赞赏 </a> <span class="sm:whitespace-nowrap">请我喝杯 Coffee ☕</span> </div> </section> </div> <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm>  <ul id="post-tags" class="mt-4 mb-8 flex flex-wrap gap-4 sm:mb-8" data-astro-cid-7ap3hmvm> <li> <a href="/tags/redis/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> Redis </a> </li><li> <a href="/tags/middleware/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-2"> <svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg> 中间件 </a> </li> </ul>  <hr class="my-8 border-dashed" data-astro-cid-7ap3hmvm> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/the-basics-of-redis-part-two/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.3l105.3-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg> <div> <span>上一篇</span> <div class="text-accent/85 text-sm">【下篇】Redis 基础篇</div> </div> </a> <a href="/posts/record-a-test/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>下一篇</span> <div class="text-accent/85 text-sm">【随笔】记一次入职测试</div> </div> <svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg> </a> </div> </main> <footer class="app-layout mt-auto" data-astro-cid-7ap3hmvm="true"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="text-muted-foreground my-2 flex w-fit flex-col items-start text-start text-sm whitespace-nowrap"> <div class="flex items-center gap-1.5"> <svg width="24" height="24" fill="currentColor" class="size-4" viewBox="-49.231 -39.385 738.462 590.769" aria-hidden="true"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9-.1-2.7-.2-5.4-.2-8.1 0-88.4 71.6-160 160-160 59.3 0 111 32.2 138.7 80.2A95.5 95.5 0 0 1 448 96c53 0 96 43 96 96 0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39L296 392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0z" /></svg> <span>最近更新：</span> <time class="tabular-nums" datetime="2026-10-22T08:22:01.000Z" data-deployed-at="2026-10-22T08:22:01.000Z" data-just-now="刚刚" data-locale="zh-CN"> 2026-10-22 16:22 </time> </div> <div class="mt-1 flex items-center gap-3 text-xs"> <span class="flex items-center gap-1" title="本站访客数"> <svg width="24" height="24" fill="currentColor" class="size-3" viewBox="-2.835 -3.241 453.671 518.481" aria-hidden="true"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3z" /></svg> <span class="sr-only">本站访客数：</span> <span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> <span aria-hidden="true">|</span> <span class="flex items-center gap-1.5" title="本站总浏览量"> <span class="flex size-4 items-center justify-center" aria-hidden="true"> <svg width="24" height="24" fill="currentColor" class="size-3.5" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48zM0 272c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v160c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zM368 96h32c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48" /></svg> </span> <span class="sr-only">本站总浏览量：</span> <span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span> </span> </div> </div> <div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"> <span>版权所有 &#169; 2020 – 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>保留所有权利。</span> </div> </div> </footer> <script>
   (() => {
     const updateDeploymentTimes = () => {
       document.querySelectorAll("[data-deployed-at]").forEach(element => {
@@ -2847,4 +2847,4 @@ Could not connect to Redis at 127.0.0.1:6379: Connection refused
     document.addEventListener("astro:page-load", updateDeploymentTimes);
     window.setInterval(updateDeploymentTimes, 60_000);
   })();
-</script>    <script type="module" src="/_astro/Layout.astro_astro_type_script_index_0_lang.DQQu8RqY.js"></script> <script type="module" src="/_astro/Layout.astro_astro_type_script_index_1_lang.DRvjezMo.js"></script> </body> </html>  <script type="module" src="/_astro/index.astro_astro_type_script_index_0_lang.Oly9xh_g.js"></script>
+</script>    <script type="module" src="/_astro/Layout.astro_astro_type_script_index_0_lang.BrDp0sUM.js"></script> <script type="module" src="/_astro/Layout.astro_astro_type_script_index_1_lang.DRvjezMo.js"></script> </body> </html>  <script type="module" src="/_astro/index.astro_astro_type_script_index_0_lang.Oly9xh_g.js"></script>
