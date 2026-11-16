@@ -1,0 +1,2 @@
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["_astro/mermaid.BieEoZ60.js","_astro/preload-helper.DygEbaNj.js"])))=>i.map(i=>d[i]);
+import{t as e}from"./preload-helper.DygEbaNj.js";function t(){document.querySelector(`.mermaid`)&&e(()=>import(`./mermaid.BieEoZ60.js`),__vite__mapDeps([0,1]))}t(),document.addEventListener(`astro:page-load`,t);
