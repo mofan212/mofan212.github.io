@@ -1,0 +1,1109 @@
+<!DOCTYPE html><html dir="ltr" lang="zh-CN" class="overflow-y-scroll motion-safe:scroll-smooth"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="canonical" href="https://mofan212.github.io/posts/spring-boot-database/"><meta name="generator" content="Astro v7.4.12"><!-- Primary meta --><title>Spring Boot 与数据库 | Mofan</title><meta name="title" content="Spring Boot 与数据库 | Mofan"><meta name="description" content="从一个 JdbcTemplate 查询出发，介绍了 Spring Boot 的数据源、连接池与集成 MyBatis。"><meta name="author" content="默烦"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Mofan"><meta property="og:title" content="Spring Boot 与数据库 | Mofan"><meta property="og:description" content="从一个 JdbcTemplate 查询出发，介绍了 Spring Boot 的数据源、连接池与集成 MyBatis。"><meta property="og:url" content="https://mofan212.github.io/posts/spring-boot-database/"><meta property="og:image" content="https://mofan212.github.io/default-og.jpg"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://mofan212.github.io/posts/spring-boot-database/"><meta property="twitter:title" content="Spring Boot 与数据库 | Mofan"><meta property="twitter:description" content="从一个 JdbcTemplate 查询出发，介绍了 Spring Boot 的数据源、连接池与集成 MyBatis。"><meta property="twitter:image" content="https://mofan212.github.io/default-og.jpg"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Mofan" href="https://mofan212.github.io/rss.xml"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) --><meta property="og:type" content="article"><meta property="article:published_time" content="2020-06-10T00:00:00.000Z"><meta property="article:modified_time" content="2026-11-17T00:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Spring Boot 与数据库 | Mofan","url":"https://mofan212.github.io/posts/spring-boot-database/","mainEntityOfPage":"https://mofan212.github.io/posts/spring-boot-database/","datePublished":"2020-06-10T00:00:00.000Z","dateModified":"2026-11-17T00:00:00.000Z","author":[{"@type":"Person","name":"默烦","url":"https://github.com/mofan212"}]}</script><!--
+      Inline FOUC-prevention script: sets data-theme on <html> before
+      the browser paints. Runs synchronously, no defer/async.
+    --><script>
+      (function () {
+        const stored = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+        const theme = stored ?? (prefersDark ? "dark" : "light");
+        const root = document.firstElementChild;
+        root?.setAttribute("data-theme", theme);
+        root?.classList.toggle("dark", theme === "dark");
+        // Expose value so theme.ts can skip re-detection.
+        window.__theme = { value: theme };
+      })();
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CnDxeVtR.js"></script><link rel="shortcut icon" href="https://mofan-blog-pics.oss-cn-chengdu.aliyuncs.com/myblog/favicon.png"><link rel="preconnect" href="https://fastly.jsdelivr.net"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/lxgw-wenkai-screen-web/lxgwwenkaiscreen/result.css"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/jetbrains-mono@1.0.6/css/jetbrains-mono-nl.min.css"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fontsource/noto-sans-sc/400.css"><link rel="preconnect" href="https://busuanzi.ibruce.info"><script>
+  // Register before Astro's deferred router module. The article module supplies
+  // the handler once loaded; keeping this listener first prevents a page swap
+  // when the viewer consumes its own history entry.
+  if (!window.__articleImagePopState) {
+    window.__articleImagePopState = () => {};
+    window.addEventListener(
+      "popstate",
+      event => window.__articleImagePopState(event),
+      { capture: true }
+    );
+  }
+</script><link rel="stylesheet" href="/_astro/Footer.Dm23adaw.css"><style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media (prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*),[data-astro-transition-scope]{animation:none!important}}
+.toc-link[data-astro-cid-ybm2afka]{position:relative}.toc-link[data-astro-cid-ybm2afka]:before{background-color:var(--accent);content:"";opacity:0;border-radius:2px;width:2px;position:absolute;inset-block:.375rem;inset-inline-start:-2px}.toc-link[data-astro-cid-ybm2afka][data-active]{color:var(--accent)}.toc-link[data-astro-cid-ybm2afka][data-active]:before{opacity:1}.toc-toggle[data-astro-cid-ybm2afka][aria-expanded=true] .toc-toggle-icon[data-astro-cid-ybm2afka]{rotate:-90deg}.toc-skip[data-astro-cid-3tbazgeo]{z-index:1;background:var(--background);color:var(--accent);padding:.125rem .25rem;font-size:.875rem;position:absolute;inset-block-start:0;inset-inline-start:0}.toc-skip[data-astro-cid-3tbazgeo]:not(:focus){clip-path:inset(50%)}.toc-scroll[data-astro-cid-3tbazgeo]{scrollbar-width:thin}.post-toc-desktop[data-astro-cid-3tbazgeo] .toc-scroll[data-astro-cid-3tbazgeo]{scrollbar-gutter:stable}.toc-scroll[data-astro-cid-3tbazgeo]:after{content:"";block-size:20dvh;display:block}[data-astro-cid-3tbazgeo][data-toc-dialog]{opacity:0;will-change:opacity, transform;transition:opacity .16s ease-out,transform .22s cubic-bezier(.22,1,.36,1);transform:translate(1.25rem)}[data-astro-cid-3tbazgeo][data-toc-dialog][data-toc-visible]{opacity:1;transform:translate(0)}[data-astro-cid-3tbazgeo][data-toc-dialog]::backdrop{background-color:#0000;transition:background-color .18s ease-out}[data-astro-cid-3tbazgeo][data-toc-dialog][data-toc-visible]::backdrop{background-color:#00000080}@media (prefers-reduced-motion:reduce){[data-astro-cid-3tbazgeo][data-toc-dialog]{transition:none;transform:none}[data-astro-cid-3tbazgeo][data-toc-dialog]::backdrop{transition:none}}[data-astro-cid-oex33nzv][data-post-series]{interpolate-size:allow-keywords}[data-astro-cid-oex33nzv][data-post-series]::details-content{opacity:0;block-size:0;transition:block-size .2s ease-out, opacity .15s ease-out, content-visibility .2s allow-discrete;overflow:hidden}[data-astro-cid-oex33nzv][data-post-series][open]::details-content{opacity:1;block-size:auto}@media (prefers-reduced-motion:reduce){[data-astro-cid-oex33nzv][data-post-series]::details-content{transition:none}}.post-sidebar[data-astro-cid-wq7kak54]{display:contents}@media (width>=90rem){.post-sidebar[data-astro-cid-wq7kak54]{width:min(18rem, calc(50vw - var(--app-max-width) / 2 - 3rem));flex-direction:column;height:calc(100dvh - 11rem);min-height:0;display:flex;position:fixed;inset-block-start:9rem;inset-inline-start:calc(50% + var(--app-max-width) / 2 + 2rem)}}
+</style><style>[data-astro-transition-scope="astro-bztu2lml-1"] { view-transition-name: spring-boot; }@layer astro { ::view-transition-old(spring-boot) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(spring-boot) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(spring-boot) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(spring-boot) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-bztu2lml-1"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-bztu2lml-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-bztu2lml-1"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-bztu2lml-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-bztu2lml-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-bztu2lml-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-bztu2lml-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-bztu2lml-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style></head><body class="bg-background font-app text-foreground selection:bg-accent/75 selection:text-accent-foreground flex min-h-svh flex-col"><a id="skip-to-content" href="#main-content" class="bg-background text-accent absolute inset-s-16 -top-full z-50 px-3 py-2 backdrop-blur-lg transition-all focus:top-4" data-astro-cid-nen7h5rs>跳到正文</a><header id="page-header" data-scroll-header data-scroll-state="visible" class="bg-background sticky top-0 z-40 w-full transition-transform duration-200 ease-in-out motion-reduce:transition-none" data-astro-cid-nen7h5rs><div class="app-layout relative flex w-full items-center justify-between py-4 sm:py-6" data-astro-cid-nen7h5rs><a href="/" class="py-1 text-xl leading-8 font-semibold whitespace-nowrap sm:my-auto sm:text-2xl sm:leading-none" data-astro-cid-nen7h5rs>Mofan</a><nav id="nav-menu" class="flex items-center sm:ms-2 sm:space-x-4" data-astro-cid-nen7h5rs><button id="menu-btn" class="focus-outline p-2 sm:hidden" aria-label="打开菜单" aria-expanded="false" aria-controls="menu-items" data-label-open="打开菜单" data-label-close="关闭菜单" data-astro-cid-nen7h5rs><svg width="24" height="24" fill="currentColor" class="hidden" viewBox="-13.714 -18.286 411.429 548.571" id="close-icon" data-astro-cid-nen7h5rs="true"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3l105.4 105.3c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256z" /></svg><svg width="24" height="24" fill="currentColor" class="icon icon-font-awesome icon-bars" viewBox="-37.333 -42.667 522.667 597.333" id="menu-icon" data-astro-cid-nen7h5rs="true"><path d="M0 96c0-17.7 14.3-32 32-32h384c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32m0 160c0-17.7 14.3-32 32-32h384c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32m448 160c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h384c17.7 0 32 14.3 32 32" /></svg></button><ul id="menu-items" class="border-border bg-background absolute inset-x-0 top-full z-40 flex hidden max-h-[calc(100dvh-4.5rem)] w-full flex-col items-center gap-3 overflow-y-auto overscroll-contain border-b px-4 py-6 shadow-lg sm:static sm:inset-x-auto sm:top-auto sm:z-auto sm:flex sm:max-h-none sm:w-auto sm:flex-row sm:items-center sm:gap-x-3 sm:gap-y-0 sm:overflow-visible sm:overscroll-auto sm:border-0 sm:p-0 sm:shadow-none sm:[&amp;&gt;li]:flex sm:[&amp;&gt;li]:h-8 sm:[&amp;&gt;li]:items-center" data-astro-cid-nen7h5rs><li data-astro-cid-nen7h5rs><a href="/archives/" class="hover:text-accent block w-32 py-1.5 text-center text-base font-medium whitespace-nowrap sm:w-auto sm:px-2 sm:py-1 sm:text-sm" data-astro-cid-nen7h5rs>归档</a></li><li data-astro-cid-nen7h5rs><a href="/categories/" class="hover:text-accent block w-32 py-1.5 text-center text-base font-medium whitespace-nowrap sm:w-auto sm:px-2 sm:py-1 sm:text-sm" data-astro-cid-nen7h5rs>分类</a></li><li data-astro-cid-nen7h5rs><a href="/tags/" class="hover:text-accent block w-32 py-1.5 text-center text-base font-medium whitespace-nowrap sm:w-auto sm:px-2 sm:py-1 sm:text-sm" data-astro-cid-nen7h5rs>标签</a></li><li data-astro-cid-nen7h5rs><a href="/link/" class="hover:text-accent block w-32 py-1.5 text-center text-base font-medium whitespace-nowrap sm:w-auto sm:px-2 sm:py-1 sm:text-sm" data-astro-cid-nen7h5rs>友链</a></li><li data-astro-cid-nen7h5rs><a href="/messageboard/" class="hover:text-accent block w-32 py-1.5 text-center text-base font-medium whitespace-nowrap sm:w-auto sm:px-2 sm:py-1 sm:text-sm" data-astro-cid-nen7h5rs>留言板</a></li><li data-astro-cid-nen7h5rs><details id="site-menu" class="group relative w-full sm:w-auto" data-astro-cid-nen7h5rs><summary class="focus-outline hover:text-accent relative flex w-32 cursor-pointer list-none items-center justify-center py-1.5 text-base font-medium whitespace-nowrap select-none sm:w-auto sm:gap-1 sm:px-2 sm:py-1 sm:text-sm [&amp;::-webkit-details-marker]:hidden" data-astro-cid-nen7h5rs><span class="block w-full text-center sm:w-auto" data-astro-cid-nen7h5rs>更多</span><svg width="24" height="24" fill="currentColor" class="site-menu-chevron text-muted-foreground absolute start-[calc(50%+1.25rem)] size-4 sm:static" viewBox="-80 -128 480 768" aria-hidden="true" data-astro-cid-nen7h5rs="true"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z" /></svg></summary><div class="mobile-site-submenu sm:hidden" data-astro-cid-nen7h5rs><div class="mobile-site-submenu-inner mx-auto flex w-full max-w-xs flex-col items-center gap-3.5 py-2" data-astro-cid-nen7h5rs><div class="flex w-full flex-col items-center gap-1.5" data-astro-cid-nen7h5rs><p class="text-muted-foreground/75 text-xs font-medium tracking-widest uppercase" data-astro-cid-nen7h5rs>关于</p><div class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 text-sm" data-astro-cid-nen7h5rs><a href="/mine/" class="hover:text-accent py-0.5 transition-colors" data-astro-cid-nen7h5rs>我</a><span class="text-muted-foreground/40 text-xs select-none" data-astro-cid-nen7h5rs>·</span><a href="/about/" class="hover:text-accent py-0.5 transition-colors" data-astro-cid-nen7h5rs>本站</a></div></div><div class="flex w-full flex-col items-center gap-1.5 border-border/40 border-t pt-2" data-astro-cid-nen7h5rs><p class="text-muted-foreground/75 text-xs font-medium tracking-widest uppercase" data-astro-cid-nen7h5rs>站点</p><div class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 text-sm" data-astro-cid-nen7h5rs><a href="/plan/" class="hover:text-accent py-0.5 transition-colors" data-astro-cid-nen7h5rs>计划</a><span class="text-muted-foreground/40 text-xs select-none" data-astro-cid-nen7h5rs>·</span><a href="/changelog/" class="hover:text-accent py-0.5 transition-colors" data-astro-cid-nen7h5rs>维护</a><span class="text-muted-foreground/40 text-xs select-none" data-astro-cid-nen7h5rs>·</span><a href="/reward/" class="hover:text-accent py-0.5 transition-colors" data-astro-cid-nen7h5rs>赞助</a></div></div></div></div><ul class="sm:border-border sm:bg-background hidden sm:absolute sm:top-full sm:left-1/2 sm:mt-2 sm:w-32 sm:-translate-x-1/2 sm:rounded-md sm:border sm:p-2 sm:text-start sm:shadow-md sm:before:absolute sm:before:-top-2 sm:before:left-0 sm:before:h-5 sm:before:w-full sm:before:content-['']" data-astro-cid-nen7h5rs><li data-astro-cid-nen7h5rs><p class="text-muted-foreground px-3 pt-0.5 pb-1 text-xs font-semibold tracking-wider" data-astro-cid-nen7h5rs>关于</p><ul data-astro-cid-nen7h5rs><li data-astro-cid-nen7h5rs><a href="/mine/" class="hover:bg-muted hover:text-accent block rounded px-3 py-1.5 font-medium" data-astro-cid-nen7h5rs>我</a></li><li data-astro-cid-nen7h5rs><a href="/about/" class="hover:bg-muted hover:text-accent block rounded px-3 py-1.5 font-medium" data-astro-cid-nen7h5rs>本站</a></li></ul></li><li class="border-border mt-1.5 border-t pt-1.5" data-astro-cid-nen7h5rs><p class="text-muted-foreground px-3 pt-0.5 pb-1 text-xs font-semibold tracking-wider" data-astro-cid-nen7h5rs>站点</p><ul data-astro-cid-nen7h5rs><li data-astro-cid-nen7h5rs><a href="/plan/" class="hover:bg-muted hover:text-accent block rounded px-3 py-1.5 font-medium" data-astro-cid-nen7h5rs>计划</a></li><li data-astro-cid-nen7h5rs><a href="/changelog/" class="hover:bg-muted hover:text-accent block rounded px-3 py-1.5 font-medium" data-astro-cid-nen7h5rs>维护</a></li><li data-astro-cid-nen7h5rs><a href="/reward/" class="hover:bg-muted hover:text-accent block rounded px-3 py-1.5 font-medium" data-astro-cid-nen7h5rs>赞助</a></li></ul></li></ul></details></li><li class="border-border/50 mt-2 flex w-full max-w-xs items-center justify-center gap-6 border-t pt-4 sm:mt-0 sm:w-auto sm:gap-x-2 sm:border-t-0 sm:pt-0" data-astro-cid-nen7h5rs><div class="flex items-center justify-center" data-astro-cid-nen7h5rs><button id="docsearch-button" class="focus-outline hover:text-accent relative size-12 p-4 sm:size-8" type="button" title="搜索" aria-label="搜索" aria-controls="docsearch"><svg width="24" height="24" fill="currentColor" class="absolute top-1/2 left-1/2 size-[22px] -translate-x-1/2 -translate-y-1/2" viewBox="0 0 512 512"><path d="M416 208c0 45.9-14.9 88.3-40 122.7l126.6 126.7c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0s208 93.1 208 208M208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288" /></svg></button><div id="docsearch" class="hidden" data-app-id="BAFEL7A6K1" data-api-key="89fcb5961984c5c054bf04149f345f38" data-indices="[&quot;mofan212io&quot;]" data-label="搜索" data-placeholder="输入关键字进行搜索"></div><script type="module" src="/_astro/DocSearch.astro_astro_type_script_index_0_lang.Bg3-kMSO.js"></script></div><a href="https://www.travellings.cn/go.html" target="_blank" rel="noopener noreferrer" title="开往" aria-label="开往" data-astro-cid-nen7h5rs="true" class="group inline-flex items-center gap-1 hover:text-accent focus-outline hover:text-accent relative flex size-10 items-center justify-center p-2.5 transition-colors sm:size-8 sm:p-4"><svg width="24" height="24" fill="currentColor" class="absolute top-1/2 left-1/2 size-[22px] -translate-x-1/2 -translate-y-1/2" viewBox="0 0 448 512" aria-hidden="true" data-astro-cid-nen7h5rs="true"><path d="M96 0C43 0 0 43 0 96v256c0 48 35.2 87.7 81.1 94.9l-46 46c-7 7-2 19.1 7.9 19.1h39.7c8.5 0 16.6-3.4 22.6-9.4L160 448h128l54.6 54.6c6 6 14.1 9.4 22.6 9.4h39.7c10 0 15-12.1 7.9-19.1l-46-46c46-7.1 81.1-46.9 81.1-94.9V96c0-53-43-96-96-96zM64 128c0-17.7 14.3-32 32-32h80c17.7 0 32 14.3 32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32zm208-32h80c17.7 0 32 14.3 32 32v96c0 17.7-14.3 32-32 32h-80c-17.7 0-32-14.3-32-32v-96c0-17.7 14.3-32 32-32M64 352a32 32 0 1 1 64 0 32 32 0 1 1-64 0m288-32a32 32 0 1 1 0 64 32 32 0 1 1 0-64" /></svg><span class="sr-only" data-astro-cid-nen7h5rs>开往</span></a><button id="theme-btn" class="focus-outline hover:text-accent relative flex size-10 items-center justify-center p-2.5 sm:size-8 sm:p-4" title="切换主题" aria-label="auto" aria-live="polite" data-astro-cid-nen7h5rs><svg width="24" height="24" fill="currentColor" class="absolute top-[50%] left-[50%] size-[22px] translate-[-50%] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" viewBox="0 0 384 512" data-astro-cid-nen7h5rs="true"><path d="M223.5 32C100 32 0 132.3 0 256s100 224 223.5 224c60.6 0 115.5-24.2 155.8-63.4 5-4.9 6.3-12.5 3.1-18.7s-10.1-9.7-17-8.5c-9.8 1.7-19.8 2.6-30.1 2.6-96.9 0-175.5-78.8-175.5-176 0-65.8 36-123.1 89.3-153.3 6.1-3.5 9.2-10.5 7.7-17.3s-7.3-11.9-14.3-12.5c-6.3-.5-12.6-.8-19-.8z" /></svg><svg width="24" height="24" fill="currentColor" class="absolute top-[50%] left-[50%] size-[22px] translate-[-50%] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" viewBox="0 0 512 512" data-astro-cid-nen7h5rs="true"><path d="M361.5 1.2c5 2.1 8.6 6.6 9.6 11.9L391 121l107.9 19.8c5.3 1 9.8 4.6 11.9 9.6s1.5 10.7-1.6 15.2L446.9 256l62.3 90.3c3.1 4.5 3.7 10.2 1.6 15.2s-6.6 8.6-11.9 9.6L391 391l-19.9 107.9c-1 5.3-4.6 9.8-9.6 11.9s-10.7 1.5-15.2-1.6L256 446.9l-90.3 62.3c-4.5 3.1-10.2 3.7-15.2 1.6s-8.6-6.6-9.6-11.9L121 391 13.1 371.1c-5.3-1-9.8-4.6-11.9-9.6s-1.5-10.7 1.6-15.2L65.1 256 2.8 165.7c-3.1-4.5-3.7-10.2-1.6-15.2s6.6-8.6 11.9-9.6L121 121l19.9-107.9c1-5.3 4.6-9.8 9.6-11.9s10.7-1.5 15.2 1.6L256 65.1l90.3-62.3c4.5-3.1 10.2-3.7 15.2-1.6M160 256a96 96 0 1 1 192 0 96 96 0 1 1-192 0m224 0a128 128 0 1 0-256 0 128 128 0 1 0 256 0" /></svg></button></li></ul></nav></div></header><div id="nav-backdrop" class="pointer-events-none fixed inset-0 z-30 bg-black/30 opacity-0 backdrop-blur-xs transition-opacity duration-200 sm:hidden" aria-hidden="true" data-astro-cid-nen7h5rs></div><script type="module" src="/_astro/Header.astro_astro_type_script_index_0_lang.Dess7URk.js"></script><div class="app-layout flex items-center justify-start"><a id="back-button" href="/" class="group inline-flex items-center gap-1 hover:text-accent focus-outline hover:text-foreground/75 -ms-2 mt-8 mb-2"><svg width="24" height="24" fill="currentColor" class="inline-block size-4 rtl:rotate-180" viewBox="-80 -128 480 768"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z" /></svg><span>返回</span></a></div><script type="module">function e(){let e=document.querySelector(`#back-button`),t=sessionStorage.getItem(`backUrl`);t&&e&&(e.href=t)}document.addEventListener(`astro:page-load`,e),e();</script><main id="main-content" class="app-layout" data-pagefind-body data-astro-cid-wq7kak54><h1 style="view-transition-name:spring-boot-database" class="text-accent inline-block text-3xl font-bold sm:text-4xl" data-astro-cid-wq7kak54>Spring Boot 与数据库</h1><div class="my-2 flex flex-wrap items-center gap-2" data-astro-cid-wq7kak54><div class="text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 [&amp;_svg]:size-4 [&amp;_svg]:min-w-4 [&amp;_svg]:scale-100"><span class="flex items-center gap-x-2"><svg width="24" height="24" fill="currentColor" class="inline-block size-6 min-w-5.5 scale-90" viewBox="-43.463 -49.672 534.925 611.343"><path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24v40H64C28.7 64 0 92.7 0 128v320c0 35.3 28.7 64 64 64h320c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64h-40V24c0-13.3-10.7-24-24-24s-24 10.7-24 24v40H152zM48 192h80v56H48zm0 104h80v64H48zm128 0h96v64h-96zm144 0h80v64h-80zm80-48h-80v-56h80zm0 160v40c0 8.8-7.2 16-16 16h-64v-56zm-128 0v56h-96v-56zm-144 0v56H64c-8.8 0-16-7.2-16-16v-40zm144-160h-96v-56h96z" /></svg><span class="text-sm">发表于</span><time class="text-sm" datetime="2020-06-10T00:00:00.000Z">2020-06-10</time></span><span class="flex items-center gap-x-2"><svg width="24" height="24" fill="currentColor" class="inline-block size-6 min-w-5.5 scale-90" viewBox="-49.672 -49.672 611.343 611.343"><path d="M75 75 41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24h110.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75m181 53c-13.3 0-24 10.7-24 24v104c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z" /></svg><span class="text-sm">更新于</span><time class="text-sm" datetime="2026-11-17T00:00:00.000Z">2026-11-17</time></span></div><span aria-hidden="true" class="text-muted-foreground" data-astro-cid-wq7kak54>|</span><nav aria-label="分类" data-astro-cid-wq7kak54><ol class="flex flex-wrap items-center gap-1" data-astro-cid-wq7kak54><li><a href="/categories/spring/" class="text-muted-foreground flex items-center gap-1 transition-colors hover:text-accent focus-visible:text-accent text-sm"><svg width="24" height="24" fill="currentColor" class="shrink-0 size-4" viewBox="-51.2 -51.2 614.4 614.4" aria-hidden="true"><path d="M32 32h448c17.7 0 32 14.3 32 32v32c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V64c0-17.7 14.3-32 32-32m0 128h448v256c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64zm128 80c0 8.8 7.2 16 16 16h160c8.8 0 16-7.2 16-16s-7.2-16-16-16H176c-8.8 0-16 7.2-16 16" /></svg>Spring</a></li><li aria-hidden="true" data-astro-cid-wq7kak54><svg width="24" height="24" fill="currentColor" class="text-muted-foreground size-4 rotate-180" viewBox="-80 -128 480 768" data-astro-cid-wq7kak54="true"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z" /></svg></li><li><a href="/categories/spring/spring-boot/" class="text-muted-foreground flex items-center gap-1 transition-colors hover:text-accent focus-visible:text-accent text-sm"><svg width="24" height="24" fill="currentColor" class="shrink-0 size-4" viewBox="-51.2 -51.2 614.4 614.4" aria-hidden="true"><path d="M32 32h448c17.7 0 32 14.3 32 32v32c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V64c0-17.7 14.3-32 32-32m0 128h448v256c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64zm128 80c0 8.8 7.2 16 16 16h160c8.8 0 16-7.2 16-16s-7.2-16-16-16H176c-8.8 0-16 7.2-16 16" /></svg>Spring Boot</a></li></ol></nav><span aria-hidden="true" class="text-muted-foreground max-sm:hidden hidden" data-astro-cid-wq7kak54>|</span><span aria-hidden="true" class="text-muted-foreground" data-astro-cid-wq7kak54>|</span><span class="text-muted-foreground flex items-center gap-x-2" data-busuanzi-page data-busuanzi-legacy-path="/posts/SpringBoot-Data/" data-astro-cid-wq7kak54><svg width="24" height="24" fill="currentColor" class="inline-block size-4 min-w-4" viewBox="-57.6 -51.2 691.2 614.4" data-astro-cid-wq7kak54="true"><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4 142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1 3.3-7.9 3.3-16.7 0-24.6-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32M144 256a144 144 0 1 1 288 0 144 144 0 1 1-288 0m144-64c0 35.3-28.7 64-64 64-7.1 0-13.9-1.2-20.3-3.3-5.5-1.8-11.9 1.6-11.7 7.4.3 6.9 1.3 13.8 3.2 20.7 13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1-5.8-.2-9.2 6.1-7.4 11.7 2.1 6.4 3.3 13.2 3.3 20.3" /></svg><span class="flex items-baseline text-sm" data-astro-cid-wq7kak54><span data-astro-cid-wq7kak54>浏览量：</span><span id="busuanzi_value_page_pv" class="tabular-nums" data-astro-cid-wq7kak54>--</span></span></span></div><div class="post-sidebar" data-astro-cid-wq7kak54><div class="contents min-[90rem]:flex min-[90rem]:min-h-0 min-[90rem]:flex-1 min-[90rem]:flex-col" data-post-toc data-astro-cid-3tbazgeo><aside class="post-toc-desktop relative hidden min-h-0 flex-1 flex-col min-[90rem]:flex" aria-label="文章目录" data-astro-cid-3tbazgeo><a class="toc-skip" href="#article" data-toc-skip data-astro-cid-3tbazgeo>跳过目录</a><div class="mb-3 flex items-center gap-3 px-3" data-astro-cid-3tbazgeo><h2 class="text-sm font-semibold" data-astro-cid-3tbazgeo>文章目录</h2><span class="text-muted-foreground text-sm tabular-nums" data-reading-progress data-astro-cid-3tbazgeo>0%</span></div><nav class="toc-scroll min-h-0 flex-1 overflow-y-auto overscroll-auto pe-1" data-toc-scroll data-astro-cid-3tbazgeo><ul class="space-y-0.5" data-astro-cid-ybm2afka><li data-toc-node="0-前言" data-toc-parent data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-ybm2afka></span><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#0-前言" data-toc-slug="0-前言" data-astro-cid-ybm2afka>0. 前言</a></div></li><li data-toc-node="1-使用-jdbctemplate" data-toc-parent data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><button type="button" class="toc-toggle text-muted-foreground hover:text-accent mt-0.5 flex size-7 shrink-0 items-center justify-center rounded" aria-label="展开或收起目录章节: 1. 使用 JdbcTemplate" aria-controls="post-toc-desktop-1-使用-jdbctemplate" aria-expanded="false" data-toc-toggle="1-使用-jdbctemplate" data-astro-cid-ybm2afka><svg width="24" height="24" fill="currentColor" class="toc-toggle-icon size-4 -rotate-180 transition-transform" viewBox="-80 -128 480 768" aria-hidden="true" data-astro-cid-ybm2afka="true"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z" /></svg></button><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#1-使用-jdbctemplate" data-toc-slug="1-使用-jdbctemplate" data-astro-cid-ybm2afka>1. 使用 JdbcTemplate</a></div><div id="post-toc-desktop-1-使用-jdbctemplate" hidden data-toc-branch="1-使用-jdbctemplate" data-astro-cid-ybm2afka><ul class="space-y-0.5 border-border ms-3 border-s ps-1" data-astro-cid-ybm2afka><li data-toc-node="11-数据库现状" data-toc-parent="1-使用-jdbctemplate" data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-ybm2afka></span><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#11-数据库现状" data-toc-slug="11-数据库现状" data-astro-cid-ybm2afka>1.1 数据库现状</a></div></li><li data-toc-node="12-查询前的准备" data-toc-parent="1-使用-jdbctemplate" data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-ybm2afka></span><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#12-查询前的准备" data-toc-slug="12-查询前的准备" data-astro-cid-ybm2afka>1.2 查询前的准备</a></div></li><li data-toc-node="13-初识-jdbctemplate" data-toc-parent="1-使用-jdbctemplate" data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-ybm2afka></span><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#13-初识-jdbctemplate" data-toc-slug="13-初识-jdbctemplate" data-astro-cid-ybm2afka>1.3 初识 JdbcTemplate</a></div></li><li data-toc-node="14-jdbcclient" data-toc-parent="1-使用-jdbctemplate" data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-ybm2afka></span><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#14-jdbcclient" data-toc-slug="14-jdbcclient" data-astro-cid-ybm2afka>1.4 JdbcClient</a></div></li></ul></div></li><li data-toc-node="2-数据源与连接池" data-toc-parent data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><button type="button" class="toc-toggle text-muted-foreground hover:text-accent mt-0.5 flex size-7 shrink-0 items-center justify-center rounded" aria-label="展开或收起目录章节: 2. 数据源与连接池" aria-controls="post-toc-desktop-2-数据源与连接池" aria-expanded="false" data-toc-toggle="2-数据源与连接池" data-astro-cid-ybm2afka><svg width="24" height="24" fill="currentColor" class="toc-toggle-icon size-4 -rotate-180 transition-transform" viewBox="-80 -128 480 768" aria-hidden="true" data-astro-cid-ybm2afka="true"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z" /></svg></button><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#2-数据源与连接池" data-toc-slug="2-数据源与连接池" data-astro-cid-ybm2afka>2. 数据源与连接池</a></div><div id="post-toc-desktop-2-数据源与连接池" hidden data-toc-branch="2-数据源与连接池" data-astro-cid-ybm2afka><ul class="space-y-0.5 border-border ms-3 border-s ps-1" data-astro-cid-ybm2afka><li data-toc-node="21-获取数据库连接" data-toc-parent="2-数据源与连接池" data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-ybm2afka></span><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#21-获取数据库连接" data-toc-slug="21-获取数据库连接" data-astro-cid-ybm2afka>2.1 获取数据库连接</a></div></li><li data-toc-node="22-释放连接" data-toc-parent="2-数据源与连接池" data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-ybm2afka></span><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#22-释放连接" data-toc-slug="22-释放连接" data-astro-cid-ybm2afka>2.2 释放连接</a></div></li><li data-toc-node="23-调整连接池配置" data-toc-parent="2-数据源与连接池" data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-ybm2afka></span><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#23-调整连接池配置" data-toc-slug="23-调整连接池配置" data-astro-cid-ybm2afka>2.3 调整连接池配置</a></div></li><li data-toc-node="24-集成-druid" data-toc-parent="2-数据源与连接池" data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-ybm2afka></span><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#24-集成-druid" data-toc-slug="24-集成-druid" data-astro-cid-ybm2afka>2.4 集成 Druid</a></div></li></ul></div></li><li data-toc-node="3-事务管理器" data-toc-parent data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><button type="button" class="toc-toggle text-muted-foreground hover:text-accent mt-0.5 flex size-7 shrink-0 items-center justify-center rounded" aria-label="展开或收起目录章节: 3. 事务管理器" aria-controls="post-toc-desktop-3-事务管理器" aria-expanded="false" data-toc-toggle="3-事务管理器" data-astro-cid-ybm2afka><svg width="24" height="24" fill="currentColor" class="toc-toggle-icon size-4 -rotate-180 transition-transform" viewBox="-80 -128 480 768" aria-hidden="true" data-astro-cid-ybm2afka="true"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z" /></svg></button><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#3-事务管理器" data-toc-slug="3-事务管理器" data-astro-cid-ybm2afka>3. 事务管理器</a></div><div id="post-toc-desktop-3-事务管理器" hidden data-toc-branch="3-事务管理器" data-astro-cid-ybm2afka><ul class="space-y-0.5 border-border ms-3 border-s ps-1" data-astro-cid-ybm2afka><li data-toc-node="31-声明式事务管理" data-toc-parent="3-事务管理器" data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-ybm2afka></span><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#31-声明式事务管理" data-toc-slug="31-声明式事务管理" data-astro-cid-ybm2afka>3.1 声明式事务管理</a></div></li><li data-toc-node="32-编程式事务管理" data-toc-parent="3-事务管理器" data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-ybm2afka></span><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#32-编程式事务管理" data-toc-slug="32-编程式事务管理" data-astro-cid-ybm2afka>3.2 编程式事务管理</a></div></li></ul></div></li><li data-toc-node="4-集成-mybatis" data-toc-parent data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><button type="button" class="toc-toggle text-muted-foreground hover:text-accent mt-0.5 flex size-7 shrink-0 items-center justify-center rounded" aria-label="展开或收起目录章节: 4. 集成 MyBatis" aria-controls="post-toc-desktop-4-集成-mybatis" aria-expanded="false" data-toc-toggle="4-集成-mybatis" data-astro-cid-ybm2afka><svg width="24" height="24" fill="currentColor" class="toc-toggle-icon size-4 -rotate-180 transition-transform" viewBox="-80 -128 480 768" aria-hidden="true" data-astro-cid-ybm2afka="true"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z" /></svg></button><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#4-集成-mybatis" data-toc-slug="4-集成-mybatis" data-astro-cid-ybm2afka>4. 集成 MyBatis</a></div><div id="post-toc-desktop-4-集成-mybatis" hidden data-toc-branch="4-集成-mybatis" data-astro-cid-ybm2afka><ul class="space-y-0.5 border-border ms-3 border-s ps-1" data-astro-cid-ybm2afka><li data-toc-node="41-自动配置-mybatis" data-toc-parent="4-集成-mybatis" data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-ybm2afka></span><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#41-自动配置-mybatis" data-toc-slug="41-自动配置-mybatis" data-astro-cid-ybm2afka>4.1 自动配置 MyBatis</a></div></li><li data-toc-node="42-mapper-扫描与配置" data-toc-parent="4-集成-mybatis" data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-ybm2afka></span><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#42-mapper-扫描与配置" data-toc-slug="42-mapper-扫描与配置" data-astro-cid-ybm2afka>4.2 Mapper 扫描与配置</a></div></li></ul></div></li></ul></nav></aside><button type="button" class="bg-background border-border text-foreground ring-background fixed end-2 bottom-[4.5rem] z-40 flex size-10 items-center justify-center rounded-full border shadow-lg ring-4 min-[90rem]:hidden" aria-label="打开文章目录" aria-controls="post-toc-dialog" aria-expanded="false" data-toc-open data-astro-cid-3tbazgeo><svg width="24" height="24" fill="currentColor" class="size-[1.125rem]" viewBox="-37.333 -42.667 522.667 597.333" aria-hidden="true" data-astro-cid-3tbazgeo="true"><path d="M0 96c0-17.7 14.3-32 32-32h384c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32m0 160c0-17.7 14.3-32 32-32h384c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32m448 160c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h384c17.7 0 32 14.3 32 32" /></svg></button><dialog id="post-toc-dialog" class="bg-background text-foreground border-border m-0 ms-auto h-dvh max-h-dvh w-[min(20rem,84vw)] max-w-none border-s p-0 shadow-2xl backdrop:bg-black/50" aria-labelledby="post-toc-dialog-title" data-toc-dialog data-astro-cid-3tbazgeo><div class="flex h-full min-h-0 flex-col" data-astro-cid-3tbazgeo><div class="border-border flex items-center justify-between gap-4 border-b px-4 py-3" data-astro-cid-3tbazgeo><div class="flex items-baseline gap-3" data-astro-cid-3tbazgeo><h2 id="post-toc-dialog-title" class="font-semibold" data-astro-cid-3tbazgeo>文章目录</h2><span class="text-muted-foreground text-sm tabular-nums" data-reading-progress data-astro-cid-3tbazgeo>0%</span></div><button type="button" class="hover:text-accent rounded p-2" aria-label="关闭文章目录" data-toc-close data-astro-cid-3tbazgeo><svg width="24" height="24" fill="currentColor" class="size-5" viewBox="-13.714 -18.286 411.429 548.571" aria-hidden="true" data-astro-cid-3tbazgeo="true"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3l105.4 105.3c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256z" /></svg></button></div><nav class="toc-scroll min-h-0 flex-1 overflow-y-auto p-3" data-toc-scroll data-astro-cid-3tbazgeo><ul class="space-y-0.5" data-astro-cid-ybm2afka><li data-toc-node="0-前言" data-toc-parent data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-ybm2afka></span><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#0-前言" data-toc-slug="0-前言" data-astro-cid-ybm2afka>0. 前言</a></div></li><li data-toc-node="1-使用-jdbctemplate" data-toc-parent data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><button type="button" class="toc-toggle text-muted-foreground hover:text-accent mt-0.5 flex size-7 shrink-0 items-center justify-center rounded" aria-label="展开或收起目录章节: 1. 使用 JdbcTemplate" aria-controls="post-toc-mobile-1-使用-jdbctemplate" aria-expanded="false" data-toc-toggle="1-使用-jdbctemplate" data-astro-cid-ybm2afka><svg width="24" height="24" fill="currentColor" class="toc-toggle-icon size-4 -rotate-180 transition-transform" viewBox="-80 -128 480 768" aria-hidden="true" data-astro-cid-ybm2afka="true"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z" /></svg></button><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#1-使用-jdbctemplate" data-toc-slug="1-使用-jdbctemplate" data-astro-cid-ybm2afka>1. 使用 JdbcTemplate</a></div><div id="post-toc-mobile-1-使用-jdbctemplate" hidden data-toc-branch="1-使用-jdbctemplate" data-astro-cid-ybm2afka><ul class="space-y-0.5 border-border ms-3 border-s ps-1" data-astro-cid-ybm2afka><li data-toc-node="11-数据库现状" data-toc-parent="1-使用-jdbctemplate" data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-ybm2afka></span><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#11-数据库现状" data-toc-slug="11-数据库现状" data-astro-cid-ybm2afka>1.1 数据库现状</a></div></li><li data-toc-node="12-查询前的准备" data-toc-parent="1-使用-jdbctemplate" data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-ybm2afka></span><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#12-查询前的准备" data-toc-slug="12-查询前的准备" data-astro-cid-ybm2afka>1.2 查询前的准备</a></div></li><li data-toc-node="13-初识-jdbctemplate" data-toc-parent="1-使用-jdbctemplate" data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-ybm2afka></span><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#13-初识-jdbctemplate" data-toc-slug="13-初识-jdbctemplate" data-astro-cid-ybm2afka>1.3 初识 JdbcTemplate</a></div></li><li data-toc-node="14-jdbcclient" data-toc-parent="1-使用-jdbctemplate" data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-ybm2afka></span><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#14-jdbcclient" data-toc-slug="14-jdbcclient" data-astro-cid-ybm2afka>1.4 JdbcClient</a></div></li></ul></div></li><li data-toc-node="2-数据源与连接池" data-toc-parent data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><button type="button" class="toc-toggle text-muted-foreground hover:text-accent mt-0.5 flex size-7 shrink-0 items-center justify-center rounded" aria-label="展开或收起目录章节: 2. 数据源与连接池" aria-controls="post-toc-mobile-2-数据源与连接池" aria-expanded="false" data-toc-toggle="2-数据源与连接池" data-astro-cid-ybm2afka><svg width="24" height="24" fill="currentColor" class="toc-toggle-icon size-4 -rotate-180 transition-transform" viewBox="-80 -128 480 768" aria-hidden="true" data-astro-cid-ybm2afka="true"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z" /></svg></button><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#2-数据源与连接池" data-toc-slug="2-数据源与连接池" data-astro-cid-ybm2afka>2. 数据源与连接池</a></div><div id="post-toc-mobile-2-数据源与连接池" hidden data-toc-branch="2-数据源与连接池" data-astro-cid-ybm2afka><ul class="space-y-0.5 border-border ms-3 border-s ps-1" data-astro-cid-ybm2afka><li data-toc-node="21-获取数据库连接" data-toc-parent="2-数据源与连接池" data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-ybm2afka></span><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#21-获取数据库连接" data-toc-slug="21-获取数据库连接" data-astro-cid-ybm2afka>2.1 获取数据库连接</a></div></li><li data-toc-node="22-释放连接" data-toc-parent="2-数据源与连接池" data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-ybm2afka></span><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#22-释放连接" data-toc-slug="22-释放连接" data-astro-cid-ybm2afka>2.2 释放连接</a></div></li><li data-toc-node="23-调整连接池配置" data-toc-parent="2-数据源与连接池" data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-ybm2afka></span><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#23-调整连接池配置" data-toc-slug="23-调整连接池配置" data-astro-cid-ybm2afka>2.3 调整连接池配置</a></div></li><li data-toc-node="24-集成-druid" data-toc-parent="2-数据源与连接池" data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-ybm2afka></span><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#24-集成-druid" data-toc-slug="24-集成-druid" data-astro-cid-ybm2afka>2.4 集成 Druid</a></div></li></ul></div></li><li data-toc-node="3-事务管理器" data-toc-parent data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><button type="button" class="toc-toggle text-muted-foreground hover:text-accent mt-0.5 flex size-7 shrink-0 items-center justify-center rounded" aria-label="展开或收起目录章节: 3. 事务管理器" aria-controls="post-toc-mobile-3-事务管理器" aria-expanded="false" data-toc-toggle="3-事务管理器" data-astro-cid-ybm2afka><svg width="24" height="24" fill="currentColor" class="toc-toggle-icon size-4 -rotate-180 transition-transform" viewBox="-80 -128 480 768" aria-hidden="true" data-astro-cid-ybm2afka="true"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z" /></svg></button><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#3-事务管理器" data-toc-slug="3-事务管理器" data-astro-cid-ybm2afka>3. 事务管理器</a></div><div id="post-toc-mobile-3-事务管理器" hidden data-toc-branch="3-事务管理器" data-astro-cid-ybm2afka><ul class="space-y-0.5 border-border ms-3 border-s ps-1" data-astro-cid-ybm2afka><li data-toc-node="31-声明式事务管理" data-toc-parent="3-事务管理器" data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-ybm2afka></span><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#31-声明式事务管理" data-toc-slug="31-声明式事务管理" data-astro-cid-ybm2afka>3.1 声明式事务管理</a></div></li><li data-toc-node="32-编程式事务管理" data-toc-parent="3-事务管理器" data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-ybm2afka></span><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#32-编程式事务管理" data-toc-slug="32-编程式事务管理" data-astro-cid-ybm2afka>3.2 编程式事务管理</a></div></li></ul></div></li><li data-toc-node="4-集成-mybatis" data-toc-parent data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><button type="button" class="toc-toggle text-muted-foreground hover:text-accent mt-0.5 flex size-7 shrink-0 items-center justify-center rounded" aria-label="展开或收起目录章节: 4. 集成 MyBatis" aria-controls="post-toc-mobile-4-集成-mybatis" aria-expanded="false" data-toc-toggle="4-集成-mybatis" data-astro-cid-ybm2afka><svg width="24" height="24" fill="currentColor" class="toc-toggle-icon size-4 -rotate-180 transition-transform" viewBox="-80 -128 480 768" aria-hidden="true" data-astro-cid-ybm2afka="true"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z" /></svg></button><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#4-集成-mybatis" data-toc-slug="4-集成-mybatis" data-astro-cid-ybm2afka>4. 集成 MyBatis</a></div><div id="post-toc-mobile-4-集成-mybatis" hidden data-toc-branch="4-集成-mybatis" data-astro-cid-ybm2afka><ul class="space-y-0.5 border-border ms-3 border-s ps-1" data-astro-cid-ybm2afka><li data-toc-node="41-自动配置-mybatis" data-toc-parent="4-集成-mybatis" data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-ybm2afka></span><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#41-自动配置-mybatis" data-toc-slug="41-自动配置-mybatis" data-astro-cid-ybm2afka>4.1 自动配置 MyBatis</a></div></li><li data-toc-node="42-mapper-扫描与配置" data-toc-parent="4-集成-mybatis" data-astro-cid-ybm2afka><div class="flex min-w-0 items-start" data-astro-cid-ybm2afka><span class="block size-7 shrink-0" aria-hidden="true" data-astro-cid-ybm2afka></span><a class="toc-link text-muted-foreground hover:text-accent focus-visible:text-accent min-w-0 flex-1 border-s-2 border-transparent py-1.5 ps-2 pe-2 text-sm leading-5" href="#42-mapper-扫描与配置" data-toc-slug="42-mapper-扫描与配置" data-astro-cid-ybm2afka>4.2 Mapper 扫描与配置</a></div></li></ul></div></li></ul></nav></div></dialog></div><script data-astro-rerun>
+  (() => {
+    function initPostToc() {
+      window.__postTocCleanup?.();
+
+      const tocRoot = document.querySelector("[data-post-toc]");
+
+      if (tocRoot) {
+        const controller = new AbortController();
+        const { signal } = controller;
+        const openButton = tocRoot.querySelector("[data-toc-open]");
+        const closeButton = tocRoot.querySelector("[data-toc-close]");
+        const dialog = tocRoot.querySelector("[data-toc-dialog]");
+        const links = Array.from(tocRoot.querySelectorAll("[data-toc-slug]"));
+        const toggleButtons = Array.from(
+          tocRoot.querySelectorAll("[data-toc-toggle]")
+        );
+        const branches = Array.from(
+          tocRoot.querySelectorAll("[data-toc-branch]")
+        );
+        const nodes = Array.from(tocRoot.querySelectorAll("[data-toc-node]"));
+        const readingProgressElements = Array.from(
+          tocRoot.querySelectorAll("[data-reading-progress]")
+        );
+        const slugs = [...new Set(links.map(link => link.dataset.tocSlug))];
+        const branchSlugs = [
+          ...new Set(toggleButtons.map(button => button.dataset.tocToggle)),
+        ];
+        const parentBySlug = new Map(
+          nodes.map(node => [
+            node.dataset.tocNode,
+            node.dataset.tocParent || "",
+          ])
+        );
+        const headingElements = slugs
+          .map(slug => document.getElementById(slug))
+          .filter(Boolean);
+        let activeSlug = "";
+        let pinnedSlug = "";
+        let updateFrame = 0;
+        let revealFrame = 0;
+        let previousReadingProgress = -1;
+        let closeDialogTimer = 0;
+        let pendingNavigationTimer = 0;
+        const activationOffset = 112;
+
+        function getReadingProgress() {
+          const article = document.getElementById("article");
+          if (!article) return null;
+
+          const articleRect = article.getBoundingClientRect();
+          const readingDistance = articleRect.height - window.innerHeight;
+          return readingDistance <= 0
+            ? articleRect.top <= 0
+              ? 100
+              : 0
+            : Math.min(
+                100,
+                Math.max(
+                  0,
+                  Math.floor((-articleRect.top / readingDistance) * 100)
+                )
+              );
+        }
+
+        function updateReadingProgress(progress) {
+          if (progress === null) return;
+          if (progress === previousReadingProgress) return;
+          previousReadingProgress = progress;
+          for (const element of readingProgressElements) {
+            element.textContent = `${progress}%`;
+          }
+        }
+
+        function finishPendingNavigation() {
+          window.clearTimeout(pendingNavigationTimer);
+          pendingNavigationTimer = 0;
+          requestUpdate();
+        }
+
+        function beginPendingNavigation() {
+          window.clearTimeout(pendingNavigationTimer);
+          pendingNavigationTimer = window.setTimeout(
+            finishPendingNavigation,
+            10000
+          );
+        }
+
+        function setBranchExpanded(slug, expanded) {
+          for (const button of toggleButtons) {
+            if (
+              button.dataset.tocToggle === slug &&
+              button.getAttribute("aria-expanded") !== String(expanded)
+            ) {
+              button.setAttribute("aria-expanded", String(expanded));
+            }
+          }
+          for (const branch of branches) {
+            if (
+              branch.dataset.tocBranch === slug &&
+              branch.hidden === expanded
+            ) {
+              branch.hidden = !expanded;
+            }
+          }
+        }
+
+        function expandActivePath(slug) {
+          const requiredBranches = new Set();
+          let current = slug;
+
+          while (current) {
+            const parent = parentBySlug.get(current);
+            if (!parent) break;
+            requiredBranches.add(parent);
+            current = parent;
+          }
+          if (branchSlugs.includes(slug)) requiredBranches.add(slug);
+
+          for (const branchSlug of branchSlugs) {
+            setBranchExpanded(branchSlug, requiredBranches.has(branchSlug));
+          }
+        }
+
+        function revealLink(link) {
+          const scrollContainer = link.closest("[data-toc-scroll]");
+          if (!scrollContainer || scrollContainer.getClientRects().length === 0)
+            return;
+
+          const containerRect = scrollContainer.getBoundingClientRect();
+          const linkRect = link.getBoundingClientRect();
+          const safeTop = containerRect.top + containerRect.height * 0.2;
+          const safeBottom = containerRect.bottom - containerRect.height * 0.2;
+          let scrollDelta = 0;
+
+          if (linkRect.top < safeTop) {
+            scrollDelta = linkRect.top - safeTop;
+          } else if (linkRect.bottom > safeBottom) {
+            scrollDelta = linkRect.bottom - safeBottom;
+          }
+          if (!scrollDelta) return;
+
+          scrollContainer.scrollTo({
+            top: scrollContainer.scrollTop + scrollDelta,
+            behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
+              .matches
+              ? "auto"
+              : "smooth",
+          });
+        }
+
+        function applyActiveHeading(slug, reveal = true) {
+          if (!slug || slug === activeSlug) return;
+          activeSlug = slug;
+          expandActivePath(slug);
+
+          const activeLinks = [];
+          for (const link of links) {
+            const isActive = link.dataset.tocSlug === slug;
+            link.toggleAttribute("data-active", isActive);
+            if (isActive) {
+              link.setAttribute("aria-current", "location");
+              activeLinks.push(link);
+            } else {
+              link.removeAttribute("aria-current");
+            }
+          }
+
+          if (revealFrame) cancelAnimationFrame(revealFrame);
+          revealFrame = 0;
+          if (reveal) {
+            // Let branch and highlight changes finish layout before measuring links.
+            revealFrame = requestAnimationFrame(() => {
+              revealFrame = 0;
+              activeLinks.forEach(revealLink);
+            });
+          }
+        }
+
+        function findCurrentHeading() {
+          if (pinnedSlug) {
+            const pinned = document.getElementById(pinnedSlug);
+            const pinnedTop = pinned?.getBoundingClientRect().top ?? Infinity;
+
+            if (pinnedTop > -8 && pinnedTop <= activationOffset) {
+              return pinnedSlug;
+            }
+            pinnedSlug = "";
+          }
+          if (headingElements.length === 0) return "";
+          let current = headingElements[0];
+
+          for (const heading of headingElements) {
+            if (heading.getBoundingClientRect().top <= activationOffset) {
+              current = heading;
+            } else {
+              break;
+            }
+          }
+
+          const reachedBottom =
+            window.innerHeight + window.scrollY >=
+            document.documentElement.scrollHeight - 2;
+          return reachedBottom ? headingElements.at(-1)?.id : current.id;
+        }
+
+        function updateToc() {
+          updateFrame = 0;
+          // Read the article and headings before either update changes the DOM.
+          const progress = getReadingProgress();
+          const slug = pendingNavigationTimer ? "" : findCurrentHeading();
+          updateReadingProgress(progress);
+          if (slug) applyActiveHeading(slug);
+        }
+
+        function requestUpdate() {
+          if (updateFrame) return;
+          updateFrame = requestAnimationFrame(updateToc);
+        }
+
+        function openDialog() {
+          if (!dialog || typeof dialog.showModal !== "function" || dialog.open)
+            return;
+          if (closeDialogTimer) {
+            window.clearTimeout(closeDialogTimer);
+            closeDialogTimer = 0;
+          }
+          dialog.showModal();
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              if (dialog.open && !closeDialogTimer) {
+                dialog.setAttribute("data-toc-visible", "");
+              }
+            });
+          });
+          openButton?.setAttribute("aria-expanded", "true");
+          const activeLink = links.find(
+            link => link.dataset.tocSlug === activeSlug && dialog.contains(link)
+          );
+          if (activeLink) requestAnimationFrame(() => revealLink(activeLink));
+        }
+
+        function finishDialogClose() {
+          if (closeDialogTimer) {
+            window.clearTimeout(closeDialogTimer);
+            closeDialogTimer = 0;
+          }
+          if (dialog?.open) dialog.close();
+        }
+
+        function closeDialog() {
+          if (!dialog?.open) return;
+          dialog.removeAttribute("data-toc-visible");
+          if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            finishDialogClose();
+            return;
+          }
+          closeDialogTimer = window.setTimeout(finishDialogClose, 260);
+        }
+
+        const skipLink = tocRoot.querySelector("[data-toc-skip]");
+
+        skipLink?.addEventListener(
+          "click",
+          event => {
+            const article = document.getElementById("article");
+            if (!article) return;
+            event.preventDefault();
+            article.setAttribute("tabindex", "-1");
+            article.addEventListener(
+              "blur",
+              () => article.removeAttribute("tabindex"),
+              { once: true, signal }
+            );
+            article.focus({ preventScroll: true });
+            const headerOffset =
+              document.querySelector("[data-scroll-header]")?.offsetHeight ?? 0;
+            window.scrollTo({
+              top:
+                article.getBoundingClientRect().top +
+                window.scrollY -
+                headerOffset -
+                16,
+              behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
+                .matches
+                ? "auto"
+                : "smooth",
+            });
+          },
+          { signal }
+        );
+
+        openButton?.addEventListener("click", openDialog, { signal });
+        closeButton?.addEventListener("click", closeDialog, { signal });
+        for (const button of toggleButtons) {
+          button.addEventListener(
+            "click",
+            () => {
+              const slug = button.dataset.tocToggle;
+              const expanded = button.getAttribute("aria-expanded") === "true";
+              setBranchExpanded(slug, !expanded);
+            },
+            { signal }
+          );
+        }
+        dialog?.addEventListener(
+          "click",
+          event => {
+            if (event.target === dialog) closeDialog();
+          },
+          { signal }
+        );
+        dialog?.addEventListener(
+          "cancel",
+          event => {
+            event.preventDefault();
+            closeDialog();
+          },
+          { signal }
+        );
+        dialog?.addEventListener(
+          "transitionend",
+          event => {
+            if (
+              event.target === dialog &&
+              event.propertyName === "transform" &&
+              !dialog.hasAttribute("data-toc-visible")
+            ) {
+              finishDialogClose();
+            }
+          },
+          { signal }
+        );
+        dialog?.addEventListener(
+          "close",
+          () => {
+            dialog.removeAttribute("data-toc-visible");
+            if (closeDialogTimer) {
+              window.clearTimeout(closeDialogTimer);
+              closeDialogTimer = 0;
+            }
+            openButton?.setAttribute("aria-expanded", "false");
+          },
+          { signal }
+        );
+
+        for (const link of links) {
+          link.addEventListener(
+            "click",
+            event => {
+              event.preventDefault();
+              const slug = link.dataset.tocSlug;
+              const target = document.getElementById(slug);
+              if (!target) return;
+
+              beginPendingNavigation();
+              // Hold the clicked heading while it sits at the top, otherwise the
+              // scrollspy promotes the next subheading as soon as the scroll ends.
+              pinnedSlug = slug;
+              applyActiveHeading(slug);
+
+              if (dialog?.contains(link)) closeDialog();
+
+              const targetDocumentTop =
+                target.getBoundingClientRect().top + window.scrollY;
+              // This inline script is not transpiled, so it must stay free of TypeScript syntax.
+              const headerOffset =
+                window.scrollY > targetDocumentTop
+                  ? (document.querySelector("[data-scroll-header]")
+                      ?.offsetHeight ?? 0)
+                  : 0;
+              const targetTop = targetDocumentTop - headerOffset - 16;
+              requestAnimationFrame(() => {
+                window.scrollTo({
+                  top: targetTop,
+                  behavior: window.matchMedia(
+                    "(prefers-reduced-motion: reduce)"
+                  ).matches
+                    ? "auto"
+                    : "smooth",
+                });
+              });
+            },
+            { signal }
+          );
+        }
+
+        const observer = new IntersectionObserver(requestUpdate, {
+          rootMargin: `-${activationOffset}px 0px -70% 0px`,
+        });
+        headingElements.forEach(heading => observer.observe(heading));
+        window.addEventListener("hashchange", requestUpdate, {
+          signal,
+        });
+        document.addEventListener("scroll", requestUpdate, {
+          passive: true,
+          signal,
+        });
+        document.addEventListener("scrollend", finishPendingNavigation, {
+          signal,
+        });
+        window.addEventListener("resize", requestUpdate, {
+          signal,
+        });
+        requestUpdate();
+
+        window.__postTocCleanup = () => {
+          observer.disconnect();
+          controller.abort();
+          if (updateFrame) cancelAnimationFrame(updateFrame);
+          if (revealFrame) cancelAnimationFrame(revealFrame);
+          if (closeDialogTimer) window.clearTimeout(closeDialogTimer);
+          if (pendingNavigationTimer) {
+            window.clearTimeout(pendingNavigationTimer);
+          }
+          if (dialog?.open) dialog.close();
+          window.__postTocCleanup = undefined;
+        };
+
+        document.addEventListener(
+          "astro:before-swap",
+          () => window.__postTocCleanup?.(),
+          { once: true, signal }
+        );
+      }
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initPostToc, {
+        once: true,
+      });
+    } else {
+      initPostToc();
+    }
+  })();
+</script><div id="btt-btn-container" data-desktop-placement="sidebar" class="pointer-events-none fixed inset-e-2 bottom-4 z-50 translate-y-14 opacity-0 transition duration-500 motion-reduce:transition-none min-[90rem]:static min-[90rem]:ms-3 min-[90rem]:mt-auto" aria-hidden="true" inert data-astro-cid-nivby3vt><button type="button" data-button="back-to-top" class="group bg-background relative flex items-center justify-center px-2 py-1 border-border ring-background size-10 rounded-full border shadow-lg ring-4 min-[90rem]:h-8 min-[90rem]:w-fit min-[90rem]:rounded-md min-[90rem]:border-transparent min-[90rem]:shadow-none min-[90rem]:focus-visible:rounded-none min-[90rem]:ring-0 min-[90rem]:bg-background/35 min-[90rem]:bg-clip-padding min-[90rem]:backdrop-blur-lg" disabled data-astro-cid-nivby3vt><span id="progress-indicator" class="pointer-events-none absolute inset-0 z-0 block rounded-full bg-transparent min-[90rem]:hidden" data-astro-cid-nivby3vt></span><svg width="24" height="24" fill="currentColor" class="relative z-10 inline-block size-5 shrink-0 rotate-90 min-[90rem]:hidden" viewBox="-70 -80 588 672" data-astro-cid-nivby3vt="true"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.3l105.3-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg><span class="group-hover:text-accent sr-only text-sm min-[90rem]:not-sr-only min-[90rem]:inline-flex min-[90rem]:items-center min-[90rem]:gap-1" data-astro-cid-nivby3vt><svg width="24" height="24" fill="currentColor" class="inline-block size-4" viewBox="-60 -80 504 672" data-astro-cid-nivby3vt="true"><path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.3l105.4 105.3c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z" /></svg>返回顶部</span></button></div><script data-astro-rerun>
+  (() => {
+    window.__backToTopCleanup?.();
+
+    const btnContainer = document.querySelector("#btt-btn-container");
+    const backToTopBtn = document.querySelector("[data-button='back-to-top']");
+    const progressIndicator = document.querySelector("#progress-indicator");
+
+    if (!btnContainer || !backToTopBtn || !progressIndicator) return;
+
+    const controller = new AbortController();
+    const { signal } = controller;
+    let updateFrame = 0;
+    let lastVisible = null;
+
+    function getScrollRoot() {
+      return document.scrollingElement || document.documentElement;
+    }
+
+    function updateProgress(progress) {
+      if (progress >= 100) {
+        progressIndicator.style.backgroundImage = "none";
+        progressIndicator.style.backgroundColor = "var(--accent)";
+        return;
+      }
+
+      progressIndicator.style.backgroundColor = "transparent";
+      progressIndicator.style.backgroundImage =
+        progress <= 0
+          ? "none"
+          : `conic-gradient(var(--accent), var(--accent) ${progress}%, transparent ${progress}%)`;
+    }
+
+    function updateVisibility(isVisible) {
+      if (isVisible === lastVisible) return;
+
+      btnContainer.classList.toggle("pointer-events-none", !isVisible);
+      btnContainer.classList.toggle("opacity-100", isVisible);
+      btnContainer.classList.toggle("translate-y-0", isVisible);
+      btnContainer.classList.toggle("opacity-0", !isVisible);
+      btnContainer.classList.toggle("translate-y-14", !isVisible);
+      btnContainer.toggleAttribute("inert", !isVisible);
+      if (isVisible) {
+        btnContainer.removeAttribute("aria-hidden");
+      } else {
+        btnContainer.setAttribute("aria-hidden", "true");
+      }
+      backToTopBtn.disabled = !isVisible;
+
+      if (!isVisible && document.activeElement === backToTopBtn) {
+        backToTopBtn.blur();
+      }
+
+      lastVisible = isVisible;
+    }
+
+    function update() {
+      updateFrame = 0;
+
+      const rootElement = getScrollRoot();
+      const clientHeight = rootElement.clientHeight;
+      const scrollDistance = Math.max(
+        0,
+        rootElement.scrollHeight - clientHeight
+      );
+      const scrollTop = Math.min(
+        scrollDistance,
+        Math.max(0, rootElement.scrollTop)
+      );
+      const distanceToBottom = scrollDistance - scrollTop;
+      const progress =
+        scrollDistance <= 0
+          ? 0
+          : distanceToBottom <= 2
+            ? 100
+            : Math.min(100, Math.max(0, (scrollTop / scrollDistance) * 100));
+      const isLongEnough = scrollDistance >= 1.5 * clientHeight;
+
+      updateProgress(progress);
+      updateVisibility(isLongEnough && scrollTop > 400);
+    }
+
+    function requestUpdate() {
+      if (updateFrame) return;
+      updateFrame = requestAnimationFrame(update);
+    }
+
+    backToTopBtn.addEventListener(
+      "click",
+      () => {
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          window.scrollTo({ left: 0, top: 0, behavior: "instant" });
+          return;
+        }
+
+        const rootElement = getScrollRoot();
+        rootElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+      },
+      { signal }
+    );
+    document.addEventListener("scroll", requestUpdate, {
+      passive: true,
+      signal,
+    });
+    window.addEventListener("resize", requestUpdate, { signal });
+    window.visualViewport?.addEventListener("resize", requestUpdate, {
+      signal,
+    });
+
+    const resizeObserver = new ResizeObserver(requestUpdate);
+    resizeObserver.observe(document.documentElement);
+    resizeObserver.observe(document.body);
+
+    window.__backToTopCleanup = () => {
+      resizeObserver.disconnect();
+      controller.abort();
+      if (updateFrame) cancelAnimationFrame(updateFrame);
+      window.__backToTopCleanup = undefined;
+    };
+
+    document.addEventListener(
+      "astro:before-swap",
+      () => window.__backToTopCleanup?.(),
+      { once: true, signal }
+    );
+
+    update();
+  })();
+</script></div><article id="article" class="mt-8 w-full app-prose post-content max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)" data-astro-cid-wq7kak54><!-- 封面画师：adsuger&emsp; &emsp;&emsp;&emsp;封面ID：76752964 -->
+<p>本文涉及的代码：<a href="https://github.com/mofan212/springboot-study/tree/master/spring-boot-data" target="_blank" rel="noopener noreferrer">springboot-study/spring-boot-data</a></p>
+<blockquote><p>本文基于 Spring Boot 4.1.x 和 JDK 25</p></blockquote>
+<h2 id="0-前言">0. 前言</h2>
+<p>本文最初写于 2020-06-10，与 <a href="../spring-boot-auto-configuration" target="_blank" rel="noopener noreferrer">Spring Boot 自动配置原理</a> 一样，是我初学 Spring Boot 时按教学视频记录的一份学习笔记。</p>
+<p><a href="../spring-boot-auto-configuration" target="_blank" rel="noopener noreferrer">Spring Boot 自动配置原理</a> 偏向底层原理，这篇更偏向于实操。</p>
+<p>我在翻新这篇文章时，对 Spring Boot 已经有了更深入的了解，难以再从初学者的角度出发，写出「Step by Step」的新手教程，因此文中可能涉及到一些源码解析的内容。对于初学者而言，这部分相对难以理解，建议直接跳过，只关注用法即可。</p>
+<h2 id="1-使用-jdbctemplate">1. 使用 JdbcTemplate</h2>
+<h3 id="11-数据库现状">1.1 数据库现状</h3>
+<p>现在 MySQL 里有一个 <code>boot_study</code> 库，库里有 <code>tb_account</code> 表，表结构如下：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="sql" data-language-name="SQL"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">drop</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> table</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> if</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> exists</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> tb_account;</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">create</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> table</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> tb_account</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> (</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    id </span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">bigint</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> primary key</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    account_name </span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">varchar</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">64</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">) </span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">not null</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    balance </span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">decimal</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">12</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">2</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">) </span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">not null</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    updated_at </span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">timestamp</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> not null</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> default</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> current_timestamp </span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">on update</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> current_timestamp</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">) engine </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> InnoDB;</span></span></code></pre>
+<p>向这个表里添加两条数据：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="sql" data-language-name="SQL"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">insert into</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> tb_account(id, account_name, balance) </span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">values</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    (</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">1</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">'Alice'</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">1000</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">00</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">),</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    (</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">2</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">'Bob'</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">500</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">00</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span></span></code></pre>
+<p>在 Spring Boot 项目里，如何连接数据库，并查询 Alice 账户下的余额呢？</p>
+<h3 id="12-查询前的准备">1.2 查询前的准备</h3>
+<p>先在 <code>pom.xml</code> 里添加 JDBC Starter 和 MySQL 驱动：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">dependency</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    &#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">groupId</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">>org.springframework.boot&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">groupId</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    &#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">artifactId</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">>spring-boot-starter-jdbc&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">artifactId</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">dependency</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">dependency</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    &#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">groupId</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">>com.mysql&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">groupId</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    &#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">artifactId</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">>mysql-connector-j&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">artifactId</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    &#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">scope</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">>runtime&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">scope</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">dependency</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span></code></pre>
+<p>后续在集成测试里验证查询，因此还需要 <code>spring-boot-starter-test</code>：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">dependency</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    &#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">groupId</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">>org.springframework.boot&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">groupId</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    &#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">artifactId</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">>spring-boot-starter-test&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">artifactId</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    &#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">scope</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">>test&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">scope</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">dependency</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span></code></pre>
+<p>在 <code>src/main/resources/application.yaml</code> 配置文件里添加数据库连接信息：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="yaml" data-language-name="YAML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span></span><code><span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">spring</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">:</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">  datasource</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">:</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">    url</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">: </span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">jdbc:mysql://localhost:3306/boot_study</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">    username</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">: </span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">root</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">    password</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">: </span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">123456</span></span></code></pre>
+<h3 id="13-初识-jdbctemplate">1.3 初识 JdbcTemplate</h3>
+<p>在 <code>src/test/java</code> 下创建测试类，包名和主启动类的包名保持一致，使得 <code>@SpringBootTest</code> 能正确找到启动类。</p>
+<p><code>spring-jdbc</code> 提供了 <code>JdbcTemplate</code>，使用它能够非常方便地查询数据库：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span><span class="code-line-number">13</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">SpringBootTest</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">Sql</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">({</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"/schema.sql"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> "/data.sql"</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">})</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">class</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> DatabaseIntegrationTest</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    @</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">Autowired</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    private</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> JdbcTemplate</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> jdbcTemplate</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    @</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">Test</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    void</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> shouldSupportJdbcTemplateWithPositionalParameters</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">()</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
+<span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">        BigDecimal</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> balance</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> =</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B"> jdbcTemplate</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">queryForObject</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span></span>
+<span class="line"><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">                "select balance from tb_account where id = ?"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">BigDecimal</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">class</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">1L</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span></span>
+<span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">        assertThat</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(balance).</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">isEqualByComparingTo</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"1000.00"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
+<p>每个测试方法执行前，<code>@Sql</code> 会先运行 <code>schema.sql</code> 建表，再运行 <code>data.sql</code> 插入 Alice 和 Bob 的记录，保证数据库内的数据一致。</p>
+<p>运行测试方法时：</p>
+<ul>
+<li><code>@SpringBootTest</code> 会加载应用配置</li>
+<li><code>@Autowired</code> 把 Spring 创建的 <code>JdbcTemplate</code> 注入测试类</li>
+</ul>
+<p><code>where id = ?</code> 里的 <code>?</code> 对应最后传入的参数 <code>1L</code>，即数据库里 Alice 账户的 id。</p>
+<p><code>balance</code> 列用 <code>DECIMAL(12, 2)</code> 存金额，传入 <code>BigDecimal.class</code> 按 <code>BigDecimal</code> 读取结果。</p>
+<h3 id="14-jdbcclient">1.4 JdbcClient</h3>
+<p>刚刚只查了一列数据，如果要查一组数据，并用一个对象承载这些数据，可以怎么做呢？</p>
+<p>用 <code>Account</code> 来承载数据：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> record</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> Account</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">long</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> id</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> String</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> accountName</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> BigDecimal</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> balance</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> LocalDateTime</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> updatedAt) </span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">{</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
+<p>定义 <code>JdbcAccountDao</code>，实现 <code>findById()</code>：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span><span class="code-line-number">13</span><span class="code-line-number">14</span><span class="code-line-number">15</span><span class="code-line-number">16</span><span class="code-line-number">17</span><span class="code-line-number">18</span><span class="code-line-number">19</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">Repository</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> class</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> JdbcAccountDao</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    private</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> final</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> JdbcClient</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> jdbcClient</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    public</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> JdbcAccountDao</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">JdbcClient</span><span style="--shiki-light:#383A42;--shiki-light-font-style:inherit;--shiki-dark:#E06C75;--shiki-dark-font-style:italic"> jdbcClient</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">        this</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">jdbcClient</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> =</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> jdbcClient;</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    public</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> Optional</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">Account</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> findById</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">long</span><span style="--shiki-light:#383A42;--shiki-light-font-style:inherit;--shiki-dark:#E06C75;--shiki-dark-font-style:italic"> id</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">        return</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B"> jdbcClient</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">sql</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"""</span></span>
+<span class="line"><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">                        select id, account_name, balance, updated_at </span></span>
+<span class="line"><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">                        from tb_account </span></span>
+<span class="line"><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">                        where id = :id</span></span>
+<span class="line"><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">                        """</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">                .</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">param</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"id"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, id)</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">                .</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">query</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">Account</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">class</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">                .</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">optional</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">();</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
+<p><code>JdbcClient</code> 是在 Spring 6.1 引入的接口，支持 JDBC 样式的位置参数和 Spring 样式的命名参数。</p>
+<p><code>sql()</code> 方法里的 <code>id = :id</code> 表示定义了一个命名参数 <code>:id</code>，并在查询时将其作为 <code>id</code> 列的值。</p>
+<p><code>param("id", id)</code> 表示把传入 <code>findById()</code> 方法的参数 <code>id</code> 绑定到 SQL 里的 <code>:id</code>。</p>
+<p><code>query(Account.class)</code> 则是把查到的结果映射成 <code>Account</code> 对象。</p>
+<blockquote><p>自动配置</p></blockquote>
+<p>之所以能直接在 DAO 里注入 <code>JdbcClient</code>，是因为 Spring Boot 自动配置了它：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">AutoConfiguration</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">after</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> =</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B"> JdbcTemplateAutoConfiguration</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">class</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">ConditionalOnSingleCandidate</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">NamedParameterJdbcTemplate</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">class</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">ConditionalOnMissingBean</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">JdbcClient</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">class</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">Import</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">DatabaseInitializationDependencyConfigurer</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">class</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> final</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> class</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> JdbcClientAutoConfiguration</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    @</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">Bean</span></span>
+<span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">    JdbcClient</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> jdbcClient</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">NamedParameterJdbcTemplate</span><span style="--shiki-light:#383A42;--shiki-light-font-style:inherit;--shiki-dark:#E06C75;--shiki-dark-font-style:italic"> jdbcTemplate</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">        return</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B"> JdbcClient</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">create</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(jdbcTemplate);</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
+<p><code>@ConditionalOnSingleCandidate</code> 注解的作用是：</p>
+<ul>
+<li>Spring 容器里只有唯一一个指定类型的 Bean 时，相关配置才生效</li>
+<li>如果容器里有多个类型相同的 Bean，但有一个标记了 <code>@Primary</code>，配置也能生效</li>
+</ul>
+<p>因此，在这里的含义是：</p>
+<ul>
+<li>Spring 容器能唯一选定一个 <code>NamedParameterJdbcTemplate</code> 类型的 Bean 时，当前自动配置才生效</li>
+</ul>
+<p><code>NamedParameterJdbcTemplate</code> 由 <code>JdbcTemplateAutoConfiguration</code> 提供。</p>
+<blockquote><p>结果映射</p></blockquote>
+<p><code>Account</code> 类中的字段名叫 <code>accountName</code> 和 <code>updatedAt</code>，数据库列名却叫 <code>account_name</code> 和 <code>updated_at</code>，Spring JDBC 支持在结果映射时，将下划线命名的数据库列名映射到小驼峰命名的 Java 字段上。</p>
+<blockquote><p>返回结果数量约定</p></blockquote>
+<p>在前面的例子里，如果去掉 <code>where id = :id</code> 条件，那么就是扫描 <code>tb_account</code> 全表，此时会查出 Alice 和 Bob 两条数据，再调用 <code>optional()</code> 方法就会抛出异常，因为这个方法要求最多只能返回一条数据。</p>
+<p>如果要返回多条数据，可以使用 <code>list()</code> 方法。</p>
+<p>与 <code>optional()</code> 类似的还有 <code>single()</code> 方法，它们之间的区别是对没有查询出结果的处理：</p>
+<ul>
+<li><code>optional()</code>：返回 <code>Optional.empty()</code></li>
+<li><code>single()</code>：抛出 <code>EmptyResultDataAccessException</code></li>
+</ul>
+<h2 id="2-数据源与连接池">2. 数据源与连接池</h2>
+<h3 id="21-获取数据库连接">2.1 获取数据库连接</h3>
+<p>使用 JDBC 操作数据库的基本流程是：</p>
+<ol>
+<li>引入 JDBC 驱动</li>
+<li>获取数据库连接</li>
+<li>准备 SQL 并绑定参数</li>
+<li>执行 SQL 并处理结果</li>
+<li>释放资源</li>
+</ol>
+<p>上一节中，在 Maven 里引入了 JDBC 驱动，在配置文件里添加了连接数据库的必要信息，但后续使用时没有先获取数据库连接对象 <code>java.sql.Connection</code>，最后也没有释放资源。</p>
+<p>那 <code>JdbcTemplate</code> 用的数据库连接是哪里来的？</p>
+<p>前面提到的 <code>JdbcTemplateAutoConfiguration</code> 会导入 <code>JdbcTemplateConfiguration</code>，在这个配置类里，有个 <code>@Bean</code> 方法，就是通过这个方法创建了 <code>JdbcTemplate</code>：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">Bean</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">Primary</span></span>
+<span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">JdbcTemplate</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> jdbcTemplate</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">DataSource</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> dataSource</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> JdbcProperties</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> properties</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span></span>
+<span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">		ObjectProvider</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">&#x3C;</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">SQLExceptionTranslator</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">></span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> sqlExceptionTranslator) {</span></span>
+<span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">	JdbcTemplate</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> jdbcTemplate </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> new</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> JdbcTemplate</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(dataSource)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">	// --snip--</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">	return</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> jdbcTemplate</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span></code></pre>
+<p>可以看到，在创建 <code>JdbcTemplate</code> 时，传入了 <code>DataSource</code> 对象。</p>
+<p><code>DataSource</code> 作为 <code>@Bean</code> 方法的参数，这表示将 Spring 容器里的 <code>DataSource</code> 类型的 Bean 作为参数传入这个方法。</p>
+<p>那么问题又来了，容器里的 <code>DataSource</code> 又是怎么来的呢？</p>
+<blockquote><p>配置绑定</p></blockquote>
+<p>配置文件 <code>application.yaml</code> 中的数据库连接信息被绑定到 <code>DataSourceProperties</code>。</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">ConfigurationProperties</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"spring.datasource"</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> class</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> DataSourceProperties</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> implements</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> BeanClassLoaderAware</span><span style="--shiki-light:#C18401;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> InitializingBean</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">	private</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> @</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">Nullable</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> String</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> url</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">	private</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> @</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">Nullable</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> String</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> username</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">	private</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> @</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">Nullable</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> String</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> password</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">	</span></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">	// --snip--</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
+<p><code>DataSourceProperties</code> 则是由 <code>DataSourceAutoConfiguration</code> 通过 <code>@EnableConfigurationProperties</code> 注解将其注册到容器里：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">EnableConfigurationProperties</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">DataSourceProperties</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">class</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> final</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> class</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> DataSourceAutoConfiguration</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">  // --snip--</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
+<blockquote><p>创建数据源</p></blockquote>
+<p>配置信息已经进入 Spring 容器，那怎么根据这份信息创建数据源呢？</p>
+<p>还是在 <code>DataSourceAutoConfiguration</code> 中，内部有个 <code>PooledDataSourceConfiguration</code>，它使用 <code>@Import</code> 注解导入了 <code>DataSourceConfiguration.Hikari.class</code>。</p>
+<p><code>Hikari</code> 是 <code>DataSourceConfiguration</code> 中嵌套的一个配置类：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">Configuration</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">proxyBeanMethods</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> =</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> false</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">ConditionalOnClass</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">HikariDataSource</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">class</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">ConditionalOnMissingBean</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">DataSource</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">class</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">ConditionalOnProperty</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">name</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> =</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> "spring.datasource.type"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> havingValue</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> =</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> "com.zaxxer.hikari.HikariDataSource"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span></span>
+<span class="line"><span style="--shiki-light:#986801;--shiki-dark:#D19A66">		matchIfMissing</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> =</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> true</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">static</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> class</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> Hikari</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">  // --snip--</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> </span></span></code></pre>
+<p>由于：</p>
+<ul>
+<li><code>spring-boot-starter-jdbc</code> 默认引入 HikariCP，所以应用能成功加载 <code>HikariDataSource</code> 类</li>
+<li>没有指定自定义数据源，容器里不存在 <code>DataSource</code> 类型的 Bean</li>
+<li>配置文件里没有指定数据源的类型</li>
+</ul>
+<p>因此，<code>Hikari</code> 配置类的条件成立。</p>
+<p>它里面有个名为 <code>dataSource()</code> 的 <code>@Bean</code> 方法：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">Bean</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">ConfigurationProperties</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"spring.datasource.hikari"</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span></span>
+<span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">HikariDataSource</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> dataSource</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">DataSourceProperties</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> properties</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> JdbcConnectionDetails</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> connectionDetails</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span></span>
+<span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">       Environment</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> environment) {</span></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">    // --snip--</span></span>
+<span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">    HikariDataSource</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> dataSource </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> createDataSource</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(connectionDetails</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B"> HikariDataSource</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">class</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">          properties</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">getClassLoader</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(),</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> dataSourceClassName </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">==</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> null</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">    // --snip--</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    return</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> dataSource</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span></code></pre>
+<p><code>HikariDataSource</code> 实现了 <code>javax.sql.DataSource</code>，Spring Boot 默认情况下就是使用这个方法创建出 Hikari 数据源。</p>
+<p>一点一点来。</p>
+<p>先看 <code>dataSource()</code> 方法的参数，<code>DataSourceProperties</code> 和 <code>Environment</code> 在 Spring 容器里很好理解，那 <code>JdbcConnectionDetails</code> 又是怎么来的呢？</p>
+<p>又回到 <code>DataSourceAutoConfiguration</code> 的内部类 <code>PooledDataSourceConfiguration</code>，刚刚看了它导入 <code>Hikari</code>，它里面还有个 <code>@Bean</code> 方法：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">Bean</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">ConditionalOnMissingBean</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">JdbcConnectionDetails</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">class</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span></span>
+<span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">PropertiesJdbcConnectionDetails</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> jdbcConnectionDetails</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">DataSourceProperties</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> properties) {</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    return</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> new</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> PropertiesJdbcConnectionDetails</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(properties)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span></code></pre>
+<p>默认情况下，容器里没有 <code>JdbcConnectionDetails</code> 类型的 Bean，条件成立，使用绑定了数据库连接信息的 <code>DataSourceProperties</code> 创建 <code>PropertiesJdbcConnectionDetails</code> 类型的 Bean，这个类型是 <code>JdbcConnectionDetails</code> 的实现类。</p>
+<p>继续 <code>dataSource()</code> 方法，它内部调用了 <code>createDataSource()</code> 方法，通过 <code>DataSourceBuilder</code> 来创建数据源，关键是：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span></span><code><span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">builder</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">url</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">connectionDetails</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">getJdbcUrl</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">())</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    .</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">username</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">connectionDetails</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">getUsername</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">())</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    .</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">password</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">connectionDetails</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">getPassword</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">())</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    .</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">build</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">();</span></span></code></pre>
+<p>到此，数据源就创建好了。</p>
+<blockquote><p>获取与释放连接</p></blockquote>
+<p>回到最开始的 <code>JdbcTemplate#queryForObject()</code>，简化调用链路，主要流程是：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="text"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span></span><code><span class="line"><span>JdbcTemplate.queryForObject()</span></span>
+<span class="line"><span>  └─ JdbcTemplate.query()</span></span>
+<span class="line"><span>      └─ JdbcTemplate.execute()</span></span>
+<span class="line"><span>          └─ DataSourceUtils.getConnection()</span></span></code></pre>
+<p>使用 <code>DataSourceUtils.getConnection()</code> 方法，通过创建 <code>JdbcTemplate</code> 传入的 <code>dataSource</code> 对象，在执行查询语句前获取到数据库连接。</p>
+<p>查询回调完成前，使用 <code>JdbcUtils.closeResultSet()</code> 关闭 <code>ResultSet</code>。</p>
+<p>查询回调完成后，使用：</p>
+<ul>
+<li><code>JdbcUtils.closeStatement()</code> 清理 <code>PreparedStatement</code></li>
+<li><code>DataSourceUtils.releaseConnection()</code> 释放连接</li>
+</ul>
+<p>这一整套流程其实就是对 JDBC 的二次封装，让框架使用者只关心书写 SQL，不再关注业务之外的获取连接、释放连接的样板代码。</p>
+<h3 id="22-释放连接">2.2 释放连接</h3>
+<p>介绍释放前，先看下是怎么获取到连接的。以未开启事务的查询为例，从上节说到的 <code>DataSourceUtils.getConnection()</code> 出发，大致调用流程是：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="text"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span></span><code><span class="line"><span>DataSourceUtils.getConnection(dataSource)</span></span>
+<span class="line"><span>  └─ DataSourceUtils.doGetConnection(dataSource)</span></span>
+<span class="line"><span>      └─ DataSourceUtils.fetchConnection(dataSource)</span></span>
+<span class="line"><span>          └─ HikariDataSource.getConnection()</span></span>
+<span class="line"><span>              └─ HikariPool.getConnection()</span></span>
+<span class="line"><span>                  └─ PoolEntry.createProxyConnection(...)</span></span>
+<span class="line"><span>                      └─ ProxyFactory.getProxyConnection(...)</span></span>
+<span class="line"><span>                          └─ new HikariProxyConnection(...)</span></span></code></pre>
+<p>如果在 IDE 里查看 <code>ProxyFactory.getProxyConnection()</code> 方法的源码，会发现它抛出了一个 <code>IllegalStateException</code> 异常，这是什么情况？那 <code>HikariProxyConnection</code> 对象是怎么创建的呢？</p>
+<p>在这个方法体里有一句注释：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span></span><code><span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">// Body is replaced (injected) by JavassistProxyFactory</span></span></code></pre>
+<p>意思是，方法体会被 <code>JavassistProxyFactory</code> 替换。</p>
+<p>先插播一个 Maven 相关的知识，<strong>一个 Maven 库可以同时提供主 JAR 和源 JAR</strong>。</p>
+<p>以普通 Java 库为例，执行 <code>mvn install</code> 时，Maven 会在 <code>compile</code> 阶段将 <code>.java</code> 编译成 <code>.class</code>，在 <code>package</code> 阶段将 <code>.class</code> 和资源打进主 JAR，再在 <code>install</code> 阶段把主 JAR 和 POM 安装到本地 Maven 仓库，供其他项目依赖。默认的构建流程只会生成主 JAR。</p>
+<p>如果配置了 Maven Source Plugin，在构建时打包 <code>.java</code> 文件并把源码 JAR 作为附加构建产物，那么执行 <code>mvn install</code> 时还会把 <code>-sources.jar</code> 也装进本地仓库。库作者发布这两个包后，使用者的 IDE 可以下载并关联源码包。点进依赖库中的类时，IDE 展示的是源码包里的 <code>.java</code> 文件。如果找不到对应版本的源码，IDE 才会反编译主 JAR 里的 <code>.class</code> 来展示。</p>
+<p>HikariCP 应用了上述构建方式。在构建时，先在 <code>compile</code> 阶段编译带 <code>throw</code> 的 <code>ProxyFactory.java</code>，然后运行 <code>JavassistProxyFactory</code> 生成代理类并改写 <code>ProxyFactory.class</code> 中的 <code>getProxyConnection()</code> 方法。</p>
+<p>所以，程序运行使用的是主 JAR <code>HikariCP.jar</code> 改写后的 <code>.class</code>，而在 IDE 里查看的源码 JAR <code>HikariCP-sources.jar</code>，那里面还是原来的 <code>.java</code>。</p>
+<p>改写 <code>getProxyConnection()</code> 方法时会使用到 <code>com.zaxxer.hikari.util.JavassistProxyFactory#modifyProxyFactory()</code> 方法，它里面有一句：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">case</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> "getProxyConnection"</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">:</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">    method</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">setBody</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"{return new "</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> +</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> packageName </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">+</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> ".HikariProxyConnection($$);}"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">);</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    break</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span></code></pre>
+<p>可以看到，获取到的连接对象是 <code>HikariProxyConnection</code> 对象。</p>
+<p>简单来说，获取连接就是：</p>
+<ul>
+<li>Hikari 从连接池中借出一个持有物理连接的 <code>PoolEntry</code>，再为这次借用创建 <code>HikariProxyConnection</code>，返回给调用方。</li>
+</ul>
+<p>回到主线，看下释放连接做了些什么。从 <code>DataSourceUtils.releaseConnection()</code> 触发，大致调用流程是：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="text"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span></span><code><span class="line"><span>DataSourceUtils.releaseConnection(con, dataSource)</span></span>
+<span class="line"><span>  └─ DataSourceUtils.doReleaseConnection(...)</span></span>
+<span class="line"><span>      └─ DataSourceUtils.doCloseConnection(...)</span></span>
+<span class="line"><span>          └─ con.close()</span></span>
+<span class="line"><span>              └─ ProxyConnection.close()</span></span>
+<span class="line"><span>                  └─ PoolEntry.recycle()</span></span>
+<span class="line"><span>                      └─ HikariPool.recycle()</span></span>
+<span class="line"><span>                          └─ connectionBag.requite(poolEntry)</span></span></code></pre>
+<p>HikariProxyConnection 继承了 ProxyConnection，完整的释放逻辑在父类的 <code>close()</code> 方法里。</p>
+<p><code>ProxyConnection#close()</code> 在最后的 <code>finally</code> 语句里执行：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">finally</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> {</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">    delegate </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B"> ClosedConnection</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">CLOSED_CONNECTION</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">    poolEntry</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">recycle</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">();</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span></code></pre>
+<p><code>delegate</code> 原本保存底层物理连接，但这里并没有真正关闭连接，而是将它指向一个标记对象，表示当前借出的连接已经关闭，不能再用它执行 SQL，真实物理连接仍被 <code>PoolEntry</code> 持有。</p>
+<p>再看 <code>poolEntry.recycle()</code>，它会调用 <code>HikariPool#recycle()</code>：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span></span><code><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">void</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> recycle</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">final</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> PoolEntry</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> poolEntry)</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">{</span></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">   // --snip--</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">   if</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> (</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">poolEntry</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">isMarkedEvicted</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">()</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">) {</span></span>
+<span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">      closeConnection</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(poolEntry</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> EVICTED_CONNECTION_MESSAGE)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">   } </span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">else</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> {</span></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">      // --snip--</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">      connectionBag</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">requite</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(poolEntry);</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">   }</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span></code></pre>
+<p><code>poolEntry.isMarkedEvicted()</code> 判断通过时，Hikari 会真正地关闭物理连接。否则执行 <code>requite()</code> 归还连接，供后续请求使用。</p>
+<p>所以，调用 <code>Connection.close()</code> 后并不意味着真的与 MySQL 断开连接。建立物理连接的开销巨大，使用连接池可以保留已经建立的连接，减少反复创建连接的开销。</p>
+<p>不过，连接在用完之后仍要及时归还，否则当连接池里的连接都被占用时，后续请求就只能等待。</p>
+<h3 id="23-调整连接池配置">2.3 调整连接池配置</h3>
+<p>可以通过 <code>spring.datasource.hikari</code> 来调整 Hikari 连接池的配置，比如池的大小、空闲连接数、等待时间：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="yaml" data-language-name="YAML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span></span><code><span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">spring</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">:</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">  datasource</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">:</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">    hikari</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">:</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">      maximum-pool-size</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">: </span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">4</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">      minimum-idle</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">: </span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">1</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">      connection-timeout</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">: </span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">1000</span></span></code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="table-scroll" tabindex="0" role="region" aria-label="可横向滚动的表格"><table><thead><tr><th align="center"><code>spring.datasource.hikari</code> 下的配置</th><th align="center">示例值</th><th align="center">含义</th></tr></thead><tbody><tr><td align="center"><code>maximum-pool-size</code></td><td align="center">4</td><td align="center">池中最多有 4 条连接，包括空闲和已借出的</td></tr><tr><td align="center"><code>minimum-idle</code></td><td align="center">1</td><td align="center">池尽量保留 1 条空闲连接，连接总数仍受上限约束</td></tr><tr><td align="center"><code>connection-timeout</code></td><td align="center">1000</td><td align="center">调用 <code>getConnection()</code> 等待可用连接的上限，单位为毫秒</td></tr></tbody></table></div>
+<p>如果 4 条连接都被使用，下次获取连接时就要等待。期间有连接归还，就可以继续使用，否则在超过配置的等待时间后抛出异常。</p>
+<h3 id="24-集成-druid">2.4 集成 Druid</h3>
+<p>添加适配了 Spring Boot 4 的 Druid 依赖：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">dependency</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    &#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">groupId</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">>com.alibaba&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">groupId</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    &#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">artifactId</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">>druid-spring-boot-4-starter&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">artifactId</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    &#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">version</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">>1.2.28&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">version</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">dependency</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span></code></pre>
+<p>在配置文件中使用 <code>spring.datasource.druid</code> 前缀对其进行配置：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="yaml" data-language-name="YAML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span></span><code><span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">spring</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">:</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">  datasource</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">:</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">    druid</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">:</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">      initial-size</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">: </span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">1</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">      min-idle</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">: </span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">1</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">      max-active</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">: </span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">4</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">      max-wait</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">: </span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">1000</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">      filter</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">:</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">        stat</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">:</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">          enabled</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">: </span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">true</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">          slow-sql-millis</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">: </span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">500</span></span></code></pre>
+<p>其中：</p>
+<ul>
+<li><code>initial-size</code> 为初始连接数</li>
+<li><code>min-idle</code> 为最小空闲连接数</li>
+<li><code>max-active</code> 为最大连接数</li>
+<li><code>max-wait</code> 为获取连接的最大等待时间，单位为毫秒</li>
+<li><code>stat</code> 下的配置启用 Druid 自己的 <code>StatFilter</code>，并将慢 SQL 的判断阈值设为 500 毫秒</li>
+</ul>
+<h2 id="3-事务管理器">3. 事务管理器</h2>
+<p>一次业务调用往往涉及到多条 SQL 的执行。以转账为例，在入账失败时，应该撤销已经完成的扣款，这些操作必须放在同一个数据库事务里。</p>
+<p>Spring 通过事务管理器控制事务。</p>
+<p>在没有自定义 <code>TransactionManager</code> 类型的 Bean 的情况下，Spring Boot 会通过 <code>DataSourceTransactionManagerAutoConfiguration</code> 中的 <code>JdbcTransactionManagerConfiguration</code> 创建它。</p>
+<p>这份配置要求容器中能够选定一个 DataSource，并且还没有 <code>TransactionManager</code> Bean。其 <code>createTransactionManager()</code> 方法根据配置选择具体实现：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">Bean</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">ConditionalOnMissingBean</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">TransactionManager</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">class</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span></span>
+<span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">DataSourceTransactionManager</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> transactionManager</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">...</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">) {</span></span>
+<span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">    DataSourceTransactionManager</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75"> transactionManager </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> createTransactionManager</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(environment</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> dataSource)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">    // --snip--</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    return</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> transactionManager</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">private</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> DataSourceTransactionManager</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> createTransactionManager</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">Environment</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> environment</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> DataSource</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> dataSource) {</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    return</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B"> environment</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">getProperty</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"spring.dao.exceptiontranslation.enabled"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">Boolean</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">class</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, </span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">Boolean</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">TRUE</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">          ?</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> new</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> JdbcTransactionManager</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(dataSource) </span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">:</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> new</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> DataSourceTransactionManager</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(dataSource)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">;</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span></code></pre>
+<p>默认情况下，<code>spring.dao.exceptiontranslation.enabled</code> 为 <code>true</code>，创建 <code>JdbcTransactionManager</code> 类型的 Bean，它继承了 <code>DataSourceTransactionManager</code>。</p>
+<h3 id="31-声明式事务管理">3.1 声明式事务管理</h3>
+<p>声明式事务管理由 <code>@Transactional</code> 注解实现。</p>
+<p>Spring Boot 通过 <code>TransactionAutoConfiguration</code> 里的 <code>EnableTransactionManagementConfiguration</code> 启用注解事务管理：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span><span class="code-line-number">10</span><span class="code-line-number">11</span><span class="code-line-number">12</span><span class="code-line-number">13</span><span class="code-line-number">14</span><span class="code-line-number">15</span><span class="code-line-number">16</span><span class="code-line-number">17</span><span class="code-line-number">18</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">Configuration</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">proxyBeanMethods</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> =</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> false</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">ConditionalOnBean</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">TransactionManager</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">class</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">ConditionalOnMissingBean</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">AbstractTransactionManagementConfiguration</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">class</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">static</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> class</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> EnableTransactionManagementConfiguration</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    @</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">Configuration</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">proxyBeanMethods</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> =</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> false</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    @</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">EnableTransactionManagement</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">proxyTargetClass</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> =</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> false</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    @</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">ConditionalOnBooleanProperty</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">name</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> =</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> "spring.aop.proxy-target-class"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> havingValue</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> =</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> false</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    static</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> class</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> JdkDynamicAutoProxyConfiguration</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    @</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">Configuration</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">proxyBeanMethods</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> =</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> false</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    @</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">EnableTransactionManagement</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">proxyTargetClass</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> =</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> true</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    @</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">ConditionalOnBooleanProperty</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">name</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> =</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> "spring.aop.proxy-target-class"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> matchIfMissing</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> =</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> true</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">    static</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> class</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> CglibAutoProxyConfiguration</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
+<p>容器里已经有 <code>TransactionManager</code> 类型的 Bean，并且没有 <code>AbstractTransactionManagementConfiguration</code> 类型的 Bean（没有自行启用注解事务管理）时，<code>EnableTransactionManagementConfiguration</code> 生效。</p>
+<p>内部有两个类 <code>JdkDynamicAutoProxyConfiguration</code> 和 <code>CglibAutoProxyConfiguration</code>，它们区别不大，都会启用以 <code>@Transactional</code> 实现的声明式事务管理。</p>
+<p>区别在 <code>@EnableTransactionManagement</code> 注解的 <code>proxyTargetClass</code> 属性上，这个属性控制的是创建代理的方式，是 JDK 的动态代理，还是 CGLib 动态代理。</p>
+<p>至于 <code>@EnableTransactionManagement</code> 是如何启用声明式事务管理，以及 <code>@Transactional</code> 是如何工作的，这里不再展开。</p>
+<h3 id="32-编程式事务管理">3.2 编程式事务管理</h3>
+<p>使用 <code>TransactionTemplate</code> 实现编程式事务，它也是在 <code>TransactionAutoConfiguration</code> 配置类里创建：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span><span class="code-line-number">6</span><span class="code-line-number">7</span><span class="code-line-number">8</span><span class="code-line-number">9</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">Configuration</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">proxyBeanMethods</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> =</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> false</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">ConditionalOnSingleCandidate</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">PlatformTransactionManager</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">class</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">static</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> class</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> TransactionTemplateConfiguration</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    @</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">Bean</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    @</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">ConditionalOnMissingBean</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">TransactionOperations</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">class</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span></span>
+<span class="line"><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">    TransactionTemplate</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> transactionTemplate</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">PlatformTransactionManager</span><span style="--shiki-light:#383A42;--shiki-light-font-style:inherit;--shiki-dark:#E06C75;--shiki-dark-font-style:italic"> transactionManager</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">        return</span><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD"> new</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> TransactionTemplate</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(transactionManager);</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    }</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
+<p>容器中能够选定一个 <code>PlatformTransactionManager</code>，且还没有 <code>TransactionOperations</code> 类型（<code>TransactionTemplate</code> 实现了 <code>TransactionOperations</code>）的 Bean 时，Spring Boot 就会基于这个事务管理器创建 <code>TransactionTemplate</code>。</p>
+<h2 id="4-集成-mybatis">4. 集成 MyBatis</h2>
+<h3 id="41-自动配置-mybatis">4.1 自动配置 MyBatis</h3>
+<p>引入依赖：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="xml" data-language-name="XML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">dependency</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    &#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">groupId</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">>org.mybatis.spring.boot&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">groupId</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    &#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">artifactId</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">>mybatis-spring-boot-starter&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">artifactId</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    &#x3C;</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">version</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">>${mybatis.version}&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">version</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">&#x3C;/</span><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">dependency</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">></span></span></code></pre>
+<p>MyBatis 的自动配置由 <code>MybatisAutoConfiguration</code> 完成，该类上的条件和绑定的配置有：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">ConditionalOnClass</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">({ </span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">SqlSessionFactory</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">class</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B"> SqlSessionFactoryBean</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">class</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> })</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">ConditionalOnSingleCandidate</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">DataSource</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">class</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">EnableConfigurationProperties</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">MybatisProperties</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">.</span><span style="--shiki-light:#E45649;--shiki-dark:#E5C07B">class</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">)</span></span></code></pre>
+<p>它内部还有一个名为 <code>sqlSessionFactory()</code> 的 <code>@Bean</code> 方法：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="java" data-language-name="Java"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span><span class="code-line-number">3</span><span class="code-line-number">4</span><span class="code-line-number">5</span></span><code><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">Bean</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">@</span><span style="--shiki-light:#A626A4;--shiki-dark:#E5C07B">ConditionalOnMissingBean</span></span>
+<span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">public</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B"> SqlSessionFactory</span><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF"> sqlSessionFactory</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">(</span><span style="--shiki-light:#C18401;--shiki-dark:#E5C07B">DataSource</span><span style="--shiki-light:#383A42;--shiki-dark:#E06C75"> dataSource) throws Exception {</span></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">  // --snip--</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#E06C75">}</span></span></code></pre>
+<p>使用容器里已经存在的 <code>DataSource</code> 创建 <code>SqlSessionFactory</code> 类型的 Bean，因此既不需要手动创建 <code>SqlSessionFactory</code>，也不需要再额外配置一套数据库连接信息。</p>
+<h3 id="42-mapper-扫描与配置">4.2 Mapper 扫描与配置</h3>
+<p>引入 MyBatis 的 Starter 后，在没有自定义 Mapper 扫描配置时，会扫描主启动类所在包及其子包里带有 <code>@Mapper</code> 注解的接口，并注册 Mapper 代理，后续就可以在业务类里注入 Mapper 接口。</p>
+<p>如果 Mapper 放在了其他包，可以使用 <code>mybatis-spring</code> 提供的 <code>@MapperScan</code> 注解指定扫描范围。</p>
+<p>Mapper 接口能被扫描到了，还要在配置文件里指定 SQL 映射文件的存放位置：</p>
+<pre class="astro-code astro-code-themes one-light one-dark-pro" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="yaml" data-language-name="YAML"><span aria-hidden="true" class="code-line-numbers"><span class="code-line-number">1</span><span class="code-line-number">2</span></span><code><span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">mybatis</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">:</span></span>
+<span class="line"><span style="--shiki-light:#E45649;--shiki-dark:#E06C75">  mapper-locations</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">: </span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">classpath:/mapper/*.xml</span></span></code></pre></article><div class="text-muted-foreground max-w-app mt-12 w-full space-y-3 text-sm" data-astro-cid-wq7kak54><aside data-post-copyright data-pagefind-ignore aria-label="版权声明" class="w-full px-2 text-center leading-6 sm:px-0"><p class="m-0 break-words">本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="focus-outline text-accent underline-offset-4 hover:underline">CC BY-NC-SA 4.0</a><span> 许可协议，</span><span class="max-sm:block">转载时请署名并注明<a href="https://mofan212.github.io/posts/spring-boot-database/" class="focus-outline text-accent underline-offset-4 hover:underline">出处</a></span></p></aside><section data-post-reward data-pagefind-ignore class="w-full" aria-label="赞赏"><div class="flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:flex-wrap sm:gap-x-1.5 sm:gap-y-2"><span class="sm:whitespace-nowrap">如果这篇文章对你有帮助，可以通过</span><a href="/reward/" class="focus-outline border-accent text-accent hover:bg-accent/10 active:bg-accent/10 inline-block rounded-md border px-3 py-1 font-medium transition-colors">赞赏</a><span class="sm:whitespace-nowrap">请我喝杯 Coffee</span></div></section></div><hr class="my-8 border-solid" data-astro-cid-wq7kak54><div class="max-w-app w-full sm:flex sm:items-start sm:justify-between sm:gap-8" data-astro-cid-wq7kak54><div class="mb-4 flex items-start justify-between gap-4 max-sm:justify-center sm:mb-0" data-astro-cid-wq7kak54><ul id="post-tags" class="text-muted-foreground flex flex-wrap gap-4 text-sm" data-astro-cid-wq7kak54><li><a data-astro-transition-scope="astro-bztu2lml-1" href="/tags/spring-boot/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-translate-y-0.5 focus-visible:text-accent focus-visible:border-none text-sm"><svg width="24" height="24" fill="currentColor" class="opacity-80 size-4" viewBox="-37.333 -42.667 522.667 597.333"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8l-9.8 58.8h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8l-9.7 58.8H416c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-21.3 128H384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-68.9l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7h-95.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.6-58.9H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zm5.8 159.6-21.3 128h95.1l21.3-128z" /></svg>Spring Boot</a></li></ul></div><div data-share-root data-share-url="https://mofan212.github.io/posts/spring-boot-database/" data-share-copied="链接已复制" data-share-copy-failed="复制失败，请手动复制地址栏" class="flex flex-none flex-col items-center justify-center gap-1 sm:items-end"><span data-share-status aria-live="polite">分享文章：</span><div class="flex items-center text-center"><div class="relative"><button type="button" data-share-wechat aria-expanded="false" aria-controls="share-wechat-qr" title="微信扫码分享" class="group hover:text-accent inline-flex scale-90 items-center gap-1 p-2 hover:rotate-6 sm:p-1"><svg width="24" height="24" fill="currentColor" class="inline-block size-6 scale-125 opacity-90 sm:scale-110" viewBox="-57.6 -51.2 691.2 614.4"><path d="M385.2 167.6c6.4 0 12.6.3 18.8 1.1C387.4 90.3 303.3 32 207.7 32 100.5 32 13 104.8 13 197.4c0 53.4 29.3 97.5 77.9 131.6l-19.3 58.6 68-34.1c24.4 4.8 43.8 9.7 68.2 9.7 6.2 0 12.1-.3 18.3-.8-4-12.9-6.2-26.6-6.2-40.8-.1-84.9 72.9-154 165.3-154m-104.5-52.9c14.5 0 24.2 9.7 24.2 24.4 0 14.5-9.7 24.2-24.2 24.2-14.8 0-29.3-9.7-29.3-24.2.1-14.7 14.6-24.4 29.3-24.4m-136.4 48.6c-14.5 0-29.3-9.7-29.3-24.2 0-14.8 14.8-24.4 29.3-24.4 14.8 0 24.4 9.7 24.4 24.4 0 14.6-9.6 24.2-24.4 24.2M563 319.4c0-77.9-77.9-141.3-165.4-141.3-92.7 0-165.4 63.4-165.4 141.3S305 460.7 397.6 460.7c19.3 0 38.9-5.1 58.6-9.9l53.4 29.3-14.8-48.6C534 402.1 563 363.2 563 319.4m-219.1-24.5c-9.7 0-19.3-9.7-19.3-19.6 0-9.7 9.7-19.3 19.3-19.3 14.8 0 24.4 9.7 24.4 19.3 0 10-9.7 19.6-24.4 19.6m107.1 0c-9.7 0-19.3-9.7-19.3-19.6 0-9.7 9.7-19.3 19.3-19.3 14.5 0 24.4 9.7 24.4 19.3.1 10-9.9 19.6-24.4 19.6" /></svg><span class="sr-only">微信扫码分享</span></button><div id="share-wechat-qr" data-share-popover hidden class="border-border bg-background absolute bottom-full left-1/2 z-20 mb-3 w-50 -translate-x-1/2 rounded-md border shadow-lg"><p class="border-border bg-muted/60 text-muted-foreground rounded-t-md border-b px-3 py-1.5 text-center text-xs">微信扫码分享</p><div class="px-4 py-3 text-center"><img data-share-qr alt="" width="112" height="112" class="mx-auto block size-28 rounded-sm bg-white"><p class="text-muted-foreground mt-2 text-xs">微信扫一扫，打开文章</p></div><span class="border-border bg-background absolute -bottom-1.5 left-1/2 size-3 -translate-x-1/2 rotate-45 border-r border-b" aria-hidden="true"></span></div></div><a href="https://connect.qq.com/widget/shareqq/index.html?url=https://mofan212.github.io/posts/spring-boot-database/" title="分享到 QQ" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"><svg width="24" height="24" fill="currentColor" class="inline-block size-6 scale-125 opacity-90 sm:scale-110" viewBox="-44.8 -51.2 537.6 614.4"><path d="M433.754 420.445c-11.526 1.393-44.86-52.741-44.86-52.741 0 31.345-16.136 72.247-51.051 101.786 16.842 5.192 54.843 19.167 45.803 34.421-7.316 12.343-125.51 7.881-159.632 4.037-34.122 3.844-152.316 8.306-159.632-4.037-9.045-15.25 28.918-29.214 45.783-34.415-34.92-29.539-51.059-70.445-51.059-101.792 0 0-33.334 54.134-44.859 52.741-5.37-.65-12.424-29.644 9.347-99.704 10.261-33.024 21.995-60.478 40.144-105.779C60.683 98.063 108.982.006 224 0c113.737.006 163.156 96.133 160.264 214.963 18.118 45.223 29.912 72.85 40.144 105.778 21.768 70.06 14.716 99.053 9.346 99.704" /></svg><span class="sr-only">分享到 QQ</span></a><a href="https://service.weibo.com/share/share.php?url=https://mofan212.github.io/posts/spring-boot-database/" title="分享到微博" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"><svg width="24" height="24" fill="currentColor" class="inline-block size-6 scale-125 opacity-90 sm:scale-110" viewBox="-51.2 -51.2 614.4 614.4"><path d="M407 177.6c7.6-24-13.4-46.8-37.4-41.7-22 4.8-28.8-28.1-7.1-32.8 50.1-10.9 92.3 37.1 76.5 84.8-6.8 21.2-38.8 10.8-32-10.3M214.8 446.7C108.5 446.7 0 395.3 0 310.4c0-44.3 28-95.4 76.3-143.7C176 67 279.5 65.8 249.9 161c-4 13.1 12.3 5.7 12.3 6 79.5-33.6 140.5-16.8 114 51.4-3.7 9.4 1.1 10.9 8.3 13.1 135.7 42.3 34.8 215.2-169.7 215.2m143.7-146.3c-5.4-55.7-78.5-94-163.4-85.7-84.8 8.6-148.8 60.3-143.4 116s78.5 94 163.4 85.7c84.8-8.6 148.8-60.3 143.4-116M347.9 35.1c-25.9 5.6-16.8 43.7 8.3 38.3 72.3-15.2 134.8 52.8 111.7 124-7.4 24.2 29.1 37 37.4 12 31.9-99.8-55.1-195.9-157.4-174.3m-78.5 311c-17.1 38.8-66.8 60-109.1 46.3-40.8-13.1-58-53.4-40.3-89.7 17.7-35.4 63.1-55.4 103.4-45.1 42 10.8 63.1 50.2 46 88.5m-86.3-30c-12.9-5.4-30 .3-38 12.9-8.3 12.9-4.3 28 8.6 34 13.1 6 30.8.3 39.1-12.9 8-13.1 3.7-28.3-9.7-34m32.6-13.4c-5.1-1.7-11.4.6-14.3 5.4-2.9 5.1-1.4 10.6 3.7 12.9 5.1 2 11.7-.3 14.6-5.4 2.8-5.2 1.1-10.9-4-12.9" /></svg><span class="sr-only">分享到微博</span></a><button type="button" data-share-copy title="复制链接" class="group hover:text-accent inline-flex scale-90 items-center gap-1 p-2 hover:rotate-6 sm:p-1"><svg width="24" height="24" fill="currentColor" class="inline-block size-6 scale-125 opacity-90 sm:scale-110" viewBox="-44.8 -51.2 537.6 614.4"><path d="M208 0h124.1C344.8 0 357 5.1 366 14.1L433.9 82c9 9 14.1 21.2 14.1 33.9V336c0 26.5-21.5 48-48 48H208c-26.5 0-48-21.5-48-48V48c0-26.5 21.5-48 48-48M48 128h80v64H64v256h192v-32h64v48c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V176c0-26.5 21.5-48 48-48" /></svg><span class="sr-only">复制链接</span></button></div></div><script type="module" src="/_astro/ShareLinks.astro_astro_type_script_index_0_lang.Bu6XstWd.js"></script></div><div data-pagefind-ignore data-astro-cid-wq7kak54><script type="module" src="/_astro/PostEnd.astro_astro_type_script_index_0_lang.TdGUGMmo.js"></script></div><hr class="my-8 border-solid" data-astro-cid-wq7kak54><div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"><a href="/posts/springboot-thymeleaf-development-process/" class="flex w-full gap-1 hover:opacity-75"><svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.3l105.3-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg><div><span>上一篇</span><div class="text-accent/85 text-sm">Spring Boot + Thymeleaf开发流程</div></div></a><a href="/posts/springboot-securityframework/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"><div><span>下一篇</span><div class="text-accent/85 text-sm">Spring Boot 与安全框架</div></div><svg width="24" height="24" fill="currentColor" class="inline-block flex-none rtl:rotate-180" viewBox="-70 -80 588 672"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" /></svg></a></div></main><footer class="app-layout mt-auto" data-astro-cid-wq7kak54="true"><div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"><div class="text-muted-foreground my-2 flex w-fit flex-col items-start text-start text-sm whitespace-nowrap"><div class="flex items-center gap-1.5"><svg width="24" height="24" fill="currentColor" class="size-4" viewBox="-49.231 -39.385 738.462 590.769" aria-hidden="true"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9-.1-2.7-.2-5.4-.2-8.1 0-88.4 71.6-160 160-160 59.3 0 111 32.2 138.7 80.2A95.5 95.5 0 0 1 448 96c53 0 96 43 96 96 0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39L296 392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0z" /></svg><span>最近更新：</span><time class="tabular-nums" datetime="2026-11-26T12:55:59.000Z" data-deployed-at="2026-11-26T12:55:59.000Z" data-just-now="刚刚" data-locale="zh-CN">2026-11-26 20:55</time></div><div class="mt-1 flex items-center gap-3 text-xs"><span class="flex items-center gap-1" title="本站访客数"><svg width="24" height="24" fill="currentColor" class="size-3" viewBox="-2.835 -3.241 453.671 518.481" aria-hidden="true"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256m-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3z" /></svg><span class="sr-only">本站访客数：</span><span id="busuanzi_value_site_uv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span></span><span aria-hidden="true">|</span><span class="flex items-center gap-1.5" title="本站总浏览量"><span class="flex size-4 items-center justify-center" aria-hidden="true"><svg width="24" height="24" fill="currentColor" class="size-3.5" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48zM0 272c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v160c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zM368 96h32c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48" /></svg></span><span class="sr-only">本站总浏览量：</span><span id="busuanzi_value_site_pv" class="inline-block min-w-[7ch] text-start tabular-nums">--</span></span></div></div><div class="my-2 flex w-full flex-col items-center text-center whitespace-nowrap sm:w-auto sm:flex-row"><span>版权所有 &#169; 2020 – 2026</span><span class="hidden sm:inline">&nbsp;|&nbsp;</span><span>保留所有权利。</span></div></div></footer><script type="module">var e=`theme`,t=`light`,n=`dark`;function r(){return localStorage.getItem(e)||(window.matchMedia(`(prefers-color-scheme: dark)`).matches?n:t)}var i=window.__theme?.value??r();function a(){localStorage.setItem(e,i),o()}function o(){let e=document.firstElementChild;e?.setAttribute(`data-theme`,i),e?.classList.toggle(`dark`,i===n),document.querySelector(`#theme-btn`)?.setAttribute(`aria-label`,i);let t=window.getComputedStyle(document.body).backgroundColor;document.querySelector(`meta[name='theme-color']`)?.setAttribute(`content`,t)}function s(){o(),document.querySelector(`#theme-btn`)?.addEventListener(`click`,()=>{i=i===t?n:t,a()})}s(),document.addEventListener(`astro:after-swap`,s),document.addEventListener(`astro:before-swap`,e=>{let t=document.querySelector(`meta[name='theme-color']`)?.getAttribute(`content`);t&&e.newDocument.querySelector(`meta[name='theme-color']`)?.setAttribute(`content`,t)}),window.matchMedia(`(prefers-color-scheme: dark)`).addEventListener(`change`,({matches:e})=>{i=e?n:t,a()});</script><script type="module" src="/_astro/BodyEnd.astro_astro_type_script_index_0_lang.CDbIVTbC.js"></script><script type="module" src="/_astro/BodyEnd.astro_astro_type_script_index_1_lang.BO9EESb6.js"></script><script>
+  (() => {
+    const updateDeploymentTimes = () => {
+      document.querySelectorAll("[data-deployed-at]").forEach(element => {
+        const deployedAt = Date.parse(element.dataset.deployedAt ?? "");
+        if (Number.isNaN(deployedAt)) return;
+
+        const elapsed = Math.max(0, Date.now() - deployedAt);
+        if (elapsed < 60_000) {
+          element.textContent = element.dataset.justNow ?? "";
+          return;
+        }
+
+        let value;
+        let unit;
+        if (elapsed < 3_600_000) {
+          value = Math.floor(elapsed / 60_000);
+          unit = "minute";
+        } else if (elapsed < 86_400_000) {
+          value = Math.floor(elapsed / 3_600_000);
+          unit = "hour";
+        } else if (elapsed < 2_592_000_000) {
+          value = Math.floor(elapsed / 86_400_000);
+          unit = "day";
+        } else if (elapsed < 31_536_000_000) {
+          value = Math.floor(elapsed / 2_592_000_000);
+          unit = "month";
+        } else {
+          value = Math.floor(elapsed / 31_536_000_000);
+          unit = "year";
+        }
+
+        const formatter = new Intl.RelativeTimeFormat(
+          element.dataset.locale ?? document.documentElement.lang,
+          { numeric: "always" }
+        );
+        element.textContent = formatter.format(-value, unit);
+      });
+    };
+
+    updateDeploymentTimes();
+
+    const initializedKey = "__astroBlogDeploymentTimeUpdaterInitialized";
+    if (window[initializedKey]) return;
+
+    window[initializedKey] = true;
+    document.addEventListener("astro:page-load", updateDeploymentTimes);
+    window.setInterval(updateDeploymentTimes, 60_000);
+  })();
+</script></body></html>
